@@ -1,0 +1,96 @@
+import { useState, lazy, Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import Layout from "@/components/layout/Layout";
+
+// LAZY LOAD PAGES
+const Index = lazy(() => import("./pages/Index"));
+const About = lazy(() => import("./pages/About"));
+const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
+const Exhibition = lazy(() => import("./pages/Exhibition"));
+const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
+const Partners = lazy(() => import("./pages/Partners"));
+const Conference = lazy(() => import("./pages/Conference"));
+const Exhibitors = lazy(() => import("./pages/Exhibitors"));
+const WhyExhibit = lazy(() => import("./pages/WhyExhibit"));
+const BookAStand = lazy(() => import("./pages/BookAStand"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Gallery = lazy(() => import("./pages/Gallery"));
+const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
+const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
+const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
+const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
+const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
+const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const EPromotion = lazy(() => import("./pages/EPromotion"));
+const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
+const WhyVisit = lazy(() => import("./pages/WhyVisit"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+
+import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
+import { HelmetProvider } from "react-helmet-async";
+import SeoHelmet from "@/components/SeoHelmet";
+
+const queryClient = new QueryClient();
+
+const App = () => {
+  const [visitorDrawerOpen, setVisitorDrawerOpen] = useState(false);
+
+  const openVisitorDrawer = () => setVisitorDrawerOpen(true);
+  const closeVisitorDrawer = () => setVisitorDrawerOpen(false);
+
+  return (
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SeoHelmet />
+            <Routes>
+              {/* PUBLIC ROUTES */}
+              <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
+                <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/advisory-board" element={<AdvisoryBoard />} />
+                <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
+                <Route path="/book-a-stand" element={<BookAStand />} />
+                <Route path="/visitor-registration" element={<VisitorRegistration />} />
+                <Route path="/buyer-registration" element={<BuyerRegistration />} />
+                <Route path="/exhibition" element={<Exhibition />} />
+                <Route path="/media-registration" element={<MediaRegistration />} />
+                <Route path="/speaker-registration" element={<SpeakerRegistration />} />
+                <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
+                <Route path="/why-exhibit" element={<WhyExhibit />} />
+                <Route path="/partners" element={<Partners />} />
+                <Route path="/conference" element={<Conference />} />
+                <Route path="/exhibitors" element={<Exhibitors />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/gallery" element={<Gallery />} />
+                <Route path="/travel-accommodation" element={<TravelAccommodation />} />
+                <Route path="/e-promotion" element={<EPromotion />} />
+                <Route path="/download-badge" element={<DownloadBadge />} />
+                <Route path="/why-visit" element={<WhyVisit />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+            <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
+  );
+};
+
+export default App;
