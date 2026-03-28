@@ -4,7 +4,7 @@ import {
     LogOut, MapPin, CreditCard, Download, FileText, CheckCircle,
     Building2, User, ShieldCheck, Mail, Phone, Wallet, Receipt,
     Printer, BadgeCheck, XCircle, Hourglass, TrendingUp, Calendar,
-    Hash, Briefcase
+    Hash, Briefcase, KeyRound, Eye, EyeOff, X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/api';
@@ -246,6 +246,10 @@ export default function ExhibitorDashboard() {
     const navigate = useNavigate();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [showChangePwd, setShowChangePwd] = useState(false);
+    const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
+    const [pwdLoading, setPwdLoading] = useState(false);
+    const [showPwd, setShowPwd] = useState({ current: false, newPwd: false });
 
     useEffect(() => {
         const token = localStorage.getItem('exhibitorToken');
@@ -269,6 +273,29 @@ export default function ExhibitorDashboard() {
     const handleLogout = () => {
         localStorage.removeItem('exhibitorToken');
         navigate('/exhibitor-login');
+    };
+
+    const handleChangePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (pwdForm.newPwd !== pwdForm.confirm) { toast.error('New passwords do not match'); return; }
+        if (pwdForm.newPwd.length < 6) { toast.error('Password must be at least 6 characters'); return; }
+        setPwdLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/exhibitor-auth/change-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('exhibitorToken')}` },
+                body: JSON.stringify({ currentPassword: pwdForm.current, newPassword: pwdForm.newPwd })
+            });
+            const result = await res.json();
+            if (result.success) {
+                toast.success('Password changed successfully');
+                setShowChangePwd(false);
+                setPwdForm({ current: '', newPwd: '', confirm: '' });
+            } else {
+                toast.error(result.message);
+            }
+        } catch { toast.error('Failed to change password'); }
+        finally { setPwdLoading(false); }
     };
 
     if (loading) return (
@@ -314,6 +341,12 @@ export default function ExhibitorDashboard() {
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setShowChangePwd(true)}
+                                className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-[#23471d] hover:bg-[#23471d]/5 rounded-lg transition-all border border-slate-200"
+                            >
+                                <KeyRound size={13} /> <span className="hidden sm:inline">Change Password</span>
+                            </button>
                             <button
                                 onClick={() => window.print()}
                                 className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-[#23471d] hover:bg-[#23471d]/5 rounded-lg transition-all border border-slate-200"
@@ -597,6 +630,60 @@ export default function ExhibitorDashboard() {
                     </div>
                 </main>
             </div>
+
+            {/* ── CHANGE PASSWORD MODAL ── */}
+            {showChangePwd && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 print:hidden">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                            <div className="flex items-center gap-2">
+                                <KeyRound size={16} className="text-[#23471d]" />
+                                <h3 className="text-sm font-bold text-slate-800">Change Password</h3>
+                            </div>
+                            <button onClick={() => setShowChangePwd(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
+                                <X size={18} />
+                            </button>
+                        </div>
+                        <form onSubmit={handleChangePassword} className="p-6 space-y-4">
+                            {[
+                                { key: 'current', label: 'Current Password', showKey: 'current' as const },
+                                { key: 'newPwd',  label: 'New Password',     showKey: 'newPwd' as const },
+                                { key: 'confirm', label: 'Confirm New Password', showKey: 'newPwd' as const },
+                            ].map(field => (
+                                <div key={field.key}>
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">{field.label}</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showPwd[field.showKey] ? 'text' : 'password'}
+                                            required
+                                            value={(pwdForm as any)[field.key]}
+                                            onChange={e => setPwdForm(p => ({ ...p, [field.key]: e.target.value }))}
+                                            className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[#23471d] focus:ring-2 focus:ring-[#23471d]/10 transition-all"
+                                            placeholder="••••••••"
+                                        />
+                                        {field.key !== 'confirm' && (
+                                            <button type="button" onClick={() => setShowPwd(p => ({ ...p, [field.showKey]: !p[field.showKey] }))}
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                                {showPwd[field.showKey] ? <EyeOff size={14} /> : <Eye size={14} />}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="flex gap-3 pt-2">
+                                <button type="button" onClick={() => setShowChangePwd(false)}
+                                    className="flex-1 py-2.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                                    Cancel
+                                </button>
+                                <button type="submit" disabled={pwdLoading}
+                                    className="flex-1 py-2.5 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-xl text-xs font-semibold transition-all disabled:opacity-50">
+                                    {pwdLoading ? 'Saving...' : 'Update Password'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
