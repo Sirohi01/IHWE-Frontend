@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { heroBackgroundApi, stallApi, exhibitorRegistrationApi, settingsApi, SERVER_URL, eventApi, stallRateApi, termsApi, publicApi } from "@/lib/api";
 import Swal from 'sweetalert2';
 
-const RAZORPAY_KEY_ID = "rzp_test_placeholder";
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || "";
 
 const loadScript = (src: string) => {
     return new Promise((resolve) => {
