@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle, User, Mail, Phone, MapPin, Briefcase, Heart, Send } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { X, CheckCircle, User, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,17 @@ interface VisitorRegistrationDrawerProps {
 const VisitorRegistrationDrawer = ({ open, onClose }: VisitorRegistrationDrawerProps) => {
     const [submitted, setSubmitted] = useState(false);
 
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [open]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitted(true);
@@ -21,13 +32,16 @@ const VisitorRegistrationDrawer = ({ open, onClose }: VisitorRegistrationDrawerP
     const inputClasses = "rounded-none border-slate-200 h-10 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all font-inter text-sm";
     const labelClasses = "text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 block font-inter";
 
-    const pathVariants = {
+    const pathVariants: Variants = {
         hidden: { pathLength: 0, opacity: 0 },
         visible: {
             pathLength: 1,
             opacity: 1,
-            transition: { pathLength: { duration: 1.5, ease: "easeInOut", delay: 0.5 }, opacity: { duration: 0.3, delay: 0.5 } }
-        }
+            transition: {
+                pathLength: { duration: 1.5, ease: [0.4, 0, 0.2, 1], delay: 0.5 },
+                opacity: { duration: 0.3, delay: 0.5 },
+            } as never,
+        },
     };
 
     return (

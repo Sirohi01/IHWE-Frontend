@@ -33,6 +33,8 @@ const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
+const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
@@ -54,37 +56,43 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <SeoHelmet />
-            <Routes>
-              {/* PUBLIC ROUTES */}
-              <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
-                <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/advisory-board" element={<AdvisoryBoard />} />
-                <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
-                <Route path="/book-a-stand" element={<BookAStand />} />
-                <Route path="/visitor-registration" element={<VisitorRegistration />} />
-                <Route path="/buyer-registration" element={<BuyerRegistration />} />
-                <Route path="/exhibition" element={<Exhibition />} />
-                <Route path="/media-registration" element={<MediaRegistration />} />
-                <Route path="/speaker-registration" element={<SpeakerRegistration />} />
-                <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
-                <Route path="/why-exhibit" element={<WhyExhibit />} />
-                <Route path="/partners" element={<Partners />} />
-                <Route path="/conference" element={<Conference />} />
-                <Route path="/exhibitors" element={<Exhibitors />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:id" element={<BlogDetail />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/gallery" element={<Gallery />} />
-                <Route path="/travel-accommodation" element={<TravelAccommodation />} />
-                <Route path="/e-promotion" element={<EPromotion />} />
-                <Route path="/download-badge" element={<DownloadBadge />} />
-                <Route path="/why-visit" element={<WhyVisit />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#071306]"><div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div></div>}>
+              <Routes>
+                {/* PUBLIC ROUTES */}
+                <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
+                  <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/advisory-board" element={<AdvisoryBoard />} />
+                  <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
+                  <Route path="/book-a-stand" element={<BookAStand />} />
+                  <Route path="/visitor-registration" element={<VisitorRegistration />} />
+                  <Route path="/buyer-registration" element={<BuyerRegistration />} />
+                  <Route path="/exhibition" element={<Exhibition />} />
+                  <Route path="/media-registration" element={<MediaRegistration />} />
+                  <Route path="/speaker-registration" element={<SpeakerRegistration />} />
+                  <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
+                  <Route path="/why-exhibit" element={<WhyExhibit />} />
+                  <Route path="/partners" element={<Partners />} />
+                  <Route path="/conference" element={<Conference />} />
+                  <Route path="/exhibitors" element={<Exhibitors />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:id" element={<BlogDetail />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/travel-accommodation" element={<TravelAccommodation />} />
+                  <Route path="/e-promotion" element={<EPromotion />} />
+                  <Route path="/download-badge" element={<DownloadBadge />} />
+                  <Route path="/why-visit" element={<WhyVisit />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+                
+                {/* STANDALONE EXHIBITOR PORTAL ROUTES (No Main Header/Footer) */}
+                <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
+                <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />} />
+              </Routes>
+            </Suspense>
             <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
         </BrowserRouter>
       </TooltipProvider>
