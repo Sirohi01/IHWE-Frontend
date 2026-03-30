@@ -952,41 +952,38 @@ const BookAStand = () => {
 
                                             {/* ── SETTLEMENT & BOOKING CONTROL ── */}
                                             <div className="pt-6">
-                                                <div className="bg-[#11250f] rounded-[2rem] overflow-hidden shadow-2xl shadow-[#1a3516]/30 relative border border-white/5">
-                                                    {/* Background Artistic Accents */}
-                                                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-[#d26019]/20 to-transparent rounded-full -mr-64 -mt-64 blur-[100px] pointer-events-none" />
-                                                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-[#23471d]/40 to-transparent rounded-full -ml-48 -mb-48 blur-[80px] pointer-events-none" />
+                                                <div className="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200/50 relative border border-slate-100">
 
                                                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
 
                                                         {/* ── LEFT: BOOKING SUMMARY ── */}
-                                                        <div className="lg:col-span-5 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-between">
-                                                            <div className="space-y-6">
+                                                        <div className="lg:col-span-5 p-6 lg:p-7 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between bg-slate-50/50">
+                                                            <div className="space-y-5">
                                                                 <div>
                                                                     <div className="flex items-center gap-3 mb-2">
-                                                                        <div className="w-8 h-px bg-[#d26019]"></div>
-                                                                        <h4 className="text-[11px] font-black text-[#d26019] uppercase tracking-[0.4em]">Final Summary</h4>
+                                                                        <div className="w-6 h-px bg-[#d26019]"></div>
+                                                                        <h4 className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.4em]">Review Details</h4>
                                                                     </div>
-                                                                    <h3 className="text-3xl font-black text-white leading-tight">Order <br />Overview</h3>
+                                                                    <h3 className="text-2xl font-black text-slate-900 leading-tight">Order Overview</h3>
                                                                 </div>
 
-                                                                <div className="space-y-6">
+                                                                <div className="space-y-5">
                                                                     {/* Stall Detail Row */}
                                                                     <div className="flex justify-between items-end group">
                                                                         <div className="space-y-1">
-                                                                            <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Stall Selection</p>
-                                                                            <p className="text-lg font-black text-white group-hover:text-[#d26019] transition-colors">
+                                                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Stall Selection</p>
+                                                                            <p className="text-lg font-black text-slate-900 group-hover:text-[#d26019] transition-colors leading-none">
                                                                                 {formData.participation.stallFor || "Not Selected"}
                                                                             </p>
                                                                         </div>
                                                                         <div className="text-right">
-                                                                            <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Area</p>
-                                                                            <p className="text-sm font-black text-white/80">{formData.participation.stallSize} SQM</p>
+                                                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Area</p>
+                                                                            <p className="text-sm font-black text-slate-600">{formData.participation.stallSize} SQM</p>
                                                                         </div>
                                                                     </div>
 
                                                                     {/* Cost Breakdown Section */}
-                                                                    <div className="pt-6 border-t border-white/5 space-y-4">
+                                                                    <div className="pt-5 border-t border-slate-200/60 space-y-3.5">
                                                                         {(() => {
                                                                             const stall = availableStalls.find(s => s._id === formData.participation.stallNo);
                                                                             const inc = stall?.incrementPercentage || 0;
@@ -998,33 +995,33 @@ const BookAStand = () => {
                                                                             return (
                                                                                 <>
                                                                                     {inc > 0 && (
-                                                                                        <div className="flex justify-between text-xs font-bold text-red-400">
+                                                                                        <div className="flex justify-between text-xs font-bold text-red-600">
                                                                                             <span>Stall Increment (+{inc}%)</span>
-                                                                                            <span className="text-red-400">+{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(incValue).toLocaleString()}</span>
+                                                                                            <span className="text-red-600">+{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(incValue).toLocaleString()}</span>
                                                                                         </div>
                                                                                     )}
                                                                                     {disc > 0 && (
-                                                                                        <div className="flex justify-between text-xs font-bold text-green-400">
+                                                                                        <div className="flex justify-between text-xs font-bold text-emerald-600">
                                                                                             <span>Stall Discount (-{disc}%)</span>
-                                                                                            <span className="text-green-400">-{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(discValue).toLocaleString()}</span>
+                                                                                            <span className="text-emerald-600">-{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(discValue).toLocaleString()}</span>
                                                                                         </div>
                                                                                     )}
                                                                                 </>
                                                                             );
                                                                         })()}
-                                                                        <div className="flex justify-between text-xs font-bold text-white/50">
+                                                                        <div className="flex justify-between text-xs font-bold text-slate-500">
                                                                             <span>Sub-Total (Net Rate)</span>
-                                                                            <span className="text-white/80">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.amount.toLocaleString()}</span>
+                                                                            <span className="text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.amount.toLocaleString()}</span>
                                                                         </div>
-                                                                        <div className="flex justify-between text-xs font-bold text-white/50">
+                                                                        <div className="flex justify-between text-xs font-bold text-slate-500">
                                                                             <span>GST (18% Statutory)</span>
-                                                                            <span className="text-white/80">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
+                                                                            <span className="text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
                                                                         </div>
-                                                                        <div className="pt-4 flex justify-between items-center decoration-slice">
-                                                                            <span className="text-sm font-black text-white uppercase tracking-widest">Total Contract Value</span>
+                                                                        <div className="pt-4 flex justify-between items-center">
+                                                                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Total Value</span>
                                                                             <div className="text-right">
-                                                                                <span className="text-2xl font-black text-white">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.total.toLocaleString()}</span>
-                                                                                <p className="text-[8px] text-white/30 font-bold uppercase tracking-tighter mt-1 italic">Inclusive of all administrative levies</p>
+                                                                                <span className="text-2xl font-black text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.total.toLocaleString()}</span>
+                                                                                <p className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter mt-1 italic">Inc. all taxes</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1032,29 +1029,29 @@ const BookAStand = () => {
                                                             </div>
 
                                                             {/* Bottom Badge */}
-                                                            <div className="mt-8 pt-6 border-t border-white/5 flex items-center gap-4">
-                                                                <div className="w-10 h-10 border border-white/10 rounded-full flex items-center justify-center text-[#d26019]">
-                                                                    <ShieldCheck size={20} />
+                                                            <div className="mt-6 pt-5 border-t border-slate-200/60 flex items-center gap-4">
+                                                                <div className="w-9 h-9 border border-slate-200 rounded-full flex items-center justify-center text-[#d26019]">
+                                                                    <ShieldCheck size={18} />
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-[9px] font-black text-white uppercase tracking-[0.2em]">Certified Exhibitor Space</p>
-                                                                    <p className="text-[8px] text-white/30 font-medium">Booking ID: IHWE-2026-TEMP</p>
+                                                                    <p className="text-[9px] font-black text-slate-900 uppercase tracking-widest">Certified Exhibitor</p>
+                                                                    <p className="text-[8px] text-slate-400 font-medium">IHWE-2026-REG</p>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         {/* ── RIGHT: PAYMENT & CONTROLS ── */}
-                                                        <div className="lg:col-span-7 p-6 lg:p-8 flex flex-col justify-between bg-white/[0.02]">
-                                                            <div className="space-y-8">
+                                                        <div className="lg:col-span-7 p-6 lg:p-7 flex flex-col justify-between">
+                                                            <div className="space-y-7">
                                                                 {/* Deployment Source */}
                                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                                    <div className="space-y-4">
-                                                                        <Label className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.3em] block">Referral Channel *</Label>
+                                                                    <div className="space-y-3">
+                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Referral Channel *</Label>
                                                                         <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                                            <SelectTrigger className="h-12 rounded-2xl border-white/10 bg-white/5 text-white text-xs font-bold focus:ring-[#d26019]/30 hover:bg-white/10 transition-all">
+                                                                            <SelectTrigger className="h-10 rounded-xl border-slate-200 bg-slate-50 text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-100 transition-all">
                                                                                 <SelectValue placeholder="Select Platform" />
                                                                             </SelectTrigger>
-                                                                            <SelectContent className="bg-[#1a3516] border-white/10 text-white">
+                                                                            <SelectContent className="bg-white border-slate-200 text-slate-900">
                                                                                 <SelectItem value="Direct Website">Direct Website</SelectItem>
                                                                                 <SelectItem value="Email Marketing">Email Marketing</SelectItem>
                                                                                 <SelectItem value="Social Media">Social Media</SelectItem>
@@ -1065,13 +1062,13 @@ const BookAStand = () => {
                                                                         </Select>
                                                                     </div>
 
-                                                                    <div className="space-y-4">
-                                                                        <Label className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.3em] block">Spoken With (Team Member) *</Label>
+                                                                    <div className="space-y-3">
+                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Spoken With *</Label>
                                                                         <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                                            <SelectTrigger className="h-12 rounded-2xl border-white/10 bg-white/5 text-white text-xs font-bold focus:ring-[#d26019]/30 hover:bg-white/10 transition-all">
+                                                                            <SelectTrigger className="h-10 rounded-xl border-slate-200 bg-slate-50 text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-100 transition-all">
                                                                                 <SelectValue placeholder="Select Team Member" />
                                                                             </SelectTrigger>
-                                                                            <SelectContent className="bg-[#1a3516] border-white/10 text-white">
+                                                                            <SelectContent className="bg-white border-slate-200 text-slate-900">
                                                                                 <SelectItem value="None">None / Direct</SelectItem>
                                                                                 {Array.isArray(staff) && staff.map((s: any) => (
                                                                                     <SelectItem key={s._id} value={s.username}>{s.username}</SelectItem>
@@ -1080,71 +1077,68 @@ const BookAStand = () => {
                                                                         </Select>
                                                                     </div>
 
-                                                                    <div className="space-y-4">
-                                                                        <Label className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.3em] block">Agreement *</Label>
+                                                                    <div className="space-y-3">
+                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Agreement *</Label>
                                                                         <label
                                                                             htmlFor="terms-check"
-                                                                            className="h-12 flex items-center gap-3 px-5 bg-white/5 border border-white/10 rounded-2xl cursor-pointer hover:bg-white/10 transition-all"
+                                                                            className="h-10 flex items-center gap-3 px-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition-all"
                                                                         >
                                                                             <Checkbox
                                                                                 id="terms-check"
                                                                                 required
-                                                                                className="border-white/20 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]"
+                                                                                className="border-slate-300 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]"
                                                                             />
-                                                                            <span className="text-[11px] font-bold text-white/70 uppercase">
-                                                                                Accept <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} target="_blank" className="text-[#d26019] hover:text-white underline transition-colors" onClick={(e) => e.stopPropagation()}>Terms & Conditions</Link>
+                                                                            <span className="text-[10px] font-bold text-slate-600 uppercase">
+                                                                                I accept <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} target="_blank" className="text-[#d26019] hover:text-slate-900 underline transition-colors" onClick={(e) => e.stopPropagation()}>Terms & Conditions</Link>
                                                                             </span>
                                                                         </label>
                                                                     </div>
                                                                 </div>
 
                                                                 {/* Payment Schedule Selector */}
-                                                                <div className="space-y-6">
+                                                                <div className="space-y-4">
                                                                     <div className="flex justify-between items-baseline">
-                                                                        <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Payment Schedule</h4>
-                                                                        <p className="text-[9px] text-[#d26019] font-black uppercase tracking-tighter italic">Recommended: Full Payment</p>
+                                                                        <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Payment Schedule</h4>
+                                                                        <p className="text-[8px] text-[#d26019] font-black uppercase tracking-tighter italic">Recommended: Full</p>
                                                                     </div>
-                                                                    <div className="grid grid-cols-2 gap-4">
+                                                                    <div className="grid grid-cols-2 gap-3">
                                                                         <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'full')}
-                                                                            className={`relative overflow-hidden group px-6 py-6 rounded-[1.5rem] border-2 transition-all duration-500 text-left ${formData.paymentType === 'full' ? 'border-[#d26019] bg-[#d26019]/10 shadow-[0_0_40px_rgba(210,96,25,0.1)]' : 'border-white/5 bg-white/5 hover:border-white/20'}`}
+                                                                            className={`relative overflow-hidden group px-5 py-5 rounded-2xl border-2 transition-all duration-300 text-left ${formData.paymentType === 'full' ? 'border-[#d26019] bg-[#d26019]/5' : 'border-slate-100 bg-slate-50 hover:border-slate-200'}`}
                                                                         >
                                                                             <div className="relative z-10">
-                                                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${formData.paymentType === 'full' ? 'bg-[#d26019] text-white' : 'bg-white/10 text-white/40'}`}>
-                                                                                    <CreditCard size={14} />
+                                                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'full' ? 'bg-[#d26019] text-white' : 'bg-white text-slate-400 border border-slate-100'}`}>
+                                                                                    <CreditCard size={12} />
                                                                                 </div>
-                                                                                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">Full Payment</p>
-                                                                                <p className="text-[14px] font-black text-white leading-tight">100% Secure Settlement</p>
+                                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Full</p>
+                                                                                <p className="text-[13px] font-black text-slate-900 leading-tight">100% Secure</p>
                                                                             </div>
-                                                                            {formData.paymentType === 'full' && (
-                                                                                <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#d26019]/20 blur-2xl rounded-full" />
-                                                                            )}
                                                                         </button>
                                                                         <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'advance')}
-                                                                            className={`relative overflow-hidden group px-6 py-6 rounded-[1.5rem] border-2 transition-all duration-500 text-left ${formData.paymentType === 'advance' ? 'border-[#d26019] bg-[#d26019]/10 shadow-[0_0_40px_rgba(210,96,25,0.1)]' : 'border-white/5 bg-white/5 hover:border-white/20'}`}
+                                                                            className={`relative overflow-hidden group px-5 py-5 rounded-2xl border-2 transition-all duration-300 text-left ${formData.paymentType === 'advance' ? 'border-[#d26019] bg-[#d26019]/5' : 'border-slate-100 bg-slate-50 hover:border-slate-200'}`}
                                                                         >
                                                                             <div className="relative z-10">
-                                                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${formData.paymentType === 'advance' ? 'bg-[#d26019] text-white' : 'bg-white/10 text-white/40'}`}>
-                                                                                    <Banknote size={14} />
+                                                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'advance' ? 'bg-[#d26019] text-white' : 'bg-white text-slate-400 border border-slate-100'}`}>
+                                                                                    <Banknote size={12} />
                                                                                 </div>
-                                                                                <p className="text-[10px] font-black text-white uppercase tracking-widest mb-1">Advance Booking</p>
-                                                                                <p className="text-[14px] font-black text-white leading-tight">{onlineAdvancePercent}% Deposit Only</p>
+                                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Advance</p>
+                                                                                <p className="text-[13px] font-black text-slate-900 leading-tight">{onlineAdvancePercent}% Deposit</p>
                                                                             </div>
                                                                         </button>
                                                                     </div>
                                                                 </div>
 
                                                                 {/* Final Call to Action */}
-                                                                <div className="pt-4 space-y-6">
-                                                                    <div className="flex justify-between items-center py-6 border-y border-white/5">
-                                                                        <div className="space-y-1">
-                                                                            <p className="text-[10px] text-white/30 font-black uppercase tracking-widest">Amount to Pay Now</p>
-                                                                            <div className="flex items-baseline gap-2">
-                                                                                <span className="text-xl font-medium text-[#d26019]">{formData.participation.currency === 'INR' ? '₹' : '$'}</span>
-                                                                                <span className="text-5xl font-black text-white tracking-tighter transition-all duration-500">{formData.amountPaid.toLocaleString()}</span>
+                                                                <div className="pt-2 space-y-5">
+                                                                    <div className="flex justify-between items-center py-5 border-y border-slate-100">
+                                                                        <div className="space-y-0.5">
+                                                                            <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest">Amount to Pay Now</p>
+                                                                            <div className="flex items-baseline gap-1.5">
+                                                                                <span className="text-lg font-medium text-[#d26019]">{formData.participation.currency === 'INR' ? '₹' : '$'}</span>
+                                                                                <span className="text-4xl font-black text-slate-900 tracking-tighter">{formData.amountPaid.toLocaleString()}</span>
                                                                             </div>
                                                                         </div>
                                                                         {formData.paymentType === 'advance' && (
@@ -1158,32 +1152,31 @@ const BookAStand = () => {
                                                                     <button
                                                                         type="submit"
                                                                         disabled={isLoading || !formData.participation.stallNo}
-                                                                        className="group relative w-full h-20 rounded-[1.8rem] bg-white text-[#11250f] font-black text-sm uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:grayscale overflow-hidden"
+                                                                        className="group relative w-full h-14 rounded-2xl bg-slate-900 text-white font-black text-[12px] uppercase tracking-[0.2em] shadow-xl shadow-slate-200/50 transition-all duration-300 hover:bg-black hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:grayscale overflow-hidden"
                                                                     >
-                                                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
-                                                                        <div className="relative z-10 flex items-center justify-center gap-4">
+                                                                        <div className="relative z-10 flex items-center justify-center gap-3">
                                                                             {isLoading ? "Synchronizing Secure Server..." : (
                                                                                 <>
                                                                                     <span>Confirm & Initialize Payment</span>
-                                                                                    <ChevronRight size={22} className="group-hover:translate-x-2 transition-transform" />
+                                                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                                                                 </>
                                                                             )}
                                                                         </div>
                                                                     </button>
 
-                                                                    <div className="flex justify-center items-center gap-8 text-white/20">
-                                                                        <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
-                                                                            <Lock size={16} />
+                                                                    <div className="flex justify-center items-center gap-6 text-slate-400">
+                                                                        <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+                                                                            <Lock size={14} />
                                                                             <span className="text-[7px] font-black uppercase tracking-widest text-center">AES-256 <br />Secure</span>
                                                                         </div>
-                                                                        <div className="h-8 w-px bg-white/5" />
-                                                                        <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
-                                                                            <ShieldCheck size={16} />
+                                                                        <div className="h-6 w-px bg-slate-200" />
+                                                                        <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+                                                                            <ShieldCheck size={14} />
                                                                             <span className="text-[7px] font-black uppercase tracking-widest text-center">RBI <br />Compliant</span>
                                                                         </div>
-                                                                        <div className="h-8 w-px bg-white/5" />
-                                                                        <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
-                                                                            <Banknote size={16} />
+                                                                        <div className="h-6 w-px bg-slate-200" />
+                                                                        <div className="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+                                                                            <Banknote size={14} />
                                                                             <span className="text-[7px] font-black uppercase tracking-widest text-center">Instant <br />Invoice</span>
                                                                         </div>
                                                                     </div>

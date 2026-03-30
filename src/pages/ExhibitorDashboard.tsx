@@ -4,36 +4,44 @@ import {
     LogOut, MapPin, CreditCard, Download, FileText, CheckCircle,
     Building2, User, ShieldCheck, Mail, Phone, Wallet, Receipt,
     Printer, BadgeCheck, XCircle, Hourglass, TrendingUp, Calendar,
-    Hash, Briefcase, KeyRound, Eye, EyeOff, X, ArrowRight
+    Hash, Briefcase, KeyRound, Eye, EyeOff, X, ArrowRight,
+    Award, AlertCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/api';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; dot: string; icon: any; step: number }> = {
-    pending:        { label: 'Under Review',   color: 'text-amber-700',   bg: 'bg-amber-50',   border: 'border-amber-200',  dot: 'bg-amber-400',   icon: Hourglass,   step: 1 },
-    approved:       { label: 'Approved',        color: 'text-blue-700',    bg: 'bg-blue-50',    border: 'border-blue-200',   dot: 'bg-blue-500',    icon: BadgeCheck,  step: 2 },
-    'advance-paid': { label: 'Advance Paid',    color: 'text-violet-700',  bg: 'bg-violet-50',  border: 'border-violet-200', dot: 'bg-violet-500',  icon: CreditCard,  step: 3 },
-    paid:           { label: 'Fully Paid',      color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200',dot: 'bg-emerald-500', icon: CheckCircle, step: 4 },
-    confirmed:      { label: 'Confirmed',       color: 'text-green-800',   bg: 'bg-green-50',   border: 'border-green-300',  dot: 'bg-green-600',   icon: ShieldCheck, step: 5 },
-    rejected:       { label: 'Rejected',        color: 'text-red-700',     bg: 'bg-red-50',     border: 'border-red-200',    dot: 'bg-red-500',     icon: XCircle,     step: 0 },
+    pending: { label: 'Under Review', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-400', icon: Hourglass, step: 1 },
+    approved: { label: 'Approved', color: 'text-blue-700', bg: 'bg-blue-50', border: 'border-blue-200', dot: 'bg-blue-500', icon: BadgeCheck, step: 2 },
+    'advance-paid': { label: 'Advance Paid', color: 'text-violet-700', bg: 'bg-violet-50', border: 'border-violet-200', dot: 'bg-violet-500', icon: CreditCard, step: 3 },
+    paid: { label: 'Fully Paid', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500', icon: CheckCircle, step: 4 },
+    confirmed: { label: 'Confirmed', color: 'text-green-800', bg: 'bg-green-50', border: 'border-green-300', dot: 'bg-green-600', icon: ShieldCheck, step: 5 },
+    rejected: { label: 'Rejected', color: 'text-red-700', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500', icon: XCircle, step: 0 },
 };
 
 const STEPS = [
-    { label: 'Submitted',    sub: 'Application received' },
-    { label: 'Approved',     sub: 'Admin verified' },
+    { label: 'Submitted', sub: 'Application received' },
+    { label: 'Approved', sub: 'Admin verified' },
     { label: 'Advance Paid', sub: 'Partial payment' },
-    { label: 'Fully Paid',   sub: 'Payment complete' },
-    { label: 'Confirmed',    sub: 'Stall confirmed' },
+    { label: 'Fully Paid', sub: 'Payment complete' },
+    { label: 'Confirmed', sub: 'Stall confirmed' },
 ];
 
-function InfoRow({ label, value, mono = false }: { label: string; value?: string | null; mono?: boolean }) {
+function InfoRow({ label, value, mono = false, icon: Icon }: { label: string; value?: string | null; mono?: boolean; icon?: any }) {
     return (
-        <div className="flex flex-col gap-1 pr-4 border-l-2 border-slate-100 pl-4 py-1.5 hover:border-[#23471d]/40 transition-all group">
-            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 group-hover:text-slate-500 transition-colors">{label}</span>
-            <span className={`text-[13px] font-black text-slate-900 leading-snug break-words ${mono ? 'font-mono tracking-[0.05em]' : ''}`}>
-                {value || <span className="text-slate-300 font-normal italic uppercase text-[10px] tracking-widest">Not Provided</span>}
-            </span>
+        <div className="flex items-start gap-3.5 p-4 rounded-2xl border border-slate-100 bg-white/50 hover:bg-white hover:border-[#23471d]/20 hover:shadow-sm transition-all group">
+            {Icon && (
+                <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#23471d]/10 group-hover:text-[#23471d] transition-all shrink-0">
+                    <Icon size={16} strokeWidth={2.5} />
+                </div>
+            )}
+            <div className="min-w-0">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{label}</p>
+                <p className={`text-[13px] font-black text-slate-900 truncate ${mono ? 'font-mono tracking-wider' : ''}`}>
+                    {value || <span className="text-slate-300 font-bold italic opacity-50">Not Provided</span>}
+                </p>
+            </div>
         </div>
     );
 }
@@ -258,7 +266,7 @@ export default function ExhibitorDashboard() {
     const fetchDashboard = async (regId?: string) => {
         const token = localStorage.getItem('exhibitorToken');
         if (!token) { navigate('/exhibitor-login'); return; }
-        
+
         let url = `${API_URL}/exhibitor-auth/dashboard`;
         if (regId) url += `?id=${regId}`;
 
@@ -337,635 +345,672 @@ export default function ExhibitorDashboard() {
     const regDate = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
     return (
-        <>
-            {/* ── PRINT DOCUMENT (only visible when printing) ── */}
-            <PrintDocument data={data} />
+        <div className="min-h-screen bg-[#f1f4f9] font-sans selection:bg-[#23471d]/20 antialiased print:hidden">
 
-            {/* ── SCREEN DASHBOARD (hidden when printing) ── */}
-            <div className="min-h-screen bg-[#eef2f7] font-['Inter',sans-serif] print:hidden">
-
-                {/* NAV */}
-                <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-                    <div className="w-full px-4 sm:px-6 xl:px-10 h-20 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#23471d] to-[#3a7a2e] flex items-center justify-center shadow-lg shadow-green-900/30">
-                                <ShieldCheck size={26} className="text-white" />
-                            </div>
-                            <div>
-                                <p className="text-base font-black text-slate-900 tracking-tight leading-none uppercase tracking-[0.1em]">Namo Gange Trust Foundation</p>
-                                <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-[0.25em]">
-                                    {data.eventId?.name || 'IHWE 2026'} · Exhibitor Command Center
-                                </p>
-                            </div>
+            {/* 🛸 PREMIUM FLOATING HEADER (DESKTOP + MOBILE BRAND) */}
+            <div className="fixed top-0 inset-x-0 z-[100] px-4 pt-4 print:hidden pointer-events-none">
+                <header className="max-w-[1600px] mx-auto bg-white/70 backdrop-blur-2xl border border-white shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-[2.5rem] flex items-center justify-between px-6 py-2.5 pointer-events-auto transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
+                    
+                    {/* Brand */}
+                    <div className="flex items-center gap-4 group">
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#1a3516] to-[#3a7a2e] flex items-center justify-center shadow-xl shadow-green-900/10 group-hover:scale-105 transition-transform">
+                            <ShieldCheck size={22} className="text-white" strokeWidth={2.5} />
                         </div>
-                        
-                        <div className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-2xl mx-8">
-                            {[
-                                { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
-                                { id: 'profile', label: 'Profile', icon: User },
-                                { id: 'invoices', label: 'Invoices', icon: FileText },
-                                { id: 'payments', label: 'Payments', icon: Wallet },
-                                { id: 'exhibitions', label: 'My Events', icon: Building2 },
-                            ].map(tab => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id as any)}
-                                    className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-white text-[#23471d] shadow-md shadow-slate-200/50 scale-[1.02]' : 'text-slate-500 hover:text-slate-800 hover:bg-white/40'}`}
-                                >
-                                    <tab.icon size={14} className={activeTab === tab.id ? 'text-[#23471d]' : 'text-slate-400'} />
-                                    <span>{tab.label}</span>
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => setShowChangePwd(true)}
-                                className="flex items-center gap-2 px-4 py-2.5 text-xs font-black uppercase tracking-widest text-slate-600 hover:text-[#23471d] hover:bg-white rounded-xl transition-all border border-slate-200 shadow-sm hover:shadow-md"
-                            >
-                                <KeyRound size={14} /> <span className="hidden xl:inline">Security</span>
-                            </button>
-                            <button
-                                onClick={handleLogout}
-                                className="flex items-center gap-2 px-4 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-slate-900 hover:bg-black rounded-xl transition-all shadow-lg shadow-slate-900/20 hover:-translate-y-0.5"
-                            >
-                                <LogOut size={14} /> <span className="hidden xl:inline">Logout</span>
-                            </button>
+                        <div>
+                            <h1 className="text-sm font-black text-slate-800 tracking-tight leading-tight uppercase tracking-[0.1em]">{data.eventId?.name || 'IHWE 2026'}</h1>
+                            <p className="text-[10px] font-bold text-slate-400 group-hover:text-[#23471d] transition-colors uppercase tracking-[0.15em] flex items-center gap-1.5 opacity-80">
+                                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" /> Command Center
+                            </p>
                         </div>
                     </div>
-                    {/* Mobile Tabs */}
-                    <div className="lg:hidden flex overflow-x-auto bg-white/50 backdrop-blur-sm border-t border-slate-100 no-scrollbar">
+
+                    {/* Navigation Desktop */}
+                    <nav className="hidden lg:flex items-center gap-1.5 p-1.5 rounded-3xl bg-slate-100/40">
                         {[
-                            { id: 'dashboard', label: 'Home', icon: TrendingUp },
-                            { id: 'profile', label: 'Profile', icon: User },
-                            { id: 'invoices', label: 'Invoices', icon: FileText },
-                            { id: 'payments', label: 'Pays', icon: Wallet },
-                            { id: 'exhibitions', label: 'Events', icon: Building2 },
+                            { id: 'dashboard', label: 'Overview', icon: TrendingUp },
+                            { id: 'profile',   label: 'Profile',  icon: User },
+                            { id: 'invoices',  label: 'Invoices', icon: FileText },
+                            { id: 'exhibitions', label: 'My Events', icon: Building2 },
                         ].map(tab => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex-1 flex flex-col items-center gap-1.5 px-4 py-4 min-w-[80px] text-[10px] font-black uppercase tracking-widest transition-all border-b-4 ${activeTab === tab.id ? 'border-[#23471d] text-[#23471d] bg-[#23471d]/5' : 'border-transparent text-slate-400 hover:text-slate-600'}`}
+                                className={`flex items-center gap-2.5 px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative overflow-hidden group
+                                    ${activeTab === tab.id 
+                                        ? 'bg-white text-slate-900 shadow-sm' 
+                                        : 'text-slate-500 hover:text-slate-800 hover:bg-white/50'
+                                    }`}
                             >
-                                <tab.icon size={16} />
+                                <tab.icon size={13} strokeWidth={2.5} className={activeTab === tab.id ? 'text-[#23471d]' : 'text-slate-400'} />
                                 <span>{tab.label}</span>
+                                {activeTab === tab.id && <motion.div layoutId="activeTab" className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#23471d]" />}
                             </button>
                         ))}
+                    </nav>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-3">
+                        <div className="hidden sm:flex items-center gap-2 h-10 px-4 bg-slate-50 border border-slate-100 rounded-2xl mr-2">
+                             <div className="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+                                <User size={12} strokeWidth={3} />
+                             </div>
+                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{data.contact1?.firstName}</span>
+                        </div>
+                        <button
+                            onClick={handleLogout}
+                            className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center hover:bg-black hover:scale-105 active:scale-95 transition-all shadow-xl shadow-slate-900/20"
+                        >
+                            <LogOut size={16} strokeWidth={2.5} />
+                        </button>
                     </div>
                 </header>
+            </div>
 
-                <main className="w-full px-6 xl:px-10 py-8 space-y-6">
-                    <AnimatePresence mode="wait">
-                        {activeTab === 'dashboard' && (
-                            <motion.div
-                                key="dashboard"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="space-y-6"
-                            >
-                                {/* HERO BANNER */}
-                                <div className="relative bg-gradient-to-br from-[#1a3516] via-[#23471d] to-[#2d5c24] rounded-2xl overflow-hidden shadow-lg">
-                                    <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
-                                    <div className="absolute bottom-0 right-32 w-40 h-40 rounded-full bg-[#d26019]/10" />
-                                    <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-300/80">{data.eventId?.name || 'Health & Wellness Expo'}</span>
-                                                <span className="w-1 h-1 rounded-full bg-green-300/40" />
-                                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-300/80">New Delhi 2026</span>
-                                            </div>
-                                            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">{data.exhibitorName}</h1>
-                                            <div className="flex flex-wrap items-center gap-4 mt-3">
-                                                <span className="flex items-center gap-1.5 text-xs text-white/60">
-                                                    <Hash size={11} /> <span className="font-mono font-bold text-white/80">{data._id.slice(-8).toUpperCase()}</span>
-                                                </span>
-                                                <span className="flex items-center gap-1.5 text-xs text-white/60">
-                                                    <Calendar size={11} /> Registered {regDate}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-start sm:items-end gap-3 shrink-0">
-                                            <div className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border ${status.bg} ${status.border}`}>
-                                                <span className={`w-2 h-2 rounded-full ${status.dot} animate-pulse`} />
-                                                <StatusIcon size={14} className={status.color} />
-                                                <span className={`text-sm font-bold ${status.color}`}>{status.label}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2 text-xs text-white/50">
-                                                <MapPin size={11} />
-                                                <span>Stall: <span className="font-bold text-white/80">{data.participation?.stallFor || data.participation?.stallNo || 'Pending'}</span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+            {/* 📱 MOBILE BOTTOM NAVIGATION (Premium Floating Design) */}
+            <div className="lg:hidden fixed bottom-6 inset-x-4 z-[100] print:hidden">
+                <nav className="bg-slate-900/95 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[2rem] flex items-center justify-around px-2 py-3">
+                    {[
+                        { id: 'dashboard', label: 'Overview', icon: TrendingUp },
+                        { id: 'profile',   label: 'Profile',  icon: User },
+                        { id: 'invoices',  label: 'Invoices', icon: FileText },
+                        { id: 'exhibitions', label: 'Events', icon: Building2 },
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id as any)}
+                            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl transition-all duration-300 relative
+                                ${activeTab === tab.id 
+                                    ? 'text-white' 
+                                    : 'text-white/40 hover:text-white/60'
+                                }`}
+                        >
+                            <tab.icon size={18} strokeWidth={2.5} className={activeTab === tab.id ? 'text-emerald-400' : 'inherit'} />
+                            <span className="text-[8px] font-black uppercase tracking-widest">{tab.label}</span>
+                            {activeTab === tab.id && (
+                                <motion.div 
+                                    layoutId="activeTabMobile" 
+                                    className="absolute -bottom-1 w-1 h-1 rounded-full bg-emerald-400" 
+                                />
+                            )}
+                        </button>
+                    ))}
+                </nav>
+            </div>
 
-                                {/* Progress */}
-                                {!isRejected && (
-                                    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Application Journey</p>
-                                        <div className="relative flex items-start">
-                                            <div className="absolute top-4 left-4 right-4 h-0.5 bg-slate-100" style={{ zIndex: 0 }} />
-                                            <div
-                                                className="absolute top-4 left-4 h-0.5 bg-gradient-to-r from-[#23471d] to-[#4ade80] transition-all duration-700"
-                                                style={{ zIndex: 1, width: currentStep > 0 ? `${Math.min(100, ((currentStep - 1) / (STEPS.length - 1)) * 100)}%` : '0%' }}
-                                            />
-                                            {STEPS.map((step, i) => {
-                                                const stepNum = i + 1;
-                                                const done = currentStep >= stepNum;
-                                                const active = currentStep === stepNum;
-                                                return (
-                                                    <div key={step.label} className="flex-1 flex flex-col items-center gap-2 relative z-10">
-                                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
-                                                            ${done ? 'bg-[#23471d] border-[#23471d] text-white' : 'bg-white border-slate-200 text-slate-400'}
-                                                            ${active ? 'ring-4 ring-[#23471d]/15 scale-110' : ''}`}>
-                                                            {done && !active ? <CheckCircle size={14} /> : stepNum}
-                                                        </div>
-                                                        <div className="text-center hidden sm:block">
-                                                            <p className={`text-[10px] font-bold uppercase tracking-wide ${done ? 'text-[#23471d]' : 'text-slate-400'}`}>{step.label}</p>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Quick Stats */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                    {[
-                                        { label: 'Total Amount', value: `${cur}${total.toLocaleString('en-IN')}`, icon: TrendingUp, cls: 'text-blue-600', iconBg: 'bg-indigo-500', bg: 'bg-indigo-50', border: 'border-indigo-200', desc: 'Net contract value' },
-                                        { label: 'Amount Paid', value: `${cur}${paid.toLocaleString('en-IN')}`, icon: Wallet, cls: 'text-emerald-600', iconBg: 'bg-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200', desc: 'Successful transactions' },
-                                        { label: 'Balance Due', value: `${cur}${balance.toLocaleString('en-IN')}`, icon: Receipt, cls: balance > 0 ? 'text-rose-600' : 'text-slate-400', iconBg: balance > 0 ? 'bg-rose-500' : 'bg-slate-400', bg: balance > 0 ? 'bg-rose-50' : 'bg-slate-50', border: balance > 0 ? 'border-rose-200' : 'border-slate-200', desc: 'Outstanding total' },
-                                        { label: 'Stall Area', value: `${data.participation?.stallSize || 0} SQM`, icon: Building2, cls: 'text-amber-600', iconBg: 'bg-amber-500', bg: 'bg-amber-50', border: 'border-amber-200', desc: 'Allocated booth size' },
-                                    ].map((c, i) => (
-                                        <div key={c.label} className="group relative bg-white min-h-[160px] p-6 border-2 border-slate-200/60 transition-all duration-500 shadow-[0_6px_14px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.08)] overflow-hidden rounded-3xl">
-                                            {/* Decorative Background Elements */}
-                                            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                                                <div className={`absolute top-0 right-0 w-32 h-32 ${c.iconBg} opacity-[0.03] rounded-full -mr-10 -mt-10 transition-all duration-1000 ease-out group-hover:-mr-5 group-hover:-mt-5`} />
-                                                <div className={`absolute bottom-0 left-0 w-20 h-20 ${c.iconBg} opacity-[0.03] rounded-full -ml-8 -mb-8 transition-all duration-1000 ease-out group-hover:-ml-4 group-hover:-mb-4`} />
-                                            </div>
-
-                                            <div className="relative z-10">
-                                                <div className="flex items-center justify-between mb-5">
-                                                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${c.iconBg} ${c.iconBg.replace('500', '600')} flex items-center justify-center shadow-lg shadow-${c.iconBg.split('-')[1]}-500/10`}>
-                                                        <c.icon size={20} className="text-white" strokeWidth={2.5} />
-                                                    </div>
-                                                    <span className="text-[10px] font-black text-slate-200 uppercase tracking-[0.2em]">0{i+1}</span>
-                                                </div>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5">{c.label}</p>
-                                                <h3 className={`text-2xl sm:text-3xl font-black ${c.cls} leading-none mb-3 tabular-nums drop-shadow-sm`}>{c.value}</h3>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-60 text-ellipsis truncate">{c.desc}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Main Summary Grid */}
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                    <div className="lg:col-span-2 space-y-6">
-                                        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                                            <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
-                                                <div className="flex items-center gap-2">
-                                                    <FileText size={13} className="text-slate-500" />
-                                                    <h3 className="text-[11px] font-bold text-slate-600 uppercase tracking-widest">Company Snapshot</h3>
-                                                </div>
-                                                <button onClick={() => setActiveTab('profile')} className="text-[10px] font-bold text-[#23471d] hover:underline">View Full Profile</button>
-                                            </div>
-                                            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                                <InfoRow label="Company Name" value={data.exhibitorName} />
-                                                <InfoRow label="Industry Sector" value={data.industrySector} />
-                                                <InfoRow label="Contact Person" value={`${data.contact1?.firstName} ${data.contact1?.lastName}`} />
-                                                <InfoRow label="Email" value={data.contact1?.email} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-6">
-                                        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 text-center space-y-4">
-                                            <div className="w-16 h-16 bg-[#23471d]/5 rounded-full flex items-center justify-center mx-auto text-[#23471d]"><Printer size={24} /></div>
-                                            <h4 className="text-sm font-bold text-slate-800">Registration Certificate</h4>
-                                            <p className="text-xs text-slate-500">Download your official booth confirmed letter and registration document.</p>
-                                            <button onClick={() => window.print()} className="w-full py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-bold transition-all">Print / Download</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {activeTab === 'profile' && (
-                            <motion.div
-                                key="profile"
-                                initial={{ opacity: 0, scale: 0.98 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.98 }}
-                                className="space-y-8"
-                            >
-                                <div className="bg-white rounded-[2rem] border-2 border-slate-200/60 shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden">
-                                    <div className="px-8 sm:px-12 py-10 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-16 h-16 rounded-[1.25rem] bg-[#23471d] flex items-center justify-center text-white shadow-xl shadow-green-900/20">
-                                                <User size={32} strokeWidth={2.5} />
+            {/* Main Content Pad */}
+            <main className="max-w-[1600px] mx-auto px-4 sm:px-10 lg:px-16 pt-28 pb-32">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'dashboard' && (
+                        <motion.div
+                            key="dashboard"
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            className="space-y-8"
+                        >
+                            {/* 👑 HERO COMMAND SECTION */}
+                            <div className="relative group">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#1a3516] to-[#3a7a2e] rounded-[3rem] blur-2xl opacity-10 group-hover:opacity-20 transition-opacity duration-700" />
+                                <div className="relative bg-white border border-slate-200 rounded-[3rem] overflow-hidden shadow-xl shadow-slate-200/50">
+                                    <div className="p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-12">
+                                        <div className="space-y-6 lg:max-w-4xl">
+                                            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{data.status} • {data._id.slice(-8).toUpperCase()}</span>
                                             </div>
                                             <div>
-                                                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Exhibitor Profile</h2>
-                                                <div className="flex items-center gap-2 mt-1.5 font-bold text-slate-400 text-[10px] uppercase tracking-[0.2em]">
-                                                    <ShieldCheck size={12} /> Verified Enterprise Identity
-                                                </div>
+                                                <h2 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter leading-tight">
+                                                    Welcome back,<br />
+                                                    <span className="text-[#23471d]">{data.exhibitorName}</span>
+                                                </h2>
+                                                <p className="text-slate-400 font-medium text-sm mt-4 leading-relaxed max-w-md">
+                                                    Your participation in {data.eventId?.name || 'IHWE 2026'} is currently in the <span className="text-slate-900 font-bold underline decoration-[#23471d]/30 underline-offset-4">{status.label}</span> phase.
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="px-5 py-2.5 rounded-2xl bg-green-50 text-green-700 text-[10px] font-black uppercase tracking-widest border border-green-100">Profile Active</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-8 sm:p-12 space-y-16">
-                                        {/* Executive Summary Cards */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                            {[
-                                                { label: 'Exhibitor Hub', value: data.exhibitorName, icon: Building2, col: 'indigo' },
-                                                { label: 'Business Type', value: data.typeOfBusiness, icon: Briefcase, col: 'blue' },
-                                                { label: 'Fascia Name', value: data.fasciaName, icon: User, col: 'amber' },
-                                                { label: 'Global Rank', value: 'Prime Exhibitor', icon: BadgeCheck, col: 'emerald' },
-                                            ].map(i => (
-                                                <div key={i.label} className="p-5 rounded-2xl bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-xl hover:shadow-slate-200/40 transition-all cursor-default">
-                                                    <div className={`w-8 h-8 rounded-lg bg-${i.col}-500/10 text-${i.col}-600 flex items-center justify-center mb-3 group-hover:bg-${i.col}-500 group-hover:text-white transition-all`}>
-                                                        <i.icon size={16} />
-                                                    </div>
-                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{i.label}</p>
-                                                    <p className="text-sm font-black text-slate-800 truncate mt-1">{i.value || 'N/A'}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <section>
-                                            <div className="flex items-center gap-4 mb-10">
-                                                <div className="h-0.5 flex-1 bg-gradient-to-r from-slate-100 to-transparent"></div>
-                                                <h3 className="text-[11px] font-black text-[#23471d] uppercase tracking-[0.3em] whitespace-nowrap bg-green-50/50 px-4 py-2 rounded-full border border-green-100/50">Core Identity</h3>
-                                                <div className="h-0.5 flex-1 bg-gradient-to-l from-slate-100 to-transparent"></div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                                <InfoRow label="Official Company Name" value={data.exhibitorName} />
-                                                <InfoRow label="Fascia (Stall Name)" value={data.fasciaName} />
-                                                <InfoRow label="Industry Sector" value={data.industrySector} />
-                                                <InfoRow label="Nature of Business" value={data.natureOfBusiness} />
-                                                <InfoRow label="Business Type" value={data.typeOfBusiness} />
-                                                <InfoRow label="Website" value={data.website} />
-                                                <InfoRow label="GSTIN" value={data.gstNo} mono />
-                                                <InfoRow label="PAN" value={data.panNo} mono />
-                                            </div>
-                                        </section>
-
-                                        <section className="pt-10 border-t border-slate-100">
-                                            <h3 className="text-[10px] font-black text-[#23471d] uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                                                <div className="w-4 h-px bg-[#23471d]"></div> Contact Information
-                                            </h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Primary Contact</p>
-                                                    <div className="space-y-4">
-                                                        <InfoRow label="Name" value={`${data.contact1?.title} ${data.contact1?.firstName} ${data.contact1?.lastName}`} />
-                                                        <InfoRow label="Designation" value={data.contact1?.designation} />
-                                                        <InfoRow label="Email Address" value={data.contact1?.email} />
-                                                        <InfoRow label="Phone Number" value={data.contact1?.mobile} />
-                                                    </div>
-                                                </div>
-                                                {data.contact2?.firstName && (
-                                                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-4">Secondary Contact</p>
-                                                        <div className="space-y-4">
-                                                            <InfoRow label="Name" value={`${data.contact2?.title} ${data.contact2?.firstName} ${data.contact2?.lastName}`} />
-                                                            <InfoRow label="Designation" value={data.contact2?.designation} />
-                                                            <InfoRow label="Email Address" value={data.contact2?.email} />
-                                                            <InfoRow label="Phone Number" value={data.contact2?.mobile} />
+                                            <div className="flex flex-wrap items-center gap-6 pt-2">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Allocated Stall</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                                                            <MapPin size={14} strokeWidth={2.5} />
                                                         </div>
+                                                        <span className="text-lg font-black text-slate-900">{data.participation?.stallFor || data.participation?.stallNo || 'PENDING'}</span>
                                                     </div>
-                                                )}
+                                                </div>
+                                                <div className="w-px h-10 bg-slate-100" />
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Booth Area</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                                            <Building2 size={14} strokeWidth={2.5} />
+                                                        </div>
+                                                        <span className="text-lg font-black text-slate-900">{data.participation?.stallSize || 0} SQM</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </section>
+                                        </div>
 
-                                        <section className="pt-10 border-t border-slate-100">
-                                            <h3 className="text-[10px] font-black text-[#23471d] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                                <div className="w-4 h-px bg-[#23471d]"></div> Registered Address
-                                            </h3>
-                                            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                                                <p className="text-sm font-semibold text-slate-800 leading-relaxed">{data.address}</p>
-                                                <p className="text-xs text-slate-500 mt-2">{[data.city, data.state, data.country, data.pincode].filter(Boolean).join(', ')}</p>
+                                        {/* Action Circle */}
+                                        <div className="shrink-0 flex items-center justify-center">
+                                            <div className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full border-[12px] border-slate-50 flex items-center justify-center bg-white shadow-inner">
+                                                <svg className="absolute inset-0 w-full h-full -rotate-90">
+                                                    <circle
+                                                        cx="50%" cy="50%" r="48%"
+                                                        className="fill-none stroke-emerald-500/10 stroke-[12]"
+                                                    />
+                                                    <motion.circle
+                                                        cx="50%" cy="50%" r="48%"
+                                                        initial={{ pathLength: 0 }}
+                                                        animate={{ pathLength: paidPct / 100 }}
+                                                        transition={{ duration: 1.5, ease: "easeOut" }}
+                                                        className="fill-none stroke-[#23471d] stroke-[12] stroke-round"
+                                                    />
+                                                </svg>
+                                                <div className="text-center space-y-1">
+                                                    <p className="text-3xl sm:text-5xl font-black text-slate-900 tabular-nums">{paidPct}%</p>
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Settled</p>
+                                                </div>
                                             </div>
-                                        </section>
+                                        </div>
                                     </div>
                                 </div>
-                            </motion.div>
-                        )}
+                            </div>
 
-                        {activeTab === 'invoices' && (
-                            <motion.div
-                                key="invoices"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 30 }}
-                                className="space-y-8"
-                            >
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="md:col-span-2 bg-white rounded-[2rem] border-2 border-slate-200/60 shadow-[0_20px_50px_rgba(0,0,0,0.03)] overflow-hidden">
-                                        <div className="px-8 py-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
-                                                    <FileText size={24} strokeWidth={2.5} />
-                                                </div>
-                                                <div>
-                                                    <h2 className="text-xl font-black text-slate-900 tracking-tight">Billing & Receipts</h2>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Tax Documents Hub</p>
-                                                </div>
-                                            </div>
+                            {/* 📊 METRICS GRID */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {[
+                                    { label: 'Total Obligation', value: `${cur}${total.toLocaleString()}`, icon: Receipt, col: 'indigo' },
+                                    { label: 'Funds Realized', value: `${cur}${paid.toLocaleString()}`, icon: Wallet, col: 'emerald' },
+                                    { label: 'Outstanding Due', value: `${cur}${balance.toLocaleString()}`, icon: TrendingUp, col: balance > 0 ? 'rose' : 'slate' },
+                                    { label: 'Account Health', value: balance === 0 ? 'PRIME' : 'ACTIVE', icon: BadgeCheck, col: 'amber' },
+                                ].map((stat, i) => (
+                                    <div key={stat.label} className="group bg-white p-6 rounded-[2rem] border border-slate-200 hover:border-[#23471d]/20 transition-all hover:shadow-xl hover:shadow-slate-200/40">
+                                        <div className={`w-12 h-12 rounded-2xl bg-${stat.col}-50 flex items-center justify-center text-${stat.col}-600 mb-6 group-hover:scale-110 transition-transform`}>
+                                            <stat.icon size={20} strokeWidth={2.5} />
                                         </div>
-                                        <div className="p-0">
-                                            <div className="overflow-x-auto no-scrollbar">
-                                                <table className="w-full text-left border-collapse">
-                                                    <thead>
-                                                        <tr className="bg-slate-50/50">
-                                                            <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Document Type</th>
-                                                            <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Issued On</th>
-                                                            <th className="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 text-right">Amount</th>
-                                                            <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="divide-y divide-slate-50">
-                                                        <tr className="group hover:bg-slate-50/50 transition-all cursor-pointer">
-                                                            <td className="px-8 py-6">
-                                                                <div className="flex items-center gap-4">
-                                                                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-[#23471d] group-hover:text-white transition-all"><FileText size={18} /></div>
-                                                                    <div>
-                                                                        <p className="text-sm font-black text-slate-800">Registration Receipt</p>
-                                                                        <p className="text-[10px] font-black text-slate-400 uppercase">#{data._id.slice(-8).toUpperCase()}-RC</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td className="px-6 py-6 text-sm text-slate-500 font-bold uppercase tracking-widest tabular-nums">{regDate}</td>
-                                                            <td className="px-6 py-6 text-sm font-black text-slate-900 text-right tabular-nums">{cur}{total.toLocaleString()}</td>
-                                                            <td className="px-8 py-6 text-right">
-                                                                <div className="flex flex-col items-end gap-3">
-                                                                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.1em] border-2 ${paid >= total ? 'bg-green-50 text-green-700 border-green-100' : paid > 0 ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-rose-50 text-rose-700 border-rose-100'}`}>
-                                                                        {paid >= total ? 'Settled' : paid > 0 ? 'Partial' : 'Pending'}
-                                                                    </span>
-                                                                    <button onClick={() => window.print()} className="flex items-center gap-1.5 text-[10px] font-black text-blue-600 hover:text-blue-800 uppercase tracking-widest group">
-                                                                        <Download size={14} className="group-hover:-translate-y-0.5 transition-all" /> <span>Download PDF</span>
-                                                                    </button>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5">{stat.label}</p>
+                                        <p className="text-xl font-black text-slate-900 tracking-tight tabular-nums">{stat.value}</p>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* 🏗️ QUICK ACTIONS / IDENTITY */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden">
+                                    <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+                                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Enterprise Context</h3>
+                                        <motion.button
+                                            onClick={() => setActiveTab('profile')}
+                                            whileHover={{ scale: 1.05 }}
+                                            className="text-[10px] font-black text-[#23471d] uppercase tracking-widest hover:underline"
+                                        >
+                                            Manage Identity
+                                        </motion.button>
+                                    </div>
+                                    <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <InfoRow label="Official Entity" value={data.exhibitorName} icon={Building2} />
+                                        <InfoRow label="Industry Sector" value={data.industrySector} icon={Briefcase} />
+                                        <InfoRow label="Liaison Officer" value={`${data.contact1?.firstName} ${data.contact1?.lastName}`} icon={User} />
+                                        <InfoRow label="Designation" value={data.contact1?.designation} icon={Award} />
+                                    </div>
+                                </div>
+                                <div className="bg-slate-900 rounded-[2.5rem] p-8 sm:p-10 text-white relative overflow-hidden flex flex-col justify-between">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl" />
+                                    <div className="space-y-6 relative z-10">
+                                        <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+                                            <Printer size={20} strokeWidth={2.5} />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-xl font-black tracking-tight leading-tight">Confirmation<br />Documents</h4>
+                                            <p className="text-white/40 text-xs font-medium mt-3 leading-relaxed">
+                                                Download your official registration certificate and stall allocation documents.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => window.print()}
+                                        className="w-full py-4 bg-white text-slate-900 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-emerald-50 hover:text-[#23471d] transition-all mt-10"
+                                    >
+                                        Print Certificate
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'profile' && (
+                        <motion.div
+                            key="profile"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="space-y-8"
+                        >
+                            <div className="bg-white rounded-[3rem] border border-slate-200 shadow-xl shadow-slate-200/40 overflow-hidden">
+                                <div className="px-10 py-10 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                    <div className="flex items-center gap-6">
+                                        <div className="w-16 h-16 rounded-[1.5rem] bg-slate-900 flex items-center justify-center text-white shadow-2xl shadow-slate-900/20">
+                                            <Building2 size={32} strokeWidth={2.5} />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Corporate Identity</h2>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+                                                <BadgeCheck size={12} className="text-emerald-500" /> Verified Industry Profile
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-10 space-y-12">
+                                    {/* Identity Section */}
+                                    <section>
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <h3 className="text-[11px] font-black text-[#23471d] uppercase tracking-[0.25em] whitespace-nowrap bg-[#23471d]/5 px-5 py-2 rounded-full border border-[#23471d]/10">Registration Nucleus</h3>
+                                            <div className="h-px flex-1 bg-slate-100" />
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            <InfoRow label="Official Entity" value={data.exhibitorName} icon={Award} />
+                                            <InfoRow label="Fascia/Brand" value={data.fasciaName || data.exhibitorName} icon={User} />
+                                            <InfoRow label="Industry Sector" value={data.industrySector} icon={Briefcase} />
+                                            <InfoRow label="Nature of Org" value={data.natureOfBusiness} icon={Hash} />
+                                            <InfoRow label="Business Framework" value={data.typeOfBusiness} icon={Building2} />
+                                            <InfoRow label="Institutional Web" value={data.website} icon={Calendar} />
+                                            <InfoRow label="Tax Identification (GST)" value={data.gstNo} icon={ShieldCheck} mono />
+                                            <InfoRow label="Financial ID (PAN)" value={data.panNo} icon={FileText} mono />
+                                        </div>
+                                    </section>
+
+                                    {/* Contact Grid */}
+                                    <section>
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.25em] whitespace-nowrap">Liaison Framework</h3>
+                                            <div className="h-px flex-1 bg-slate-100" />
+                                        </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                            <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 space-y-6">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-3 py-1 bg-white rounded-full shadow-sm">Primary Delegate</span>
+                                                    <Mail size={16} className="text-slate-300" />
+                                                </div>
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    <InfoRow label="Officer Name" value={`${data.contact1?.title} ${data.contact1?.firstName} ${data.contact1?.lastName}`} icon={User} />
+                                                    <InfoRow label="Global Email" value={data.contact1?.email} icon={Mail} />
+                                                    <InfoRow label="Direct Mobile" value={data.contact1?.mobile} icon={Phone} mono />
+                                                </div>
                                             </div>
-                                            {paid === 0 && (
-                                                <div className="p-12 text-center bg-slate-50/30">
-                                                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                                                        <Hourglass size={24} />
+                                            {data.contact2?.firstName && (
+                                                <div className="bg-slate-50/50 p-8 rounded-[2rem] border border-slate-100 space-y-6">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-3 py-1 bg-white rounded-full shadow-sm">Secondary Delegate</span>
+                                                        <Mail size={16} className="text-slate-300" />
                                                     </div>
-                                                    <p className="text-xs text-slate-400 font-black uppercase tracking-widest">Awaiting Initial Payment</p>
-                                                    <p className="text-[10px] text-slate-400 mt-1 italic">Receipts are generated instantly after payment verification.</p>
+                                                    <div className="grid grid-cols-1 gap-4">
+                                                        <InfoRow label="Officer Name" value={`${data.contact2?.title} ${data.contact2?.firstName} ${data.contact2?.lastName}`} icon={User} />
+                                                        <InfoRow label="Global Email" value={data.contact2?.email} icon={Mail} />
+                                                        <InfoRow label="Direct Mobile" value={data.contact2?.mobile} icon={Phone} mono />
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
+                                    </section>
+
+                                    {/* Geographic Footprint */}
+                                    <section>
+                                        <div className="flex items-center gap-4 mb-8">
+                                            <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.25em] whitespace-nowrap">Geographic Footprint</h3>
+                                            <div className="h-px flex-1 bg-slate-100" />
+                                        </div>
+                                        <div className="bg-white p-8 rounded-[2rem] border border-slate-100 flex items-start gap-6">
+                                            <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400">
+                                                <MapPin size={22} />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <p className="text-sm font-bold text-slate-900 leading-relaxed">{data.address}</p>
+                                                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{[data.city, data.state, data.country, data.pincode].filter(Boolean).join(' • ')}</p>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'invoices' && (
+                        <motion.div
+                            key="finance"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            className="space-y-8"
+                        >
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                {/* Invoice Ledger */}
+                                <div className="lg:col-span-2 bg-white rounded-[3rem] border border-slate-200 shadow-xl shadow-slate-200/30 overflow-hidden">
+                                    <div className="px-8 py-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white">
+                                                <FileText size={24} strokeWidth={2.5} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-black text-slate-900 tracking-tight">Fiscal Documents</h3>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Automated Tax Invoicing</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="bg-[#23471d] rounded-[2rem] p-8 text-white relative overflow-hidden flex flex-col justify-between shadow-2xl shadow-green-900/40">
-                                        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl opacity-50"></div>
-                                        <div className="relative z-10">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-8 border-b border-white/10 pb-4">Financial Insight</p>
+                                    <div className="p-0">
+                                        <div className="overflow-x-auto no-scrollbar">
+                                            <table className="w-full text-left">
+                                                <thead>
+                                                    <tr className="bg-slate-50/30">
+                                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Document / Transaction</th>
+                                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Timestamp</th>
+                                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Value</th>
+                                                        <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-50">
+                                                    <tr className="group hover:bg-slate-50/50 transition-all cursor-pointer">
+                                                        <td className="px-8 py-6">
+                                                            <div className="flex items-center gap-4">
+                                                                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-[#23471d] group-hover:text-white transition-all"><FileText size={18} /></div>
+                                                                <div>
+                                                                    <p className="text-sm font-black text-slate-800 tracking-tight">Proforma Invoice</p>
+                                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">PINV-{data._id.slice(-6).toUpperCase()}</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-6 text-[11px] text-slate-500 font-black uppercase tracking-widest">{regDate}</td>
+                                                        <td className="px-6 py-6 text-sm font-black text-slate-900 text-right tabular-nums">{cur}{total.toLocaleString()}</td>
+                                                        <td className="px-8 py-6 text-right">
+                                                            <button 
+                                                                onClick={() => window.print()}
+                                                                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-black transition-all shadow-lg shadow-slate-900/10"
+                                                            >
+                                                                <Download size={14} strokeWidth={2.5} /> <span className="hidden sm:inline">Export PDF</span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+
+                                                    {/* Payment Tracker Entry */}
+                                                    {paid > 0 && (
+                                                        <tr className="group hover:bg-slate-50/50 transition-all">
+                                                            <td className="px-8 py-6">
+                                                                <div className="flex items-center gap-4">
+                                                                    <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600"><CheckCircle size={18} /></div>
+                                                                    <div>
+                                                                        <p className="text-sm font-black text-slate-800 tracking-tight">Payment Realized</p>
+                                                                        <p className="text-[10px] font-bold text-slate-400 uppercase">
+                                                                            {data.manualPaymentDetails?.transactionId || data.paymentId || 'TRX-CONFIRMED'}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-6 py-6 text-[11px] text-slate-500 font-black uppercase tracking-widest">
+                                                                {data.manualPaymentDetails?.updatedAt ? new Date(data.manualPaymentDetails.updatedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : regDate}
+                                                            </td>
+                                                            <td className="px-6 py-6 text-sm font-black text-emerald-600 text-right tabular-nums">+{cur}{paid.toLocaleString()}</td>
+                                                            <td className="px-8 py-6 text-right">
+                                                                {data.receiptUrl ? (
+                                                                    <a 
+                                                                        href={data.receiptUrl} 
+                                                                        target="_blank" 
+                                                                        rel="noopener noreferrer"
+                                                                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-100 transition-all"
+                                                                    >
+                                                                        <Download size={14} /> <span className="hidden sm:inline">Receipt</span>
+                                                                    </a>
+                                                                ) : (
+                                                                    <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-lg inline-block">Verified</div>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    {/* Transaction Metadata (Ledger Sidebar) */}
+                                    <div className="p-8 bg-slate-50/50 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Settlement Infrastructure</p>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center text-xs">
+                                                    <span className="font-bold text-slate-500 uppercase tracking-tight">Method</span>
+                                                    <span className="font-black text-slate-900">{data.manualPaymentDetails?.method || data.paymentMode || 'Online'}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-xs">
+                                                    <span className="font-bold text-slate-500 uppercase tracking-tight">UTR / Ref No.</span>
+                                                    <span className="font-black text-slate-900 font-mono tracking-tighter">{data.manualPaymentDetails?.transactionId || data.paymentId || '—'}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Participation Fee</p>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center text-xs">
+                                                    <span className="font-bold text-slate-500 uppercase tracking-tight">Base Amount</span>
+                                                    <span className="font-black text-slate-900">{cur}{(data.participation?.amount || 0).toLocaleString()}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-xs">
+                                                    <span className="font-bold text-slate-500 uppercase tracking-tight">GST (18%)</span>
+                                                    <span className="font-black text-slate-900">+{cur}{(total - (data.participation?.amount || 0)).toLocaleString()}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="lg:border-l lg:border-slate-200 lg:pl-8">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Account Statement</p>
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white">
+                                                    <Receipt size={18} />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-black text-slate-900 tracking-tight">Audit Ready</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase">System Generated</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Fiscal Snapshot Card */}
+                                <div className="space-y-6">
+                                    <div className="bg-[#1a3516] rounded-[3rem] p-10 text-white relative overflow-hidden flex flex-col justify-between shadow-2xl shadow-green-900/30">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl opacity-50"></div>
+                                        <div className="relative z-10 space-y-8">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 pb-4 border-b border-white/10">Liquidity Pulse</p>
                                             <div className="space-y-6">
                                                 <div>
-                                                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Contracted Volume</p>
-                                                    <h4 className="text-3xl font-black tabular-nums tracking-tighter">{cur}{total.toLocaleString()}</h4>
+                                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400/80 mb-2">Realized Liquidity</p>
+                                                    <h4 className="text-4xl font-black tabular-nums tracking-tighter leading-none">{cur}{paid.toLocaleString()}</h4>
                                                 </div>
                                                 <div className="pt-6 border-t border-white/10">
-                                                    <div className="flex justify-between items-end">
-                                                        <div>
-                                                            <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Realized Funds</p>
-                                                            <p className="text-xl font-black tabular-nums">{cur}{paid.toLocaleString()}</p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <p className="text-xs font-black text-green-400">{paidPct}%</p>
-                                                            <p className="text-[9px] font-black text-white/30 uppercase">Settled</p>
-                                                        </div>
+                                                    <div className="flex justify-between items-end mb-3">
+                                                        <p className="text-[10px] font-black uppercase tracking-widest text-white/30 truncate">Settlement Ratio</p>
+                                                        <p className="text-xs font-black text-emerald-400">{paidPct}%</p>
                                                     </div>
-                                                    <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
-                                                        <motion.div 
+                                                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                                                        <motion.div
                                                             initial={{ width: 0 }}
                                                             animate={{ width: `${paidPct}%` }}
-                                                            className="h-full bg-green-400 rounded-full"
+                                                            className="h-full bg-emerald-400"
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {activeTab === 'payments' && (
-                            <motion.div
-                                key="payments"
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="space-y-8"
-                            >
-                                <div className="bg-white rounded-[2.5rem] border-2 border-slate-200/60 shadow-[0_30px_70px_rgba(0,0,0,0.06)] overflow-hidden">
-                                    <div className="px-8 sm:px-12 py-10 bg-gradient-to-br from-slate-50 to-white border-b border-slate-100">
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-16 h-16 rounded-3xl bg-amber-500 flex items-center justify-center text-white shadow-xl shadow-amber-900/20">
-                                                    <Wallet size={32} strokeWidth={2.5} />
-                                                </div>
-                                                <div>
-                                                    <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Payment Ledger</h2>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Immutable Transaction History</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-2 px-6 py-4 rounded-[1.5rem] bg-indigo-50 border-2 border-indigo-100">
-                                                <TrendingUp size={16} className="text-indigo-600" />
-                                                <span className="text-xl font-black text-indigo-700 tabular-nums">{paidPct}% Total Compliance</span>
-                                            </div>
+                                    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-200">
+                                        <div className="flex items-center gap-3 mb-6">
+                                            <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center"><AlertCircle size={14} /></div>
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pending Liability</p>
                                         </div>
+                                        <h5 className="text-2xl font-black text-slate-900 tabular-nums mb-1">{cur}{balance.toLocaleString()}</h5>
+                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
+                                            {balance > 0 ? "Outstanding balance required for stall handover." : "All fiscal obligations fully satisfied."}
+                                        </p>
                                     </div>
-                                    <div className="p-8 sm:p-12">
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                                            <div className="p-8 rounded-[2rem] bg-indigo-50 border-2 border-indigo-100/50 group hover:scale-[1.02] transition-all">
-                                                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-2">Net Obligation</p>
-                                                <p className="text-3xl font-black text-indigo-700 tabular-nums">{cur}{total.toLocaleString()}</p>
-                                            </div>
-                                            <div className="p-8 rounded-[2rem] bg-emerald-50 border-2 border-emerald-100/50 group hover:scale-[1.02] transition-all shadow-lg shadow-emerald-900/5">
-                                                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mb-2">Authorized Payments</p>
-                                                <p className="text-3xl font-black text-emerald-700 tabular-nums">{cur}{paid.toLocaleString()}</p>
-                                            </div>
-                                            <div className="p-8 rounded-[2rem] bg-rose-50 border-2 border-rose-100/50 group hover:scale-[1.02] transition-all">
-                                                <p className="text-[10px] font-black text-rose-400 uppercase tracking-[0.2em] mb-2">Residual Dues</p>
-                                                <p className="text-3xl font-black text-rose-600 tabular-nums">{cur}{balance.toLocaleString()}</p>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
 
-                                        <div className="flex items-center gap-4 mb-10">
-                                            <div className="h-[1px] flex-1 bg-slate-100"></div>
-                                            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Chronological Timeline</p>
-                                            <div className="h-[1px] flex-1 bg-slate-100"></div>
-                                        </div>
-                                        
-                                        <div className="space-y-6 relative before:absolute before:left-[24px] before:top-8 before:bottom-8 before:w-[2px] before:bg-slate-100">
-                                            {paid > 0 ? (
-                                                <div className="relative pl-16 py-4 group">
-                                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[50px] h-[50px] rounded-2xl bg-green-100 border-2 border-green-200 flex items-center justify-center text-green-600 shadow-lg group-hover:scale-110 transition-transform z-10">
-                                                        <CheckCircle size={24} strokeWidth={2.5} />
+                    {activeTab === 'exhibitions' && (
+                        <motion.div
+                            key="exhibitions"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="space-y-8"
+                        >
+                            <div className="bg-white rounded-[3rem] border border-slate-200 shadow-sm overflow-hidden">
+                                <div className="px-10 py-8 border-b border-slate-100 bg-slate-50/50">
+                                    <h2 className="text-xl font-black text-slate-900 tracking-tight">Institutional Participation</h2>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Cross-Event Identity Manager</p>
+                                </div>
+                                <div className="p-10">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {allRegistrations.map((reg: any) => (
+                                            <div
+                                                key={reg._id}
+                                                onClick={() => {
+                                                    if (reg._id !== data._id) {
+                                                        setLoading(true);
+                                                        fetchDashboard(reg._id);
+                                                        setActiveTab('dashboard');
+                                                    }
+                                                }}
+                                                className={`group relative p-8 rounded-[2.5rem] border-2 transition-all duration-500 cursor-pointer
+                                                        ${reg._id === data._id
+                                                        ? 'border-[#23471d] bg-[#23471d]/5 shadow-xl shadow-green-900/5'
+                                                        : 'border-slate-100 hover:border-slate-200 hover:bg-slate-50'}`}
+                                            >
+                                                <div className="space-y-6">
+                                                    <div className="flex justify-between items-start">
+                                                        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-slate-400 group-hover:text-[#23471d] transition-colors shadow-sm">
+                                                            <Building2 size={24} />
+                                                        </div>
+                                                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${reg._id === data._id ? 'bg-[#23471d] text-white' : 'bg-slate-100 text-slate-400'}`}>
+                                                            {reg._id === data._id ? 'Active Context' : 'Historical'}
+                                                        </span>
                                                     </div>
-                                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-7 rounded-[1.75rem] border-2 border-slate-100 bg-white hover:bg-slate-50/50 hover:border-green-100 transition-all shadow-[0_10px_30px_rgba(0,0,0,0.02)] group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.05)]">
-                                                        <div>
-                                                            <h5 className="text-lg font-black text-slate-900 tracking-tight mb-1">Registration Capital Release</h5>
-                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{regDate} · Payment via Secure Online Gateway</p>
-                                                        </div>
-                                                        <div className="text-left sm:text-right mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-slate-50">
-                                                            <p className="text-2xl font-black text-[#23471d] tabular-nums tracking-tighter">+{cur}{paid.toLocaleString()}</p>
-                                                            <p className="text-[10px] font-mono font-bold text-slate-300 uppercase mt-1">Ref ID: {data.paymentId || 'GWAY-X001'}</p>
-                                                        </div>
+                                                    <div>
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{reg.eventId?.name || 'ANNUAL GATHERING'}</p>
+                                                        <h3 className="text-lg font-black text-slate-900 tracking-tight leading-tight">{reg.exhibitorName}</h3>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 text-[11px] font-bold text-slate-400 border-t border-slate-100 pt-6">
+                                                        <div className="flex items-center gap-1.5"><MapPin size={12} /> {reg.participation?.stallFor || 'TBD'}</div>
+                                                        <div className="w-1 h-1 rounded-full bg-slate-200" />
+                                                        <div className="flex items-center gap-1.5"><Calendar size={12} /> {new Date(reg.eventId?.startDate).getFullYear()}</div>
                                                     </div>
                                                 </div>
-                                            ) : (
-                                                <div className="text-center py-24 border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/30">
-                                                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200 shadow-sm">
-                                                        <Wallet size={32} />
-                                                    </div>
-                                                    <p className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Transaction Ledger Empty</p>
-                                                    <p className="text-[10px] text-slate-400 mt-2 font-bold italic">No financial movements detected on this account.</p>
-                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <Link
+                                            to="/book-a-stand"
+                                            className="group flex flex-col items-center justify-center p-8 rounded-[2.5rem] border-2 border-dashed border-slate-200 hover:border-[#23471d] hover:bg-[#23471d]/5 transition-all"
+                                        >
+                                            <div className="w-14 h-14 rounded-full bg-slate-50 group-hover:bg-[#23471d]/10 flex items-center justify-center text-slate-300 group-hover:text-[#23471d] transition-all mb-4">
+                                                <ArrowRight size={24} className="-rotate-45" />
+                                            </div>
+                                            <p className="text-[11px] font-black text-slate-400 group-hover:text-[#23471d] uppercase tracking-[0.2em]">New Event Registration</p>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </main>
+
+            <footer className="max-w-[1600px] mx-auto px-10 lg:px-16 py-12 border-t border-slate-200/50 flex flex-col sm:flex-row items-center justify-between gap-6 opacity-60">
+                <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                    <span>© 2026 Namo Gange Trust</span>
+                    <div className="w-1 h-1 rounded-full bg-slate-300" />
+                    <span>Security Protocol Alpha</span>
+                </div>
+            </footer>
+
+            {/* 🔐 SECURITY LAYER (MODAL) */}
+            <AnimatePresence>
+                {showChangePwd && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 print:hidden"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.95, y: 20 }}
+                            className="bg-white rounded-[3rem] shadow-2xl w-full max-w-md overflow-hidden relative"
+                        >
+                            <div className="px-10 py-10 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-2xl bg-[#23471d] text-white flex items-center justify-center">
+                                        <KeyRound size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-black text-slate-900 tracking-tight">Security Update</h3>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Credential Governance</p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setShowChangePwd(false)} className="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors">
+                                    <X size={18} className="text-slate-500" />
+                                </button>
+                            </div>
+                            <form onSubmit={handleChangePassword} className="p-10 space-y-6">
+                                {[
+                                    { key: 'current', label: 'Current Authentication', showKey: 'current' as const },
+                                    { key: 'newPwd', label: 'New Passphrase', showKey: 'newPwd' as const },
+                                    { key: 'confirm', label: 'Validate Passphrase', showKey: 'newPwd' as const },
+                                ].map(field => (
+                                    <div key={field.key}>
+                                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] block mb-2 px-1">{field.label}</label>
+                                        <div className="relative group">
+                                            <input
+                                                type={showPwd[field.showKey] ? 'text' : 'password'}
+                                                required
+                                                value={(pwdForm as any)[field.key]}
+                                                onChange={e => setPwdForm(p => ({ ...p, [field.key]: e.target.value }))}
+                                                className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[13px] font-bold focus:outline-none focus:bg-white focus:border-[#23471d]/30 focus:shadow-sm transition-all"
+                                                placeholder="••••••••"
+                                            />
+                                            {field.key !== 'confirm' && (
+                                                <button type="button" onClick={() => setShowPwd(p => ({ ...p, [field.showKey]: !p[field.showKey] }))}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#23471d] transition-colors">
+                                                    {showPwd[field.showKey] ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                </button>
                                             )}
                                         </div>
                                     </div>
+                                ))}
+                                <div className="grid grid-cols-2 gap-4 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowChangePwd(false)}
+                                        className="py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest text-slate-400 hover:bg-slate-50 transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={pwdLoading}
+                                        className="py-4 bg-[#23471d] hover:bg-black text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all shadow-xl shadow-green-900/20 disabled:opacity-50"
+                                    >
+                                        {pwdLoading ? 'UPDATING...' : 'SAVE CHANGES'}
+                                    </button>
                                 </div>
-                            </motion.div>
-                        )}
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-                        {activeTab === 'exhibitions' && (
-                            <motion.div
-                                key="exhibitions"
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                className="space-y-6"
-                            >
-                                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                                    <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-[#23471d]"><Building2 size={24} /></div>
-                                            <div>
-                                                <h2 className="text-xl font-black text-slate-900">My Participation</h2>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Switch Between Registered Events</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="p-8">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {allRegistrations.map((reg: any) => (
-                                                <div 
-                                                    key={reg._id} 
-                                                    onClick={() => {
-                                                        if (reg._id !== data._id) {
-                                                            setLoading(true);
-                                                            fetchDashboard(reg._id);
-                                                            setActiveTab('dashboard');
-                                                        }
-                                                    }}
-                                                    className={`cursor-pointer group relative p-6 rounded-3xl border-2 transition-all duration-300 ${reg._id === data._id ? 'border-[#23471d] bg-[#23471d]/5 shadow-lg' : 'border-slate-100 hover:border-[#23471d]/30 hover:bg-slate-50'}`}
-                                                >
-                                                    {reg._id === data._id && (
-                                                        <div className="absolute -top-3 -right-3 w-8 h-8 bg-[#23471d] text-white rounded-full flex items-center justify-center shadow-lg border-4 border-white"><CheckCircle size={14} /></div>
-                                                    )}
-                                                    <p className="text-[10px] font-black text-slate-400 group-hover:text-[#23471d] uppercase tracking-widest mb-3 transition-colors">{reg.eventId?.name || 'Annual Expo'}</p>
-                                                    <h3 className="text-lg font-black text-slate-900 leading-tight mb-4">{reg.exhibitorName}</h3>
-                                                    <div className="space-y-3">
-                                                        <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                                                            <MapPin size={12} className="text-slate-400" /> Stall: {reg.participation?.stallFor || 'TBD'}
-                                                        </div>
-                                                        <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                                                            <Calendar size={12} className="text-slate-400" /> {new Date(reg.eventId?.startDate).getFullYear()}
-                                                        </div>
-                                                    </div>
-                                                    <div className="mt-6 pt-4 border-t border-slate-100/50 flex justify-between items-center">
-                                                        <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${STATUS_CONFIG[reg.status]?.bg || 'bg-slate-100'} ${STATUS_CONFIG[reg.status]?.color || 'text-slate-500'}`}>
-                                                            {STATUS_CONFIG[reg.status]?.label || reg.status}
-                                                        </span>
-                                                        {reg._id !== data._id && <ArrowRight size={14} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-1 transition-all" />}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            <Link 
-                                                to="/book-a-stand"
-                                                className="flex flex-col items-center justify-center p-6 rounded-3xl border-2 border-dashed border-slate-200 hover:border-[#23471d] hover:bg-[#23471d]/5 transition-all group"
-                                            >
-                                                <div className="w-12 h-12 rounded-full bg-slate-50 group-hover:bg-[#23471d]/10 flex items-center justify-center text-slate-300 group-hover:text-[#23471d] transition-all mb-3"><ArrowRight className="-rotate-45" size={20} /></div>
-                                                <p className="text-xs font-black text-slate-400 group-hover:text-[#23471d] uppercase tracking-widest">Register New Event</p>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </main>
-
-                <div className="text-center py-10 opacity-50">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">© 2026 Namo Gange Trust Foundation · Global Healthcare Excellence</p>
-                </div>
-            </div>
-
-            {/* ── CHANGE PASSWORD MODAL ── */}
-            {showChangePwd && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 print:hidden">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                            <div className="flex items-center gap-2">
-                                <KeyRound size={16} className="text-[#23471d]" />
-                                <h3 className="text-sm font-bold text-slate-800">Change Password</h3>
-                            </div>
-                            <button onClick={() => setShowChangePwd(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                                <X size={18} />
-                            </button>
-                        </div>
-                        <form onSubmit={handleChangePassword} className="p-6 space-y-4">
-                            {[
-                                { key: 'current', label: 'Current Password', showKey: 'current' as const },
-                                { key: 'newPwd',  label: 'New Password',     showKey: 'newPwd' as const },
-                                { key: 'confirm', label: 'Confirm New Password', showKey: 'newPwd' as const },
-                            ].map(field => (
-                                <div key={field.key}>
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">{field.label}</label>
-                                    <div className="relative">
-                                        <input
-                                            type={showPwd[field.showKey] ? 'text' : 'password'}
-                                            required
-                                            value={(pwdForm as any)[field.key]}
-                                            onChange={e => setPwdForm(p => ({ ...p, [field.key]: e.target.value }))}
-                                            className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[#23471d] focus:ring-2 focus:ring-[#23471d]/10 transition-all"
-                                            placeholder="••••••••"
-                                        />
-                                        {field.key !== 'confirm' && (
-                                            <button type="button" onClick={() => setShowPwd(p => ({ ...p, [field.showKey]: !p[field.showKey] }))}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                                                {showPwd[field.showKey] ? <EyeOff size={14} /> : <Eye size={14} />}
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                            <div className="flex gap-3 pt-2">
-                                <button type="button" onClick={() => setShowChangePwd(false)}
-                                    className="flex-1 py-2.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                                    Cancel
-                                </button>
-                                <button type="submit" disabled={pwdLoading}
-                                    className="flex-1 py-2.5 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-xl text-xs font-semibold transition-all disabled:opacity-50">
-                                    {pwdLoading ? 'Saving...' : 'Update Password'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-        </>
+            {/* 🔥 PRINT LAYER */}
+            <PrintDocument data={data} />
+        </div>
     );
 }
