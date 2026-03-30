@@ -147,6 +147,7 @@ const initialFormData = {
     selectedSectors: [] as string[],
     otherSector: '',
     referredBy: '',
+    spokenWith: '',
     filledBy: 'User',
     paymentMode: 'online' as 'manual' | 'online',
     paymentType: 'full' as 'advance' | 'full',
@@ -166,6 +167,7 @@ const BookAStand = () => {
     const [events, setEvents] = useState<any[]>([]);
     const [selectedEventId, setSelectedEventId] = useState<string>('');
     const [availableStalls, setAvailableStalls] = useState<any[]>([]);
+    const [staff, setStaff] = useState<any[]>([]);
     const [marketingStaff, setMarketingStaff] = useState<any[]>([]);
     const [termsContent, setTermsContent] = useState<any>(null);
     const [allRates, setAllRates] = useState<any[]>([]);
@@ -178,13 +180,14 @@ const BookAStand = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const [hData, eData, staffRes, termsRes] = await Promise.all([
+                const [hData, eData, employeesRes, staffRes, termsRes] = await Promise.all([
                     heroBackgroundApi.getByPage("Registration / Book A Stand"),
                     eventApi.getActive(),
-                    fetch(`${SERVER_URL}/api/admin/staff/marketing`).then(res => res.json()).catch(() => ({ data: [] })),
+                    publicApi.getEmployees(),
+                    publicApi.getStaff(),
                     termsApi.getByPage("exhibitor-registration")
                 ]);
-                
+
                 if (hData) setHeroData(hData);
                 if (eData && eData.length > 0) {
                     setEvents(eData);
@@ -192,7 +195,8 @@ const BookAStand = () => {
                     setFormData(prev => ({ ...prev, eventId: eData[0]._id, advancePercentage: eData[0].onlineAdvancePercentage }));
                     setOnlineAdvancePercent(eData[0].onlineAdvancePercentage || 50);
                 }
-                setMarketingStaff(staffRes);
+                if (employeesRes) setMarketingStaff(employeesRes);
+                if (staffRes) setStaff(staffRes);
                 if (termsRes) setTermsContent(termsRes);
             } catch (error) {
                 console.error("Error fetching initial data:", error);
@@ -230,7 +234,7 @@ const BookAStand = () => {
     useEffect(() => {
         const updateRate = async () => {
             if (!selectedEventId || !formData.participation.stallType || !formData.participation.currency) return;
-            
+
             try {
                 const rateData = await stallRateApi.getRate(selectedEventId, formData.participation.currency, formData.participation.stallType);
                 if (rateData) {
@@ -251,12 +255,12 @@ const BookAStand = () => {
         const part = formData.participation;
         const rate = Number(part.rate) || 0;
         const size = Number(part.stallSize) || 0;
-        
+
         // Find selected stall for increments/discounts
         const stall = availableStalls.find(s => s._id === part.stallNo);
         const incPercent = stall?.incrementPercentage || 0;
         const discPercent = stall?.discountPercentage || 0;
-        
+
         const baseAmount = rate * size;
         const withInc = baseAmount * (1 + incPercent / 100);
         const discountAmount = withInc * (discPercent / 100);
@@ -374,8 +378,8 @@ const BookAStand = () => {
                     description: `Stand Booking - Stall ${formData.participation.stallFor}`,
                     order_id: orderData.order.id,
                     handler: async (response: any) => {
-                        const finalData = { 
-                            ...formData, 
+                        const finalData = {
+                            ...formData,
                             razorpayOrderId: response.razorpay_order_id,
                             paymentId: response.razorpay_payment_id,
                             razorpaySignature: response.razorpay_signature,
@@ -434,7 +438,7 @@ const BookAStand = () => {
                         {heroData?.title || "Exhibition 2026"}
                     </p>
 
-                    <h1 
+                    <h1
                         className="text-4xl md:text-6xl font-semibold mb-4 tracking-tight"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                     >
@@ -456,7 +460,7 @@ const BookAStand = () => {
                         {/* ── EXHIBITOR REGISTRATION TABLE ── */}
                         <div className="bg-white border border-slate-200 overflow-hidden shadow-sm" data-aos="fade-up">
                             <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
-                                <h2 
+                                <h2
                                     className="text-xl font-bold text-slate-900 uppercase tracking-tight flex items-baseline gap-0.5"
                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                 >
@@ -480,7 +484,7 @@ const BookAStand = () => {
                                             <div className="w-20 h-20 bg-[#23471d]/10 flex items-center justify-center text-[#23471d] rounded-full">
                                                 <CheckCircle size={40} />
                                             </div>
-                                            <h2 
+                                            <h2
                                                 className="text-3xl font-bold text-slate-900"
                                                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                             >
@@ -499,7 +503,7 @@ const BookAStand = () => {
                                                 </div>
                                                 <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-widest">ID: REG-{Date.now().toString().slice(-6)}</span>
                                             </div>
-                                            
+
                                             <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4 font-inter">
                                                 <div className="border-r border-slate-100">
                                                     <p className="text-[9px] text-slate-400 font-black uppercase mb-1">STALL NO.</p>
@@ -599,7 +603,7 @@ const BookAStand = () => {
                                     >
                                         <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                             <div>
-                                                <h2 
+                                                <h2
                                                     className="text-lg font-bold text-slate-900 uppercase"
                                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                                 >
@@ -607,7 +611,7 @@ const BookAStand = () => {
                                                 </h2>
                                                 <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">Registration Portal</p>
                                             </div>
-                                            
+
                                             <div className="w-full md:w-64">
                                                 <Label className="text-[9px] font-black text-[#23471d] uppercase mb-1.5 block">Select Exhibition Event *</Label>
                                                 <Select onValueChange={(v) => handleSelectChange('eventId', v)} value={selectedEventId}>
@@ -637,7 +641,7 @@ const BookAStand = () => {
                                                             <div key={rate._id} className="bg-white p-4 rounded border border-slate-200 shadow-sm flex flex-col items-center text-center">
                                                                 <div className="text-[10px] font-black text-slate-500 uppercase mb-1">{rate.stallType}</div>
                                                                 <div className="text-lg font-black text-[#d26019]">
-                                                                    {rate.currency === 'INR' ? '₹' : '$'}{rate.ratePerSqm.toLocaleString()} 
+                                                                    {rate.currency === 'INR' ? '₹' : '$'}{rate.ratePerSqm.toLocaleString()}
                                                                     <span className="text-[10px] text-slate-400 font-bold ml-1">/ SQM</span>
                                                                 </div>
                                                             </div>
@@ -648,7 +652,7 @@ const BookAStand = () => {
 
                                             {/* ── EXHIBITOR DETAILS ── */}
                                             <div className="space-y-5">
-                                                <h3 
+                                                <h3
                                                     className="text-sm font-black text-[#d26019] uppercase tracking-[0.1em] border-b border-slate-100 pb-2 flex items-center gap-2"
                                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                                 >
@@ -852,8 +856,8 @@ const BookAStand = () => {
                                                             <div className="space-y-2">
                                                                 {cat.options.map((opt, oIdx) => (
                                                                     <div key={oIdx} className="flex items-center space-x-2">
-                                                                        <Checkbox 
-                                                                            id={`sector-${cIdx}-${oIdx}`} 
+                                                                        <Checkbox
+                                                                            id={`sector-${cIdx}-${oIdx}`}
                                                                             checked={formData.selectedSectors.includes(opt)}
                                                                             onCheckedChange={() => handleSectorToggle(opt)}
                                                                             className="border-slate-300 data-[state=checked]:bg-[#23471d]"
@@ -869,13 +873,13 @@ const BookAStand = () => {
 
                                             {/* ── PARTICIPATION DETAILS ── */}
                                             <div className="space-y-6 pt-4">
-                                                <h3 
+                                                <h3
                                                     className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5 flex items-center gap-2"
                                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                                 >
                                                     <CheckCircle size={16} /> Participation & Space Details
                                                 </h3>
-                                                
+
                                                 <div className="bg-slate-50/50 border border-slate-200 p-6 rounded-[2px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                                     <div className="lg:col-span-2">
                                                         <Label className={labelClasses}>SELECT STALL FROM AVAILABLE LIST *</Label>
@@ -941,7 +945,7 @@ const BookAStand = () => {
                                                         <Label className={labelClasses}>DIMENSIONS</Label>
                                                         <div className="h-8 bg-slate-100 flex items-center px-4 text-xs font-bold text-slate-500 border border-slate-300">
                                                             {formData.participation.dimension || "0x0m"}
-                                                                              </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -952,9 +956,9 @@ const BookAStand = () => {
                                                     {/* Background Artistic Accents */}
                                                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-[#d26019]/20 to-transparent rounded-full -mr-64 -mt-64 blur-[100px] pointer-events-none" />
                                                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-[#23471d]/40 to-transparent rounded-full -ml-48 -mb-48 blur-[80px] pointer-events-none" />
-                                                    
+
                                                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
-                                                        
+
                                                         {/* ── LEFT: BOOKING SUMMARY ── */}
                                                         <div className="lg:col-span-5 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col justify-between">
                                                             <div className="space-y-6">
@@ -963,7 +967,7 @@ const BookAStand = () => {
                                                                         <div className="w-8 h-px bg-[#d26019]"></div>
                                                                         <h4 className="text-[11px] font-black text-[#d26019] uppercase tracking-[0.4em]">Final Summary</h4>
                                                                     </div>
-                                                                    <h3 className="text-3xl font-black text-white leading-tight">Order <br/>Overview</h3>
+                                                                    <h3 className="text-3xl font-black text-white leading-tight">Order <br />Overview</h3>
                                                                 </div>
 
                                                                 <div className="space-y-6">
@@ -1062,15 +1066,30 @@ const BookAStand = () => {
                                                                     </div>
 
                                                                     <div className="space-y-4">
+                                                                        <Label className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.3em] block">Spoken With (Team Member) *</Label>
+                                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                                            <SelectTrigger className="h-12 rounded-2xl border-white/10 bg-white/5 text-white text-xs font-bold focus:ring-[#d26019]/30 hover:bg-white/10 transition-all">
+                                                                                <SelectValue placeholder="Select Team Member" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="bg-[#1a3516] border-white/10 text-white">
+                                                                                <SelectItem value="None">None / Direct</SelectItem>
+                                                                                {Array.isArray(staff) && staff.map((s: any) => (
+                                                                                    <SelectItem key={s._id} value={s.username}>{s.username}</SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+
+                                                                    <div className="space-y-4">
                                                                         <Label className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.3em] block">Agreement *</Label>
-                                                                        <label 
+                                                                        <label
                                                                             htmlFor="terms-check"
                                                                             className="h-12 flex items-center gap-3 px-5 bg-white/5 border border-white/10 rounded-2xl cursor-pointer hover:bg-white/10 transition-all"
                                                                         >
-                                                                            <Checkbox 
+                                                                            <Checkbox
                                                                                 id="terms-check"
-                                                                                required 
-                                                                                className="border-white/20 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]" 
+                                                                                required
+                                                                                className="border-white/20 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]"
                                                                             />
                                                                             <span className="text-[11px] font-bold text-white/70 uppercase">
                                                                                 Accept <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} target="_blank" className="text-[#d26019] hover:text-white underline transition-colors" onClick={(e) => e.stopPropagation()}>Terms & Conditions</Link>
@@ -1086,7 +1105,7 @@ const BookAStand = () => {
                                                                         <p className="text-[9px] text-[#d26019] font-black uppercase tracking-tighter italic">Recommended: Full Payment</p>
                                                                     </div>
                                                                     <div className="grid grid-cols-2 gap-4">
-                                                                        <button 
+                                                                        <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'full')}
                                                                             className={`relative overflow-hidden group px-6 py-6 rounded-[1.5rem] border-2 transition-all duration-500 text-left ${formData.paymentType === 'full' ? 'border-[#d26019] bg-[#d26019]/10 shadow-[0_0_40px_rgba(210,96,25,0.1)]' : 'border-white/5 bg-white/5 hover:border-white/20'}`}
@@ -1102,7 +1121,7 @@ const BookAStand = () => {
                                                                                 <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-[#d26019]/20 blur-2xl rounded-full" />
                                                                             )}
                                                                         </button>
-                                                                        <button 
+                                                                        <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'advance')}
                                                                             className={`relative overflow-hidden group px-6 py-6 rounded-[1.5rem] border-2 transition-all duration-500 text-left ${formData.paymentType === 'advance' ? 'border-[#d26019] bg-[#d26019]/10 shadow-[0_0_40px_rgba(210,96,25,0.1)]' : 'border-white/5 bg-white/5 hover:border-white/20'}`}
@@ -1155,17 +1174,17 @@ const BookAStand = () => {
                                                                     <div className="flex justify-center items-center gap-8 text-white/20">
                                                                         <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
                                                                             <Lock size={16} />
-                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">AES-256 <br/>Secure</span>
+                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">AES-256 <br />Secure</span>
                                                                         </div>
                                                                         <div className="h-8 w-px bg-white/5" />
                                                                         <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
                                                                             <ShieldCheck size={16} />
-                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">RBI <br/>Compliant</span>
+                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">RBI <br />Compliant</span>
                                                                         </div>
                                                                         <div className="h-8 w-px bg-white/5" />
                                                                         <div className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity">
                                                                             <Banknote size={16} />
-                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">Instant <br/>Invoice</span>
+                                                                            <span className="text-[7px] font-black uppercase tracking-widest text-center">Instant <br />Invoice</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

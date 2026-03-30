@@ -504,8 +504,13 @@ export const exhibitorRegistrationApi = {
 };
 
 export const publicApi = {
-    getEmployees: async (): Promise<string[]> => {
+    getEmployees: async (): Promise<any[]> => {
         const response = await fetch(`${API_URL}/public/employees`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getStaff: async (): Promise<any[]> => {
+        const response = await fetch(`${API_URL}/public/staff`);
         const data = await response.json();
         return data.success ? data.data : [];
     }

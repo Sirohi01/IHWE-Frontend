@@ -8,7 +8,9 @@ import { API_URL } from '@/lib/api';
 const ExhibitorLogin = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
+    const [loginMode, setLoginMode] = useState<'email' | 'mobile'>('email');
     const [email, setEmail] = useState('');
+    const [mobile, setMobile] = useState('');
     const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [exhibitorId, setExhibitorId] = useState('');
@@ -19,17 +21,26 @@ const ExhibitorLogin = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch(`${API_URL}/exhibitor-auth/login`, {
+            const endpoint = loginMode === 'email' ? 'login' : 'send-mobile-otp';
+            const body = loginMode === 'email' 
+                ? { email: email.trim(), password: password.trim() }
+                : { mobile: mobile.trim() };
+
+            const res = await fetch(`${API_URL}/exhibitor-auth/${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email.trim(), password: password.trim() })
+                body: JSON.stringify(body)
             });
             const data = await res.json();
 
-            if (data.success && data.requiresOtp) {
+            if (data.success && (data.requiresOtp || loginMode === 'mobile')) {
                 setExhibitorId(data.exhibitorId);
                 setStep(2);
-                toast.success('Credentials verified!', { description: 'OTP sent to your registered mobile and email.' });
+                toast.success('Verification Started!', { 
+                    description: loginMode === 'email' 
+                        ? 'OTP sent to your registered mobile and email.' 
+                        : 'OTP sent to your mobile number.' 
+                });
             } else {
                 toast.error('Authentication Failed', { description: data.message || 'Invalid credentials provided.' });
             }
@@ -140,57 +151,95 @@ const ExhibitorLogin = () => {
                                     <p className="mt-2 text-sm font-bold text-slate-500 uppercase tracking-widest">Authentication Level 1</p>
                                 </div>
 
-                                <form onSubmit={handleLogin} className="space-y-6">
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] font-black uppercase tracking-widest text-[#23471d] ml-1">Access Email</label>
-                                        <div className="relative group">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Mail className="h-4 w-4 text-slate-400 group-focus-within:text-[#23471d] transition-colors" />
-                                            </div>
-                                            <input
-                                                type="email"
-                                                required
-                                                value={email}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                className="block w-full pl-11 pr-4 py-4 border-2 border-slate-100 rounded-2xl text-sm font-bold bg-slate-50 focus:bg-white focus:border-[#23471d] outline-none transition-all placeholder:text-slate-300"
-                                                placeholder="exhibitor@company.com"
-                                            />
-                                        </div>
-                                    </div>
+                                {/* Login Selection */}
+                                <div className="flex p-1 bg-slate-100 rounded-2xl">
+                                    <button
+                                        onClick={() => setLoginMode('email')}
+                                        className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${loginMode === 'email' ? 'bg-white text-[#23471d] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                                    >
+                                        Email & Pass
+                                    </button>
+                                    <button
+                                        onClick={() => setLoginMode('mobile')}
+                                        className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${loginMode === 'mobile' ? 'bg-white text-[#23471d] shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                                    >
+                                        Mobile OTP
+                                    </button>
+                                </div>
 
-                                    <div className="space-y-1.5">
-                                        <div className="flex items-center justify-between ml-1">
-                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#23471d]">Secure Passcode</label>
-                                            <span className="text-[10px] font-bold text-slate-400 cursor-help hover:text-slate-600 transition-colors">Check your Welcome Email</span>
-                                        </div>
-                                        <div className="relative group">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-[#23471d] transition-colors" />
+                                <form onSubmit={handleLogin} className="space-y-6">
+                                    {loginMode === 'email' ? (
+                                        <>
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] font-black uppercase tracking-widest text-[#23471d] ml-1">Access Email</label>
+                                                <div className="relative group">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Mail className="h-4 w-4 text-slate-400 group-focus-within:text-[#23471d] transition-colors" />
+                                                    </div>
+                                                    <input
+                                                        type="email"
+                                                        required
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                        className="block w-full pl-11 pr-4 py-4 border-2 border-slate-100 rounded-2xl text-sm font-bold bg-slate-50 focus:bg-white focus:border-[#23471d] outline-none transition-all placeholder:text-slate-300"
+                                                        placeholder="exhibitor@company.com"
+                                                    />
+                                                </div>
                                             </div>
-                                            <input
-                                                type={showPassword ? "text" : "password"}
-                                                required
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                className="block w-full pl-11 pr-12 py-4 border-2 border-slate-100 rounded-2xl text-sm font-bold bg-slate-50 focus:bg-white focus:border-[#23471d] outline-none transition-all placeholder:text-slate-300 tracking-wider"
-                                                placeholder="••••••••"
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-[#23471d] transition-colors focus:outline-none"
-                                            >
-                                                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                            </button>
+
+                                            <div className="space-y-1.5">
+                                                <div className="flex items-center justify-between ml-1">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-[#23471d]">Secure Passcode</label>
+                                                    <span className="text-[10px] font-bold text-slate-400 cursor-help hover:text-slate-600 transition-colors">Check your Welcome Email</span>
+                                                </div>
+                                                <div className="relative group">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Lock className="h-4 w-4 text-slate-400 group-focus-within:text-[#23471d] transition-colors" />
+                                                    </div>
+                                                    <input
+                                                        type={showPassword ? "text" : "password"}
+                                                        required
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                        className="block w-full pl-11 pr-12 py-4 border-2 border-slate-100 rounded-2xl text-sm font-bold bg-slate-50 focus:bg-white focus:border-[#23471d] outline-none transition-all placeholder:text-slate-300 tracking-wider"
+                                                        placeholder="••••••••"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowPassword(!showPassword)}
+                                                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-[#23471d] transition-colors focus:outline-none"
+                                                    >
+                                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="space-y-1.5">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-[#23471d] ml-1">Mobile Number</label>
+                                            <div className="relative group">
+                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                    <Phone className="h-4 w-4 text-slate-400 group-focus-within:text-[#23471d] transition-colors" />
+                                                </div>
+                                                <input
+                                                    type="tel"
+                                                    required
+                                                    value={mobile}
+                                                    onChange={(e) => setMobile(e.target.value)}
+                                                    className="block w-full pl-11 pr-4 py-4 border-2 border-slate-100 rounded-2xl text-sm font-bold bg-slate-50 focus:bg-white focus:border-[#23471d] outline-none transition-all placeholder:text-slate-300"
+                                                    placeholder="+91 99999 99999"
+                                                />
+                                            </div>
+                                            <p className="text-[9px] text-slate-400 font-bold uppercase mt-1 italic ml-1">OTP will be sent via WhatsApp & Email</p>
                                         </div>
-                                    </div>
+                                    )}
 
                                     <button
                                         type="submit"
                                         disabled={loading}
                                         className="w-full flex justify-between items-center py-4 px-6 rounded-2xl shadow-[0_10px_40px_rgba(35,71,29,0.15)] hover:shadow-[0_10px_40px_rgba(35,71,29,0.3)] text-xs font-black uppercase tracking-widest text-white bg-[#23471d] hover:bg-[#1a3516] focus:outline-none focus:ring-4 focus:ring-[#23471d]/20 disabled:opacity-50 transition-all hover:-translate-y-1"
                                     >
-                                        <span>{loading ? 'Authenticating Data...' : 'Proceed to Step 2'}</span>
+                                        <span>{loading ? 'Processing...' : (loginMode === 'email' ? 'Proceed to Step 2' : 'Get Login OTP')}</span>
                                         {!loading && <ArrowRight size={18} />}
                                     </button>
                                 </form>
