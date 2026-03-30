@@ -327,6 +327,11 @@ export const galleryApi = {
         const response = await fetch(url);
         const data = await response.json();
         return data.success ? data.data : [];
+    },
+    getCategories: async () => {
+        const response = await fetch(`${API_URL}/gallery-category`);
+        const data = await response.json();
+        return data.success ? data.data : [];
     }
 };
 

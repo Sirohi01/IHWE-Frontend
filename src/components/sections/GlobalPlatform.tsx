@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { globalPlatformApi, API_URL } from '@/lib/api';
+import { globalPlatformApi, SERVER_URL } from '@/lib/api';
 
 interface PlatformData {
   subheading: string;
@@ -36,15 +36,19 @@ const GlobalPlatform: React.FC = () => {
 
   // Function to wrap highlight text in orange span
   const renderTitle = (title: string, highlight: string) => {
-    if (!highlight || !title.includes(highlight)) {
-      return title;
-    }
-    const parts = title.split(highlight);
+    if (!highlight) return title;
+    const parts = title.split(new RegExp(`(${highlight})`, "gi"));
     return (
       <>
-        {parts[0]}
-        <span className="text-[#d26019]">{highlight}</span>
-        {parts[1]}
+        {parts.map((part, i) =>
+          part.toLowerCase() === highlight.toLowerCase() ? (
+            <span key={i} className="text-[#d26019]">
+              {part}
+            </span>
+          ) : (
+            part
+          )
+        )}
       </>
     );
   };
@@ -61,7 +65,7 @@ const GlobalPlatform: React.FC = () => {
                 <div className="rounded-2xl overflow-hidden aspect-[3/4] shadow-md bg-gray-100">
                   {data.images[0]?.url && (
                     <img 
-                      src={`${API_URL.replace('/api', '')}${data.images[0].url}`} 
+                      src={data.images[0].url.startsWith('http') ? data.images[0].url : `${SERVER_URL}${data.images[0].url}`} 
                       alt={data.images[0]?.altText || "Global Platform"} 
                       className="w-full h-full object-cover" 
                     />
@@ -70,7 +74,7 @@ const GlobalPlatform: React.FC = () => {
                 <div className="rounded-2xl overflow-hidden aspect-square shadow-md bg-gray-100">
                   {data.images[1]?.url && (
                     <img 
-                      src={`${API_URL.replace('/api', '')}${data.images[1].url}`} 
+                      src={data.images[1].url.startsWith('http') ? data.images[1].url : `${SERVER_URL}${data.images[1].url}`} 
                       alt={data.images[1]?.altText || "Global Platform"} 
                       className="w-full h-full object-cover" 
                     />
@@ -81,7 +85,7 @@ const GlobalPlatform: React.FC = () => {
                 <div className="rounded-2xl overflow-hidden aspect-square shadow-md bg-gray-100">
                   {data.images[2]?.url && (
                     <img 
-                      src={`${API_URL.replace('/api', '')}${data.images[2].url}`} 
+                      src={data.images[2].url.startsWith('http') ? data.images[2].url : `${SERVER_URL}${data.images[2].url}`} 
                       alt={data.images[2]?.altText || "Global Platform"} 
                       className="w-full h-full object-cover" 
                     />
@@ -90,7 +94,7 @@ const GlobalPlatform: React.FC = () => {
                 <div className="rounded-2xl overflow-hidden aspect-[3/4] shadow-md bg-gray-100">
                   {data.images[3]?.url && (
                     <img 
-                      src={`${API_URL.replace('/api', '')}${data.images[3].url}`} 
+                      src={data.images[3].url.startsWith('http') ? data.images[3].url : `${SERVER_URL}${data.images[3].url}`} 
                       alt={data.images[3]?.altText || "Global Platform"} 
                       className="w-full h-full object-cover" 
                     />
@@ -98,8 +102,6 @@ const GlobalPlatform: React.FC = () => {
                 </div>
               </div>
             </div>
-            {/* Floating Decorative Element */}
-            <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-[#23471d]/5 backdrop-blur-xl rounded-full" />
           </div>
 
           {/* RIGHT SIDE: CONTENT FROM BACKEND */}
