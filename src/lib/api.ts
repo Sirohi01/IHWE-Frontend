@@ -336,8 +336,9 @@ export const galleryApi = {
         const data = await response.json();
         return data.success ? data.data : [];
     },
-    getCategories: async () => {
-        const response = await fetch(`${API_URL}/gallery-category`);
+    getCategories: async (type?: string) => {
+        const url = type ? `${API_URL}/gallery-category?type=${type}` : `${API_URL}/gallery-category`;
+        const response = await fetch(url);
         const data = await response.json();
         return data.success ? data.data : [];
     }
