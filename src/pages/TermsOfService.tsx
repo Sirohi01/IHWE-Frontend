@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Gavel, AlertCircle, Info } from "lucide-react";
+import { Info } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { termsApi, eventApi } from "@/lib/api";
 
 const TermsOfService = () => {
+  const [searchParams] = useSearchParams();
+  const eventId = searchParams.get("eventId");
+  const pageName = searchParams.get("page") || "terms-of-service";
+
+  const [termsContent, setTermsContent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTerms = async () => {
+      try {
+        let targetEventId = eventId;
+        if (!targetEventId) {
+            const events = await eventApi.getActive();
+            if (events && events.length > 0) {
+                targetEventId = events[0]._id;
+            }
+        }
+        
+        if (targetEventId) {
+            const data = await termsApi.getByPage(pageName, targetEventId);
+            setTermsContent(data);
+        }
+      } catch (err) {
+        console.error("Error fetching terms:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTerms();
+  }, [eventId, pageName]);
+
   return (
     <div className="bg-[#f9fafb] min-h-screen font-inter">
       {/* Hero Section */}
@@ -11,10 +44,10 @@ const TermsOfService = () => {
         <div className="container mx-auto px-4 text-center relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Legal Information</p>
           <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
-            Terms of Service
+            Terms & Conditions
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Please read these terms carefully before using our website or participating in our event.
+            Please read these terms carefully before proceeding.
           </p>
         </div>
         <div
@@ -30,91 +63,29 @@ const TermsOfService = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-white p-8 md:p-12 shadow-sm border border-slate-100 space-y-12 text-slate-700 leading-relaxed"
+            className="bg-white p-8 md:p-12 shadow-sm border border-slate-100 space-y-12 text-slate-700 leading-relaxed min-h-[400px]"
           >
-            {/* Agreement to Terms */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Info className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">1. Agreement to Terms</h2>
-              </div>
-              <p>
-                By accessing our website (healthwellnessexpo.com) or registering for the International Health & Wellness Expo (IHWE), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our site or register for the event.
-              </p>
-            </div>
-
-            {/* Intellectual Property */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <FileText className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">2. Intellectual Property</h2>
-              </div>
-              <p>
-                All content on this website, including text, graphics, logos, images, and software, is the property of Encodancy Pvt Ltd or its sponsors/partners and is protected by intellectual property laws. You may not use, reproduce, or distribute any content without our prior written permission.
-              </p>
-            </div>
-
-            {/* Use of Site */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <AlertCircle className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">3. Use of Site</h2>
-              </div>
-              <p className="mb-4">
-                You agree to use the site only for lawful purposes. You are prohibited from:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Using the site in any way that violates local, state, or international laws.</li>
-                <li>Engaging in any conduct that disrupts or interferes with the site's functionality.</li>
-                <li>Attempting to gain unauthorized access to any portion of the site.</li>
-                <li>Using any automated means (like bots) to access the site without permission.</li>
-              </ul>
-            </div>
-
-            {/* Limitation of Liability */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Gavel className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">4. Limitation of Liability</h2>
-              </div>
-              <p>
-                Encodancy Pvt Ltd will not be liable for any damages of any kind arising from the use of this site or from your participation in the event, including but not limited to direct, indirect, incidental, punitive, and consequential damages.
-              </p>
-            </div>
-
-            {/* Governing Law */}
-            <div>
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">5. Governing Law</h2>
-              <p>
-                These terms are governed by and construed in accordance with the laws of India. Any disputes relating to these terms will be subject to the exclusive jurisdiction of the courts in Ghaziabad, India.
-              </p>
-            </div>
-
-            {/* Changes to Terms */}
-            <div>
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">6. Changes to Terms</h2>
-              <p>
-                We reserve the right to modify these Terms of Service at any time. Any changes will be effective immediately upon posting on the site. Your continued use of the site or registration for the event after any changes constitutes your acceptance of the new terms.
-              </p>
-            </div>
-
-            {/* Contact Us */}
-            <div className="pt-8 border-t border-slate-100">
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">Contact Us</h2>
-              <p className="mb-4">
-                If you have any questions regarding these Terms of Service, you may contact us using the information below:
-              </p>
-              <div className="space-y-2 text-sm">
-                <p className="font-bold text-slate-900">Encodancy Pvt Ltd</p>
-                <p>12/29, Site-II, Loni Road, Industrial Area, Mohan Nagar, Ghaziabad, India</p>
-                <p>Email: info@healthwellnessexpo.com</p>
-                <p>Phone: +91 98765 43210</p>
-              </div>
-            </div>
-
-            <div className="text-xs text-slate-400 pt-10">
-              Last Updated: March 19, 2026
-            </div>
+            {loading ? (
+                <div className="flex items-center justify-center p-12 text-slate-400 font-bold uppercase tracking-widest text-sm">Loading Terms...</div>
+            ) : termsContent ? (
+                <div>
+                  <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
+                    <Info className="w-8 h-8 text-[#d26019]" />
+                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">{termsContent.title}</h2>
+                  </div>
+                  <div 
+                    className="prose prose-slate max-w-none text-slate-700 space-y-4"
+                    dangerouslySetInnerHTML={{ __html: termsContent.content }}
+                  />
+                  <div className="text-xs text-slate-400 pt-10 mt-10 border-t border-slate-100 uppercase font-bold tracking-widest">
+                    Last Updated: {new Date(termsContent.updatedAt).toLocaleDateString()}
+                  </div>
+                </div>
+            ) : (
+                <div className="text-center p-12 text-slate-500 font-medium">
+                  No terms and conditions found for the selected event. Please contact support.
+                </div>
+            )}
           </motion.div>
         </div>
       </section>

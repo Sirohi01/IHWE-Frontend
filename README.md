@@ -56,4 +56,3 @@ npm run build
 ## License
 
 This project is proprietary.
-# IHWE-Frontend

@@ -1,0 +1,187 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { API_URL, settingsApi } from '@/lib/api';
+
+// Sub-components
+import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
+import ExhibitorHeader from '@/components/dashboard/exhibitor/ExhibitorHeader';
+import ExhibitorMobileNav from '@/components/dashboard/exhibitor/ExhibitorMobileNav';
+import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
+import ExhibitorProfile from '@/components/dashboard/exhibitor/ExhibitorProfile';
+import ExhibitorInvoices from '@/components/dashboard/exhibitor/ExhibitorInvoices';
+import ExhibitorEvents from '@/components/dashboard/exhibitor/ExhibitorEvents';
+import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
+import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
+
+export default function ExhibitorDashboard() {
+    const navigate = useNavigate();
+    const [data, setData] = useState<any>(null);
+    const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions'>('dashboard');
+    const [showChangePwd, setShowChangePwd] = useState(false);
+    const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
+    const [pwdLoading, setPwdLoading] = useState(false);
+    const [showPwd, setShowPwd] = useState({ current: false, newPwd: false });
+    const [logo, setLogo] = useState<string | null>(null);
+
+    const fetchDashboard = async (regId?: string) => {
+        const token = localStorage.getItem('exhibitorToken');
+        if (!token) { navigate('/exhibitor-login'); return; }
+
+        let url = `${API_URL}/exhibitor-auth/dashboard`;
+        if (regId) url += `?id=${regId}`;
+
+        try {
+            const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await r.json();
+            if (res.success) {
+                setData(res.data);
+                if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
+            } else {
+                toast.error(res.message);
+                if (res.message === 'Token expired or invalid') {
+                    localStorage.removeItem('exhibitorToken');
+                    navigate('/exhibitor-login');
+                }
+            }
+        } catch {
+            toast.error('Failed to load dashboard.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchDashboard();
+        settingsApi.get().then(s => { if (s?.logo) setLogo(s.logo); });
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('exhibitorToken');
+        navigate('/exhibitor-login');
+    };
+
+    const handleChangePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (pwdForm.newPwd !== pwdForm.confirm) { toast.error('New passwords do not match'); return; }
+        if (pwdForm.newPwd.length < 6) { toast.error('Password must be at least 6 characters'); return; }
+        setPwdLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/exhibitor-auth/change-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('exhibitorToken')}` },
+                body: JSON.stringify({ currentPassword: pwdForm.current, newPassword: pwdForm.newPwd })
+            });
+            const result = await res.json();
+            if (result.success) {
+                toast.success('Password changed successfully');
+                setShowChangePwd(false);
+                setPwdForm({ current: '', newPwd: '', confirm: '' });
+            } else {
+                toast.error(result.message);
+            }
+        } catch { toast.error('Failed to change password'); }
+        finally { setPwdLoading(false); }
+    };
+
+    if (loading) return (
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center print:hidden">
+            <div className="flex flex-col items-center gap-3">
+                <div className="w-10 h-10 rounded-full border-[3px] border-[#23471d]/20 border-t-[#23471d] animate-spin" />
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Loading Portal...</p>
+            </div>
+        </div>
+    );
+
+    if (!data) return null;
+
+    const cur = data.currency === 'USD' ? '$' : '₹';
+    const status = STATUS_CONFIG[data.status] || STATUS_CONFIG.pending;
+    const paid = data.amountPaid || 0;
+    const total = data.participation?.total || 0;
+    const balance = data.balanceAmount || 0;
+    const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
+    const regDate = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+
+    return (
+        <div className="min-h-screen bg-[#f1f4f9] font-sans selection:bg-[#23471d]/20 antialiased">
+            <ExhibitorHeader 
+                logo={logo} 
+                data={data} 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+                handleLogout={handleLogout} 
+            />
+
+            <ExhibitorMobileNav 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab} 
+            />
+
+            <main className="max-w-[1600px] mx-auto px-4 sm:px-10 lg:px-16 pt-28 pb-32 print:hidden">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'dashboard' && (
+                        <ExhibitorOverview 
+                            data={data} 
+                            cur={cur} 
+                            status={status} 
+                            paidPct={paidPct} 
+                            paid={paid} 
+                            total={total} 
+                            balance={balance} 
+                            setActiveTab={setActiveTab} 
+                        />
+                    )}
+
+                    {activeTab === 'profile' && <ExhibitorProfile data={data} />}
+
+                    {activeTab === 'invoices' && (
+                        <ExhibitorInvoices 
+                            data={data} 
+                            cur={cur} 
+                            total={total} 
+                            paid={paid} 
+                            balance={balance} 
+                            paidPct={paidPct} 
+                            regDate={regDate} 
+                        />
+                    )}
+
+                    {activeTab === 'exhibitions' && (
+                        <ExhibitorEvents 
+                            data={data} 
+                            allRegistrations={allRegistrations} 
+                            setLoading={setLoading} 
+                            fetchDashboard={fetchDashboard} 
+                            setActiveTab={setActiveTab} 
+                        />
+                    )}
+                </AnimatePresence>
+            </main>
+
+            <footer className="max-w-[1600px] mx-auto px-10 lg:px-16 py-12 border-t border-slate-200/50 flex flex-col sm:flex-row items-center justify-between gap-6 opacity-60 print:hidden">
+                <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                    <span>© 2026 Namo Gange Trust</span>
+                    <div className="w-1 h-1 rounded-full bg-slate-300" />
+                    <span>Security Protocol Alpha</span>
+                </div>
+            </footer>
+
+            <SecurityModal 
+                show={showChangePwd} 
+                onClose={() => setShowChangePwd(false)} 
+                pwdForm={pwdForm} 
+                setPwdForm={setPwdForm} 
+                pwdLoading={pwdLoading} 
+                showPwd={showPwd} 
+                setShowPwd={setShowPwd} 
+                onSubmit={handleChangePassword} 
+            />
+
+            <PrintCertificate data={data} />
+        </div>
+    );
+}

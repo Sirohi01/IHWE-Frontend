@@ -1,9 +1,17 @@
 import { useAuthStore } from "@/stores/authStore";
-import { SidebarItemType } from "@/components/admin/Sidebar";
+export interface SidebarItemType {
+    _id: string;
+    label: string;
+    type: "heading" | "item" | "dropdown";
+    path?: string;
+    icon?: string;
+    roles?: string[];
+    children?: any[];
+}
+
 
 export const sidebarApi = {
     getTree: async (roleId?: string, isSuperAdmin: boolean = false): Promise<SidebarItemType[]> => {
-        // Mocking the sidebar tree structure based on user request
         return [
             {
                 _id: "dashboard",
@@ -327,6 +335,12 @@ export const galleryApi = {
         const response = await fetch(url);
         const data = await response.json();
         return data.success ? data.data : [];
+    },
+    getCategories: async (type?: string) => {
+        const url = type ? `${API_URL}/gallery-category?type=${type}` : `${API_URL}/gallery-category`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.success ? data.data : [];
     }
 };
 
@@ -432,3 +446,79 @@ export const analyticsApi = {
         }
     }
 };
+
+export const stallApi = {
+    getAvailable: async () => {
+        const response = await fetch(`${API_URL}/stalls/available`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getByEvent: async (eventId: string) => {
+        const response = await fetch(`${API_URL}/stalls/available?eventId=${eventId}`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const eventApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/events`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getActive: async () => {
+        const response = await fetch(`${API_URL}/events/active`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const stallRateApi = {
+    getRate: async (eventId: string, currency: string, stallType: string) => {
+        const response = await fetch(`${API_URL}/stall-rates/find?eventId=${eventId}&currency=${currency}&stallType=${stallType}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    },
+    getAllByEvent: async (eventId: string) => {
+        const response = await fetch(`${API_URL}/stall-rates/event/${eventId}`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const termsApi = {
+    getByPage: async (pageName: string, eventId?: string) => {
+        let url = `${API_URL}/terms-and-conditions/${pageName}`;
+        if (eventId) {
+            url += `?eventId=${eventId}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const exhibitorRegistrationApi = {
+    submit: async (payload: any) => {
+        const response = await fetch(`${API_URL}/exhibitor-registration`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    }
+};
+
+export const publicApi = {
+    getEmployees: async (): Promise<any[]> => {
+        const response = await fetch(`${API_URL}/public/employees`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getStaff: async (): Promise<any[]> => {
+        const response = await fetch(`${API_URL}/public/staff`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+

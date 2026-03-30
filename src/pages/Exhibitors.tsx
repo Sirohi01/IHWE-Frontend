@@ -95,7 +95,7 @@ const Exhibitors = () => {
                   {/* Logo Area */}
                   <div className="aspect-[4/3] p-3 flex items-center justify-center bg-white border-b border-slate-100">
                     <LazyLoadImage
-                      src={`${SERVER_URL}/${exhi.image}`}
+                      src={exhi.image.startsWith('http') ? exhi.image : `${SERVER_URL}${exhi.image}`}
                       alt={exhi.altText || exhi.title}
                       effect="blur"
                       className="max-h-full max-w-full object-contain transition-all duration-700 scale-90 group-hover:scale-100"
