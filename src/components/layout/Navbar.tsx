@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle } from "lucide-react";
+import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
 
