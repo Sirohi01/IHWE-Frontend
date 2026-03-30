@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { API_URL } from '@/lib/api';
+import { API_URL, SERVER_URL, settingsApi } from '@/lib/api';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; dot: string; icon: any; step: number }> = {
     pending: { label: 'Under Review', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-400', icon: Hourglass, step: 1 },
@@ -262,6 +262,7 @@ export default function ExhibitorDashboard() {
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
     const [pwdLoading, setPwdLoading] = useState(false);
     const [showPwd, setShowPwd] = useState({ current: false, newPwd: false });
+    const [logo, setLogo] = useState<string | null>(null);
 
     const fetchDashboard = async (regId?: string) => {
         const token = localStorage.getItem('exhibitorToken');
@@ -292,6 +293,7 @@ export default function ExhibitorDashboard() {
 
     useEffect(() => {
         fetchDashboard();
+        settingsApi.get().then(s => { if (s?.logo) setLogo(s.logo); });
     }, [navigate]);
 
     const handleLogout = () => {
@@ -351,16 +353,16 @@ export default function ExhibitorDashboard() {
             <div className="fixed top-0 inset-x-0 z-[100] px-4 pt-4 print:hidden pointer-events-none">
                 <header className="max-w-[1600px] mx-auto bg-white/70 backdrop-blur-2xl border border-white shadow-[0_8px_32px_rgba(0,0,0,0.05)] rounded-[2.5rem] flex items-center justify-between px-6 py-2.5 pointer-events-auto transition-all duration-500 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]">
                     
-                    {/* Brand */}
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#1a3516] to-[#3a7a2e] flex items-center justify-center shadow-xl shadow-green-900/10 group-hover:scale-105 transition-transform">
-                            <ShieldCheck size={22} className="text-white" strokeWidth={2.5} />
-                        </div>
-                        <div>
-                            <h1 className="text-sm font-black text-slate-800 tracking-tight leading-tight uppercase tracking-[0.1em]">{data.eventId?.name || 'IHWE 2026'}</h1>
-                            <p className="text-[10px] font-bold text-slate-400 group-hover:text-[#23471d] transition-colors uppercase tracking-[0.15em] flex items-center gap-1.5 opacity-80">
-                                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" /> Command Center
-                            </p>
+                    {/* Brand Only */}
+                    <div className="flex items-center group">
+                        <div className="h-14 flex items-center group-hover:scale-105 transition-all duration-500">
+                            {logo ? (
+                                <img src={`${SERVER_URL}${logo}`} className="h-full w-auto object-contain pr-4" alt="Logo" />
+                            ) : (
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#1a3516] to-[#3a7a2e] flex items-center justify-center shadow-xl shadow-green-900/10">
+                                    <ShieldCheck size={24} className="text-white" strokeWidth={2.5} />
+                                </div>
+                            )}
                         </div>
                     </div>
 
