@@ -464,7 +464,7 @@ const BookAStand = () => {
                                     className="text-xl font-bold text-slate-900 uppercase tracking-tight flex items-baseline gap-0.5"
                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                 >
-                                    9<span className="text-[0.6em] relative -top-[0.2em] font-sans lowercase">th</span> INTERNATIONAL HEALTH AND WELLNESS EXPO
+                                    {events.find(e => e._id === selectedEventId)?.name || "INTERNATIONAL HEALTH AND WELLNESS EXPO"}
                                 </h2>
                                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">EXHIBITOR REGISTRATION - BOOKING FORM</p>
                             </div>
@@ -888,10 +888,16 @@ const BookAStand = () => {
                                                                 <SelectValue placeholder="-- Click to Choose Stall --" />
                                                             </SelectTrigger>
                                                             <SelectContent className="max-h-[300px]">
-                                                                {availableStalls.length === 0 ? (
+                                                                {availableStalls.filter(s => 
+                                                                    (typeof s.eventId === 'string' ? s.eventId === selectedEventId : s.eventId?._id === selectedEventId) || 
+                                                                    (typeof s.event === 'string' ? s.event === selectedEventId : s.event?._id === selectedEventId)
+                                                                ).length === 0 ? (
                                                                     <p className="p-4 text-center text-xs text-slate-400 italic">No stalls available for this event</p>
                                                                 ) : (
-                                                                    availableStalls.map(s => (
+                                                                    availableStalls.filter(s => 
+                                                                        (typeof s.eventId === 'string' ? s.eventId === selectedEventId : s.eventId?._id === selectedEventId) || 
+                                                                        (typeof s.event === 'string' ? s.event === selectedEventId : s.event?._id === selectedEventId)
+                                                                    ).map(s => (
                                                                         <SelectItem key={s._id} value={s._id} className="text-xs font-bold">
                                                                             Stall {s.stallNumber} ({s.area} sqm - {s.length}x{s.width}m) - {s.plScheme}
                                                                         </SelectItem>
