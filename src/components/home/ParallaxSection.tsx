@@ -88,11 +88,11 @@ const ParallaxSection = () => {
             />
           </motion.div>
 
-          {/* Clean Transparent Overlay */}
-          <div className="absolute inset-0 bg-black/50" />
+          {/* Balanced Semi-Transparent Overlay (Optimized for text readability) */}
+          <div className="absolute inset-0 bg-black/35" />
 
-          {/* Subtle Gradient Depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70" />
+          {/* Moderate Gradient Depth for Sharp Text Legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/50" />
 
           {/* Content */}
           <div className="container mx-auto px-4 relative z-10 text-center">

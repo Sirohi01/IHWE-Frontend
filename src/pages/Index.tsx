@@ -15,7 +15,7 @@ import ExhibitionGrid from "@/components/home/ExhibitionGrid";
 import IndustryZones from "@/components/home/IndustryZones";
 import GallerySection from "@/components/home/GallerySection";
 import ExhibitorLogos from "@/components/home/ExhibitorLogos";
-import HealthcareGrowth from "@/components/home/HealthcareGrowth";
+import FAQSection from "@/components/home/FAQSection";
 import EventHighlights from "@/components/home/EventHighlights";
 import DownloadsSection from "@/components/home/DownloadsSection";
 
@@ -33,7 +33,6 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <MarqueeStrip />
       <WhoWeAre />
 
-      <HealthcareGrowth />
       <IndustryZones />
       <GallerySection />
 
@@ -47,7 +46,9 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       {/* <GlobalPartners /> */}
       <Testimonials />
       <StatsCounter />
+       <FAQSection />
       <BlogPreview />
+     
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
     </>
   );

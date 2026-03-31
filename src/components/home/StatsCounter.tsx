@@ -141,13 +141,13 @@ const StatsCounter = () => {
                         <StatCard
                             key={s._id || index}
                             icon={s.icon}
-                            end={Number(s.end)}
+                            end={isNaN(Number(s.end)) ? 0 : Number(s.end)}
                             prefix={s.prefix}
                             suffix={s.suffix}
                             label={s.label}
                             bg={s.bg}
                             overlay={s.overlay}
-                            delay={index * 200} // Reduced delay for snappier feel
+                            delay={index * 100} // Reduced delay for snappier feel
                             sectionVisible={visible}
                         />
                     ))}

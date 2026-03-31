@@ -16,7 +16,6 @@ const pathVariants = {
 } as any;
 
 const AboutSection = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
@@ -33,36 +32,7 @@ const AboutSection = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.5,
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          videoRef.current?.play().catch(error => {
-            console.log("Autoplay prevented:", error);
-          });
-        } else {
-          videoRef.current?.pause();
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, options);
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
-    return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
-      }
-    };
-  }, [data]); // Re-observe if video src changes
+  // Removed video intersection observer
 
   const visionMission = [
     {
@@ -123,20 +93,72 @@ const AboutSection = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
 
-          {/* LEFT VIDEO SIDE */}
-          <div data-aos="fade-right" className="self-stretch">
-            <div className="relative h-full">
-              <div className="overflow-hidden border-4 border-[#d26019] bg-slate-900 h-full">
-                <video
-                  ref={videoRef}
-                  key={data?.video} // Reset video element when src changes
-                  src={data?.video ? `${SERVER_URL}${data.video}` : ""}
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover"
+          {/* LEFT IMAGES SIDE - EDITORIAL GRID */}
+          <div data-aos="fade-right" className="relative group">
+            <div className="grid grid-cols-12 gap-3 lg:gap-4 h-[450px] md:h-[550px] lg:h-[650px]">
+              
+              {/* MAIN TALL IMAGE (LEFT) */}
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="col-span-7 relative overflow-hidden rounded-3xl border-2 border-[#d26019]/20 shadow-lg group-hover:shadow-2xl transition-all duration-500"
+              >
+                <img 
+                  src={data?.image1 ? `${SERVER_URL}${data.image1}` : ""} 
+                  alt={data?.image1Alt || "International Expo Conference"} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                  {/* Overlay text can be added here if needed */}
+                </div>
+              </motion.div>
+
+              {/* RIGHT STACK */}
+              <div className="col-span-5 flex flex-col gap-3 lg:gap-4">
+                
+                {/* TOP ACCENT (SQUARE/PORTRAIT-ISH) */}
+                <motion.div 
+                  initial={{ opacity: 0, y: -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="flex-[1.2] relative overflow-hidden rounded-2xl border-2 border-[#23471d]/20 shadow-md"
+                >
+                  <img 
+                    src={data?.image3 ? `${SERVER_URL}${data.image3}` : ""} 
+                    alt={data?.image3Alt || "Wellness Pavilion"} 
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
+                  />
+                </motion.div>
+
+                {/* BOTTOM ACCENT (WIDE) */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="flex-[0.8] relative overflow-hidden rounded-2xl border-2 border-slate-200/50 shadow-md"
+                >
+                  <img 
+                    src={data?.image2 ? `${SERVER_URL}${data.image2}` : ""} 
+                    alt={data?.image2Alt || "Medical Innovation"} 
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-[#d26019]/10 mix-blend-multiply opacity-0 hover:opacity-100 transition-opacity duration-500" />
+                </motion.div>
+                
               </div>
+
+              {/* DECORATIVE ELEMENTS */}
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute -left-6 -top-6 w-24 h-24 border-2 border-[#d26019]/10 rounded-full border-dashed z-[-1]" 
+              />
+              <div className="absolute -right-4 -bottom-4 w-32 h-32 bg-[#23471d]/5 blur-3xl rounded-full z-[-1]" />
             </div>
           </div>
 
