@@ -3,75 +3,50 @@ import { motion } from "framer-motion";
 import {
     MapPin, Calendar, Car, Train, Plane,
     Hotel, HelpCircle, Mail, Phone, ExternalLink,
-    MapPinned, Clock, Globe, Sparkles
+    MapPinned, Clock, Globe, Sparkles, Info
 } from "lucide-react";
-import { heroBackgroundApi, SERVER_URL } from "@/lib/api";
+import { heroBackgroundApi, travelAccommodationApi, SERVER_URL } from "@/lib/api";
 import heroImgFallback from "../assets/travel.jpg";
 
-const transportOptions = [
-    {
-        icon: Car,
-        title: "By Road",
-        desc: "Easily accessible by car, taxi, or bus. The venue is well-connected to major highways and city routes."
-    },
-    {
-        icon: Train,
-        title: "By Train",
-        desc: "Nearest Railway Station: New Delhi Railway Station (Approx. 5 km). Regular trains from across India."
-    },
-    {
-        icon: Train,
-        title: "By Metro",
-        desc: "Nearest Metro Station: Pragati Maidan (Supreme Court) Metro Station. Take an auto/taxi to the venue."
-    },
-    {
-        icon: Plane,
-        title: "By Air",
-        desc: "Nearest Airport: Indira Gandhi International Airport (DEL), Approx. 18 km. Taxis and app-based cabs available 24x7."
-    }
-];
+const ICONS_MAP: Record<string, any> = {
+    Car, Train, Plane, MapPin, MapPinned, Info, Bus: Car, Metro: Train
+};
 
-const hotels = [
-    {
-        name: "Radisson Blu",
-        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=800",
-        dist: "3 km from venue",
-        price: "₹12,500/night",
-        rating: 5,
-        tag: "Most Popular"
-    },
-    {
-        name: "Lemon Tree",
-        image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=800",
-        dist: "5 km from venue",
-        price: "₹8,200/night",
-        rating: 4,
-        tag: "Business Choice"
-    },
-    {
-        name: "Country Inn",
-        image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=800",
-        dist: "2.5 km from venue",
-        price: "₹7,200/night",
-        rating: 4,
-        tag: "Budget-Friendly"
-    }
-];
+const IconComponent = ({ name, ...props }: { name: string; [key: string]: any }) => {
+    const Comp = ICONS_MAP[name] || Info;
+    return <Comp {...props} />;
+};
 
 const TravelAccommodation = () => {
     const [heroData, setHeroData] = useState<any>(null);
+    const [data, setData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchHero = async () => {
+        const fetchData = async () => {
             try {
-                const data = await heroBackgroundApi.getByPage("Exhibit / Travel & Accommodation");
-                if (data) setHeroData(data);
+                const [heroRes, mainRes] = await Promise.all([
+                    heroBackgroundApi.getByPage("Exhibit / Travel & Accommodation"),
+                    travelAccommodationApi.get()
+                ]);
+                if (heroRes) setHeroData(heroRes);
+                if (mainRes) setData(mainRes);
             } catch (error) {
-                console.error("Error fetching hero:", error);
+                console.error("Error fetching data:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
-        fetchHero();
+        fetchData();
     }, []);
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="w-12 h-12 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white min-h-screen font-inter pb-12">
@@ -110,7 +85,7 @@ const TravelAccommodation = () => {
                             <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#23471d]">The Destination</span>
                         </div>
                         <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
-                            Venue <span className="text-[#d26019]">Location</span>
+                            {data?.venueHeading?.split(' ')[0] || "Venue"} <span className="text-[#d26019]">{data?.venueHeading?.split(' ').slice(1).join(' ') || "Location"}</span>
                         </h2>
                     </div>
 
@@ -118,13 +93,17 @@ const TravelAccommodation = () => {
                         {/* Left: Google Map */}
                         <div className="lg:col-span-7 relative h-[350px] lg:h-auto" data-aos="fade-right">
                             <div className="absolute inset-0 lg:h-full overflow-hidden shadow-xl border border-slate-100 rounded-sm">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14009.843540849091!2d77.2357397409923!3d28.615945897527517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce328b5a553f7%3A0x795cf6ea0f8b5378!2sPragati%20Maidan%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1772876873909!5m2!1sen!2sin"
-                                    className="w-full h-full border-0"
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                />
+                                {data?.mapIframe ? (
+                                    <div className="w-full h-full [&>iframe]:w-full [&>iframe]:h-full" dangerouslySetInnerHTML={{ __html: data.mapIframe }} />
+                                ) : (
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14009.843540849091!2d77.2357397409923!3d28.615945897527517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce328b5a553f7%3A0x795cf6ea0f8b5378!2sPragati%20Maidan%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1772876873909!5m2!1sen!2sin"
+                                        className="w-full h-full border-0"
+                                        allowFullScreen
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                    />
+                                )}
                             </div>
                         </div>
 
@@ -166,10 +145,10 @@ const TravelAccommodation = () => {
                             </div>
 
                             <div className="pt-2 flex gap-3">
-                                <Button className="flex-1 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white h-11 font-bold uppercase tracking-widest text-[9px] shadow-lg flex items-center justify-center gap-2">
+                                <Button variant="primary" className="flex-1 rounded-sm shadow-lg flex items-center justify-center gap-2 uppercase tracking-widest text-[9px] h-11 font-bold">
                                     <MapPin size={14} /> Get Directions
                                 </Button>
-                                <Button variant="outline" className="flex-1 rounded-sm border-2 border-slate-200 text-slate-800 h-11 font-bold uppercase tracking-widest text-[9px] hover:border-[#23471d] transition-all flex items-center justify-center gap-2">
+                                <Button variant="outline" className="flex-1 rounded-sm h-11 font-bold uppercase tracking-widest text-[9px] transition-all flex items-center justify-center gap-2">
                                     <Globe size={14} /> Venue Website
                                 </Button>
                             </div>
@@ -184,16 +163,16 @@ const TravelAccommodation = () => {
                     <div className="flex flex-col items-center mb-10">
                         <div className="flex items-center justify-center gap-3 mb-2">
                             <div className="h-px w-6 bg-[#23471d]" />
-                            <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">How to reach</span>
+                            <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">{data?.commuteSubtitle || "How to reach"}</span>
                             <div className="h-px w-6 bg-[#23471d]" />
                         </div>
                         <h2 className="text-2xl md:text-3xl font-serif text-slate-900 leading-tight">
-                            Commute <span className="text-[#d26019]">options</span>
+                            {data?.commuteHeading?.split(' ')[0] || "Commute"} <span className="text-[#d26019]">{data?.commuteHeading?.split(' ').slice(1).join(' ') || "options"}</span>
                         </h2>
                     </div>
 
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {transportOptions.map((item, idx) => (
+                        {(data?.commuteOptions?.length ? data.commuteOptions : []).map((item: any, idx: number) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 15 }}
@@ -202,10 +181,10 @@ const TravelAccommodation = () => {
                                 className="bg-white p-6 rounded-sm border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group text-center"
                             >
                                 <div className="w-14 h-14 rounded-lg bg-slate-50 flex items-center justify-center text-[#23471d] mx-auto mb-4 group-hover:bg-[#23471d] group-hover:text-white transition-all duration-500 shadow-inner">
-                                    <item.icon size={24} />
+                                    <IconComponent name={item.icon} size={24} />
                                 </div>
                                 <h3 className="text-base font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">{item.title}</h3>
-                                <p className="text-[12px] text-slate-500 leading-relaxed font-inter">{item.desc}</p>
+                                <p className="text-[12px] text-slate-500 leading-relaxed font-inter">{item.description}</p>
                             </motion.div>
                         ))}
                     </div>
@@ -218,17 +197,17 @@ const TravelAccommodation = () => {
                     <div className="flex flex-col items-center text-center mb-10">
                         <div className="flex items-center justify-center gap-3 mb-2">
                             <div className="h-px w-6 bg-[#23471d]" />
-                            <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">Preferred Stay</span>
+                            <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">{data?.accommodationSubtitle || "Preferred Stay"}</span>
                             <div className="h-px w-6 bg-[#23471d]" />
                         </div>
                         <h2 className="text-2xl md:text-3xl font-serif text-slate-900 leading-tight">
-                            Accommodation <span className="text-[#d26019]">Options</span>
+                            {data?.accommodationHeading?.split(' ')[0] || "Accommodation"} <span className="text-[#d26019]">{data?.accommodationHeading?.split(' ').slice(1).join(' ') || "Options"}</span>
                         </h2>
                         <p className="mt-2 text-sm text-slate-500 font-inter">Enjoy a comfortable stay near the venue. Choose from our curated hotel options.</p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-6">
-                        {hotels.map((hotel, idx) => (
+                        {(data?.hotelOptions?.length ? data.hotelOptions : []).map((hotel: any, idx: number) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 15 }}
@@ -237,7 +216,11 @@ const TravelAccommodation = () => {
                                 className="group bg-white rounded-sm border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden">
-                                    <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                                    <img 
+                                        src={hotel.image?.startsWith('http') ? hotel.image : `${SERVER_URL}${hotel.image}`} 
+                                        alt={hotel.alt || hotel.title} 
+                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                                    />
                                     <div className="absolute top-3 left-3">
                                         <span className="bg-[#23471d] text-white text-[8px] font-bold px-2.5 py-1 rounded-sm uppercase tracking-widest shadow-lg">
                                             {hotel.tag}
@@ -246,22 +229,22 @@ const TravelAccommodation = () => {
                                 </div>
                                 <div className="p-5">
                                     <div className="flex justify-between items-start mb-1.5">
-                                        <h3 className="text-lg font-serif font-bold text-slate-900 group-hover:text-[#23471d] transition-colors">{hotel.name}</h3>
+                                        <h3 className="text-lg font-serif font-bold text-slate-900 group-hover:text-[#23471d] transition-colors">{hotel.title}</h3>
                                         <div className="flex items-center gap-0.5 text-yellow-500">
-                                            {[...Array(hotel.rating)].map((_, i) => (
+                                            {[...Array(hotel.stars || 5)].map((_, i) => (
                                                 <Sparkles key={i} size={10} fill="currentColor" />
                                             ))}
                                         </div>
                                     </div>
                                     <p className="text-[12px] text-slate-500 mb-4 flex items-center gap-1.5 font-medium">
-                                        <MapPin size={12} className="text-[#d26019]" /> {hotel.dist}
+                                        <MapPin size={12} className="text-[#d26019]" /> {hotel.distance}
                                     </p>
                                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                                         <div>
                                             <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-0.5">Approx. Rate</p>
-                                            <p className="text-base font-bold text-[#23471d]">{hotel.price}</p>
+                                            <p className="text-base font-bold text-[#23471d]">{hotel.rate}</p>
                                         </div>
-                                        <Button className="rounded-sm w-9 h-9 p-0 flex items-center justify-center bg-slate-900 group-hover:bg-[#23471d] text-white transition-all shadow-md">
+                                        <Button variant="primary" className="rounded-sm w-9 h-9 p-0 flex items-center justify-center group-hover:bg-[#23471d] text-white transition-all shadow-md">
                                             <ExternalLink size={16} />
                                         </Button>
                                     </div>
@@ -283,29 +266,28 @@ const TravelAccommodation = () => {
                             <div className="w-14 h-14 rounded-2xl bg-[#23471d]/5 text-[#23471d] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-inner">
                                 <HelpCircle size={28} />
                             </div>
-                            <h2 className="text-2xl font-serif font-bold text-slate-900 mb-3">Need Help Booking?</h2>
+                            <h2 className="text-2xl font-serif font-bold text-slate-900 mb-3">{data?.helpHeading || "Need Help Booking?"}</h2>
                             <p className="text-sm text-slate-500 max-w-lg mx-auto mb-8 leading-relaxed">
-                                For travel assistance, group bookings, or hotel recommendations,
-                                our dedicated concierge team is ready to assist you.
+                                {data?.helpDescription || "For travel assistance, group bookings, or hotel recommendations, our dedicated concierge team is ready to assist you."}
                             </p>
 
                             <div className="grid sm:grid-cols-2 gap-4 pb-2 text-left">
-                                <a href="mailto:travel@ihwe.com" className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#23471d] hover:bg-white hover:shadow-lg transition-all group">
+                                <a href={`mailto:${data?.contactEmail || "travel@ihwe.com"}`} className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#23471d] hover:bg-white hover:shadow-lg transition-all group">
                                     <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-[#23471d] shadow-sm">
                                         <Mail size={16} />
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">Email Assistance</p>
-                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">travel@ihwe.com</p>
+                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">{data?.contactEmail || "travel@ihwe.com"}</p>
                                     </div>
                                 </a>
-                                <a href="tel:+919876543210" className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#d26019] hover:bg-white hover:shadow-lg transition-all group">
+                                <a href={`tel:${data?.contactPhone || "+919876543210"}`} className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#d26019] hover:bg-white hover:shadow-lg transition-all group">
                                     <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-[#d26019] shadow-sm">
                                         <Phone size={16} />
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">Call / WhatsApp</p>
-                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">+91-98765-43210</p>
+                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">{data?.contactPhone || "+91-98765-43210"}</p>
                                     </div>
                                 </a>
                             </div>
@@ -323,7 +305,7 @@ const Button = ({ className, variant, ...props }: any) => {
         primary: "bg-[#23471d] hover:bg-[#1a3516] text-white",
         outline: "border-2 border-slate-200 hover:border-[#23471d] text-slate-800"
     };
-    return <button className={`${base} ${className}`} {...props} />;
+    return <button className={`${base} ${variants[variant] || ''} ${className}`} {...props} />;
 };
 
 export default TravelAccommodation;

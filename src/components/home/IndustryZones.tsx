@@ -22,6 +22,9 @@ interface FeaturedServicesData {
     heading: string;
     highlightText: string;
     description: string;
+    mainButtonText: string;
+    mainButtonUrl: string;
+    mainSubText: string;
     cards: Array<{
         _id: string;
         title: string;
@@ -159,16 +162,16 @@ const IndustryZones = () => {
                     ))}
                 </div>
 
-                {/* Bottom CTA */}
+                {/* Bottom CTA (Now Dynamic) */}
                 <div className="mt-12 text-center" data-aos="fade-up">
                     <Link
-                        to="/book-a-stand"
+                        to={data.mainButtonUrl || "/book-a-stand"}
                         className="rounded-none bg-[#23471d] hover:bg-[#d26019] text-white h-12 px-10 font-black uppercase tracking-[0.2em] text-xs group shadow-xl transition-all inline-flex items-center justify-center"
                     >
-                        Exhibit At India Health 2026 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                        {data.mainButtonText || "Exhibit At India Health 2026"} <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
                     </Link>
-                    <p className="mt-6 text-slate-400 text-xs font-bold uppercase tracking-widest">
-                        Join 2,500+ exhibiting brands from over 25 countries
+                    <p className="mt-6 text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mb-2 scale-y-110">
+                        {data.mainSubText || "Join 2,500+ exhibiting brands from over 25 countries"}
                     </p>
                 </div>
             </div>

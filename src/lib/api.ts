@@ -136,6 +136,14 @@ export const featuredServicesApi = {
     }
 };
 
+export const faqApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/faq`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const glimpseApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/glimpse`);
@@ -522,3 +530,10 @@ export const publicApi = {
     }
 };
 
+export const travelAccommodationApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/travel-accommodation`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
