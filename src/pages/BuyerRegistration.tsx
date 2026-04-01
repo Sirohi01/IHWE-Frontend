@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HeroBg from "@/assets/buyer.jpg";
-import { buyerRegistrationApi } from "@/lib/api";
+import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const COUNTRIES = [
     "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
@@ -49,6 +49,7 @@ const PRODUCT_CATEGORIES = [
 const BuyerRegistration = () => {
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [heroData, setHeroData] = useState<any>(null);
     const [formData, setFormData] = useState({
         companyName: "",
         country: "",
@@ -67,6 +68,18 @@ const BuyerRegistration = () => {
         specificExhibitors: "",
         confirmed: false
     });
+
+    useEffect(() => {
+        const fetchHero = async () => {
+            try {
+                const data = await heroBackgroundApi.getByPage("Registration / Buyer Registration");
+                if (data) setHeroData(data);
+            } catch (err) {
+                console.error("Error fetching hero:", err);
+            }
+        };
+        fetchHero();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -123,13 +136,12 @@ const BuyerRegistration = () => {
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter">
 
-            {/* ── HERO ── */}
+            {/* ── HERO SECTION - Registration Standard 16:5 ── */}
             <section
-                className="relative pt-36 pb-20 overflow-hidden"
+                className="hero-background-registration"
                 style={{
-                    backgroundImage: `url(${HeroBg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`,
+                    aspectRatio: '16 / 5'
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />
@@ -138,20 +150,18 @@ const BuyerRegistration = () => {
                     className="container mx-auto px-4 text-center text-white relative z-10"
                     data-aos="fade-up"
                 >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-3 opacity-80">
-                        BUYER REGISTRATION 2026
+                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+                        {heroData?.title || "Trade Engagement"}
                     </p>
 
                     <h1 
-                        className="text-4xl md:text-6xl font-semibold mb-4 tracking-tight"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
                     >
-                        Witness the Future of Wellness
+                        {heroData?.heading || "Global Buyer Summit"}
                     </h1>
 
-                    <p className="text-white/70 text-base mb-6 max-w-2xl mx-auto leading-relaxed">
-                        Join 8,000+ healthcare professionals and discover the latest innovations in
-                        health and wellness. Complimentary registration for a limited time.
+                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                        {heroData?.shortDescription || "Join 8,000+ healthcare professionals and discover the latest innovations in health and wellness."}
                     </p>
 
                 </div>

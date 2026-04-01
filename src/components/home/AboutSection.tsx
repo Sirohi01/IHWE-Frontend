@@ -95,7 +95,7 @@ const AboutSection = () => {
 
           {/* LEFT IMAGES SIDE - EDITORIAL GRID */}
           <div data-aos="fade-right" className="relative group">
-            <div className="grid grid-cols-12 gap-3 lg:gap-4 h-[450px] md:h-[550px] lg:h-[650px]">
+            <div className="grid grid-cols-12 gap-3 lg:gap-4 items-start">
               
               {/* MAIN TALL IMAGE (LEFT) */}
               <motion.div 
@@ -103,7 +103,7 @@ const AboutSection = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
-                className="col-span-7 relative overflow-hidden rounded-3xl border-2 border-[#d26019]/20 shadow-lg group-hover:shadow-2xl transition-all duration-500"
+                className="col-span-7 relative overflow-hidden rounded-3xl border-2 border-[#d26019]/20 shadow-lg group-hover:shadow-2xl transition-all duration-500 aspect-[3/4]"
               >
                 <img 
                   src={data?.image1 ? `${SERVER_URL}${data.image1}` : ""} 
@@ -111,21 +111,18 @@ const AboutSection = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                  {/* Overlay text can be added here if needed */}
-                </div>
               </motion.div>
 
               {/* RIGHT STACK */}
               <div className="col-span-5 flex flex-col gap-3 lg:gap-4">
                 
-                {/* TOP ACCENT (SQUARE/PORTRAIT-ISH) */}
+                {/* TOP ACCENT (SQUARE) */}
                 <motion.div 
                   initial={{ opacity: 0, y: -20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="flex-[1.2] relative overflow-hidden rounded-2xl border-2 border-[#23471d]/20 shadow-md"
+                  className="relative overflow-hidden rounded-2xl border-2 border-[#23471d]/20 shadow-md aspect-square"
                 >
                   <img 
                     src={data?.image3 ? `${SERVER_URL}${data.image3}` : ""} 
@@ -140,7 +137,7 @@ const AboutSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="flex-[0.8] relative overflow-hidden rounded-2xl border-2 border-slate-200/50 shadow-md"
+                  className="relative overflow-hidden rounded-2xl border-2 border-slate-200/50 shadow-md aspect-[16/9]"
                 >
                   <img 
                     src={data?.image2 ? `${SERVER_URL}${data.image2}` : ""} 

@@ -131,8 +131,8 @@ const FAQSection = () => {
           </div>
 
           {/* RIGHT COLUMN: Synced Image */}
-          <div className="lg:col-span-5 sticky top-32 hidden lg:block">
-            <div className="relative aspect-[4/3] bg-slate-50 border border-slate-200 overflow-hidden shadow-sm">
+          <div className="lg:col-span-5 lg:sticky lg:top-32 order-first lg:order-last mb-8 lg:mb-0">
+            <div className="relative aspect-[4/3] bg-white border-2 border-slate-100 overflow-hidden shadow-md rounded-xl">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex ?? "none"}
@@ -144,13 +144,13 @@ const FAQSection = () => {
                 >
                   {activeIndex !== null && items[activeIndex]?.image ? (
                     <img
-                      src={`${SERVER_URL}${items[activeIndex].image}`}
+                      src={items[activeIndex].image.startsWith('http') ? items[activeIndex].image : `${SERVER_URL}${items[activeIndex].image}`}
                       alt={items[activeIndex]?.imageAlt || items[activeIndex]?.question}
                       className="w-full h-full object-cover"
                     />
                   ) : faqData?.defaultImage ? (
                     <img
-                      src={`${SERVER_URL}${faqData.defaultImage}`}
+                      src={faqData.defaultImage.startsWith('http') ? faqData.defaultImage : `${SERVER_URL}${faqData.defaultImage}`}
                       alt={faqData?.defaultImageAlt || "9th International Health & Wellness Expo 2026"}
                       className="w-full h-full object-cover"
                     />

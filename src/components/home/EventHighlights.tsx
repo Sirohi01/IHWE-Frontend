@@ -160,13 +160,13 @@ const EventHighlights = () => {
                 {/* Main grid — both columns same height */}
                 <div className="grid lg:grid-cols-12 gap-6 items-stretch">
 
-                    {/* Left: Image — Forced to match right column height on desktop */}
-                    <div className="lg:col-span-6 relative h-[300px] sm:h-[400px] lg:h-auto" data-aos="fade-right">
-                        <div className="absolute inset-0 lg:h-full overflow-hidden group shadow-xl border border-slate-100">
+                    {/* Left: Image — Balanced width (5/12) to keep height in check while being square */}
+                    <div className="lg:col-span-5 relative aspect-square" data-aos="fade-right">
+                        <div className="absolute inset-0 overflow-hidden group shadow-xl border border-slate-100 bg-white">
                             <img
                                 src={data?.image ? `${SERVER_URL}${data.image}` : ""}
                                 alt={data?.imageAlt || ""}
-                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-105"
                             />
                             {/* Overlay Button */}
                             <div className="absolute bottom-6 left-6 z-20">
@@ -181,8 +181,8 @@ const EventHighlights = () => {
                         </div>
                     </div>
 
-                    {/* Right: Details stacked tightly, no extra space */}
-                    <div className="lg:col-span-6 flex flex-col gap-3" data-aos="fade-left">
+                    {/* Right: Details — Takes more space (7/12) to balance the section */}
+                    <div className="lg:col-span-7 flex flex-col gap-3" data-aos="fade-left">
                         {details.map((detail, idx) => (
                             <div
                                 key={idx}

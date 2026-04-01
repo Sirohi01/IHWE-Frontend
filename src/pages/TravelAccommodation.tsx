@@ -50,17 +50,15 @@ const TravelAccommodation = () => {
 
     return (
         <div className="bg-white min-h-screen font-inter pb-12">
-            {/* ── HERO SECTION ── */}
+            {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
             <section
-                className="relative pt-36 pb-16 overflow-hidden"
+                className="hero-background-standard"
                 style={{ 
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImgFallback})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImgFallback})`
                 }}
             >
-                <div className="absolute inset-0 bg-black/55" />
-                <div className="absolute bottom-0 left-0 w-full h-12 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
                 <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
                     <p className="text-[10px] uppercase tracking-[0.5em] mb-3 opacity-80 font-bold">
@@ -70,7 +68,7 @@ const TravelAccommodation = () => {
                         {heroData?.heading || "Travel & Accommodation"}
                     </h1>
                     <p className="text-white/70 text-sm md:text-base mb-6 max-w-2xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Plan your visit to the 9th International Health & Wellness Expo 2026 with ease. We ensure a comfortable stay and seamless travel experience."}
+                        {heroData?.shortDescription || "Plan your visit with ease. We ensure a comfortable stay and seamless travel experience."}
                     </p>
                 </div>
             </section>

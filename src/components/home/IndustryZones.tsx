@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
+import {
     ArrowRight, Box, Activity, Monitor, Beaker, Leaf, Plane, ShieldCheck, Microscope,
     Star, Heart, Globe, Zap, Award, Package, MapPin, Users
 } from "lucide-react";
@@ -12,7 +12,7 @@ const ICONS_MAP: Record<string, any> = {
     Star, Heart, Globe, Zap, Award, Package, MapPin, Users
 };
 
-const IconComponent = ({ name, ...props }: { name: string; [key: string]: any }) => {
+const IconComponent = ({ name, ...props }: { name: string;[key: string]: any }) => {
     const Comp = ICONS_MAP[name] || ShieldCheck;
     return <Comp {...props} />;
 };
@@ -61,9 +61,9 @@ const IndustryZones = () => {
     const renderTitle = (title: string, highlight: string) => {
         if (!highlight || !title.includes(highlight)) return title;
         const parts = title.split(new RegExp(`(${highlight})`, "gi"));
-        return parts.map((part, i) => 
-            part.toLowerCase() === highlight.toLowerCase() 
-                ? <span key={i} className="text-[#d26019]">{part}</span> 
+        return parts.map((part, i) =>
+            part.toLowerCase() === highlight.toLowerCase()
+                ? <span key={i} className="text-[#d26019]">{part}</span>
                 : part
         );
     };
@@ -119,12 +119,12 @@ const IndustryZones = () => {
                             className="group relative bg-white border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
                         >
                             {/* Image Part */}
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                                 {card.image ? (
                                     <img
                                         src={`${SERVER_URL}${card.image}`}
                                         alt={card.imageAlt || card.title}
-                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     />
                                 ) : (
                                     <div className="w-full h-full bg-slate-100 flex items-center justify-center">
@@ -139,15 +139,15 @@ const IndustryZones = () => {
                                 </div>
                             </div>
 
-                            {/* Icon Badge - Floating */}
-                            <div className="absolute left-6 top-[172px] z-20">
+                            {/* Icon Badge - floating OUTSIDE overflow-hidden */}
+                            <div className="relative z-20 -mt-6 ml-6 mb-0 w-12">
                                 <div className="w-12 h-12 bg-white flex items-center justify-center rounded-none shadow-lg border-b-2" style={{ borderColor: card.accent }}>
                                     <IconComponent name={card.icon} className="w-6 h-6" style={{ color: card.accent }} />
                                 </div>
                             </div>
 
                             {/* Content Part */}
-                            <div className="p-8 pt-10 flex flex-col flex-1">
+                            <div className="px-6 pb-6 pt-3 flex flex-col flex-1">
                                 <h3 className="text-xl font-bold text-slate-900 mb-3 transition-colors duration-300">
                                     {card.title}
                                 </h3>

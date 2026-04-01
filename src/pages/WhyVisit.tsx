@@ -44,18 +44,16 @@ const WhyVisit = () => {
 
     return (
         <div className="bg-[#f9fafb] min-h-screen font-inter text-slate-900">
-            {/* ── HERO ── */}
+            {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
             <section
-                className="relative pt-36 pb-20 overflow-hidden"
+                className="hero-background-standard"
                 style={{
-                    backgroundImage: heroData?.backgroundImage ? `url(${SERVER_URL}${heroData.backgroundImage})` : `url(${visitImg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center"
+                    backgroundImage: heroData?.backgroundImage ? `url(${SERVER_URL}${heroData.backgroundImage})` : `url(${visitImg})`
                 }}
             >
-                <div className="absolute inset-0 bg-black/55" />
+                <div className="absolute inset-0 bg-black/40" />
                 <div
-                    className="absolute bottom-0 left-0 w-full h-16 bg-[#f9fafb]"
+                    className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
                     style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
                 />
                 <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
@@ -66,7 +64,7 @@ const WhyVisit = () => {
                         {heroData?.heading || "Why Visit IH&WE 2026?"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-3xl mx-auto font-light leading-relaxed font-inter">
-                        {heroData?.shortDescription || "Join thousands of healthcare professionals and wellness enthusiasts at the region's most comprehensive health exhibition. Discover the future of wellness and build lasting industry connections."}
+                        {heroData?.shortDescription || "Join thousands of healthcare professionals at the regional exhibition."}
                     </p>
                 </div>
             </section>

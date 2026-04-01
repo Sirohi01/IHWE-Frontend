@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, Calendar, ArrowRight, Layers, Zap, Building2, Sparkles, Smartphone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import { blogApi, SERVER_URL } from "@/lib/api";
-
+import { blogApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import blogHero from "../assets/blogs.jpg";
 
 const categoryList = [
@@ -20,17 +19,22 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [heroData, setHeroData] = useState<any>(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await blogApi.getAll();
+        const [blogResponse, bgData] = await Promise.all([
+          blogApi.getAll(),
+          heroBackgroundApi.getByPage("General / Blog")
+        ]);
         // Backend returns { success: true, data: [...] }
-        if (response && response.success && Array.isArray(response.data)) {
-          setBlogs(response.data);
+        if (blogResponse && blogResponse.success && Array.isArray(blogResponse.data)) {
+          setBlogs(blogResponse.data);
         } else {
           setBlogs([]);
         }
+        if (bgData) setHeroData(bgData);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
@@ -47,18 +51,26 @@ const Blog = () => {
 
   return (
     <div className="bg-[#f5f0e8] min-h-screen">
+      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
       <section
-        className="relative pt-36 pb-20 overflow-hidden"
-        style={{ backgroundImage: `url(${blogHero})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        className="hero-background-standard"
+        style={{ 
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : blogHero})`,
+          aspectRatio: "16 / 4"
+        }}
       >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#f5f0e8]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f5f0e8]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Insights & Media</p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">Blog & News</h1>
+          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+            {heroData?.title || "Insights & Media"}
+          </p>
+          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+            {heroData?.heading || "Blog & News"}
+          </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Stay updated with the latest trends, breakthroughs, and insights from the global healthcare and wellness landscape.
+            {heroData?.shortDescription || "Stay updated with the latest trends and insights from the global healthcare landscape."}
           </p>
         </div>
       </section>

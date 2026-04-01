@@ -114,16 +114,16 @@ const WhoWeAre = () => {
 
           {/* RIGHT: 4 IMAGE STAGGERED GRID */}
           {activeImages.length > 0 && (
-            <div className="relative grid grid-cols-2 gap-4 md:gap-5">
+            <div className="relative grid grid-cols-2 gap-3 md:gap-5 mt-8 lg:mt-0">
               {activeImages[0] && (
                 <div
                   data-aos="fade-down"
                   data-aos-delay="100"
                   data-aos-duration="700"
-                  className="mt-8 overflow-hidden aspect-square rounded-2xl"
+                  className="md:mt-8 overflow-hidden aspect-square rounded-2xl border-2 border-[#d26019]/10 shadow-lg"
                 >
                   <img
-                    src={`${SERVER_URL}${activeImages[0].url}`}
+                    src={activeImages[0].url.startsWith('http') ? activeImages[0].url : `${SERVER_URL}${activeImages[0].url}`}
                     alt={activeImages[0].altText || "Who We Are Image 1"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -134,10 +134,10 @@ const WhoWeAre = () => {
                   data-aos="fade-left"
                   data-aos-delay="200"
                   data-aos-duration="700"
-                  className="-mt-4 overflow-hidden aspect-[4/5] rounded-2xl"
+                  className="md:-mt-4 overflow-hidden aspect-[4/5] rounded-2xl border-2 border-[#23471d]/10 shadow-lg"
                 >
                   <img
-                    src={`${SERVER_URL}${activeImages[1].url}`}
+                    src={activeImages[1].url.startsWith('http') ? activeImages[1].url : `${SERVER_URL}${activeImages[1].url}`}
                     alt={activeImages[1].altText || "Who We Are Image 2"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -148,10 +148,10 @@ const WhoWeAre = () => {
                   data-aos="fade-right"
                   data-aos-delay="300"
                   data-aos-duration="700"
-                  className="-mt-8 overflow-hidden aspect-[4/5] rounded-2xl"
+                  className="md:-mt-8 overflow-hidden aspect-[4/5] rounded-2xl border-2 border-[#23471d]/10 shadow-lg"
                 >
                   <img
-                    src={`${SERVER_URL}${activeImages[2].url}`}
+                    src={activeImages[2].url.startsWith('http') ? activeImages[2].url : `${SERVER_URL}${activeImages[2].url}`}
                     alt={activeImages[2].altText || "Who We Are Image 3"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -162,10 +162,10 @@ const WhoWeAre = () => {
                   data-aos="fade-up"
                   data-aos-delay="400"
                   data-aos-duration="700"
-                  className="mt-4 overflow-hidden aspect-square rounded-2xl"
+                  className="md:mt-4 overflow-hidden aspect-square rounded-2xl border-2 border-[#d26019]/10 shadow-lg"
                 >
                   <img
-                    src={`${SERVER_URL}${activeImages[3].url}`}
+                    src={activeImages[3].url.startsWith('http') ? activeImages[3].url : `${SERVER_URL}${activeImages[3].url}`}
                     alt={activeImages[3].altText || "Who We Are Image 4"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />

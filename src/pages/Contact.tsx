@@ -223,18 +223,17 @@ const Contact = () => {
 
   return (
     <div className="bg-[#f9fafb] min-h-screen font-inter">
-      {/* HERO — exactly matching Conference hero */}
+      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
       <section
-        className="relative pt-36 pb-12 overflow-hidden"
+        className="hero-background-standard"
         style={{ 
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center"
+          aspectRatio: '16 / 4'
         }}
       >
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/40" />
         <div
-          className="absolute bottom-0 left-0 w-full h-16 bg-[#f9fafb]"
+          className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
           style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
         />
 

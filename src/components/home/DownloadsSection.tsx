@@ -145,11 +145,11 @@ const DownloadsSection = () => {
                             whileHover={{ y: -4, transition: { duration: 0.2 } }}
                             className="bg-white border border-slate-100 shadow-md hover:shadow-xl transition-shadow duration-300 group overflow-hidden flex flex-col rounded-xl"
                         >
-                            <div className="relative overflow-hidden h-44 bg-white rounded-t-xl">
+                            <div className="relative overflow-hidden aspect-video bg-white rounded-t-xl">
                                 <img
                                     src={item.image}
                                     alt={item.imageAlt || item.title}
-                                    className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 

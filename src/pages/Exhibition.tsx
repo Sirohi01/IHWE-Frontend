@@ -42,12 +42,16 @@ const Exhibition = () => {
 
   return (
     <div className="bg-white min-h-screen font-inter">
+      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
       <section
-        className="relative pt-36 pb-20 overflow-hidden"
-        style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        className="hero-background-standard"
+        style={{ 
+          backgroundImage: `url(${heroBg})`,
+          aspectRatio: '16 / 4'
+        }}
       >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute bottom-0 left-0 w-full h-16 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
             {heroData?.title || "Exhibition"}
@@ -56,7 +60,7 @@ const Exhibition = () => {
             {heroData?.heading || "Exhibit at IH&WE 2026"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            {heroData?.shortDescription || "The ultimate platform to showcase your breakthrough medical solutions and products to global healthcare practitioners and industry leaders."}
+            {heroData?.shortDescription || "The ultimate platform to showcase breakthrough medical solutions."}
           </p>
         </div>
       </section>

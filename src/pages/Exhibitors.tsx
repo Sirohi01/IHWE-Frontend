@@ -4,18 +4,23 @@ import { Search, Filter, Globe, MapPin, ExternalLink } from "lucide-react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import exhiHero from "../assets/exhi.jpg";
-import { exhibitorApi, SERVER_URL } from "@/lib/api";
+import { exhibitorApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Exhibitors = () => {
   const [exhibitors, setExhibitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [heroData, setHeroData] = useState<any>(null);
 
   useEffect(() => {
     const fetchExhibitors = async () => {
       try {
-        const data = await exhibitorApi.get();
-        setExhibitors(data || []);
+        const [exhiData, bgData] = await Promise.all([
+          exhibitorApi.get(),
+          heroBackgroundApi.getByPage("General / Exhibitors List")
+        ]);
+        setExhibitors(exhiData || []);
+        if (bgData) setHeroData(bgData);
       } catch (error) {
         console.error("Error fetching exhibitors:", error);
       } finally {
@@ -25,26 +30,33 @@ const Exhibitors = () => {
     fetchExhibitors();
   }, []);
 
-  const filteredExhibitors = exhibitors.filter((exhi) =>
+  const filteredExhibitors = exhibitors.filter((exhi: any) =>
     exhi.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     exhi.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="bg-[#fcfcfc] min-h-screen">
-      {/* HERO SECTION */}
+      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
       <section
-        className="relative pt-36 pb-20 overflow-hidden"
-        style={{ backgroundImage: `url(${exhiHero})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        className="hero-background-standard"
+        style={{ 
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : exhiHero})`,
+          aspectRatio: '16 / 4'
+        }}
       >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#fcfcfc]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#fcfcfc]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Global Network</p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">Exhibitor List</h1>
+          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+            {heroData?.title || "Global Network"}
+          </p>
+          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+            {heroData?.heading || "Exhibitor List"}
+          </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Meet the world-class organizations and innovators showcasing the latest in health, wellness, and medical technology.
+            {heroData?.shortDescription || "Meet the innovators showcasing the latest in health, wellness, and medical technology."}
           </p>
         </div>
       </section>

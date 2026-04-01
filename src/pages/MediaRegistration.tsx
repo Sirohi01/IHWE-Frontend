@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import HeroBg from "@/assets/media.jpg";
 
 const COUNTRIES = [
@@ -33,6 +34,19 @@ const MEDIA_CATEGORIES = [
 
 const MediaRegistration = () => {
     const [submitted, setSubmitted] = useState(false);
+    const [heroData, setHeroData] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchHero = async () => {
+            try {
+                const data = await heroBackgroundApi.getByPage("Registration / Media Registration");
+                if (data) setHeroData(data);
+            } catch (err) {
+                console.error("Error fetching hero:", err);
+            }
+        };
+        fetchHero();
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,14 +60,13 @@ const MediaRegistration = () => {
         "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] font-inter">
-            {/* ── HERO ── */}
+        <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
+            {/* ── HERO SECTION - Registration Standard 16:5 ── */}
             <section
-                className="relative pt-36 pb-20 overflow-hidden"
+                className="hero-background-registration"
                 style={{
-                    backgroundImage: `url(${HeroBg})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`,
+                    aspectRatio: '16 / 5'
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />
@@ -62,20 +75,18 @@ const MediaRegistration = () => {
                     className="container mx-auto px-4 text-center text-white relative z-10"
                     data-aos="fade-up"
                 >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-3 opacity-80">
-                        Media & Partners Registration
+                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+                        {heroData?.title || "Press & Partnership"}
                     </p>
 
                     <h1 
-                        className="text-4xl md:text-6xl font-semibold mb-4 tracking-tight"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
                     >
-                        Cover the Future of Wellness
+                        {heroData?.heading || "Cover the Future of Wellness"}
                     </h1>
 
-                    <p className="text-white/70 text-base mb-6 max-w-xl mx-auto leading-relaxed">
-                        Accreditation for journalists, bloggers, and influencers to cover IH&WE 2026.
-                        Gain exclusive access to exhibitors and speakers.
+                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
+                        {heroData?.shortDescription || "Accreditation for journalists, bloggers, and influencers to cover IH&WE 2026."}
                     </p>
                 </div>
             </section>

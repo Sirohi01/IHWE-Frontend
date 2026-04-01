@@ -28,37 +28,67 @@ const Topbar = () => {
 
   return (
     <motion.div
-      className="hidden md:block bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-50 py-1"
+      className="bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-50 py-1"
     >
-      <div className="container mx-auto flex items-center justify-between px-6 py-1 gap-10">
+      <div className="container mx-auto flex flex-wrap items-center justify-center md:justify-between px-2 md:px-6 py-2 md:py-1 gap-y-2 gap-x-10 text-center md:text-left">
 
-        {/* Left Section - Contact Info */}
-        <div className="flex-shrink-0 flex items-center gap-6">
-          {topbarEmails.map((item: any, idx: number) => (
+        {/* Left Section - Contact Info (Compact on mobile) */}
+        <div className="flex items-center justify-center md:justify-start gap-3 md:gap-6 w-full md:w-auto overflow-hidden">
+          {topbarEmails.slice(0, 1).map((item: any, idx: number) => (
             <a
-              key={`email-${idx}`}
+              key={`email-top-${idx}`}
               href={`mailto:${item.email}`}
-              className="flex items-center gap-2 hover:text-white transition font-medium"
+              className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
             >
-              <Mail className="w-3.5 h-3.5 text-[#d26019]" />
+              <Mail className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
               <span>{item.email}</span>
             </a>
           ))}
 
-          {topbarPhones.map((item: any, idx: number) => (
+          {/* Secondary Emails - Desktop Only */}
+          <div className="hidden md:flex gap-6">
+            {topbarEmails.slice(1).map((item: any, idx: number) => (
+              <a
+                key={`email-sec-${idx}`}
+                href={`mailto:${item.email}`}
+                className="flex items-center gap-2 hover:text-white transition font-medium"
+              >
+                <Mail className="w-3.5 h-3.5 text-[#d26019]" />
+                <span>{item.email}</span>
+              </a>
+            ))}
+          </div>
+
+          <div className="h-2 w-px bg-slate-700 md:hidden" />
+
+          {topbarPhones.slice(0, 1).map((item: any, idx: number) => (
             <a
-              key={`phone-${idx}`}
+              key={`phone-top-${idx}`}
               href={`tel:${item.phone}`}
-              className="flex items-center gap-2 hover:text-white transition font-medium"
+              className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
             >
-              <Phone className="w-3.5 h-3.5 text-[#d26019]" />
+              <Phone className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
               <span>{item.phone}</span>
             </a>
           ))}
+
+          {/* Secondary Phones - Desktop Only */}
+          <div className="hidden md:flex gap-6">
+            {topbarPhones.slice(1).map((item: any, idx: number) => (
+              <a
+                key={`phone-sec-${idx}`}
+                href={`tel:${item.phone}`}
+                className="flex items-center gap-2 hover:text-white transition font-medium"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#d26019]" />
+                <span>{item.phone}</span>
+              </a>
+            ))}
+          </div>
         </div>
 
-        {/* Center Section - Scrolling Marquee */}
-        <div className="flex-1 overflow-hidden relative h-full flex items-center">
+        {/* Center Section - Scrolling Marquee - Hidden on small screens */}
+        <div className="hidden xl:flex flex-1 overflow-hidden relative h-full items-center px-4">
           <motion.div
             animate={{ x: ["100%", "-100%"] }}
             transition={{
@@ -72,8 +102,8 @@ const Topbar = () => {
           </motion.div>
         </div>
 
-        {/* Right Section - Event Date + Login Buttons */}
-        <div className="flex-shrink-0 flex items-center gap-4">
+        {/* Right Section - Event Date + Login Buttons - Moved to Navbar on Mobile */}
+        <div className="hidden lg:flex flex-shrink-0 items-center gap-4">
           <span className="flex items-center gap-2 font-bold text-slate-200">
             <CalendarDays className="w-3.5 h-3.5 text-[#d26019]" />
             <span className="uppercase tracking-wider">{eventDate}</span>

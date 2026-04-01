@@ -416,16 +416,14 @@ const BookAStand = () => {
         "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] font-inter">
-
-            {/* ── HERO ── */}
+        <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
+            {/* ── HERO SECTION - Registration Standard 16:5 ── */}
             <section
-                className="relative pt-36 pb-20 overflow-hidden"
+                className="hero-background-registration"
                 style={{
-                    backgroundImage: heroData?.backgroundImage ? `url(${SERVER_URL}${heroData.backgroundImage})` : "none",
-                    backgroundColor: "#1a3516", // Professional fallback color
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
+                    backgroundColor: "#1a3516", // Professional fallback
+                    aspectRatio: '16 / 5'
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />
@@ -434,21 +432,19 @@ const BookAStand = () => {
                     className="container mx-auto px-4 text-center text-white relative z-10"
                     data-aos="fade-up"
                 >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-3 opacity-80">
-                        {heroData?.title || "Exhibition 2026"}
+                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+                        {heroData?.title || "Exhibitor Portal"}
                     </p>
 
                     <h1
-                        className="text-4xl md:text-6xl font-semibold mb-4 tracking-tight"
-                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
                     >
                         {heroData?.heading || "Book Your Exhibition Stand"}
                     </h1>
 
-                    <p className="text-white/70 text-base mb-6 max-w-xl mx-auto leading-relaxed">
+                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
                         {heroData?.shortDescription || "Showcase your innovations to 8,000+ top healthcare professionals. Fill out the form and our team will tailor the perfect space for your brand."}
                     </p>
-
                 </div>
             </section>
 

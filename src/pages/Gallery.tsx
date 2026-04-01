@@ -16,13 +16,14 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import gallHero from "../assets/gall.jpg";
-import { galleryApi, SERVER_URL } from "@/lib/api";
+import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Gallery = () => {
     const [filter, setFilter] = useState("photo");
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
     const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
     const [mediaItems, setMediaItems] = useState<any[]>([]);
+    const [heroData, setHeroData] = useState<any>(null);
     
     // Separate categories for Photo Gallery and Media Gallery
     const [categories, setCategories] = useState<any[]>([]); 
@@ -60,13 +61,15 @@ const Gallery = () => {
         const fetchGallery = async () => {
             setIsLoading(true);
             try {
-                // Fetch all media items and all categories
-                const [mediaData, catData] = await Promise.all([
+                // Fetch all media items, all categories, and hero background
+                const [mediaData, catData, bgData] = await Promise.all([
                     galleryApi.getAll(),
-                    galleryApi.getCategories() // Fetches all categories (including type 'gallery' and 'media')
+                    galleryApi.getCategories(),
+                    heroBackgroundApi.getByPage("General / Gallery")
                 ]);
 
                 setCategories(catData);
+                if (bgData) setHeroData(bgData);
 
                 const formatted = mediaData.map((item: any) => {
                     const isVideo = item.mediaType === 'video';
@@ -185,19 +188,26 @@ const Gallery = () => {
 
     return (
         <div className="bg-white min-h-screen">
-            {/* HERO SECTION */}
+            {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
             <section
-                className="relative pt-36 pb-20 overflow-hidden"
-                style={{ backgroundImage: `url(${gallHero})`, backgroundSize: "cover", backgroundPosition: "center" }}
+                className="hero-background-standard"
+                style={{ 
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`,
+                    aspectRatio: '16 / 4'
+                }}
             >
-                <div className="absolute inset-0 bg-black/50" />
-                <div className="absolute bottom-0 left-0 w-full h-16 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
                 <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Visual Legacy</p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">Gallery</h1>
+                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+                        {heroData?.title || "Visual Journey"}
+                    </p>
+                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+                        {heroData?.heading || "Event Gallery"}
+                    </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                        Explore the transformative moments and media highlights from India's premier health and wellness gathering.
+                        {heroData?.shortDescription || "Relive the highlights, innovations, and vibrant moments of 9th IHWE 2026."}
                     </p>
                 </div>
             </section>

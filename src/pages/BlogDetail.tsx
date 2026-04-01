@@ -66,16 +66,15 @@ const BlogDetail = () => {
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans">
-      {/* ── HERO SECTION ── */}
+      {/* ── HERO SECTION - Article Style (1600x675) ── */}
       <section
-        className="relative pt-36 pb-20 overflow-hidden"
+        className="hero-background-post"
         style={{
-          backgroundImage: `url(${SERVER_URL}${blog.image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage: `url(${blog.image.startsWith('http') ? blog.image : `${SERVER_URL}${blog.image}`})`
         }}
       >
-        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-black/40" />
+
         <div className="container mx-auto px-4 text-white relative z-10" data-aos="fade-up">
           {/* Back link */}
           <Link
@@ -224,7 +223,7 @@ const BlogDetail = () => {
                       {/* Thumbnail */}
                       <div className="w-16 h-16 shrink-0 overflow-hidden bg-slate-100 rounded-lg">
                         <img
-                          src={`${SERVER_URL}${recent.image}`}
+                          src={recent.image.startsWith('http') ? recent.image : `${SERVER_URL}${recent.image}`}
                           alt={recent.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />

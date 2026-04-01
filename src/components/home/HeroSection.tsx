@@ -20,7 +20,24 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
       try {
         const data = await heroApi.getAll();
         if (data && data.length > 0) {
-          const activeSlides = data.filter((s: any) => s.isActive);
+          const now = new Date().getTime();
+          const activeSlides = data.filter((s: any) => {
+            if (!s.isActive) return false;
+            
+            // If scheduling is present, check time
+            if (s.schedule?.startDate && s.schedule?.startTime) {
+              const startDateTime = new Date(s.schedule.startDate + 'T' + s.schedule.startTime).getTime();
+              const endDateTime = s.schedule.endDate && s.schedule.endTime 
+                ? new Date(s.schedule.endDate + 'T' + s.schedule.endTime).getTime()
+                : null;
+              
+              if (now < startDateTime) return false;
+              if (endDateTime && now > endDateTime) return false;
+            }
+            
+            return true;
+          });
+
           if (activeSlides.length > 0) {
             setSlides(activeSlides);
           }
@@ -39,7 +56,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % slides.length);
-    }, 8000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -78,7 +95,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
 
   if (isLoading) {
     return (
-      <section className="relative h-[80vh] md:h-[85vh] w-full overflow-hidden bg-black flex items-center justify-center">
+      <section className="relative w-full overflow-hidden bg-black flex items-center justify-center" style={{ aspectRatio: '16/6' }}>
         <div className="w-12 h-12 rounded-full border-4 border-white/20 border-t-white animate-spin" />
       </section>
     );
@@ -87,7 +104,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
   if (slides.length === 0) return null;
 
   return (
-    <section className="relative h-[80vh] md:h-[85vh] w-full overflow-hidden bg-black font-inter text-white">
+    <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/6' }}>
       <AnimatePresence initial={false} custom={direction} mode="popLayout">
         <motion.div
           key={current}
@@ -127,7 +144,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
       <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
       <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
 
-      <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-center items-start text-left text-white">
+      <div className="hidden md:flex relative z-20 container mx-auto px-6 h-full flex-col justify-center items-start text-left text-white">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -249,7 +266,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-16 right-12 z-30 flex flex-col gap-6">
+      <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
         {slides.map((_, i) => (
           <button
             key={i}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import * as LucideIcons from "lucide-react";
 import { Mail, Phone, MapPin, User, Building2, Loader2 } from "lucide-react";
-import { stallVendorApi } from "@/lib/api";
+import { stallVendorApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import heroImg from "../assets/stall.jpg";
 
 const DynamicIcon = ({ name, className }: { name: string; className?: string }) => {
@@ -13,14 +13,19 @@ const DynamicIcon = ({ name, className }: { name: string; className?: string }) 
 const StallDesigningVendors = () => {
   const [content, setContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [heroData, setHeroData] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await stallVendorApi.get();
-        if (data) setContent(data);
+        const [vendorData, bgData] = await Promise.all([
+          stallVendorApi.get(),
+          heroBackgroundApi.getByPage("Exhibit / Stall Designing Vendors")
+        ]);
+        if (vendorData) setContent(vendorData);
+        if (bgData) setHeroData(bgData);
       } catch (err) {
-        console.error("Error fetching vendors:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
@@ -41,19 +46,16 @@ const StallDesigningVendors = () => {
   return (
     <div className="bg-white min-h-screen">
 
-      {/* HERO SECTION — exactly matching Contact page with reduced bottom padding */}
+      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
       <section
-        className="relative pt-36 pb-12 overflow-hidden"
+        className="hero-background-standard"
         style={{
-          backgroundImage: `url(${heroImg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImg})`
         }}
       >
-        <div className="absolute inset-0 bg-black/50" />
-        {/* Same curve as Contact page */}
+        <div className="absolute inset-0 bg-black/40" />
         <div
-          className="absolute bottom-0 left-0 w-full h-16 bg-white"
+          className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white"
           style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
         />
 
@@ -61,12 +63,14 @@ const StallDesigningVendors = () => {
           className="container mx-auto px-4 text-center text-white relative z-10"
           data-aos="fade-up"
         >
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">{content.subheading || "Our Partners"}</p>
+          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+            {heroData?.title || content.subheading || "Our Partners"}
+          </p>
           <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
-            Stall Designing Vendors
+            {heroData?.heading || "Stall Designing Vendors"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Professional exhibition stall designers and fabrication experts for IH&WE 2026.
+            {heroData?.shortDescription || "Professional exhibition stall designers and fabrication experts."}
           </p>
         </div>
       </section>

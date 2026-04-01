@@ -146,4 +146,61 @@
     transform: scale(1.2);
     opacity: 0;
   }
+
+  /* Internal Pages Hero Standard (1600x400 PX Target - Sleek) */
+  /* NATURAL FLOW - Sequential Order (Topbar -> Navbar -> Hero) */
+  .hero-background-standard {
+    @apply relative overflow-hidden flex items-center justify-center w-full px-6 bg-cover bg-center;
+    aspect-ratio: 16 / 4; 
+    margin-top: 0 !important; 
+    padding: 0 !important;
+  }
+
+  .hero-background-registration {
+    @apply relative overflow-hidden flex items-center justify-center w-full px-6 bg-cover bg-center;
+    aspect-ratio: 16 / 5;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Specific for Blog Details / Article Page (1600 x 500 target) */
+  .hero-background-post {
+    @apply relative overflow-hidden flex items-center justify-center w-full px-6 bg-cover bg-center;
+    aspect-ratio: 16 / 5;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  @media (max-width: 768px) {
+    .hero-background-standard,
+    .hero-background-registration,
+    .hero-background-post {
+      aspect-ratio: 1 / 1; 
+      min-height: 400px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .hero-background-standard {
+      aspect-ratio: 16 / 10; 
+    }
+  }
+
+  /* Extreme Responsive Text for 16:4 Sleek Standard */
+  .hero-background-standard h1 {
+    font-size: clamp(0.7rem, 4vw, 3.2rem) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 0.1rem !important;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: 700 !important;
+    text-align: center;
+  }
+  .hero-background-standard p {
+    font-size: clamp(0.4rem, 1.6vw, 1rem) !important;
+    max-width: 90% !important;
+    line-height: 1.2 !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    opacity: 0.9;
+    text-align: center;
+  }
 }

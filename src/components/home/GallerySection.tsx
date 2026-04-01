@@ -110,7 +110,7 @@ const GallerySection = () => {
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.05, duration: 0.6 }}
                                 onClick={() => setSelectedImg(imageUrl)}
-                                className={`group relative cursor-pointer rounded-xl overflow-hidden bg-slate-100 shadow-sm hover:shadow-2xl transition-all duration-700 
+                                className={`group relative cursor-pointer rounded-xl overflow-hidden bg-white border-2 border-slate-100 shadow-md hover:shadow-2xl transition-all duration-700 
                                     ${isStaggered ? "lg:translate-y-4" : "lg:translate-y-0"}
                                 `}
                             >

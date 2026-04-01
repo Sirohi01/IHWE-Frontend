@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock } from "lucide-react";
+import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
 
@@ -151,31 +151,31 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
 
   return (
     <motion.nav
-      className={`fixed left-0 right-0 z-40 transition-all duration-500 ${scrolled ? "top-0" : "top-0 md:top-[38px]"
-        } bg-white border-b border-slate-200 py-2 shadow-sm`}
+      className={`sticky top-0 left-0 right-0 z-[100] transition-all duration-500 bg-white border-b border-slate-200 py-2 shadow-sm`}
     >
       <div className="container mx-auto px-6 max-w-[1400px]">
+        {/* ... desktop section stays same, skipping to line 384 ... */}
 
         {/* ─── Desktop Nav ─── */}
-        <div className="hidden lg:flex items-center justify-between py-0">
+        <div className="hidden xl:flex items-center justify-between py-0 relative h-16">
 
-          <Link to="/" className="flex items-center group flex-shrink-0">
+          <Link to="/" className="relative z-[150] h-full flex items-center min-w-[200px]">
             {settings?.logo ? (
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
-                className="h-14 md:h-16 w-auto object-contain"
+                className="absolute top-1/2 -translate-y-1/2 left-0 h-32 md:h-40 w-auto object-contain transition-transform duration-500 drop-shadow-[0_8px_15px_rgba(0,0,0,0.1)] group-hover:scale-105"
               />
             ) : (
-              <div className="flex flex-col">
-                <span className="text-xl font-black text-[#23471d] leading-none">IHWE</span>
-                <span className="text-[10px] font-bold text-[#d26019] tracking-widest uppercase">EXPO 2026</span>
-              </div>
-            )}
+                <div className="flex flex-col">
+                  <span className="text-xl font-black text-[#23471d] leading-none">IHWE</span>
+                  <span className="text-[10px] font-bold text-[#d26019] tracking-widest uppercase">EXPO 2026</span>
+                </div>
+              )}
           </Link>
 
           {/* RIGHT: Nav Links + Button */}
-          <div className="flex items-center gap-4 h-full">
+          <div className="flex-1 flex items-center justify-end gap-0.5 px-4">
             {navLinks.map((link) => (
               <div
                 key={link.label}
@@ -382,21 +382,21 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
           </div>
         </div>
 
-        <div className="flex xl:hidden items-center justify-between h-[64px]">
-          <Link to="/" className="flex items-center group">
+        <div className="flex xl:hidden items-center justify-between h-[64px] relative">
+          <Link to="/" className="relative z-[150] h-full flex items-center min-w-[140px] ml-2">
             {settings?.logo ? (
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
-                className="h-10 w-auto object-contain"
+                className="absolute top-1/2 -translate-y-1/2 left-0 h-24 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.1)]"
               />
             ) : (
-              <span className="text-lg font-black text-[#23471d]">IHWE</span>
+              <span className="text-xl font-black text-[#23471d] tracking-tighter">IHWE</span>
             )}
           </Link>
 
           <button
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
+            className="p-2 rounded-full hover:bg-slate-100 transition-colors relative z-[110]"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? (
@@ -418,14 +418,14 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 top-[64px] xl:hidden bg-white z-50 flex flex-col"
           >
-            <div className="flex-1 overflow-y-auto px-6 py-8">
-              <div className="flex flex-col gap-4">
+            <div className="flex-1 overflow-y-auto px-8 py-10">
+              <div className="flex flex-col gap-6">
                 {navLinks.map((link) => (
-                  <div key={link.label} className="border-b border-slate-50 pb-2">
+                  <div key={link.label} className="border-b border-slate-100/60 pb-6">
                     <Link
                       to={link.path}
                       style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                      className={`flex items-center justify-between py-3 text-lg font-bold ${location.pathname === link.path ? "text-[#d26019]" : "text-slate-900"
+                      className={`flex items-center justify-between text-base font-black uppercase tracking-widest ${location.pathname === link.path ? "text-[#d26019]" : "text-slate-900"
                         }`}
                     >
                       {link.label}
@@ -466,21 +466,34 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 ))}
               </div>
             </div>
-            <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex flex-col gap-3">
-              <button
-                className="w-full border-2 border-[#23471d] text-[#23471d] py-4 rounded-xl font-bold text-lg active:scale-[0.98] transition-all"
-                onClick={onRegisterVisit}
-              >
-                Register to Visit
-              </button>
-              <Link
-                to="/book-a-stand"
-                className="w-full bg-[#23471d] border-2 border-[#d26019] text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-[0.98] transition-all flex items-center justify-center"
-                onClick={() => setMobileOpen(false)}
-              >
-                Book a Stand
-              </Link>
-            </div>
+              {/* ─── Login & Event Actions (Moved from Topbar) ─── */}
+              <div className="flex flex-col gap-3 pt-2 mb-6">
+                <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl">
+                  <CalendarDays className="w-4 h-4 text-[#d26019]" />
+                  <span className="text-[12px] font-bold text-slate-600 uppercase tracking-wider">
+                    {settings?.topbarDate || "15–17 October 2026"}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-2">
+                  <Link
+                    to="/exhibitor-login"
+                    onClick={() => setMobileOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-slate-900 text-white rounded-xl font-bold text-[13px] uppercase tracking-widest shadow-md active:scale-[0.98] transition-all"
+                  >
+                    <Lock className="w-4 h-4 text-[#d26019]" />
+                    Exhibitor Login
+                  </Link>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button className="flex items-center justify-center py-3.5 bg-white border border-slate-200 text-slate-800 rounded-xl font-bold text-[11px] uppercase tracking-widest active:scale-[0.98] transition-all">
+                      Delegates
+                    </button>
+                    <button className="flex items-center justify-center py-3.5 bg-white border border-slate-200 text-slate-800 rounded-xl font-bold text-[11px] uppercase tracking-widest active:scale-[0.98] transition-all">
+                      User Login
+                    </button>
+                  </div>
+                </div>
+              </div>
           </motion.div>
         )}
       </AnimatePresence>

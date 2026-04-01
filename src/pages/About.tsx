@@ -51,8 +51,7 @@ const About = () => {
     backgroundImage: heroData?.backgroundImage
       ? `url(${SERVER_URL}${heroData.backgroundImage})`
       : `none`,
-    backgroundSize: "cover",
-    backgroundPosition: "center"
+    aspectRatio: "16 / 4"
   };
 
   const heroSubtitle = heroData?.title || "";
@@ -64,11 +63,11 @@ const About = () => {
     <div className="bg-[#FFFDF1] font-inter">
       {/* PROFESSIONAL HERO SECTION */}
       <section
-        className="relative pt-36 pb-20 overflow-hidden"
+        className="hero-background-standard"
         style={heroStyles}
       >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#FFFDF1]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#FFFDF1]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">{heroSubtitle}</p>
