@@ -70,7 +70,7 @@ export const roleApi = {
 
 const BASE_API_URL = (import.meta.env.VITE_API_URL || (window.location.hostname === "localhost" ? "http://localhost:5000/api" : "/api")).replace(/\/$/, "");
 export const API_URL = BASE_API_URL.endsWith("/api") ? BASE_API_URL : `${BASE_API_URL}/api`;
-export const SERVER_URL = API_URL.replace(/\/api$/, "");
+export const SERVER_URL = API_URL.replace(/\/api$/, "") || window.location.origin;
 
 export const heroApi = {
     getAll: async () => {
@@ -212,12 +212,12 @@ export const seoApi = {
 
 export const heroBackgroundApi = {
     getAll: async () => {
-        const response = await fetch(`${API_URL}/hero-background`);
+        const response = await fetch(`${API_URL}/hero-background?t=${Date.now()}`);
         const data = await response.json();
         return data.success ? data.data : [];
     },
     getByPage: async (pageName: string) => {
-        const response = await fetch(`${API_URL}/hero-background`);
+        const response = await fetch(`${API_URL}/hero-background?t=${Date.now()}`);
         const data = await response.json();
         if (data.success) {
             return data.data.find((item: any) => item.pageName === pageName);

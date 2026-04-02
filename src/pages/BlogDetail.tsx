@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Calendar, User, ArrowLeft, Tag, ArrowRight, Clock } from "lucide-react";
 import { blogApi, SERVER_URL } from "@/lib/api";
+import SeoHelmet from "@/components/SeoHelmet";
 
 const BlogDetail = () => {
   const { id } = useParams(); // This is the slug
@@ -64,8 +65,21 @@ const BlogDetail = () => {
     );
   }
 
-  return (
+    return (
     <div className="min-h-screen bg-[#F9FAFB] font-sans">
+      {/* SEO Injection */}
+      <SeoHelmet
+        data={{
+          metaTitle: blog.metaTitle,
+          metaDescription: blog.metaDescription,
+          metaKeywords: blog.metaKeywords,
+          ogImage: blog.image,
+          openGraphTags: blog.openGraphTags,
+          schemaMarkup: blog.schemaMarkup,
+          canonicalTag: blog.canonicalTag
+        }}
+      />
+
       {/* ── HERO SECTION - Article Style (1600x675) ── */}
       <section
         className="hero-background-post"
@@ -139,12 +153,27 @@ const BlogDetail = () => {
               className="bg-white border border-slate-100 p-8 md:p-10 shadow-sm
                 prose prose-slate max-w-none
                 prose-headings:font-serif prose-headings:text-slate-900 prose-headings:font-bold
-                prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-3 prose-h2:border-b prose-h2:border-slate-100 prose-h2:pb-2
-                prose-p:text-slate-600 prose-p:leading-relaxed prose-p:text-[15px]
-                prose-a:text-[#134E8E] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-slate-800 prose-img:rounded-2xl"
+                prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-100 prose-h2:pb-2
+                prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
+                prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-[15px]
+                prose-a:text-blue-600 prose-a:font-semibold prose-a:underline
+                prose-strong:text-slate-900 prose-strong:font-extrabold prose-img:rounded-2xl"
+              style={{ color: '#374151' }}
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
+            <style>{`
+              .prose { font-family: 'Lora', Georgia, serif !important; font-size: 16px; line-height: 1.85; }
+              .prose p, .prose li, .prose span { font-family: 'Lora', Georgia, serif !important; color: #374151 !important; font-size: 16px !important; line-height: 1.85 !important; }
+              .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { font-family: 'Playfair Display', Georgia, serif !important; color: #0f172a !important; }
+              .prose h2 { font-weight: 800 !important; font-size: 1.875rem !important; margin-top: 2.5rem !important; margin-bottom: 1rem !important; padding-bottom: 0.5rem !important; border-bottom: 1px solid #e2e8f0; }
+              .prose h3 { font-weight: 700 !important; font-size: 1.5rem !important; margin-top: 2rem !important; margin-bottom: 0.75rem !important; }
+              .prose a { color: #2563eb !important; text-decoration: underline !important; font-weight: 600 !important; font-family: 'Lora', Georgia, serif !important; }
+              .prose a:hover { color: #1d4ed8 !important; }
+              .prose strong, .prose b { font-weight: 800 !important; color: #0f172a !important; font-family: 'Lora', Georgia, serif !important; }
+              .prose ul { padding-left: 1.5rem !important; margin: 1rem 0 !important; }
+              .prose ul li { list-style-type: disc !important; color: #374151 !important; font-family: 'Lora', Georgia, serif !important; margin-bottom: 0.4rem !important; }
+              .prose ol li { color: #374151 !important; font-family: 'Lora', Georgia, serif !important; margin-bottom: 0.4rem !important; }
+            `}</style>
 
             {/* Tags - Hidden if not exists */}
             {blog.tags && blog.tags.length > 0 && (

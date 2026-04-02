@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Search, Calendar, ArrowRight, Layers, Zap, Building2, Sparkles, Smartphone } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { blogApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import blogHero from "../assets/blogs.jpg";
-
-const categoryList = [
-  { id: "All", label: "All", icon: Layers },
-  { id: "Technology", label: "Technology", icon: Zap },
-  { id: "Industry", label: "Industry", icon: Building2 },
-  { id: "Innovation", label: "Innovation", icon: Sparkles },
-  { id: "Devices", label: "Devices", icon: Smartphone },
-];
 
 const Blog = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState("All");
-  const [search, setSearch] = useState("");
   const [heroData, setHeroData] = useState<any>(null);
 
   useEffect(() => {
@@ -43,11 +32,6 @@ const Blog = () => {
     };
     fetchBlogs();
   }, []);
-
-  const filtered = blogs.filter(p =>
-    (category === "All" || p.category === category) &&
-    (search === "" || p.title.toLowerCase().includes(search.toLowerCase()))
-  );
 
   return (
     <div className="bg-[#f5f0e8] min-h-screen">
@@ -77,43 +61,6 @@ const Blog = () => {
 
       <section className="pt-4 pb-20">
         <div className="container mx-auto px-4">
-          {/* Filters & Search */}
-          <div className="flex flex-col lg:flex-row gap-8 items-center justify-between mb-16 px-2">
-            <div className="inline-flex p-1.5 bg-white/40 backdrop-blur-sm rounded-xl border border-white/20 flex-wrap justify-center font-inter order-2 lg:order-1">
-              {categoryList.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setCategory(c.id)}
-                  className={`relative flex items-center gap-2.5 px-6 py-3 rounded-lg text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-500 overflow-hidden ${category === c.id
-                    ? "text-white shadow-lg"
-                    : "text-slate-600 hover:bg-white/30"
-                    }`}
-                >
-                  {category === c.id && (
-                    <motion.div
-                      layoutId="activeFilter"
-                      className="absolute inset-0 bg-[#23471d]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className="relative z-10 flex items-center gap-2">
-                    <c.icon className={`w-3.5 h-3.5 ${category === c.id ? "text-white" : "text-[#23471d]"}`} />
-                    {c.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            <div className="relative w-full sm:w-80 font-inter order-1 lg:order-2">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#23471d]" />
-              <Input
-                placeholder="Search articles..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 bg-white/50 backdrop-blur-sm border-white/30 h-14 rounded-xl focus:ring-[#23471d]/20 placeholder:text-slate-400 text-sm font-bold tracking-wide"
-              />
-            </div>
-          </div>
 
           {loading ? (
             <div className="text-center py-20">
@@ -121,7 +68,7 @@ const Blog = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((post, i) => (
+              {blogs.map((post, i) => (
                 <Link
                   to={`/blog/${post.slug}`}
                   key={post._id}
@@ -182,7 +129,7 @@ const Blog = () => {
             </div>
           )}
 
-          {!loading && filtered.length === 0 && (
+          {!loading && blogs.length === 0 && (
             <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200" data-aos="fade-up">
               <p className="text-slate-500 text-sm font-inter">No articles found matching your criteria.</p>
             </div>
