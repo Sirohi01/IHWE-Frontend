@@ -5,8 +5,7 @@ import {
     CheckCircle,
     Send, ChevronRight,
     ShieldCheck,
-    UserCircle,
-    Building2
+    Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { heroBackgroundApi, SERVER_URL } from "@/lib/api";
+import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi } from "@/lib/api";
 import HeroBg from "@/assets/car22.jpg";
 
 const COUNTRIES = [
@@ -58,26 +57,321 @@ const INTEREST_CORPORATE = [
 ];
 
 const VisitorRegistration = () => {
-    const [visitorType, setVisitorType] = useState("general");
-    const [submitted, setSubmitted] = useState(false);
+    const [visitorType, setVisitorType] = useState("corporate");
+    const [isSuccess, setIsSuccess] = useState(false);
     const [heroData, setHeroData] = useState<any>(null);
+    const [events, setEvents] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    // OTP States
+    const [formData, setFormData] = useState({
+        registrationFor: "",
+        firstName: "",
+        lastName: "",
+        gender: "",
+        dob: "",
+        email: "",
+        mobileNo: "",
+        designation: "",
+        alternateNo: "",
+        companyName: "",
+        companyWebsite: "",
+        industry: "",
+        companySize: "",
+        country: "India",
+        state: "",
+        city: "",
+        anyRequirement: "",
+        schedulingB2B: "no",
+        whatsappUpdates: "yes",
+        subscribeNewsletter: true,
+        purposeOfVisit: [] as string[],
+        areaOfInterest: [] as string[]
+    });
+
+    const [emailOtp, setEmailOtp] = useState("");
+    const [phoneOtp, setPhoneOtp] = useState("");
+    const [emailOtpSent, setEmailOtpSent] = useState(false);
+    const [phoneOtpSent, setPhoneOtpSent] = useState(false);
+    const [emailVerified, setEmailVerified] = useState(false);
+    const [phoneVerified, setPhoneVerified] = useState(false);
+    const [isSendingEmailOtp, setIsSendingEmailOtp] = useState(false);
+    const [isSendingPhoneOtp, setIsSendingPhoneOtp] = useState(false);
+    const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+    const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
+    const [emailTimer, setEmailTimer] = useState(0);
+    const [phoneTimer, setPhoneTimer] = useState(0);
 
     useEffect(() => {
-        const fetchHero = async () => {
+        const fetchInitialData = async () => {
             try {
-                const data = await heroBackgroundApi.getByPage("Registration / Visitor Registration");
-                if (data) setHeroData(data);
+                const [heroRes, eventsRes] = await Promise.all([
+                    heroBackgroundApi.getByPage("Registration / Visitor Registration"),
+                    eventApi.getActive()
+                ]);
+                if (heroRes) setHeroData(heroRes);
+                setEvents(eventsRes);
             } catch (err) {
-                console.error("Error fetching hero:", err);
+                console.error("Error fetching initial data:", err);
             }
         };
-        fetchHero();
+        fetchInitialData();
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Timers
+    useEffect(() => {
+        let eInterval: any;
+        if (emailTimer > 0) {
+            eInterval = setInterval(() => setEmailTimer(prev => prev - 1), 1000);
+        }
+        return () => clearInterval(eInterval);
+    }, [emailTimer]);
+
+    useEffect(() => {
+        let pInterval: any;
+        if (phoneTimer > 0) {
+            pInterval = setInterval(() => setPhoneTimer(prev => prev - 1), 1000);
+        }
+        return () => clearInterval(pInterval);
+    }, [phoneTimer]);
+
+    const handleInputChange = (e: any) => {
+        const { name, value, type, checked } = e.target;
+        
+        if (name === 'email') setEmailVerified(false);
+        if (name === 'mobileNo') setPhoneVerified(false);
+
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handlePurposeChange = (opt: string, checked: boolean) => {
+        setFormData(prev => ({
+            ...prev,
+            purposeOfVisit: checked 
+                ? [...prev.purposeOfVisit, opt] 
+                : prev.purposeOfVisit.filter(i => i !== opt)
+        }));
+    };
+
+    const handleInterestChange = (opt: string, checked: boolean) => {
+        setFormData(prev => ({
+            ...prev,
+            areaOfInterest: checked 
+                ? [...prev.areaOfInterest, opt] 
+                : prev.areaOfInterest.filter(i => i !== opt)
+        }));
+    };
+
+    const sendEmailOtp = async () => {
+        if (!formData.email) {
+            alert("Please enter your email first.");
+            return;
+        }
+        setIsSendingEmailOtp(true);
+        try {
+            const res = await verifyApi.sendEmailOtp(formData.email, 'VISITOR');
+            if (res.success) {
+                setEmailOtpSent(true);
+                setEmailTimer(60);
+            } else {
+                alert(res.message || "Failed to send OTP");
+            }
+        } catch (error: any) {
+            alert(error.message || "Failed to send OTP");
+        } finally {
+            setIsSendingEmailOtp(false);
+        }
+    };
+
+    const confirmEmailOtp = async () => {
+        if (!emailOtp) return;
+        setIsVerifyingEmail(true);
+        try {
+            const res = await verifyApi.verifyEmailOtp(formData.email, emailOtp);
+            if (res.success) {
+                setEmailVerified(true);
+            } else {
+                alert(res.message || "Invalid OTP");
+            }
+        } catch (error) {
+            alert("Verification failed.");
+        } finally {
+            setIsVerifyingEmail(false);
+        }
+    };
+
+    const sendPhoneOtp = async () => {
+        if (!formData.mobileNo) {
+            alert("Please enter your WhatsApp number.");
+            return;
+        }
+        setIsSendingPhoneOtp(true);
+        try {
+            const res = await verifyApi.sendPhoneOtp(formData.mobileNo);
+            if (res.success) {
+                setPhoneOtpSent(true);
+                setPhoneTimer(60);
+            } else {
+                alert(res.message || "Failed to send OTP");
+            }
+        } catch (error: any) {
+            alert(error.message || "Failed to send OTP");
+        } finally {
+            setIsSendingPhoneOtp(false);
+        }
+    };
+
+    const confirmPhoneOtp = async () => {
+        if (!phoneOtp) return;
+        setIsVerifyingPhone(true);
+        try {
+            const res = await verifyApi.verifyPhoneOtp(formData.mobileNo, phoneOtp);
+            if (res.success) {
+                setPhoneVerified(true);
+            } else {
+                alert(res.message || "Invalid OTP");
+            }
+        } catch (error) {
+            alert("Verification failed.");
+        } finally {
+            setIsVerifyingPhone(false);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        setErrorMessage("");
+        
+        if (!emailVerified || !phoneVerified) {
+            alert("Please verify both your Email and WhatsApp number.");
+            return;
+        }
+        
+        setLoading(true);
+        try {
+            let payload: any = {};
+
+            if (visitorType === 'general') {
+                payload = {
+                    registrationFor: formData.registrationFor,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    mobile: formData.mobileNo,
+                    alternateNo: formData.alternateNo,
+                    dateOfBirth: formData.dob,
+                    gender: formData.gender,
+                    companyName: formData.companyName,
+                    designation: formData.designation,
+                    industrySector: formData.industry,
+                    country: formData.country,
+                    state: formData.state,
+                    city: formData.city,
+                    subscribe: formData.subscribeNewsletter,
+                    purposeOfVisit: {
+                        businessNetworking: formData.purposeOfVisit.includes("Business Networking"),
+                        exploringProducts: formData.purposeOfVisit.includes("Exploring New Products"),
+                        buyingProducts: formData.purposeOfVisit.includes("Buying Products & Services"),
+                        learningTrends: formData.purposeOfVisit.includes("Learning Industry Trends"),
+                        others: formData.purposeOfVisit.includes("Others")
+                    },
+                    areaOfInterest: {
+                        ayushHerbal: formData.areaOfInterest.includes("AYUSH & Herbal Products"),
+                        organicProducts: formData.areaOfInterest.includes("Organic & Natural Products"),
+                        fitnessWellness: formData.areaOfInterest.includes("Fitness & Wellness Equipment"),
+                        healthSupplements: formData.areaOfInterest.includes("Health Supplements"),
+                        healthcareServices: formData.areaOfInterest.includes("Hospitals & Healthcare Services"),
+                        agricultureFarming: formData.areaOfInterest.includes("Agriculture & Organic Farming"),
+                        researchInnovations: formData.areaOfInterest.includes("R&D & Innovations"),
+                        others: formData.areaOfInterest.includes("Others")
+                    }
+                };
+            } else {
+                payload = {
+                    registrationFor: formData.registrationFor,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    mobile: formData.mobileNo,
+                    designation: formData.designation,
+                    companyName: formData.companyName,
+                    companyWebsite: formData.companyWebsite,
+                    industrySector: formData.industry,
+                    companySize: formData.companySize,
+                    country: formData.country,
+                    state: formData.state,
+                    city: formData.city,
+                    b2bMeeting: formData.schedulingB2B,
+                    whatsappUpdates: formData.whatsappUpdates,
+                    specificRequirement: formData.anyRequirement,
+                    subscribe: formData.subscribeNewsletter,
+                    purposeOfVisit: {
+                        exploringBusiness: formData.purposeOfVisit.includes("Exploring Business Opportunities"),
+                        meetingExhibitors: formData.purposeOfVisit.includes("Meeting Exhibitors & Suppliers"),
+                        attendingSeminar: formData.purposeOfVisit.includes("Attending Arogya Sangosthi Seminar"),
+                        networking: formData.purposeOfVisit.includes("Networking & Collaborations"),
+                        learningTrends: formData.purposeOfVisit.includes("Learning About Latest Trends")
+                    },
+                    areaOfInterest: {
+                        ayushHerbal: formData.areaOfInterest.includes("AYUSH & Herbal Products"),
+                        healthWellness: formData.areaOfInterest.includes("Health & Wellness"),
+                        organicFarming: formData.areaOfInterest.includes("Organic Farming & Agriculture"),
+                        fitnessNutrition: formData.areaOfInterest.includes("Fitness & Nutrition"),
+                        bioMedicine: formData.areaOfInterest.includes("Bio-Medicine & Research"),
+                        healthTech: formData.areaOfInterest.includes("HealthTech & Startups")
+                    }
+                };
+            }
+
+            const res = visitorType === 'corporate' 
+                ? await visitorApi.submitCorporate(payload)
+                : await visitorApi.submitGeneral(payload);
+
+            if (res.success || res.data) {
+                setIsSuccess(true);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setTimeout(() => {
+                    setFormData({
+                        registrationFor: "",
+                        firstName: "",
+                        lastName: "",
+                        gender: "",
+                        dob: "",
+                        email: "",
+                        mobileNo: "",
+                        designation: "",
+                        alternateNo: "",
+                        companyName: "",
+                        companyWebsite: "",
+                        industry: "",
+                        companySize: "",
+                        country: "India",
+                        state: "",
+                        city: "",
+                        anyRequirement: "",
+                        schedulingB2B: "no",
+                        whatsappUpdates: "yes",
+                        subscribeNewsletter: true,
+                        purposeOfVisit: [],
+                        areaOfInterest: []
+                    });
+                    setEmailVerified(false);
+                    setPhoneVerified(false);
+                    setIsSuccess(false);
+                }, 5000);
+            } else {
+                throw new Error(res.message || 'Registration failed');
+            }
+        } catch (error: any) {
+            setErrorMessage(error.message || "Something went wrong. Please try again.");
+            alert("Error: " + (error.message || "Submission failed. Please check your data."));
+        } finally {
+            setLoading(false);
+        }
     };
 
     const inputClasses =
@@ -123,38 +417,31 @@ const VisitorRegistration = () => {
                 <div className="container mx-auto px-6 max-w-[1400px]">
                     <div className="space-y-8">
                         <AnimatePresence mode="wait">
-                            {submitted ? (
+                            {isSuccess ? (
                                 <motion.div
                                     key="success"
-                                    initial={{ opacity: 0, scale: 0.98 }}
+                                    initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="bg-white border border-slate-300 shadow-2xl p-16 flex flex-col items-center justify-center text-center space-y-6"
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    className="bg-white border border-green-300 p-16 flex flex-col items-center justify-center min-h-[500px] shadow-2xl relative overflow-hidden"
                                 >
-                                    <div className="w-20 h-20 bg-[#23471d]/10 flex items-center justify-center text-[#23471d]">
-                                        <CheckCircle size={40} />
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-green-500" />
+                                    <CheckCircle className="w-24 h-24 text-green-500 mb-8 animate-bounce-short" />
+                                    <h3 className="text-3xl font-serif font-bold text-slate-900 mb-4 text-center">Registration Success!</h3>
+                                    <p className="text-slate-600 text-center text-lg max-w-md mb-8 leading-relaxed">
+                                        Thank you for registering. Your details have been successfully submitted. You will receive a confirmation shortly.
+                                    </p>
+                                    <div className="flex items-center gap-3 text-sm text-slate-400 font-bold uppercase tracking-widest">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+                                        Redirecting or resetting in 5 seconds...
                                     </div>
-                                    <div className="space-y-2">
-                                        <h2 className="text-3xl font-serif font-bold text-slate-900">
-                                            Registration Complete!
-                                        </h2>
-                                        <p className="text-slate-600 text-base max-w-md mx-auto leading-relaxed font-inter">
-                                            Your visitor pass has been confirmed. You will receive a digital copy via email shortly.
-                                            We look forward to seeing you at IH&WE 2026.
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-4 pt-4">
+                                    
+                                    <div className="mt-10 flex gap-4">
                                         <Link to="/">
-                                            <Button className="rounded-sm px-10 h-11 bg-[#23471d] hover:bg-[#1a3516] text-sm font-bold uppercase tracking-widest transition-all">
-                                                Return Home
+                                            <Button className="h-11 px-8 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#23471d]/20 transition-all active:scale-95">
+                                                Go to Homepage
                                             </Button>
                                         </Link>
-                                        <Button
-                                            variant="outline"
-                                            onClick={() => setSubmitted(false)}
-                                            className="rounded-sm px-10 h-11 border-slate-300 text-sm font-bold uppercase tracking-widest hover:bg-slate-50 transition-all font-inter"
-                                        >
-                                            New Registration
-                                        </Button>
                                     </div>
                                 </motion.div>
                             ) : (
@@ -162,6 +449,7 @@ const VisitorRegistration = () => {
                                     key="form"
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
                                     className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
                                 >
                                     <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
@@ -174,17 +462,12 @@ const VisitorRegistration = () => {
                                         <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">International Health & Wellness Expo 2026</p>
                                     </div>
 
-                                    {visitorType === "corporate" && (
-                                        <div className="px-8 pt-6 pb-2">
-                                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">Corporate Visitor Registration</h3>
-                                        </div>
-                                    )}
-
                                     <form onSubmit={handleSubmit} className="p-8 space-y-8 font-inter">
                                         {/* ── VISITOR TYPE ── */}
                                         <div className="flex flex-wrap items-center gap-12">
                                             <RadioGroup
                                                 defaultValue="corporate"
+                                                value={visitorType}
                                                 className="flex flex-wrap gap-10"
                                                 onValueChange={(v) => setVisitorType(v)}
                                             >
@@ -224,27 +507,50 @@ const VisitorRegistration = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
                                                 <div>
                                                     <Label className={labelClasses}>REGISTRATION FOR *</Label>
-                                                    <Select>
+                                                    <Select 
+                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, registrationFor: v }))}
+                                                        value={formData.registrationFor}
+                                                    >
                                                         <SelectTrigger className={inputClasses}>
                                                             <SelectValue placeholder="Select Here" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="organic_expo">5th Organic Expo 2026</SelectItem>
-                                                            <SelectItem value="ihwe_expo">9th International Health and Wellness Expo</SelectItem>
+                                                            {events.map(e => (
+                                                                <SelectItem key={e._id} value={e._id}>{e.name}</SelectItem>
+                                                            ))}
+                                                            {!events.length && (
+                                                                <>
+                                                                    <SelectItem value="organic_expo">5th Organic Expo 2026</SelectItem>
+                                                                    <SelectItem value="ihwe_expo">9th International Health and Wellness Expo</SelectItem>
+                                                                </>
+                                                            )}
                                                         </SelectContent>
                                                     </Select>
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>FIRST NAME *</Label>
-                                                    <Input required placeholder="Enter First Name" className={inputClasses} />
+                                                    <Input 
+                                                        name="firstName"
+                                                        value={formData.firstName}
+                                                        onChange={handleInputChange}
+                                                        required placeholder="Enter First Name" className={inputClasses} 
+                                                    />
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>LAST NAME *</Label>
-                                                    <Input required placeholder="Enter Last Name" className={inputClasses} />
+                                                    <Input 
+                                                        name="lastName"
+                                                        value={formData.lastName}
+                                                        onChange={handleInputChange}
+                                                        required placeholder="Enter Last Name" className={inputClasses} 
+                                                    />
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>GENDER *</Label>
-                                                    <Select>
+                                                    <Select
+                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, gender: v }))}
+                                                        value={formData.gender}
+                                                    >
                                                         <SelectTrigger className={inputClasses}>
                                                             <SelectValue placeholder="Select Here" />
                                                         </SelectTrigger>
@@ -257,27 +563,151 @@ const VisitorRegistration = () => {
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>DATE OF BIRTH (OPTIONAL)</Label>
-                                                    <Input type="date" className={inputClasses} />
+                                                    <Input 
+                                                        name="dob"
+                                                        value={formData.dob}
+                                                        onChange={handleInputChange}
+                                                        type="date" className={inputClasses} 
+                                                    />
                                                 </div>
-                                                <div>
-                                                    <Label className={labelClasses}>EMAIL *</Label>
-                                                    <Input type="email" required placeholder="Enter Address.." className={inputClasses} />
+                                                
+                                                {/* Phone & OTP Row */}
+                                                <div className="relative flex flex-col group">
+                                                    <Label className={labelClasses}>MOBILE NO. (WHATSAPP) *</Label>
+                                                    <div className="relative flex items-center">
+                                                        <Input 
+                                                            name="mobileNo"
+                                                            value={formData.mobileNo}
+                                                            onChange={handleInputChange}
+                                                            disabled={phoneVerified || phoneOtpSent}
+                                                            required placeholder="Enter WhatsApp Number" 
+                                                            className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} 
+                                                        />
+                                                        {!phoneVerified && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={sendPhoneOtp}
+                                                                disabled={isSendingPhoneOtp || !formData.mobileNo || phoneTimer > 0}
+                                                                className="absolute right-1 px-3 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all"
+                                                            >
+                                                                {isSendingPhoneOtp ? "..." : phoneTimer > 0 ? `${phoneTimer}s` : phoneOtpSent ? "RE-SEND" : "SEND OTP"}
+                                                            </button>
+                                                        )}
+                                                        {phoneVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <Label className={labelClasses}>MOBILE NO. *</Label>
-                                                    <Input required placeholder="Enter Telephone/Mobile.." className={inputClasses} />
+
+                                                {/* Email & OTP Row */}
+                                                <div className="relative flex flex-col group">
+                                                    <Label className={labelClasses}>EMAIL ADDRESS *</Label>
+                                                    <div className="relative flex items-center">
+                                                        <Input 
+                                                            name="email"
+                                                            value={formData.email}
+                                                            onChange={handleInputChange}
+                                                            disabled={emailVerified || emailOtpSent}
+                                                            type="email" required placeholder="Enter Email Address" 
+                                                            className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} 
+                                                        />
+                                                        {!emailVerified && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={sendEmailOtp}
+                                                                disabled={isSendingEmailOtp || !formData.email || emailTimer > 0}
+                                                                className="absolute right-1 px-3 py-1 bg-[#d26019] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all"
+                                                            >
+                                                                {isSendingEmailOtp ? "..." : emailTimer > 0 ? `${emailTimer}s` : emailOtpSent ? "RE-SEND" : "SEND OTP"}
+                                                            </button>
+                                                        )}
+                                                        {emailVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
+                                                    </div>
                                                 </div>
+
                                                 {visitorType === "corporate" && (
                                                     <div>
                                                         <Label className={labelClasses}>DESIGNATION *</Label>
-                                                        <Input required placeholder="Enter Designation.." className={inputClasses} />
+                                                        <Input 
+                                                            name="designation"
+                                                            value={formData.designation}
+                                                            onChange={handleInputChange}
+                                                            required placeholder="Enter Designation.." className={inputClasses} 
+                                                        />
                                                     </div>
                                                 )}
                                                 <div>
                                                     <Label className={labelClasses}>ALTERNATE NO. (OPTIONAL)</Label>
-                                                    <Input placeholder="Enter Alternate No." className={inputClasses} />
+                                                    <Input 
+                                                        name="alternateNo"
+                                                        value={formData.alternateNo}
+                                                        onChange={handleInputChange}
+                                                        placeholder="Enter Alternate No." className={inputClasses} 
+                                                    />
                                                 </div>
                                             </div>
+
+                                            {/* ── DUAL OTP INPUT GRID ── */}
+                                            <AnimatePresence>
+                                                {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: "auto" }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 overflow-hidden"
+                                                    >
+                                                        {/* WhatsApp OTP Column */}
+                                                        <div>
+                                                            {phoneOtpSent && !phoneVerified && (
+                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
+                                                                    <Input 
+                                                                        value={phoneOtp}
+                                                                        onChange={(e) => setPhoneOtp(e.target.value)}
+                                                                        placeholder="WhatsApp OTP" 
+                                                                        className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
+                                                                        maxLength={6}
+                                                                        autoComplete="off"
+                                                                        name="visitor-phone-otp-field"
+                                                                        inputMode="numeric"
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        onClick={confirmPhoneOtp}
+                                                                        disabled={isVerifyingPhone || phoneOtp.length < 4}
+                                                                        className="h-9 bg-[#23471d] hover:bg-[#1a3516] text-[10px] font-bold px-4"
+                                                                    >
+                                                                        {isVerifyingPhone ? "..." : "VERIFY"}
+                                                                    </Button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Email OTP Column */}
+                                                        <div>
+                                                            {emailOtpSent && !emailVerified && (
+                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
+                                                                    <Input 
+                                                                        value={emailOtp}
+                                                                        onChange={(e) => setEmailOtp(e.target.value)}
+                                                                        placeholder="Email OTP" 
+                                                                        className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
+                                                                        maxLength={6}
+                                                                        autoComplete="off"
+                                                                        name="visitor-email-otp-field"
+                                                                        inputMode="numeric"
+                                                                    />
+                                                                    <Button
+                                                                        type="button"
+                                                                        onClick={confirmEmailOtp}
+                                                                        disabled={isVerifyingEmail || emailOtp.length < 4}
+                                                                        className="h-9 bg-[#d26019] hover:bg-[#a84c14] text-[10px] font-bold px-4"
+                                                                    >
+                                                                        {isVerifyingEmail ? "..." : "VERIFY"}
+                                                                    </Button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
                                         </div>
 
                                         {/* ── PROFESSIONAL DETAILS ── */}
@@ -287,47 +717,56 @@ const VisitorRegistration = () => {
                                                     className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5"
                                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                                 >
-                                                    Company & Industry Information:
+                                                    Company & Industry Information
                                                 </h3>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
                                                     <div className="lg:col-span-2">
                                                         <Label className={labelClasses}>COMPANY NAME *</Label>
-                                                        <Input required placeholder="Enter Company Name.." className={inputClasses} />
+                                                        <Input 
+                                                            name="companyName"
+                                                            value={formData.companyName}
+                                                            onChange={handleInputChange}
+                                                            required placeholder="Enter Company Name.." className={inputClasses} 
+                                                        />
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>COMPANY WEBSITE *</Label>
-                                                        <Input required placeholder="Enter Company Website.." className={inputClasses} />
+                                                        <Input 
+                                                            name="companyWebsite"
+                                                            value={formData.companyWebsite}
+                                                            onChange={handleInputChange}
+                                                            required placeholder="Enter Company Website.." className={inputClasses} 
+                                                        />
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>INDUSTRY/SECTOR *</Label>
-                                                        <Select>
+                                                        <Select
+                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, industry: v }))}
+                                                            value={formData.industry}
+                                                        >
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="ayush">AYUSH (Ayurveda, Yoga, Unani, Siddha, Homeopathy)</SelectItem>
-                                                                <SelectItem value="agriculture">Agriculture, Horticulture & Medicinal Plants</SelectItem>
-                                                                <SelectItem value="bioenergy">Bio-Energy & Sustainable Living</SelectItem>
-                                                                <SelectItem value="fitness">Fitness & Wellness Industry</SelectItem>
-                                                                <SelectItem value="health_services">Health & Medical Services</SelectItem>
-                                                                <SelectItem value="wellness_tourism">Health & Wellness Tourism</SelectItem>
-                                                                <SelectItem value="medical_equipment">Medical Equipment & Healthcare Technology</SelectItem>
-                                                                <SelectItem value="medical_tourism">Medical Tourism</SelectItem>
-                                                                <SelectItem value="nutrition">Nutrition & Health Supplements</SelectItem>
-                                                                <SelectItem value="organic_herbal">Organic & Herbal Products</SelectItem>
-                                                                <SelectItem value="pharma">Pharmaceutical Companies</SelectItem>
-                                                                <SelectItem value="research_edu">Research, Education & Government Bodies</SelectItem>
+                                                            <SelectContent className="bg-white">
+                                                                <SelectItem value="ayush">AYUSH</SelectItem>
+                                                                <SelectItem value="agriculture">Agriculture & Organic</SelectItem>
+                                                                <SelectItem value="fitness">Fitness & Wellness</SelectItem>
+                                                                <SelectItem value="healthcare">Healthcare Services</SelectItem>
+                                                                <SelectItem value="pharma">Pharmaceutical</SelectItem>
                                                                 <SelectItem value="others">Others</SelectItem>
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
                                                         <div>
                                                             <Label className={labelClasses}>COMPANY SIZE *</Label>
-                                                            <Select>
+                                                            <Select
+                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, companySize: v }))}
+                                                                value={formData.companySize}
+                                                            >
                                                                 <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Here" />
                                                                 </SelectTrigger>
-                                                                <SelectContent>
+                                                                <SelectContent className="bg-white">
                                                                     <SelectItem value="1-10">1-10 Employees</SelectItem>
                                                                     <SelectItem value="11-50">11-50 Employees</SelectItem>
                                                                     <SelectItem value="51-200">51-200 Employees</SelectItem>
@@ -337,38 +776,37 @@ const VisitorRegistration = () => {
                                                         </div>
                                                     <div>
                                                         <Label className={labelClasses}>COUNTRY *</Label>
-                                                        <Select>
+                                                        <Select
+                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, country: v }))}
+                                                            value={formData.country}
+                                                        >
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Country" />
                                                             </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px]">
+                                                            <SelectContent className="max-h-[300px] bg-white">
                                                                 {COUNTRIES.map(c => (
-                                                                    <SelectItem key={c} value={c.toLowerCase().replace(/ /g, "_")}>{c}</SelectItem>
+                                                                    <SelectItem key={c} value={c}>{c}</SelectItem>
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>STATE *</Label>
-                                                        <Select>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select Country first" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="state1">State 1</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
+                                                        <Input 
+                                                            name="state"
+                                                            value={formData.state}
+                                                            onChange={handleInputChange}
+                                                            placeholder="Enter State" className={inputClasses} 
+                                                        />
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>CITY *</Label>
-                                                        <Select>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select State first" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="city1">City 1</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
+                                                        <Input 
+                                                            name="city"
+                                                            value={formData.city}
+                                                            onChange={handleInputChange}
+                                                            placeholder="Enter City" className={inputClasses} 
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,7 +820,11 @@ const VisitorRegistration = () => {
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                                     {(visitorType === "corporate" ? PURPOSE_CORPORATE : PURPOSE_GENERAL).map((opt) => (
                                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                            <Checkbox className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                            <Checkbox 
+                                                                checked={formData.purposeOfVisit.includes(opt)}
+                                                                onCheckedChange={(checked: boolean) => handlePurposeChange(opt, checked)}
+                                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" 
+                                                            />
                                                             <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
                                                         </label>
                                                     ))}
@@ -395,7 +837,11 @@ const VisitorRegistration = () => {
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                                     {(visitorType === "corporate" ? INTEREST_CORPORATE : INTEREST_GENERAL).map((opt) => (
                                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                            <Checkbox className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                            <Checkbox 
+                                                                checked={formData.areaOfInterest.includes(opt)}
+                                                                onCheckedChange={(checked: boolean) => handleInterestChange(opt, checked)}
+                                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" 
+                                                            />
                                                             <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
                                                         </label>
                                                     ))}
@@ -405,9 +851,13 @@ const VisitorRegistration = () => {
 
                                         {visitorType === "corporate" && (
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
-                                                <div className="space-y-4">
+                                                <div className="space-y-4 text-left">
                                                     <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? *</Label>
-                                                    <RadioGroup defaultValue="no" className="flex gap-6">
+                                                    <RadioGroup 
+                                                        value={formData.schedulingB2B}
+                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
+                                                        className="flex gap-6"
+                                                    >
                                                         <div className="flex items-center space-x-2">
                                                             <RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
                                                             <Label htmlFor="b2b-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
@@ -418,9 +868,13 @@ const VisitorRegistration = () => {
                                                         </div>
                                                     </RadioGroup>
                                                 </div>
-                                                <div className="space-y-4">
+                                                <div className="space-y-4 text-left">
                                                     <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like updates via WhatsApp? *</Label>
-                                                    <RadioGroup defaultValue="yes" className="flex gap-6">
+                                                    <RadioGroup 
+                                                        value={formData.whatsappUpdates}
+                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, whatsappUpdates: v }))}
+                                                        className="flex gap-6"
+                                                    >
                                                         <div className="flex items-center space-x-2">
                                                             <RadioGroupItem value="yes" id="wa-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
                                                             <Label htmlFor="wa-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
@@ -437,14 +891,23 @@ const VisitorRegistration = () => {
                                         {visitorType === "corporate" && (
                                             <div className="space-y-2">
                                                 <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Any Specific requirement</Label>
-                                                <Input placeholder="Write Here .." className={inputClasses} />
+                                                <Input 
+                                                    name="anyRequirement"
+                                                    value={formData.anyRequirement}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Write Here .." className={inputClasses} 
+                                                />
                                             </div>
                                         )}
 
                                         {/* ── NEWSLETTER ── */}
                                         <div className="pt-4 border-t border-slate-100">
                                             <label className="flex items-center gap-3 cursor-pointer group">
-                                                <Checkbox className="rounded-none w-4 h-4 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                <Checkbox 
+                                                    checked={formData.subscribeNewsletter}
+                                                    onCheckedChange={(checked: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: checked }))}
+                                                    className="rounded-none w-4 h-4 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" 
+                                                />
                                                 <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide">Subscribe to Event Updates & Newsletters</span>
                                             </label>
                                         </div>
@@ -453,9 +916,20 @@ const VisitorRegistration = () => {
                                         <div className="pt-6 flex flex-col items-center">
                                             <Button
                                                 type="submit"
-                                                className="w-full max-w-sm h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group"
+                                                disabled={loading || !emailVerified || !phoneVerified}
+                                                className="w-full max-w-sm h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
                                             >
-                                                SUBMIT REGISTRATION
+                                                {loading ? (
+                                                    <>
+                                                        <Loader2 className="w-5 h-5 animate-spin"/>
+                                                        <span>SUBMITTING...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        SUBMIT REGISTRATION
+                                                        <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                                    </>
+                                                )}
                                             </Button>
                                             <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2">
                                                 <ShieldCheck size={12} className="text-[#23471d]" />

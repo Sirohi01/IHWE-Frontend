@@ -405,11 +405,11 @@ export const socialMediaApi = {
 };
 
 export const verifyApi = {
-    sendEmailOtp: async (email: string) => {
+    sendEmailOtp: async (email: string, profile: string = 'SPEAKER') => {
         const response = await fetch(`${API_URL}/verify/send-email-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+            body: JSON.stringify({ email, profile })
         });
         return await response.json();
     },
@@ -421,11 +421,11 @@ export const verifyApi = {
         });
         return await response.json();
     },
-    sendPhoneOtp: async (phone: string) => {
+    sendPhoneOtp: async (phone: string, profile: string = 'CONTACT') => {
         const response = await fetch(`${API_URL}/verify/send-phone-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone })
+            body: JSON.stringify({ phone, profile })
         });
         return await response.json();
     },
@@ -535,5 +535,24 @@ export const travelAccommodationApi = {
         const response = await fetch(`${API_URL}/travel-accommodation`);
         const data = await response.json();
         return data.success ? data.data : null;
+    }
+};
+
+export const visitorApi = {
+    submitCorporate: async (payload: any) => {
+        const response = await fetch(`${API_URL}/corporate-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    submitGeneral: async (payload: any) => {
+        const response = await fetch(`${API_URL}/general-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
     }
 };

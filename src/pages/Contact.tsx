@@ -25,6 +25,31 @@ const Contact = () => {
   const [verifyingPhone, setVerifyingPhone] = useState(false);
   const [sendingEmailOtp, setSendingEmailOtp] = useState(false);
   const [sendingPhoneOtp, setSendingPhoneOtp] = useState(false);
+  const [emailResendTimer, setEmailResendTimer] = useState(0);
+  const [phoneResendTimer, setPhoneResendTimer] = useState(0);
+
+  // Timer logic for OTP resend
+  useEffect(() => {
+    let emailInterval: any;
+    let phoneInterval: any;
+
+    if (emailResendTimer > 0) {
+      emailInterval = setInterval(() => {
+        setEmailResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    if (phoneResendTimer > 0) {
+      phoneInterval = setInterval(() => {
+        setPhoneResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(emailInterval);
+      clearInterval(phoneInterval);
+    };
+  }, [emailResendTimer, phoneResendTimer]);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -117,12 +142,14 @@ const Contact = () => {
       setErrors(prev => ({ ...prev, email: "Please enter a valid email first." }));
       return;
     }
+    if (emailResendTimer > 0) return;
+
     setSendingEmailOtp(true);
     try {
       const res = await verifyApi.sendEmailOtp(formData.email);
       if (res.success) {
         setEmailOtpSent(true);
-        // Note: Alert removed to prevent blocking UI thread, or moved after state
+        setEmailResendTimer(60);
         console.log("Email OTP sent successfully");
       } else {
         alert(res.message || "Failed to send OTP.");
@@ -158,11 +185,14 @@ const Contact = () => {
       setErrors(prev => ({ ...prev, phone: "Please enter a valid phone number first." }));
       return;
     }
+    if (phoneResendTimer > 0) return;
+
     setSendingPhoneOtp(true);
     try {
       const res = await verifyApi.sendPhoneOtp(formData.phone);
       if (res.success) {
         setPhoneOtpSent(true);
+        setPhoneResendTimer(60);
         console.log("Phone OTP sent successfully");
       } else {
         alert(res.message || "Failed to send OTP.");
@@ -373,10 +403,10 @@ const Contact = () => {
                           {!phoneVerified && (
                             <button
                               onClick={sendPhoneOtp}
-                              disabled={sendingPhoneOtp || !formData.phone || phoneOtpSent}
-                              className="absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all shadow-sm active:scale-95"
+                              disabled={sendingPhoneOtp || !formData.phone || phoneResendTimer > 0}
+                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-200 transition-all shadow-sm active:scale-95 ${phoneResendTimer > 0 ? "bg-slate-300" : ""}`}
                             >
-                              {sendingPhoneOtp ? "Sending..." : phoneOtpSent ? "Sent" : "Send OTP"}
+                              {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `Resend in ${phoneResendTimer}s` : phoneOtpSent ? "Resend OTP" : "Send OTP"}
                             </button>
                           )}
                           {phoneVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}
@@ -395,10 +425,10 @@ const Contact = () => {
                           {!emailVerified && (
                             <button
                               onClick={sendEmailOtp}
-                              disabled={sendingEmailOtp || !formData.email || emailOtpSent}
-                              className="absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all shadow-sm active:scale-95"
+                              disabled={sendingEmailOtp || !formData.email || emailResendTimer > 0}
+                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all shadow-sm active:scale-95 ${emailResendTimer > 0 ? "bg-slate-300" : ""}`}
                             >
-                              {sendingEmailOtp ? "Sending..." : emailOtpSent ? "Sent" : "Send OTP"}
+                              {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `Resend in ${emailResendTimer}s` : emailOtpSent ? "Resend OTP" : "Send OTP"}
                             </button>
                           )}
                           {emailVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}

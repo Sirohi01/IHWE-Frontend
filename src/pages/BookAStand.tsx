@@ -1,20 +1,38 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-    CheckCircle,
-    Send, ChevronRight,
-    ShieldCheck,
-    CreditCard,
-    Banknote,
-    Lock
+import { 
+    CheckCircle, 
+    Send, ChevronRight, 
+    ShieldCheck, 
+    CreditCard, 
+    Banknote, 
+    Lock,
+    Mail,
+    Smartphone,
+    RotateCcw,
+    XCircle,
+    Info,
+    AlertCircle,
+    Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { heroBackgroundApi, stallApi, exhibitorRegistrationApi, settingsApi, SERVER_URL, eventApi, stallRateApi, termsApi, publicApi } from "@/lib/api";
+import { 
+    heroBackgroundApi, 
+    stallApi, 
+    exhibitorRegistrationApi, 
+    settingsApi, 
+    SERVER_URL, 
+    eventApi, 
+    stallRateApi, 
+    termsApi, 
+    publicApi,
+    verifyApi
+} from "@/lib/api";
 import Swal from 'sweetalert2';
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || "";
@@ -176,6 +194,17 @@ const BookAStand = () => {
 
     const [onlineAdvancePercent, setOnlineAdvancePercent] = useState(50);
 
+    // Verification States
+    const [emailVerified, setEmailVerified] = useState(false);
+    const [phoneVerified, setPhoneVerified] = useState(false);
+    const [emailOtp, setEmailOtp] = useState("");
+    const [phoneOtp, setPhoneOtp] = useState("");
+    const [emailTimer, setEmailTimer] = useState(0);
+    const [phoneTimer, setPhoneTimer] = useState(0);
+    const [isEmailLoading, setIsEmailLoading] = useState(false);
+    const [isPhoneLoading, setIsPhoneLoading] = useState(false);
+    const [verificationError, setVerificationError] = useState<string | null>(null);
+
     // Initial Data Fetch
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -229,6 +258,24 @@ const BookAStand = () => {
             if (ev) setOnlineAdvancePercent(ev.onlineAdvancePercentage);
         }
     }, [selectedEventId, events]);
+
+    // OTP Timers
+    useEffect(() => {
+        let eTimer: any;
+        let pTimer: any;
+
+        if (emailTimer > 0) {
+            eTimer = setInterval(() => setEmailTimer(prev => prev - 1), 1000);
+        }
+        if (phoneTimer > 0) {
+            pTimer = setInterval(() => setPhoneTimer(prev => prev - 1), 1000);
+        }
+
+        return () => {
+            if (eTimer) clearInterval(eTimer);
+            if (pTimer) clearInterval(pTimer);
+        };
+    }, [emailTimer, phoneTimer]);
 
     // Rate Calculation Effect
     useEffect(() => {
@@ -290,6 +337,17 @@ const BookAStand = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        
+        // Reset verification if email or phone changes
+        if (name === 'contact1.email') {
+            setEmailVerified(false);
+            setVerificationError(null);
+        }
+        if (name === 'contact1.mobile') {
+            setPhoneVerified(false);
+            setVerificationError(null);
+        }
+
         if (name.includes('.')) {
             const [parent, child] = name.split('.');
             setFormData(prev => ({
@@ -346,8 +404,109 @@ const BookAStand = () => {
         });
     };
 
+    // --- VERIFICATION FUNCTIONS ---
+    const handleSendEmailOtp = async () => {
+        if (!formData.contact1.email) {
+            setVerificationError("Please enter your official email first.");
+            return;
+        }
+        setIsEmailLoading(true);
+        setVerificationError(null);
+        try {
+            const res = await verifyApi.sendEmailOtp(formData.contact1.email, 'EXHIBITOR');
+            if (res.success) {
+                setEmailTimer(60);
+                setVerificationError(null);
+            } else {
+                setVerificationError(res.message || "Failed to send email OTP.");
+            }
+        } catch (error) {
+            setVerificationError("Failed to send email OTP. Please try again.");
+        } finally {
+            setIsEmailLoading(false);
+        }
+    };
+
+    const handleVerifyEmailOtp = async () => {
+        if (!emailOtp || emailOtp.length < 6) {
+            setVerificationError("Please enter a valid 6-digit OTP.");
+            return;
+        }
+        setIsEmailLoading(true);
+        setVerificationError(null);
+        try {
+            const res = await verifyApi.verifyEmailOtp(formData.contact1.email, emailOtp);
+            if (res.success) {
+                setEmailVerified(true);
+                setEmailOtp("");
+                setVerificationError(null);
+            } else {
+                setVerificationError("Invalid or expired OTP. Please check again.");
+            }
+        } catch (error) {
+            setVerificationError("Verification failed. Please try again.");
+        } finally {
+            setIsEmailLoading(false);
+        }
+    };
+
+    const handleSendPhoneOtp = async () => {
+        if (!formData.contact1.mobile) {
+            setVerificationError("Please enter your mobile number first.");
+            return;
+        }
+        setIsPhoneLoading(true);
+        setVerificationError(null);
+        try {
+            const res = await verifyApi.sendPhoneOtp(formData.contact1.mobile, 'EXHIBITOR');
+            if (res.success) {
+                setPhoneTimer(60);
+                setVerificationError(null);
+            } else {
+                setVerificationError(res.message || "Failed to send WhatsApp OTP.");
+            }
+        } catch (error) {
+            setVerificationError("Failed to send WhatsApp OTP. Please try again.");
+        } finally {
+            setIsPhoneLoading(false);
+        }
+    };
+
+    const handleVerifyPhoneOtp = async () => {
+        if (!phoneOtp || phoneOtp.length < 6) {
+            setVerificationError("Please enter a valid 6-digit OTP.");
+            return;
+        }
+        setIsPhoneLoading(true);
+        setVerificationError(null);
+        try {
+            const res = await verifyApi.verifyPhoneOtp(formData.contact1.mobile, phoneOtp);
+            if (res.success) {
+                setPhoneVerified(true);
+                setPhoneOtp("");
+                setVerificationError(null);
+            } else {
+                setVerificationError("Invalid or expired OTP. Please check again.");
+            }
+        } catch (error) {
+            setVerificationError("Verification failed. Please try again.");
+        } finally {
+            setIsPhoneLoading(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (!emailVerified || !phoneVerified) {
+            setVerificationError("Verification Required: Please verify your Email and WhatsApp mobile number before proceeding to payment.");
+            const liaisonSection = document.getElementById('liaison-officer-section');
+            if (liaisonSection) {
+                liaisonSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
+
         if (!formData.participation.stallNo) {
             Swal.fire('Error', 'Please select a stall first', 'error');
             return;
@@ -413,7 +572,7 @@ const BookAStand = () => {
     const inputClasses =
         "rounded-[2px] border-slate-400 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 w-full text-left";
     const labelClasses =
-        "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
+        "text-[11px] font-bold text-slate-800 mb-1.5 block uppercase tracking-[0.05em]";
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
@@ -472,122 +631,53 @@ const BookAStand = () => {
                                 {submitted ? (
                                     <motion.div
                                         key="success"
-                                        initial={{ opacity: 0, scale: 0.98 }}
+                                        initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="bg-white border border-slate-300 shadow-2xl p-12 flex flex-col items-center justify-center text-center space-y-8"
+                                        className="min-h-[500px] flex flex-col items-center justify-center text-center p-8 bg-white border border-slate-200 shadow-2xl relative overflow-hidden"
                                     >
-                                        <div className="flex flex-col items-center space-y-4">
-                                            <div className="w-20 h-20 bg-[#23471d]/10 flex items-center justify-center text-[#23471d] rounded-full">
-                                                <CheckCircle size={40} />
+                                        {/* Decorative Background Elements */}
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#23471d]/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+                                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#d26019]/5 rounded-full -ml-32 -mb-32 blur-3xl" />
+
+                                        <div className="relative z-10 space-y-6 max-w-lg">
+                                            <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100 shadow-inner">
+                                                <CheckCircle className="text-[#23471d]" size={40} />
                                             </div>
-                                            <h2
-                                                className="text-3xl font-bold text-slate-900"
-                                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                            >
-                                                Registration Successful!
-                                            </h2>
-                                            <p className="text-slate-600 text-sm max-w-md mx-auto leading-relaxed font-inter italic">
-                                                Thank you for your interest in IH&WE 2026. Our team will contact you within 24 hours to discuss the next steps of your registration.
+                                            
+                                            <div className="space-y-2">
+                                                <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Application Received!</h2>
+                                                <p className="text-[#d26019] font-black text-[10px] uppercase tracking-[0.3em]">Exhibitor Registration Protocol Complete</p>
+                                            </div>
+
+                                            <p className="text-slate-500 text-sm leading-relaxed font-medium">
+                                                Thank you for choosing to exhibit at IHWE 2026. Your stall booking application for <span className="font-bold text-slate-900">Stall #{formData.participation.stallFor}</span> has been successfully submitted.
                                             </p>
-                                        </div>
 
-                                        <div className="bg-slate-50 border border-slate-200 overflow-hidden rounded-sm text-left w-full max-w-2xl mx-auto shadow-sm">
-                                            <div className="bg-white border-b border-slate-200 px-6 py-3 flex justify-between items-center">
-                                                <div className="flex flex-col">
-                                                    <h4 className="text-[10px] font-black text-[#23471d] uppercase tracking-[0.2em]">RESERVATION SUMMARY (SPACE DETAIL)</h4>
-                                                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">Exhibitor: {formData.exhibitorName}</p>
+                                            <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-3">
+                                                <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                                    <span>Transaction Status</span>
+                                                    <span className="text-green-600">Verification Success</span>
                                                 </div>
-                                                <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-widest">ID: REG-{Date.now().toString().slice(-6)}</span>
+                                                <div className="h-px bg-slate-200" />
+                                                <p className="text-[11px] text-slate-600 font-medium">
+                                                    A confirmation email has been sent to <span className="text-slate-900 font-bold">{formData.contact1.email}</span> with your registration details and invoice.
+                                                </p>
                                             </div>
 
-                                            <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-4 font-inter">
-                                                <div className="border-r border-slate-100">
-                                                    <p className="text-[9px] text-slate-400 font-black uppercase mb-1">STALL NO.</p>
-                                                    <p className="text-sm font-black text-[#d26019]">{formData.participation.stallFor || formData.participation.stallNo}</p>
-                                                </div>
-                                                <div className="border-r border-slate-100">
-                                                    <p className="text-[9px] text-slate-400 font-black uppercase mb-1">AREA / DIMENS.</p>
-                                                    <p className="text-xs font-bold text-slate-800">{formData.participation.stallSize} sqm / {formData.participation.dimension}</p>
-                                                </div>
-                                                <div className="border-r border-slate-100">
-                                                    <p className="text-[9px] text-slate-400 font-black uppercase mb-1">STALL TYPE</p>
-                                                    <p className="text-xs font-bold text-slate-800 uppercase">{formData.participation.stallType}</p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-[9px] text-slate-400 font-black uppercase mb-1">RATE PER SQMT</p>
-                                                    <p className="text-xs font-bold text-slate-800">₹ {Number(formData.participation.rate).toLocaleString()}</p>
-                                                </div>
-
-                                                <div className="col-span-full border-y border-slate-100 py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                                                    <div className="flex flex-col">
-                                                        <p className="text-[9px] text-slate-400 font-black uppercase mb-1">CONTACT PERSON</p>
-                                                        <p className="text-xs font-bold text-slate-800">{formData.contact1.title} {formData.contact1.firstName} {formData.contact1.lastName}</p>
-                                                        <p className="text-[10px] text-slate-500">{formData.contact1.mobile} | {formData.contact1.email}</p>
-                                                    </div>
-                                                    <div className="flex flex-col md:text-right">
-                                                        <p className="text-[9px] text-slate-400 font-black uppercase mb-1">NET PAYABLE AMOUNT</p>
-                                                        <p className="text-xl font-black text-slate-900 leading-none">₹ {Number(formData.participation.total).toLocaleString()}</p>
-                                                        <span className="text-[8px] text-slate-400 font-bold italic">Inclusive of 18% GST</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-span-full md:col-span-2 space-y-4">
-                                                    <div className="bg-orange-50/50 p-4 border border-orange-100 rounded-sm">
-                                                        <p className="text-[9px] text-orange-600 font-black uppercase tracking-[0.1em] mb-2 flex items-center gap-1.5"><CreditCard size={10} /> ESTIMATED PAYMENT SCHEDULE</p>
-                                                        <div className="grid grid-cols-2 gap-4">
-                                                            <div>
-                                                                <p className="text-[8px] text-slate-500 font-bold uppercase">Balance Remaining</p>
-                                                                <p className="text-sm font-black text-slate-700">₹ {Number(formData.balanceAmount).toLocaleString()}</p>
-                                                            </div>
-                                                            <div className="text-right">
-                                                                <p className="text-[8px] text-slate-500 font-bold uppercase italic">Future Installments (30/20%)</p>
-                                                                <div className="flex flex-col text-[10px] font-bold text-slate-400">
-                                                                    <span>₹ {Math.round(formData.participation.total * 0.3).toLocaleString()} (2 M. before)</span>
-                                                                    <span>₹ {Math.round(formData.participation.total * 0.2).toLocaleString()} (1 M. before)</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-span-full md:col-span-2 bg-slate-100/50 p-4 border border-slate-200 rounded-sm flex flex-col justify-between">
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <p className="text-[9px] text-slate-400 font-black uppercase mb-1">PAYMENT RECEIVED</p>
-                                                            <p className="text-lg font-black text-green-700 leading-none">₹ {Number(formData.amountPaid).toLocaleString()}</p>
-                                                        </div>
-                                                        <span className="bg-green-100 text-green-700 text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest">{formData.paymentMode} ({formData.paymentType})</span>
-                                                    </div>
-                                                    <div className="pt-4 mt-4 border-t border-slate-200 grid grid-cols-2 gap-4 text-center">
-                                                        <div>
-                                                            <div className="h-8 border-b border-slate-300 mb-1 border-dashed"></div>
-                                                            <p className="text-[8px] text-slate-400 font-bold uppercase">Exhibitor Signature</p>
-                                                        </div>
-                                                        <div>
-                                                            <div className="h-8 border-b border-slate-300 mb-1 border-dashed"></div>
-                                                            <p className="text-[8px] text-slate-400 font-bold uppercase">Organizer Seal</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-4 pt-4">
-                                            <Link to="/">
-                                                <Button className="rounded-sm px-10 h-11 bg-[#23471d] hover:bg-[#1a3516] text-sm font-bold uppercase tracking-widest transition-all">
-                                                    Return Home
+                                            <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+                                                <Link to="/">
+                                                    <Button className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-black text-[11px] font-black uppercase tracking-widest w-full">
+                                                        Return to Home
+                                                    </Button>
+                                                </Link>
+                                                <Button variant="outline" onClick={() => window.print()} className="h-11 px-8 rounded-xl border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 w-full">
+                                                    Print Application
                                                 </Button>
-                                            </Link>
-                                            <Button
-                                                variant="outline"
-                                                onClick={() => {
-                                                    setSubmitted(false);
-                                                    setFormData(initialFormData);
-                                                }}
-                                                className="rounded-sm px-10 h-11 border-slate-300 text-sm font-bold uppercase tracking-widest hover:bg-slate-50 transition-all font-inter"
-                                            >
-                                                New Registration
-                                            </Button>
+                                            </div>
+                                            
+                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pt-4">
+                                                Official IHWE 2026 Exhibitor Portal
+                                            </p>
                                         </div>
                                     </motion.div>
                                 ) : (
@@ -629,17 +719,20 @@ const BookAStand = () => {
                                             {/* ── APPLICABLE RATES DISPLAY ── */}
                                             {selectedEventId && allRates.length > 0 && (
                                                 <div className="bg-slate-50 border border-slate-200 p-6 rounded-md shadow-sm mb-8">
-                                                    <h3 className="text-sm font-black text-[#23471d] uppercase tracking-[0.1em] border-b border-slate-200 pb-2 mb-4 flex items-center gap-2">
+                                                    <h3 
+                                                        className="text-[16px] font-bold text-[#23471d] pb-0.5 border-b border-slate-100 mb-6 flex items-center gap-2"
+                                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                                                    >
                                                         <Banknote size={18} /> APPLICABLE STALL RATES
                                                     </h3>
                                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                                         {allRates.map(rate => (
-                                                            <div key={rate._id} className="bg-white p-4 rounded border border-slate-200 shadow-sm flex flex-col items-center text-center">
-                                                                <div className="text-[10px] font-black text-slate-500 uppercase mb-1">{rate.stallType}</div>
-                                                                <div className="text-lg font-black text-[#d26019]">
+                                                            <div key={rate._id} className="bg-white p-5 rounded-[2px] border border-slate-300 shadow-sm flex flex-col items-center text-center group hover:border-[#23471d] transition-all">
+                                                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 group-hover:text-[#23471d]">{rate.stallType}</div>
+                                                                <div className="text-xl font-bold text-slate-900 leading-tight">
                                                                     {rate.currency === 'INR' ? '₹' : '$'}{rate.ratePerSqm.toLocaleString()}
-                                                                    <span className="text-[10px] text-slate-400 font-bold ml-1">/ SQM</span>
                                                                 </div>
+                                                                <div className="text-[9px] text-[#d26019] font-black uppercase tracking-tighter mt-1 italic">/ PER SQ. MT.</div>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -754,47 +847,192 @@ const BookAStand = () => {
                                             <div className="space-y-6 pt-4 border-t border-slate-100">
                                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                                     {/* Primary Contact */}
-                                                    <div className="space-y-4">
+                                                    <div className="space-y-4" id="liaison-officer-section">
                                                         <h3 className="text-sm font-black text-[#23471d] uppercase tracking-[0.1em] flex items-center gap-2">
                                                             <CheckCircle size={16} /> Primary Liaison Officer
                                                         </h3>
-                                                        <div className="grid grid-cols-2 gap-4 bg-slate-50/50 p-5 border border-slate-100">
-                                                            <div>
-                                                                <Label className={labelClasses}>Title *</Label>
-                                                                <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
-                                                                    <SelectTrigger className={inputClasses}><SelectValue placeholder="Title" /></SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="Mr.">Mr.</SelectItem>
-                                                                        <SelectItem value="Ms.">Ms.</SelectItem>
-                                                                        <SelectItem value="Dr.">Dr.</SelectItem>
-                                                                        <SelectItem value="Prof.">Prof.</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
+                                                        <div className="bg-slate-50/50 p-5 border border-slate-100 space-y-4">
+                                                            <div className="grid grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <Label className={labelClasses}>Title *</Label>
+                                                                    <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
+                                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Title" /></SelectTrigger>
+                                                                        <SelectContent>
+                                                                            <SelectItem value="Mr.">Mr.</SelectItem>
+                                                                            <SelectItem value="Ms.">Ms.</SelectItem>
+                                                                            <SelectItem value="Dr.">Dr.</SelectItem>
+                                                                            <SelectItem value="Prof.">Prof.</SelectItem>
+                                                                        </SelectContent>
+                                                                    </Select>
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>Designation *</Label>
+                                                                    <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="e.g. Director" className={inputClasses} />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>First Name *</Label>
+                                                                    <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="First Name" className={inputClasses} />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>Last Name *</Label>
+                                                                    <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Last Name" className={inputClasses} />
+                                                                </div>
+                                                                
+                                                                {/* Email & OTP */}
+                                                                <div className="col-span-2 space-y-2">
+                                                                    <Label className={labelClasses}>Official Email *</Label>
+                                                                    <div className="flex gap-2">
+                                                                        <div className="relative flex-1">
+                                                                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
+                                                                            <Input 
+                                                                                required 
+                                                                                type="email" 
+                                                                                name="contact1.email" 
+                                                                                value={formData.contact1.email} 
+                                                                                onChange={handleInputChange} 
+                                                                                placeholder="email@company.com" 
+                                                                                className={`${inputClasses} pl-8 ${emailVerified ? 'border-green-500 bg-green-50/30' : ''}`}
+                                                                                readOnly={emailVerified}
+                                                                            />
+                                                                            {emailVerified && <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600" size={14} />}
+                                                                        </div>
+                                                                        {!emailVerified && (
+                                                                            <Button 
+                                                                                type="button"
+                                                                                onClick={handleSendEmailOtp}
+                                                                                disabled={isEmailLoading || emailTimer > 0 || !formData.contact1.email}
+                                                                                className="h-8 bg-[#23471d] hover:bg-[#1a3516] text-[10px] font-bold uppercase px-4 rounded-sm transition-all"
+                                                                            >
+                                                                                {isEmailLoading ? <Loader2 className="animate-spin" size={14} /> : (emailTimer > 0 ? `Resend (${emailTimer}s)` : "Send OTP")}
+                                                                            </Button>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <AnimatePresence>
+                                                                        {emailTimer > 0 && !emailVerified && (
+                                                                            <motion.div 
+                                                                                initial={{ opacity: 0, height: 0 }}
+                                                                                animate={{ opacity: 1, height: 'auto' }}
+                                                                                exit={{ opacity: 0, height: 0 }}
+                                                                                className="flex gap-2 pt-1"
+                                                                            >
+                                                                                <Input 
+                                                                                    placeholder="Enter Email OTP" 
+                                                                                    value={emailOtp}
+                                                                                    onChange={(e) => setEmailOtp(e.target.value)}
+                                                                                    className={inputClasses}
+                                                                                    maxLength={6}
+                                                                                    autoComplete="off"
+                                                                                    name="exhibitor-email-otp-field"
+                                                                                    inputMode="numeric"
+                                                                                />
+                                                                                <Button 
+                                                                                    type="button"
+                                                                                    onClick={handleVerifyEmailOtp}
+                                                                                    disabled={isEmailLoading || emailOtp.length < 6}
+                                                                                    className="h-8 bg-[#d26019] hover:bg-[#b85415] text-[10px] font-bold uppercase px-4 rounded-sm transition-all text-white border-none shadow-sm"
+                                                                                >
+                                                                                    {isEmailLoading ? <Loader2 className="animate-spin" size={14} /> : "Verify"}
+                                                                                </Button>
+                                                                            </motion.div>
+                                                                        )}
+                                                                    </AnimatePresence>
+                                                                </div>
+
+                                                                {/* Mobile & OTP */}
+                                                                <div className="col-span-2 space-y-2">
+                                                                    <Label className={labelClasses}>Mobile Number *</Label>
+                                                                    <div className="flex gap-2">
+                                                                        <div className="relative flex-1">
+                                                                            <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={12} />
+                                                                            <Input 
+                                                                                required 
+                                                                                name="contact1.mobile" 
+                                                                                value={formData.contact1.mobile} 
+                                                                                onChange={handleInputChange} 
+                                                                                placeholder="+91 XXXXXXXXXX" 
+                                                                                className={`${inputClasses} pl-8 ${phoneVerified ? 'border-green-500 bg-green-50/30' : ''}`}
+                                                                                readOnly={phoneVerified}
+                                                                            />
+                                                                            {phoneVerified && <CheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600" size={14} />}
+                                                                        </div>
+                                                                        {!phoneVerified && (
+                                                                            <Button 
+                                                                                type="button"
+                                                                                onClick={handleSendPhoneOtp}
+                                                                                disabled={isPhoneLoading || phoneTimer > 0 || !formData.contact1.mobile}
+                                                                                className="h-8 bg-[#25D366] hover:bg-[#128C7E] text-[10px] font-bold uppercase px-4 rounded-sm transition-all text-white border-none shadow-sm font-inter"
+                                                                            >
+                                                                                {isPhoneLoading ? <Loader2 className="animate-spin" size={14} /> : (phoneTimer > 0 ? `Resend (${phoneTimer}s)` : "Verify via WhatsApp")}
+                                                                            </Button>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <AnimatePresence>
+                                                                        {phoneTimer > 0 && !phoneVerified && (
+                                                                            <motion.div 
+                                                                                initial={{ opacity: 0, height: 0 }}
+                                                                                animate={{ opacity: 1, height: 'auto' }}
+                                                                                exit={{ opacity: 0, height: 0 }}
+                                                                                className="flex gap-2 pt-1"
+                                                                            >
+                                                                                <Input 
+                                                                                    placeholder="Enter WhatsApp OTP" 
+                                                                                    value={phoneOtp}
+                                                                                    onChange={(e) => setPhoneOtp(e.target.value)}
+                                                                                    className={inputClasses}
+                                                                                    maxLength={6}
+                                                                                    autoComplete="off"
+                                                                                    name="exhibitor-phone-otp-field"
+                                                                                    inputMode="numeric"
+                                                                                />
+                                                                                <Button 
+                                                                                    type="button"
+                                                                                    onClick={handleVerifyPhoneOtp}
+                                                                                    disabled={isPhoneLoading || phoneOtp.length < 6}
+                                                                                    className="h-8 bg-[#d26019] hover:bg-[#b85415] text-[10px] font-bold uppercase px-4 rounded-sm transition-all text-white border-none shadow-sm"
+                                                                                >
+                                                                                    {isPhoneLoading ? <Loader2 className="animate-spin" size={14} /> : "Verify"}
+                                                                                </Button>
+                                                                            </motion.div>
+                                                                        )}
+                                                                    </AnimatePresence>
+                                                                </div>
+
+                                                                <div className="col-span-2">
+                                                                    <Label className={labelClasses}>Alternate Contact No.</Label>
+                                                                    <Input name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder="Secondary mobile or landline" className={inputClasses} />
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>Designation *</Label>
-                                                                <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="e.g. Director" className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>First Name *</Label>
-                                                                <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="First Name" className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>Last Name *</Label>
-                                                                <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Last Name" className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>Official Email *</Label>
-                                                                <Input required type="email" name="contact1.email" value={formData.contact1.email} onChange={handleInputChange} placeholder="email@company.com" className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>Mobile Number *</Label>
-                                                                <Input required name="contact1.mobile" value={formData.contact1.mobile} onChange={handleInputChange} placeholder="+91 XXXXXXXXXX" className={inputClasses} />
-                                                            </div>
-                                                            <div className="col-span-2">
-                                                                <Label className={labelClasses}>Alternate Contact No.</Label>
-                                                                <Input name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder="Secondary mobile or landline" className={inputClasses} />
-                                                            </div>
+
+                                                            {/* Verification Error Alert */}
+                                                            <AnimatePresence>
+                                                                {verificationError && (
+                                                                    <motion.div 
+                                                                        initial={{ opacity: 0, y: -10 }}
+                                                                        animate={{ opacity: 1, y: 0 }}
+                                                                        exit={{ opacity: 0, y: -10 }}
+                                                                        className="p-3 bg-red-50 border border-red-200 rounded-sm flex items-center gap-3 text-red-600 text-[11px] font-bold uppercase tracking-tight"
+                                                                    >
+                                                                        <AlertCircle size={14} />
+                                                                        {verificationError}
+                                                                        <button 
+                                                                            type="button"
+                                                                            onClick={() => setVerificationError(null)}
+                                                                            className="ml-auto text-red-400 hover:text-red-600"
+                                                                        >
+                                                                            <RotateCcw size={12} />
+                                                                        </button>
+                                                                    </motion.div>
+                                                                )}
+                                                            </AnimatePresence>
+
+                                                            {(emailVerified && phoneVerified) && (
+                                                                <div className="p-3 bg-green-50 border border-green-200 rounded-sm flex items-center gap-3 text-green-700 text-[11px] font-bold uppercase tracking-tight">
+                                                                    <ShieldCheck size={14} />
+                                                                    Identity Verified Successfully
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
 
@@ -959,33 +1197,33 @@ const BookAStand = () => {
                                                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12">
 
                                                         {/* ── LEFT: BOOKING SUMMARY ── */}
-                                                        <div className="lg:col-span-5 p-6 lg:p-7 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between bg-slate-50/50">
-                                                            <div className="space-y-5">
+                                                        <div className="lg:col-span-5 p-7 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col justify-between bg-white">
+                                                            <div className="space-y-6">
                                                                 <div>
                                                                     <div className="flex items-center gap-3 mb-2">
                                                                         <div className="w-6 h-px bg-[#d26019]"></div>
                                                                         <h4 className="text-[10px] font-black text-[#d26019] uppercase tracking-[0.4em]">Review Details</h4>
                                                                     </div>
-                                                                    <h3 className="text-2xl font-black text-slate-900 leading-tight">Order Overview</h3>
+                                                                    <h3 className="text-[18px] font-bold text-slate-900 leading-tight" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Order Overview</h3>
                                                                 </div>
 
-                                                                <div className="space-y-5">
+                                                                <div className="space-y-6 bg-slate-50/50 p-6 border border-slate-200 rounded-[2px]">
                                                                     {/* Stall Detail Row */}
                                                                     <div className="flex justify-between items-end group">
-                                                                        <div className="space-y-1">
-                                                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Stall Selection</p>
-                                                                            <p className="text-lg font-black text-slate-900 group-hover:text-[#d26019] transition-colors leading-none">
+                                                                        <div className="space-y-1.5">
+                                                                            <p className="text-[10px] text-[#23471d] font-black uppercase tracking-[0.2em]">Stall Selection</p>
+                                                                            <h3 className="text-2xl font-black text-slate-900 leading-none tracking-tight">
                                                                                 {formData.participation.stallFor || "Not Selected"}
-                                                                            </p>
+                                                                            </h3>
                                                                         </div>
                                                                         <div className="text-right">
-                                                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Area</p>
-                                                                            <p className="text-sm font-black text-slate-600">{formData.participation.stallSize} SQM</p>
+                                                                            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Area</p>
+                                                                            <p className="text-lg font-black text-slate-700">{formData.participation.stallSize} SQM</p>
                                                                         </div>
                                                                     </div>
 
                                                                     {/* Cost Breakdown Section */}
-                                                                    <div className="pt-5 border-t border-slate-200/60 space-y-3.5">
+                                                                    <div className="pt-6 border-t border-slate-200 space-y-4">
                                                                         {(() => {
                                                                             const stall = availableStalls.find(s => s._id === formData.participation.stallNo);
                                                                             const inc = stall?.incrementPercentage || 0;
@@ -997,33 +1235,36 @@ const BookAStand = () => {
                                                                             return (
                                                                                 <>
                                                                                     {inc > 0 && (
-                                                                                        <div className="flex justify-between text-xs font-bold text-red-600">
+                                                                                        <div className="flex justify-between text-[11px] font-bold text-red-600">
                                                                                             <span>Stall Increment (+{inc}%)</span>
-                                                                                            <span className="text-red-600">+{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(incValue).toLocaleString()}</span>
+                                                                                            <span className="text-red-700">+{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(incValue).toLocaleString()}</span>
                                                                                         </div>
                                                                                     )}
                                                                                     {disc > 0 && (
-                                                                                        <div className="flex justify-between text-xs font-bold text-emerald-600">
+                                                                                        <div className="flex justify-between text-[11px] font-bold text-emerald-600">
                                                                                             <span>Stall Discount (-{disc}%)</span>
-                                                                                            <span className="text-emerald-600">-{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(discValue).toLocaleString()}</span>
+                                                                                            <span className="text-emerald-700">-{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(discValue).toLocaleString()}</span>
                                                                                         </div>
                                                                                     )}
                                                                                 </>
                                                                             );
                                                                         })()}
-                                                                        <div className="flex justify-between text-xs font-bold text-slate-500">
+                                                                        <div className="flex justify-between text-[11px] font-bold text-slate-500">
                                                                             <span>Sub-Total (Net Rate)</span>
-                                                                            <span className="text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.amount.toLocaleString()}</span>
+                                                                            <span className="text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.amount.toLocaleString()}</span>
                                                                         </div>
-                                                                        <div className="flex justify-between text-xs font-bold text-slate-500">
+                                                                        <div className="flex justify-between text-[11px] font-bold text-slate-500">
                                                                             <span>GST (18% Statutory)</span>
-                                                                            <span className="text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
+                                                                            <span className="text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
                                                                         </div>
-                                                                        <div className="pt-4 flex justify-between items-center">
-                                                                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Total Value</span>
+                                                                        
+                                                                        <div className="pt-6 mt-2 border-t border-slate-200 flex justify-between items-center">
+                                                                            <div className="flex flex-col">
+                                                                                <span className="text-[10px] font-black text-[#23471d] uppercase tracking-[0.2em] mb-1">Total Value</span>
+                                                                                <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest italic leading-none">Inclusive of all taxes</p>
+                                                                            </div>
                                                                             <div className="text-right">
-                                                                                <span className="text-2xl font-black text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.total.toLocaleString()}</span>
-                                                                                <p className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter mt-1 italic">Inc. all taxes</p>
+                                                                                <span className="text-3xl font-black text-slate-900 tracking-tighter">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.participation.total.toLocaleString()}</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1046,88 +1287,88 @@ const BookAStand = () => {
                                                         <div className="lg:col-span-7 p-6 lg:p-7 flex flex-col justify-between">
                                                             <div className="space-y-7">
                                                                 {/* Deployment Source */}
-                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                                                    <div className="space-y-3">
-                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Referral Channel *</Label>
-                                                                        <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                                            <SelectTrigger className="h-10 rounded-xl border-slate-200 bg-slate-50 text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-100 transition-all">
-                                                                                <SelectValue placeholder="Select Platform" />
-                                                                            </SelectTrigger>
-                                                                            <SelectContent className="bg-white border-slate-200 text-slate-900">
-                                                                                <SelectItem value="Direct Website">Direct Website</SelectItem>
-                                                                                <SelectItem value="Email Marketing">Email Marketing</SelectItem>
-                                                                                <SelectItem value="Social Media">Social Media</SelectItem>
-                                                                                {Array.isArray(marketingStaff) && marketingStaff.map((staff: any) => (
-                                                                                    <SelectItem key={staff._id} value={staff.username}>Staff: {staff.username}</SelectItem>
-                                                                                ))}
-                                                                            </SelectContent>
-                                                                        </Select>
-                                                                    </div>
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                                                                        <div className="space-y-1.5">
+                                                                            <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Referral Channel *</Label>
+                                                                            <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
+                                                                                <SelectTrigger className="h-9 rounded-[2px] border-slate-300 bg-white text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-50 transition-all">
+                                                                                    <SelectValue placeholder="Select Platform" />
+                                                                                </SelectTrigger>
+                                                                                <SelectContent className="bg-white border-slate-200 text-slate-900">
+                                                                                    <SelectItem value="Direct Website">Direct Website</SelectItem>
+                                                                                    <SelectItem value="Email Marketing">Email Marketing</SelectItem>
+                                                                                    <SelectItem value="Social Media">Social Media</SelectItem>
+                                                                                    {Array.isArray(marketingStaff) && marketingStaff.map((staff: any) => (
+                                                                                        <SelectItem key={staff._id} value={staff.username}>Staff: {staff.username}</SelectItem>
+                                                                                    ))}
+                                                                                </SelectContent>
+                                                                            </Select>
+                                                                        </div>
 
-                                                                    <div className="space-y-3">
-                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Spoken With *</Label>
-                                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                                            <SelectTrigger className="h-10 rounded-xl border-slate-200 bg-slate-50 text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-100 transition-all">
-                                                                                <SelectValue placeholder="Select Team Member" />
-                                                                            </SelectTrigger>
-                                                                            <SelectContent className="bg-white border-slate-200 text-slate-900">
-                                                                                <SelectItem value="None">None / Direct</SelectItem>
-                                                                                {Array.isArray(staff) && staff.map((s: any) => (
-                                                                                    <SelectItem key={s._id} value={s.username}>{s.username}</SelectItem>
-                                                                                ))}
-                                                                            </SelectContent>
-                                                                        </Select>
-                                                                    </div>
+                                                                        <div className="space-y-1.5">
+                                                                            <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Spoken With *</Label>
+                                                                            <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                                                <SelectTrigger className="h-9 rounded-[2px] border-slate-300 bg-white text-slate-900 text-[11px] font-bold focus:ring-[#d26019]/20 hover:bg-slate-50 transition-all">
+                                                                                    <SelectValue placeholder="Select Team Member" />
+                                                                                </SelectTrigger>
+                                                                                <SelectContent className="bg-white border-slate-200 text-slate-900">
+                                                                                    <SelectItem value="None">None / Direct</SelectItem>
+                                                                                    {Array.isArray(staff) && staff.map((s: any) => (
+                                                                                        <SelectItem key={s._id} value={s.username}>{s.username}</SelectItem>
+                                                                                    ))}
+                                                                                </SelectContent>
+                                                                            </Select>
+                                                                        </div>
 
-                                                                    <div className="space-y-3">
-                                                                        <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Agreement *</Label>
-                                                                        <label
-                                                                            htmlFor="terms-check"
-                                                                            className="h-10 flex items-center gap-3 px-4 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition-all"
-                                                                        >
-                                                                            <Checkbox
-                                                                                id="terms-check"
-                                                                                required
-                                                                                className="border-slate-300 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]"
-                                                                            />
-                                                                            <span className="text-[10px] font-bold text-slate-600 uppercase">
-                                                                                I accept <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} target="_blank" className="text-[#d26019] hover:text-slate-900 underline transition-colors" onClick={(e) => e.stopPropagation()}>Terms & Conditions</Link>
-                                                                            </span>
-                                                                        </label>
+                                                                        <div className="space-y-1.5 col-span-1 md:col-span-2">
+                                                                            <Label className="text-[9px] font-black text-[#d26019] uppercase tracking-[0.2em] block">Agreement *</Label>
+                                                                            <label
+                                                                                htmlFor="terms-check"
+                                                                                className="h-9 flex items-center gap-3 px-4 bg-white border border-slate-300 rounded-[2px] cursor-pointer hover:bg-slate-50 transition-all"
+                                                                            >
+                                                                                <Checkbox
+                                                                                    id="terms-check"
+                                                                                    required
+                                                                                    className="border-slate-300 data-[state=checked]:bg-[#d26019] data-[state=checked]:border-[#d26019]"
+                                                                                />
+                                                                                <span className="text-[10px] font-bold text-slate-700 uppercase">
+                                                                                    I accept <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} target="_blank" className="text-[#d26019] hover:text-[#23471d] underline transition-colors" onClick={(e) => e.stopPropagation()}>Terms & Conditions</Link>
+                                                                                </span>
+                                                                            </label>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
 
                                                                 {/* Payment Schedule Selector */}
                                                                 <div className="space-y-4">
                                                                     <div className="flex justify-between items-baseline">
-                                                                        <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Payment Schedule</h4>
-                                                                        <p className="text-[8px] text-[#d26019] font-black uppercase tracking-tighter italic">Recommended: Full</p>
+                                                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Payment Schedule</h4>
+                                                                        <p className="text-[8px] text-[#23471d] font-black uppercase tracking-tighter italic">Recommended: Full</p>
                                                                     </div>
-                                                                    <div className="grid grid-cols-2 gap-3">
+                                                                    <div className="grid grid-cols-2 gap-4">
                                                                         <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'full')}
-                                                                            className={`relative overflow-hidden group px-5 py-5 rounded-2xl border-2 transition-all duration-300 text-left ${formData.paymentType === 'full' ? 'border-[#d26019] bg-[#d26019]/5' : 'border-slate-100 bg-slate-50 hover:border-slate-200'}`}
+                                                                            className={`relative overflow-hidden group px-6 py-6 rounded-[2px] border-2 transition-all duration-300 text-left ${formData.paymentType === 'full' ? 'border-[#23471d] bg-white shadow-lg' : 'border-slate-300 bg-white hover:border-slate-400'}`}
                                                                         >
                                                                             <div className="relative z-10">
-                                                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'full' ? 'bg-[#d26019] text-white' : 'bg-white text-slate-400 border border-slate-100'}`}>
-                                                                                    <CreditCard size={12} />
+                                                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'full' ? 'bg-[#23471d] text-white' : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
+                                                                                    <CreditCard size={14} />
                                                                                 </div>
-                                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Full</p>
-                                                                                <p className="text-[13px] font-black text-slate-900 leading-tight">100% Secure</p>
+                                                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5 group-hover:text-[#23471d]">Full Payment</p>
+                                                                                <p className="text-[15px] font-bold text-slate-900 leading-tight">100% Secure</p>
                                                                             </div>
                                                                         </button>
                                                                         <button
                                                                             type="button"
                                                                             onClick={() => handleSelectChange('paymentType', 'advance')}
-                                                                            className={`relative overflow-hidden group px-5 py-5 rounded-2xl border-2 transition-all duration-300 text-left ${formData.paymentType === 'advance' ? 'border-[#d26019] bg-[#d26019]/5' : 'border-slate-100 bg-slate-50 hover:border-slate-200'}`}
+                                                                            className={`relative overflow-hidden group px-6 py-6 rounded-[2px] border-2 transition-all duration-300 text-left ${formData.paymentType === 'advance' ? 'border-[#23471d] bg-white shadow-lg' : 'border-slate-300 bg-white hover:border-slate-400'}`}
                                                                         >
                                                                             <div className="relative z-10">
-                                                                                <div className={`w-7 h-7 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'advance' ? 'bg-[#d26019] text-white' : 'bg-white text-slate-400 border border-slate-100'}`}>
-                                                                                    <Banknote size={12} />
+                                                                                <div className={`w-8 h-8 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${formData.paymentType === 'advance' ? 'bg-[#23471d] text-white' : 'bg-slate-100 text-slate-400 border border-slate-200'}`}>
+                                                                                    <Banknote size={14} />
                                                                                 </div>
-                                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Advance</p>
-                                                                                <p className="text-[13px] font-black text-slate-900 leading-tight">{onlineAdvancePercent}% Deposit</p>
+                                                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5 group-hover:text-[#23471d]">Advance Token</p>
+                                                                                <p className="text-[15px] font-bold text-slate-900 leading-tight">{onlineAdvancePercent}% Deposit</p>
                                                                             </div>
                                                                         </button>
                                                                     </div>
@@ -1153,14 +1394,14 @@ const BookAStand = () => {
 
                                                                     <button
                                                                         type="submit"
-                                                                        disabled={isLoading || !formData.participation.stallNo}
-                                                                        className="group relative w-full h-14 rounded-2xl bg-slate-900 text-white font-black text-[12px] uppercase tracking-[0.2em] shadow-xl shadow-slate-200/50 transition-all duration-300 hover:bg-black hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:grayscale overflow-hidden"
+                                                                        disabled={isLoading || !formData.participation.stallNo || !emailVerified || !phoneVerified}
+                                                                        className="group relative w-full h-14 rounded-[2px] bg-slate-900 text-white font-bold text-[13px] uppercase tracking-[0.2em] shadow-xl hover:bg-black transition-all duration-300 disabled:opacity-50 disabled:grayscale overflow-hidden"
                                                                     >
                                                                         <div className="relative z-10 flex items-center justify-center gap-3">
                                                                             {isLoading ? "Synchronizing Secure Server..." : (
                                                                                 <>
                                                                                     <span>Confirm & Initialize Payment</span>
-                                                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                                                                    <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                                                                                 </>
                                                                             )}
                                                                         </div>
@@ -1188,10 +1429,10 @@ const BookAStand = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 px-12 opacity-30">
-                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Official Registration Gateway v4.5</p>
-                                                    <div className="hidden md:block h-px flex-1 bg-slate-200 mx-10" />
-                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em]">Global Healthcare Excellence 2026</p>
+                                                <div className="mt-14 flex flex-col md:flex-row justify-between items-center gap-6 px-12 opacity-50 border-t border-slate-100 pt-10">
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Official Registration Gateway v4.5</p>
+                                                    <div className="hidden md:block h-px flex-1 bg-slate-100 mx-10" />
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Global Healthcare Excellence 2026</p>
                                                 </div>
                                             </div>
                                         </form>
