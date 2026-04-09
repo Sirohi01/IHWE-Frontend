@@ -556,3 +556,21 @@ export const visitorApi = {
         return await response.json();
     }
 };
+
+export const crmApi = {
+    getCountries: async () => {
+        const response = await fetch(`${API_URL}/crm-countries`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : (data.data || []);
+    },
+    getStates: async () => {
+        const response = await fetch(`${API_URL}/crm-states`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : (data.data || []);
+    },
+    getCities: async () => {
+        const response = await fetch(`${API_URL}/crm-cities`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : (data.data || []);
+    }
+};

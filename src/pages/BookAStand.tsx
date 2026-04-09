@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -31,7 +31,8 @@ import {
     stallRateApi, 
     termsApi, 
     publicApi,
-    verifyApi
+    verifyApi,
+    crmApi
 } from "@/lib/api";
 import Swal from 'sweetalert2';
 
@@ -104,9 +105,7 @@ const INDUSTRY_SECTORS = [
     "Others"
 ];
 
-const COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia And Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, The Democratic Republic Of The", "Cook Islands", "Costa Rica", "Cote D'ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-bissau", "Guyana", "Haiti", "Heard Island And Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic Of", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic Of", "Korea, Republic Of", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia, The Former Yugoslav Republic Of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States Of", "Moldova, Republic Of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Helena", "Saint Kitts And Nevis", "Saint Lucia", "Saint Pierre And Miquelon", "Saint Vincent And The Grenadines", "Samoa", "San Marino", "Sao Tome And Principe", "Saudi Arabia", "Senegal", "Serbia And Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia And The South Sandwich Islands", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard And Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province Of China", "Tajikistan", "Tanzania, United Republic Of", "Thailand", "Timor-leste", "Togo", "Tokelau", "Tonga", "Trinidad And Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks And Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Viet Nam", "Virgin Islands, British", "Virgin Islands, U.s.", "Wallis And Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
-];
+// Removed static COUNTRIES array
 
 const NATURE_OF_BUSINESS = [
     "Agency",
@@ -189,6 +188,9 @@ const BookAStand = () => {
     const [marketingStaff, setMarketingStaff] = useState<any[]>([]);
     const [termsContent, setTermsContent] = useState<any>(null);
     const [allRates, setAllRates] = useState<any[]>([]);
+    const [countries, setCountries] = useState<any[]>([]);
+    const [states, setStates] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
 
     const [formData, setFormData] = useState(initialFormData);
 
@@ -209,12 +211,15 @@ const BookAStand = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const [hData, eData, employeesRes, staffRes, termsRes] = await Promise.all([
+                const [hData, eData, employeesRes, staffRes, termsRes, countryRes, stateRes, cityRes] = await Promise.all([
                     heroBackgroundApi.getByPage("Registration / Book A Stand"),
                     eventApi.getActive(),
                     publicApi.getEmployees(),
                     publicApi.getStaff(),
-                    termsApi.getByPage("exhibitor-registration")
+                    termsApi.getByPage("exhibitor-registration"),
+                    crmApi.getCountries(),
+                    crmApi.getStates(),
+                    crmApi.getCities()
                 ]);
 
                 if (hData) setHeroData(hData);
@@ -227,6 +232,9 @@ const BookAStand = () => {
                 if (employeesRes) setMarketingStaff(employeesRes);
                 if (staffRes) setStaff(staffRes);
                 if (termsRes) setTermsContent(termsRes);
+                if (countryRes) setCountries(countryRes);
+                if (stateRes) setStates(stateRes);
+                if (cityRes) setCities(cityRes);
             } catch (error) {
                 console.error("Error fetching initial data:", error);
             }
@@ -258,6 +266,30 @@ const BookAStand = () => {
             if (ev) setOnlineAdvancePercent(ev.onlineAdvancePercentage);
         }
     }, [selectedEventId, events]);
+
+    const filteredStates = useMemo(() => {
+        if (!formData.country || countries.length === 0) return [];
+        const selectedCountry = countries.find(c => 
+            c.name && c.name.trim().toLowerCase() === formData.country.trim().toLowerCase()
+        );
+        if (!selectedCountry) return [];
+        return states.filter(s => 
+            s.countryCode != null && selectedCountry.countryCode != null &&
+            String(s.countryCode) === String(selectedCountry.countryCode)
+        );
+    }, [formData.country, countries, states]);
+
+    const filteredCities = useMemo(() => {
+        if (!formData.state || states.length === 0) return [];
+        const selectedState = states.find(s => 
+            s.name && s.name.trim().toLowerCase() === formData.state.trim().toLowerCase()
+        );
+        if (!selectedState) return [];
+        return cities.filter(c => 
+            c.stateCode != null && selectedState.stateCode != null &&
+            String(c.stateCode) === String(selectedState.stateCode)
+        );
+    }, [formData.state, states, cities]);
 
     // OTP Timers
     useEffect(() => {
@@ -363,6 +395,16 @@ const BookAStand = () => {
         if (name === 'eventId') {
             setSelectedEventId(value);
             setFormData(prev => ({ ...prev, eventId: value }));
+            return;
+        }
+
+        if (name === 'country') {
+            setFormData(prev => ({ ...prev, country: value, state: '', city: '' }));
+            return;
+        }
+
+        if (name === 'state') {
+            setFormData(prev => ({ ...prev, state: value, city: '' }));
             return;
         }
 
@@ -808,20 +850,50 @@ const BookAStand = () => {
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Country" />
                                                             </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px]">
-                                                                {COUNTRIES.map(country => (
-                                                                    <SelectItem key={country} value={country} className="text-[11px] font-medium">{country}</SelectItem>
+                                                            <SelectContent className="bg-white">
+                                                                {countries.map(country => (
+                                                                    <SelectItem key={country._id} value={country.name} className="text-[11px] font-medium">{country.name}</SelectItem>
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>STATE *</Label>
-                                                        <Input required name="state" value={formData.state} onChange={handleInputChange} placeholder="State/Province" className={inputClasses} />
+                                                        <Select 
+                                                            onValueChange={(v) => handleSelectChange('state', v)} 
+                                                            value={formData.state}
+                                                            disabled={!formData.country}
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select State" />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="bg-white max-h-[300px]">
+                                                                {filteredStates
+                                                                    .map(state => (
+                                                                        <SelectItem key={state._id} value={state.name} className="text-[11px] font-medium">{state.name}</SelectItem>
+                                                                    ))
+                                                                }
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>CITY *</Label>
-                                                        <Input required name="city" value={formData.city} onChange={handleInputChange} placeholder="Town/City" className={inputClasses} />
+                                                        <Select 
+                                                            onValueChange={(v) => handleSelectChange('city', v)} 
+                                                            value={formData.city}
+                                                            disabled={!formData.state}
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select City" />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="bg-white max-h-[300px]">
+                                                                {filteredCities
+                                                                    .map(city => (
+                                                                        <SelectItem key={city._id} value={city.name} className="text-[11px] font-medium">{city.name}</SelectItem>
+                                                                    ))
+                                                                }
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>PINCODE *</Label>
