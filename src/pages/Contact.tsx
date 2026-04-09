@@ -257,8 +257,7 @@ const Contact = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`,
-          aspectRatio: '16 / 4'
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />

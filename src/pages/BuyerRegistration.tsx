@@ -140,8 +140,7 @@ const BuyerRegistration = () => {
             <section
                 className="hero-background-registration"
                 style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`,
-                    aspectRatio: '16 / 5'
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />

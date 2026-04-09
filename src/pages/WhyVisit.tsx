@@ -70,7 +70,7 @@ const WhyVisit = () => {
             </section>
 
             {/* ── MAIN CONTENT ── */}
-            <section className="-mt-8 pb-32 relative z-20">
+            <section className="mt-12 md:mt-24 pb-32 relative z-20">
                 <div className="container mx-auto px-6 max-w-7xl">
                     {/* Header - EXACT MATCH TO WHY EXHIBIT STYLE */}
                     <div className="text-center mb-16" data-aos="fade-up">

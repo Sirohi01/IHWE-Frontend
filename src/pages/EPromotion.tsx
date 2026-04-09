@@ -159,7 +159,7 @@ const EPromotion = () => {
       </section>
 
       {/* ── MAIN CONTENT ─────────────────────────────────────────────────── */}
-      <section className="-mt-8 pb-16 relative z-20 bg-[#f9fafb]">
+      <section className="mt-8 md:-mt-8 pb-16 relative z-20 bg-[#f9fafb]">
         <div className="container mx-auto px-4 max-w-5xl">
 
           {/* Main heading */}

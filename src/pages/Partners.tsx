@@ -68,8 +68,7 @@ const Partners = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : partnersHeroFallback})`,
-          aspectRatio: '16 / 4'
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : partnersHeroFallback})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -127,9 +126,9 @@ const Partners = () => {
                       {group.partners.concat(group.partners).map((p, idx) => (
                         <CarouselItem
                           key={`${p._id}-${idx}`}
-                          className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6"
+                          className="pl-4 basis-1/3 sm:basis-1/3 md:basis-1/4 lg:basis-1/6"
                         >
-                          <div className="bg-white border border-slate-200 p-4 h-24 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
+                          <div className="bg-white border border-slate-200 p-4 h-20 md:h-24 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
                             <LazyLoadImage
                               src={p.logo.startsWith("http") ? p.logo : `${SERVER_URL}${p.logo}`}
                               alt={p.imageAlt || p.name}

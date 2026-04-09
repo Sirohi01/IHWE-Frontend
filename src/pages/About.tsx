@@ -50,8 +50,7 @@ const About = () => {
   const heroStyles = {
     backgroundImage: heroData?.backgroundImage
       ? `url(${SERVER_URL}${heroData.backgroundImage})`
-      : `none`,
-    aspectRatio: "16 / 4"
+      : `none`
   };
 
   const heroSubtitle = heroData?.title || "";

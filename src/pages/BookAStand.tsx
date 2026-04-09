@@ -581,8 +581,7 @@ const BookAStand = () => {
                 className="hero-background-registration"
                 style={{
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
-                    backgroundColor: "#1a3516", // Professional fallback
-                    aspectRatio: '16 / 5'
+                    backgroundColor: "#1a3516" // Professional fallback
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />

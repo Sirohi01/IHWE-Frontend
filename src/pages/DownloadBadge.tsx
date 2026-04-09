@@ -133,7 +133,7 @@ const DownloadBadge = () => {
         </div>
       </section>
 
-      <section className="pt-0 pb-20 relative overflow-hidden -mt-12 md:-mt-20 z-20">
+      <section className="mt-8 md:-mt-20 pb-20 relative overflow-hidden z-20">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#23471d]/5 rounded-full blur-[120px] -mr-48 -mt-48" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#d26019]/5 rounded-full blur-[120px] -ml-48 -mb-48" />

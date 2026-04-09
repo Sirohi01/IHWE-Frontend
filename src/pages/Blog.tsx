@@ -39,8 +39,7 @@ const Blog = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : blogHero})`,
-          aspectRatio: "16 / 4"
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : blogHero})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />

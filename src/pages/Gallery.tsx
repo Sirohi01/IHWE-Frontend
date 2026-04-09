@@ -192,8 +192,7 @@ const Gallery = () => {
             <section
                 className="hero-background-standard"
                 style={{ 
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`,
-                    aspectRatio: '16 / 4'
+                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`
                 }}
             >
                 <div className="absolute inset-0 bg-black/40" />

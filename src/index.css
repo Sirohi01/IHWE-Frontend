@@ -175,8 +175,8 @@
     .hero-background-standard,
     .hero-background-registration,
     .hero-background-post {
-      aspect-ratio: 1 / 1; 
-      min-height: 400px;
+      aspect-ratio: 4 / 3; 
+      min-height: 300px;
     }
   }
 
@@ -188,17 +188,17 @@
 
   /* Extreme Responsive Text for 16:4 Sleek Standard */
   .hero-background-standard h1 {
-    font-size: clamp(0.7rem, 4vw, 3.2rem) !important;
-    line-height: 1.1 !important;
-    margin-bottom: 0.1rem !important;
+    font-size: clamp(1.75rem, 5vw, 3.5rem) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.5rem !important;
     text-shadow: 0 4px 15px rgba(0,0,0,0.5);
     font-weight: 700 !important;
     text-align: center;
   }
   .hero-background-standard p {
-    font-size: clamp(0.4rem, 1.6vw, 1rem) !important;
+    font-size: clamp(0.9rem, 2vw, 1.125rem) !important;
     max-width: 90% !important;
-    line-height: 1.2 !important;
+    line-height: 1.4 !important;
     text-shadow: 0 2px 10px rgba(0,0,0,0.5);
     opacity: 0.9;
     text-align: center;

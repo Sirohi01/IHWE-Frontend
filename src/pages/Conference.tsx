@@ -224,8 +224,7 @@ const Conference = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : confeHeroFallback})`,
-          aspectRatio: '16 / 4'
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : confeHeroFallback})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -245,7 +244,7 @@ const Conference = () => {
       </section>
 
       {/* TABBED SCHEDULE SECTION */}
-      <section className="-mt-8 pb-20 relative z-20">
+      <section className="mt-8 md:-mt-8 pb-20 relative z-20">
         <div className="container mx-auto px-4">
           {/* Header Summary - Tightened */}
           <div className="max-w-4xl mx-auto text-center mb-10" data-aos="fade-up">

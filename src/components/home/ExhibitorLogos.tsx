@@ -95,9 +95,9 @@ const ExhibitorLogos = () => {
                             {[...images, ...images].map((logo, index) => (
                                 <CarouselItem
                                     key={`${logo._id}-${index}`}
-                                    className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
+                                    className="pl-4 basis-1/3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
                                 >
-                                    <div className="bg-white border border-slate-200 p-1.5 h-28 flex items-center justify-center shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
+                                    <div className="bg-white border border-slate-200 p-1.5 h-20 md:h-28 flex items-center justify-center shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300">
                                         <img
                                             src={logo.url.startsWith("http") ? logo.url : `${SERVER_URL}${logo.url}`}
                                             alt={logo.altText}

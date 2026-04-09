@@ -46,8 +46,7 @@ const Exhibition = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroBg})`,
-          aspectRatio: '16 / 4'
+          backgroundImage: `url(${heroBg})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />

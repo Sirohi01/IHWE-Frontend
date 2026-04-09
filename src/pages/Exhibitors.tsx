@@ -41,8 +41,7 @@ const Exhibitors = () => {
       <section
         className="hero-background-standard"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : exhiHero})`,
-          aspectRatio: '16 / 4'
+          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : exhiHero})`
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
