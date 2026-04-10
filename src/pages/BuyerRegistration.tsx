@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -14,12 +14,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import HeroBg from "@/assets/buyer.jpg";
-import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
+import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi } from "@/lib/api";
 
-const COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-];
-
+// Removed static COUNTRIES array to use dynamic database data
 const COMPANY_TYPES = [
     "Importer/Exporter",
     "Distributor",
@@ -50,9 +47,14 @@ const BuyerRegistration = () => {
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [heroData, setHeroData] = useState<any>(null);
+    const [countries, setCountries] = useState<any[]>([]);
+    const [states, setStates] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
     const [formData, setFormData] = useState({
         companyName: "",
         country: "",
+        state: "",
+        city: "",
         companyWebsite: "",
         yearsInBusiness: "",
         annualImportVolume: "",
@@ -70,16 +72,48 @@ const BuyerRegistration = () => {
     });
 
     useEffect(() => {
-        const fetchHero = async () => {
+        const fetchData = async () => {
             try {
-                const data = await heroBackgroundApi.getByPage("Registration / Buyer Registration");
-                if (data) setHeroData(data);
+                const [hData, cRes, sRes, ciRes] = await Promise.all([
+                    heroBackgroundApi.getByPage("Registration / Buyer Registration"),
+                    crmApi.getCountries(),
+                    crmApi.getStates(),
+                    crmApi.getCities()
+                ]);
+                if (hData) setHeroData(hData);
+                if (cRes) setCountries(cRes);
+                if (sRes) setStates(sRes);
+                if (ciRes) setCities(ciRes);
             } catch (err) {
-                console.error("Error fetching hero:", err);
+                console.error("Error fetching initial data:", err);
             }
         };
-        fetchHero();
+        fetchData();
     }, []);
+
+    const filteredStates = useMemo(() => {
+        if (!formData.country || countries.length === 0) return [];
+        const selectedCountry = countries.find(c => 
+            c.name && c.name.trim().toLowerCase() === formData.country.trim().toLowerCase()
+        );
+        if (!selectedCountry) return [];
+        return states.filter(s => 
+            s.countryCode != null && selectedCountry.countryCode != null &&
+            String(s.countryCode) === String(selectedCountry.countryCode)
+        );
+    }, [formData.country, countries, states]);
+
+    const filteredCities = useMemo(() => {
+        if (!formData.state || states.length === 0) return [];
+        const selectedState = states.find(s => 
+            s.name && s.name.trim().toLowerCase() === formData.state.trim().toLowerCase()
+        );
+        if (!selectedState) return [];
+        return cities.filter(c => 
+            c.stateCode != null && selectedState.stateCode != null &&
+            String(c.stateCode) === String(selectedState.stateCode)
+        );
+    }, [formData.state, states, cities]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -87,6 +121,14 @@ const BuyerRegistration = () => {
     };
 
     const handleSelectChange = (name: string, value: string) => {
+        if (name === 'country') {
+            setFormData(prev => ({ ...prev, country: value, state: '', city: '' }));
+            return;
+        }
+        if (name === 'state') {
+            setFormData(prev => ({ ...prev, state: value, city: '' }));
+            return;
+        }
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
@@ -219,6 +261,8 @@ const BuyerRegistration = () => {
                                                     setFormData({
                                                         companyName: "",
                                                         country: "",
+                                                        state: "",
+                                                        city: "",
                                                         companyWebsite: "",
                                                         yearsInBusiness: "",
                                                         annualImportVolume: "",
@@ -278,13 +322,50 @@ const BuyerRegistration = () => {
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Country" />
                                                             </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px]">
-                                                                {COUNTRIES.map(country => (
-                                                                    <SelectItem key={country} value={country}>{country}</SelectItem>
+                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                {countries.map(country => (
+                                                                    <SelectItem key={country._id} value={country.name}>{country.name}</SelectItem>
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>State *</Label>
+                                                        <Select 
+                                                            value={formData.state} 
+                                                            onValueChange={(v) => handleSelectChange('state', v)}
+                                                            disabled={!formData.country}
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select State" />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                {filteredStates.map(state => (
+                                                                    <SelectItem key={state._id} value={state.name}>{state.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>City *</Label>
+                                                        <Select 
+                                                            value={formData.city} 
+                                                            onValueChange={(v) => handleSelectChange('city', v)}
+                                                            disabled={!formData.state}
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select City" />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                {filteredCities.map(city => (
+                                                                    <SelectItem key={city._id} value={city.name}>{city.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2.5">
                                                     <div>
                                                         <Label className={labelClasses}>Company Website</Label>
                                                         <Input name="companyWebsite" value={formData.companyWebsite} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />

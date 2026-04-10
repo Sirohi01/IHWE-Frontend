@@ -13,12 +13,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi } from "@/lib/api";
+import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi, crmApi } from "@/lib/api";
 import HeroBg from "@/assets/car22.jpg";
 
-const COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua And Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia And Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, The Democratic Republic Of The", "Cook Islands", "Costa Rica", "Cote D'ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Falkland Islands (Malvinas)", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guinea", "Guinea-bissau", "Guyana", "Haiti", "Heard Island And Mcdonald Islands", "Holy See (Vatican City State)", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran, Islamic Republic Of", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, Democratic People's Republic Of", "Korea, Republic Of", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libyan Arab Jamahiriya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Macedonia, The Former Yugoslav Republic Of", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia, Federated States Of", "Moldova, Republic Of", "Monaco", "Mongolia", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestinian Territory, Occupied", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russian Federation", "Rwanda", "Saint Helena", "Saint Kitts And Nevis", "Saint Lucia", "Saint Pierre And Miquelon", "Saint Vincent And The Grenadines", "Samoa", "San Marino", "Sao Tome And Principe", "Saudi Arabia", "Senegal", "Serbia And Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia And The South Sandwich Islands", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard And Jan Mayen", "Swaziland", "Sweden", "Switzerland", "Syrian Arab Republic", "Taiwan, Province Of China", "Tajikistan", "Tanzania, United Republic Of", "Thailand", "Timor-leste", "Togo", "Tokelau", "Tonga", "Trinidad And Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks And Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Viet Nam", "Virgin Islands, British", "Virgin Islands, U.s.", "Wallis And Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
-];
+
 
 const PURPOSE_GENERAL = [
     "Business Networking",
@@ -64,6 +62,13 @@ const VisitorRegistration = () => {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
+    // Cascading Dropdown State
+    const [countries, setCountries] = useState<any[]>([]);
+    const [states, setStates] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
+    const [loadingStates, setLoadingStates] = useState(false);
+    const [loadingCities, setLoadingCities] = useState(false);
+
     // OTP States
     const [formData, setFormData] = useState({
         registrationFor: "",
@@ -106,12 +111,14 @@ const VisitorRegistration = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const [heroRes, eventsRes] = await Promise.all([
+                const [heroRes, eventsRes, countriesRes] = await Promise.all([
                     heroBackgroundApi.getByPage("Registration / Visitor Registration"),
-                    eventApi.getActive()
+                    eventApi.getActive(),
+                    crmApi.getCountries()
                 ]);
                 if (heroRes) setHeroData(heroRes);
                 setEvents(eventsRes);
+                setCountries(countriesRes);
             } catch (err) {
                 console.error("Error fetching initial data:", err);
             }
@@ -136,6 +143,52 @@ const VisitorRegistration = () => {
         return () => clearInterval(pInterval);
     }, [phoneTimer]);
 
+    // Cascade: Country -> States
+    useEffect(() => {
+        const fetchStates = async () => {
+            if (!formData.country) {
+                setStates([]);
+                return;
+            }
+            const selectedCountry = countries.find(c => c.name === formData.country);
+            if (selectedCountry) {
+                setLoadingStates(true);
+                try {
+                    const data = await crmApi.getStates(selectedCountry.countryCode);
+                    setStates(data);
+                } catch (err) {
+                    console.error("Error fetching states:", err);
+                } finally {
+                    setLoadingStates(false);
+                }
+            }
+        };
+        fetchStates();
+    }, [formData.country, countries]);
+
+    // Cascade: State -> Cities
+    useEffect(() => {
+        const fetchCities = async () => {
+            if (!formData.state) {
+                setCities([]);
+                return;
+            }
+            const selectedState = states.find(s => s.name === formData.state);
+            if (selectedState) {
+                setLoadingCities(true);
+                try {
+                    const data = await crmApi.getCities(selectedState.stateCode);
+                    setCities(data);
+                } catch (err) {
+                    console.error("Error fetching cities:", err);
+                } finally {
+                    setLoadingCities(false);
+                }
+            }
+        };
+        fetchCities();
+    }, [formData.state, states]);
+
     const handleInputChange = (e: any) => {
         const { name, value, type, checked } = e.target;
         
@@ -146,6 +199,17 @@ const VisitorRegistration = () => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+
+        // Reset cascades
+        if (name === "country") {
+            setFormData(prev => ({ ...prev, state: "", city: "" }));
+            setStates([]);
+            setCities([]);
+        }
+        if (name === "state") {
+            setFormData(prev => ({ ...prev, city: "" }));
+            setCities([]);
+        }
     };
 
     const handlePurposeChange = (opt: string, checked: boolean) => {
@@ -776,36 +840,52 @@ const VisitorRegistration = () => {
                                                     <div>
                                                         <Label className={labelClasses}>COUNTRY *</Label>
                                                         <Select
-                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, country: v }))}
+                                                            onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })}
                                                             value={formData.country}
                                                         >
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Country" />
                                                             </SelectTrigger>
                                                             <SelectContent className="max-h-[300px] bg-white">
-                                                                {COUNTRIES.map(c => (
-                                                                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                                                                {countries.map(c => (
+                                                                    <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>STATE *</Label>
-                                                        <Input 
-                                                            name="state"
+                                                        <Select 
+                                                            disabled={!formData.country || loadingStates}
+                                                            onValueChange={(v) => handleInputChange({ target: { name: 'state', value: v } })}
                                                             value={formData.state}
-                                                            onChange={handleInputChange}
-                                                            placeholder="Enter State" className={inputClasses} 
-                                                        />
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder={loadingStates ? "Loading..." : "Select State"} />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                {states.map(s => (
+                                                                    <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                     <div>
                                                         <Label className={labelClasses}>CITY *</Label>
-                                                        <Input 
-                                                            name="city"
+                                                        <Select 
+                                                            disabled={!formData.state || loadingCities}
+                                                            onValueChange={(v) => handleInputChange({ target: { name: 'city', value: v } })}
                                                             value={formData.city}
-                                                            onChange={handleInputChange}
-                                                            placeholder="Enter City" className={inputClasses} 
-                                                        />
+                                                        >
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder={loadingCities ? "Loading..." : "Select City"} />
+                                                            </SelectTrigger>
+                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                {cities.map(ct => (
+                                                                    <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                 </div>
                                             </div>

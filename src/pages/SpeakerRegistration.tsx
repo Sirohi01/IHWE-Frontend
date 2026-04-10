@@ -15,15 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { heroBackgroundApi, verifyApi, SERVER_URL } from "@/lib/api";
+import { heroBackgroundApi, verifyApi, SERVER_URL, crmApi } from "@/lib/api";
 import HeroBg from "@/assets/speakers.jpg";
-
-const COUNTRIES = [
-    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
-    "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
-    "Cote d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)",
-    "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar (formerly Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-];
 
 import Swal from 'sweetalert2';
 
@@ -46,6 +39,13 @@ const SpeakerRegistration = () => {
     const [emailResendTimer, setEmailResendTimer] = useState(0);
     const [phoneResendTimer, setPhoneResendTimer] = useState(0);
 
+    // Cascading Dropdown State
+    const [countries, setCountries] = useState<any[]>([]);
+    const [states, setStates] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
+    const [loadingStates, setLoadingStates] = useState(false);
+    const [loadingCities, setLoadingCities] = useState(false);
+
     const [formData, setFormData] = useState({
         title: "",
         firstName: "",
@@ -64,16 +64,66 @@ const SpeakerRegistration = () => {
     });
 
     useEffect(() => {
-        const fetchHero = async () => {
+        const fetchInitialData = async () => {
             try {
-                const data = await heroBackgroundApi.getByPage("Registration / Speaker Registration");
-                if (data) setHeroData(data);
+                const [hData, cData] = await Promise.all([
+                    heroBackgroundApi.getByPage("Registration / Speaker Registration"),
+                    crmApi.getCountries()
+                ]);
+                if (hData) setHeroData(hData);
+                setCountries(cData);
             } catch (err) {
-                console.error("Error fetching hero:", err);
+                console.error("Error fetching initial data:", err);
             }
         };
-        fetchHero();
+        fetchInitialData();
     }, []);
+
+    // Cascade: Country -> States
+    useEffect(() => {
+        const fetchStates = async () => {
+            if (!formData.country) {
+                setStates([]);
+                return;
+            }
+            const selectedCountry = countries.find(c => c.name === formData.country);
+            if (selectedCountry) {
+                setLoadingStates(true);
+                try {
+                    const data = await crmApi.getStates(selectedCountry.countryCode);
+                    setStates(data);
+                } catch (err) {
+                    console.error("Error fetching states:", err);
+                } finally {
+                    setLoadingStates(false);
+                }
+            }
+        };
+        fetchStates();
+    }, [formData.country, countries]);
+
+    // Cascade: State -> Cities
+    useEffect(() => {
+        const fetchCities = async () => {
+            if (!formData.state) {
+                setCities([]);
+                return;
+            }
+            const selectedState = states.find(s => s.name === formData.state);
+            if (selectedState) {
+                setLoadingCities(true);
+                try {
+                    const data = await crmApi.getCities(selectedState.stateCode);
+                    setCities(data);
+                } catch (err) {
+                    console.error("Error fetching cities:", err);
+                } finally {
+                    setLoadingCities(false);
+                }
+            }
+        };
+        fetchCities();
+    }, [formData.state, states]);
 
     // Timer logic for OTP resend
     useEffect(() => {
@@ -269,6 +319,17 @@ const SpeakerRegistration = () => {
             setPhoneVerified(false);
             setPhoneOtpSent(false);
             setPhoneResendTimer(0);
+        }
+
+        // Reset cascades
+        if (field === "country") {
+            setFormData(prev => ({ ...prev, state: "", city: "" }));
+            setStates([]);
+            setCities([]);
+        }
+        if (field === "state") {
+            setFormData(prev => ({ ...prev, city: "" }));
+            setCities([]);
         }
     };
 
@@ -628,31 +689,47 @@ const SpeakerRegistration = () => {
                                                     <SelectValue placeholder="Select Country" />
                                                 </SelectTrigger>
                                                 <SelectContent className="max-h-[300px]">
-                                                    {COUNTRIES.map(c => (
-                                                        <SelectItem key={c} value={c}>{c}</SelectItem>
+                                                    {countries.map(c => (
+                                                        <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>
                                         </div>
                                         <div>
                                             <Label className={labelClasses}>STATE *</Label>
-                                            <Input 
-                                                required 
-                                                placeholder="Enter State.." 
-                                                className={inputClasses} 
+                                            <Select 
+                                                required
+                                                disabled={!formData.country || loadingStates}
                                                 value={formData.state}
-                                                onChange={(e) => handleInputChange("state", e.target.value)}
-                                            />
+                                                onValueChange={(val) => handleInputChange("state", val)}
+                                            >
+                                                <SelectTrigger className={inputClasses}>
+                                                    <SelectValue placeholder={loadingStates ? "Loading..." : "Select State"} />
+                                                </SelectTrigger>
+                                                <SelectContent className="max-h-[300px]">
+                                                    {states.map(s => (
+                                                        <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                         <div>
                                             <Label className={labelClasses}>CITY *</Label>
-                                            <Input 
-                                                required 
-                                                placeholder="Enter City.." 
-                                                className={inputClasses} 
+                                            <Select 
+                                                required
+                                                disabled={!formData.state || loadingCities}
                                                 value={formData.city}
-                                                onChange={(e) => handleInputChange("city", e.target.value)}
-                                            />
+                                                onValueChange={(val) => handleInputChange("city", val)}
+                                            >
+                                                <SelectTrigger className={inputClasses}>
+                                                    <SelectValue placeholder={loadingCities ? "Loading..." : "Select City"} />
+                                                </SelectTrigger>
+                                                <SelectContent className="max-h-[300px]">
+                                                    {cities.map(ct => (
+                                                        <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                     </div>
                                 </div>

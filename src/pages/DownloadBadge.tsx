@@ -3,44 +3,46 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mail, Phone, Send, CheckCircle, Loader2, Download, 
   User, Lock, Sparkles, LogIn, Eye, EyeOff, Shield, Camera,
-  IdCard as IdCardIcon, QrCode, MapPin, Calendar
+  IdCard as IdCardIcon, QrCode as QrIcon, MapPin, Calendar,
+  RefreshCw, Printer
 } from "lucide-react";
-import { settingsApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
+import { settingsApi, heroBackgroundApi, SERVER_URL, visitorAuthApi, eventHighlightsApi } from "@/lib/api";
 import Swal from "sweetalert2";
+import QRCode from "react-qr-code";
+import { toPng } from "html-to-image";
 
 const DownloadBadge = () => {
   const [settings, setSettings] = useState<any>(null);
   const [heroData, setHeroData] = useState<any>(null);
+  const [eventData, setEventData] = useState<any>(null);
   const [credentials, setCredentials] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [visitorData, setVisitorData] = useState<any>(null);
+  const [maskedEmail, setMaskedEmail] = useState("");
+  const [maskedMobile, setMaskedMobile] = useState("");
+  
   const badgeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchData = async () => {
       try {
-        const data = await settingsApi.get();
-        if (data) setSettings(data);
+        const [settingsData, heroRes, eventRes] = await Promise.all([
+          settingsApi.get(),
+          heroBackgroundApi.getByPage("Visit / Download Badge"),
+          eventHighlightsApi.get()
+        ]);
+        if (settingsData) setSettings(settingsData);
+        if (heroRes) setHeroData(heroRes);
+        if (eventRes) setEventData(eventRes);
       } catch (error) {
-        console.error("Error fetching settings:", error);
+        console.error("Error fetching data:", error);
       }
     };
-    fetchSettings();
-  }, []);
-
-  useEffect(() => {
-    const fetchHero = async () => {
-      try {
-        const data = await heroBackgroundApi.getByPage("Visit / Download Badge");
-        if (data) setHeroData(data);
-      } catch (error) {
-        console.error("Error fetching hero:", error);
-      }
-    };
-    fetchHero();
+    fetchData();
   }, []);
 
   const showAlert = (icon: any, title: string, text: string) => {
@@ -58,85 +60,283 @@ const DownloadBadge = () => {
     });
   };
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!credentials) {
       showAlert('warning', 'Missing Information', 'Please enter your registered Email or Mobile Number');
       return;
     }
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 1500)); // Mock API delay
-    setIsLoading(false);
-    setShowOtp(true);
-    showAlert('success', 'OTP Sent', `A verification code has been sent to ${credentials}`);
+    try {
+      const res = await visitorAuthApi.sendOtp(credentials);
+      if (res.success) {
+        setMaskedEmail(res.data.toEmail);
+        setMaskedMobile(res.data.toMobile);
+        setShowOtp(true);
+        showAlert('success', 'OTP Sent', `A verification code has been sent to your registered Email and WhatsApp`);
+      } else {
+        showAlert('error', 'Login Failed', res.message || 'Could not send verification code');
+      }
+    } catch (error) {
+      showAlert('error', 'Error', 'Failed to connect to the server');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otp) {
-      showAlert('warning', 'Missing OTP', 'Please enter the verification code');
+    if (!otp || otp.length < 6) {
+      showAlert('warning', 'Invalid OTP', 'Please enter the 6-digit verification code');
       return;
     }
     setIsChecking(true);
-    await new Promise(r => setTimeout(r, 1500)); // Mock verification
-    setIsChecking(false);
-    setIsSuccess(true);
-    await Swal.fire({
-      icon: "success",
-      title: "Authenticated!",
-      text: "Your badge is ready for download",
-      timer: 1500,
-      showConfirmButton: false,
+    try {
+      const res = await visitorAuthApi.verifyOtp(credentials, otp);
+      if (res.success) {
+        setVisitorData(res.visitor);
+        setIsSuccess(true);
+        Swal.fire({
+          icon: "success",
+          title: "Authenticated!",
+          text: "Welcome back! Your badge is ready.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } else {
+        showAlert('error', 'Verification Failed', res.message || 'Invalid or expired OTP');
+      }
+    } catch (error) {
+      showAlert('error', 'Error', 'Failed to verify OTP');
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will need to re-verify your OTP to access your badge again.",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#23471d',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Logout'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsSuccess(false);
+        setShowOtp(false);
+        setOtp("");
+        setCredentials("");
+        setVisitorData(null);
+      }
     });
   };
 
   const downloadBadge = () => {
     if (!badgeRef.current) return;
     
-    // In a real app we'd use html-to-image or similar
-    // For now, we'll simulate the download
-    const link = document.createElement('a');
-    link.href = '#';
-    link.download = 'IHWE_Entry_Badge.png';
-    document.body.appendChild(link);
-    // link.click(); // Prevent actual download for user
-    document.body.removeChild(link);
-    
-    showAlert('success', 'Download Started', 'Your badge image is being saved.');
+    setIsLoading(true);
+    toPng(badgeRef.current, { cacheBust: true, pixelRatio: 4 })
+      .then((dataUrl) => {
+        // Direct conversion to Blob for better browser download tracking
+        const arr = dataUrl.split(',');
+        const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/png';
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], { type: mime });
+        
+        const blobUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = blobUrl;
+        link.download = `IHWE_Badge_${visitorData?.registrationId || 'Visitor'}.png`;
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        // Add a small delay for better browser registration
+        setTimeout(() => {
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(blobUrl);
+          setIsLoading(false);
+          showAlert('success', 'Downloaded', 'Your high-resolution badge has been saved.');
+        }, 500);
+      })
+      .catch((err) => {
+        console.error('Badge download error:', err);
+        setIsLoading(false);
+        showAlert('error', 'Download Failed', 'Could not generate badge image. Please try again.');
+      });
   };
 
+  const handlePrint = () => {
+    if (!badgeRef.current) return;
+    
+    setIsLoading(true);
+    toPng(badgeRef.current, { cacheBust: true, pixelRatio: 4 })
+      .then((dataUrl) => {
+        // Create a hidden iframe for printing (prevents popup blockers)
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        const iframeDoc = iframe.contentWindow?.document;
+        if (!iframeDoc) {
+          showAlert('error', 'Print Error', 'Could not initialize print engine.');
+          setIsLoading(false);
+          return;
+        }
+
+        iframeDoc.write(`
+          <html>
+            <head>
+              <title>Print Badge - IHWE 2026</title>
+              <style>
+                @page { size: landscape; margin: 0; }
+                body { 
+                  margin: 0; 
+                  display: flex; 
+                  justify-content: center; 
+                  align-items: center; 
+                  height: 100vh; 
+                  background: white;
+                }
+                img { 
+                  max-width: 95%; 
+                  max-height: 95%; 
+                  object-fit: contain;
+                }
+              </style>
+            </head>
+            <body>
+              <img src="${dataUrl}" />
+              <script>
+                window.onload = function() {
+                  window.print();
+                };
+              </script>
+            </body>
+          </html>
+        `);
+        iframeDoc.close();
+
+        // Remove iframe after printing
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          setIsLoading(false);
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('Print error:', err);
+        setIsLoading(false);
+        showAlert('error', 'Error', 'Failed to generate print preview.');
+      });
+  };
+
+  const guidelines = [
+    "Pass is valid for the registered person's name only.",
+    "Pass is non-transferable to protect your personal information.",
+    "Kindly get your QR code scanned at the entrance of Halls.",
+    "Getting your QR code scanned means allowing the other person to access your business card information.",
+    "Please discard your pass into the collection box at the exit gates, when you leave the exhibition.",
+    "E- Badge is valid only with the Photo ID in original.",
+    "Children below the age of 16 will not be allowed in the exhibition.",
+    "Organizers hold the right to ask any visitor to vacate the premises for anti-social activities.",
+    "The Decision of organizer will be final and binding, regarding the entry or exit.",
+    "Photography & videography is strictly prohibited without prior written permission of the organizer.",
+    "Venue is under CCTV surveillance however you are requested to take care of your belongings. The Organizer is not responsible for the loss or theft of any personal belongings."
+  ];
+
   return (
-    <div className="bg-[#f9fafb] min-h-screen font-inter">
-      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
-      <section
-        className="hero-background-standard"
-        style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.jpg"})`
-        }}
-      >
-        <div className="absolute inset-0 bg-black/40" />
-        <div
-          className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
-          style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
-        />
+    <div className="bg-[#f9fafb] min-h-screen font-inter pb-20">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          @page { size: landscape; margin: 10mm; }
+          body { 
+            background: white !important; 
+            margin: 0 !important; 
+            padding: 0 !important;
+          }
+          /* Hide EVERYTHING */
+          body * { 
+            visibility: hidden !important; 
+          }
+          /* Show ONLY the pass and its contents */
+          #id-card-pass, #id-card-pass * { 
+            visibility: visible !important; 
+          }
+          /* Position the pass perfectly for the printer */
+          #id-card-pass {
+            position: absolute !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) scale(0.95) !important;
+            width: 720px !important;
+            max-width: none !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            border: 1px solid #eee !important;
+            display: flex !important;
+            flex-direction: row !important;
+          }
+          /* Force horizontal layout even if the screen is small */
+          #id-card-pass { flex-direction: row !important; }
+          #id-card-pass > div { display: block !important; }
+          
+          /* Hide all UI elements definitively */
+          .no-print, header, footer, button, .swal2-container { 
+            display: none !important; 
+          }
+        }
+      `}} />
 
-        <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-            {heroData?.title || "Entry Pass"}
-          </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
-            {heroData?.heading || "Download Badge"}
-          </h1>
-          <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            {heroData?.shortDescription || "Access your digital entry pass for the 9th International Expo."}
-          </p>
-        </div>
-      </section>
+      {/* ── HERO SECTION (Hidden on Success) ── */}
+      {!isSuccess && (
+        <section
+          className="hero-background-standard no-print"
+          style={{ 
+            backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.jpg"})`
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40" />
+          <div
+            className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
+            style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
+          />
 
-      <section className="mt-8 md:-mt-20 pb-20 relative overflow-hidden z-20">
+          <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
+            <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
+              {heroData?.title || "Entry Pass"}
+            </p>
+            <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+              {heroData?.heading || "Download Badge"}
+            </h1>
+            <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+              {heroData?.shortDescription || "Access your digital entry pass for the 9th International Expo."}
+            </p>
+          </div>
+        </section>
+      )}
+
+      <section className={`${!isSuccess ? "mt-8 md:-mt-20" : "pt-10 md:pt-20"} pb-20 relative overflow-hidden z-20 badge-container-wrapper`}>
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#23471d]/5 rounded-full blur-[120px] -mr-48 -mt-48" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#d26019]/5 rounded-full blur-[120px] -ml-48 -mb-48" />
+        {!isSuccess && (
+          <>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-[#23471d]/5 rounded-full blur-[120px] -mr-48 -mt-48" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#d26019]/5 rounded-full blur-[120px] -ml-48 -mb-48" />
+          </>
+        )}
 
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
@@ -147,7 +347,7 @@ const DownloadBadge = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="grid lg:grid-cols-2 gap-12 items-center"
+                  className="grid lg:grid-cols-2 gap-12 items-center no-print"
                 >
                   {/* Left Side: Brand & Info */}
                   <div className="space-y-8" data-aos="fade-right">
@@ -176,7 +376,7 @@ const DownloadBadge = () => {
                         {[
                           { icon: Shield, title: "Secure Access", desc: "OTP protected login" },
                           { icon: IdCardIcon, title: "Virtual Badge", desc: "Always on your phone" },
-                          { icon: QrCode, title: "Quick Entry", desc: "Scan and proceed" },
+                          { icon: QrIcon, title: "Quick Entry", desc: "Scan and proceed" },
                           { icon: Sparkles, title: "Sustainable", desc: "Eco-friendly pass" }
                         ].map((item, idx) => (
                           <div key={idx} className="flex items-center gap-4 bg-white p-4 border-2 border-[#23471d]/20 transition-all shadow-sm">
@@ -241,7 +441,14 @@ const DownloadBadge = () => {
                                 className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 focus:outline-none focus:border-[#23471d] transition-all text-sm tracking-[0.5em] font-bold"
                               />
                             </div>
-                            <p className="text-[10px] text-slate-400 mt-3 text-center">Didn't receive code? <button type="button" className="text-[#d26019] font-bold underline">Resend</button></p>
+                            <div className="flex justify-between items-center mt-3">
+                               <button type="button" onClick={() => setShowOtp(false)} className="text-[10px] font-bold text-slate-400 hover:text-red-500 uppercase flex items-center gap-2">
+                                 <RefreshCw size={12} /> Change
+                               </button>
+                               <button type="button" onClick={() => handleSendOtp()} className="text-[10px] font-bold text-[#d26019] hover:underline uppercase">
+                                 Resend OTP
+                               </button>
+                            </div>
                           </div>
                         </motion.div>
                       )}
@@ -292,95 +499,146 @@ const DownloadBadge = () => {
               ) : (
                 <motion.div 
                   key="badge-section"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-center justify-center"
                 >
-                  <div className="text-center mb-10" data-aos="fade-up">
-                    <div className="flex items-center justify-center gap-3 mb-3">
-                      <div className="h-px w-8 bg-[#23471d]" />
-                      <span className="text-xs font-bold uppercase tracking-[0.4em] text-[#23471d]">Your Pass is Ready</span>
-                      <div className="h-px w-8 bg-[#23471d]" />
-                    </div>
-                    <h2 className="text-4xl font-serif text-slate-900">
-                      Exhibition <span className="text-[#23471d]">Badge</span>
-                    </h2>
+                  {/* ACTION BAR */}
+                  <div className="w-full max-w-4xl flex items-center justify-between mb-8 bg-white p-4 shadow-sm border border-slate-100 no-print">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={18} className="text-[#23471d]" />
+                        <span className="text-sm font-bold uppercase tracking-wider text-slate-700">Visitor Badge Ready</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <button 
+                          onClick={handlePrint}
+                          className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded text-[10px] font-black text-slate-600 hover:bg-slate-200 transition-all uppercase tracking-widest"
+                        >
+                           <Printer size={14} /> Print
+                        </button>
+                        <button 
+                          onClick={handleLogout}
+                          className="flex items-center gap-2 bg-red-50 text-red-600 px-4 py-2 rounded text-[10px] font-black hover:bg-red-100 transition-all uppercase tracking-widest"
+                        >
+                           <LogIn size={14} className="rotate-180" /> Logout
+                        </button>
+                      </div>
                   </div>
 
-                  {/* VIRTUAL ID CARD */}
+                  {/* THE PASS (SMALLER SIZE & REFINED STYLING) */}
                   <div 
                     ref={badgeRef}
-                    className="relative w-full max-w-[400px] aspect-[1/1.58] bg-white shadow-2xl overflow-hidden border border-slate-100 group mb-10"
-                    data-aos="zoom-in"
+                    id="id-card-pass"
+                    className="w-full max-w-[720px] bg-white flex flex-col md:flex-row shadow-2xl border border-slate-100 relative overflow-hidden"
                   >
-                    {/* Header with Pattern */}
-                    <div className="h-40 bg-[#23471d] relative overflow-hidden flex flex-col items-center justify-center p-6 text-center">
-                      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-                      <img 
-                        src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
-                        alt="Logo" 
-                        className="h-20 w-auto object-contain brightness-0 invert relative z-10 mb-2"
-                      />
-                      <p className="text-[10px] text-white/60 font-bold uppercase tracking-[0.3em] relative z-10">Entry Pass 2026</p>
+                    {/* LEFT PANE: VISITOR DETAILS */}
+                    <div className="w-full md:w-[58%] flex flex-col items-center p-6 relative">
+                        <div className="absolute top-0 left-0 w-20 h-20 bg-[#23471d]/5 rounded-br-full" />
+                        
+                        {/* REFINED HEADER: LOGO LEFT, DETAILS RIGHT */}
+                        <div className="flex items-center gap-6 mb-8 w-full px-6">
+                          <img 
+                            src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
+                            alt="Logo" 
+                            className="h-28 w-auto object-contain"
+                          />
+                          <div className="h-20 w-px bg-slate-200" />
+                          <div className="flex flex-col text-left">
+                            <h4 className="text-base font-serif font-black text-[#d26019] leading-tight uppercase">
+                              {eventData?.venueName || "Dubai World Trade Centre"}
+                            </h4>
+                            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tight mb-1">
+                              {eventData?.venueAddress || "Hall 6, Sheikh Zayed Road, Dubai"}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
+                               <div className="h-2 w-2 rounded-full bg-[#23471d]" />
+                               <span className="text-[10px] font-black text-[#23471d] uppercase tracking-wider">
+                                  {eventData?.eventDate || "21 - 23 August 2026"}
+                               </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="text-center w-full mb-6 px-4">
+                          <h3 className="text-4xl font-serif font-black text-slate-900 mb-1 uppercase tracking-tight leading-tight">
+                             {visitorData?.firstName} {visitorData?.lastName}
+                          </h3>
+                          <p className="text-sm font-bold text-[#d26019] uppercase tracking-widest mb-1 italic">
+                             {visitorData?.designation}
+                          </p>
+                          <p className="text-xl font-serif font-black text-[#23471d] uppercase px-4 truncate">
+                             {visitorData?.companyName}
+                          </p>
+                           <p className="text-lg font-bold text-slate-800 uppercase tracking-widest mt-1">{visitorData?.country}</p>
+                        </div>
+
+                        {/* QR Code Container */}
+                        <div className="bg-white p-3 border border-slate-50 shadow-inner mb-3">
+                          <QRCode 
+                            value={visitorData?.registrationId || "IHWE-2026"} 
+                            size={120}
+                            fgColor="#000000"
+                          />
+                        </div>
+                        <p className="text-[10px] font-black text-[#23471d] bg-[#23471d]/5 px-5 py-1.5 rounded-full uppercase tracking-[0.2em] mb-8">
+                           Valid from {eventData?.eventDate || "21 - 23 August 2026"}
+                        </p>
+
+                        {/* Visitor Label Bar (BASED ON IMAGE) */}
+                        <div className="w-full bg-[#1ab05c] py-3 mb-4 shadow-lg flex items-center justify-center">
+                          <span className="text-2xl font-serif font-black text-white uppercase italic tracking-[0.2em]">
+                            VISITOR
+                          </span>
+                        </div>
+
+                        <div className="text-center">
+                           <p className="text-base font-black text-slate-900 mb-0.5">User ID : {visitorData?.registrationId}</p>
+                           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest italic opacity-70">NOTE: E-badge is valid with photo ID in original.</p>
+                        </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-8 flex flex-col items-center text-center">
-                      <div className="w-28 h-28 bg-slate-100 rounded-full mb-6 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center relative">
-                        <User className="w-12 h-12 text-slate-300" />
-                        <div className="absolute bottom-0 inset-x-0 bg-[#23471d] py-1 text-[8px] text-white font-bold">VISITOR</div>
-                      </div>
+                    <div className="hidden md:block w-px border-l-2 border-dashed border-slate-200 my-6" />
 
-                      <h3 className="text-2xl font-serif font-bold text-slate-900 mb-1">Rajesh Kumar</h3>
-                      <p className="text-[#d26019] font-bold text-xs uppercase tracking-widest mb-8">Design Solutions Inc.</p>
-
-                      <div className="grid grid-cols-2 gap-8 w-full mb-10">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-2 text-[#23471d]">
-                            <Calendar size={12} />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Date</span>
-                          </div>
-                          <p className="text-xs font-bold text-slate-800">21-23 Aug 2026</p>
+                    {/* RIGHT PANE: GUIDELINES */}
+                    <div className="w-full md:w-[42%] bg-slate-50/30 p-6 flex flex-col">
+                        <h4 className="text-xl font-serif font-black text-slate-900 border-b-2 border-slate-900 pb-2 mb-5 uppercase leading-tight">
+                           Visitor Pass <span className="block italic text-lg">Guidelines</span>
+                        </h4>
+                        <ul className="space-y-3 text-[10px] text-slate-700 leading-tight list-none font-medium">
+                           {guidelines.map((text, i) => (
+                             <li key={i} className="flex gap-2">
+                               <span className="font-bold text-slate-900">{i + 1}.</span>
+                               <span>{text}</span>
+                             </li>
+                           ))}
+                        </ul>
+                        
+                        <div className="mt-auto pt-6 text-center md:text-left opacity-30">
+                           <img src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} className="h-6 grayscale brightness-0 mb-1 mx-auto md:mx-0" />
+                           <p className="text-[6px] font-bold uppercase tracking-widest">Namo Gange Trust Initiative</p>
                         </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-2 text-[#23471d]">
-                            <MapPin size={12} />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Venue</span>
-                          </div>
-                          <p className="text-xs font-bold text-slate-800">Yashobhoomi, Delhi</p>
-                        </div>
-                      </div>
-
-                      <div className="w-32 h-32 bg-white p-2 border-2 border-slate-50 flex items-center justify-center shadow-inner relative group/qr">
-                        <QrCode className="w-24 h-24 text-slate-800" />
-                        <div className="absolute inset-0 bg-white/60 flex items-center justify-center opacity-0 group-hover/qr:opacity-100 transition-opacity">
-                          <p className="text-[8px] font-bold text-[#23471d]">SCAN TO VERIFY</p>
-                        </div>
-                      </div>
                     </div>
-
-                    {/* Footer Accent */}
-                    <div className="absolute bottom-0 inset-x-0 h-2 bg-gradient-to-r from-[#23471d] via-[#d26019] to-[#23471d]" />
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4" data-aos="fade-up">
+                  <div className="mt-12 flex flex-col sm:flex-row gap-4 no-print" data-aos="fade-up">
                     <button 
                       onClick={downloadBadge}
-                      className="flex items-center justify-center gap-3 bg-[#23471d] text-white px-10 py-5 font-bold uppercase tracking-widest text-xs hover:bg-[#1a3a14] transition-all shadow-xl hover:shadow-[#23471d]/20"
+                      disabled={isLoading}
+                      className="flex items-center justify-center gap-3 bg-[#23471d] text-white px-12 py-5 font-bold uppercase tracking-widest text-xs hover:bg-[#1a3a14] transition-all shadow-xl hover:shadow-[#23471d]/20 border border-transparent hover:border-white/10"
                     >
-                      <Download size={18} />
-                      Download Image Pass
+                      {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
+                      DOWNLOAD IMAGE PASS (PNG)
                     </button>
                     <button 
-                      onClick={() => setIsSuccess(false)}
-                      className="flex items-center justify-center gap-3 bg-red-600 text-white px-10 py-5 font-bold uppercase tracking-widest text-xs hover:bg-red-700 transition-all shadow-lg hover:shadow-red-600/20"
+                      onClick={handleLogout}
+                      className="flex items-center justify-center gap-3 bg-white text-red-600 border border-red-100 px-12 py-5 font-bold uppercase tracking-widest text-xs hover:bg-red-50 transition-all shadow-lg"
                     >
-                      Logout
+                      LOGOUT SESSION
                     </button>
                   </div>
 
-                  <p className="text-xs text-slate-400 mt-10 max-w-sm text-center italic">
-                    Note: Please carry this digital badge on your mobile or print it for entry at the registration counter.
+                  <p className="text-[10px] text-slate-400 mt-10 max-w-sm text-center uppercase font-bold tracking-[0.2em] opacity-60 no-print">
+                    © 2026 International Health & Wellness Expo
                   </p>
                 </motion.div>
               )}

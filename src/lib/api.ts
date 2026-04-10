@@ -538,6 +538,26 @@ export const travelAccommodationApi = {
     }
 };
 
+
+export const visitorAuthApi = {
+    sendOtp: async (credentials: string) => {
+        const response = await fetch(`${API_URL}/visitor-auth/send-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credentials })
+        });
+        return await response.json();
+    },
+    verifyOtp: async (credentials: string, otp: string) => {
+        const response = await fetch(`${API_URL}/visitor-auth/verify-otp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credentials, otp })
+        });
+        return await response.json();
+    }
+};
+
 export const visitorApi = {
     submitCorporate: async (payload: any) => {
         const response = await fetch(`${API_URL}/corporate-visitors`, {
@@ -563,13 +583,15 @@ export const crmApi = {
         const data = await response.json();
         return Array.isArray(data) ? data : (data.data || []);
     },
-    getStates: async () => {
-        const response = await fetch(`${API_URL}/crm-states`);
+    getStates: async (countryCode?: number) => {
+        const url = countryCode ? `${API_URL}/crm-states?countryCode=${countryCode}` : `${API_URL}/crm-states`;
+        const response = await fetch(url);
         const data = await response.json();
         return Array.isArray(data) ? data : (data.data || []);
     },
-    getCities: async () => {
-        const response = await fetch(`${API_URL}/crm-cities`);
+    getCities: async (stateCode?: number) => {
+        const url = stateCode ? `${API_URL}/crm-cities?stateCode=${stateCode}` : `${API_URL}/crm-cities`;
+        const response = await fetch(url);
         const data = await response.json();
         return Array.isArray(data) ? data : (data.data || []);
     }
