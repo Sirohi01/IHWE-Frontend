@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Home", path: "/" },
   {
     label: "Overview",
-    path: "/about",
+  
     dropdown: [
       {
         label: "About IHWE",
@@ -39,7 +39,7 @@ const navLinks = [
   },
   {
     label: "Exhibit",
-    path: "/exhibition",
+   
     dropdown: [
       {
         label: "Why Exhibit?",
@@ -81,7 +81,7 @@ const navLinks = [
   },
   {
     label: "Visit",
-    path: "/exhibition",
+    
     dropdown: [
       {
         label: "Register for FREE",
