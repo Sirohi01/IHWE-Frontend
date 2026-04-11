@@ -192,7 +192,7 @@ const EventHighlights = () => {
                                     <detail.icon className="w-4 h-4 text-[#23471d] group-hover:text-white" />
                                 </div>
                                 <div className="pt-0.5">
-                                    <h4 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">{detail.title}</h4>
+                                    <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">{detail.title}</h3>
                                     <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight">{detail.value}</div>
                                     <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left">
                                         {detail.sub}

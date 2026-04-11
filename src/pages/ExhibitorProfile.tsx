@@ -71,7 +71,7 @@ const ExhibitorProfile = () => {
                                             <Calendar className="w-4 h-4 text-[#23471d] group-hover:text-white" />
                                         </div>
                                         <div className="pt-0.5">
-                                            <h4 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Event Date</h4>
+                                            <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Event Date</h3>
                                             <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight text-left">
                                                 {profileData?.eventDate || "21 - 23 August 2026"}
                                             </div>
@@ -87,7 +87,7 @@ const ExhibitorProfile = () => {
                                             <MapPin className="w-4 h-4 text-[#23471d] group-hover:text-white" />
                                         </div>
                                         <div className="pt-0.5">
-                                            <h4 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Venue Location</h4>
+                                            <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Venue Location</h3>
                                             <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight text-left">
                                                 {profileData?.venueHall || "Hall 6, Pragati Maidan"}
                                             </div>
