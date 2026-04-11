@@ -46,14 +46,14 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-sm mb-6 uppercase tracking-[0.2em] text-[#d26019]">Quick Links</h4>
             <div className="flex flex-col gap-3">
-              {[
-                { label: "Home", path: "/" },
-                { label: "About Us", path: "/about" },
-                { label: "Conference", path: "/conference" },
-                { label: "Blog", path: "/blog" },
-                { label: "Contact", path: "/contact" },
-              ].map((l) => (
-                <Link key={l.path} to={l.path} className="text-[13px] font-medium text-slate-300 hover:text-[#d26019] transition-colors flex items-center gap-2 group">
+              {(settings?.quickLinks?.length > 0 ? settings.quickLinks : [
+                { label: "Home", href: "/" },
+                { label: "About Us", href: "/about" },
+                { label: "Conference", href: "/conference" },
+                { label: "Blog", href: "/blog" },
+                { label: "Contact", href: "/contact" },
+              ]).map((l: any) => (
+                <Link key={l.href} to={l.href} className="text-[13px] font-medium text-slate-300 hover:text-[#d26019] transition-colors flex items-center gap-2 group">
                   <span className="w-1.5 h-1.5 rounded-full bg-slate-700 group-hover:bg-[#d26019] transition-colors" />
                   {l.label}
                 </Link>
@@ -64,14 +64,14 @@ const Footer = () => {
           <div>
             <h4 className="font-extrabold text-sm mb-6 uppercase tracking-[0.2em] text-[#d26019]">Exhibition</h4>
             <div className="flex flex-col gap-3">
-              {[
-                { label: "Why Exhibit", path: "/exhibition" },
-                { label: "Exhibitors", path: "/exhibitors" },
-                { label: "Partners", path: "/partners" },
-                { label: "Floor Plan", path: "/exhibition#floor" },
-                { label: "Book a Stand", path: "/book-a-stand" },
-              ].map((l) => (
-                <Link key={l.label} to={l.path} className="text-[13px] font-medium text-slate-300 hover:text-[#d26019] transition-colors flex items-center gap-2 group">
+              {(settings?.exhibitionLinks?.length > 0 ? settings.exhibitionLinks : [
+                { label: "Why Exhibit", href: "/exhibition" },
+                { label: "Exhibitors", href: "/exhibitors" },
+                { label: "Partners", href: "/partners" },
+                { label: "Floor Plan", href: "/exhibition#floor" },
+                { label: "Book a Stand", href: "/book-a-stand" },
+              ]).map((l: any) => (
+                <Link key={l.label} to={l.href} className="text-[13px] font-medium text-slate-300 hover:text-[#d26019] transition-colors flex items-center gap-2 group">
                   <span className="w-1.5 h-1.5 rounded-full bg-slate-700 group-hover:bg-[#d26019] transition-colors" />
                   {l.label}
                 </Link>

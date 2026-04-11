@@ -11,8 +11,19 @@ import {
     ChevronLeft,
     ArrowRight,
     Layers,
-    Search
+    Search,
+    ChevronRight,
+    MoreHorizontal
 } from "lucide-react";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+    PaginationEllipsis,
+} from "@/components/ui/pagination";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import gallHero from "../assets/gall.jpg";
@@ -20,6 +31,8 @@ import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Gallery = () => {
     const [filter, setFilter] = useState("photo");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 8;
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
     const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
     const [mediaItems, setMediaItems] = useState<any[]>([]);
@@ -181,10 +194,26 @@ const Gallery = () => {
         if (filter === "photo") return []; // Grid view handled separately
         if (filter === "press") return []; // Grid view handled separately
         
-        return filter === "all"
-            ? mediaItems
-            : mediaItems.filter(item => item.category === filter);
+        return mediaItems.filter(item => item.category === filter);
     }, [filter, activeEvent, mediaItems]);
+
+    const finalDisplayItems = useMemo(() => {
+        const items = activeEvent 
+            ? mediaItems.filter(item => item.title === activeEvent && (filter === 'all' || item.category === filter))
+            : filteredItems;
+        return items;
+    }, [activeEvent, filter, mediaItems, filteredItems]);
+
+    const paginatedItems = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return finalDisplayItems.slice(startIndex, startIndex + itemsPerPage);
+    }, [finalDisplayItems, currentPage]);
+
+    const totalPages = Math.ceil(finalDisplayItems.length / itemsPerPage);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filter, activeEvent]);
 
     return (
         <div className="bg-white min-h-screen">
@@ -217,7 +246,6 @@ const Gallery = () => {
                     <div className="flex flex-col items-center">
                         <div className="inline-flex p-1.5 bg-slate-100/50 backdrop-blur-sm rounded-xl mb-4 border border-slate-200/50 flex-wrap justify-center shadow-sm">
                             {[
-                                { id: "all", label: "All Items", icon: Layers },
                                 { id: "photo", label: "Photo Gallery", icon: ImageIcon },
                                 { id: "video", label: "Video Gallery", icon: Video },
                                 { id: "press", label: "Media Gallery", icon: Newspaper },
@@ -351,10 +379,10 @@ const Gallery = () => {
 
                             <motion.div
                                 layout
-                                className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6"
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                             >
                                 <AnimatePresence mode="popLayout">
-                                    {(activeEvent ? mediaItems.filter(it => it.title === activeEvent && (filter === 'all' || it.category === filter)) : filteredItems).map((item) => (
+                                    {paginatedItems.map((item) => (
                                         <motion.div
                                             key={item.id}
                                             layout
@@ -403,6 +431,73 @@ const Gallery = () => {
                                     ))}
                                 </AnimatePresence>
                             </motion.div>
+
+                            {/* PAGINATION UI */}
+                            {totalPages > 1 && (
+                                <div className="mt-16">
+                                    <Pagination>
+                                        <PaginationContent>
+                                            <PaginationItem>
+                                                <button
+                                                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                                    disabled={currentPage === 1}
+                                                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-colors ${
+                                                        currentPage === 1 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:text-[#23471d]"
+                                                    }`}
+                                                >
+                                                    <ChevronLeft className="w-4 h-4" /> Previous
+                                                </button>
+                                            </PaginationItem>
+                                            
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                                                // Show first page, last page, and current +/- 1
+                                                if (
+                                                    page === 1 ||
+                                                    page === totalPages ||
+                                                    (page >= currentPage - 1 && page <= currentPage + 1)
+                                                ) {
+                                                    return (
+                                                        <PaginationItem key={page}>
+                                                            <button
+                                                                onClick={() => setCurrentPage(page)}
+                                                                className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                                                                    currentPage === page
+                                                                        ? "bg-[#23471d] text-white shadow-lg"
+                                                                        : "text-slate-500 hover:bg-slate-100"
+                                                                }`}
+                                                            >
+                                                                {page}
+                                                            </button>
+                                                        </PaginationItem>
+                                                    );
+                                                } else if (
+                                                    page === currentPage - 2 ||
+                                                    page === currentPage + 2
+                                                ) {
+                                                    return (
+                                                        <PaginationItem key={page}>
+                                                            <PaginationEllipsis />
+                                                        </PaginationItem>
+                                                    );
+                                                }
+                                                return null;
+                                            })}
+
+                                            <PaginationItem>
+                                                <button
+                                                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                                    disabled={currentPage === totalPages}
+                                                    className={`px-4 py-2 flex items-center gap-2 text-sm font-medium transition-colors ${
+                                                        currentPage === totalPages ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:text-[#23471d]"
+                                                    }`}
+                                                >
+                                                    Next <ChevronRight className="w-4 h-4" />
+                                                </button>
+                                            </PaginationItem>
+                                        </PaginationContent>
+                                    </Pagination>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

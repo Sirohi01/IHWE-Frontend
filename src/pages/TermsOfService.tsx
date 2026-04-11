@@ -1,90 +1,78 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Info } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
-import { termsApi, eventApi } from "@/lib/api";
+import { Info, Shield } from "lucide-react";
+import { policyApi } from "@/lib/api";
 
 const TermsOfService = () => {
-  const [searchParams] = useSearchParams();
-  const eventId = searchParams.get("eventId");
-  const pageName = searchParams.get("page") || "terms-of-service";
-
-  const [termsContent, setTermsContent] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [policy, setPolicy] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTerms = async () => {
+    const fetchPolicy = async () => {
       try {
-        let targetEventId = eventId;
-        if (!targetEventId) {
-            const events = await eventApi.getActive();
-            if (events && events.length > 0) {
-                targetEventId = events[0]._id;
-            }
+        const data = await policyApi.getByPage("terms-of-service");
+        if (data) {
+          setPolicy(data);
         }
-        
-        if (targetEventId) {
-            const data = await termsApi.getByPage(pageName, targetEventId);
-            setTermsContent(data);
-        }
-      } catch (err) {
-        console.error("Error fetching terms:", err);
+      } catch (error) {
+        console.error("Error fetching terms of service:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
-    fetchTerms();
-  }, [eventId, pageName]);
+    fetchPolicy();
+  }, []);
 
   return (
-    <div className="bg-[#f9fafb] min-h-screen font-inter">
+    <div className="bg-white min-h-screen font-inter">
       {/* Hero Section */}
-      <section className="relative pt-36 pb-20 overflow-hidden bg-slate-900 text-white">
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="container mx-auto px-4 text-center relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Legal Information</p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
-            Terms & Conditions
+      <section className="relative pt-32 pb-16 bg-slate-900 border-b border-white/10 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">
+            {policy?.title || "Terms & Conditions"}
           </h1>
-          <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto">
             Please read these terms carefully before proceeding.
           </p>
         </div>
-        <div
-          className="absolute bottom-0 left-0 w-full h-16 bg-[#f9fafb]"
-          style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
-        />
       </section>
 
-      {/* Content Section */}
+      {/* Main Content */}
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-4xl">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white p-8 md:p-12 shadow-sm border border-slate-100 space-y-12 text-slate-700 leading-relaxed min-h-[400px]"
+            className="bg-slate-50/50 p-8 md:p-12 rounded-3xl border border-slate-100 min-h-[400px]"
           >
-            {loading ? (
-                <div className="flex items-center justify-center p-12 text-slate-400 font-bold uppercase tracking-widest text-sm">Loading Terms...</div>
-            ) : termsContent ? (
-                <div>
-                  <div className="flex items-center gap-3 mb-8 pb-4 border-b border-slate-100">
-                    <Info className="w-8 h-8 text-[#d26019]" />
-                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">{termsContent.title}</h2>
-                  </div>
-                  <div 
-                    className="prose prose-slate max-w-none text-slate-700 space-y-4"
-                    dangerouslySetInnerHTML={{ __html: termsContent.content }}
-                  />
-                  <div className="text-xs text-slate-400 pt-10 mt-10 border-t border-slate-100 uppercase font-bold tracking-widest">
-                    Last Updated: {new Date(termsContent.updatedAt).toLocaleDateString()}
-                  </div>
-                </div>
+            {isLoading ? (
+              <div className="flex justify-center py-20">
+                <div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : policy ? (
+              <div 
+                className="dynamic-content prose prose-slate max-w-none 
+                  [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-serif [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mb-6 [&_h2]:mt-10
+                  [&_h3]:text-xl [&_h3]:font-serif [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-4 [&_h3]:mt-8
+                  [&_p]:mb-6 [&_p]:text-slate-600 [&_p]:leading-relaxed
+                  [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:space-y-2
+                  [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_ol]:space-y-2
+                  [&_strong]:font-bold [&_strong]:text-slate-900"
+                dangerouslySetInnerHTML={{ __html: policy.content }} 
+              />
             ) : (
-                <div className="text-center p-12 text-slate-500 font-medium">
-                  No terms and conditions found for the selected event. Please contact support.
-                </div>
+              <div className="text-center py-20">
+                <Shield className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-slate-400">Terms Content Not Found</h3>
+                <p className="text-slate-400">Please check back later.</p>
+              </div>
+            )}
+
+            {policy && (
+              <div className="mt-12 pt-8 border-t border-slate-200 text-xs text-slate-400 uppercase tracking-widest font-bold">
+                Last Updated: {new Date(policy.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </div>
             )}
           </motion.div>
         </div>

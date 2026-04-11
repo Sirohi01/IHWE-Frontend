@@ -577,6 +577,14 @@ export const visitorApi = {
     }
 };
 
+export const policyApi = {
+    getByPage: async (page: string) => {
+        const response = await fetch(`${API_URL}/policies/${page}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const crmApi = {
     getCountries: async () => {
         const response = await fetch(`${API_URL}/crm-countries`);

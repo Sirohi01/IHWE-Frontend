@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, Lock, Eye, FileText } from "lucide-react";
+import { policyApi } from "@/lib/api";
 
 const PrivacyPolicy = () => {
+  const [policy, setPolicy] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPolicy = async () => {
+      try {
+        const data = await policyApi.getByPage("privacy-policy");
+        if (data) {
+          setPolicy(data);
+        }
+      } catch (error) {
+        console.error("Error fetching privacy policy:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPolicy();
+  }, []);
+
   return (
     <div className="bg-[#f9fafb] min-h-screen font-inter">
       {/* Hero Section */}
@@ -11,16 +31,12 @@ const PrivacyPolicy = () => {
         <div className="container mx-auto px-4 text-center relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Legal Information</p>
           <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
-            Privacy Policy
+            {policy?.title || "Privacy Policy"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            Your privacy is important to us. This policy outlines how we collect, use, and protect your information.
+            {policy ? "Your privacy is our priority. Please read our policy below." : "Your privacy is important to us. This policy outlines how we collect, use, and protect your information."}
           </p>
         </div>
-        <div
-          className="absolute bottom-0 left-0 w-full h-16 bg-[#f9fafb]"
-          style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
-        />
       </section>
 
       {/* Content Section */}
@@ -32,91 +48,33 @@ const PrivacyPolicy = () => {
             transition={{ duration: 0.5 }}
             className="bg-white p-8 md:p-12 shadow-sm border border-slate-100 space-y-12 text-slate-700 leading-relaxed"
           >
-            {/* Introduction */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Shield className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">1. Introduction</h2>
+            {isLoading ? (
+              <div className="flex justify-center py-20">
+                <div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div>
               </div>
-              <p>
-                Welcome to the International Health & Wellness Expo 2026 (IHWE). We are committed to protecting your personal data and your privacy. This Privacy Policy explains how Encodancy Pvt Ltd ("we", "us", or "our") collects, uses, and shares information about you when you visit our website or participate in our events.
-              </p>
-            </div>
-
-            {/* Information We Collect */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Eye className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">2. Information We Collect</h2>
+            ) : policy ? (
+              <div 
+                className="dynamic-content prose prose-slate max-w-none 
+                  [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-serif [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mb-6 [&_h2]:mt-10
+                  [&_h3]:text-xl [&_h3]:font-serif [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-4 [&_h3]:mt-8
+                  [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:space-y-2
+                  [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_ol]:space-y-2
+                  [&_strong]:font-bold [&_strong]:text-slate-900"
+                dangerouslySetInnerHTML={{ __html: policy.content }} 
+              />
+            ) : (
+              <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                <Shield className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-slate-400">Policy Content Not Found</h3>
+                <p className="text-slate-400">This content is currently being updated.</p>
               </div>
-              <p className="mb-4">
-                We collect information that you provide directly to us when you:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Register for the expo as a visitor, exhibitor, or speaker.</li>
-                <li>Fill out contact forms or inquiry forms.</li>
-                <li>Subscribe to our newsletter or updates.</li>
-                <li>Communicate with us via email or phone.</li>
-              </ul>
-              <p className="mt-4">
-                This information may include your name, email address, phone number, job title, company name, and any other details you choose to provide.
-              </p>
-            </div>
+            )}
 
-            {/* How We Use Your Information */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <FileText className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">3. How We Use Your Information</h2>
+            {policy && (
+              <div className="text-xs text-slate-400 pt-10 border-t border-slate-100">
+                Last Updated: {new Date(policy.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </div>
-              <p className="mb-4">
-                We use the information we collect to:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Process your registration and manage your participation in the event.</li>
-                <li>Respond to your inquiries and provide customer support.</li>
-                <li>Send you event-related updates, newsletters, and promotional materials.</li>
-                <li>Improve our website and event services.</li>
-                <li>Comply with legal obligations.</li>
-              </ul>
-            </div>
-
-            {/* Data Protection */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Lock className="w-8 h-8 text-[#d26019]" />
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900">4. Data Protection</h2>
-              </div>
-              <p>
-                We implement a variety of security measures to maintain the safety of your personal information. Your personal information is contained behind secured networks and is only accessible by a limited number of persons who have special access rights to such systems and are required to keep the information confidential.
-              </p>
-            </div>
-
-            {/* Cookies */}
-            <div>
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">5. Cookies</h2>
-              <p>
-                Our website uses cookies to enhance your browsing experience. Cookies are small files that a site or its service provider transfers to your computer's hard drive through your Web browser (if you allow) that enables the site's or service provider's systems to recognize your browser and capture and remember certain information.
-              </p>
-            </div>
-
-            {/* Contact Us */}
-            <div className="pt-8 border-t border-slate-100">
-              <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-6">Contact Us</h2>
-              <p className="mb-4">
-                If you have any questions regarding this privacy policy, you may contact us using the information below:
-              </p>
-              <div className="space-y-2 text-sm">
-                <p className="font-bold text-slate-900">Encodancy Pvt Ltd</p>
-                <p>12/29, Site-II, Loni Road, Industrial Area, Mohan Nagar, Ghaziabad, India</p>
-                <p>Email: info@healthwellnessexpo.com</p>
-                <p>Phone: +91 98765 43210</p>
-              </div>
-            </div>
-
-            <div className="text-xs text-slate-400 pt-10">
-              Last Updated: March 19, 2026
-            </div>
+            )}
           </motion.div>
         </div>
       </section>
