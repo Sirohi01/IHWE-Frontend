@@ -259,9 +259,58 @@ const BuyerRegistration = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.consentTerms || !formData.consentPaymentValid) { alert("Please agree to all mandatory terms."); return; }
-        if (!emailOtpVerified || !mobileOtpVerified) { alert("Please verify your Email and Mobile via OTP first."); return; }
+        
+        // 1. All Mandatory Text & Single-Select Fields Validation
+        const requiredFields = [
+            { key: 'fullName', label: 'Contact Person' },
+            { key: 'designation', label: 'Designation' },
+            { key: 'companyName', label: 'Company Name' },
+            { key: 'businessType', label: 'Business Type' },
+            { key: 'emailAddress', label: 'Email Address' },
+            { key: 'mobileNumber', label: 'Mobile Number' },
+            { key: 'registeredAddress', label: 'Registered Address' },
+            { key: 'pinCode', label: 'Pin Code' },
+            { key: 'stateProvince', label: 'State/Province' },
+            { key: 'city', label: 'City' },
+            { key: 'yearsInOperation', label: 'Years in Operation' },
+            { key: 'annualTurnover', label: 'Annual Turnover' },
+            { key: 'keyProductsServices', label: 'Key Products/Services' },
+            { key: 'primaryProductInterest', label: 'Primary Product Interest' },
+            { key: 'buyingFrequency', label: 'Buying Frequency' },
+            { key: 'estimatedAnnualPurchaseValue', label: 'Estimated Annual Purchase Value' },
+            { key: 'purchaseTimeline', label: 'Purchase Timeline' },
+            { key: 'roleInPurchaseDecision', label: 'Decision Role' },
+            { key: 'preferredMeetingDate', label: 'Preferred Meeting Date' },
+            { key: 'preferredTimeSlot', label: 'Preferred Time Slot' },
+            { key: 'registrationCategory', label: 'Registration Category' }
+        ];
 
+        const missingFields = requiredFields.filter(field => !formData[field.key as keyof typeof formData]);
+        
+        if (missingFields.length > 0) {
+            alert(`Please complete the following required fields: \n- ${missingFields.map(f => f.label).join('\n- ')}`);
+            return;
+        }
+
+        // 2. Multi-select Validation
+        if (formData.preferredSupplierRegion.length === 0 || formData.preferredSupplierType.length === 0) {
+            alert("Please select at least one Preferred Supplier Region and Type.");
+            return;
+        }
+
+        // 3. Consent Validation
+        if (!formData.consentTerms || !formData.consentPaymentValid || !formData.consentMatchedExhibitors) { 
+            alert("Please check all mandatory consent boxes."); 
+            return; 
+        }
+        
+        // 4. OTP Verification Check
+        if (!emailOtpVerified || !mobileOtpVerified) { 
+            alert("Please verify your Email and Mobile via OTP before submitting."); 
+            return; 
+        }
+
+        // 5. Proceed with Payment/Submission
         if (formData.paymentMode === 'Online/Razorpay') {
             handleRazorpay();
         } else {
