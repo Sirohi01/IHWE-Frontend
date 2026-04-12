@@ -376,10 +376,11 @@ export const contactEnquiryApi = {
 
 export const buyerRegistrationApi = {
     submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
         const response = await fetch(`${API_URL}/buyer-registration`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
         });
         return await response.json();
     },

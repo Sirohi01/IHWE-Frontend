@@ -65,18 +65,29 @@ const BuyerRegistration = () => {
         keyProductsServices: "",
         primaryProductInterest: "",
         secondaryProductCategories: [] as string[],
+        specificProductRequirements: "",
+        estimatedPurchaseVolume: "",
+        budgetRange: "",
         preferredSupplierRegion: [] as string[],
+        preferredState: [] as string[],
         preferredSupplierType: [] as string[],
+        preferredCompanySize: "",
         purchaseTimeline: "",
         roleInPurchaseDecision: "",
         pricingPreference: "Mid-Range",
+        requiredCertifications: [] as string[],
         preferredMeetingDate: "",
         preferredTimeSlot: "",
         requirePreScheduledB2B: "Yes",
         meetingPriorityLevel: "Medium",
+        remarks: "",
         registrationCategory: "",
         registrationFee: "₹0",
+        paymentMode: "Online/Razorpay",
+        transactionId: "",
+        paymentProof: null as File | null,
         consentTerms: false,
+        consentPaymentValid: false,
         consentMatchedExhibitors: false
     });
 
@@ -156,6 +167,11 @@ const BuyerRegistration = () => {
             const list = prev[name as keyof typeof prev] as string[];
             return { ...prev, [name]: checked ? [...list, value] : list.filter(item => item !== value) };
         });
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        setFormData(prev => ({ ...prev, paymentProof: file }));
     };
 
     const requestOtp = async (type: 'email' | 'mobile') => {
@@ -243,29 +259,46 @@ const BuyerRegistration = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.consentTerms) { alert("Please agree to the Terms & Conditions."); return; }
+        if (!formData.consentTerms || !formData.consentPaymentValid) { alert("Please agree to all mandatory terms."); return; }
         if (!emailOtpVerified || !mobileOtpVerified) { alert("Please verify your Email and Mobile via OTP first."); return; }
 
-        // Final required check
-        if (!formData.buyingFrequency || !formData.estimatedAnnualPurchaseValue || !formData.roleInPurchaseDecision) {
-            alert("Please fill all required business profiling fields.");
-            return;
+        if (formData.paymentMode === 'Online/Razorpay') {
+            handleRazorpay();
+        } else {
+            if (!formData.transactionId || !formData.paymentProof) {
+                alert("Please provide Transaction ID and upload Payment Proof for manual transfer.");
+                return;
+            }
+            submitFinal();
         }
-
-        handleRazorpay();
     };
 
     const submitFinal = async (paymentDetails: any = null) => {
         setIsSubmitting(true);
         try {
-            const payload = {
-                ...formData,
-                paymentMode: 'Online/Razorpay',
-                razorpayOrderId: paymentDetails?.razorpay_order_id,
-                razorpayPaymentId: paymentDetails?.razorpay_payment_id,
-                paymentStatus: paymentDetails ? 'Completed' : 'Pending'
-            };
-            const res = await buyerRegistrationApi.submit(payload);
+            const fd = new FormData();
+
+
+            Object.entries(formData).forEach(([key, value]) => {
+                if (key === 'paymentProof' && value instanceof File) {
+                    fd.append(key, value);
+                } else if (Array.isArray(value)) {
+                    fd.append(key, JSON.stringify(value));
+                } else if (value !== null && value !== undefined) {
+                    fd.append(key, String(value));
+                }
+            });
+
+            if (paymentDetails) {
+                fd.set('paymentMode', 'Online/Razorpay');
+                fd.append('razorpayOrderId', paymentDetails.razorpay_order_id);
+                fd.append('razorpayPaymentId', paymentDetails.razorpay_payment_id);
+                fd.set('paymentStatus', 'Completed');
+            } else {
+                fd.set('paymentStatus', 'Pending');
+            }
+
+            const res = await buyerRegistrationApi.submit(fd);
             if (res.success) { setSubmitted(true); window.scrollTo({ top: 0, behavior: "smooth" }); } else alert(res.message);
         } catch (error) { alert("Submission error."); } finally { setIsSubmitting(false); }
     };
@@ -308,7 +341,7 @@ const BuyerRegistration = () => {
                                     <ShieldCheck className="text-emerald-400 opacity-50" size={28} />
                                 </div>
                                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                                    {/* 1. Personal & Company Information */}
+
                                     <div className="space-y-3">
                                         <h3 className={sectionTitleClasses}>Personal & Company Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -319,7 +352,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* 2. Contact Information */}
+
                                     <div className="space-y-3">
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -354,28 +387,33 @@ const BuyerRegistration = () => {
 
                                     </div>
 
-                                    {/* 3 & 4 Business Profile and Sourcing Interests */}
+
                                     <div className="space-y-3">
                                         <h3 className={sectionTitleClasses}>Business Profile & Interests</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                                            <div><Label className={labelClasses}>Years in Operation *</Label><Input required name="yearsInOperation" value={formData.yearsInOperation} onChange={handleChange} className={inputClasses} placeholder="e.g. 5 Years" /></div>
+                                            <div><Label className={labelClasses}>Years in Operation *</Label><Input type="date" required name="yearsInOperation" value={formData.yearsInOperation} onChange={handleChange} className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Annual Turnover *</Label><Select onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualTurnoverRanges.map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select></div>
                                             <div><Label className={labelClasses}>Buying Frequency *</Label><Select onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Frequency" /></SelectTrigger><SelectContent className="bg-white">{config?.buyingFrequencies.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white">{config?.primaryProductInterests.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select></div>
                                             <div><Label className={labelClasses}>Est. Annual Purchase *</Label><Select onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualPurchaseValueRanges.map((v: string) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select></div>
-                                            <div className="lg:col-span-3"><Label className={labelClasses}>Key Products/Services *</Label><Input required name="keyProductsServices" value={formData.keyProductsServices} onChange={handleChange} className={inputClasses} placeholder="Your primary offerings..." /></div>
+                                            <div><Label className={labelClasses}>Budget Range *</Label><Select onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white">{config?.budgetRanges.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Est. Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} className={inputClasses} placeholder="e.g. 5000 Units" /></div>
+                                            <div><Label className={labelClasses}>Key Products/Services *</Label><Input required name="keyProductsServices" value={formData.keyProductsServices} onChange={handleChange} className={inputClasses} placeholder="Your primary offerings..." /></div>
                                         </div>
-                                        <div className="space-y-2.5">
-                                            <div><Label className={labelClasses}>Secondary Categories</Label><div className="flex flex-wrap gap-2 mt-1">{config?.secondaryProductCategories.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[9px] cursor-pointer bg-slate-50 px-2 py-1 rounded border border-slate-200 hover:bg-emerald-50 transition-colors"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)} className="h-2.5 w-2.5" /> {c}</label>))}</div></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                            <div><Label className={labelClasses}>Secondary Categories</Label><div className="flex flex-wrap gap-2 mt-1 max-h-[100px] overflow-y-auto p-2 border rounded bg-white">{config?.secondaryProductCategories.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[9px] cursor-pointer bg-slate-50 px-2 py-1 rounded border border-slate-200 hover:bg-emerald-50 transition-colors"><Checkbox checked={formData.secondaryProductCategories.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)} className="h-2.5 w-2.5" /> {c}</label>))}</div></div>
+                                            <div><Label className={labelClasses}>Specific Requirements</Label><Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1.5`} placeholder="Any custom needs..." /></div>
                                         </div>
                                     </div>
 
                                     {/* Supplier Preference (India Only) */}
                                     <div className="space-y-3">
                                         <h3 className={sectionTitleClasses}>Supplier Preference (India Only)</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="space-y-1.5"><Label className={labelClasses}>Preferred Supplier Region *</Label><div className="flex flex-wrap gap-1.5">{config?.regions.map((r: string) => (<label key={r} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}</label>))}</div></div>
-                                            <div className="space-y-1.5"><Label className={labelClasses}>Preferred Supplier Type *</Label><div className="flex flex-wrap gap-1.5">{config?.supplierTypes.map((t: string) => (<label key={t} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}</label>))}</div></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                            <div className="col-span-1 lg:col-span-2 space-y-1.5"><Label className={labelClasses}>Preferred Regions *</Label><div className="flex flex-wrap gap-1.5">{config?.regions.map((r: string) => (<label key={r} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox checked={formData.preferredSupplierRegion.includes(r)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}</label>))}</div></div>
+                                            <div className="col-span-1 lg:col-span-2 space-y-1.5"><Label className={labelClasses}>Preferred Types *</Label><div className="flex flex-wrap gap-1.5">{config?.supplierTypes.map((t: string) => (<label key={t} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox checked={formData.preferredSupplierType.includes(t)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}</label>))}</div></div>
+                                            <div><Label className={labelClasses}>Preferred States</Label><div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto p-2 border rounded bg-white">{filteredStates.map(s => (<label key={s._id} className="flex items-center gap-1.5 text-[10px]"><Checkbox checked={formData.preferredState.includes(s.name)} onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)} className="h-3 w-3" /> {s.name}</label>))}</div></div>
+                                            <div><Label className={labelClasses}>Preferred Company Size</Label><Select onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white">{config?.companySizes.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
                                         </div>
                                     </div>
 
@@ -397,21 +435,58 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* Registration Packages - COMPACT CARDS */}
+                                    {/* Certification & Remarks */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-3">
+                                            <h3 className={sectionTitleClasses}>Certifications & Compliance</h3>
+                                            <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-white min-h-[50px]">{config?.certificationOptions.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[10px] bg-slate-50 px-2 py-1.5 rounded border border-slate-200 cursor-pointer hover:bg-emerald-50"><Checkbox checked={formData.requiredCertifications.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('requiredCertifications', c, !!checked)} className="h-3 w-3" /> {c}</label>))}</div>
+                                        </div>
+                                        <div className="space-y-3">
+                                            <h3 className={sectionTitleClasses}>Additional Remarks</h3>
+                                            <Textarea name="remarks" value={formData.remarks} onChange={handleChange} placeholder="Any other special requirements or remarks..." className={`${inputClasses} h-[55px]`} />
+                                        </div>
+                                    </div>
+
+                                    {/* Registration Packages & Payment Mode */}
                                     <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>Registration Packages</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                            {config?.packages.map((pkg: any) => {
-                                                const isActive = formData.registrationCategory === pkg.name;
-                                                return (
-                                                    <div key={pkg.name} onClick={() => handleSelectChange('registrationCategory', pkg.name)} className={`relative p-3 border-2 transition-all cursor-pointer rounded-lg ${isActive ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200 hover:border-slate-300'}`}>
-                                                        {isActive && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Selected</div>}
-                                                        <h4 className="text-sm font-bold mb-0.5">{pkg.name}</h4>
-                                                        <div className="text-xl font-black text-[#23471d] mb-2">₹{pkg.price} <span className="text-[9px] font-normal text-slate-400">+ GST</span></div>
-                                                        <ul className="space-y-1 mb-2">{pkg.benefits.map((b: string, i: number) => (<li key={i} className="flex items-start gap-1 text-[9px] font-medium text-slate-600"><CheckCircle className="text-emerald-500 mt-0.5 shrink-0" size={10} /> {b}</li>))}</ul>
+                                        <h3 className={sectionTitleClasses}>Registration Details & Payment</h3>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 col-span-1">
+                                                {config?.packages.map((pkg: any) => {
+                                                    const isActive = formData.registrationCategory === pkg.name;
+                                                    return (
+                                                        <div key={pkg.name} onClick={() => handleSelectChange('registrationCategory', pkg.name)} className={`relative p-3 border-2 transition-all cursor-pointer rounded-lg ${isActive ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200 hover:border-slate-300'}`}>
+                                                            {isActive && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Selected</div>}
+                                                            <h4 className="text-[11px] font-bold mb-0.5">{pkg.name}</h4>
+                                                            <div className="text-lg font-black text-[#23471d] mb-2">₹{pkg.price} <span className="text-[8px] font-normal text-slate-400">+ GST</span></div>
+                                                            <ul className="space-y-1">{pkg.benefits.slice(0, 3).map((b: string, i: number) => (<li key={i} className="flex items-start gap-1 text-[8px] font-medium text-slate-600"><CheckCircle className="text-emerald-500 mt-0.5 shrink-0" size={8} /> {b}</li>))}</ul>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                                <Label className={labelClasses}>Payment Mode *</Label>
+                                                <RadioGroup defaultValue="Online/Razorpay" onValueChange={(v) => setFormData(p => ({ ...p, paymentMode: v }))} className="flex gap-4 mb-3">
+                                                    <div className="flex items-center space-x-1.5"><RadioGroupItem value="Online/Razorpay" id="mode-online" /><Label htmlFor="mode-online" className="text-[10px] cursor-pointer">Online / Instant</Label></div>
+                                                    <div className="flex items-center space-x-1.5"><RadioGroupItem value="Manual Transfer" id="mode-manual" /><Label htmlFor="mode-manual" className="text-[10px] cursor-pointer">Manual Transfer (UPI/NetBanking)</Label></div>
+                                                </RadioGroup>
+
+                                                {formData.paymentMode !== 'Online/Razorpay' && (
+                                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-3 pt-3 border-t border-slate-200">
+                                                        <div className="grid grid-cols-2 gap-3">
+                                                            <div><Label className={labelClasses}>Transaction ID / Ref *</Label><Input required name="transactionId" value={formData.transactionId} onChange={handleChange} className={inputClasses} placeholder="UTR / Ref Number" /></div>
+                                                            <div><Label className={labelClasses}>Upload Proof *</Label><Input type="file" required accept="image/*" onChange={handleFileChange} className={`${inputClasses} pt-1`} /></div>
+                                                        </div>
+                                                        <p className="text-[8px] text-slate-500 italic font-medium">Please upload a screenshot of your payment for manual verification.</p>
+                                                    </motion.div>
+                                                )}
+                                                {formData.paymentMode === 'Online/Razorpay' && (
+                                                    <div className="flex items-center gap-2 p-3 bg-white rounded border border-emerald-100">
+                                                        <CreditCard className="text-emerald-600" size={16} />
+                                                        <p className="text-[10px] text-emerald-800 font-medium leading-tight">Pay securely via UPI, Card, or Net Banking. Your registration will be confirmed instantly.</p>
                                                     </div>
-                                                );
-                                            })}
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -419,12 +494,13 @@ const BuyerRegistration = () => {
                                     <div className="pt-4 space-y-4 border-t border-slate-200">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                                             <div className="space-y-2">
-                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-terms" checked={formData.consentTerms} onCheckedChange={(c) => setFormData(p => ({ ...p, consentTerms: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-terms" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to the Terms & Conditions and Refund Policy.</Label></div>
-                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-match" checked={formData.consentMatchedExhibitors} onCheckedChange={(c) => setFormData(p => ({ ...p, consentMatchedExhibitors: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-match" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to be matched with relevant exhibitors.</Label></div>
+                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-terms" checked={formData.consentTerms} onCheckedChange={(c) => setFormData(p => ({ ...p, consentTerms: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-terms" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to the Terms & Conditions and Refund Policy *</Label></div>
+                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-valid" checked={formData.consentPaymentValid} onCheckedChange={(c) => setFormData(p => ({ ...p, consentPaymentValid: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-valid" className="text-[9px] leading-relaxed text-slate-600 font-medium">I confirm that the payment made is valid and non-refundable *</Label></div>
+                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-match" checked={formData.consentMatchedExhibitors} onCheckedChange={(c) => setFormData(p => ({ ...p, consentMatchedExhibitors: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-match" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to be matched with relevant exhibitors *</Label></div>
                                             </div>
                                             <div className="flex flex-col items-center">
-                                                <Button type="submit" disabled={isSubmitting} className="w-full h-10 bg-[#23471d] hover:bg-[#1a3516] rounded-full text-white font-bold text-[10px] uppercase tracking-[0.2em] shadow-md transition-all flex items-center justify-center gap-2 group">{isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <>Complete Registration & Pay <Send size={12} className="group-hover:translate-x-1 transition-transform" /></>}</Button>
-                                                <p className="mt-2 text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-1"><Shield size={8} className="text-[#23471d]" /> Secured By Razorpay</p>
+                                                <Button type="submit" disabled={isSubmitting} className="w-full h-10 bg-[#23471d] hover:bg-[#1a3516] rounded-full text-white font-bold text-[10px] uppercase tracking-[0.2em] shadow-md transition-all flex items-center justify-center gap-2 group">{isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <>{formData.paymentMode === 'Online/Razorpay' ? 'Complete Registration & Pay' : 'Submit Registration Proof'} <Send size={12} className="group-hover:translate-x-1 transition-transform" /></>}</Button>
+                                                <p className="mt-2 text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-1"><Shield size={8} className="text-[#23471d]" /> Secured Registration System</p>
                                             </div>
                                         </div>
                                     </div>
