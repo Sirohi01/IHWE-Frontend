@@ -77,8 +77,8 @@ const MissionVision: React.FC = () => {
           {/* OUR MISSION */}
           <div className="text-center" data-aos="fade-right">
             <IconCompMission className="w-12 h-12 text-[#d26019] mx-auto mb-5" />
-            <h2 className="text-2xl md:text-4xl font-serif mb-6">{data.mission.title}</h2>
-            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90 italic">
+            <h2 className="text-2xl md:text-4xl font-inter mb-6">{data.mission.title}</h2>
+            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90">
               {renderDescription(data.mission.description, data.mission.highlightText)}
             </p>
           </div>
@@ -89,8 +89,8 @@ const MissionVision: React.FC = () => {
           {/* OUR VISION */}
           <div className="text-center" data-aos="fade-left">
             <IconCompVision className="w-12 h-12 text-[#d26019] mx-auto mb-5" />
-            <h2 className="text-2xl md:text-4xl font-serif mb-6">{data.vision.title}</h2>
-            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90 italic">
+            <h2 className="text-2xl md:text-4xl font-inter mb-6">{data.vision.title}</h2>
+            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90">
               {renderDescription(data.vision.description, data.vision.highlightText)}
             </p>
           </div>

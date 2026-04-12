@@ -30,10 +30,10 @@ const MarqueeStrip = () => {
     >
       <div className="flex whitespace-nowrap">
         <div className="marquee flex">
-          <span className="text-white font-poppins font-medium text-sm tracking-wider px-2">{data.text}</span>
-          <span className="text-white font-poppins font-medium text-sm tracking-wider px-2">{data.text}</span>
-          <span className="text-white font-poppins font-medium text-sm tracking-wider px-2">{data.text}</span>
-          <span className="text-white font-poppins font-medium text-sm tracking-wider px-2">{data.text}</span>
+          <span className="text-white font-inter font-medium text-sm tracking-wider px-2">{data.text}</span>
+          <span className="text-white font-inter font-medium text-sm tracking-wider px-2">{data.text}</span>
+          <span className="text-white font-inter font-medium text-sm tracking-wider px-2">{data.text}</span>
+          <span className="text-white font-inter font-medium text-sm tracking-wider px-2">{data.text}</span>
         </div>
       </div>
     </section>

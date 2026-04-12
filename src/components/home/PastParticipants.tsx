@@ -11,7 +11,7 @@ const PastParticipants = () => {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
           <p className="text-primary font-medium text-sm uppercase tracking-widest mb-3">Past Participants</p>
-          <h2 className="text-3xl md:text-4xl font-poppins font-bold text-foreground">
+          <h2 className="text-3xl md:text-4xl font-inter font-bold text-foreground">
             Trusted by Industry Leaders
           </h2>
         </div>
@@ -23,7 +23,7 @@ const PastParticipants = () => {
               data-aos-delay={i * 40}
               className="group aspect-[3/1.5] rounded-xl border border-border/50 bg-muted/30 flex items-center justify-center p-4 grayscale hover:grayscale-0 hover:border-primary/30 hover:shadow-md transition-all cursor-pointer"
             >
-              <span className="font-poppins font-semibold text-sm text-muted-foreground group-hover:text-primary transition-colors text-center">
+              <span className="font-inter font-semibold text-sm text-muted-foreground group-hover:text-primary transition-colors text-center">
                 {p}
               </span>
             </div>

@@ -234,7 +234,7 @@ const Conference = () => {
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
             {heroData?.title || "Knowledge & Innovation"}
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
             {heroData?.heading || "Conference Agenda"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -253,7 +253,7 @@ const Conference = () => {
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#23471d]">Program Schedule</span>
               <div className="h-px w-6 bg-[#23471d]" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-serif text-slate-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-inter text-slate-900 mb-4">
               Expert <span className="text-[#23471d]">Insights</span> & Dialogues
             </h2>
           </div>
@@ -288,7 +288,7 @@ const Conference = () => {
                 className="bg-white border border-slate-300 shadow-sm overflow-hidden rounded-[2px]"
               >
                 <div className="bg-slate-50 border-b border-slate-300 px-6 py-4">
-                  <h2 className="text-lg font-serif font-bold text-slate-900 uppercase tracking-tight flex items-baseline gap-0.5">
+                  <h2 className="text-lg font-inter font-bold text-slate-900 uppercase tracking-tight flex items-baseline gap-0.5">
                     IHWE — <span className="text-[#23471d]">{activeTab}</span> Program Schedule
                   </h2>
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-0.5">Interactive Knowledge Forum 2025</p>

@@ -9,7 +9,7 @@ export function InfoRow({ label, value, mono = false, icon: Icon }: { label: str
             <div className="min-w-0">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{label}</p>
                 <p className={`text-[13px] font-black text-slate-900 truncate ${mono ? 'font-mono tracking-wider' : ''}`}>
-                    {value || <span className="text-slate-300 font-bold italic opacity-50">Not Provided</span>}
+                    {value || <span className="text-slate-300 font-bold opacity-50">Not Provided</span>}
                 </p>
             </div>
         </div>

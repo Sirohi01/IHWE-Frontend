@@ -463,7 +463,7 @@ const VisitorRegistration = () => {
                     </p>
 
                     <h1 
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
+                        className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight"
                     >
                         {heroData?.heading || "Witness the Future of Wellness"}
                     </h1>
@@ -490,7 +490,7 @@ const VisitorRegistration = () => {
                                 >
                                     <div className="absolute top-0 left-0 w-full h-1 bg-green-500" />
                                     <CheckCircle className="w-24 h-24 text-green-500 mb-8 animate-bounce-short" />
-                                    <h3 className="text-3xl font-serif font-bold text-slate-900 mb-4 text-center">Registration Success!</h3>
+                                    <h3 className="text-3xl font-inter font-bold text-slate-900 mb-4 text-center">Registration Success!</h3>
                                     <p className="text-slate-600 text-center text-lg max-w-md mb-8 leading-relaxed">
                                         Thank you for registering. Your details have been successfully submitted. You will receive a confirmation shortly.
                                     </p>

@@ -67,7 +67,7 @@ const ExhibitionGrid = () => {
                                 Upcoming Events
                             </span>
                         </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                             What's On at the Expo
                         </h2>
                     </div>
@@ -92,7 +92,7 @@ const ExhibitionGrid = () => {
                                     ★ {events[0].tag}
                                 </span>
                             </div>
-                            <h3 className="text-2xl md:text-3xl font-serif font-light mb-4 leading-snug">
+                            <h3 className="text-2xl md:text-3xl font-inter font-light mb-4 leading-snug">
                                 {events[0].title}
                             </h3>
                             <div className="flex flex-wrap gap-x-6 gap-y-2 text-white/80 text-sm">

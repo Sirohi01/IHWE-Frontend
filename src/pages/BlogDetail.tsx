@@ -57,7 +57,7 @@ const BlogDetail = () => {
   if (!blog) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F9FAFB] p-4 text-center">
-        <h2 className="text-3xl font-serif font-bold text-slate-800 mb-4">Article Not Found</h2>
+        <h2 className="text-3xl font-inter font-bold text-slate-800 mb-4">Article Not Found</h2>
         <Link to="/blog" className="inline-flex items-center gap-2 bg-[#134E8E] text-white px-6 py-3 font-bold text-xs uppercase tracking-widest hover:bg-[#0e3a6a] transition-all">
           <ArrowLeft className="w-4 h-4" /> Back to Blog
         </Link>
@@ -106,7 +106,7 @@ const BlogDetail = () => {
           </div>
 
           {/* Title - Using h1Title if available for SEO prioritisation */}
-          <h1 className="text-3xl md:text-5xl font-serif font-semibold mb-5 tracking-tight leading-tight max-w-4xl">
+          <h1 className="text-3xl md:text-5xl font-inter font-semibold mb-5 tracking-tight leading-tight max-w-4xl">
             {blog.h1Title || blog.title}
           </h1>
 
@@ -142,7 +142,7 @@ const BlogDetail = () => {
             {/* Excerpt highlight */}
             {blog.excerpt && (
               <div className="border-l-4 border-[#DE802B] pl-6 mb-10 bg-white p-6 shadow-sm">
-                <p className="text-slate-600 text-base leading-relaxed italic font-medium">
+                <p className="text-slate-600 text-base leading-relaxed font-medium">
                   {blog.excerpt}
                 </p>
               </div>
@@ -152,7 +152,7 @@ const BlogDetail = () => {
             <div
               className="bg-white border border-slate-100 p-8 md:p-10 shadow-sm
                 prose prose-slate max-w-none
-                prose-headings:font-serif prose-headings:text-slate-900 prose-headings:font-bold
+                prose-headings:font-inter prose-headings:text-slate-900 prose-headings:font-bold
                 prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-100 prose-h2:pb-2
                 prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-[15px]
@@ -279,7 +279,7 @@ const BlogDetail = () => {
             <div className="bg-[#134E8E] p-8 text-white relative overflow-hidden group">
               <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-white/5 rounded-full group-hover:scale-110 transition-transform duration-700" />
               <div className="relative z-10">
-                <h4 className="font-serif font-bold text-xl mb-3">Plan Your Exhibit at IHWE 2026</h4>
+                <h4 className="font-inter font-bold text-xl mb-3">Plan Your Exhibit at IHWE 2026</h4>
                 <p className="text-white/70 text-xs leading-relaxed mb-6">
                   Experience the largest upcoming interior, home decor & Woodworking exhibition.
                 </p>

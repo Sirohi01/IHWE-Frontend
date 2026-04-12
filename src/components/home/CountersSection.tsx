@@ -53,7 +53,7 @@ const CountersSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {counters.map((c, i) => (
             <div key={c.label} className="text-center" data-aos="zoom-in" data-aos-delay={i * 100}>
-              <div className="text-4xl md:text-5xl font-poppins font-bold text-primary-foreground">
+              <div className="text-4xl md:text-5xl font-inter font-bold text-primary-foreground">
                 {counts[i].toLocaleString()}{c.suffix}
               </div>
               <div className="text-primary-foreground/70 text-sm mt-2 font-medium">{c.label}</div>

@@ -43,7 +43,7 @@ const ExhibitorLogin = () => {
           confirmButtonColor: '#23471d',
           background: '#f8f9fa',
           customClass: {
-            title: 'text-xl font-bold font-serif',
+            title: 'text-xl font-bold font-inter',
             popup: 'rounded-xl',
             confirmButton: 'py-2 px-6 text-base font-semibold'
           }
@@ -151,7 +151,7 @@ const ExhibitorLogin = () => {
                                     />
                                     <div className="h-16 w-px bg-slate-200" />
                                     <div>
-                                        <h2 className="text-3xl font-serif font-bold text-slate-900">
+                                        <h2 className="text-3xl font-inter font-bold text-slate-900">
                                             Exhibitor <span className="text-[#23471d]">Portal</span>
                                         </h2>
                                         <p className="text-[#d26019] font-bold tracking-[0.2em] uppercase text-xs">Official Login</p>
@@ -199,7 +199,7 @@ const ExhibitorLogin = () => {
                                             className="space-y-8"
                                         >
                                             <div className="text-center lg:text-left">
-                                                <h3 className="text-3xl font-serif font-bold text-slate-900 mb-2">Welcome Back!</h3>
+                                                <h3 className="text-3xl font-inter font-bold text-slate-900 mb-2">Welcome Back!</h3>
                                                 <p className="text-slate-500 text-sm">Please sign in to your exhibitor account</p>
                                             </div>
 
@@ -306,7 +306,7 @@ const ExhibitorLogin = () => {
                                                     <Key size={32} />
                                                 </div>
                                                 <div>
-                                                    <h3 className="text-3xl font-serif font-bold text-slate-900">Verify Code</h3>
+                                                    <h3 className="text-3xl font-inter font-bold text-slate-900">Verify Code</h3>
                                                     <p className="text-slate-500 text-sm mt-2">Enter the 6-digit verification code sent to your registered contact.</p>
                                                 </div>
                                             </div>

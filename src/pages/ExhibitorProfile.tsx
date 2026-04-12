@@ -44,7 +44,7 @@ const ExhibitorProfile = () => {
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
                         {heroData?.title || "Strategic Participation"}
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+                    <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
                         {heroData?.heading || "Exhibitor Profile"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -63,7 +63,7 @@ const ExhibitorProfile = () => {
 
                             {/* SHOW INFORMATION */}
                             <div className="mb-16">
-                                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Show Information</h2>
+                                <h2 className="text-2xl md:text-3xl font-inter font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Show Information</h2>
                                 <div className="flex flex-col gap-3 max-w-2xl">
                                     {/* Date Card */}
                                     <div className="bg-[#FAF9F6] p-4 flex items-start gap-5 border-l-4 border-[#23471d] group hover:bg-white hover:shadow-xl transition-all duration-300">
@@ -72,10 +72,10 @@ const ExhibitorProfile = () => {
                                         </div>
                                         <div className="pt-0.5">
                                             <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Event Date</h3>
-                                            <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight text-left">
+                                            <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight text-left">
                                                 {profileData?.eventDate || "21 - 23 August 2026"}
                                             </div>
-                                            <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left font-inter italic">
+                                            <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left font-inter">
                                                 {profileData?.eventDay || "Friday - Sunday"}
                                             </p>
                                         </div>
@@ -88,10 +88,10 @@ const ExhibitorProfile = () => {
                                         </div>
                                         <div className="pt-0.5">
                                             <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Venue Location</h3>
-                                            <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight text-left">
+                                            <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight text-left">
                                                 {profileData?.venueHall || "Hall 6, Pragati Maidan"}
                                             </div>
-                                            <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left font-inter italic">
+                                            <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left font-inter">
                                                 {profileData?.venueCity || "New Delhi, India"}
                                             </p>
                                         </div>
@@ -101,7 +101,7 @@ const ExhibitorProfile = () => {
 
                             {/* COLORED BOXES GRID */}
                             <div className="mb-20">
-                                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Exhibitor Profile</h2>
+                                <h2 className="text-2xl md:text-3xl font-inter font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Exhibitor Profile</h2>
 
                                 <div className="flex flex-wrap justify-start gap-0.5">
                                     <div className="w-full flex flex-wrap justify-start gap-0.5">
@@ -120,7 +120,7 @@ const ExhibitorProfile = () => {
 
                             {/* PRODUCT CATEGORIES */}
                             <div>
-                                <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Product Categories</h2>
+                                <h2 className="text-2xl md:text-3xl font-inter font-bold text-slate-900 mb-10 border-l-4 border-[#23471d] pl-4">Product Categories</h2>
                                 <div className="grid sm:grid-cols-2 gap-y-3 gap-x-8">
                                     {categories.map((cat: any, i: number) => (
                                         <div key={i} className="flex items-center gap-3 py-1 border-b border-dashed border-slate-100 group">

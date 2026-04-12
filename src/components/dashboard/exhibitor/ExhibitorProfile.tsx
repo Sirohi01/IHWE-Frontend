@@ -39,9 +39,9 @@ export default function ExhibitorProfile({ data }: ProfileProps) {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <InfoRow label="Official Entity" value={data.exhibitorName} icon={Award} />
+                            <InfoRow label="Nature of Org" value={data.natureOfBusiness} icon={Hash} />
                             <InfoRow label="Fascia/Brand" value={data.fasciaName || data.exhibitorName} icon={User} />
                             <InfoRow label="Industry Sector" value={data.industrySector} icon={Briefcase} />
-                            <InfoRow label="Nature of Org" value={data.natureOfBusiness} icon={Hash} />
                             <InfoRow label="Business Framework" value={data.typeOfBusiness} icon={Building2} />
                             <InfoRow label="Institutional Web" value={data.website} icon={Calendar} />
                             <InfoRow label="Tax Identification (GST)" value={data.gstNo} icon={ShieldCheck} mono />

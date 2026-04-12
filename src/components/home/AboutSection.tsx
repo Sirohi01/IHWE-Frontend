@@ -53,7 +53,7 @@ const AboutSection = () => {
 
     if (!highlightedWord || !subheading.includes(highlightedWord)) {
       return (
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-foreground mb-6 leading-tight">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-foreground mb-6 leading-tight">
           {subheading}
         </h2>
       );
@@ -62,7 +62,7 @@ const AboutSection = () => {
     const parts = subheading.split(highlightedWord);
 
     return (
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-foreground mb-6 leading-tight">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-foreground mb-6 leading-tight">
         {parts[0]}
         <span className="relative inline-block text-[#d26019]">
           {highlightedWord}
@@ -186,7 +186,7 @@ const AboutSection = () => {
                     <item.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-poppins font-semibold text-slate-800 text-sm mb-0.5">
+                    <h3 className="font-inter font-semibold text-slate-800 text-sm mb-0.5">
                       {item.title}
                     </h3>
                     <p className="text-sm text-slate-600 leading-relaxed text-justify">

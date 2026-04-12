@@ -81,7 +81,7 @@ const DownloadsSection = () => {
         return (
             <div className="py-20 flex flex-col items-center justify-center bg-white">
                 <div className="w-10 h-10 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin mb-4" />
-                <p className="text-slate-500 font-serif italic">Loading resources...</p>
+                <p className="text-slate-500 font-inter">Loading resources...</p>
             </div>
         );
     }
@@ -125,7 +125,7 @@ const DownloadsSection = () => {
                         </span>
                         <div className="h-px w-8 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                         {renderHeading()}
                     </h2>
                     <p className="mt-3 text-slate-600 text-sm max-w-xl mx-auto leading-relaxed">
@@ -176,7 +176,7 @@ const DownloadsSection = () => {
                                         <FileText className="w-3.5 h-3.5 text-[#23471d]" />
                                     </div>
                                     <div>
-                                        <h3 className="font-poppins font-bold text-slate-900 text-[12px] leading-snug">
+                                        <h3 className="font-inter font-bold text-slate-900 text-[12px] leading-snug">
                                             {item.title}
                                         </h3>
                                         <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed">

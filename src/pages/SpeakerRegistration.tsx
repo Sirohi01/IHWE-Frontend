@@ -419,7 +419,7 @@ const SpeakerRegistration = () => {
                     </p>
 
                     <h1 
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
+                        className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight"
                     >
                         {heroData?.heading || "Share Your Expertise"}
                     </h1>

@@ -43,7 +43,7 @@ const ExpoPillars = () => {
                         </span>
                         <div className="h-px w-8 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-serif text-slate-900 leading-tight max-w-2xl mx-auto">
+                    <h2 className="text-3xl md:text-5xl font-inter text-slate-900 leading-tight max-w-2xl mx-auto">
                         Our Core Pillars for <br />
                         <span className="text-[#d26019]">Healthcare Excellence</span>
                     </h2>
@@ -60,7 +60,7 @@ const ExpoPillars = () => {
                             <div className={`w-14 h-14 ${pillar.bgColor} flex items-center justify-center mb-6 group-hover:bg-[#d26019] transition-colors duration-300`}>
                                 <pillar.icon className={`w-7 h-7 ${pillar.color} group-hover:text-white transition-colors duration-300`} />
                             </div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-4 font-serif">
+                            <h3 className="text-xl font-bold text-slate-900 mb-4 font-inter">
                                 {pillar.title}
                             </h3>
                             <p className="text-slate-600 text-sm leading-relaxed">

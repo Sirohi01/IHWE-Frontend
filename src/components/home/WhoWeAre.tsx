@@ -57,11 +57,11 @@ const WhoWeAre = () => {
   // Build title with highlighted text
   const renderTitle = () => {
     if (!data.highlightText || !data.title.includes(data.highlightText)) {
-      return <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 leading-tight">{data.title}</h2>;
+      return <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 mb-6 leading-tight">{data.title}</h2>;
     }
     const parts = data.title.split(data.highlightText);
     return (
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 leading-tight">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 mb-6 leading-tight">
         {parts[0]}
         <span className="text-[#d26019]">{data.highlightText}</span>
         {parts[1]}

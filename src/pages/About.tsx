@@ -70,7 +70,7 @@ const About = () => {
 
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">{heroSubtitle}</p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">{heroTitle}</h1>
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">{heroTitle}</h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
             {heroDesc}
           </p>
@@ -103,7 +103,7 @@ const About = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto p-12 rounded-3xl bg-white shadow-2xl overflow-hidden relative group">
             <div className="absolute top-0 left-0 w-2 h-full bg-[#23471d]" />
-            <h2 className="text-3xl font-serif text-slate-900 mb-6">Want to be part of IH&WE 2026?</h2>
+            <h2 className="text-3xl font-inter text-slate-900 mb-6">Want to be part of IH&WE 2026?</h2>
             <p className="text-slate-600 mb-10">Join thousands of healthcare leaders and pioneers in building the future of wellness.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link to="/contact">

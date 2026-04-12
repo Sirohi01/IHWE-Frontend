@@ -58,7 +58,7 @@ const KeyHighlights = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 leading-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 mb-6 leading-tight"
           >
             What Awaits You at <br />
             <span className="text-[#d26019]">IHWE 2026</span>
@@ -98,7 +98,7 @@ const KeyHighlights = () => {
                   <h.icon className="w-6 h-6" />
                 </div>
 
-                <h3 className="text-xl font-serif text-slate-900 mb-3 group-hover:text-[#d26019] transition-colors duration-300">
+                <h3 className="text-xl font-inter text-slate-900 mb-3 group-hover:text-[#d26019] transition-colors duration-300">
                   {h.title}
                 </h3>
 

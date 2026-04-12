@@ -80,7 +80,7 @@ const ExhibitorLogos = () => {
                     </span>
                     <div className="h-px w-8 bg-[#23471d]" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-serif text-slate-900 mb-10 leading-tight" data-aos="fade-up" data-aos-delay="100">
+                <h2 className="text-3xl md:text-4xl font-inter text-slate-900 mb-10 leading-tight" data-aos="fade-up" data-aos-delay="100">
                     {getHighlightedText(heading, highlightText)}
                 </h2>
             </div>

@@ -64,7 +64,7 @@ const TravelAccommodation = () => {
                     <p className="text-[10px] uppercase tracking-[0.5em] mb-3 opacity-80 font-bold">
                         {heroData?.title || "Smooth Arrival"}
                     </p>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-4 italic tracking-tight">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-inter font-semibold mb-4 tracking-tight">
                         {heroData?.heading || "Travel & Accommodation"}
                     </h1>
                     <p className="text-white/70 text-sm md:text-base mb-6 max-w-2xl mx-auto font-light leading-relaxed">
@@ -82,7 +82,7 @@ const TravelAccommodation = () => {
                             <div className="h-px w-6 bg-[#23471d]" />
                             <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#23471d]">The Destination</span>
                         </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                             {data?.venueHeading?.split(' ')[0] || "Venue"} <span className="text-[#d26019]">{data?.venueHeading?.split(' ').slice(1).join(' ') || "Location"}</span>
                         </h2>
                     </div>
@@ -113,7 +113,7 @@ const TravelAccommodation = () => {
                                 </div>
                                 <div className="pt-0.5">
                                     <h4 className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Mark Your Calendar</h4>
-                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight">21 - 23 August 2026</div>
+                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight">21 - 23 August 2026</div>
                                     <p className="text-[13px] text-slate-600 leading-relaxed">Friday - Sunday</p>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@ const TravelAccommodation = () => {
                                 </div>
                                 <div className="pt-0.5">
                                     <h4 className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Exhibition Hours</h4>
-                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight">9:00 AM - 6:00 PM</div>
+                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight">9:00 AM - 6:00 PM</div>
                                     <p className="text-[13px] text-slate-600 leading-relaxed">Indian Standard Time (IST)</p>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@ const TravelAccommodation = () => {
                                 </div>
                                 <div className="pt-0.5">
                                     <h4 className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">Venue Location</h4>
-                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight">Bharat Mandapam</div>
+                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight">Bharat Mandapam</div>
                                     <p className="text-[13px] text-slate-600 leading-relaxed font-inter">
                                         Halls 8, 9, and 10, Pragati Maidan, New Delhi
                                     </p>
@@ -164,7 +164,7 @@ const TravelAccommodation = () => {
                             <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">{data?.commuteSubtitle || "How to reach"}</span>
                             <div className="h-px w-6 bg-[#23471d]" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-serif text-slate-900 leading-tight">
+                        <h2 className="text-2xl md:text-3xl font-inter text-slate-900 leading-tight">
                             {data?.commuteHeading?.split(' ')[0] || "Commute"} <span className="text-[#d26019]">{data?.commuteHeading?.split(' ').slice(1).join(' ') || "options"}</span>
                         </h2>
                     </div>
@@ -181,7 +181,7 @@ const TravelAccommodation = () => {
                                 <div className="w-14 h-14 rounded-lg bg-slate-50 flex items-center justify-center text-[#23471d] mx-auto mb-4 group-hover:bg-[#23471d] group-hover:text-white transition-all duration-500 shadow-inner">
                                     <IconComponent name={item.icon} size={24} />
                                 </div>
-                                <h3 className="text-base font-serif font-bold text-slate-900 mb-2 uppercase tracking-tight">{item.title}</h3>
+                                <h3 className="text-base font-inter font-bold text-slate-900 mb-2 uppercase tracking-tight">{item.title}</h3>
                                 <p className="text-[12px] text-slate-500 leading-relaxed font-inter">{item.description}</p>
                             </motion.div>
                         ))}
@@ -198,7 +198,7 @@ const TravelAccommodation = () => {
                             <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[10px]">{data?.accommodationSubtitle || "Preferred Stay"}</span>
                             <div className="h-px w-6 bg-[#23471d]" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl font-serif text-slate-900 leading-tight">
+                        <h2 className="text-2xl md:text-3xl font-inter text-slate-900 leading-tight">
                             {data?.accommodationHeading?.split(' ')[0] || "Accommodation"} <span className="text-[#d26019]">{data?.accommodationHeading?.split(' ').slice(1).join(' ') || "Options"}</span>
                         </h2>
                         <p className="mt-2 text-sm text-slate-500 font-inter">Enjoy a comfortable stay near the venue. Choose from our curated hotel options.</p>
@@ -227,7 +227,7 @@ const TravelAccommodation = () => {
                                 </div>
                                 <div className="p-5">
                                     <div className="flex justify-between items-start mb-1.5">
-                                        <h3 className="text-lg font-serif font-bold text-slate-900 group-hover:text-[#23471d] transition-colors">{hotel.title}</h3>
+                                        <h3 className="text-lg font-inter font-bold text-slate-900 group-hover:text-[#23471d] transition-colors">{hotel.title}</h3>
                                         <div className="flex items-center gap-0.5 text-yellow-500">
                                             {[...Array(hotel.stars || 5)].map((_, i) => (
                                                 <Sparkles key={i} size={10} fill="currentColor" />
@@ -264,7 +264,7 @@ const TravelAccommodation = () => {
                             <div className="w-14 h-14 rounded-2xl bg-[#23471d]/5 text-[#23471d] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-inner">
                                 <HelpCircle size={28} />
                             </div>
-                            <h2 className="text-2xl font-serif font-bold text-slate-900 mb-3">{data?.helpHeading || "Need Help Booking?"}</h2>
+                            <h2 className="text-2xl font-inter font-bold text-slate-900 mb-3">{data?.helpHeading || "Need Help Booking?"}</h2>
                             <p className="text-sm text-slate-500 max-w-lg mx-auto mb-8 leading-relaxed">
                                 {data?.helpDescription || "For travel assistance, group bookings, or hotel recommendations, our dedicated concierge team is ready to assist you."}
                             </p>

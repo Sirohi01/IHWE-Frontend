@@ -19,11 +19,11 @@ const GlobalPartners = () => {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
           <p className="text-primary font-medium text-sm uppercase tracking-widest mb-3">Our Partners</p>
-          <h2 className="text-3xl md:text-4xl font-poppins font-bold text-foreground">Global Partners</h2>
+          <h2 className="text-3xl md:text-4xl font-inter font-bold text-foreground">Global Partners</h2>
         </div>
         {partnerGroups.map((group) => (
           <div key={group.title} className="mb-12 last:mb-0">
-            <h3 className="font-poppins font-semibold text-lg text-center mb-6" data-aos="fade-up">{group.title}</h3>
+            <h3 className="font-inter font-semibold text-lg text-center mb-6" data-aos="fade-up">{group.title}</h3>
             <div className="flex flex-wrap justify-center gap-4">
               {group.partners.map((p) => (
                 <div
@@ -31,7 +31,7 @@ const GlobalPartners = () => {
                   data-aos="zoom-in"
                   className="px-8 py-4 rounded-xl border border-border/50 bg-background hover:border-primary/30 hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
                 >
-                  <span className="font-poppins font-medium text-sm text-muted-foreground hover:text-primary transition-colors">{p}</span>
+                  <span className="font-inter font-medium text-sm text-muted-foreground hover:text-primary transition-colors">{p}</span>
                 </div>
               ))}
             </div>

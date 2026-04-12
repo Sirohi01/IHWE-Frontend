@@ -53,7 +53,7 @@ const DownloadBadge = () => {
       confirmButtonColor: '#23471d',
       background: '#f8f9fa',
       customClass: {
-        title: 'text-xl font-bold font-serif',
+        title: 'text-xl font-bold font-inter',
         popup: 'rounded-xl',
         confirmButton: 'py-2 px-6 text-base font-semibold'
       }
@@ -319,7 +319,7 @@ const DownloadBadge = () => {
             <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
               {heroData?.title || "Entry Pass"}
             </p>
-            <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
               {heroData?.heading || "Download Badge"}
             </h1>
             <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -359,7 +359,7 @@ const DownloadBadge = () => {
                       />
                       <div className="h-16 w-px bg-slate-200" />
                       <div>
-                        <h2 className="text-3xl font-serif font-bold text-slate-900">
+                        <h2 className="text-3xl font-inter font-bold text-slate-900">
                           Digital <span className="text-[#23471d]">Entry</span>
                         </h2>
                         <p className="text-[#d26019] font-bold tracking-[0.2em] uppercase text-xs">Access Portal</p>
@@ -398,7 +398,7 @@ const DownloadBadge = () => {
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
                     
                     <div className="mb-10 text-center lg:text-left">
-                      <h3 className="text-3xl font-serif font-bold text-slate-900 mb-2">Welcome Back!</h3>
+                      <h3 className="text-3xl font-inter font-bold text-slate-900 mb-2">Welcome Back!</h3>
                       <p className="text-slate-500 text-sm">Sign in to download your interior design expo badge</p>
                     </div>
 
@@ -544,7 +544,7 @@ const DownloadBadge = () => {
                           />
                           <div className="h-20 w-px bg-slate-200" />
                           <div className="flex flex-col text-left">
-                            <h4 className="text-base font-serif font-black text-[#d26019] leading-tight uppercase">
+                            <h4 className="text-base font-inter font-black text-[#d26019] leading-tight uppercase">
                               {eventData?.venueName || "Dubai World Trade Centre"}
                             </h4>
                             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-tight mb-1">
@@ -560,13 +560,13 @@ const DownloadBadge = () => {
                         </div>
 
                         <div className="text-center w-full mb-6 px-4">
-                          <h3 className="text-4xl font-serif font-black text-slate-900 mb-1 uppercase tracking-tight leading-tight">
+                          <h3 className="text-4xl font-inter font-black text-slate-900 mb-1 uppercase tracking-tight leading-tight">
                              {visitorData?.firstName} {visitorData?.lastName}
                           </h3>
-                          <p className="text-sm font-bold text-[#d26019] uppercase tracking-widest mb-1 italic">
+                          <p className="text-sm font-bold text-[#d26019] uppercase tracking-widest mb-1">
                              {visitorData?.designation}
                           </p>
-                          <p className="text-xl font-serif font-black text-[#23471d] uppercase px-4 truncate">
+                          <p className="text-xl font-inter font-black text-[#23471d] uppercase px-4 truncate">
                              {visitorData?.companyName}
                           </p>
                            <p className="text-lg font-bold text-slate-800 uppercase tracking-widest mt-1">{visitorData?.country}</p>
@@ -586,14 +586,14 @@ const DownloadBadge = () => {
 
                         {/* Visitor Label Bar (BASED ON IMAGE) */}
                         <div className="w-full bg-[#1ab05c] py-3 mb-4 shadow-lg flex items-center justify-center">
-                          <span className="text-2xl font-serif font-black text-white uppercase italic tracking-[0.2em]">
+                          <span className="text-2xl font-inter font-black text-white uppercase tracking-[0.2em]">
                             VISITOR
                           </span>
                         </div>
 
                         <div className="text-center">
                            <p className="text-base font-black text-slate-900 mb-0.5">User ID : {visitorData?.registrationId}</p>
-                           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest italic opacity-70">NOTE: E-badge is valid with photo ID in original.</p>
+                           <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest opacity-70">NOTE: E-badge is valid with photo ID in original.</p>
                         </div>
                     </div>
 
@@ -601,8 +601,8 @@ const DownloadBadge = () => {
 
                     {/* RIGHT PANE: GUIDELINES */}
                     <div className="w-full md:w-[42%] bg-slate-50/30 p-6 flex flex-col">
-                        <h4 className="text-xl font-serif font-black text-slate-900 border-b-2 border-slate-900 pb-2 mb-5 uppercase leading-tight">
-                           Visitor Pass <span className="block italic text-lg">Guidelines</span>
+                        <h4 className="text-xl font-inter font-black text-slate-900 border-b-2 border-slate-900 pb-2 mb-5 uppercase leading-tight">
+                           Visitor Pass <span className="block text-lg">Guidelines</span>
                         </h4>
                         <ul className="space-y-3 text-[10px] text-slate-700 leading-tight list-none font-medium">
                            {guidelines.map((text, i) => (

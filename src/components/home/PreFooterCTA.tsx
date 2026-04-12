@@ -9,7 +9,7 @@ const PreFooterCTA = ({ onBookStand }: PreFooterCTAProps) => {
     <section className="py-20" data-aos="fade-up">
       <div className="container mx-auto px-4">
         <div className="gradient-primary rounded-3xl p-10 md:p-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-poppins font-bold text-primary-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-inter font-bold text-primary-foreground mb-4">
             Ready to Be Part of IHWE 2026?
           </h2>
           <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8 text-lg">

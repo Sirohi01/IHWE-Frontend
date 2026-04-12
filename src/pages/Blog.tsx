@@ -49,7 +49,7 @@ const Blog = () => {
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
             {heroData?.title || "Insights & Media"}
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
             {heroData?.heading || "Blog & News"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">

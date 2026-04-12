@@ -60,7 +60,7 @@ const HealthcareGrowth = () => {
                         <span className="text-[12px] font-bold uppercase tracking-[0.3em] text-[#23471d]">Market Opportunity</span>
                         <div className="h-px w-8 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight max-w-3xl mx-auto">
                         India's Healthcare Industry Is Expected to Reach{" "}
                         <span className="text-[#d26019]">Over $610 Billion</span> by 2026.
                     </h2>
@@ -146,7 +146,7 @@ const HealthcareGrowth = () => {
                         <div className="mt-4 border-l-4 border-[#d26019] bg-slate-50 px-5 py-3 flex items-start gap-3">
                             <Quote className="w-4 h-4 text-[#d26019] shrink-0 mt-0.5" />
                             <div>
-                                <p className="text-slate-600 text-[13px] leading-relaxed italic">
+                                <p className="text-slate-600 text-[13px] leading-relaxed">
                                     "India has adopted a multi-sectoral approach towards the health sector. The country is focusing on four main pillars of universal health — preventive health, affordable healthcare, supply-side interventions and mission mode intervention."
                                 </p>
                                 <p className="mt-1.5 font-bold text-[#23471d] text-[9px] uppercase tracking-widest">

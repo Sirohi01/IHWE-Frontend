@@ -149,7 +149,7 @@ const EPromotion = () => {
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
             {heroData?.title || "Exhibit · Exhibit"}
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
             {heroData?.heading || "E-Promotion Opportunities"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -169,7 +169,7 @@ const EPromotion = () => {
               <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#23471d]">{data.subheading}</span>
               <div className="h-px w-8 bg-[#23471d]" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-serif text-slate-900 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-inter text-slate-900 leading-tight">
               {data.title.split(data.highlightText)[0]}
               <span className="text-[#d26019]">{data.highlightText}</span>
               {data.title.split(data.highlightText)[1]}
@@ -212,7 +212,7 @@ const EPromotion = () => {
                 <span className="text-xs font-bold uppercase tracking-[0.4em] text-[#23471d]">Get In Touch</span>
                 <div className="h-px w-8 bg-[#23471d]" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-serif text-slate-900">
+              <h2 className="text-3xl md:text-4xl font-inter text-slate-900">
                 Interested in <span className="text-[#23471d]">Promoting Your Brand?</span>
               </h2>
             </div>
@@ -247,7 +247,7 @@ const EPromotion = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-600 text-center mb-8 max-w-md text-lg italic"
+                    className="text-gray-600 text-center mb-8 max-w-md text-lg"
                   >
                     Thank you for your interest. Our promotions team will review your enquiry and contact you within 24 hours.
                   </motion.p>

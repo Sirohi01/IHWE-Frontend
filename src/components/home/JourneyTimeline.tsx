@@ -10,7 +10,7 @@ const JourneyTimeline = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-6 mb-16" data-aos="fade-right">
-                <h3 className="font-serif text-3xl text-slate-800">Our Journey</h3>
+                <h3 className="font-inter text-3xl text-slate-800">Our Journey</h3>
                 <div className="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent" />
             </div>
 
@@ -27,7 +27,7 @@ const JourneyTimeline = () => {
                         {/* Content Card */}
                         <div className={`w-full md:w-[42%] group`}>
                             <div className={`p-8 bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 relative ${i % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
-                                <div className={`text-[#d26019] font-bold text-2xl mb-2 font-serif`}>{t.year}</div>
+                                <div className={`text-[#d26019] font-bold text-2xl mb-2 font-inter`}>{t.year}</div>
                                 <p className="text-slate-600 leading-relaxed">{t.text}</p>
 
                                 {/* Decorative Arrow/Indicator for Desktop */}

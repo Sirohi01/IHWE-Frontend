@@ -60,7 +60,7 @@ const WhyVisit = () => {
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80 font-medium font-inter">
                         {heroData?.title || "Visit · Experience"}
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 tracking-tight italic">
+                    <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
                         {heroData?.heading || "Why Visit IH&WE 2026?"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-3xl mx-auto font-light leading-relaxed font-inter">
@@ -81,7 +81,7 @@ const WhyVisit = () => {
                             </span>
                             <div className="h-px w-8 bg-[#23471d]" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight italic">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                             {highlightText(pageData?.heading || "Discover Why You Should Join Us", pageData?.highlightText || "Join Us")}
                         </h2>
                         {pageData?.shortDescription && (

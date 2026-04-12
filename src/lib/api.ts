@@ -604,3 +604,11 @@ export const crmApi = {
         return Array.isArray(data) ? data : (data.data || []);
     }
 };
+
+export const adminApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/admin/all`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};

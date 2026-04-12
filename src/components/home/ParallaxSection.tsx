@@ -109,7 +109,7 @@ const ParallaxSection = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-2xl md:text-4xl lg:text-5xl font-serif font-semibold text-white leading-tight mb-6"
+              className="text-2xl md:text-4xl lg:text-5xl font-inter font-semibold text-white leading-tight mb-6"
             >
               {getHighlightedText(data.heading, data.highlightText)}
             </motion.h2>

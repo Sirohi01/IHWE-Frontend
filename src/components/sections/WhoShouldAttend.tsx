@@ -97,7 +97,7 @@ const WhoShouldAttendSection: React.FC = () => {
                                 <span className="uppercase tracking-[0.3em] text-[#d26019] font-bold text-[10px]">{data.subheading}</span>
                             </div>
 
-                            <h2 className="text-3xl md:text-4xl font-serif text-slate-900 mb-6 leading-tight">
+                            <h2 className="text-3xl md:text-4xl font-inter text-slate-900 mb-6 leading-tight">
                                 {renderHeading(data.heading, data.highlightText)}
                             </h2>
 

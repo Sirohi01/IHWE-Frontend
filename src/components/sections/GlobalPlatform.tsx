@@ -112,7 +112,7 @@ const GlobalPlatform: React.FC = () => {
                 {data.subheading}
               </span>
             </div>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 mb-6 leading-tight">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 mb-6 leading-tight">
               {renderTitle(data.title, data.highlightText)}
             </h2>
             
@@ -132,7 +132,7 @@ const GlobalPlatform: React.FC = () => {
             </div>
 
             {data.tagline && (
-              <p className="text-slate-700 leading-relaxed text-sm mt-10 italic border-l-2 border-[#d26019] pl-4">
+              <p className="text-slate-700 leading-relaxed text-sm mt-10 border-l-2 border-[#d26019] pl-4">
                 {data.tagline}
               </p>
             )}

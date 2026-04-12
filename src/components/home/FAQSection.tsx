@@ -55,7 +55,7 @@ const FAQSection = () => {
             </span>
             <div className="h-px w-8 bg-[#23471d]" />
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
             {faqData?.heading || "Frequently Asked"}{" "}
             <span className="text-[#d26019]">{faqData?.highlightText || "Questions"}</span>
           </h2>
@@ -172,7 +172,7 @@ const FAQSection = () => {
 
             {/* CTA below image */}
             <div className="mt-6 p-5 bg-white border border-slate-100 shadow-sm text-center">
-              <p className="text-slate-500 text-xs font-medium mb-3 italic">
+              <p className="text-slate-500 text-xs font-medium mb-3">
                 "Still have questions about exhibiting at IHWE 2026?"
               </p>
               <Link

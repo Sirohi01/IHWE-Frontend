@@ -231,7 +231,7 @@ const Gallery = () => {
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
                         {heroData?.title || "Visual Journey"}
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+                    <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
                         {heroData?.heading || "Event Gallery"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -306,7 +306,7 @@ const Gallery = () => {
                                                     <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Photo Collection</span>
                                                     <div className="h-px w-4 bg-white/30" />
                                                 </div>
-                                                <h3 className="text-base font-serif font-bold mb-2 uppercase">{event.title}</h3>
+                                                <h3 className="text-base font-inter font-bold mb-2 uppercase">{event.title}</h3>
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-[#23471d]">
                                                         <ArrowRight className="w-4 h-4" />
@@ -316,7 +316,7 @@ const Gallery = () => {
                                             </div>
                                         </div>
                                         <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity text-left">
-                                             <h3 className="text-white text-xs font-serif uppercase tracking-widest">{event.title}</h3>
+                                             <h3 className="text-white text-xs font-inter uppercase tracking-widest">{event.title}</h3>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -347,7 +347,7 @@ const Gallery = () => {
                                                     <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Media Coverage</span>
                                                     <div className="h-px w-4 bg-white/30" />
                                                 </div>
-                                                <h3 className="text-base font-serif font-bold mb-2 uppercase">{event.title}</h3>
+                                                <h3 className="text-base font-inter font-bold mb-2 uppercase">{event.title}</h3>
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-[#23471d]">
                                                         <ArrowRight className="w-4 h-4" />
@@ -357,7 +357,7 @@ const Gallery = () => {
                                             </div>
                                         </div>
                                         <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity text-left">
-                                             <h3 className="text-white text-xs font-serif uppercase tracking-widest">{event.title}</h3>
+                                             <h3 className="text-white text-xs font-inter uppercase tracking-widest">{event.title}</h3>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -373,7 +373,7 @@ const Gallery = () => {
                                     <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shadow-sm">
                                         <ChevronLeft className="w-5 h-5" />
                                     </div>
-                                    <h2 className="text-2xl md:text-3xl font-serif font-bold text-slate-900 uppercase tracking-tight italic">{activeEvent}</h2>
+                                    <h2 className="text-2xl md:text-3xl font-inter font-bold text-slate-900 uppercase tracking-tight">{activeEvent}</h2>
                                 </div>
                             )}
 
@@ -539,7 +539,7 @@ const Gallery = () => {
                             )}
                             {selectedMedia.description && (
                                 <div className="mt-4 text-center">
-                                    <p className="text-white/80 text-sm font-light italic">{selectedMedia.description}</p>
+                                    <p className="text-white/80 text-sm font-light">{selectedMedia.description}</p>
                                 </div>
                             )}
                         </motion.div>

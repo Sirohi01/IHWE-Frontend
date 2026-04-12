@@ -63,7 +63,7 @@ const OrganizedBy: React.FC = () => {
                         <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[11px]">{data.subheading}</span>
                         <div className="h-px w-8 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-serif text-slate-900 leading-tight">
+                    <h2 className="text-3xl md:text-4xl font-inter text-slate-900 leading-tight">
                         {renderHeading(data.heading, data.highlightText)}
                     </h2>
                 </div>
@@ -92,11 +92,11 @@ const OrganizedBy: React.FC = () => {
                             </div>
                             <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-5 tracking-tight group-hover:text-[#23471d] transition-colors">{data.orgName}</h3>
                             <div className="relative">
-                                <span className="absolute -left-4 -top-2 text-4xl text-[#23471d]/10 font-serif">"</span>
-                                <p className="text-slate-600 text-[15px] md:text-lg leading-relaxed italic relative z-10">
+                                <span className="absolute -left-4 -top-2 text-4xl text-[#23471d]/10 font-inter">"</span>
+                                <p className="text-slate-600 text-[15px] md:text-lg leading-relaxed relative z-10">
                                     {data.quote}
                                 </p>
-                                <span className="absolute -right-2 -bottom-4 text-4xl text-[#23471d]/10 font-serif">"</span>
+                                <span className="absolute -right-2 -bottom-4 text-4xl text-[#23471d]/10 font-inter">"</span>
                             </div>
                         </div>
                     </div>

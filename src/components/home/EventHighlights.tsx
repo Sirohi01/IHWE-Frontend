@@ -110,7 +110,7 @@ const EventHighlights = () => {
 
         if (!data.highlightText) {
             return (
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                     {data.title}
                 </h1>
             );
@@ -118,7 +118,7 @@ const EventHighlights = () => {
 
         const titleParts = data.title.split(data.highlightText);
         return (
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                 {titleParts[0]}
                 <span className="text-[#d26019]">{data.highlightText}</span>
                 {titleParts[1]}
@@ -193,7 +193,7 @@ const EventHighlights = () => {
                                 </div>
                                 <div className="pt-0.5">
                                     <h3 className="text-[8px] font-bold uppercase tracking-[0.3em] text-[#d26019] mb-1">{detail.title}</h3>
-                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-serif leading-tight">{detail.value}</div>
+                                    <div className="text-base font-bold text-slate-900 mb-0.5 font-inter leading-tight">{detail.value}</div>
                                     <p className="text-[13px] md:text-sm text-slate-600 leading-relaxed text-left">
                                         {detail.sub}
                                     </p>

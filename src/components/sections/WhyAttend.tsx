@@ -72,7 +72,7 @@ const WhyAttendSection: React.FC = () => {
                         <span className="uppercase tracking-[0.3em] text-[#23471d] font-bold text-[11px]">{data.subheading}</span>
                         <div className="h-px w-6 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                         {renderHeading(data.heading, data.highlightText)}
                     </h2>
                 </div>

@@ -66,7 +66,7 @@ const StallDesigningVendors = () => {
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
             {heroData?.title || content.subheading || "Our Partners"}
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
             {heroData?.heading || "Stall Designing Vendors"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -87,10 +87,10 @@ const StallDesigningVendors = () => {
               </span>
               <div className="h-px w-8 bg-[#23471d]" />
             </div>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight mb-4">
               {/* Replace specific words with orange span if highlightText matches */}
               {content.heading?.split(content.highlightText).map((part: string, i: number, arr: any) => (
-                <span key={i} className="font-serif">
+                <span key={i} className="font-inter">
                   {part}
                   {i < arr.length - 1 && <span className="text-[#d26019]">{content.highlightText}</span>}
                 </span>

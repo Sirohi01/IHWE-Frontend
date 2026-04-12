@@ -30,7 +30,7 @@ const PrivacyPolicy = () => {
         <div className="absolute inset-0 bg-black/40" />
         <div className="container mx-auto px-4 text-center relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Legal Information</p>
-          <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
             {policy?.title || "Privacy Policy"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -55,8 +55,8 @@ const PrivacyPolicy = () => {
             ) : policy ? (
               <div 
                 className="dynamic-content prose prose-slate max-w-none 
-                  [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-serif [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mb-6 [&_h2]:mt-10
-                  [&_h3]:text-xl [&_h3]:font-serif [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-4 [&_h3]:mt-8
+                  [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-inter [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mb-6 [&_h2]:mt-10
+                  [&_h3]:text-xl [&_h3]:font-inter [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-4 [&_h3]:mt-8
                   [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:space-y-2
                   [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_ol]:space-y-2
                   [&_strong]:font-bold [&_strong]:text-slate-900"

@@ -123,7 +123,7 @@ const Testimonials = () => {
             </span>
             <div className="h-px w-8 bg-[#23471d] hidden md:block" />
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight md:text-center">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight md:text-center">
             {getHighlightedText(data.heading, data.highlightText)}
           </h2>
           <p className="text-slate-600 mt-6 md:text-center max-w-2xl mx-auto text-lg font-inter">
@@ -161,7 +161,7 @@ const Testimonials = () => {
 
                   {/* Feedback */}
                   <div className="min-h-[120px]">
-                    <p className="text-slate-700 text-sm leading-relaxed mb-8 italic">
+                    <p className="text-slate-700 text-sm leading-relaxed mb-8">
                       "{testimonial.feedback}"
                     </p>
                   </div>

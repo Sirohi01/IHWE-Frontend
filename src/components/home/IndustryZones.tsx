@@ -99,7 +99,7 @@ const IndustryZones = () => {
                         </span>
                         <div className="h-px w-8 bg-[#23471d]" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                         {renderTitle(data.heading, data.highlightText)}
                     </h2>
                     <p className="mt-6 text-slate-500 max-w-2xl mx-auto text-base leading-relaxed">

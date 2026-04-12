@@ -168,7 +168,7 @@ const VisitorRegistrationDrawer = ({ open, onClose }: VisitorRegistrationDrawerP
                                     </div>
 
                                     <div className="mt-4">
-                                        <p className="text-[11px] text-slate-500 leading-relaxed italic">
+                                        <p className="text-[11px] text-slate-500 leading-relaxed">
                                             * Join thousands of visitors at India's largest health & wellness event. Pre-registration ensures quick entry and exclusive updates.
                                         </p>
                                     </div>

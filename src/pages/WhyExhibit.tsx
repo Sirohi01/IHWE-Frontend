@@ -81,7 +81,7 @@ const WhyExhibit = () => {
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
                         {heroData?.title || "Maximize Visibility & Growth"}
                     </p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">
+                    <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
                         {heroData?.heading || "Why Exhibit?"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
@@ -102,7 +102,7 @@ const WhyExhibit = () => {
                             </span>
                             <div className="h-px w-8 bg-[#23471d]" />
                         </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 leading-tight">
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
                             {highlightText(pageData?.heading || "Drive Growth & Innovation", pageData?.highlightText || "Growth & Innovation")}
                         </h2>
                         {pageData?.shortDescription && (
@@ -193,7 +193,7 @@ const WhyExhibit = () => {
                         transition={{ duration: 0.8 }}
                         className="max-w-3xl mx-auto"
                     >
-                        <h2 className="text-2xl md:text-4xl font-serif text-white mb-4 italic leading-tight">
+                        <h2 className="text-2xl md:text-4xl font-inter text-white mb-4 leading-tight">
                             {highlightCTAText(pageData?.ctaTitle || "Ready to Scale Your Brand?", pageData?.ctaHighlightText || "Scale Your Brand?")}
                         </h2>
                         <p className="text-slate-300 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed font-light">
