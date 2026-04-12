@@ -5,7 +5,17 @@ import {
     CheckCircle,
     Send,
     ShieldCheck,
-    Loader2
+    Loader2,
+    User,
+    Phone,
+    Briefcase,
+    Target,
+    Globe,
+    Calendar,
+    CreditCard,
+    Smartphone,
+    AtSign,
+    Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,77 +23,89 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import HeroBg from "@/assets/buyer.jpg";
-import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi } from "@/lib/api";
-
-// Removed static COUNTRIES array to use dynamic database data
-const COMPANY_TYPES = [
-    "Importer/Exporter",
-    "Distributor",
-    "Retail Chain",
-    "Wholesaler",
-    "Private Label Buyer",
-    "HoReCa",
-    "E-commerce Platform",
-    "Government Agency",
-    "Other"
-];
-
-const PRODUCT_CATEGORIES = [
-    "Cereals & Grains",
-    "Pulses",
-    "Spices & Herbs",
-    "Oils",
-    "Tea & Coffee",
-    "Processed Food",
-    "Superfoods",
-    "Dairy",
-    "Fresh Produce",
-    "Private Label",
-    "Other"
-];
+import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi } from "@/lib/api";
 
 const BuyerRegistration = () => {
+    const [config, setConfig] = useState<any>(null);
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [heroData, setHeroData] = useState<any>(null);
     const [countries, setCountries] = useState<any[]>([]);
     const [states, setStates] = useState<any[]>([]);
     const [cities, setCities] = useState<any[]>([]);
+
+    const [emailOtpSent, setEmailOtpSent] = useState(false);
+    const [emailOtpVerified, setEmailOtpVerified] = useState(false);
+    const [emailOtpValue, setEmailOtpValue] = useState("");
+    const [mobileOtpSent, setMobileOtpSent] = useState(false);
+    const [mobileOtpVerified, setMobileOtpVerified] = useState(false);
+    const [mobileOtpValue, setMobileOtpValue] = useState("");
+    const [isVerifying, setIsVerifying] = useState({ email: false, mobile: false });
+
     const [formData, setFormData] = useState({
-        companyName: "",
-        country: "",
-        state: "",
-        city: "",
-        companyWebsite: "",
-        yearsInBusiness: "",
-        annualImportVolume: "",
-        mainMarketsServed: "",
-        companyTypes: [] as string[],
-        contactPerson: "",
+        fullName: "",
         designation: "",
-        email: "",
-        whatsapp: "",
-        interestedCategories: [] as string[],
-        targetPriceRange: "",
-        preferredMeetingType: "both",
-        specificExhibitors: "",
-        confirmed: false
+        companyName: "",
+        businessType: "",
+        mobileNumber: "",
+        alternateNumber: "",
+        emailAddress: "",
+        website: "",
+        pinCode: "",
+        country: "India",
+        stateProvince: "",
+        city: "",
+        registeredAddress: "",
+        yearsInOperation: "",
+        annualTurnover: "",
+        buyingFrequency: "",
+        estimatedAnnualPurchaseValue: "",
+        keyProductsServices: "",
+        primaryProductInterest: "",
+        secondaryProductCategories: [] as string[],
+        preferredSupplierRegion: [] as string[],
+        preferredSupplierType: [] as string[],
+        purchaseTimeline: "",
+        roleInPurchaseDecision: "",
+        pricingPreference: "Mid-Range",
+        preferredMeetingDate: "",
+        preferredTimeSlot: "",
+        requirePreScheduledB2B: "Yes",
+        meetingPriorityLevel: "Medium",
+        registrationCategory: "",
+        registrationFee: "₹0",
+        consentTerms: false,
+        consentMatchedExhibitors: false
     });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [hData, cRes, sRes, ciRes] = await Promise.all([
+                const [hData, cRes, sRes, ciRes, configRes] = await Promise.all([
                     heroBackgroundApi.getByPage("Registration / Buyer Registration"),
                     crmApi.getCountries(),
                     crmApi.getStates(),
-                    crmApi.getCities()
+                    crmApi.getCities(),
+                    buyerRegistrationApi.getConfig()
                 ]);
                 if (hData) setHeroData(hData);
                 if (cRes) setCountries(cRes);
                 if (sRes) setStates(sRes);
                 if (ciRes) setCities(ciRes);
+                if (configRes?.success) {
+                    const cfg = configRes.data;
+                    setConfig(cfg);
+
+                    if (cfg.packages?.length > 0) {
+                        setFormData(prev => ({
+                            ...prev,
+                            registrationCategory: cfg.packages[0].name,
+                            registrationFee: `₹${cfg.packages[0].price}`
+                        }));
+                    }
+                }
             } catch (err) {
                 console.error("Error fetching initial data:", err);
             }
@@ -92,28 +114,18 @@ const BuyerRegistration = () => {
     }, []);
 
     const filteredStates = useMemo(() => {
-        if (!formData.country || countries.length === 0) return [];
-        const selectedCountry = countries.find(c => 
-            c.name && c.name.trim().toLowerCase() === formData.country.trim().toLowerCase()
-        );
+        const countryToUse = formData.country || "India";
+        const selectedCountry = countries.find(c => c.name === countryToUse);
         if (!selectedCountry) return [];
-        return states.filter(s => 
-            s.countryCode != null && selectedCountry.countryCode != null &&
-            String(s.countryCode) === String(selectedCountry.countryCode)
-        );
+        return states.filter(s => String(s.countryCode) === String(selectedCountry.countryCode));
     }, [formData.country, countries, states]);
 
     const filteredCities = useMemo(() => {
-        if (!formData.state || states.length === 0) return [];
-        const selectedState = states.find(s => 
-            s.name && s.name.trim().toLowerCase() === formData.state.trim().toLowerCase()
-        );
+        if (!formData.stateProvince || states.length === 0) return [];
+        const selectedState = states.find(s => s.name === formData.stateProvince);
         if (!selectedState) return [];
-        return cities.filter(c => 
-            c.stateCode != null && selectedState.stateCode != null &&
-            String(c.stateCode) === String(selectedState.stateCode)
-        );
-    }, [formData.state, states, cities]);
+        return cities.filter(c => String(c.stateCode) === String(selectedState.stateCode));
+    }, [formData.stateProvince, states, cities]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -121,12 +133,19 @@ const BuyerRegistration = () => {
     };
 
     const handleSelectChange = (name: string, value: string) => {
-        if (name === 'country') {
-            setFormData(prev => ({ ...prev, country: value, state: '', city: '' }));
+        if (name === 'registrationCategory' && config) {
+            const pkg = config.packages.find((p: any) => p.name === value);
+            if (pkg) {
+                setFormData(prev => ({ ...prev, registrationCategory: value, registrationFee: `₹${pkg.price}` }));
+            }
             return;
         }
-        if (name === 'state') {
-            setFormData(prev => ({ ...prev, state: value, city: '' }));
+        if (name === 'country') {
+            setFormData(prev => ({ ...prev, country: value, stateProvince: '', city: '' }));
+            return;
+        }
+        if (name === 'stateProvince') {
+            setFormData(prev => ({ ...prev, stateProvince: value, city: '' }));
             return;
         }
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -135,430 +154,287 @@ const BuyerRegistration = () => {
     const handleCheckboxChange = (name: string, value: string, checked: boolean) => {
         setFormData(prev => {
             const list = prev[name as keyof typeof prev] as string[];
-            if (checked) {
-                return { ...prev, [name]: [...list, value] };
-            } else {
-                return { ...prev, [name]: list.filter(item => item !== value) };
-            }
+            return { ...prev, [name]: checked ? [...list, value] : list.filter(item => item !== value) };
         });
     };
 
-    const handleConfirmChange = (checked: boolean) => {
-        setFormData(prev => ({ ...prev, confirmed: checked }));
+    const requestOtp = async (type: 'email' | 'mobile') => {
+        const identifier = type === 'email' ? formData.emailAddress : formData.mobileNumber;
+        if (!identifier) { alert(`Please enter a valid ${type} first.`); return; }
+        setIsVerifying(prev => ({ ...prev, [type]: true }));
+        try {
+            const res = await otpApi.request(identifier, type === 'email' ? 'email' : 'phone', formData.fullName);
+            if (res.success) {
+                alert(`OTP sent to your ${type}.`);
+                type === 'email' ? setEmailOtpSent(true) : setMobileOtpSent(true);
+            } else alert(res.message);
+        } catch (err) { alert("Connection error."); } finally { setIsVerifying(prev => ({ ...prev, [type]: false })); }
+    };
+
+    const verifyOtp = async (type: 'email' | 'mobile') => {
+        const identifier = type === 'email' ? formData.emailAddress : formData.mobileNumber;
+        const otp = type === 'email' ? emailOtpValue : mobileOtpValue;
+        if (!otp) { alert("Please enter the OTP."); return; }
+        setIsVerifying(prev => ({ ...prev, [type]: true }));
+        try {
+            const res = await otpApi.verify(identifier, otp, type === 'email' ? 'email' : 'phone');
+            if (res.success) {
+                alert(`${type.toUpperCase()} verified successfully!`);
+                type === 'email' ? setEmailOtpVerified(true) : setMobileOtpVerified(true);
+            } else alert(res.message);
+        } catch (err) { alert("Verification failed."); } finally { setIsVerifying(prev => ({ ...prev, [type]: false })); }
+    };
+
+    const handleRazorpay = async () => {
+        if (!(window as any).Razorpay) {
+            alert("Razorpay SDK not loaded. Please check your internet connection and try again.");
+            return;
+        }
+
+        try {
+            const pkg = config?.packages.find((p: any) => p.name === formData.registrationCategory);
+            if (!pkg) {
+                alert("Invalid package selected.");
+                return;
+            }
+            const res = await buyerRegistrationApi.createOrder(pkg.price);
+
+            if (res.success && res.order) {
+                const options = {
+                    key: (import.meta.env.VITE_RAZORPAY_KEY_ID || "").trim(),
+                    amount: res.order.amount,
+                    currency: "INR",
+                    name: "IHWE 2026",
+                    description: `Registration for ${formData.registrationCategory}`,
+                    order_id: res.order.id,
+                    handler: async function (response: any) {
+                        try {
+                            await submitFinal(response);
+                        } catch (err) {
+                            console.error("Payment handler error:", err);
+                            alert("Payment successful but final submission failed. Please contact support.");
+                        }
+                    },
+                    prefill: {
+                        name: formData.fullName,
+                        email: formData.emailAddress,
+                        contact: formData.mobileNumber
+                    },
+                    theme: {
+                        color: "#23471d"
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            setIsSubmitting(false);
+                        }
+                    }
+                };
+                const rzp = new (window as any).Razorpay(options);
+                rzp.open();
+            } else {
+                console.error("Order creation failed:", res);
+                alert(res.message || "Failed to create payment order. Please try again.");
+            }
+        } catch (error) {
+            console.error("Razorpay trigger error:", error);
+            alert("An error occurred while initializing payment.");
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.confirmed) {
-            alert("Please confirm that you are a genuine trade buyer.");
+        if (!formData.consentTerms) { alert("Please agree to the Terms & Conditions."); return; }
+        if (!emailOtpVerified || !mobileOtpVerified) { alert("Please verify your Email and Mobile via OTP first."); return; }
+
+        // Final required check
+        if (!formData.buyingFrequency || !formData.estimatedAnnualPurchaseValue || !formData.roleInPurchaseDecision) {
+            alert("Please fill all required business profiling fields.");
             return;
         }
-        setIsSubmitting(true);
-        try {
-            const res = await buyerRegistrationApi.submit(formData);
-            if (res.success) {
-                setSubmitted(true);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            } else {
-                alert(res.message || "Something went wrong. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error submitting registration:", error);
-            alert("Connection error. Please check your internet and try again.");
-        } finally {
-            setIsSubmitting(false);
-        }
+
+        handleRazorpay();
     };
 
-    const inputClasses =
-        "rounded-[2px] border-slate-400 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 w-full text-left";
-    const labelClasses =
-        "text-[11px] font-bold text-slate-800 mb-1 block capitalize";
+    const submitFinal = async (paymentDetails: any = null) => {
+        setIsSubmitting(true);
+        try {
+            const payload = {
+                ...formData,
+                paymentMode: 'Online/Razorpay',
+                razorpayOrderId: paymentDetails?.razorpay_order_id,
+                razorpayPaymentId: paymentDetails?.razorpay_payment_id,
+                paymentStatus: paymentDetails ? 'Completed' : 'Pending'
+            };
+            const res = await buyerRegistrationApi.submit(payload);
+            if (res.success) { setSubmitted(true); window.scrollTo({ top: 0, behavior: "smooth" }); } else alert(res.message);
+        } catch (error) { alert("Submission error."); } finally { setIsSubmitting(false); }
+    };
+
+
+    const inputClasses = "rounded border-slate-200 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[10px] bg-white placeholder:text-slate-400 text-slate-700 font-medium shadow-none outline-none px-2 ";
+    const labelClasses = "text-[10px] font-semibold text-slate-600 mb-1 block";
+    const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-2 border-b-2 border-emerald-500/20 flex items-center gap-1.5 mb-4 uppercase tracking-tight";
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter">
-
-            {/* ── HERO SECTION - Registration Standard 16:5 ── */}
-            <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`
-                }}
-            >
-                <div className="absolute inset-0 bg-black/45" />
-
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || "Trade Engagement"}
-                    </p>
-
-                    <h1 
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
-                    >
-                        {heroData?.heading || "Global Buyer Summit"}
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Join 8,000+ healthcare professionals and discover the latest innovations in health and wellness."}
-                    </p>
-
+            <section className="relative h-[160px] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20" />
+                <div className="container mx-auto px-4 text-center text-white relative z-10">
+                    <p className="text-[8px] uppercase tracking-[0.5em] mb-1.5 text-emerald-400 font-bold">IHWE 2026 - Global Connect</p>
+                    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-2 italic">Buyer Registration</h1>
+                    <div className="w-12 h-0.5 bg-emerald-500 mx-auto rounded-full" />
                 </div>
             </section>
 
-            {/* ── MAIN CONTENT ── */}
-            <section className="pt-8 pb-24 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                    <div className="space-y-8">
+            <section className="py-6 relative bg-[#F8FAFC]">
+                <div className="container mx-auto px-4 max-w-[1400px]">
+                    <AnimatePresence mode="wait">
+                        {submitted ? (
+                            <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white border border-slate-200 p-12 flex flex-col items-center text-center space-y-5 shadow-2xl rounded-xl">
+                                <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500"><CheckCircle size={48} strokeWidth={1.5} /></div>
+                                <div className="space-y-2">
+                                    <h2 className="text-2xl font-bold text-slate-900 font-serif">Registration Successful!</h2>
+                                    <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed">Thank you for choosing IHWE 2026. Your registration details and payment confirmation have been emailed to you.</p>
+                                </div>
+                                <Link to="/"><Button className="rounded-full px-8 h-10 bg-[#23471d] hover:bg-[#1a3516] text-xs font-bold uppercase tracking-widest shadow-xl">Return Home</Button></Link>
+                            </motion.div>
+                        ) : (
+                            <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
+                                <div className="bg-[#23471d] px-6 py-4 text-white flex justify-between items-center">
+                                    <div>
+                                        <h2 className="text-lg font-bold uppercase tracking-widest">Buyer-Seller Meet</h2>
+                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium">International Health & Wellness Expo 2026</p>
+                                    </div>
+                                    <ShieldCheck className="text-emerald-400 opacity-50" size={28} />
+                                </div>
+                                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                                    {/* 1. Personal & Company Information */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>Personal & Company Information</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div><Label className={labelClasses}>Contact Person *</Label><Input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Designation *</Label><Input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Current Position" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Company Name *</Label><Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Business Type *</Label><Select required onValueChange={(v) => handleSelectChange('businessType', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white">{config?.companyTypes.map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select></div>
+                                        </div>
+                                    </div>
 
-                        <div className="w-full">
-                            <AnimatePresence mode="wait">
-                                {submitted ? (
-                                    <motion.div
-                                        key="success"
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        className="bg-white border border-green-300 p-16 flex flex-col items-center justify-center text-center space-y-6 shadow-sm min-h-[480px]"
-                                    >
-                                        <motion.div 
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ type: "spring", damping: 12, stiffness: 200 }}
-                                            className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-2"
-                                        >
-                                            <CheckCircle size={60} strokeWidth={1.5} />
-                                        </motion.div>
-                                        <div className="space-y-3">
-                                            <h2 
-                                                className="text-3xl font-bold text-slate-900"
-                                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                            >
-                                                Registration <span className="text-green-600">Successful!</span>
-                                            </h2>
-                                            <p className="text-slate-500 text-base max-w-md mx-auto leading-relaxed font-inter">
-                                                Thank you for registering as a buyer for IHWE 2026. Our team will review your application and contact you soon.
-                                            </p>
+                                    {/* 2. Contact Information */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>Contact Information</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div className="space-y-1.5">
+                                                <Label className={labelClasses}>Email (verified by OTP) *</Label>
+                                                <div className="flex gap-2">
+                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-2 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7`} disabled={emailOtpVerified} /></div>
+                                                    {!emailOtpVerified && <Button type="button" onClick={() => (emailOtpSent ? verifyOtp('email') : requestOtp('email'))} disabled={isVerifying.email} className="bg-[#23471d] text-[10px] h-8 px-2 whitespace-nowrap">{isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : (emailOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                </div>
+                                                {emailOtpSent && !emailOtpVerified && <Input placeholder="OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={inputClasses} />}
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <Label className={labelClasses}>Mobile (verified by OTP) *</Label>
+                                                <div className="flex gap-2">
+                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-2 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Primary" className={`${inputClasses} pl-7`} disabled={mobileOtpVerified} /></div>
+                                                    {!mobileOtpVerified && <Button type="button" onClick={() => (mobileOtpSent ? verifyOtp('mobile') : requestOtp('mobile'))} disabled={isVerifying.mobile} className="bg-[#23471d] text-[10px] h-8 px-2 whitespace-nowrap">{isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : (mobileOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                </div>
+                                                {mobileOtpSent && !mobileOtpVerified && <Input placeholder="OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={inputClasses} />}
+                                            </div>
+                                            <div><Label className={labelClasses}>Alternate Number</Label><Input name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="Optional" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Website</Label><Input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={inputClasses} /></div>
                                         </div>
-                                        
-                                        <div className="flex items-center gap-2 text-xs text-slate-400 mt-4">
-                                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            Application is being processed...
-                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
 
-                                        <div className="flex gap-4 pt-6">
-                                            <Link to="/">
-                                                <Button className="rounded-none px-10 h-11 bg-[#23471d] hover:bg-[#1a3516] text-sm font-bold uppercase tracking-widest transition-all">
-                                                    Return Home
-                                                </Button>
-                                            </Link>
-                                            <Button
-                                                variant="outline"
-                                                onClick={() => {
-                                                    setSubmitted(false);
-                                                    setFormData({
-                                                        companyName: "",
-                                                        country: "",
-                                                        state: "",
-                                                        city: "",
-                                                        companyWebsite: "",
-                                                        yearsInBusiness: "",
-                                                        annualImportVolume: "",
-                                                        mainMarketsServed: "",
-                                                        companyTypes: [],
-                                                        contactPerson: "",
-                                                        designation: "",
-                                                        email: "",
-                                                        whatsapp: "",
-                                                        interestedCategories: [],
-                                                        targetPriceRange: "",
-                                                        preferredMeetingType: "both",
-                                                        specificExhibitors: "",
-                                                        confirmed: false
-                                                    });
-                                                }}
-                                                className="rounded-none px-10 h-11 border-slate-300 text-sm font-bold uppercase tracking-widest hover:bg-slate-50 transition-all font-inter"
-                                            >
-                                                New Registration
-                                            </Button>
-                                        </div>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        key="form"
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
-                                    >
-                                        <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
-                                            <h2 
-                                                className="text-lg font-bold text-slate-900 uppercase"
-                                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                            >
-                                                Buyer Registration Form
-                                            </h2>
-                                            <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">International Health & Wellness Expo 2026</p>
+                                            <div><Label className={labelClasses}>State/Province *</Label><Select onValueChange={(v) => handleSelectChange('stateProvince', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredStates.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>City *</Label><Select onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredCities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select></div>
+
+
+                                            <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} className={inputClasses} placeholder="Full Corporate Address" /></div>
+                                            <div><Label className={labelClasses}>Pin Code *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} className={inputClasses} placeholder="Pin code" /></div>
                                         </div>
 
-                                        <form onSubmit={handleSubmit} className="p-8 space-y-5 font-inter">
-                                            {/* ── COMPANY INFORMATION ── */}
-                                            <div className="space-y-3">
-                                                <h3 
-                                                    className="text-[16px] font-bold text-[#23471d] pb-0.5 border-b border-slate-100"
-                                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                >
-                                                    Company Information
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2.5">
-                                                    <div>
-                                                        <Label className={labelClasses}>Company Name *</Label>
-                                                        <Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>Country *</Label>
-                                                        <Select value={formData.country} onValueChange={(v) => handleSelectChange('country', v)}>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select Country" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px] bg-white">
-                                                                {countries.map(country => (
-                                                                    <SelectItem key={country._id} value={country.name}>{country.name}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>State *</Label>
-                                                        <Select 
-                                                            value={formData.state} 
-                                                            onValueChange={(v) => handleSelectChange('state', v)}
-                                                            disabled={!formData.country}
-                                                        >
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select State" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px] bg-white">
-                                                                {filteredStates.map(state => (
-                                                                    <SelectItem key={state._id} value={state.name}>{state.name}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>City *</Label>
-                                                        <Select 
-                                                            value={formData.city} 
-                                                            onValueChange={(v) => handleSelectChange('city', v)}
-                                                            disabled={!formData.state}
-                                                        >
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select City" />
-                                                            </SelectTrigger>
-                                                            <SelectContent className="max-h-[300px] bg-white">
-                                                                {filteredCities.map(city => (
-                                                                    <SelectItem key={city._id} value={city.name}>{city.name}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
+                                    </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2.5">
-                                                    <div>
-                                                        <Label className={labelClasses}>Company Website</Label>
-                                                        <Input name="companyWebsite" value={formData.companyWebsite} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>Years in Business</Label>
-                                                        <Input name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                </div>
+                                    {/* 3 & 4 Business Profile and Sourcing Interests */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>Business Profile & Interests</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div><Label className={labelClasses}>Years in Operation *</Label><Input required name="yearsInOperation" value={formData.yearsInOperation} onChange={handleChange} className={inputClasses} placeholder="e.g. 5 Years" /></div>
+                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualTurnoverRanges.map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Frequency" /></SelectTrigger><SelectContent className="bg-white">{config?.buyingFrequencies.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Primary Product Interest *</Label><Select onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white">{config?.primaryProductInterests.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Est. Annual Purchase *</Label><Select onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualPurchaseValueRanges.map((v: string) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select></div>
+                                            <div className="lg:col-span-3"><Label className={labelClasses}>Key Products/Services *</Label><Input required name="keyProductsServices" value={formData.keyProductsServices} onChange={handleChange} className={inputClasses} placeholder="Your primary offerings..." /></div>
+                                        </div>
+                                        <div className="space-y-2.5">
+                                            <div><Label className={labelClasses}>Secondary Categories</Label><div className="flex flex-wrap gap-2 mt-1">{config?.secondaryProductCategories.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[9px] cursor-pointer bg-slate-50 px-2 py-1 rounded border border-slate-200 hover:bg-emerald-50 transition-colors"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)} className="h-2.5 w-2.5" /> {c}</label>))}</div></div>
+                                        </div>
+                                    </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2.5">
-                                                    <div>
-                                                        <Label className={labelClasses}>Annual Import Volume</Label>
-                                                        <Input name="annualImportVolume" value={formData.annualImportVolume} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>Main Markets Served</Label>
-                                                        <Input name="mainMarketsServed" value={formData.mainMarketsServed} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                </div>
+                                    {/* Supplier Preference (India Only) */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>Supplier Preference (India Only)</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1.5"><Label className={labelClasses}>Preferred Supplier Region *</Label><div className="flex flex-wrap gap-1.5">{config?.regions.map((r: string) => (<label key={r} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}</label>))}</div></div>
+                                            <div className="space-y-1.5"><Label className={labelClasses}>Preferred Supplier Type *</Label><div className="flex flex-wrap gap-1.5">{config?.supplierTypes.map((t: string) => (<label key={t} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}</label>))}</div></div>
+                                        </div>
+                                    </div>
 
-                                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm mt-2">
-                                                    <Label className="text-[11px] font-bold text-slate-800 mb-1.5 block">Type of Company *</Label>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                                        {COMPANY_TYPES.map((type) => (
-                                                            <label key={type} className="flex items-center gap-2.5 cursor-pointer group">
-                                                                <Checkbox 
-                                                                    checked={formData.companyTypes.includes(type)}
-                                                                    onCheckedChange={(checked) => handleCheckboxChange('companyTypes', type, !!checked)}
-                                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" 
-                                                                />
-                                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 leading-tight transition-colors font-medium">{type}</span>
-                                                            </label>
-                                                        ))}
+                                    {/* Purchase Timeline, Decision Role, Pricing Preference */}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-emerald-50/30 p-4 rounded-lg border border-emerald-100/50">
+                                        <div className="space-y-1.5"><Label className={labelClasses}>Purchase Timeline *</Label><RadioGroup onValueChange={(v) => handleSelectChange('purchaseTimeline', v)} className="flex flex-wrap gap-x-4 gap-y-1">{config?.purchaseTimelines.map((t: string) => (<div key={t} className="flex items-center space-x-1.5"><RadioGroupItem value={t} id={`timeline-${t}`} className="h-3 w-3" /><Label htmlFor={`timeline-${t}`} className="text-[10px] font-medium text-slate-600">{t}</Label></div>))}</RadioGroup></div>
+                                        <div className="space-y-1.5"><Label className={labelClasses}>Decision Role *</Label><RadioGroup onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)} className="flex flex-wrap gap-x-4 gap-y-1">{config?.roles.map((r: string) => (<div key={r} className="flex items-center space-x-1.5"><RadioGroupItem value={r} id={`role-${r}`} className="h-3 w-3" /><Label htmlFor={`role-${r}`} className="text-[10px] font-medium text-slate-600">{r}</Label></div>))}</RadioGroup></div>
+                                        <div className="space-y-1.5"><Label className={labelClasses}>Pricing Preference *</Label><RadioGroup defaultValue="Mid-Range" onValueChange={(v) => handleSelectChange('pricingPreference', v)} className="flex flex-wrap gap-x-4 gap-y-1">{["Premium", "Mid-Range", "Budget"].map(p => (<div key={p} className="flex items-center space-x-1.5"><RadioGroupItem value={p} id={`price-${p}`} className="h-3 w-3" /><Label htmlFor={`price-${p}`} className="text-[10px] font-medium text-slate-600">{p}</Label></div>))}</RadioGroup></div>
+                                    </div>
+
+                                    {/* B2B Meeting Preferences */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>B2B Meeting Preferences</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div><Label className={labelClasses}>Preferred Date *</Label><Input type="date" required name="preferredMeetingDate" value={formData.preferredMeetingDate} onChange={handleChange} className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Preferred Slot *</Label><Select onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Slot" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem><SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem><SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem></SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Pre-Scheduled? *</Label><Select defaultValue="Yes" onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Yes">Yes, Require sB2B</SelectItem><SelectItem value="No">No, Walk-in only</SelectItem></SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Priority Level *</Label><Select defaultValue="Medium" onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="High">High Priority</SelectItem><SelectItem value="Medium">Medium Priority</SelectItem><SelectItem value="General">General</SelectItem></SelectContent></Select></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Registration Packages - COMPACT CARDS */}
+                                    <div className="space-y-3">
+                                        <h3 className={sectionTitleClasses}>Registration Packages</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                            {config?.packages.map((pkg: any) => {
+                                                const isActive = formData.registrationCategory === pkg.name;
+                                                return (
+                                                    <div key={pkg.name} onClick={() => handleSelectChange('registrationCategory', pkg.name)} className={`relative p-3 border-2 transition-all cursor-pointer rounded-lg ${isActive ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200 hover:border-slate-300'}`}>
+                                                        {isActive && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Selected</div>}
+                                                        <h4 className="text-sm font-bold mb-0.5">{pkg.name}</h4>
+                                                        <div className="text-xl font-black text-[#23471d] mb-2">₹{pkg.price} <span className="text-[9px] font-normal text-slate-400">+ GST</span></div>
+                                                        <ul className="space-y-1 mb-2">{pkg.benefits.map((b: string, i: number) => (<li key={i} className="flex items-start gap-1 text-[9px] font-medium text-slate-600"><CheckCircle className="text-emerald-500 mt-0.5 shrink-0" size={10} /> {b}</li>))}</ul>
                                                     </div>
-                                                </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+
+                                    {/* Terms & Submit */}
+                                    <div className="pt-4 space-y-4 border-t border-slate-200">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                                            <div className="space-y-2">
+                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-terms" checked={formData.consentTerms} onCheckedChange={(c) => setFormData(p => ({ ...p, consentTerms: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-terms" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to the Terms & Conditions and Refund Policy.</Label></div>
+                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-match" checked={formData.consentMatchedExhibitors} onCheckedChange={(c) => setFormData(p => ({ ...p, consentMatchedExhibitors: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-match" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to be matched with relevant exhibitors.</Label></div>
                                             </div>
-
-                                            {/* ── CONTACT DETAILS ── */}
-                                            <div className="space-y-3">
-                                                <h3 
-                                                    className="text-[16px] font-bold text-[#23471d] pb-0.5 border-b border-slate-100"
-                                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                >
-                                                    Contact Details
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2.5">
-                                                    <div>
-                                                        <Label className={labelClasses}>Contact Person *</Label>
-                                                        <Input required name="contactPerson" value={formData.contactPerson} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>Designation *</Label>
-                                                        <Input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>Email *</Label>
-                                                        <Input type="email" required name="email" value={formData.email} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                    <div>
-                                                        <Label className={labelClasses}>WhatsApp *</Label>
-                                                        <Input required name="whatsapp" value={formData.whatsapp} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                </div>
+                                            <div className="flex flex-col items-center">
+                                                <Button type="submit" disabled={isSubmitting} className="w-full h-10 bg-[#23471d] hover:bg-[#1a3516] rounded-full text-white font-bold text-[10px] uppercase tracking-[0.2em] shadow-md transition-all flex items-center justify-center gap-2 group">{isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <>Complete Registration & Pay <Send size={12} className="group-hover:translate-x-1 transition-transform" /></>}</Button>
+                                                <p className="mt-2 text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-1"><Shield size={8} className="text-[#23471d]" /> Secured By Razorpay</p>
                                             </div>
-
-                                            {/* ── PRODUCT INTEREST ── */}
-                                            <div className="space-y-4">
-                                                <h3 
-                                                    className="text-[16px] font-bold text-[#23471d] pb-0.5 border-b border-slate-100"
-                                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                >
-                                                    Product Interest
-                                                </h3>
-                                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                    <Label className="text-[11px] font-bold text-slate-800 mb-1.5 block">Interested Categories *</Label>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                                        {PRODUCT_CATEGORIES.map((cat) => (
-                                                            <label key={cat} className="flex items-center gap-2.5 cursor-pointer group">
-                                                                <Checkbox 
-                                                                    checked={formData.interestedCategories.includes(cat)}
-                                                                    onCheckedChange={(checked) => handleCheckboxChange('interestedCategories', cat, !!checked)}
-                                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" 
-                                                                />
-                                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 leading-tight transition-colors font-medium">{cat}</span>
-                                                            </label>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 mt-1">
-                                                    <div className="md:col-span-2 lg:col-span-4">
-                                                        <Label className={labelClasses}>Target Price Range</Label>
-                                                        <Input name="targetPriceRange" value={formData.targetPriceRange} onChange={handleChange} placeholder="Write Here.." className={inputClasses} />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* ── MEETING PREFERENCES ── */}
-                                            <div className="space-y-3">
-                                                <h3 
-                                                    className="text-[16px] font-bold text-[#23471d] pb-0.5 border-b border-slate-100"
-                                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                >
-                                                    Meeting Preferences
-                                                </h3>
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                                                    <div className="space-y-2.5 px-0.5">
-                                                        <Label className="text-[11px] font-bold text-slate-800">Preferred Meeting Type *</Label>
-                                                        <RadioGroup 
-                                                            value={formData.preferredMeetingType} 
-                                                            onValueChange={(v) => handleSelectChange('preferredMeetingType', v)}
-                                                            className="flex flex-col space-y-1.5 pt-1"
-                                                        >
-                                                            <div className="flex items-center space-x-3">
-                                                                <RadioGroupItem value="1:1" id="1:1" className="w-3.5 h-3.5 border-slate-400 text-[#23471d]" />
-                                                                <Label htmlFor="1:1" className="text-[11px] font-medium text-slate-600 cursor-pointer">1:1 Scheduled Meetings</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-3">
-                                                                <RadioGroupItem value="roundtable" id="roundtable" className="w-3.5 h-3.5 border-slate-400 text-[#23471d]" />
-                                                                <Label htmlFor="roundtable" className="text-[11px] font-medium text-slate-600 cursor-pointer">Small Group Roundtable</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-3">
-                                                                <RadioGroupItem value="both" id="both" className="w-3.5 h-3.5 border-slate-400 text-[#23471d]" />
-                                                                <Label htmlFor="both" className="text-[11px] font-medium text-slate-600 cursor-pointer">Both</Label>
-                                                            </div>
-                                                        </RadioGroup>
-                                                    </div>
-
-                                                    <div className="pt-1">
-                                                        <Label className={labelClasses}>Registration Fee + (18% GST)</Label>
-                                                        <div className="relative">
-                                                            <Input value="₹0" disabled className={`${inputClasses} bg-slate-50 text-[#23471d] border-slate-900 font-bold border-2 h-9`} />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="pt-1">
-                                                    <Label className={labelClasses}>Specific Exhibitors You Wish to Meet</Label>
-                                                    <textarea
-                                                        name="specificExhibitors"
-                                                        value={formData.specificExhibitors}
-                                                        onChange={handleChange}
-                                                        className="rounded-[2px] border border-slate-400 min-h-[80px] focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 py-2 w-full text-left"
-                                                        placeholder="Write Here.."
-                                                    ></textarea>
-                                                </div>
-
-                                                <div className="flex items-start gap-3 pt-1">
-                                                    <Checkbox 
-                                                        id="confirm" 
-                                                        checked={formData.confirmed}
-                                                        onCheckedChange={(checked) => handleConfirmChange(!!checked)}
-                                                        className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600 mt-0.5" 
-                                                    />
-                                                    <Label htmlFor="confirm" className="text-[11px] leading-relaxed text-slate-600 font-medium cursor-pointer">
-                                                        I confirm that I am a genuine trade buyer and agree to attend scheduled meetings.
-                                                    </Label>
-                                                </div>
-                                            </div>
-
-                                            <div className="pt-6 flex flex-col items-center">
-                                                <Button
-                                                    type="submit"
-                                                    disabled={isSubmitting}
-                                                    className="w-full max-w-sm h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group"
-                                                >
-                                                    {isSubmitting ? (
-                                                        <>
-                                                            <Loader2 size={16} className="animate-spin" />
-                                                            Submitting...
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            Submit Registration
-                                                            <Send size={16} />
-                                                        </>
-                                                    )}
-                                                </Button>
-                                                <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2">
-                                                    <ShieldCheck size={12} className="text-[#23471d]" />
-                                                    Secure Registration Portal
-                                                </p>
-                                            </div>
-                                        </form>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 };
 
