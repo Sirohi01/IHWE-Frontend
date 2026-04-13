@@ -625,7 +625,19 @@ const VisitorRegistration = () => {
                                                 </div>
                                             </RadioGroup>
 
-                                            
+                                            <div className="flex flex-col gap-1 min-w-[220px]">
+                                                <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Registering For (Event) *</Label>
+                                                <Select required value={formData.registrationFor} onValueChange={(v) => setFormData(prev => ({ ...prev, registrationFor: v }))}>
+                                                    <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                        <SelectValue placeholder="Select Event" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {events.map((ev: any) => (
+                                                            <SelectItem key={ev._id} value={ev.name} className="text-xs">{ev.name}</SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
                                         </div>
 
                                         {/* ── PERSONAL DETAILS ── */}
@@ -941,7 +953,7 @@ const VisitorRegistration = () => {
                                                     <div>
                                                         <Label className={labelClasses}>Pincode *</Label>
                                                         <Input 
-                                                            name="companyWebsite"
+                                                            name="companyPincode"
                                                             value={formData.companyPincode}
                                                             onChange={handleInputChange}
                                                             required placeholder="Enter Pincode" className={inputClasses} 
