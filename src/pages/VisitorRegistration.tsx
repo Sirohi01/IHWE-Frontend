@@ -27,11 +27,15 @@ const PURPOSE_GENERAL = [
 ];
 
 const PURPOSE_CORPORATE = [
+    "Business Meeting",
+    "Networking & Industry Interaction",
+    "Partnership / Collaboration Discussion",
     "Exploring Business Opportunities",
-    "Networking & Collaborations",
-    "Meeting Exhibitors & Suppliers",
-    "Learning About Latest Trends",
-    "Attending Arogya Sangosthi Seminar"
+    "Exhibitor / Vendor Meeting",
+    "Product Sourcing / Procurement",
+    "Market Research",
+    "Investment Opportunities",
+    "Conference / Seminar Participation"
 ];
 
 const INTEREST_GENERAL = [
@@ -46,12 +50,14 @@ const INTEREST_GENERAL = [
 ];
 
 const INTEREST_CORPORATE = [
-    "AYUSH & Herbal Products",
-    "Fitness & Nutrition",
-    "Health & Wellness",
-    "Bio-Medicine & Research",
-    "Organic Farming & Agriculture",
-    "HealthTech & Startups"
+    "Medical, Healthcare & Hospital Solutions",
+    "Medical Technology, Diagnostics & Devices",
+    "AYUSH & Traditional Systems of Medicine",
+    "Nutrition, Organic & Health Foods",
+    "Beauty, Personal Care & Aesthetic Wellness",
+    "Mental Health, Yoga & Spiritual Wellness",
+    "Wellness, Fitness & Lifestyle",
+    "Institutions, Government Bodies & Startups"
 ];
 
 const VisitorRegistration = () => {
@@ -87,6 +93,7 @@ const VisitorRegistration = () => {
         country: "India",
         state: "",
         city: "",
+        companyPincode:"",
         anyRequirement: "",
         schedulingB2B: "no",
         whatsappUpdates: "yes",
@@ -107,6 +114,7 @@ const VisitorRegistration = () => {
     const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
     const [emailTimer, setEmailTimer] = useState(0);
     const [phoneTimer, setPhoneTimer] = useState(0);
+    const [selected, setSelected] = useState<"domestic" | "international" | null>(null);
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -344,14 +352,14 @@ const VisitorRegistration = () => {
                         others: formData.purposeOfVisit.includes("Others")
                     },
                     areaOfInterest: {
-                        ayushHerbal: formData.areaOfInterest.includes("AYUSH & Herbal Products"),
-                        organicProducts: formData.areaOfInterest.includes("Organic & Natural Products"),
-                        fitnessWellness: formData.areaOfInterest.includes("Fitness & Wellness Equipment"),
-                        healthSupplements: formData.areaOfInterest.includes("Health Supplements"),
-                        healthcareServices: formData.areaOfInterest.includes("Hospitals & Healthcare Services"),
-                        agricultureFarming: formData.areaOfInterest.includes("Agriculture & Organic Farming"),
-                        researchInnovations: formData.areaOfInterest.includes("R&D & Innovations"),
-                        others: formData.areaOfInterest.includes("Others")
+                        ayushHerbal: formData.areaOfInterest.includes("Mediacal Healthcare & Hospital Solution"),
+                        organicProducts: formData.areaOfInterest.includes("AYUSH & Traditional Systems of Medicine"),
+                        fitnessWellness: formData.areaOfInterest.includes("Wellness, Fitness & Lifestyle"),
+                        healthSupplements: formData.areaOfInterest.includes("Nutrition, Organic & Health Foods"),
+                        healthcareServices: formData.areaOfInterest.includes("Beauty, Personal Care & Aesthetic Wellness"),
+                        agricultureFarming: formData.areaOfInterest.includes("Mental Health, Yoga & Spiritual Wellness"),
+                        researchInnovations: formData.areaOfInterest.includes("Medical Technology, Diagnostics & Devices"),
+                        others: formData.areaOfInterest.includes("Institutions, Government Bodies & Startups")
                     }
                 };
             } else {
@@ -381,12 +389,14 @@ const VisitorRegistration = () => {
                         learningTrends: formData.purposeOfVisit.includes("Learning About Latest Trends")
                     },
                     areaOfInterest: {
-                        ayushHerbal: formData.areaOfInterest.includes("AYUSH & Herbal Products"),
-                        healthWellness: formData.areaOfInterest.includes("Health & Wellness"),
-                        organicFarming: formData.areaOfInterest.includes("Organic Farming & Agriculture"),
-                        fitnessNutrition: formData.areaOfInterest.includes("Fitness & Nutrition"),
-                        bioMedicine: formData.areaOfInterest.includes("Bio-Medicine & Research"),
-                        healthTech: formData.areaOfInterest.includes("HealthTech & Startups")
+                       mediacal: formData.areaOfInterest.includes("Medical, Healthcare & Hospital Solutions"),
+                        ayush: formData.areaOfInterest.includes("AYUSH & Traditional Systems of Medicine"),
+                        wellness: formData.areaOfInterest.includes("Wellness, Fitness & Lifestyle"),
+                        Nutrition: formData.areaOfInterest.includes("Nutrition, Organic & Health Foods"),
+                        beauty: formData.areaOfInterest.includes("Beauty, Personal Care & Aesthetic Wellness"),
+                        mental: formData.areaOfInterest.includes("Mental Health, Yoga & Spiritual Wellness"),
+                        medicaltech: formData.areaOfInterest.includes("Medical Technology, Diagnostics & Devices"),
+                        institution: formData.areaOfInterest.includes("Institutions, Government Bodies & Startups")
                     }
                 };
             }
@@ -416,6 +426,7 @@ const VisitorRegistration = () => {
                         country: "India",
                         state: "",
                         city: "",
+                        companyPincode:"",
                         anyRequirement: "",
                         schedulingB2B: "no",
                         whatsappUpdates: "yes",
@@ -463,7 +474,7 @@ const VisitorRegistration = () => {
                     </p>
 
                     <h1 
-                        className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight"
+                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
                     >
                         {heroData?.heading || "Witness the Future of Wellness"}
                     </h1>
@@ -478,55 +489,151 @@ const VisitorRegistration = () => {
             {/* ── MAIN CONTENT ── */}
             <section className="pt-8 pb-24 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">
-                    <div className="space-y-8">
-                        <AnimatePresence mode="wait">
-                            {isSuccess ? (
-                                <motion.div
-                                    key="success"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    className="bg-white border border-green-300 p-16 flex flex-col items-center justify-center min-h-[500px] shadow-2xl relative overflow-hidden"
-                                >
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-green-500" />
-                                    <CheckCircle className="w-24 h-24 text-green-500 mb-8 animate-bounce-short" />
-                                    <h3 className="text-3xl font-inter font-bold text-slate-900 mb-4 text-center">Registration Success!</h3>
-                                    <p className="text-slate-600 text-center text-lg max-w-md mb-8 leading-relaxed">
-                                        Thank you for registering. Your details have been successfully submitted. You will receive a confirmation shortly.
-                                    </p>
-                                    <div className="flex items-center gap-3 text-sm text-slate-400 font-bold uppercase tracking-widest">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-                                        Redirecting or resetting in 5 seconds...
-                                    </div>
-                                    
-                                    <div className="mt-10 flex gap-4">
-                                        <Link to="/">
-                                            <Button className="h-11 px-8 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-xs font-bold uppercase tracking-widest shadow-lg shadow-[#23471d]/20 transition-all active:scale-95">
-                                                Go to Homepage
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </motion.div>
-                            ) : (
-                                <motion.div
+                    <motion.div
                                     key="form"
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
                                     className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
                                 >
-                                    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
-                                        <h2 
-                                            className="text-xl font-bold text-slate-900 uppercase"
-                                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                        >
-                                            Visitor Registration
-                                        </h2>
-                                        <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">International Health & Wellness Expo 2026</p>
-                                    </div>
+                            
+{/* ================= VISITOR SELECTION ================= */}
+{!selected && (
+    <>
+    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 justify-between items-center">
+                                 <h3 className="text-[22px] mb-2 font-semibold text-[#d26019]">
+    Welcome to the 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
+  </h3>
 
-                                    <form onSubmit={handleSubmit} className="p-8 space-y-8 font-inter">
+  <p className="mb-2">
+    Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH, organic, and sustainable industries under one roof.
+  </p>
+
+  <p className="mb-2">
+    Whether you are a visitor discovering innovations or a corporate buyer seeking meaningful business connections, IHWE offers a high-value, curated experience with India’s most trusted brands and manufacturers.
+  </p>
+
+  <p className="mb-2">
+    Register now and be part of a powerful global movement in health & wellness.
+  </p>    
+</div>
+   
+  <div className="text-center py-12 space-y-6">
+
+    <h2 className="text-2xl font-bold text-slate-800">
+      Choose Visitor Category
+    </h2>
+
+    <div className="flex justify-center gap-6">
+
+      <button
+        onClick={() => setSelected("domestic")}
+        className="px-4 py-2 bg-[#23471d] text-white font-semibold shadow hover:scale-105 transition-all"
+      >
+        Domestic Visitor
+      </button>
+
+      <button
+        onClick={() => setSelected("international")}
+        className="px-4 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all"
+      >
+        International Visitor
+      </button>
+
+    </div>
+  </div>
+   </>
+)}
+
+
+                                </motion.div>
+                     
+                    <div className="space-y-8">
+                    <AnimatePresence mode="wait">
+                          {isSuccess && (
+  <motion.div
+    key="success"
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    className="bg-white border border-green-300 p-16 flex flex-col items-center justify-center min-h-[500px] shadow-2xl relative overflow-hidden"
+  >
+    <div className="absolute top-0 left-0 w-full h-1 bg-green-500" />
+
+    <CheckCircle className="w-24 h-24 text-green-500 mb-8 animate-bounce-short" />
+
+    <h3 className="text-3xl font-serif font-bold text-slate-900 mb-4 text-center">
+      Registration Success!
+    </h3>
+
+    <p className="text-slate-600 text-center text-lg max-w-md mb-8 leading-relaxed">
+      Thank you for registering. Your details have been successfully submitted.
+    </p>
+
+    <div className="flex items-center gap-3 text-sm text-slate-400 font-bold uppercase tracking-widest">
+      <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+      Redirecting in 5 seconds...
+    </div>
+
+    <div className="mt-10 flex gap-4">
+      <Button
+        onClick={() => {
+          setIsSuccess(false);
+          setSelected(null); // ✅ IMPORTANT (back to buttons)
+        }}
+        className="h-11 px-8 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-xs font-bold uppercase tracking-widest"
+      >
+        Register Another
+      </Button>
+
+      <Link to="/">
+        <Button className="h-11 px-8 rounded-sm bg-[#d26019] hover:bg-[#a84c14] text-xs font-bold uppercase tracking-widest">
+          Go Home
+        </Button>
+      </Link>
+    </div>
+  </motion.div>
+)}
+                             
+                  {selected === "domestic" && !isSuccess && (
+                   <motion.div
+                                    key="form"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
+                                >
+                                   
+                            <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+                                {/* LEFT SIDE */}
+                                <div>
+                                    <h2 
+                                        className="text-xl font-bold text-slate-900 uppercase"
+                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                                    >
+                                        Domestic Visitor Registration
+                                    </h2>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
+                                       9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
+                                    </p>
+                                </div>
+
+                                {/* RIGHT SIDE */}
+                                <Link to="/buyer-registration">
+                                    <Button 
+                                        type="button"
+                                        variant="outline"
+                                        className="px-6 h-9 border-[#d26019] text-[#d26019] hover:bg-[#d26019] hover:text-white text-[14px] font-bold uppercase tracking-wider transition-all"
+                                    >
+                                        Buyer Registeration
+                                    </Button>
+                                </Link>
+
+                            </div>
+
+                                    <form onSubmit={handleSubmit} className="p-8 space-y-4 font-inter">
                                         {/* ── VISITOR TYPE ── */}
+                                        
                                         <div className="flex flex-wrap items-center gap-12">
                                             <RadioGroup
                                                 defaultValue="corporate"
@@ -548,48 +655,19 @@ const VisitorRegistration = () => {
                                                 </div>
                                             </RadioGroup>
 
-                                            <Link to="/buyer-registration">
-                                                <Button 
-                                                    type="button"
-                                                    variant="outline"
-                                                    className="rounded-full px-6 h-9 border-[#d26019] text-[#d26019] hover:bg-[#d26019] hover:text-white text-[11px] font-bold uppercase tracking-wider transition-all"
-                                                >
-                                                    Buyer Register
-                                                </Button>
-                                            </Link>
+                                            
                                         </div>
 
                                         {/* ── PERSONAL DETAILS ── */}
-                                        <div className="space-y-6">
+                                        <div className="">
                                             <h3 
                                                 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5"
                                                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                             >
                                                 Personal Information
                                             </h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
-                                                <div>
-                                                    <Label className={labelClasses}>REGISTRATION FOR *</Label>
-                                                    <Select 
-                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, registrationFor: v }))}
-                                                        value={formData.registrationFor}
-                                                    >
-                                                        <SelectTrigger className={inputClasses}>
-                                                            <SelectValue placeholder="Select Here" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {events.map(e => (
-                                                                <SelectItem key={e._id} value={e._id}>{e.name}</SelectItem>
-                                                            ))}
-                                                            {!events.length && (
-                                                                <>
-                                                                    <SelectItem value="organic_expo">5th Organic Expo 2026</SelectItem>
-                                                                    <SelectItem value="ihwe_expo">9th International Health and Wellness Expo</SelectItem>
-                                                                </>
-                                                            )}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
+                                                
                                                 <div>
                                                     <Label className={labelClasses}>FIRST NAME *</Label>
                                                     <Input 
@@ -608,6 +686,17 @@ const VisitorRegistration = () => {
                                                         required placeholder="Enter Last Name" className={inputClasses} 
                                                     />
                                                 </div>
+                                                {visitorType === "corporate" && (
+                                                    <div>
+                                                        <Label className={labelClasses}>DESIGNATION *</Label>
+                                                        <Input 
+                                                            name="designation"
+                                                            value={formData.designation}
+                                                            onChange={handleInputChange}
+                                                            required placeholder="Enter Designation.." className={inputClasses} 
+                                                        />
+                                                    </div>
+                                                )}
                                                 <div>
                                                     <Label className={labelClasses}>GENDER *</Label>
                                                     <Select
@@ -659,9 +748,17 @@ const VisitorRegistration = () => {
                                                         {phoneVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
                                                     </div>
                                                 </div>
-
+                                                <div>
+                                                    <Label className={labelClasses}>ALTERNATE NO. (OPTIONAL)</Label>
+                                                    <Input 
+                                                        name="alternateNo"
+                                                        value={formData.alternateNo}
+                                                        onChange={handleInputChange}
+                                                        placeholder="Enter Alternate No." className={inputClasses} 
+                                                    />
+                                                </div>
                                                 {/* Email & OTP Row */}
-                                                <div className="relative flex flex-col group">
+                                                <div className="relative flex flex-col group lg:col-span-2">
                                                     <Label className={labelClasses}>EMAIL ADDRESS *</Label>
                                                     <div className="relative flex items-center">
                                                         <Input 
@@ -686,26 +783,8 @@ const VisitorRegistration = () => {
                                                     </div>
                                                 </div>
 
-                                                {visitorType === "corporate" && (
-                                                    <div>
-                                                        <Label className={labelClasses}>DESIGNATION *</Label>
-                                                        <Input 
-                                                            name="designation"
-                                                            value={formData.designation}
-                                                            onChange={handleInputChange}
-                                                            required placeholder="Enter Designation.." className={inputClasses} 
-                                                        />
-                                                    </div>
-                                                )}
-                                                <div>
-                                                    <Label className={labelClasses}>ALTERNATE NO. (OPTIONAL)</Label>
-                                                    <Input 
-                                                        name="alternateNo"
-                                                        value={formData.alternateNo}
-                                                        onChange={handleInputChange}
-                                                        placeholder="Enter Alternate No." className={inputClasses} 
-                                                    />
-                                                </div>
+                                                
+                                                
                                             </div>
 
                                             {/* ── DUAL OTP INPUT GRID ── */}
@@ -746,7 +825,7 @@ const VisitorRegistration = () => {
                                                         {/* Email OTP Column */}
                                                         <div>
                                                             {emailOtpSent && !emailVerified && (
-                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
+                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 grid-col-3 rounded-sm">
                                                                     <Input 
                                                                         value={emailOtp}
                                                                         onChange={(e) => setEmailOtp(e.target.value)}
@@ -775,14 +854,14 @@ const VisitorRegistration = () => {
 
                                         {/* ── PROFESSIONAL DETAILS ── */}
                                         {visitorType === "corporate" && (
-                                            <div className="space-y-6">
+                                            <div className="space-y-2">
                                                 <h3 
-                                                    className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5"
+                                                    className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-400 pb-1.5"
                                                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                                 >
                                                     Company & Industry Information
                                                 </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
                                                     <div className="lg:col-span-2">
                                                         <Label className={labelClasses}>COMPANY NAME *</Label>
                                                         <Input 
@@ -837,6 +916,7 @@ const VisitorRegistration = () => {
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
+                                                    {visitorType != "corporate" && (
                                                     <div>
                                                         <Label className={labelClasses}>COUNTRY *</Label>
                                                         <Select
@@ -853,6 +933,7 @@ const VisitorRegistration = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
+                                                    )}
                                                     <div>
                                                         <Label className={labelClasses}>STATE *</Label>
                                                         <Select 
@@ -886,6 +967,15 @@ const VisitorRegistration = () => {
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>Pincode *</Label>
+                                                        <Input 
+                                                            name="companyWebsite"
+                                                            value={formData.companyPincode}
+                                                            onChange={handleInputChange}
+                                                            required placeholder="Enter Pincode" className={inputClasses} 
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
@@ -996,7 +1086,7 @@ const VisitorRegistration = () => {
                                             <Button
                                                 type="submit"
                                                 disabled={loading || !emailVerified || !phoneVerified}
-                                                className="w-full max-w-sm h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                                className="w-full max-w-56 h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
                                             >
                                                 {loading ? (
                                                     <>
@@ -1017,7 +1107,9 @@ const VisitorRegistration = () => {
                                         </div>
                                     </form>
                                 </motion.div>
-                            )}
+                            
+                        )}
+                    
                         </AnimatePresence>
                     </div>
                 </div>

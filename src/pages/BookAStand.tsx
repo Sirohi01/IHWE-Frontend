@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -663,7 +663,7 @@ const BookAStand = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-inter">
-            {/* ── HERO SECTION - Registration Standard 16:5 ── */}
+            {/* -- HERO SECTION - Registration Standard 16:5 -- */}
             <section
                 className="hero-background-registration"
                 style={{
@@ -693,24 +693,23 @@ const BookAStand = () => {
                 </div>
             </section>
 
-            {/* ── MAIN CONTENT ── */}
+            {/* -- MAIN CONTENT -- */}
             <section className="pt-4 pb-12 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">
                     <div className="space-y-4">
-                        {/* ── PERPETUAL EVENT HEADER ── */}
+                        {/* -- PERPETUAL EVENT HEADER -- */}
                         <div className="bg-white border border-slate-300 shadow-xl overflow-hidden mb-4" data-aos="fade-up">
-                            <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
                                         <h2 className="text-2xl font-inter font-bold text-slate-900">{events.find(e => e._id === selectedEventId)?.name || 'IH&WE'}</h2>
-                                        <span className="px-3 py-1 bg-green-100 text-[#23471d] text-[9px] font-bold uppercase rounded-full border border-green-200 tracking-wider">Live Registration</span>
                                     </div>
                                     <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.15em]">Exhibitor Registration - Booking Form</p>
 
                                     {events.find(e => e._id === selectedEventId)?.description && (
-                                        <div className="mt-3 relative">
+                                        <div className="mt-2 relative">
                                             <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#d26019]/20 rounded-full" />
-                                            <p className="text-[17px] text-slate-500 pl-4 font-medium max-w-2xl leading-relaxed">
+                                            <p className="text-[15px] text-slate-500 pl-4 font-medium max-w-full leading-relaxed">
                                                 {events.find(e => e._id === selectedEventId)?.description}
                                             </p>
                                         </div>
@@ -756,7 +755,7 @@ const BookAStand = () => {
                             </div>
                         </div>
 
-                        {/* ── REGISTRATION FLOW ── */}
+                        {/* -- REGISTRATION FLOW -- */}
                         <div className="w-full">
                             <AnimatePresence mode="wait">
                                 {!exhibitorType ? (
@@ -852,15 +851,15 @@ const BookAStand = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         className="bg-white border border-slate-300 shadow-2xl overflow-hidden rounded-sm"
                                     >
-                                        <form onSubmit={handleSubmit} className="p-8 space-y-6 font-inter bg-white">
-                                            {/* ── RATES COMPARISON TABLE (Matches Image 1) ── */}
+                                        <form onSubmit={handleSubmit} className="p-4 space-y-3 font-inter bg-white">
+                                            {/* -- RATES COMPARISON TABLE (Matches Image 1) -- */}
                                             <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
                                                         <tr className="bg-[#0091d5] text-white">
                                                             <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
                                                             {exhibitorType === 'domestic' && (
-                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ?)</th>
                                                             )}
                                                             {exhibitorType === 'international' && (
                                                                 <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
@@ -877,7 +876,7 @@ const BookAStand = () => {
                                                                         <td className="py-4 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '18' : '9'} sq m.)</td>
                                                                         {exhibitorType === 'domestic' && (
                                                                             <td className="py-4 px-6 text-[12px] font-medium uppercase">
-                                                                                {inrRate ? `INR ₹ ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
+                                                                                {inrRate ? `INR ? ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
                                                                             </td>
                                                                         )}
                                                                         {exhibitorType === 'international' && (
@@ -897,13 +896,13 @@ const BookAStand = () => {
                                                 </table>
                                             </div>
 
-                                            {/* ── EXHIBITOR DETAILS SECTION ── */}
-                                            <div className="space-y-4 pt-2">
+                                            {/* -- EXHIBITOR DETAILS SECTION -- */}
+                                            <div className="space-y-2 pt-1">
                                                 <div className="pb-2 border-b border-slate-100">
                                                     <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Exhibitor Details</h3>
                                                 </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-2">
                                                     <div className="md:col-span-4">
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COMPANY NAME <span className="text-red-500">*</span></Label>
                                                         <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
@@ -1018,8 +1017,8 @@ const BookAStand = () => {
                                                 </div>
                                             </div>
 
-                                            {/* ── EXHIBITOR CONTACT DETAILS ── */}
-                                            <div className="space-y-4 pt-2">
+                                            {/* -- EXHIBITOR CONTACT DETAILS -- */}
+                                            <div className="space-y-2 pt-1">
                                                 <div className="pb-2 border-b border-slate-100">
                                                     <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Exhibitor Contact Details</h3>
                                                 </div>
@@ -1027,7 +1026,7 @@ const BookAStand = () => {
                                                 {/* First Contact Person */}
                                                 <div className="space-y-4">
                                                     <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
-                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-4">
+                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
                                                         <div>
                                                             <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TITLE <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
@@ -1138,15 +1137,15 @@ const BookAStand = () => {
 
                                             </div>
 
-                                            {/* ── PARTICIPATION DETAILS SECTION ── */}
-                                            <div className="space-y-4 pt-2 border-t border-slate-100">
+                                            {/* -- PARTICIPATION DETAILS SECTION -- */}
+                                            <div className="space-y-2 pt-1 border-t border-slate-100">
                                                 <div className="pb-2 border-b border-slate-100">
                                                     <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Participation Details</h3>
                                                 </div>
 
                                                 <div className="space-y-4">
                                                     {/* Selection Controls */}
-                                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4">
+                                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
                                                         <div className="space-y-1.5">
                                                             <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL FOR <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
@@ -1239,7 +1238,7 @@ const BookAStand = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="space-y-2 pt-2 border-t border-slate-100">
+                                            <div className="space-y-2 pt-1 border-t border-slate-100">
                                                 <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1 mb-2">
                                                     Exhibitor Category
                                                 </h3>
@@ -1313,7 +1312,7 @@ const BookAStand = () => {
                                                 </div>
                                             </div>
 
-                                            {/* ── FINAL BOOKING CONTROL ── */}
+                                            {/* -- FINAL BOOKING CONTROL -- */}
                                             <div className="pt-2 border-t border-slate-200">
                                                 <div className="flex flex-col gap-4">
                                                     <div className="space-y-3">
@@ -1362,7 +1361,7 @@ const BookAStand = () => {
                                                                     <div>
                                                                         <p className="text-[9px] text-slate-400 font-bold uppercase">Selected Stand</p>
                                                                         <p className="text-sm font-bold text-slate-900">Stall {formData.participation.stallFor || 'Not Selected'}</p>
-                                                                        <p className="text-[11px] text-slate-500">{formData.participation.stallType} • {formData.participation.stallSize} Sq M.</p>
+                                                                        <p className="text-[11px] text-slate-500">{formData.participation.stallType} � {formData.participation.stallSize} Sq M.</p>
                                                                     </div>
                                                                 </div>
 
@@ -1370,24 +1369,24 @@ const BookAStand = () => {
                                                                     <div className="flex justify-between items-center text-xs">
                                                                         <span className="text-slate-500 font-medium">Space Rental</span>
                                                                         <span className="font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.rate * formData.participation.stallSize).toLocaleString()}
+                                                                            {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.rate * formData.participation.stallSize).toLocaleString()}
                                                                         </span>
                                                                     </div>
                                                                     {selectedStall?.incrementPercentage > 0 && (
                                                                         <div className="flex justify-between items-center text-xs text-orange-600">
                                                                             <span className="font-medium">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                            <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
+                                                                            <span className="font-bold">+ {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
                                                                         </div>
                                                                     )}
                                                                     <div className="h-px bg-slate-200 my-2" />
                                                                     <div className="flex justify-between items-center text-xs text-slate-600">
                                                                         <span className="font-medium">GST (18%)</span>
-                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
+                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '?' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
                                                                     </div>
                                                                     <div className="flex justify-between items-center">
                                                                         <span className="text-xs font-bold uppercase text-slate-500">Total Booking Value</span>
                                                                         <span className="text-sm font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.total).toLocaleString()}
+                                                                            {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.total).toLocaleString()}
                                                                         </span>
                                                                     </div>
 
@@ -1395,7 +1394,7 @@ const BookAStand = () => {
                                                                         <div className="flex justify-between items-center pt-2">
                                                                             <span className="text-xs font-bold uppercase text-orange-600">Balance Later</span>
                                                                             <span className="text-sm font-bold text-orange-600">
-                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {formData.balanceAmount.toLocaleString()}
+                                                                                {formData.participation.currency === 'INR' ? '?' : '$'} {formData.balanceAmount.toLocaleString()}
                                                                             </span>
                                                                         </div>
                                                                     )}
@@ -1408,7 +1407,7 @@ const BookAStand = () => {
                                                                             <p className="text-[9px] text-slate-500 font-bold uppercase">Payable right now</p>
                                                                         </div>
                                                                         <div className="text-right">
-                                                                            <p className="text-2xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.amountPaid.toLocaleString()}</p>
+                                                                            <p className="text-2xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '?' : '$'} {formData.amountPaid.toLocaleString()}</p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1441,7 +1440,7 @@ const BookAStand = () => {
                             </AnimatePresence>
                         </div>
 
-                        {/* ── EVENT INFO FOOTER BAR ── */}
+                        {/* -- EVENT INFO FOOTER BAR -- */}
                         <div className="w-full bg-[#0072bc] text-white p-4 rounded-sm shadow-xl flex flex-wrap justify-between items-center gap-4" data-aos="fade-up">
                             <div className="flex items-center gap-4 border-r border-[#ffffff33] pr-8 last:border-none last:pr-0">
                                 <div className="p-3 bg-white/10 rounded-full"><Calendar size={24} /></div>
@@ -1486,3 +1485,5 @@ const BookAStand = () => {
 };
 
 export default BookAStand;
+
+
