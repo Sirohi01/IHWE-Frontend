@@ -1244,9 +1244,7 @@ const BookAStand = () => {
                                                     Exhibitor Category
                                                 </h3>
 
-
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-4 gap-4">
                                                     <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
                                                         <Select
@@ -1256,7 +1254,7 @@ const BookAStand = () => {
                                                             <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Primary Category" />
                                                             </SelectTrigger>
-                                                            <SelectContent >
+                                                            <SelectContent>
                                                                 {PRIMARY_CATEGORIES.map(cat => (
                                                                     <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
                                                                 ))}
@@ -1274,10 +1272,41 @@ const BookAStand = () => {
                                                             <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 disabled:opacity-50">
                                                                 <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
                                                             </SelectTrigger>
-                                                            <SelectContent >
+                                                            <SelectContent>
                                                                 {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
                                                                     <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
                                                                 ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+
+                                                    <div>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL *</Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
+                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectValue placeholder="How did you hear about us?" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
+                                                                <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
+                                                                <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
+                                                                <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
+                                                                <SelectItem value="Others" className="text-xs">Others</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+
+                                                    <div>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH *</Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectValue placeholder="Select Staff Member" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {marketingStaff.map(s => (
+                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">{s.username}</SelectItem>
+                                                                ))}
+                                                                <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
@@ -1287,40 +1316,7 @@ const BookAStand = () => {
                                             {/* ── FINAL BOOKING CONTROL ── */}
                                             <div className="pt-2 border-t border-slate-200">
                                                 <div className="flex flex-col gap-4">
-                                                    {/* Left: Input Selection */}
                                                     <div className="space-y-3">
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                            <div className="space-y-1.5">
-                                                                <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL *</Label>
-                                                                <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                                    <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
-                                                                        <SelectValue placeholder="How did you hear about us?" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
-                                                                        <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
-                                                                        <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
-                                                                        <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
-                                                                        <SelectItem value="Others" className="text-xs">Others</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH *</Label>
-                                                                <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                                    <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
-                                                                        <SelectValue placeholder="Select Staff Member" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        {marketingStaff.map(s => (
-                                                                            <SelectItem key={s._id} value={s.username} className="text-xs">{s.username}</SelectItem>
-                                                                        ))}
-                                                                        <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                        </div>
-
                                                         <div className="space-y-2">
                                                             <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
                                                                 <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
@@ -1329,18 +1325,6 @@ const BookAStand = () => {
                                                                 </span>
                                                             </label>
                                                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
                                                     </div>
 
