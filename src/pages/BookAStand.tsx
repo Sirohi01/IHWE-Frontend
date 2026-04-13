@@ -702,7 +702,7 @@ const BookAStand = () => {
                             <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
-                                        <h2 className="text-2xl font-inter font-bold text-slate-900">{events.find(e => e._id === selectedEventId)?.name || 'IH&WE'}</h2>
+                                        <h3 className="text-[22px] font-inter font-bold text-[#D26019]">{events.find(e => e._id === selectedEventId)?.name || 'IH&WE'}</h3>
                                     </div>
                                     <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.15em]">Exhibitor Registration - Booking Form</p>
 
@@ -1361,7 +1361,7 @@ const BookAStand = () => {
                                                                     <div>
                                                                         <p className="text-[9px] text-slate-400 font-bold uppercase">Selected Stand</p>
                                                                         <p className="text-sm font-bold text-slate-900">Stall {formData.participation.stallFor || 'Not Selected'}</p>
-                                                                        <p className="text-[11px] text-slate-500">{formData.participation.stallType} • {formData.participation.stallSize} Sq M.</p>
+                                                                        <p className="text-[11px] text-slate-500">{formData.participation.stallType} ï¿½ {formData.participation.stallSize} Sq M.</p>
                                                                     </div>
                                                                 </div>
 
