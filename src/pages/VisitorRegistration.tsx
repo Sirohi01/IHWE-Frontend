@@ -23,7 +23,7 @@ const PURPOSE_GENERAL = [
     "Exploring New Products",
     "Buying Products & Services",
     "Learning Industry Trends",
-    "Others"
+    "Others",
 ];
 
 const PURPOSE_CORPORATE = [
@@ -35,7 +35,7 @@ const PURPOSE_CORPORATE = [
     "Product Sourcing / Procurement",
     "Market Research",
     "Investment Opportunities",
-    "Conference / Seminar Participation"
+    "Conference / Seminar Participation",
 ];
 
 const INTEREST_GENERAL = [
@@ -46,7 +46,7 @@ const INTEREST_GENERAL = [
     "Hospitals & Healthcare Services",
     "Agriculture & Organic Farming",
     "R&D & Innovations",
-    "Others"
+    "Others",
 ];
 
 const INTEREST_CORPORATE = [
@@ -57,7 +57,7 @@ const INTEREST_CORPORATE = [
     "Beauty, Personal Care & Aesthetic Wellness",
     "Mental Health, Yoga & Spiritual Wellness",
     "Wellness, Fitness & Lifestyle",
-    "Institutions, Government Bodies & Startups"
+    "Institutions, Government Bodies & Startups",
 ];
 
 const VisitorRegistration = () => {
@@ -223,8 +223,8 @@ const VisitorRegistration = () => {
     const handlePurposeChange = (opt: string, checked: boolean) => {
         setFormData(prev => ({
             ...prev,
-            purposeOfVisit: checked 
-                ? [...prev.purposeOfVisit, opt] 
+            purposeOfVisit: checked
+                ? [...prev.purposeOfVisit, opt]
                 : prev.purposeOfVisit.filter(i => i !== opt)
         }));
     };
@@ -232,8 +232,8 @@ const VisitorRegistration = () => {
     const handleInterestChange = (opt: string, checked: boolean) => {
         setFormData(prev => ({
             ...prev,
-            areaOfInterest: checked 
-                ? [...prev.areaOfInterest, opt] 
+            areaOfInterest: checked
+                ? [...prev.areaOfInterest, opt]
                 : prev.areaOfInterest.filter(i => i !== opt)
         }));
     };
@@ -344,23 +344,8 @@ const VisitorRegistration = () => {
                     state: formData.state,
                     city: formData.city,
                     subscribe: formData.subscribeNewsletter,
-                    purposeOfVisit: {
-                        businessNetworking: formData.purposeOfVisit.includes("Business Networking"),
-                        exploringProducts: formData.purposeOfVisit.includes("Exploring New Products"),
-                        buyingProducts: formData.purposeOfVisit.includes("Buying Products & Services"),
-                        learningTrends: formData.purposeOfVisit.includes("Learning Industry Trends"),
-                        others: formData.purposeOfVisit.includes("Others")
-                    },
-                    areaOfInterest: {
-                        ayushHerbal: formData.areaOfInterest.includes("Mediacal Healthcare & Hospital Solution"),
-                        organicProducts: formData.areaOfInterest.includes("AYUSH & Traditional Systems of Medicine"),
-                        fitnessWellness: formData.areaOfInterest.includes("Wellness, Fitness & Lifestyle"),
-                        healthSupplements: formData.areaOfInterest.includes("Nutrition, Organic & Health Foods"),
-                        healthcareServices: formData.areaOfInterest.includes("Beauty, Personal Care & Aesthetic Wellness"),
-                        agricultureFarming: formData.areaOfInterest.includes("Mental Health, Yoga & Spiritual Wellness"),
-                        researchInnovations: formData.areaOfInterest.includes("Medical Technology, Diagnostics & Devices"),
-                        others: formData.areaOfInterest.includes("Institutions, Government Bodies & Startups")
-                    }
+                    purposeOfVisit: formData.purposeOfVisit,
+                    areaOfInterest: formData.areaOfInterest,
                 };
             } else {
                 payload = {
@@ -381,23 +366,8 @@ const VisitorRegistration = () => {
                     whatsappUpdates: formData.whatsappUpdates,
                     specificRequirement: formData.anyRequirement,
                     subscribe: formData.subscribeNewsletter,
-                    purposeOfVisit: {
-                        exploringBusiness: formData.purposeOfVisit.includes("Exploring Business Opportunities"),
-                        meetingExhibitors: formData.purposeOfVisit.includes("Meeting Exhibitors & Suppliers"),
-                        attendingSeminar: formData.purposeOfVisit.includes("Attending Arogya Sangosthi Seminar"),
-                        networking: formData.purposeOfVisit.includes("Networking & Collaborations"),
-                        learningTrends: formData.purposeOfVisit.includes("Learning About Latest Trends")
-                    },
-                    areaOfInterest: {
-                       mediacal: formData.areaOfInterest.includes("Medical, Healthcare & Hospital Solutions"),
-                        ayush: formData.areaOfInterest.includes("AYUSH & Traditional Systems of Medicine"),
-                        wellness: formData.areaOfInterest.includes("Wellness, Fitness & Lifestyle"),
-                        Nutrition: formData.areaOfInterest.includes("Nutrition, Organic & Health Foods"),
-                        beauty: formData.areaOfInterest.includes("Beauty, Personal Care & Aesthetic Wellness"),
-                        mental: formData.areaOfInterest.includes("Mental Health, Yoga & Spiritual Wellness"),
-                        medicaltech: formData.areaOfInterest.includes("Medical Technology, Diagnostics & Devices"),
-                        institution: formData.areaOfInterest.includes("Institutions, Government Bodies & Startups")
-                    }
+                    purposeOfVisit: formData.purposeOfVisit,
+                    areaOfInterest: formData.areaOfInterest,
                 };
             }
 
