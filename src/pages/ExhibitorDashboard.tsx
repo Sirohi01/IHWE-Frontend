@@ -4,16 +4,18 @@ import { AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { API_URL, settingsApi } from '@/lib/api';
 
-// Sub-components
+// Old sub-components (kept for tabs)
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
-import ExhibitorHeader from '@/components/dashboard/exhibitor/ExhibitorHeader';
-import ExhibitorMobileNav from '@/components/dashboard/exhibitor/ExhibitorMobileNav';
 import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
 import ExhibitorProfile from '@/components/dashboard/exhibitor/ExhibitorProfile';
 import ExhibitorInvoices from '@/components/dashboard/exhibitor/ExhibitorInvoices';
 import ExhibitorEvents from '@/components/dashboard/exhibitor/ExhibitorEvents';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
+
+// New admin-style layout components
+import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
+import ExhibitorStatsGrid from '@/components/dashboard/exhibitor2/ExhibitorStatsGrid';
 
 export default function ExhibitorDashboard() {
     const navigate = useNavigate();
@@ -98,7 +100,7 @@ export default function ExhibitorDashboard() {
 
     if (!data) return null;
 
-    const cur = data.currency === 'USD' ? '$' : '₹';
+    const cur = data.participation?.currency === 'USD' ? '$' : '\u20B9';
     const status = STATUS_CONFIG[data.status] || STATUS_CONFIG.pending;
     const paid = data.amountPaid || 0;
     const total = data.participation?.total || 0;
@@ -107,81 +109,80 @@ export default function ExhibitorDashboard() {
     const regDate = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
     return (
-        <div className="min-h-screen bg-[#f1f4f9] font-sans selection:bg-[#23471d]/20 antialiased">
-            <ExhibitorHeader 
-                logo={logo} 
-                data={data} 
-                activeTab={activeTab} 
-                setActiveTab={setActiveTab} 
-                handleLogout={handleLogout} 
-            />
+        <ExhibitorLayout
+            logo={logo}
+            data={data}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            handleLogout={handleLogout}
+            onChangePwd={() => setShowChangePwd(true)}
+        >
+            <AnimatePresence mode="wait">
 
-            <ExhibitorMobileNav 
-                activeTab={activeTab} 
-                setActiveTab={setActiveTab} 
-            />
-
-            <main className="max-w-[1600px] mx-auto px-4 sm:px-10 lg:px-16 pt-28 pb-32 print:hidden">
-                <AnimatePresence mode="wait">
-                    {activeTab === 'dashboard' && (
-                        <ExhibitorOverview 
-                            data={data} 
-                            cur={cur} 
-                            status={status} 
-                            paidPct={paidPct} 
-                            paid={paid} 
-                            total={total} 
-                            balance={balance} 
-                            setActiveTab={setActiveTab} 
+                {activeTab === 'dashboard' && (
+                    <div className="space-y-4">
+                        <div className="bg-white shadow-sm p-4">
+                            <ExhibitorStatsGrid
+                                data={data}
+                                cur={cur}
+                                paid={paid}
+                                total={total}
+                                balance={balance}
+                                paidPct={paidPct}
+                            />
+                        </div>
+                        <ExhibitorOverview
+                            data={data}
+                            cur={cur}
+                            status={status}
+                            paidPct={paidPct}
+                            paid={paid}
+                            total={total}
+                            balance={balance}
+                            setActiveTab={setActiveTab}
                         />
-                    )}
+                    </div>
+                )}
 
-                    {activeTab === 'profile' && <ExhibitorProfile data={data} />}
+                {activeTab === 'profile' && (
+                    <ExhibitorProfile data={data} />
+                )}
 
-                    {activeTab === 'invoices' && (
-                        <ExhibitorInvoices 
-                            data={data} 
-                            cur={cur} 
-                            total={total} 
-                            paid={paid} 
-                            balance={balance} 
-                            paidPct={paidPct} 
-                            regDate={regDate} 
-                        />
-                    )}
+                {activeTab === 'invoices' && (
+                    <ExhibitorInvoices
+                        data={data}
+                        cur={cur}
+                        total={total}
+                        paid={paid}
+                        balance={balance}
+                        paidPct={paidPct}
+                        regDate={regDate}
+                    />
+                )}
 
-                    {activeTab === 'exhibitions' && (
-                        <ExhibitorEvents 
-                            data={data} 
-                            allRegistrations={allRegistrations} 
-                            setLoading={setLoading} 
-                            fetchDashboard={fetchDashboard} 
-                            setActiveTab={setActiveTab} 
-                        />
-                    )}
-                </AnimatePresence>
-            </main>
+                {activeTab === 'exhibitions' && (
+                    <ExhibitorEvents
+                        data={data}
+                        allRegistrations={allRegistrations}
+                        setLoading={setLoading}
+                        fetchDashboard={fetchDashboard}
+                        setActiveTab={setActiveTab}
+                    />
+                )}
 
-            <footer className="max-w-[1600px] mx-auto px-10 lg:px-16 py-12 border-t border-slate-200/50 flex flex-col sm:flex-row items-center justify-between gap-6 opacity-60 print:hidden">
-                <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                    <span>© 2026 Namo Gange Trust</span>
-                    <div className="w-1 h-1 rounded-full bg-slate-300" />
-                    <span>Security Protocol Alpha</span>
-                </div>
-            </footer>
+            </AnimatePresence>
 
-            <SecurityModal 
-                show={showChangePwd} 
-                onClose={() => setShowChangePwd(false)} 
-                pwdForm={pwdForm} 
-                setPwdForm={setPwdForm} 
-                pwdLoading={pwdLoading} 
-                showPwd={showPwd} 
-                setShowPwd={setShowPwd} 
-                onSubmit={handleChangePassword} 
+            <SecurityModal
+                show={showChangePwd}
+                onClose={() => setShowChangePwd(false)}
+                pwdForm={pwdForm}
+                setPwdForm={setPwdForm}
+                pwdLoading={pwdLoading}
+                showPwd={showPwd}
+                setShowPwd={setShowPwd}
+                onSubmit={handleChangePassword}
             />
-
             <PrintCertificate data={data} />
-        </div>
+        </ExhibitorLayout>
     );
 }

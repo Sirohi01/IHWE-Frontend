@@ -859,7 +859,7 @@ const BookAStand = () => {
                                                         <tr className="bg-[#0091d5] text-white">
                                                             <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
                                                             {exhibitorType === 'domestic' && (
-                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ?)</th>
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
                                                             )}
                                                             {exhibitorType === 'international' && (
                                                                 <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
@@ -876,12 +876,12 @@ const BookAStand = () => {
                                                                         <td className="py-4 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '18' : '9'} sq m.)</td>
                                                                         {exhibitorType === 'domestic' && (
                                                                             <td className="py-4 px-6 text-[12px] font-medium uppercase">
-                                                                                {inrRate ? `INR ? ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
+                                                                                {inrRate ? `INR ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
                                                                             </td>
                                                                         )}
                                                                         {exhibitorType === 'international' && (
                                                                             <td className="py-4 px-6 text-[12px] font-medium uppercase">
-                                                                                {usdRate ? `USD $ ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
+                                                                                {usdRate ? `USD ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
                                                                             </td>
                                                                         )}
                                                                     </tr>
@@ -902,12 +902,12 @@ const BookAStand = () => {
                                                     <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Exhibitor Details</h3>
                                                 </div>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-2">
-                                                    <div className="md:col-span-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-2">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COMPANY NAME <span className="text-red-500">*</span></Label>
                                                         <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
-                                                    <div className="md:col-span-3">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -920,7 +920,7 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-3">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -933,16 +933,16 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-2">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">WEBSITE <span className="text-red-500">*</span></Label>
                                                         <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
 
-                                                    <div className="md:col-span-4">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
                                                         <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
-                                                    <div className="md:col-span-2">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COUNTRY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -958,7 +958,7 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-2">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -971,7 +971,7 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-2">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">CITY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -984,20 +984,8 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-2">
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
-                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
-                                                    </div>
 
-                                                    <div className="md:col-span-2">
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'GST NO.' : 'VAT NO.'} <span className="text-red-500">*</span></Label>
-                                                        <Input required name="gstNo" value={formData.gstNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
-                                                    </div>
-                                                    <div className="md:col-span-2">
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'PAN NO.' : 'REG. NO.'} <span className="text-red-500">*</span></Label>
-                                                        <Input required name="panNo" value={formData.panNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
-                                                    </div>
-                                                    <div className="md:col-span-3">
+                                                    <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -1010,9 +998,9 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-3">
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">FASCIA NAME <span className="text-red-500">*</span></Label>
-                                                        <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                    <div>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
+                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1375,18 +1363,18 @@ const BookAStand = () => {
                                                                     {selectedStall?.incrementPercentage > 0 && (
                                                                         <div className="flex justify-between items-center text-xs text-orange-600">
                                                                             <span className="font-medium">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                            <span className="font-bold">+ {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
+                                                                            <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
                                                                         </div>
                                                                     )}
                                                                     <div className="h-px bg-slate-200 my-2" />
                                                                     <div className="flex justify-between items-center text-xs text-slate-600">
                                                                         <span className="font-medium">GST (18%)</span>
-                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '?' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
+                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
                                                                     </div>
                                                                     <div className="flex justify-between items-center">
                                                                         <span className="text-xs font-bold uppercase text-slate-500">Total Booking Value</span>
                                                                         <span className="text-sm font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.total).toLocaleString()}
+                                                                            {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.total).toLocaleString()}
                                                                         </span>
                                                                     </div>
 
@@ -1394,7 +1382,7 @@ const BookAStand = () => {
                                                                         <div className="flex justify-between items-center pt-2">
                                                                             <span className="text-xs font-bold uppercase text-orange-600">Balance Later</span>
                                                                             <span className="text-sm font-bold text-orange-600">
-                                                                                {formData.participation.currency === 'INR' ? '?' : '$'} {formData.balanceAmount.toLocaleString()}
+                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {formData.balanceAmount.toLocaleString()}
                                                                             </span>
                                                                         </div>
                                                                     )}
@@ -1407,7 +1395,7 @@ const BookAStand = () => {
                                                                             <p className="text-[9px] text-slate-500 font-bold uppercase">Payable right now</p>
                                                                         </div>
                                                                         <div className="text-right">
-                                                                            <p className="text-2xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '?' : '$'} {formData.amountPaid.toLocaleString()}</p>
+                                                                            <p className="text-2xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.amountPaid.toLocaleString()}</p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1425,7 +1413,12 @@ const BookAStand = () => {
                                                         disabled={isLoading || !formData.participation.stallNo}
                                                         className="w-full py-3 bg-[#a37512] hover:bg-[#8b6310] text-white text-sm font-bold uppercase tracking-[0.2em] rounded-sm shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 group"
                                                     >
-                                                        {isLoading ? "PROCEEDING..." : (
+                                                        {isLoading ? (
+                                                            <>
+                                                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                                PROCESSING...
+                                                            </>
+                                                        ) : (
                                                             <>
                                                                 Proceed for Payment
                                                                 <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -1485,5 +1478,6 @@ const BookAStand = () => {
 };
 
 export default BookAStand;
+
 
 
