@@ -376,10 +376,11 @@ export const contactEnquiryApi = {
 
 export const buyerRegistrationApi = {
     submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
         const response = await fetch(`${API_URL}/buyer-registration`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
         });
         return await response.json();
     },
@@ -391,6 +392,45 @@ export const buyerRegistrationApi = {
     delete: async (id: string) => {
         const response = await fetch(`${API_URL}/buyer-registration/${id}`, {
             method: 'DELETE'
+        });
+        return await response.json();
+    },
+    createOrder: async (amount: number) => {
+        const response = await fetch(`${API_URL}/buyer-registration/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        });
+        return await response.json();
+    },
+    verifyPayment: async (regId: string, paymentDetails: any) => {
+        const response = await fetch(`${API_URL}/buyer-registration/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ regId, paymentDetails })
+        });
+        return await response.json();
+    },
+    getConfig: async () => {
+        const response = await fetch(`${API_URL}/buyer-registration/config`);
+        return await response.json();
+    }
+};
+
+export const otpApi = {
+    request: async (identifier: string, type: 'email' | 'phone', name?: string) => {
+        const response = await fetch(`${API_URL}/otp/request`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier, type, name })
+        });
+        return await response.json();
+    },
+    verify: async (identifier: string, otp: string, type: 'email' | 'phone') => {
+        const response = await fetch(`${API_URL}/otp/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier, otp, type })
         });
         return await response.json();
     }
