@@ -639,7 +639,7 @@ const BookAStand = () => {
     const inputClasses =
         "rounded-[2px] border-slate-400 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 w-full text-left";
     const labelClasses =
-        "text-[11px] font-bold text-slate-800 mb-1.5 block uppercase tracking-[0.05em]";
+        "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
     const formatDateRange = (start?: string, end?: string) => {
         if (!start || !end) return "";
         const startDate = new Date(start);
@@ -906,11 +906,11 @@ const BookAStand = () => {
 
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-4">
                                                     <div className="md:col-span-4">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">COMPANY NAME <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COMPANY NAME <span className="text-red-500">*</span></Label>
                                                         <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                     <div className="md:col-span-3">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
@@ -923,29 +923,29 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div className="md:col-span-3">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
-                                                                {INDUSTRY_SECTORS.map(s => (
+                                                                {PRIMARY_CATEGORIES.map(s => (
                                                                     <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">WEBSITE <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">WEBSITE <span className="text-red-500">*</span></Label>
                                                         <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
 
                                                     <div className="md:col-span-4">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
                                                         <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">COUNTRY <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COUNTRY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
@@ -961,7 +961,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
@@ -974,7 +974,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">CITY <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">CITY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
@@ -987,20 +987,20 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
                                                         <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
 
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'GST NO.' : 'VAT NO.'} <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'GST NO.' : 'VAT NO.'} <span className="text-red-500">*</span></Label>
                                                         <Input required name="gstNo" value={formData.gstNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                     <div className="md:col-span-2">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'PAN NO.' : 'REG. NO.'} <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'PAN NO.' : 'REG. NO.'} <span className="text-red-500">*</span></Label>
                                                         <Input required name="panNo" value={formData.panNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                     <div className="md:col-span-3">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Here" />
@@ -1012,8 +1012,8 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
-                                                    <div className="md:col-span-5">
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">FASCIA NAME <span className="text-red-500">*</span></Label>
+                                                    <div className="md:col-span-3">
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">FASCIA NAME <span className="text-red-500">*</span></Label>
                                                         <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                     </div>
                                                 </div>
@@ -1027,10 +1027,10 @@ const BookAStand = () => {
 
                                                 {/* First Contact Person */}
                                                 <div className="space-y-4">
-                                                    <h4 className="text-[11px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
+                                                    <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
                                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-4">
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">TITLE <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TITLE <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
                                                                 <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                     <SelectValue placeholder="Select Here" />
@@ -1044,15 +1044,15 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">FIRST NAME <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">FIRST NAME <span className="text-red-500">*</span></Label>
                                                             <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">LAST NAME <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LAST NAME <span className="text-red-500">*</span></Label>
                                                             <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">EMAIL <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">EMAIL <span className="text-red-500">*</span></Label>
                                                             <div className="flex gap-1">
                                                                 <Input
                                                                     required
@@ -1090,11 +1090,11 @@ const BookAStand = () => {
                                                         </div>
 
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">DESIGNATION <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">DESIGNATION <span className="text-red-500">*</span></Label>
                                                             <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">MOBILE <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">MOBILE <span className="text-red-500">*</span></Label>
                                                             <div className="flex gap-1">
                                                                 <Input
                                                                     required
@@ -1129,8 +1129,8 @@ const BookAStand = () => {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="md:col-span-2">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">ALTERNATE NO.</Label>
+                                                        <div>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">ALTERNATE NO.</Label>
                                                             <Input name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
                                                         </div>
                                                     </div>
@@ -1149,7 +1149,7 @@ const BookAStand = () => {
                                                     {/* Selection Controls */}
                                                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4">
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">STALL FOR <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL FOR <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
                                                                 <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                     <SelectValue placeholder="Select Stall" />
@@ -1162,11 +1162,11 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">STALL SIZE <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL SIZE <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallSize} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">STALL CATEGORY <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL CATEGORY <span className="text-red-500">*</span></Label>
                                                             <Select
                                                                 onValueChange={(v) => {
                                                                     setFormData(prev => ({
@@ -1186,15 +1186,15 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">PL SCHEME <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">PL SCHEME <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallScheme || "N/A"} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">DIMENSION <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">DIMENSION <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.dimension} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">STALL NO. <span className="text-red-500">*</span></Label>
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL NO. <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallFor} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                     </div>
@@ -1249,7 +1249,7 @@ const BookAStand = () => {
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     <div>
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
                                                             value={formData.primaryCategory}
@@ -1266,7 +1266,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">SUB-CATEGORY</Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SUB-CATEGORY</Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
                                                             value={formData.subCategory}
@@ -1292,7 +1292,7 @@ const BookAStand = () => {
                                                     <div className="space-y-3">
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                             <div className="space-y-1.5">
-                                                                <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL *</Label>
+                                                                <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL *</Label>
                                                                 <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
                                                                     <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                         <SelectValue placeholder="How did you hear about us?" />
@@ -1307,7 +1307,7 @@ const BookAStand = () => {
                                                                 </Select>
                                                             </div>
                                                             <div className="space-y-1.5">
-                                                                <Label className="text-[10px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH *</Label>
+                                                                <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH *</Label>
                                                                 <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
                                                                     <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                         <SelectValue placeholder="Select Staff Member" />
