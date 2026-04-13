@@ -858,31 +858,30 @@ const BookAStand = () => {
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
                                                         <tr className="bg-[#0091d5] text-white">
-                                                            <th className="py-3 px-4 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33]">Stand Type</th>
+                                                            <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
                                                             {exhibitorType === 'domestic' && (
-                                                                <th className="py-3 px-4 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
                                                             )}
                                                             {exhibitorType === 'international' && (
-                                                                <th className="py-3 px-4 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
                                                             )}
                                                         </tr>
                                                     </thead>
                                                     <tbody className="text-slate-700">
                                                         {allRates.length > 0 ? (
-                                                            // Group rates by type to show comparison
-                                                            [...new Set(allRates.map(r => r.stallType))].map(type => {
+                                                            [...new Set(allRates.map(r => r.stallType))].map((type, idx) => {
                                                                 const inrRate = allRates.find(r => r.stallType === type && r.currency === 'INR');
                                                                 const usdRate = allRates.find(r => r.stallType === type && r.currency === 'USD');
                                                                 return (
-                                                                    <tr key={type} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                                                                        <td className="py-3 px-4 text-[11px] font-bold border-r border-slate-100">{type} (min. {type?.toLowerCase().includes('raw') ? '18' : '9'} sq m.)</td>
+                                                                    <tr key={type} className={`border-b border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                                                                        <td className="py-4 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '18' : '9'} sq m.)</td>
                                                                         {exhibitorType === 'domestic' && (
-                                                                            <td className="py-3 px-4 text-[11px]">
+                                                                            <td className="py-4 px-6 text-[12px] font-medium uppercase">
                                                                                 {inrRate ? `INR ₹ ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
                                                                             </td>
                                                                         )}
                                                                         {exhibitorType === 'international' && (
-                                                                            <td className="py-3 px-4 text-[11px]">
+                                                                            <td className="py-4 px-6 text-[12px] font-medium uppercase">
                                                                                 {usdRate ? `USD $ ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
                                                                             </td>
                                                                         )}
