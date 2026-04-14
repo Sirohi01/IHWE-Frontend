@@ -388,6 +388,19 @@ const BookAStand = () => {
             setPhoneVerified(false);
             setVerificationError(null);
         }
+        const isMobileField = name === 'contact1.mobile' || name === 'contact2.mobile' ||
+            name === 'contact1.alternateNo' || name === 'contact2.alternateNo';
+        if (isMobileField && exhibitorType === 'domestic') {
+            const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+            if (name.includes('.')) {
+                const [parent, child] = name.split('.');
+                setFormData(prev => ({
+                    ...prev,
+                    [parent]: { ...prev[parent as keyof typeof prev] as any, [child]: digitsOnly }
+                }));
+            }
+            return;
+        }
 
         if (name.includes('.')) {
             const [parent, child] = name.split('.');
@@ -687,7 +700,7 @@ const BookAStand = () => {
                 className="hero-background-registration"
                 style={{
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
-                    backgroundColor: "#1a3516" // Professional fallback
+                    backgroundColor: "#1a3516"
                 }}
             >
                 <div className="absolute inset-0 bg-black/45" />
@@ -749,7 +762,7 @@ const BookAStand = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className="bg-slate-50/30 px-8 py-5">
+                            {/* <div className="bg-slate-50/30 px-8 py-5">
                                 <div className="flex flex-col md:flex-row items-end gap-6">
                                     <div className="w-full md:w-96">
                                         <Label className="text-[10px] font-bold text-[#23471d] uppercase mb-2 block tracking-[0.1em]">Select Exhibition Event *</Label>
@@ -771,7 +784,7 @@ const BookAStand = () => {
                                         <p className="text-[11px] text-slate-500 font-medium">Selecting an event will automatically update pricing structures and protocols below.</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* -- REGISTRATION FLOW -- */}
@@ -871,7 +884,6 @@ const BookAStand = () => {
                                         className="bg-white border border-slate-300 shadow-2xl overflow-hidden rounded-sm"
                                     >
                                         <form onSubmit={handleSubmit} className="p-4 space-y-3 font-inter bg-white">
-                                            {/* -- RATES COMPARISON TABLE (Matches Image 1) -- */}
                                             <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
@@ -892,7 +904,7 @@ const BookAStand = () => {
                                                                 const usdRate = allRates.find(r => r.stallType === type && r.currency === 'USD');
                                                                 return (
                                                                     <tr key={type} className={`border-b border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                                        <td className="py-4 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '18' : '9'} sq m.)</td>
+                                                                        <td className="py-4 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '9' : '9'} sq m.)</td>
                                                                         {exhibitorType === 'domestic' && (
                                                                             <td className="py-4 px-6 text-[12px] font-medium uppercase">
                                                                                 {inrRate ? `INR ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
@@ -1106,7 +1118,9 @@ const BookAStand = () => {
                                                                     name="contact1.mobile"
                                                                     value={formData.contact1.mobile}
                                                                     onChange={handleInputChange}
-                                                                    placeholder="WhatsApp Number"
+                                                                    placeholder={exhibitorType === 'domestic' ? "10-digit number" : "WhatsApp Number"}
+                                                                    inputMode={exhibitorType === 'domestic' ? 'numeric' : 'tel'}
+                                                                    maxLength={exhibitorType === 'domestic' ? 10 : undefined}
                                                                     className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${phoneVerified ? 'border-green-500' : ''}`}
                                                                     readOnly={phoneVerified}
                                                                 />
@@ -1135,8 +1149,8 @@ const BookAStand = () => {
                                                             )}
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">ALTERNATE NO.</Label>
-                                                            <Input name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">ALTERNATE NO. <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1328,6 +1342,18 @@ const BookAStand = () => {
                                                                 <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
                                                                 <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
                                                                     I hereby confirm that the information provided is accurate. I have read and agree to the <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
+                                                                </span>
+                                                            </label>
+                                                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                                                    I have read and agree to the <Link to="/refund-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Refund & Cancellation Policy</Link> for IHWE Stand Booking.
+                                                                </span>
+                                                            </label>
+                                                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                                                    I have read and agree to the <Link to="/privacy-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Privacy Policy</Link> of IHWE.
                                                                 </span>
                                                             </label>
                                                         </div>

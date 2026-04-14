@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, FileText } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { policyApi } from "@/lib/api";
 
-const PrivacyPolicy = () => {
+const RefundPolicy = () => {
   const [policy, setPolicy] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
-        const data = await policyApi.getByPage("privacy-policy");
-        if (data) {
-          setPolicy(data);
-        }
+        const data = await policyApi.getByPage("refund-policy");
+        if (data) setPolicy(data);
       } catch (error) {
-        console.error("Error fetching privacy policy:", error);
+        console.error("Error fetching refund policy:", error);
       } finally {
         setIsLoading(false);
       }
@@ -25,24 +23,22 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="bg-[#f9fafb] min-h-screen font-inter">
-      {/* Hero Section */}
       <section className="relative pt-36 pb-20 overflow-hidden bg-slate-900 text-white">
         <div className="absolute inset-0 bg-black/40" />
         <div className="container mx-auto px-4 text-center relative z-10" data-aos="fade-up">
           <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">Legal Information</p>
           <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
-            {policy?.title || "Privacy Policy"}
+            {policy?.title || "Refund Policy"}
           </h1>
           <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            {policy ? "Your privacy is our priority. Please read our policy below." : "Your privacy is important to us. This policy outlines how we collect, use, and protect your information."}
+            Please read our refund and cancellation policy carefully before booking.
           </p>
         </div>
       </section>
 
-      {/* Content Section */}
       <section className="py-20">
         <div className="container mx-auto px-1 max-w-8xl">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -53,23 +49,22 @@ const PrivacyPolicy = () => {
                 <div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : policy ? (
-              <div 
+              <div
                 className="dynamic-content prose prose-slate max-w-none 
                   [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-inter [&_h2]:font-bold [&_h2]:text-slate-900 [&_h2]:mb-6 [&_h2]:mt-10
                   [&_h3]:text-xl [&_h3]:font-inter [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mb-4 [&_h3]:mt-8
                   [&_p]:mb-6 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ul]:space-y-2
                   [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_ol]:space-y-2
                   [&_strong]:font-bold [&_strong]:text-slate-900"
-                dangerouslySetInnerHTML={{ __html: policy.content }} 
+                dangerouslySetInnerHTML={{ __html: policy.content }}
               />
             ) : (
               <div className="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                <Shield className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-slate-400">Policy Content Not Found</h3>
+                <RefreshCw className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-slate-400">Refund Policy Not Found</h3>
                 <p className="text-slate-400">This content is currently being updated.</p>
               </div>
             )}
-
             {policy && (
               <div className="text-xs text-slate-400 pt-10 border-t border-slate-100">
                 Last Updated: {new Date(policy.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -82,4 +77,4 @@ const PrivacyPolicy = () => {
   );
 };
 
-export default PrivacyPolicy;
+export default RefundPolicy;

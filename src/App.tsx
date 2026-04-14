@@ -33,6 +33,7 @@ const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 
@@ -85,6 +86,7 @@ const App = () => {
                   <Route path="/why-visit" element={<WhyVisit />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="/refund-policy" element={<RefundPolicy />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
                 
