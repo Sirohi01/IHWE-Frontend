@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -75,6 +76,10 @@ const BuyerRegistration = () => {
         purchaseTimeline: "",
         roleInPurchaseDecision: "",
         pricingPreference: "Mid-Range",
+        matchmakingInterest: "Yes",
+        logisticsRequirements: "",
+        preferredPaymentMethods: [] as string[],
+        companyProfile: null as File | null,
         requiredCertifications: [] as string[],
         preferredMeetingDate: "",
         preferredTimeSlot: "",
@@ -90,6 +95,31 @@ const BuyerRegistration = () => {
         consentPaymentValid: false,
         consentMatchedExhibitors: false
     });
+
+    const [showMembershipOptions, setShowMembershipOptions] = useState(false);
+    const [showTermsModal, setShowTermsModal] = useState(false);
+    const [tempSelectedPackage, setTempSelectedPackage] = useState<any>(null);
+
+    const membershipPackages = [
+        {
+            name: "ICOA Standard Buyer Membership",
+            price: 1999,
+            color: "bg-blue-50 border-blue-500 text-blue-700",
+            benefits: ["Access to Expo Floor", "Standard B2B Meeting Lounge", "ICOA Network basic updates"]
+        },
+        {
+            name: "ICOA VIP Buyer Membership",
+            price: 9999,
+            color: "bg-amber-50 border-amber-500 text-amber-700",
+            benefits: ["Priority B2B matching", "VIP Networking Lounge", "Dedicated matchmaking assistance"]
+        },
+        {
+            name: "ICOA Elite Buyer Membership",
+            price: 25000,
+            color: "bg-red-50 border-red-500 text-red-700",
+            benefits: ["Relationship Manager", "Personalized supplier discovery", "Institutional buyer status"]
+        }
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -259,8 +289,8 @@ const BuyerRegistration = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
-        // 1. All Mandatory Text & Single-Select Fields Validation
+
+
         const requiredFields = [
             { key: 'fullName', label: 'Contact Person' },
             { key: 'designation', label: 'Designation' },
@@ -280,37 +310,37 @@ const BuyerRegistration = () => {
             { key: 'estimatedAnnualPurchaseValue', label: 'Estimated Annual Purchase Value' },
             { key: 'purchaseTimeline', label: 'Purchase Timeline' },
             { key: 'roleInPurchaseDecision', label: 'Decision Role' },
+            { key: 'matchmakingInterest', label: 'Matchmaking Interest' },
             { key: 'preferredMeetingDate', label: 'Preferred Meeting Date' },
             { key: 'preferredTimeSlot', label: 'Preferred Time Slot' },
             { key: 'registrationCategory', label: 'Registration Category' }
         ];
 
         const missingFields = requiredFields.filter(field => !formData[field.key as keyof typeof formData]);
-        
+
         if (missingFields.length > 0) {
             alert(`Please complete the following required fields: \n- ${missingFields.map(f => f.label).join('\n- ')}`);
             return;
         }
 
-        // 2. Multi-select Validation
         if (formData.preferredSupplierRegion.length === 0 || formData.preferredSupplierType.length === 0) {
             alert("Please select at least one Preferred Supplier Region and Type.");
             return;
         }
 
-        // 3. Consent Validation
-        if (!formData.consentTerms || !formData.consentPaymentValid || !formData.consentMatchedExhibitors) { 
-            alert("Please check all mandatory consent boxes."); 
-            return; 
-        }
-        
-        // 4. OTP Verification Check
-        if (!emailOtpVerified || !mobileOtpVerified) { 
-            alert("Please verify your Email and Mobile via OTP before submitting."); 
-            return; 
+
+        if (!formData.consentTerms || !formData.consentPaymentValid || !formData.consentMatchedExhibitors) {
+            alert("Please check all mandatory consent boxes.");
+            return;
         }
 
-        // 5. Proceed with Payment/Submission
+
+        if (!emailOtpVerified || !mobileOtpVerified) {
+            alert("Please verify your Email and Mobile via OTP before submitting.");
+            return;
+        }
+
+
         if (formData.paymentMode === 'Online/Razorpay') {
             handleRazorpay();
         } else {
@@ -329,7 +359,7 @@ const BuyerRegistration = () => {
 
 
             Object.entries(formData).forEach(([key, value]) => {
-                if (key === 'paymentProof' && value instanceof File) {
+                if ((key === 'paymentProof' || key === 'companyProfile') && value instanceof File) {
                     fd.append(key, value);
                 } else if (Array.isArray(value)) {
                     fd.append(key, JSON.stringify(value));
@@ -352,23 +382,42 @@ const BuyerRegistration = () => {
         } catch (error) { alert("Submission error."); } finally { setIsSubmitting(false); }
     };
 
+    // Consistent compact styles
+    const inputClasses = "rounded border-slate-200 h-7 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[11px] bg-white placeholder:text-[11px] placeholder:text-slate-400 text-slate-700 font-medium shadow-none outline-none px-2 ";
+    const labelClasses = "text-[11px] font-semibold text-slate-600 mb-0.5 block";
+    const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-1 border-b border-emerald-500/20 flex items-center gap-1.5 mb-3 uppercase tracking-tight";
 
-    const inputClasses = "rounded border-slate-200 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[10px] bg-white placeholder:text-slate-400 text-slate-700 font-medium shadow-none outline-none px-2 ";
-    const labelClasses = "text-[10px] font-semibold text-slate-600 mb-1 block";
-    const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-2 border-b-2 border-emerald-500/20 flex items-center gap-1.5 mb-4 uppercase tracking-tight";
+    const handlePackageSelection = (pkg: any) => {
+        setTempSelectedPackage(pkg);
+        setShowTermsModal(true);
+    };
+
+    const confirmPackage = () => {
+        if (tempSelectedPackage) {
+            setFormData(prev => ({
+                ...prev,
+                registrationCategory: tempSelectedPackage.name,
+                registrationFee: `₹${tempSelectedPackage.price}`,
+                consentTerms: true,
+                consentPaymentValid: true,
+                consentMatchedExhibitors: true
+            }));
+        }
+        setShowTermsModal(false);
+    };
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter">
-            <section className="relative h-[160px] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
+            <section className="relative h-[140px] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20" />
                 <div className="container mx-auto px-4 text-center text-white relative z-10">
-                    <p className="text-[8px] uppercase tracking-[0.5em] mb-1.5 text-emerald-400 font-bold">IHWE 2026 - Global Connect</p>
-                    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-2 italic">Buyer Registration</h1>
+                    <p className="text-[9px] uppercase tracking-[0.5em] mb-1 text-emerald-400 font-bold">IHWE 2026 - Global Connect</p>
+                    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-1 italic">Buyer Registration</h1>
                     <div className="w-12 h-0.5 bg-emerald-500 mx-auto rounded-full" />
                 </div>
             </section>
 
-            <section className="py-6 relative bg-[#F8FAFC]">
+            <section className="py-4 relative bg-[#F8FAFC]">
                 <div className="container mx-auto px-4 max-w-[1400px]">
                     <AnimatePresence mode="wait">
                         {submitted ? (
@@ -382,174 +431,264 @@ const BuyerRegistration = () => {
                             </motion.div>
                         ) : (
                             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
-                                <div className="bg-[#23471d] px-6 py-4 text-white flex justify-between items-center">
+                                <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-lg font-bold uppercase tracking-widest">Buyer-Seller Meet</h2>
+                                        <h2 className="text-base font-bold uppercase tracking-wider">Buyer-Seller Meet</h2>
                                         <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium">International Health & Wellness Expo 2026</p>
                                     </div>
-                                    <ShieldCheck className="text-emerald-400 opacity-50" size={28} />
+                                    <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
                                 </div>
-                                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                                <form onSubmit={handleSubmit} className="p-5 space-y-5">
 
-                                    <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>Personal & Company Information</h3>
+                                    {/* 1. Personal & Company Information */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Personal & Company Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                                            <div><Label className={labelClasses}>Contact Person *</Label><Input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Full Name *</Label><Input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Designation *</Label><Input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Current Position" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Company Name *</Label><Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Business Type *</Label><Select required onValueChange={(v) => handleSelectChange('businessType', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white">{config?.companyTypes.map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Business Type *</Label><Select required onValueChange={(v) => handleSelectChange('businessType', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white">{config?.companyTypes?.map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select></div>
                                         </div>
                                     </div>
 
-
-                                    <div className="space-y-3">
+                                    {/* 2. Contact Information */}
+                                    <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                                            <div className="space-y-1.5">
-                                                <Label className={labelClasses}>Email (verified by OTP) *</Label>
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Mobile Number (OTP) *</Label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-2 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7`} disabled={emailOtpVerified} /></div>
-                                                    {!emailOtpVerified && <Button type="button" onClick={() => (emailOtpSent ? verifyOtp('email') : requestOtp('email'))} disabled={isVerifying.email} className="bg-[#23471d] text-[10px] h-8 px-2 whitespace-nowrap">{isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : (emailOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Primary" className={`${inputClasses} pl-7`} disabled={mobileOtpVerified} /></div>
+                                                    {!mobileOtpVerified && <Button type="button" onClick={() => (mobileOtpSent ? verifyOtp('mobile') : requestOtp('mobile'))} disabled={isVerifying.mobile} className="bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap">{isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : (mobileOtpSent ? 'Verify' : 'Send')}</Button>}
                                                 </div>
-                                                {emailOtpSent && !emailOtpVerified && <Input placeholder="OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={inputClasses} />}
-                                            </div>
-                                            <div className="space-y-1.5">
-                                                <Label className={labelClasses}>Mobile (verified by OTP) *</Label>
-                                                <div className="flex gap-2">
-                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-2 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Primary" className={`${inputClasses} pl-7`} disabled={mobileOtpVerified} /></div>
-                                                    {!mobileOtpVerified && <Button type="button" onClick={() => (mobileOtpSent ? verifyOtp('mobile') : requestOtp('mobile'))} disabled={isVerifying.mobile} className="bg-[#23471d] text-[10px] h-8 px-2 whitespace-nowrap">{isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : (mobileOtpSent ? 'Verify' : 'Send')}</Button>}
-                                                </div>
-                                                {mobileOtpSent && !mobileOtpVerified && <Input placeholder="OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={inputClasses} />}
+                                                {mobileOtpSent && !mobileOtpVerified && <Input placeholder="Enter OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={`${inputClasses} mt-1`} />}
                                             </div>
                                             <div><Label className={labelClasses}>Alternate Number</Label><Input name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="Optional" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Website</Label><Input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={inputClasses} /></div>
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Email Address (OTP) *</Label>
+                                                <div className="flex gap-2">
+                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7`} disabled={emailOtpVerified} /></div>
+                                                    {!emailOtpVerified && <Button type="button" onClick={() => (emailOtpSent ? verifyOtp('email') : requestOtp('email'))} disabled={isVerifying.email} className="bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap">{isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : (emailOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                </div>
+                                                {emailOtpSent && !emailOtpVerified && <Input placeholder="Enter OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={`${inputClasses} mt-1`} />}
+                                            </div>
+                                            <div><Label className={labelClasses}>Website (Optional)</Label><Input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={inputClasses} /></div>
                                         </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-
-                                            <div><Label className={labelClasses}>State/Province *</Label><Select onValueChange={(v) => handleSelectChange('stateProvince', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredStates.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>City *</Label><Select onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredCities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select></div>
-
-
-                                            <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} className={inputClasses} placeholder="Full Corporate Address" /></div>
-                                            <div><Label className={labelClasses}>Pin Code *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} className={inputClasses} placeholder="Pin code" /></div>
-                                        </div>
-
                                     </div>
 
+                                    {/* Registered Address, State, City, Pin Code - Single Row without Country */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                        <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={inputClasses} /></div>
+                                        <div><Label className={labelClasses}>State/Province *</Label><Select onValueChange={(v) => handleSelectChange('stateProvince', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select State" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredStates.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select></div>
+                                        <div><Label className={labelClasses}>City *</Label><Select onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select City" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredCities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select></div>
+                                        <div><Label className={labelClasses}>Pin Code *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={inputClasses} /></div>
+                                    </div>
 
-                                    <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>Business Profile & Interests</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                    {/* 3. Business Profile */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Business Profile</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                                             <div><Label className={labelClasses}>Years in Operation *</Label><Input type="date" required name="yearsInOperation" value={formData.yearsInOperation} onChange={handleChange} className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualTurnoverRanges.map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Frequency" /></SelectTrigger><SelectContent className="bg-white">{config?.buyingFrequencies.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Primary Product Interest *</Label><Select onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white">{config?.primaryProductInterests.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Est. Annual Purchase *</Label><Select onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualPurchaseValueRanges.map((v: string) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Budget Range *</Label><Select onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white">{config?.budgetRanges.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Est. Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} className={inputClasses} placeholder="e.g. 5000 Units" /></div>
-                                            <div><Label className={labelClasses}>Key Products/Services *</Label><Input required name="keyProductsServices" value={formData.keyProductsServices} onChange={handleChange} className={inputClasses} placeholder="Your primary offerings..." /></div>
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                                            <div><Label className={labelClasses}>Secondary Categories</Label><div className="flex flex-wrap gap-2 mt-1 max-h-[100px] overflow-y-auto p-2 border rounded bg-white">{config?.secondaryProductCategories.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[9px] cursor-pointer bg-slate-50 px-2 py-1 rounded border border-slate-200 hover:bg-emerald-50 transition-colors"><Checkbox checked={formData.secondaryProductCategories.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)} className="h-2.5 w-2.5" /> {c}</label>))}</div></div>
-                                            <div><Label className={labelClasses}>Specific Requirements</Label><Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1.5`} placeholder="Any custom needs..." /></div>
+                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualTurnoverRanges?.map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Key Products / Services *</Label><Input required name="keyProductsServices" value={formData.keyProductsServices} onChange={handleChange} placeholder="Your primary offerings..." className={inputClasses} /></div>
                                         </div>
                                     </div>
 
-                                    {/* Supplier Preference (India Only) */}
-                                    <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>Supplier Preference (India Only)</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <div className="col-span-1 lg:col-span-2 space-y-1.5"><Label className={labelClasses}>Preferred Regions *</Label><div className="flex flex-wrap gap-1.5">{config?.regions.map((r: string) => (<label key={r} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox checked={formData.preferredSupplierRegion.includes(r)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}</label>))}</div></div>
-                                            <div className="col-span-1 lg:col-span-2 space-y-1.5"><Label className={labelClasses}>Preferred Types *</Label><div className="flex flex-wrap gap-1.5">{config?.supplierTypes.map((t: string) => (<label key={t} className="flex items-center gap-1.5 text-[10px] bg-white border border-slate-300 px-2 py-1  cursor-pointer hover:border-emerald-500 transition-all"><Checkbox checked={formData.preferredSupplierType.includes(t)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}</label>))}</div></div>
-                                            <div><Label className={labelClasses}>Preferred States</Label><div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto p-2 border rounded bg-white">{filteredStates.map(s => (<label key={s._id} className="flex items-center gap-1.5 text-[10px]"><Checkbox checked={formData.preferredState.includes(s.name)} onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)} className="h-3 w-3" /> {s.name}</label>))}</div></div>
-                                            <div><Label className={labelClasses}>Preferred Company Size</Label><Select onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white">{config?.companySizes.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
-                                        </div>
-                                    </div>
-
-                                    {/* Purchase Timeline, Decision Role, Pricing Preference */}
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-emerald-50/30 p-4 rounded-lg border border-emerald-100/50">
-                                        <div className="space-y-1.5"><Label className={labelClasses}>Purchase Timeline *</Label><RadioGroup onValueChange={(v) => handleSelectChange('purchaseTimeline', v)} className="flex flex-wrap gap-x-4 gap-y-1">{config?.purchaseTimelines.map((t: string) => (<div key={t} className="flex items-center space-x-1.5"><RadioGroupItem value={t} id={`timeline-${t}`} className="h-3 w-3" /><Label htmlFor={`timeline-${t}`} className="text-[10px] font-medium text-slate-600">{t}</Label></div>))}</RadioGroup></div>
-                                        <div className="space-y-1.5"><Label className={labelClasses}>Decision Role *</Label><RadioGroup onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)} className="flex flex-wrap gap-x-4 gap-y-1">{config?.roles.map((r: string) => (<div key={r} className="flex items-center space-x-1.5"><RadioGroupItem value={r} id={`role-${r}`} className="h-3 w-3" /><Label htmlFor={`role-${r}`} className="text-[10px] font-medium text-slate-600">{r}</Label></div>))}</RadioGroup></div>
-                                        <div className="space-y-1.5"><Label className={labelClasses}>Pricing Preference *</Label><RadioGroup defaultValue="Mid-Range" onValueChange={(v) => handleSelectChange('pricingPreference', v)} className="flex flex-wrap gap-x-4 gap-y-1">{["Premium", "Mid-Range", "Budget"].map(p => (<div key={p} className="flex items-center space-x-1.5"><RadioGroupItem value={p} id={`price-${p}`} className="h-3 w-3" /><Label htmlFor={`price-${p}`} className="text-[10px] font-medium text-slate-600">{p}</Label></div>))}</RadioGroup></div>
-                                    </div>
-
-                                    {/* B2B Meeting Preferences */}
-                                    <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>B2B Meeting Preferences</h3>
+                                    {/* 4. Sourcing & Buying Interests */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Sourcing & Buying Interests</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                                            <div><Label className={labelClasses}>Preferred Date *</Label><Input type="date" required name="preferredMeetingDate" value={formData.preferredMeetingDate} onChange={handleChange} className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Preferred Slot *</Label><Select onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Slot" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem><SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem><SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem></SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Pre-Scheduled? *</Label><Select defaultValue="Yes" onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Yes">Yes, Require sB2B</SelectItem><SelectItem value="No">No, Walk-in only</SelectItem></SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Priority Level *</Label><Select defaultValue="Medium" onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="High">High Priority</SelectItem><SelectItem value="Medium">Medium Priority</SelectItem><SelectItem value="General">General</SelectItem></SelectContent></Select></div>
-                                        </div>
-                                    </div>
-
-                                    {/* Certification & Remarks */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-3">
-                                            <h3 className={sectionTitleClasses}>Certifications & Compliance</h3>
-                                            <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-white min-h-[50px]">{config?.certificationOptions.map((c: string) => (<label key={c} className="flex items-center gap-1.5 text-[10px] bg-slate-50 px-2 py-1.5 rounded border border-slate-200 cursor-pointer hover:bg-emerald-50"><Checkbox checked={formData.requiredCertifications.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('requiredCertifications', c, !!checked)} className="h-3 w-3" /> {c}</label>))}</div>
-                                        </div>
-                                        <div className="space-y-3">
-                                            <h3 className={sectionTitleClasses}>Additional Remarks</h3>
-                                            <Textarea name="remarks" value={formData.remarks} onChange={handleChange} placeholder="Any other special requirements or remarks..." className={`${inputClasses} h-[55px]`} />
-                                        </div>
-                                    </div>
-
-                                    {/* Registration Packages & Payment Mode */}
-                                    <div className="space-y-3">
-                                        <h3 className={sectionTitleClasses}>Registration Details & Payment</h3>
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 col-span-1">
-                                                {config?.packages.map((pkg: any) => {
-                                                    const isActive = formData.registrationCategory === pkg.name;
-                                                    return (
-                                                        <div key={pkg.name} onClick={() => handleSelectChange('registrationCategory', pkg.name)} className={`relative p-3 border-2 transition-all cursor-pointer rounded-lg ${isActive ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200 hover:border-slate-300'}`}>
-                                                            {isActive && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Selected</div>}
-                                                            <h4 className="text-[11px] font-bold mb-0.5">{pkg.name}</h4>
-                                                            <div className="text-lg font-black text-[#23471d] mb-2">₹{pkg.price} <span className="text-[8px] font-normal text-slate-400">+ GST</span></div>
-                                                            <ul className="space-y-1">{pkg.benefits.slice(0, 3).map((b: string, i: number) => (<li key={i} className="flex items-start gap-1 text-[8px] font-medium text-slate-600"><CheckCircle className="text-emerald-500 mt-0.5 shrink-0" size={8} /> {b}</li>))}</ul>
-                                                        </div>
-                                                    );
-                                                })}
+                                            <div><Label className={labelClasses}>Primary Product Interest *</Label><Select onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select></div>
+                                            <div>
+                                                <Label className={labelClasses}>Secondary Product Categories</Label>
+                                                <Select onValueChange={(v) => handleCheckboxChange('secondaryProductCategories', v, true)}>
+                                                    <SelectTrigger className={inputClasses}>
+                                                        <SelectValue placeholder={formData.secondaryProductCategories.length > 0 ? `${formData.secondaryProductCategories.length} selected` : "Choose Interests"} />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white">
+                                                        {config?.secondaryProductCategories?.map((c: string) => (
+                                                            <div key={c} className="flex items-center gap-2 px-2 py-1.5 hover:bg-emerald-50 cursor-pointer text-[11px]">
+                                                                <Checkbox
+                                                                    checked={formData.secondaryProductCategories.includes(c)}
+                                                                    onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)}
+                                                                    className="h-3 w-3"
+                                                                />
+                                                                <span>{c}</span>
+                                                            </div>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
-                                            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                                                <Label className={labelClasses}>Payment Mode *</Label>
-                                                <RadioGroup defaultValue="Online/Razorpay" onValueChange={(v) => setFormData(p => ({ ...p, paymentMode: v }))} className="flex gap-4 mb-3">
-                                                    <div className="flex items-center space-x-1.5"><RadioGroupItem value="Online/Razorpay" id="mode-online" /><Label htmlFor="mode-online" className="text-[10px] cursor-pointer">Online / Instant</Label></div>
-                                                    <div className="flex items-center space-x-1.5"><RadioGroupItem value="Manual Transfer" id="mode-manual" /><Label htmlFor="mode-manual" className="text-[10px] cursor-pointer">Manual Transfer (UPI/NetBanking)</Label></div>
-                                                </RadioGroup>
+                                            <div><Label className={labelClasses}>Estimated Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Budget Range</Label><Select onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white">{config?.budgetRanges?.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select></div>
+                                        </div>
+                                        <div className="mt-1">
+                                            <Label className={labelClasses}>Specific Product Requirements</Label>
+                                            <Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1`} placeholder="Any custom needs..." />
+                                        </div>
+                                    </div>
 
-                                                {formData.paymentMode !== 'Online/Razorpay' && (
-                                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-3 pt-3 border-t border-slate-200">
-                                                        <div className="grid grid-cols-2 gap-3">
-                                                            <div><Label className={labelClasses}>Transaction ID / Ref *</Label><Input required name="transactionId" value={formData.transactionId} onChange={handleChange} className={inputClasses} placeholder="UTR / Ref Number" /></div>
-                                                            <div><Label className={labelClasses}>Upload Proof *</Label><Input type="file" required accept="image/*" onChange={handleFileChange} className={`${inputClasses} pt-1`} /></div>
-                                                        </div>
-                                                        <p className="text-[8px] text-slate-500 italic font-medium">Please upload a screenshot of your payment for manual verification.</p>
-                                                    </motion.div>
-                                                )}
-                                                {formData.paymentMode === 'Online/Razorpay' && (
-                                                    <div className="flex items-center gap-2 p-3 bg-white rounded border border-emerald-100">
-                                                        <CreditCard className="text-emerald-600" size={16} />
-                                                        <p className="text-[10px] text-emerald-800 font-medium leading-tight">Pay securely via UPI, Card, or Net Banking. Your registration will be confirmed instantly.</p>
-                                                    </div>
-                                                )}
+                                    {/* 5. Supplier Preference - Single Row */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Supplier Preference (India Only)</h3>
+                                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Preferred Supplier Region *</Label>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {['North India', 'South India', 'East India', 'West India', 'Pan India'].map((r: string) => (
+                                                        <label key={r} className="flex items-center gap-1 text-[11px] bg-white border border-slate-300 px-2 py-0.5 rounded cursor-pointer hover:border-emerald-500">
+                                                            <Checkbox checked={formData.preferredSupplierRegion.includes(r)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Preferred Supplier Type *</Label>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler'].map((t: string) => (
+                                                        <label key={t} className="flex items-center gap-1 text-[11px] bg-white border border-slate-300 px-2 py-0.5 rounded cursor-pointer hover:border-emerald-500">
+                                                            <Checkbox checked={formData.preferredSupplierType.includes(t)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <div><Label className={labelClasses}>Preferred State (Optional)</Label><Select onValueChange={(v) => handleCheckboxChange('preferredState', v, true)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select State" /></SelectTrigger><SelectContent className="bg-white max-h-[200px]">{filteredStates.map(s => (<div key={s._id} className="flex items-center gap-2 px-2 py-1.5 hover:bg-emerald-50 cursor-pointer text-[11px]"><Checkbox checked={formData.preferredState.includes(s.name)} onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)} className="h-3 w-3" /><span>{s.name}</span></div>))}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Preferred Company Size</Label><Select onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger><SelectContent className="bg-white">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
+                                        </div>
+                                    </div>
+
+                                    {/* 6. Purchase Intent & Capacity */}
+                                    <div className="space-y-2 ">
+                                        <h3 className={sectionTitleClasses}> Purchase Intent & Capacity</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select value={formData.buyingFrequency} onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white">{['One-time', 'Monthly', 'Quarterly', 'Long-term'].map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white">{config?.annualPurchaseValueRanges?.map((v: string) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white">{['Immediate', '1–3 Months', '3–6 Months', 'Exploring'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white">{['Final Decision Maker', 'Influencer', 'Research Only'].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select></div>
+                                        </div>
+                                    </div>
+
+                                    {/* 7. Certification & Compliance + 8. Pricing Preference - Single Row */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <h3 className={sectionTitleClasses}> Certification & Compliance</h3>
+                                            <div className="flex flex-wrap gap-2 p-2 border rounded-lg bg-white">
+                                                {['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others'].map((c: string) => (
+                                                    <label key={c} className="flex items-center gap-1 text-[11px] bg-slate-50 px-2 py-0.5 rounded border border-slate-200 cursor-pointer hover:bg-emerald-50">
+                                                        <Checkbox checked={formData.requiredCertifications.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('requiredCertifications', c, !!checked)} className="h-3 w-3" /> {c}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h3 className={sectionTitleClasses}> Pricing Preference</h3>
+                                            <div className="flex gap-4 p-2">
+                                                <label className="flex items-center gap-1 text-[11px]"><Checkbox checked={formData.pricingPreference === 'Premium'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Premium')} className="h-3 w-3" /> Premium</label>
+                                                <label className="flex items-center gap-1 text-[11px]"><Checkbox checked={formData.pricingPreference === 'Mid-Range'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Mid-Range')} className="h-3 w-3" /> Mid-Range</label>
+                                                <label className="flex items-center gap-1 text-[11px]"><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Terms & Submit */}
-                                    <div className="pt-4 space-y-4 border-t border-slate-200">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                                            <div className="space-y-2">
-                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-terms" checked={formData.consentTerms} onCheckedChange={(c) => setFormData(p => ({ ...p, consentTerms: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-terms" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to the Terms & Conditions and Refund Policy *</Label></div>
-                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-valid" checked={formData.consentPaymentValid} onCheckedChange={(c) => setFormData(p => ({ ...p, consentPaymentValid: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-valid" className="text-[9px] leading-relaxed text-slate-600 font-medium">I confirm that the payment made is valid and non-refundable *</Label></div>
-                                                <div className="flex items-start gap-2 p-2 bg-slate-50 rounded border border-slate-100"><Checkbox id="consent-match" checked={formData.consentMatchedExhibitors} onCheckedChange={(c) => setFormData(p => ({ ...p, consentMatchedExhibitors: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-match" className="text-[9px] leading-relaxed text-slate-600 font-medium">I agree to be matched with relevant exhibitors *</Label></div>
+                                    {/* 9. B2B Meeting Preferences */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                                            <div><Label className={labelClasses}>Preferred Meeting Date *</Label><Input type="date" required name="preferredMeetingDate" value={formData.preferredMeetingDate} onChange={handleChange} className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Preferred Time Slot *</Label><Select onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Slot" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem><SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem><SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem></SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Pre-scheduled sB2B *</Label><Select defaultValue="Yes" onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Meeting Priority Level *</Label><Select defaultValue="Medium" onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent className="bg-white"><SelectItem value="High">High</SelectItem><SelectItem value="Medium">Medium</SelectItem><SelectItem value="General">General</SelectItem></SelectContent></Select></div>
+                                        </div>
+                                    </div>
+
+                                    {/* 10. Paid Registration Details - Packages Row + Payment Row */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Paid Registration Details 💳</h3>
+                                        
+                                        {!showMembershipOptions ? (
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                {/* Standard Buyer Pass */}
+                                                <div 
+                                                    onClick={() => handlePackageSelection({ name: "Standard Buyer Pass", price: 999 })}
+                                                    className={`relative p-2 border-2 transition-all cursor-pointer rounded-lg ${formData.registrationCategory === "Standard Buyer Pass" ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200'}`}
+                                                >
+                                                    {formData.registrationCategory === "Standard Buyer Pass" && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Selected</div>}
+                                                    <h4 className="text-[11px] font-bold">Standard Buyer Pass</h4>
+                                                    <div className="text-sm font-black text-[#23471d]">₹999</div>
+                                                    <ul className="text-[9px] text-slate-500"><li>✓ Access to Expo Floor</li><li>✓ Standard B2B Lounge</li></ul>
+                                                </div>
+
+                                                {/* VIP Buyer Pass */}
+                                                <div 
+                                                    onClick={() => handlePackageSelection({ name: "VIP Buyer Pass", price: 2499 })}
+                                                    className={`relative p-2 border-2 transition-all cursor-pointer rounded-lg ${formData.registrationCategory === "VIP Buyer Pass" ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200'}`}
+                                                >
+                                                    {formData.registrationCategory === "VIP Buyer Pass" && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Selected</div>}
+                                                    <h4 className="text-[11px] font-bold">VIP Buyer Pass</h4>
+                                                    <div className="text-sm font-black text-[#23471d]">₹2499</div>
+                                                    <ul className="text-[9px] text-slate-500"><li>✓ Everything in Standard</li><li>✓ Priority B2B Matching</li></ul>
+                                                </div>
+
+                                                {/* ICOA Trigger Card */}
+                                                <div 
+                                                    onClick={() => setShowMembershipOptions(true)}
+                                                    className="relative p-2 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all cursor-pointer rounded-lg hover:border-emerald-500"
+                                                >
+                                                    <h4 className="text-[11px] font-bold text-emerald-800">ICOA Buyer Membership</h4>
+                                                    <div className="text-sm font-black text-emerald-600">Starting ₹1,999</div>
+                                                    <div className="text-[9px] text-emerald-500 font-bold uppercase mt-1">View Membership Plans →</div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">ICOA Membership Categories</p>
+                                                    <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className="h-6 text-[10px] text-emerald-600 font-bold hover:bg-emerald-50">← Back to Passes</Button>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                    {membershipPackages.map((pkg) => (
+                                                        <div 
+                                                            key={pkg.name} 
+                                                            onClick={() => handlePackageSelection(pkg)}
+                                                            className={`relative p-2 border-2 transition-all cursor-pointer rounded-lg ${formData.registrationCategory === pkg.name ? 'border-[#23471d] bg-emerald-50/50 shadow-md' : 'border-slate-200'}`}
+                                                        >
+                                                            {formData.registrationCategory === pkg.name && <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#23471d] text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase">Selected</div>}
+                                                            <h4 className="text-[11px] font-bold">{pkg.name}</h4>
+                                                            <div className="text-sm font-black text-[#23471d]">₹{pkg.price}</div>
+                                                            <ul className="text-[9px] text-slate-500">
+                                                                {pkg.benefits.map((b, i) => <li key={i}>✓ {b}</li>)}
+                                                            </ul>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mt-2">
+                                            <div><Label className={labelClasses}>Registration Fee</Label><Input value={formData.registrationFee} disabled className={`${inputClasses} bg-slate-50`} placeholder="Fee" /></div>
+                                            <div><Label className={labelClasses}>Payment Mode *</Label><RadioGroup defaultValue="UPI" onValueChange={(v) => setFormData(p => ({ ...p, paymentMode: v }))} className="flex gap-3"><div className="flex items-center gap-1"><RadioGroupItem value="UPI" id="mode-upi" /><Label htmlFor="mode-upi" className="text-[11px]">UPI</Label></div><div className="flex items-center gap-1"><RadioGroupItem value="Credit/Debit Card" id="mode-card" /><Label htmlFor="mode-card" className="text-[11px]">Card</Label></div><div className="flex items-center gap-1"><RadioGroupItem value="Net Banking" id="mode-net" /><Label htmlFor="mode-net" className="text-[11px]">Net Banking</Label></div></RadioGroup></div>
+                                            <div><Label className={labelClasses}>Transaction ID / Reference *</Label><Input required name="transactionId" value={formData.transactionId} onChange={handleChange} placeholder="UTR / Ref Number" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Upload Payment Proof *</Label><Input type="file" required accept="image/*" onChange={handleFileChange} className={`${inputClasses} pt-1`} placeholder="No file chosen" /></div>
+                                        </div>
+                                    </div>
+
+                                    {/* 11. Additional Information */}
+                                    <div className="space-y-2">
+                                        <h3 className={sectionTitleClasses}> Additional Information</h3>
+                                        <Textarea name="remarks" value={formData.remarks} onChange={handleChange} placeholder="Remarks / Special Requirements" className={`${inputClasses} h-[50px]`} />
+                                    </div>
+
+                                    {/* 12. Consent & Declaration */}
+                                    <div className="pt-2 space-y-3 border-t border-slate-200">
+                                        <h3 className={sectionTitleClasses}> Consent & Declaration</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+                                            <div className="space-y-1">
+                                                <div className="flex items-start gap-2 p-1"><Checkbox id="consent-terms" checked={formData.consentTerms} onCheckedChange={(c) => setFormData(p => ({ ...p, consentTerms: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-terms" className="text-[10px] leading-tight text-slate-600 font-medium">I agree to Terms & Conditions and Refund Policy *</Label></div>
+                                                <div className="flex items-start gap-2 p-1"><Checkbox id="consent-valid" checked={formData.consentPaymentValid} onCheckedChange={(c) => setFormData(p => ({ ...p, consentPaymentValid: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-valid" className="text-[10px] leading-tight text-slate-600 font-medium">I confirm that the payment made is valid and non-refundable *</Label></div>
+                                                <div className="flex items-start gap-2 p-1"><Checkbox id="consent-match" checked={formData.consentMatchedExhibitors} onCheckedChange={(c) => setFormData(p => ({ ...p, consentMatchedExhibitors: !!c }))} className="h-3 w-3 mt-0.5" /><Label htmlFor="consent-match" className="text-[10px] leading-tight text-slate-600 font-medium">I agree to be matched with relevant exhibitors *</Label></div>
                                             </div>
                                             <div className="flex flex-col items-center">
-                                                <Button type="submit" disabled={isSubmitting} className="w-full h-10 bg-[#23471d] hover:bg-[#1a3516] rounded-full text-white font-bold text-[10px] uppercase tracking-[0.2em] shadow-md transition-all flex items-center justify-center gap-2 group">{isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <>{formData.paymentMode === 'Online/Razorpay' ? 'Complete Registration & Pay' : 'Submit Registration Proof'} <Send size={12} className="group-hover:translate-x-1 transition-transform" /></>}</Button>
-                                                <p className="mt-2 text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-1"><Shield size={8} className="text-[#23471d]" /> Secured Registration System</p>
+                                                <Button type="submit" disabled={isSubmitting} className="w-full h-8 bg-[#23471d] hover:bg-[#1a3516] rounded-full text-white font-bold text-[11px] uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2">{isSubmitting ? <Loader2 size={12} className="animate-spin" /> : <>Submit Registration <Send size={11} /></>}</Button>
+                                                <p className="mt-1 text-[8px] text-slate-400 font-bold uppercase tracking-wide flex items-center gap-1"><Shield size={8} className="text-[#23471d]" /> Secured Registration System</p>
                                             </div>
                                         </div>
                                     </div>
@@ -558,8 +697,76 @@ const BuyerRegistration = () => {
                         )}
                     </AnimatePresence>
                 </div>
-            </section >
-        </div >
+            </section>
+
+            {/* Terms & Conditions Modal */}
+            <AnimatePresence>
+                {showTermsModal && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                    >
+                        <motion.div 
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden"
+                        >
+                            <div className="bg-[#23471d] p-4 text-white flex justify-between items-center">
+                                <h3 className="font-bold uppercase tracking-wider text-sm">Payment Terms & Conditions</h3>
+                                <button onClick={() => setShowTermsModal(false)} className="hover:rotate-90 transition-transform"><Loader2 className="rotate-45" size={20} /></button>
+                            </div>
+                            
+                            <div className="p-6 overflow-y-auto text-[11px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar">
+                                <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100 text-emerald-800 font-bold mb-4">
+                                    Registration: {tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}
+                                </div>
+                                <p className="font-bold underline text-slate-800 uppercase">9th Edition of International Health & Wellness Expo 2026 (IHWE – Global Edition)</p>
+                                <p>Organised by: Namo Gange Wellness Pvt. Ltd.</p>
+                                
+                                <div className="space-y-3 pt-2">
+                                    <p><strong>1. Acceptance of Terms:</strong> By proceeding with registration, the Participant confirms they have read and agreed to these Terms under the Indian Contract Act, 1872.</p>
+                                    <p><strong>2. Scope of Payment:</strong> Includes Exhibition Stall Booking, Sponsorship, Buyer/Seller Registration, and Membership fees.</p>
+                                    <p><strong>3. Confirmation:</strong> Confirmed only upon receipt of payment. Confirmation invoice will be issued via email.</p>
+                                    <p><strong>4. Pricing & Taxes:</strong> Fees are exclusive of GST. Participant agrees to bear all duties and charges.</p>
+                                    <p><strong>5. Strict No Refund Policy:</strong> ALL PAYMENTS ARE FINAL, NON-REFUNDABLE, AND NON-TRANSFERABLE. This includes cancellations, no-shows, or changes in plans.</p>
+                                    <p><strong>6. Force Majeure:</strong> Organiser reserves right to reschedule. Registration remains valid for revised dates; no refund arises.</p>
+                                    <p><strong>7. Jurisdiction:</strong> Governed by laws of India. Disputes subject to Courts in Delhi NCR.</p>
+                                </div>
+                                
+                                <div className="pt-4 border-t border-slate-100 italic text-[10px]">
+                                    Note: Expo entry is free; Buyer-Seller Meet is conducted by ICOA for curated business engagement.
+                                </div>
+                            </div>
+
+                            <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3">
+                                <div className="flex items-start gap-3 p-3 bg-white border border-emerald-200 rounded-lg">
+                                    <Checkbox id="modal-consent" onCheckedChange={(checked) => {
+                                        if (checked) {
+                                            // Optional: visual feedback before closing or auto-confirm
+                                        }
+                                    }} />
+                                    <Label htmlFor="modal-consent" className="text-[10px] leading-tight text-slate-700 font-bold">
+                                        I have read, understood, and agree to the Payment Terms & Conditions, including the strictly non-refundable and non-transferable policy, and I voluntarily proceed.
+                                    </Label>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" onClick={() => setShowTermsModal(false)} className="flex-1 h-9 text-xs">Cancel</Button>
+                                    <Button 
+                                        onClick={confirmPackage}
+                                        className="flex-1 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white text-xs font-bold uppercase"
+                                    >
+                                        Agree & Proceed
+                                    </Button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 };
 
