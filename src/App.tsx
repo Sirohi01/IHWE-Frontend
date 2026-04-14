@@ -89,17 +89,17 @@ const App = () => {
                   <Route path="/refund-policy" element={<RefundPolicy />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
-                
+
                 {/* STANDALONE EXHIBITOR PORTAL ROUTES (No Main Header/Footer) */}
                 <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
                 <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />} />
               </Routes>
             </Suspense>
             <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 
