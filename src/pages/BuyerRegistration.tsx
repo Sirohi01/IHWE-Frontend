@@ -360,7 +360,7 @@ const BuyerRegistration = () => {
         // 1. Core Fields
         const fieldsToValidate = [
             'fullName', 'designation', 'companyName', 'businessType',
-            'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
+            'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
             'stateProvince', 'city', 'yearsInOperation', 'annualTurnover',
             'keyProductsServices', 'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
@@ -673,7 +673,7 @@ const BuyerRegistration = () => {
                                 <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
                                     <div>
                                         <h2 className="text-base font-bold uppercase tracking-wider font-sans">Buyer-Seller Meet</h2>
-                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium font-sans">International Health & Wellness Expo 2026</p>
+                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium font-sans">9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</p>
                                     </div>
                                     <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
                                 </div>
@@ -703,7 +703,7 @@ const BuyerRegistration = () => {
                                                 <ErrorDisplay name="mobileNumber" errors={errors} />
                                                 {mobileOtpSent && !mobileOtpVerified && <Input placeholder="Enter OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={inputClasses} />}
                                             </div>
-                                            <div><Label className={labelClasses}>Alternate Number (10 digits)</Label><Input name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="Optional" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Alternate Number (10 digits) *</Label><Input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="10-digit alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Email Address (OTP) *</Label>
                                                 <div className="flex gap-2">
@@ -814,7 +814,7 @@ const BuyerRegistration = () => {
                                         <h3 className={sectionTitleClasses}> Purchase Intent & Capacity</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Buying Frequency *</Label><Select value={formData.buyingFrequency} onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={`${inputClasses} ${errors.buyingFrequency ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['One-time', 'Monthly', 'Quarterly', 'Long-term'].map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyingFrequency" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Range" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.annualPurchaseValueRanges?.map((v: string) => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Input name="estimatedAnnualPurchaseValue" value={formData.estimatedAnnualPurchaseValue} onChange={handleChange} placeholder="e.g. 50-100 Lakhs" className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`} /><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Immediate', '1–3 Months', '3–6 Months', 'Exploring'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{['Final Decision Maker', 'Influencer', 'Research Only'].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
@@ -1045,11 +1045,8 @@ const BuyerRegistration = () => {
                                         )}
                                     </div>
 
-                                    {/* Submit Section */}
-                                    <div className="pt-4 flex flex-col items-center border-t border-slate-100">
-                                        <Button type="submit" disabled={isSubmitting} className={`w-inline h-8 bg-[#23471d] hover:bg-[#1a3516] rounded-sm text-white shadow-md transition-all flex items-center justify-center gap-2 ${buttonTextClasses}`}>{isSubmitting ? <Loader2 size={12} className="animate-spin" /> : <>Submit Registration <Send size={11} /></>}</Button>
-                                        <p className="mt-1 text-[8px] text-slate-400 font-bold uppercase tracking-wide flex items-center gap-1 font-sans"><Shield size={8} className="text-[#23471d]" /> Secured Registration System</p>
-                                    </div>
+
+
                                 </form>
                             </motion.div>
                         )}
