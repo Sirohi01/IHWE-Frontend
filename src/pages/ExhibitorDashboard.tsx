@@ -59,6 +59,20 @@ export default function ExhibitorDashboard() {
     useEffect(() => {
         fetchDashboard();
         settingsApi.get().then(s => { if (s?.logo) setLogo(s.logo); });
+
+        // Re-fetch when tab becomes visible (user switches back to this tab)
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') fetchDashboard();
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+
+        // Poll every 30s so status changes from admin reflect automatically
+        const poll = setInterval(() => fetchDashboard(), 30000);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibility);
+            clearInterval(poll);
+        };
     }, [navigate]);
 
     const handleLogout = () => {
