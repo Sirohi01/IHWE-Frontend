@@ -90,6 +90,12 @@ const navLinks = [
         description: "Get your complimentary visitor pass today"
       },
       {
+        label: "Buyer Registration",
+        path: "/buyer-registration",
+        icon: ShoppingBag,
+        description: "Explore opportunities as a domestic or international buyer"
+      },
+      {
         label: "Why Visit",
         path: "/why-visit",
         icon: Sparkles,

@@ -5,8 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-
-// LAZY LOAD PAGES
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
@@ -33,10 +31,9 @@ const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
-const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
-
+const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
@@ -59,7 +56,6 @@ const App = () => {
             <SeoHelmet />
             <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#071306]"><div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div></div>}>
               <Routes>
-                {/* PUBLIC ROUTES */}
                 <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
                   <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
                   <Route path="/about" element={<About />} />
@@ -67,7 +63,6 @@ const App = () => {
                   <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                   <Route path="/book-a-stand" element={<BookAStand />} />
                   <Route path="/visitor-registration" element={<VisitorRegistration />} />
-                  <Route path="/buyer-registration" element={<BuyerRegistration />} />
                   <Route path="/exhibition" element={<Exhibition />} />
                   <Route path="/media-registration" element={<MediaRegistration />} />
                   <Route path="/speaker-registration" element={<SpeakerRegistration />} />
@@ -86,11 +81,11 @@ const App = () => {
                   <Route path="/why-visit" element={<WhyVisit />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
+                  <Route path="/buyer-registration" element={<BuyerLanding />} />
+                  <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
 
-                {/* STANDALONE EXHIBITOR PORTAL ROUTES (No Main Header/Footer) */}
                 <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
                 <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />} />
               </Routes>
