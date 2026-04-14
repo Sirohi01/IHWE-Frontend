@@ -388,10 +388,20 @@ const BookAStand = () => {
             setPhoneVerified(false);
             setVerificationError(null);
         }
+        const isNameOrDesignation = name.includes('firstName') || name.includes('lastName') || name.includes('designation');
+        let newValue = value;
+        if (isNameOrDesignation) {
+            newValue = value.replace(/[0-9]/g, '');
+        }
+
+        if (name === 'landlineNo') {
+            newValue = value.replace(/\D/g, '');
+        }
+
         const isMobileField = name === 'contact1.mobile' || name === 'contact2.mobile' ||
             name === 'contact1.alternateNo' || name === 'contact2.alternateNo';
         if (isMobileField && exhibitorType === 'domestic') {
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+            const digitsOnly = newValue.replace(/\D/g, '').slice(0, 10);
             if (name.includes('.')) {
                 const [parent, child] = name.split('.');
                 setFormData(prev => ({
@@ -406,10 +416,10 @@ const BookAStand = () => {
             const [parent, child] = name.split('.');
             setFormData(prev => ({
                 ...prev,
-                [parent]: { ...prev[parent as keyof typeof prev] as any, [child]: value }
+                [parent]: { ...prev[parent as keyof typeof prev] as any, [child]: newValue }
             }));
         } else {
-            setFormData(prev => ({ ...prev, [name]: value }));
+            setFormData(prev => ({ ...prev, [name]: newValue }));
         }
     };
 
@@ -666,6 +676,7 @@ const BookAStand = () => {
         "rounded-[2px] border-slate-400 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 w-full text-left";
     const labelClasses =
         "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
+    const fmtAmt = (n: number) => Math.round(n).toLocaleString('en-IN');
     const formatDateRange = (start?: string, end?: string) => {
         if (!start || !end) return "";
         const startDate = new Date(start);
@@ -692,7 +703,7 @@ const BookAStand = () => {
             <PaymentProcessingModal
                 status={paymentModal?.status ?? null}
                 stallNo={formData.participation.stallFor}
-                amount={`${formData.participation.currency === 'USD' ? '$' : '\u20B9'}${formData.amountPaid.toLocaleString('en-IN')}`}
+                amount={`${formData.participation.currency === 'USD' ? '$' : '\u20B9'}${fmtAmt(formData.amountPaid)}`}
                 onClose={() => setPaymentModal(null)}
             />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
@@ -729,105 +740,52 @@ const BookAStand = () => {
             <section className="pt-4 pb-12 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">
                     <div className="space-y-4">
-                        {/* -- PERPETUAL EVENT HEADER -- */}
-                        <div className="bg-white border border-slate-300 shadow-xl overflow-hidden mb-4" data-aos="fade-up">
-                            <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-3 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-3 mb-1">
-                                        <h3 className="text-[22px] font-inter font-bold text-[#D26019]">{events.find(e => e._id === selectedEventId)?.name || 'IH&WE'}</h3>
-                                    </div>
-                                    <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.15em]">Exhibitor Registration - Booking Form</p>
-
-                                    {events.find(e => e._id === selectedEventId)?.description && (
-                                        <div className="mt-2 relative">
-                                            <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#d26019]/20 rounded-full" />
-                                            <p className="text-[15px] text-slate-500 pl-4 font-medium max-w-full leading-relaxed">
-                                                {events.find(e => e._id === selectedEventId)?.description}
-                                            </p>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="flex flex-col items-end gap-1">
-                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Support Protocol</span>
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                        <span className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider">{exhibitorType ? `${exhibitorType} Module` : 'Initialization...'}</span>
-                                    </div>
-
-                                    {events.find(e => e._id === selectedEventId)?.contactPhone && (
-                                        <a href={`tel:${events.find(e => e._id === selectedEventId)?.contactPhone}`} className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-[#d26019]/20 rounded-md shadow-sm hover:border-[#d26019] transition-all group">
-                                            <Phone size={16} className="text-[#d26019] group-hover:scale-110 transition-transform" />
-                                            <span className="text-[16px] font-bold text-slate-900 tracking-normal">{events.find(e => e._id === selectedEventId)?.contactPhone}</span>
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                            {/* <div className="bg-slate-50/30 px-8 py-5">
-                                <div className="flex flex-col md:flex-row items-end gap-6">
-                                    <div className="w-full md:w-96">
-                                        <Label className="text-[10px] font-bold text-[#23471d] uppercase mb-2 block tracking-[0.1em]">Select Exhibition Event *</Label>
-                                        <Select onValueChange={(v) => handleSelectChange('eventId', v)} value={selectedEventId}>
-                                            <SelectTrigger className="h-11 rounded-sm border-slate-300 bg-white text-xs font-bold text-slate-900 shadow-sm focus:ring-[#23471d]/20 hover:border-[#23471d] transition-all">
-                                                <SelectValue placeholder="Choose Event" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {events.map(ev => (
-                                                    <SelectItem key={ev._id} value={ev._id} className="text-xs font-bold uppercase tracking-tight">
-                                                        {ev.name} ({new Date(ev.startDate).getFullYear()})
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <div className="flex-1 pb-1">
-                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Configuration Note</p>
-                                        <p className="text-[11px] text-slate-500 font-medium">Selecting an event will automatically update pricing structures and protocols below.</p>
-                                    </div>
-                                </div>
-                            </div> */}
-                        </div>
-
                         {/* -- REGISTRATION FLOW -- */}
                         <div className="w-full">
-                            <AnimatePresence mode="wait">
-                                {!exhibitorType ? (
-                                    <motion.div
-                                        key="placeholder"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="h-[400px] flex flex-col items-center justify-center text-center p-8 bg-white border border-slate-200 border-dashed rounded-xl shadow-sm"
-                                    >
-                                        <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                                            <Info className="text-slate-300" size={40} />
-                                        </div>
-                                        <h3 className="text-2xl font-inter font-bold text-slate-900 mb-2 leading-tight">Select Category to Start</h3>
-                                        <p className="text-slate-400 text-sm max-w-sm font-medium mb-8">Please choose between Domestic or International to begin your registration process.</p>
-
-                                        <div className="flex flex-col sm:flex-row gap-4">
+                            {/* -- WELCOME SECTION - only when no type selected -- */}
+                            {!exhibitorType && (
+                                <div className="bg-white border border-slate-300 shadow-xl overflow-hidden mb-4">
+                                    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
+                                        <h3 className="text-[22px] mb-2 font-semibold text-[#d26019]">
+                                            Welcome to the 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
+                                        </h3>
+                                        <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.15em] mb-3">Exhibitor Registration - Booking Form</p>
+                                        <p className="mb-2">
+                                            Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH, organic, and sustainable industries under one roof.
+                                        </p>
+                                        <p className="mb-2">
+                                            Whether you are a visitor discovering innovations or a corporate buyer seeking meaningful business connections, IHWE offers a high-value, curated experience with India's most trusted brands and manufacturers.
+                                        </p>
+                                        <p className="mb-2">
+                                            Register now and be part of a powerful global movement in health & wellness.
+                                        </p>
+                                    </div>
+                                    <div className="text-center py-12 space-y-6">
+                                        <h2 className="text-2xl font-bold text-slate-800">
+                                            Choose Exhibitor Category
+                                        </h2>
+                                        <div className="flex justify-center gap-6">
                                             <button
                                                 type="button"
                                                 onClick={() => handleExhibitorTypeChange('domestic')}
-                                                className="group relative px-10 py-4 bg-white border border-[#23471d] text-[#23471d] rounded-sm transition-all hover:bg-[#23471d] hover:text-white shadow-sm active:scale-[0.98] active:translate-y-0.5"
+                                                className="px-4 py-2 bg-[#23471d] text-white font-semibold shadow hover:scale-105 transition-all"
                                             >
-                                                <div className="relative z-10 flex items-center gap-3">
-                                                    <span className="text-xs font-bold uppercase tracking-[0.2em]">Domestic (India)</span>
-                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                                </div>
+                                                Domestic Exhibitor
                                             </button>
-
                                             <button
                                                 type="button"
                                                 onClick={() => handleExhibitorTypeChange('international')}
-                                                className="group relative px-10 py-4 bg-white border border-[#d26019] text-[#d26019] rounded-sm transition-all hover:bg-[#d26019] hover:text-white shadow-sm active:scale-[0.98] active:translate-y-0.5"
+                                                className="px-4 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all"
                                             >
-                                                <div className="relative z-10 flex items-center gap-3">
-                                                    <span className="text-xs font-bold uppercase tracking-[0.2em]">International</span>
-                                                    <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                                                </div>
+                                                International Exhibitor
                                             </button>
                                         </div>
-                                    </motion.div>
-                                ) : submitted ? (
+                                    </div>
+                                </div>
+                            )}
+
+                            <AnimatePresence mode="wait">
+                                {!exhibitorType ? null : submitted ? (
                                     <motion.div
                                         key="success"
                                         initial={{ opacity: 0, scale: 0.95 }}
@@ -883,7 +841,17 @@ const BookAStand = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         className="bg-white border border-slate-300 shadow-2xl overflow-hidden rounded-sm"
                                     >
-                                        <form onSubmit={handleSubmit} className="p-4 space-y-3 font-inter bg-white">
+                                        <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+                                            <div>
+                                                <h2 className="text-xl font-bold text-slate-900 uppercase" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                                    {exhibitorType === 'domestic' ? 'Domestic Exhibitor Registration' : 'International Exhibitor Registration'}
+                                                </h2>
+                                                <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
+                                                    9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <form onSubmit={handleSubmit} className="p-8 space-y-4 font-inter bg-white">
                                             <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
@@ -930,18 +898,18 @@ const BookAStand = () => {
                                             {/* -- EXHIBITOR DETAILS SECTION -- */}
                                             <div className="space-y-2 pt-1">
                                                 <div className="pb-2 border-b border-slate-100">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Exhibitor Details</h3>
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Details</h3>
                                                 </div>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-2">
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COMPANY NAME <span className="text-red-500">*</span></Label>
-                                                        <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                        <Label className={labelClasses}>COMPANY NAME <span className="text-red-500">*</span></Label>
+                                                        <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -952,9 +920,9 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -965,18 +933,18 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">WEBSITE <span className="text-red-500">*</span></Label>
-                                                        <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                        <Label className={labelClasses}>WEBSITE <span className="text-red-500">*</span></Label>
+                                                        <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
-                                                        <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                        <Label className={labelClasses}>EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
+                                                        <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">COUNTRY <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>COUNTRY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -990,9 +958,9 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1003,9 +971,9 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">CITY <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>CITY <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1017,9 +985,9 @@ const BookAStand = () => {
                                                     </div>
 
                                                     {/* <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1030,8 +998,8 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div> */}
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
-                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                        <Label className={labelClasses}>LANDLINE NO.</Label>
+                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -1039,7 +1007,7 @@ const BookAStand = () => {
                                             {/* -- EXHIBITOR CONTACT DETAILS -- */}
                                             <div className="space-y-2 pt-1">
                                                 <div className="pb-2 border-b border-slate-100">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Exhibitor Contact Details</h3>
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Contact Details</h3>
                                                 </div>
 
                                                 {/* First Contact Person */}
@@ -1047,9 +1015,9 @@ const BookAStand = () => {
                                                     <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
                                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">TITLE <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>TITLE <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
-                                                                <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Here" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
@@ -1061,15 +1029,15 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">FIRST NAME <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                            <Label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LAST NAME <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                            <Label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">EMAIL <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>EMAIL <span className="text-red-500">*</span></Label>
                                                             <div className="flex gap-1">
                                                                 <Input
                                                                     required
@@ -1107,11 +1075,11 @@ const BookAStand = () => {
                                                         </div>
 
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">DESIGNATION <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
+                                                            <Label className={labelClasses}>DESIGNATION <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">MOBILE <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>MOBILE <span className="text-red-500">*</span></Label>
                                                             <div className="flex gap-1">
                                                                 <Input
                                                                     required
@@ -1149,8 +1117,8 @@ const BookAStand = () => {
                                                             )}
                                                         </div>
                                                         <div>
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">ALTERNATE NO. <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
+                                                            <Label className={labelClasses}>ALTERNATE NO. <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className={inputClasses} inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1161,16 +1129,16 @@ const BookAStand = () => {
                                             {/* -- PARTICIPATION DETAILS SECTION -- */}
                                             <div className="space-y-2 pt-1 border-t border-slate-100">
                                                 <div className="pb-2 border-b border-slate-100">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]">Participation Details</h3>
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Participation Details</h3>
                                                 </div>
 
                                                 <div className="space-y-4">
                                                     {/* Selection Controls */}
                                                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL FOR <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></Label>
                                                             <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
-                                                                <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Stall" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
@@ -1181,11 +1149,11 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL SIZE <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>STALL SIZE <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallSize} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL CATEGORY <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>STALL CATEGORY <span className="text-red-500">*</span></Label>
                                                             <Select
                                                                 onValueChange={(v) => {
                                                                     setFormData(prev => ({
@@ -1195,7 +1163,7 @@ const BookAStand = () => {
                                                                 }}
                                                                 value={formData.participation.stallType}
                                                             >
-                                                                <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Category" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
@@ -1205,15 +1173,15 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">PL SCHEME <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallScheme || "N/A"} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">DIMENSION <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.dimension} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">STALL NO. <span className="text-red-500">*</span></Label>
+                                                            <Label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></Label>
                                                             <Input readOnly value={formData.participation.stallFor} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
                                                         </div>
                                                     </div>
@@ -1233,25 +1201,25 @@ const BookAStand = () => {
                                                                 <div className="flex flex-col gap-1 min-w-[160px]">
                                                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Space Area ({formData.participation.stallSize} sqm)</span>
                                                                     <span className="text-lg font-bold text-slate-900">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {Number(formData.participation.rate * formData.participation.stallSize).toLocaleString()}
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
                                                                     </span>
                                                                 </div>
                                                                 {selectedStall?.incrementPercentage > 0 && (
                                                                     <div className="flex flex-col gap-1 min-w-[160px] text-orange-600">
                                                                         <span className="text-[10px] font-bold uppercase tracking-widest">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                        <span className="text-lg font-bold">+ {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
+                                                                        <span className="text-lg font-bold">+ {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
                                                                     </div>
                                                                 )}
                                                                 <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4">
                                                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">GST (18%)</span>
                                                                     <span className="text-lg font-bold text-slate-900">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
                                                                     </span>
                                                                 </div>
                                                                 <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4 ml-auto">
                                                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Grand Total <span className="text-[8px] normal-case text-slate-300 ml-1">Tax Included</span></span>
                                                                     <span className="text-2xl font-bold text-[#23471d]">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {formData.participation.total.toLocaleString()}
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total)}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -1266,7 +1234,7 @@ const BookAStand = () => {
 
                                                 <div className="grid grid-cols-4 gap-4">
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
                                                             value={formData.primaryCategory}
@@ -1283,7 +1251,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SUB-CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
                                                             value={formData.subCategory}
@@ -1301,9 +1269,9 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="How did you hear about us?" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1317,9 +1285,9 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH <span className="text-red-500">*</span></Label>
+                                                        <Label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                            <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Staff Member" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1360,116 +1328,70 @@ const BookAStand = () => {
 
                                                     </div>
 
-                                                    {/* Right: Summary Card (Fills White Space) */}
+
+                                                    {/* Right: Summary Card */}
                                                     <div className="w-full">
-                                                        <div className="bg-white border-2 border-slate-100 p-4 rounded-sm shadow-sm">
-                                                            <div className="pb-4 border-b border-slate-100 mb-3 flex justify-between items-center">
-                                                                <h3 className="text-base font-inter font-bold text-slate-900 tracking-normal uppercase">Booking Summary</h3>
-                                                                <span className="px-2 py-0.5 bg-green-50 text-green-600 text-[9px] font-bold uppercase rounded-full border border-green-100">Live Quote</span>
+                                                        <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
+                                                            <div className="flex justify-between items-center mb-2">
+                                                                <h3 className="text-sm font-bold text-slate-900 uppercase">Booking Summary</h3>
+                                                                <select
+                                                                    value={formData.paymentType}
+                                                                    onChange={(e) => setFormData(prev => ({ ...prev, paymentType: e.target.value as 'full' | 'advance' }))}
+                                                                    className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
+                                                                >
+                                                                    <option value="full">Full Payment</option>
+                                                                    <option value="advance">Advance ({onlineAdvancePercent}%)</option>
+                                                                </select>
                                                             </div>
 
-                                                            <div className="space-y-3">
-                                                                {/* Payment Choice Selector */}
-                                                                <div className="p-1 bg-slate-50 border border-slate-200 rounded-sm grid grid-cols-2 gap-1 mb-2">
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => setFormData(prev => ({ ...prev, paymentType: 'full' }))}
-                                                                        className={`py-2.5 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${formData.paymentType === 'full' ? 'bg-[#23471d] text-white shadow-md' : 'text-slate-400 hover:text-slate-700 hover:bg-white'}`}
-                                                                    >
-                                                                        Full Payment
-                                                                    </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => setFormData(prev => ({ ...prev, paymentType: 'advance' }))}
-                                                                        className={`py-2.5 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${formData.paymentType === 'advance' ? 'bg-[#23471d] text-white shadow-md' : 'text-slate-400 hover:text-slate-700 hover:bg-white'}`}
-                                                                    >
-                                                                        Pay Advance ({onlineAdvancePercent}%)
-                                                                    </button>
+                                                            <div className="space-y-1.5 text-xs border-t border-slate-100 pt-2">
+                                                                <div className="flex justify-between">
+                                                                    <span className="text-slate-500">Stall {formData.participation.stallFor || '�'} � {formData.participation.stallSize} sqm</span>
+                                                                    <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}</span>
                                                                 </div>
-
-                                                                <div className="flex items-start gap-4">
-                                                                    <div className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-[#23471d] flex-shrink-0">
-                                                                        <MapPin size={18} />
+                                                                {selectedStall?.incrementPercentage > 0 && (
+                                                                    <div className="flex justify-between text-orange-600">
+                                                                        <span>PL Increment ({selectedStall.incrementPercentage}%)</span>
+                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
                                                                     </div>
-                                                                    <div>
-                                                                        <p className="text-[9px] text-slate-400 font-bold uppercase">Selected Stand</p>
-                                                                        <p className="text-sm font-bold text-slate-900">Stall {formData.participation.stallFor || 'Not Selected'}</p>
-                                                                        <p className="text-[11px] text-slate-500">{formData.participation.stallType} � {formData.participation.stallSize} Sq M.</p>
-                                                                    </div>
+                                                                )}
+                                                                <div className="flex justify-between text-slate-500">
+                                                                    <span>GST (18%)</span>
+                                                                    <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total - formData.participation.amount)}</span>
                                                                 </div>
-
-                                                                <div className="bg-slate-50 p-4 space-y-3 rounded-sm">
-                                                                    <div className="flex justify-between items-center text-xs">
-                                                                        <span className="text-slate-500 font-medium">Space Rental</span>
-                                                                        <span className="font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '?' : '$'} {Number(formData.participation.rate * formData.participation.stallSize).toLocaleString()}
-                                                                        </span>
-                                                                    </div>
-                                                                    {selectedStall?.incrementPercentage > 0 && (
-                                                                        <div className="flex justify-between items-center text-xs text-orange-600">
-                                                                            <span className="font-medium">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                            <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100).toLocaleString()}</span>
-                                                                        </div>
-                                                                    )}
-                                                                    <div className="h-px bg-slate-200 my-2" />
-                                                                    <div className="flex justify-between items-center text-xs text-slate-600">
-                                                                        <span className="font-medium">GST (18%)</span>
-                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '\$'} {Math.round(formData.participation.total - formData.participation.amount).toLocaleString()}</span>
-                                                                    </div>
-                                                                    <div className="flex justify-between items-center">
-                                                                        <span className="text-xs font-bold uppercase text-slate-500">Total Booking Value</span>
-                                                                        <span className="text-sm font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '₹' : '$'} {Number(formData.participation.total).toLocaleString()}
-                                                                        </span>
-                                                                    </div>
-
-                                                                    {formData.paymentType === 'advance' && (
-                                                                        <div className="flex justify-between items-center pt-2">
-                                                                            <span className="text-xs font-bold uppercase text-orange-600">Balance Later</span>
-                                                                            <span className="text-sm font-bold text-orange-600">
-                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {formData.balanceAmount.toLocaleString()}
-                                                                            </span>
-                                                                        </div>
-                                                                    )}
+                                                                <div className="flex justify-between border-t border-slate-200 pt-1.5">
+                                                                    <span className="font-bold text-slate-700 uppercase">Total</span>
+                                                                    <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total)}</span>
                                                                 </div>
-
-                                                                <div className="p-4 bg-[#23471d]/5 border-2 border-[#23471d]/20 rounded-sm">
-                                                                    <div className="flex justify-between items-center">
-                                                                        <div className="space-y-0.5">
-                                                                            <p className="text-[10px] font-bold text-[#23471d] uppercase tracking-widest">{formData.paymentType === 'full' ? 'Net Payable' : 'Advance Payable'}</p>
-                                                                            <p className="text-[9px] text-slate-500 font-bold uppercase">Payable right now</p>
-                                                                        </div>
-                                                                        <div className="text-right">
-                                                                            <p className="text-2xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {formData.amountPaid.toLocaleString()}</p>
-                                                                        </div>
+                                                                {formData.paymentType === 'advance' && (
+                                                                    <div className="flex justify-between text-orange-600">
+                                                                        <span className="font-bold uppercase">Balance Later</span>
+                                                                        <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
                                                                     </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="mt-3 p-3 bg-[#23471d]/5 border border-[#23471d]/20 rounded-sm flex justify-between items-center">
+                                                                <div>
+                                                                    <p className="text-[10px] font-bold text-[#23471d] uppercase">{formData.paymentType === 'full' ? 'Net Payable' : 'Advance Payable'}</p>
+                                                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Payable now</p>
                                                                 </div>
-
-                                                                <div className="pt-2">
-                                                                    <p className="text-[10px] text-slate-400 font-medium leading-tight">
-                                                                        * Total includes current taxes. Final invoice will be sent to <strong>{formData.contact1.email || 'your email'}</strong> upon successful transaction.
-                                                                    </p>
-                                                                </div>
+                                                                <p className="text-xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isLoading || !formData.participation.stallNo}
-                                                        className="w-full py-3 bg-[#a37512] hover:bg-[#8b6310] text-white text-sm font-bold uppercase tracking-[0.2em] rounded-sm shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 group"
-                                                    >
-                                                        {isLoading ? (
-                                                            <>
-                                                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                                                PROCESSING...
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                Proceed for Payment
-                                                                <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                                                            </>
-                                                        )}
-                                                    </button>
+                                                    <div className="pt-4 flex flex-col items-center">
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isLoading || !formData.participation.stallNo}
+                                                            className="w-full max-w-56 h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                                        >
+                                                            {isLoading ? (
+                                                                <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>PROCESSING...</span></>
+                                                            ) : (
+                                                                <>PROCEED FOR PAYMENT <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                                            )}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </form>
@@ -1478,43 +1400,7 @@ const BookAStand = () => {
                             </AnimatePresence>
                         </div>
 
-                        {/* -- EVENT INFO FOOTER BAR -- */}
-                        <div className="w-full bg-[#0072bc] text-white p-4 rounded-sm shadow-xl flex flex-wrap justify-between items-center gap-4" data-aos="fade-up">
-                            <div className="flex items-center gap-4 border-r border-[#ffffff33] pr-8 last:border-none last:pr-0">
-                                <div className="p-3 bg-white/10 rounded-full"><Calendar size={24} /></div>
-                                <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">DATE</p>
-                                    <p className="text-[13px] font-bold">{selectedEvent ? formatDateRange(selectedEvent.startDate, selectedEvent.endDate) : (eventHighlights?.eventDate || "21th-23th March 2026")}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 border-r border-[#ffffff33] pr-8 last:border-none last:pr-0">
-                                <div className="p-3 bg-white/10 rounded-full"><MapPin size={24} /></div>
-                                <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">LOCATION</p>
-                                    <p className="text-[13px] font-bold">
-                                        {(selectedEvent?.location || selectedEvent?.venue) || (eventHighlights?.venueName || "Pragati Maidan, New Delhi")}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4 border-r border-[#ffffff33] pr-8 last:border-none last:pr-0">
-                                <div className="p-3 bg-white/10 rounded-full"><Send size={24} /></div>
-                                <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">TICKETS</p>
-                                    <p className="text-[13px] font-bold">
-                                        {(selectedEvent?.ticketsStatus) || (eventHighlights?.ticketsRemaining || "Few Remaining")}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-white/10 rounded-full"><Mic2 size={24} /></div>
-                                <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">SPEAKERS</p>
-                                    <p className="text-[13px] font-bold">
-                                        {(selectedEvent?.speakersCount) || (eventHighlights?.speakersCount || "100+ Speakers")}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        {/* -- EVENT INFO FOOTER BAR -- REMOVED */}
                     </div>
                 </div>
             </section >
@@ -1523,6 +1409,9 @@ const BookAStand = () => {
 };
 
 export default BookAStand;
+
+
+
 
 
 
