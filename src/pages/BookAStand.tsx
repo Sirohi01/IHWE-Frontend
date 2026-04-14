@@ -1301,7 +1301,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL *</Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="How did you hear about us?" />
@@ -1317,7 +1317,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH *</Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SPOKEN WITH <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
                                                                 <SelectValue placeholder="Select Staff Member" />
