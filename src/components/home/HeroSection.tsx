@@ -23,18 +23,18 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
           const now = new Date().getTime();
           const activeSlides = data.filter((s: any) => {
             if (!s.isActive) return false;
-            
+
             // If scheduling is present, check time
             if (s.schedule?.startDate && s.schedule?.startTime) {
               const startDateTime = new Date(s.schedule.startDate + 'T' + s.schedule.startTime).getTime();
-              const endDateTime = s.schedule.endDate && s.schedule.endTime 
+              const endDateTime = s.schedule.endDate && s.schedule.endTime
                 ? new Date(s.schedule.endDate + 'T' + s.schedule.endTime).getTime()
                 : null;
-              
+
               if (now < startDateTime) return false;
               if (endDateTime && now > endDateTime) return false;
             }
-            
+
             return true;
           });
 
@@ -152,7 +152,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl"
+            className="max-w-4xl -mt-20"
           >
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -171,25 +171,28 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.9 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-[1.15] tracking-tight text-white uppercase"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
-              {slides[current].title.split(' ').map((word: string, i: number) => (
-                <span key={i} className={word.toLowerCase() === 'innovation' || word.toLowerCase() === 'expo' ? 'text-white' : ''}>
-                  {word}{' '}
-                </span>
-              ))}
-            </motion.h2>
+              className={cn(
+                "font-bold mb-6 leading-[1.15] tracking-tight text-white uppercase",
+                !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
+              )}
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined
+              }}
+              dangerouslySetInnerHTML={{ __html: slides[current].title }}
+            />
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.9 }}
-              className="text-sm md:text-base font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
-              {slides[current].description}
-            </motion.p>
+              className="font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined
+              }}
+              dangerouslySetInnerHTML={{ __html: slides[current].description }}
+            />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -197,69 +200,73 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
               transition={{ delay: 0.5, duration: 0.9 }}
               className="flex flex-col sm:flex-row gap-4 items-center"
             >
-              {slides[current].button1Url ? (
-                slides[current].button1Url.startsWith('http') ? (
-                  <a
-                    href={slides[current].button1Url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+              {slides[current].button1Name && (
+                slides[current].button1Url ? (
+                  slides[current].button1Url.startsWith('http') ? (
+                    <a
+                      href={slides[current].button1Url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(210,96,25,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button1Name}
+                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
+                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={slides[current].button1Url}
+                      className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(210,96,25,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button1Name}
+                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
+                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </Link>
+                  )
+                ) : (
+                  <button
+                    onClick={onRegisterVisit}
                     className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(210,96,25,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button1Name || "Register to Visit"}
+                      {slides[current].button1Name}
                       <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
                     </span>
                     <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  </button>
+                )
+              )}
+
+              {slides[current].button2Name && (
+                slides[current].button2Url?.startsWith('http') ? (
+                  <a
+                    href={slides[current].button2Url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(35,71,29,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      {slides[current].button2Name}
+                      <Sparkles size={12} className="group-hover:rotate-180 transition-transform duration-500" />
+                    </span>
+                    <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                   </a>
                 ) : (
                   <Link
-                    to={slides[current].button1Url}
-                    className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(210,96,25,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
+                    to={slides[current].button2Url || "/book-a-stand"}
+                    className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(35,71,29,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
                   >
                     <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button1Name || "Register to Visit"}
-                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                      {slides[current].button2Name}
+                      <Sparkles size={12} className="group-hover:rotate-180 transition-transform duration-500" />
                     </span>
-                    <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                   </Link>
                 )
-              ) : (
-                <button
-                  onClick={onRegisterVisit}
-                  className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(210,96,25,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {slides[current].button1Name || "Register to Visit"}
-                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
-                  </span>
-                  <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                </button>
-              )}
-
-              {slides[current].button2Url?.startsWith('http') ? (
-                <a
-                  href={slides[current].button2Url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(35,71,29,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {slides[current].button2Name || "Book a Stand"}
-                    <Sparkles size={12} className="group-hover:rotate-180 transition-transform duration-500" />
-                  </span>
-                  <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                </a>
-              ) : (
-                <Link
-                  to={slides[current].button2Url || "/book-a-stand"}
-                  className="group relative overflow-hidden rounded-xl px-8 py-3.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.2em] text-[10px] font-bold border-2 border-white shadow-[0_10px_30px_rgba(35,71,29,0.3)] hover:shadow-[0_15px_40px_rgba(35,71,29,0.4)] w-full sm:w-auto flex items-center justify-center"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {slides[current].button2Name || "Book a Stand"}
-                    <Sparkles size={12} className="group-hover:rotate-180 transition-transform duration-500" />
-                  </span>
-                  <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                </Link>
               )}
             </motion.div>
           </motion.div>
