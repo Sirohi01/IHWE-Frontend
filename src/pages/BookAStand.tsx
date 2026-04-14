@@ -1016,7 +1016,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
 
-                                                    <div>
+                                                    {/* <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
                                                             <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
@@ -1028,7 +1028,7 @@ const BookAStand = () => {
                                                                 ))}
                                                             </SelectContent>
                                                         </Select>
-                                                    </div>
+                                                    </div> */}
                                                     <div>
                                                         <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">LANDLINE NO.</Label>
                                                         <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 placeholder:text-slate-400" />
