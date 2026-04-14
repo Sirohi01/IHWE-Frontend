@@ -98,14 +98,7 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-[2px] hover:bg-emerald-700 transition-all"
                             >
-                                <ExternalLink size={12} /> View Receipt
-                            </a>
-                            <a
-                                href={receiptUrl}
-                                download
-                                className="flex items-center gap-2 px-4 py-2 bg-white border border-emerald-300 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-[2px] hover:bg-emerald-50 transition-all"
-                            >
-                                <Download size={12} /> Download
+                                <ExternalLink size={12} /> Download
                             </a>
                         </div>
                     </div>
