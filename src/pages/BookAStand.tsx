@@ -1283,7 +1283,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SUB-CATEGORY</Label>
+                                                        <Label className="text-[12px] font-bold text-slate-900 uppercase mb-1 block">SUB-CATEGORY <span className="text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
                                                             value={formData.subCategory}
