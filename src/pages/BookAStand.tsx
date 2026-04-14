@@ -32,6 +32,7 @@ import {
     adminApi
 } from "@/lib/api";
 import Swal from 'sweetalert2';
+import PaymentProcessingModal from '@/components/PaymentProcessingModal';
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || "";
 
@@ -172,6 +173,7 @@ const initialFormData = {
 const BookAStand = () => {
     const [submitted, setSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymentModal, setPaymentModal] = useState<{ status: 'processing' | 'success' | 'failed' } | null>(null);
     const [heroData, setHeroData] = useState<any>(null);
     const [events, setEvents] = useState<any[]>([]);
     const [selectedEventId, setSelectedEventId] = useState<string>('');
@@ -604,17 +606,28 @@ const BookAStand = () => {
                     description: `Stand Booking - Stall ${formData.participation.stallFor}`,
                     order_id: orderData.order.id,
                     handler: async (response: any) => {
-                        const finalData = {
-                            ...formData,
-                            razorpayOrderId: response.razorpay_order_id,
-                            paymentId: response.razorpay_payment_id,
-                            razorpaySignature: response.razorpay_signature,
-                            status: formData.paymentType === 'full' ? 'paid' : 'advance-paid'
-                        };
-                        const submitRes = await exhibitorRegistrationApi.submit(finalData);
-                        if (submitRes.success) {
-                            setSubmitted(true);
-                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        setPaymentModal({ status: 'processing' });
+                        try {
+                            const finalData = {
+                                ...formData,
+                                razorpayOrderId: response.razorpay_order_id,
+                                paymentId: response.razorpay_payment_id,
+                                razorpaySignature: response.razorpay_signature,
+                                status: formData.paymentType === 'full' ? 'paid' : 'advance-paid'
+                            };
+                            const submitRes = await exhibitorRegistrationApi.submit(finalData);
+                            if (submitRes.success) {
+                                setPaymentModal({ status: 'success' });
+                                setTimeout(() => {
+                                    setPaymentModal(null);
+                                    setSubmitted(true);
+                                    window.scrollTo({ top: 0, behavior: "smooth" });
+                                }, 2500);
+                            } else {
+                                setPaymentModal({ status: 'failed' });
+                            }
+                        } catch {
+                            setPaymentModal({ status: 'failed' });
                         }
                     },
                     prefill: {
@@ -663,6 +676,12 @@ const BookAStand = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-inter">
+            <PaymentProcessingModal
+                status={paymentModal?.status ?? null}
+                stallNo={formData.participation.stallFor}
+                amount={`${formData.participation.currency === 'USD' ? '$' : '\u20B9'}${formData.amountPaid.toLocaleString('en-IN')}`}
+                onClose={() => setPaymentModal(null)}
+            />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
             <section
                 className="hero-background-registration"
