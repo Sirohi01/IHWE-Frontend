@@ -884,7 +884,7 @@ const BuyerRegistration = () => {
     const [mobileOtpValue, setMobileOtpValue] = useState("");
     const [isVerifying, setIsVerifying] = useState({ email: false, mobile: false });
 
-    const [formData, setFormData] = useState({
+    const initialFormState = {
         fullName: "",
         designation: "",
         companyName: "",
@@ -904,12 +904,12 @@ const BuyerRegistration = () => {
         estimatedAnnualPurchaseValue: "",
         keyProductsServices: "",
         primaryProductInterest: "",
-        secondaryProductCategories: [] as string[],
+        secondaryProductCategories: "",
         specificProductRequirements: "",
         estimatedPurchaseVolume: "",
         budgetRange: "",
         preferredSupplierRegion: [] as string[],
-        preferredState: [] as string[],
+        preferredState: "",
         preferredSupplierType: [] as string[],
         preferredCompanySize: "",
         purchaseTimeline: "",
@@ -933,7 +933,9 @@ const BuyerRegistration = () => {
         consentTerms: false,
         consentPaymentValid: false,
         consentMatchedExhibitors: false
-    });
+    };
+
+    const [formData, setFormData] = useState(initialFormState);
 
     const [showMembershipOptions, setShowMembershipOptions] = useState(false);
     const [showTermsModal, setShowTermsModal] = useState(false);
@@ -1199,6 +1201,25 @@ const BuyerRegistration = () => {
         } catch (error) { alert("Submission error."); } finally { setIsSubmitting(false); }
     };
 
+    const handleReset = () => {
+        setFormData({
+            ...initialFormState,
+            registrationCategory: config?.packages?.[0]?.name || "",
+            registrationFee: config?.packages?.[0]?.price ? `₹${config.packages[0].price}` : "₹0"
+        });
+        setFormData(prev => ({ ...prev, preferredState: "", secondaryProductCategories: "" }));
+        setSubmitted(false);
+        setEmailOtpSent(false);
+        setEmailOtpVerified(false);
+        setEmailOtpValue("");
+        setMobileOtpSent(false);
+        setMobileOtpVerified(false);
+        setMobileOtpValue("");
+        setShowMembershipOptions(false);
+        setTempSelectedPackage(null);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     // Consistent styling classes
     const inputClasses = "w-full h-8 px-3 py-2 rounded-[2px] border border-slate-400 bg-white text-left text-[12px] font-medium text-slate-900 outline-none shadow-none transition-all ring-offset-background focus:border-[#23471d] focus:ring-[#23471d]/10 placeholder:text-slate-400 font-sans";
     const labelClasses = "text-[12px] font-semibold text-slate-900 mb-0.5 block text-left font-sans";
@@ -1248,7 +1269,10 @@ const BuyerRegistration = () => {
                                     <h2 className="text-2xl font-bold text-slate-900 font-serif">Registration Successful!</h2>
                                     <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed font-sans">Thank you for choosing IHWE 2026. Your registration details and payment confirmation have been emailed to you.</p>
                                 </div>
-                                <Link to="/"><Button className={`rounded-full px-8 h-10 bg-[#23471d] hover:bg-[#1a3516] ${buttonTextClasses} shadow-xl`}>Return Home</Button></Link>
+                                <div className="flex flex-wrap gap-4 justify-center">
+                                    <Button onClick={handleReset} className={`rounded-full px-8 h-10 border-[#23471d] text-[#23471d] hover:bg-emerald-50 ${buttonTextClasses} shadow-sm`} variant="outline">Register Another</Button>
+                                    <Link to="/"><Button className={`rounded-full px-8 h-10 bg-[#23471d] hover:bg-[#1a3516] ${buttonTextClasses} shadow-xl`}>Return Home</Button></Link>
+                                </div>
                             </motion.div>
                         ) : (
                             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
@@ -1322,20 +1346,15 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className={selectContentClasses}>{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select></div>
                                             <div>
                                                 <Label className={labelClasses}>Secondary Product Categories</Label>
-                                                <Select onValueChange={(v) => handleCheckboxChange('secondaryProductCategories', v, true)}>
+                                                <Select value={formData.secondaryProductCategories} onValueChange={(v) => handleSelectChange('secondaryProductCategories', v)}>
                                                     <SelectTrigger className={inputClasses}>
-                                                        <SelectValue placeholder={formData.secondaryProductCategories.length > 0 ? `${formData.secondaryProductCategories.length} selected` : "Choose Interests"} />
+                                                        <SelectValue placeholder="Choose Interests" />
                                                     </SelectTrigger>
                                                     <SelectContent className={selectContentClasses}>
                                                         {config?.secondaryProductCategories?.map((c: string) => (
-                                                            <div key={c} className="flex items-center gap-2 px-2 py-1.5 hover:bg-emerald-50 cursor-pointer text-[12px] font-sans">
-                                                                <Checkbox
-                                                                    checked={formData.secondaryProductCategories.includes(c)}
-                                                                    onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', c, !!checked)}
-                                                                    className="h-3 w-3"
-                                                                />
-                                                                <span>{c}</span>
-                                                            </div>
+                                                            <SelectItem key={c} value={c}>
+                                                                {c}
+                                                            </SelectItem>
                                                         ))}
                                                     </SelectContent>
                                                 </Select>
@@ -1373,7 +1392,21 @@ const BuyerRegistration = () => {
                                                     ))}
                                                 </div>
                                             </div>
-                                            <div><Label className={labelClasses}>Preferred State (Optional)</Label><Select onValueChange={(v) => handleCheckboxChange('preferredState', v, true)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select State" /></SelectTrigger><SelectContent className={`${selectContentClasses} max-h-[200px]`}>{filteredStates.map(s => (<div key={s._id} className="flex items-center gap-2 px-2 py-1.5 hover:bg-emerald-50 cursor-pointer text-[12px] font-sans"><Checkbox checked={formData.preferredState.includes(s.name)} onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)} className="h-3 w-3" /><span>{s.name}</span></div>))}</SelectContent></Select></div>
+                                            <div>
+                                                <Label className={labelClasses}>Preferred State (Optional)</Label>
+                                                <Select value={formData.preferredState} onValueChange={(v) => handleSelectChange('preferredState', v)}>
+                                                    <SelectTrigger className={inputClasses}>
+                                                        <SelectValue placeholder="Select State" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className={`${selectContentClasses} max-h-[200px]`}>
+                                                        {filteredStates.map(s => (
+                                                            <SelectItem key={s._id} value={s.name}>
+                                                                {s.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
                                             <div><Label className={labelClasses}>Preferred Company Size</Label><Select onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger><SelectContent className={selectContentClasses}>{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
                                         </div>
                                     </div>
@@ -1563,12 +1596,6 @@ const BuyerRegistration = () => {
                                                 </div>
 
                                                 {/* Important Note for Memberships */}
-                                                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-start gap-3">
-                                                    <span className="text-lg">⚠️</span>
-                                                    <div className="text-[11px] leading-relaxed text-amber-900 font-medium font-sans">
-                                                        <strong className="uppercase font-sans">Important Note:</strong> Expo entry is free for all visitors. Buyer–Seller Meet is conducted by the International Council of AYUSH (ICOA) at IHWE, ensuring curated B2B interactions and high-quality business engagement.
-                                                    </div>
-                                                </div>
                                             </div>
                                         )}
 
