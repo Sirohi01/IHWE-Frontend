@@ -999,6 +999,10 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div> */}
                                                     <div>
+                                                        <Label className={labelClasses}>PINCODE <span className="text-red-500">*</span></Label>
+                                                        <Input required name="pincode" value={formData.pincode} onChange={(e) => setFormData(prev => ({ ...prev, pincode: e.target.value.replace(/\D/g, '') }))} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
+                                                    </div>
+                                                    <div>
                                                         <Label className={labelClasses}>LANDLINE NO.</Label>
                                                         <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
                                                     </div>
