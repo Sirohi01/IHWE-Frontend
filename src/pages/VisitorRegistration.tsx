@@ -1006,7 +1006,7 @@ const VisitorRegistration = () => {
                                             </div>
                                         </div>
 
-                                        {/* {visitorType === "corporate" && (
+                                        {visitorType === "corporate" && (
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
                                                 <div className="space-y-4 text-left">
                                                     <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? *</Label>
@@ -1025,7 +1025,7 @@ const VisitorRegistration = () => {
                                                         </div>
                                                     </RadioGroup>
                                                 </div>
-                                                <div className="space-y-4 text-left">
+                                                {/* <div className="space-y-4 text-left">
                                                     <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like updates via WhatsApp? *</Label>
                                                     <RadioGroup
                                                         value={formData.whatsappUpdates}
@@ -1041,9 +1041,9 @@ const VisitorRegistration = () => {
                                                             <Label htmlFor="wa-no" className="text-sm font-medium text-slate-600 cursor-pointer">No</Label>
                                                         </div>
                                                     </RadioGroup>
-                                                </div>
+                                                </div> */}
                                             </div>
-                                        )} */}
+                                        )}
 
                                         {visitorType === "corporate" && (
                                             <div className="space-y-2">
