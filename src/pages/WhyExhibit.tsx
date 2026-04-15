@@ -179,7 +179,7 @@ const WhyExhibit = () => {
                 >
                     <img
                         src={pageData?.ctaImage ? `${SERVER_URL}${pageData.ctaImage}` : ctaFallback}
-                        alt={pageData?.ctaImageAlt || "Success at IH&WE"}
+                        alt={pageData?.ctaImageAlt || "Success at IHWE"}
                         className="w-full h-full object-cover brightness-[0.6] contrast-110"
                     />
                 </motion.div>

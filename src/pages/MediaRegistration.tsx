@@ -158,7 +158,7 @@ const MediaRegistration = () => {
                     </h1>
 
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Accreditation for journalists, bloggers, and influencers to cover IH&WE 2026."}
+                        {heroData?.shortDescription || "Accreditation for journalists, bloggers, and influencers to cover IHWE 2026."}
                     </p>
                 </div>
             </section>

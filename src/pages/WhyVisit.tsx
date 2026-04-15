@@ -61,7 +61,7 @@ const WhyVisit = () => {
                         {heroData?.title || "Visit · Experience"}
                     </p>
                     <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
-                        {heroData?.heading || "Why Visit IH&WE 2026?"}
+                        {heroData?.heading || "Why Visit IHWE 2026?"}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg mb-8 max-w-3xl mx-auto font-light leading-relaxed font-inter">
                         {heroData?.shortDescription || "Join thousands of healthcare professionals at the regional exhibition."}

@@ -625,7 +625,7 @@ const BookAStand = () => {
                     key: RAZORPAY_KEY_ID,
                     amount: orderData.order.amount,
                     currency: formData.participation.currency,
-                    name: "IH&WE Registration",
+                    name: "IHWE Registration",
                     description: `Stand Booking - Stall ${formData.participation.stallFor}`,
                     order_id: orderData.order.id,
                     handler: async (response: any) => {
