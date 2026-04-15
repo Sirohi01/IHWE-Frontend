@@ -1,5 +1,4 @@
 
-
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -32,7 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
 
-// Function to load Razorpay script
+
 const loadRazorpayScript = () => {
     return new Promise((resolve) => {
         const script = document.createElement('script');
@@ -113,7 +112,7 @@ const BuyerRegistration = () => {
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [loadingLocations, setLoadingLocations] = useState({ states: false, cities: false });
 
-    // Modal states
+
     const [showTermsModal, setShowTermsModal] = useState(false);
     const [tempSelectedPackage, setTempSelectedPackage] = useState<any>(null);
     const [activePolicyTab, setActivePolicyTab] = useState<'payment' | 'refund' | 'privacy'>('payment');
@@ -207,7 +206,7 @@ const BuyerRegistration = () => {
                     }
                 }
 
-                // Fetch dynamic policies
+
                 setLoadingPolicies(true);
                 try {
                     const [payment, refund, privacy] = await Promise.all([
@@ -232,7 +231,7 @@ const BuyerRegistration = () => {
         fetchData();
     }, []);
 
-    // Cascade State from Country selection
+
     useEffect(() => {
         const fetchStates = async () => {
             if (!formData.country) {
@@ -255,7 +254,7 @@ const BuyerRegistration = () => {
         fetchStates();
     }, [formData.country, countries]);
 
-    // Cascade City from State selection
+
     useEffect(() => {
         const fetchCities = async () => {
             if (!formData.stateProvince) {
@@ -299,7 +298,7 @@ const BuyerRegistration = () => {
         } else if (name === 'emailAddress' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
             error = "Invalid email format";
         } else if (name === 'mobileNumber' && value) {
-            // Fix: Mobile number must be exactly 10 digits
+
             if (!/^\d{10}$/.test(value)) {
                 error = "Mobile number must be exactly 10 digits";
             }
@@ -316,7 +315,7 @@ const BuyerRegistration = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
 
-        // Mobile number validation - only numbers, max 10 digits
+
         if (name === 'mobileNumber') {
             const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
             setFormData(prev => ({ ...prev, [name]: digitsOnly }));
@@ -357,7 +356,7 @@ const BuyerRegistration = () => {
         let isValid = true;
         const newErrors: Record<string, string> = {};
 
-        // 1. Core Fields
+
         const fieldsToValidate = [
             'fullName', 'designation', 'companyName', 'businessType',
             'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
@@ -412,12 +411,12 @@ const BuyerRegistration = () => {
     };
 
     const handleUnlockPackages = () => {
-        // Run validation but ignore registrationCategory
+
         const isValid = validateForm(true);
 
         if (!isValid) {
             alert("⚠️ Please fill in all required fields and correct any errors to continue.");
-            // Scroll to first error
+
             const firstErrorField = Object.keys(errors)[0];
             const element = document.getElementsByName(firstErrorField || "")[0];
             if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -430,7 +429,7 @@ const BuyerRegistration = () => {
         }
 
         setIsFormLocked(false);
-        // Add a small delay for DOM update before scrolling
+
         setTimeout(() => {
             const packageSection = document.getElementById('package-section');
             if (packageSection) {
@@ -512,12 +511,12 @@ const BuyerRegistration = () => {
 
         const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY",
-            amount: tempSelectedPackage.price * 100, // Amount in paise
+            amount: tempSelectedPackage.price * 100,
             currency: "INR",
             name: "IHWE 2026",
             description: `${tempSelectedPackage.name} Registration`,
             handler: async function (response: any) {
-                // Payment successful
+
                 setFormData(prev => ({
                     ...prev,
                     registrationCategory: tempSelectedPackage.name,
@@ -554,7 +553,6 @@ const BuyerRegistration = () => {
             return;
         }
 
-        // Show final confirmation
         const userConfirmed = window.confirm(
             "⚠️ IMPORTANT: All payments are NON-REFUNDABLE and NON-TRANSFERABLE.\n\n" +
             "Do you wish to proceed with the payment?"
@@ -572,7 +570,7 @@ const BuyerRegistration = () => {
                 ...formData,
                 registrationCategory: tempSelectedPackage?.name,
                 registrationFee: `₹${tempSelectedPackage?.price}`,
-                paymentStatus: "Paid",
+                paymentStatus: "Completed",
                 transactionId: transactionId,
                 consentTerms: true,
                 consentPaymentValid: true,
@@ -614,8 +612,7 @@ const BuyerRegistration = () => {
             return;
         }
 
-        // Note: Form submission now happens after payment, not here
-        // The package selection modal will handle payment and submission
+
     };
 
     const handleReset = () => {
@@ -636,7 +633,7 @@ const BuyerRegistration = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    // Consistent styling classes
+
     const inputClasses = "w-full h-8 px-3 py-2 rounded-[2px] border border-slate-400 bg-white text-left text-[12px] font-medium text-slate-900 outline-none shadow-none transition-all ring-offset-background focus:border-[#23471d] focus:ring-[#23471d]/10 placeholder:text-slate-400 font-sans";
     const labelClasses = "text-[12px] font-semibold text-slate-900 mb-0.5 block text-left font-sans";
     const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-1 border-b border-emerald-500/20 flex items-center gap-1.5 mb-3 uppercase tracking-tight font-sans";
