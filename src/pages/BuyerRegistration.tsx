@@ -102,6 +102,8 @@ const BuyerRegistration = () => {
     const [mobileOtpVerified, setMobileOtpVerified] = useState(false);
     const [mobileOtpValue, setMobileOtpValue] = useState("");
     const [isVerifying, setIsVerifying] = useState({ email: false, mobile: false });
+    const [emailResendTimer, setEmailResendTimer] = useState(0);
+    const [mobileResendTimer, setMobileResendTimer] = useState(0);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [loadingLocations, setLoadingLocations] = useState({ states: false, cities: false });
 
@@ -270,6 +272,23 @@ const BuyerRegistration = () => {
         };
         fetchCities();
     }, [formData.stateProvince, states]);
+
+    // OTP Resend Timers
+    useEffect(() => {
+        let eTimer: any;
+        if (emailResendTimer > 0) {
+            eTimer = setInterval(() => setEmailResendTimer(prev => prev - 1), 1000);
+        }
+        return () => clearInterval(eTimer);
+    }, [emailResendTimer]);
+
+    useEffect(() => {
+        let mTimer: any;
+        if (mobileResendTimer > 0) {
+            mTimer = setInterval(() => setMobileResendTimer(prev => prev - 1), 1000);
+        }
+        return () => clearInterval(mTimer);
+    }, [mobileResendTimer]);
 
     const validateField = (name: string, value: any) => {
         let error = "";
@@ -458,7 +477,13 @@ const BuyerRegistration = () => {
             const res = await otpApi.request(identifier, type === 'email' ? 'email' : 'phone', formData.fullName);
             if (res.success) {
                 toast.success(`OTP sent to your ${type === 'email' ? 'email address' : 'mobile number'}.`);
-                type === 'email' ? setEmailOtpSent(true) : setMobileOtpSent(true);
+                if (type === 'email') {
+                    setEmailOtpSent(true);
+                    setEmailResendTimer(60);
+                } else {
+                    setMobileOtpSent(true);
+                    setMobileResendTimer(60);
+                }
             } else {
                 toast.error(res.message || `Failed to send OTP to ${type}.`);
             }
@@ -684,21 +709,69 @@ const BuyerRegistration = () => {
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Mobile Number (10 digits) *</Label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified} maxLength={10} /></div>
-                                                    {!mobileOtpVerified && <Button type="button" onClick={() => (mobileOtpSent ? verifyOtp('mobile') : requestOtp('mobile'))} disabled={isVerifying.mobile || formData.mobileNumber.length !== 10} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>{isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : (mobileOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
+                                                    {!mobileOtpVerified && !mobileOtpSent && (
+                                                        <Button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile || formData.mobileNumber.length !== 10} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
+                                                            {isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : 'Send OTP'}
+                                                        </Button>
+                                                    )}
+                                                    {mobileOtpSent && !mobileOtpVerified && (
+                                                        <Button type="button" onClick={() => verifyOtp('mobile')} disabled={isVerifying.mobile || !mobileOtpValue} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
+                                                            {isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : 'Verify'}
+                                                        </Button>
+                                                    )}
+                                                    {mobileOtpVerified && <CheckCircle size={16} className="text-emerald-500 self-center shrink-0" />}
                                                 </div>
                                                 <ErrorDisplay name="mobileNumber" errors={errors} />
-                                                {mobileOtpSent && !mobileOtpVerified && <Input placeholder="Enter OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={inputClasses} />}
+                                                {mobileOtpSent && !mobileOtpVerified && (
+                                                    <div className="space-y-1">
+                                                        <Input placeholder="Enter 6-digit OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
+                                                        <div className="flex items-center justify-between">
+                                                            <span className="text-[10px] text-slate-400">Didn't receive it?</span>
+                                                            {mobileResendTimer > 0 ? (
+                                                                <span className="text-[10px] font-bold text-slate-400">Resend in {mobileResendTimer}s</span>
+                                                            ) : (
+                                                                <button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile} className="text-[10px] font-bold text-[#23471d] hover:underline disabled:opacity-50">
+                                                                    Resend OTP
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div><Label className={labelClasses}>Alternate Number (10 digits) *</Label><Input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="10-digit alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Email Address (OTP) *</Label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7 ${errors.emailAddress ? 'border-red-400' : ''}`} disabled={emailOtpVerified} /></div>
-                                                    {!emailOtpVerified && <Button type="button" onClick={() => (emailOtpSent ? verifyOtp('email') : requestOtp('email'))} disabled={isVerifying.email} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>{isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : (emailOtpSent ? 'Verify' : 'Send')}</Button>}
+                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7 ${errors.emailAddress ? 'border-red-400' : ''}`} disabled={emailOtpVerified || emailOtpSent} /></div>
+                                                    {!emailOtpVerified && !emailOtpSent && (
+                                                        <Button type="button" onClick={() => requestOtp('email')} disabled={isVerifying.email || !formData.emailAddress} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
+                                                            {isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : 'Send OTP'}
+                                                        </Button>
+                                                    )}
+                                                    {emailOtpSent && !emailOtpVerified && (
+                                                        <Button type="button" onClick={() => verifyOtp('email')} disabled={isVerifying.email || !emailOtpValue} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
+                                                            {isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : 'Verify'}
+                                                        </Button>
+                                                    )}
+                                                    {emailOtpVerified && <CheckCircle size={16} className="text-emerald-500 self-center shrink-0" />}
                                                 </div>
                                                 <ErrorDisplay name="emailAddress" errors={errors} />
-                                                {emailOtpSent && !emailOtpVerified && <Input placeholder="Enter OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={inputClasses} />}
+                                                {emailOtpSent && !emailOtpVerified && (
+                                                    <div className="space-y-1">
+                                                        <Input placeholder="Enter 6-digit OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
+                                                        <div className="flex items-center justify-between">
+                                                            <span className="text-[10px] text-slate-400">Didn't receive it?</span>
+                                                            {emailResendTimer > 0 ? (
+                                                                <span className="text-[10px] font-bold text-slate-400">Resend in {emailResendTimer}s</span>
+                                                            ) : (
+                                                                <button type="button" onClick={() => requestOtp('email')} disabled={isVerifying.email} className="text-[10px] font-bold text-[#23471d] hover:underline disabled:opacity-50">
+                                                                    Resend OTP
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div><Label className={labelClasses}>Website (Optional)</Label><Input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={`${inputClasses} ${errors.website ? 'border-red-400' : ''}`} /><ErrorDisplay name="website" errors={errors} /></div>
                                         </div>
