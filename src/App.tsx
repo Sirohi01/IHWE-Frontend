@@ -35,6 +35,7 @@ const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
+const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
@@ -90,6 +91,7 @@ const App = () => {
 
                 <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
                 <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />} />
+                <Route path="/visitor" element={<VisitorScan />} />
               </Routes>
             </Suspense>
             <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
