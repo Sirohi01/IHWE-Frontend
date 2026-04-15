@@ -4,32 +4,25 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     CheckCircle,
-    Send,
     ShieldCheck,
     Loader2,
-    User,
-    Phone,
-    Briefcase,
-    Target,
-    Globe,
-    Calendar,
     CreditCard,
     Smartphone,
     AtSign,
-    Shield,
     FileText,
     Lock,
-    AlertTriangle
+    AlertTriangle,
+    Ban
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
+import { toast } from "sonner";
 
 
 const loadRazorpayScript = () => {
@@ -114,6 +107,7 @@ const BuyerRegistration = () => {
 
 
     const [showTermsModal, setShowTermsModal] = useState(false);
+    const [showPaymentConfirmModal, setShowPaymentConfirmModal] = useState(false);
     const [tempSelectedPackage, setTempSelectedPackage] = useState<any>(null);
     const [activePolicyTab, setActivePolicyTab] = useState<'payment' | 'refund' | 'privacy'>('payment');
     const [policyConsents, setPolicyConsents] = useState({
@@ -415,8 +409,7 @@ const BuyerRegistration = () => {
         const isValid = validateForm(true);
 
         if (!isValid) {
-            alert("⚠️ Please fill in all required fields and correct any errors to continue.");
-
+            toast.error("Please fill in all required fields and correct any errors to continue.");
             const firstErrorField = Object.keys(errors)[0];
             const element = document.getElementsByName(firstErrorField || "")[0];
             if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -424,7 +417,7 @@ const BuyerRegistration = () => {
         }
 
         if (!emailOtpVerified || !mobileOtpVerified) {
-            alert("⚠️ Please verify your Email and Mobile via OTP to view available packages.");
+            toast.warning("Please verify your Email and Mobile via OTP to view available packages.");
             return;
         }
 
@@ -453,22 +446,24 @@ const BuyerRegistration = () => {
     const requestOtp = async (type: 'email' | 'mobile') => {
         const identifier = type === 'email' ? formData.emailAddress : formData.mobileNumber;
         if (!identifier) {
-            alert(`Please enter a valid ${type} first.`);
+            toast.error(`Please enter a valid ${type} first.`);
             return;
         }
         if (type === 'mobile' && !/^\d{10}$/.test(identifier)) {
-            alert("Please enter a valid 10-digit mobile number first.");
+            toast.error("Please enter a valid 10-digit mobile number.");
             return;
         }
         setIsVerifying(prev => ({ ...prev, [type]: true }));
         try {
             const res = await otpApi.request(identifier, type === 'email' ? 'email' : 'phone', formData.fullName);
             if (res.success) {
-                alert(`OTP sent to your ${type}.`);
+                toast.success(`OTP sent to your ${type === 'email' ? 'email address' : 'mobile number'}.`);
                 type === 'email' ? setEmailOtpSent(true) : setMobileOtpSent(true);
-            } else alert(res.message);
+            } else {
+                toast.error(res.message || `Failed to send OTP to ${type}.`);
+            }
         } catch (err) {
-            alert("Connection error.");
+            toast.error("Connection error. Please try again.");
         } finally {
             setIsVerifying(prev => ({ ...prev, [type]: false }));
         }
@@ -478,18 +473,20 @@ const BuyerRegistration = () => {
         const identifier = type === 'email' ? formData.emailAddress : formData.mobileNumber;
         const otp = type === 'email' ? emailOtpValue : mobileOtpValue;
         if (!otp) {
-            alert("Please enter the OTP.");
+            toast.error("Please enter the OTP first.");
             return;
         }
         setIsVerifying(prev => ({ ...prev, [type]: true }));
         try {
             const res = await otpApi.verify(identifier, otp, type === 'email' ? 'email' : 'phone');
             if (res.success) {
-                alert(`${type.toUpperCase()} verified successfully!`);
+                toast.success(`${type === 'email' ? 'Email' : 'Mobile'} verified successfully! ✓`);
                 type === 'email' ? setEmailOtpVerified(true) : setMobileOtpVerified(true);
-            } else alert(res.message);
+            } else {
+                toast.error(res.message || "Invalid OTP. Please try again.");
+            }
         } catch (err) {
-            alert("Verification failed.");
+            toast.error("Verification failed. Please try again.");
         } finally {
             setIsVerifying(prev => ({ ...prev, [type]: false }));
         }
@@ -505,7 +502,7 @@ const BuyerRegistration = () => {
     const initiateRazorpayPayment = async () => {
         const razorpayLoaded = await loadRazorpayScript();
         if (!razorpayLoaded) {
-            alert("Failed to load payment gateway. Please try again.");
+            toast.error("Failed to load payment gateway. Please try again.");
             return;
         }
 
@@ -516,15 +513,14 @@ const BuyerRegistration = () => {
             name: "IHWE 2026",
             description: `${tempSelectedPackage.name} Registration`,
             handler: async function (response: any) {
-
                 setFormData(prev => ({
                     ...prev,
                     registrationCategory: tempSelectedPackage.name,
                     registrationFee: `₹${tempSelectedPackage.price}`,
                     transactionId: response.razorpay_payment_id
                 }));
-
                 setShowTermsModal(false);
+                setShowPaymentConfirmModal(false);
                 await submitFinal(response.razorpay_payment_id);
             },
             prefill: {
@@ -538,7 +534,7 @@ const BuyerRegistration = () => {
             modal: {
                 confirm_close: true,
                 ondismiss: function () {
-                    alert("Payment cancelled. Please complete payment to confirm registration.");
+                    toast.warning("Payment cancelled. Complete payment to confirm your registration.");
                 }
             }
         };
@@ -549,19 +545,13 @@ const BuyerRegistration = () => {
 
     const confirmPackage = () => {
         if (!policyConsents.paymentTerms || !policyConsents.refundPolicy || !policyConsents.privacyPolicy) {
-            alert("Please accept all Terms & Conditions, Refund Policy, and Privacy Policy to proceed.");
+            toast.error("Please accept all Terms, Refund Policy, and Privacy Policy to proceed.");
             return;
         }
-
-        const userConfirmed = window.confirm(
-            "⚠️ IMPORTANT: All payments are NON-REFUNDABLE and NON-TRANSFERABLE.\n\n" +
-            "Do you wish to proceed with the payment?"
-        );
-
-        if (userConfirmed) {
-            initiateRazorpayPayment();
-        }
+        setShowTermsModal(false);
+        setShowPaymentConfirmModal(true);
     };
+
 
     const submitFinal = async (transactionId: string) => {
         setIsSubmitting(true);
@@ -580,10 +570,10 @@ const BuyerRegistration = () => {
                 setSubmitted(true);
                 window.scrollTo({ top: 0, behavior: "smooth" });
             } else {
-                alert(res.message || "Submission error. Please contact support.");
+                toast.error(res.message || "Submission error. Please contact support.");
             }
         } catch (error) {
-            alert("Submission error. Please contact support.");
+            toast.error("Submission error. Please contact support.");
         } finally {
             setIsSubmitting(false);
         }
@@ -595,7 +585,7 @@ const BuyerRegistration = () => {
         const isValid = validateForm();
 
         if (!isValid) {
-            alert("Please correct the errors in the form before submitting.");
+            toast.error("Please correct the errors in the form before submitting.");
             const firstErrorField = Object.keys(errors)[0];
             const element = document.getElementsByName(firstErrorField)[0];
             if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -603,12 +593,12 @@ const BuyerRegistration = () => {
         }
 
         if (formData.preferredSupplierRegion.length === 0 || formData.preferredSupplierType.length === 0) {
-            alert("Please select at least one Preferred Supplier Region and Type.");
+            toast.error("Please select at least one Preferred Supplier Region and Type.");
             return;
         }
 
         if (!emailOtpVerified || !mobileOtpVerified) {
-            alert("Please verify your Email and Mobile via OTP before submitting.");
+            toast.error("Please verify your Email and Mobile via OTP before submitting.");
             return;
         }
 
@@ -1219,6 +1209,87 @@ const BuyerRegistration = () => {
                                         {activePolicyTab === 'privacy' && "Agree & Proceed to Payment 💳"}
                                     </Button>
                                 </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ── PAYMENT CONFIRMATION MODAL ── */}
+            <AnimatePresence>
+                {showPaymentConfirmModal && tempSelectedPackage && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.85, y: 30 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.85, y: 30 }}
+                            className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
+                        >
+                            {/* Header */}
+                            <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                    <CreditCard size={20} className="text-emerald-300" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-black uppercase tracking-wider text-sm">Payment Confirmation</h3>
+                                    <p className="text-emerald-300 text-[10px] font-bold uppercase tracking-widest">{tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}</p>
+                                </div>
+                            </div>
+
+                            {/* Body */}
+                            <div className="p-6 space-y-5">
+                                {/* Non-refundable notice */}
+                                <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
+                                    <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="text-red-700 font-black text-sm uppercase tracking-wide mb-1">
+                                            ⚠️ IMPORTANT NOTICE
+                                        </p>
+                                        <p className="text-red-600 text-[13px] font-semibold leading-relaxed">
+                                            All payments are{" "}
+                                            <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-REFUNDABLE</span>{" "}
+                                            and{" "}
+                                            <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-TRANSFERABLE</span>.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Package summary */}
+                                <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
+                                    <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-slate-800 font-bold text-sm">{tempSelectedPackage?.name}</span>
+                                        <span className="text-[#23471d] font-black text-xl">₹{tempSelectedPackage?.price}</span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 font-medium">9th International Health &amp; Wellness Expo 2026</p>
+                                </div>
+
+                                <p className="text-slate-500 text-[12px] leading-relaxed text-center">
+                                    By proceeding, you confirm that you have read and agreed to all policies.
+                                </p>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="px-6 pb-6 grid grid-cols-2 gap-3">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setShowPaymentConfirmModal(false)}
+                                    className="h-11 border-slate-300 text-slate-600 font-black text-[11px] uppercase tracking-wider rounded-lg hover:bg-slate-50"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={() => initiateRazorpayPayment()}
+                                    className="h-11 bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-[11px] uppercase tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                                >
+                                    <CreditCard size={14} />
+                                    Proceed to Pay
+                                </Button>
                             </div>
                         </motion.div>
                     </motion.div>
