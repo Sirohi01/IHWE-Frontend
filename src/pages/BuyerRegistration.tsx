@@ -672,7 +672,7 @@ const BuyerRegistration = () => {
                             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
                                 <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-base font-bold uppercase tracking-wider font-sans">Buyer-Seller Meet</h2>
+                                        <h2 className="text-base font-bold uppercase tracking-wider font-sans">Domestic Buyer Registration</h2>
                                         <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium font-sans">9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</p>
                                     </div>
                                     <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
