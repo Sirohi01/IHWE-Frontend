@@ -49,11 +49,20 @@ const VisitorScan = () => {
 
   useEffect(() => {
     if (!registrationId) return;
+    // Try corporate first, then general
     fetch(`${API_URL}/corporate-visitors/scan/${encodeURIComponent(registrationId)}`)
       .then((r) => r.json())
       .then((d) => {
-        if (d.success) setVisitor(d.data);
-        else setError("Visitor not found for this QR code.");
+        if (d.success) { setVisitor(d.data); setLoading(false); }
+        else {
+          // Try general visitor
+          return fetch(`${API_URL}/general-visitors/scan/${encodeURIComponent(registrationId)}`)
+            .then((r) => r.json())
+            .then((d2) => {
+              if (d2.success) setVisitor(d2.data);
+              else setError("Visitor not found for this QR code.");
+            });
+        }
       })
       .catch(() => setError("Failed to fetch visitor data. Please try again."))
       .finally(() => setLoading(false));
