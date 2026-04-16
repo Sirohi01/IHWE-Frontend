@@ -532,7 +532,7 @@ const BuyerRegistration = () => {
         }
 
         const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY",
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
             amount: tempSelectedPackage.price * 100,
             currency: "INR",
             name: "IHWE 2026",
