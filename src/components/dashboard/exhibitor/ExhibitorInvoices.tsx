@@ -175,7 +175,7 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                             <DownloadBtn url={receiptPdfUrl} label="Payment Receipt (PDF)" icon={Receipt} />
                         )}
                         {receiptUrl && (
-                            <DownloadBtn url={receiptUrl} label="Uploaded Receipt" icon={Download} />
+                            <DownloadBtn url={receiptUrl} label="Uploaded Invoice" icon={Download} />
                         )}
                         {!registrationPdfUrl && !receiptPdfUrl && !receiptUrl && (
                             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">No documents available yet</p>
@@ -184,7 +184,7 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                 </Section>
 
                 {/* Invoice Actions */}
-                <div className="flex flex-wrap gap-3 pt-2">
+                {/* <div className="flex flex-wrap gap-3 pt-2">
                     <button
                         onClick={() => openPrintWindow(data)}
                         className="flex items-center gap-2 px-5 py-2.5 bg-[#23471d] text-white text-[11px] font-black uppercase tracking-widest rounded-[2px] hover:bg-[#1a3516] transition-all shadow-sm"
@@ -196,7 +196,7 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                             <AlertCircle size={13} /> Balance Due: {cur}{balance.toLocaleString()}
                         </div>
                     )}
-                </div>
+                </div> */}
             </div>
         </motion.div>
     );
