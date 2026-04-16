@@ -89,7 +89,7 @@ export default function ExhibitorOverview({ data, cur, status, paidPct, paid, to
                 {/* Company Info */}
                 <Section title="Company Information">
                     <Row2 l1="Company Name" v1={data.exhibitorName} l2="Industry / Sector" v2={data.industrySector} />
-                    <Row2 l1="Type of Business" v1={data.typeOfBusiness} l2="Nature of Business" v2={data.natureOfBusiness} />
+                    <Row2 l1="Type of Business" v1={data.typeOfBusiness} l2="Industry / Sector" v2={data.industrySector} />
                     <Row2 l1="Website" v1={data.website} l2="Address" v2={[data.city, data.state, data.country].filter(Boolean).join(', ')} />
                 </Section>
 

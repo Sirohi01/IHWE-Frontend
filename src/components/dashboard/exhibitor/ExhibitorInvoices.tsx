@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FileText, Download, CheckCircle, AlertCircle, Printer, ExternalLink } from 'lucide-react';
+import { FileText, Download, CheckCircle, AlertCircle, Printer, ExternalLink, Receipt } from 'lucide-react';
 import { openPrintWindow } from './PrintCertificate';
 import { SERVER_URL } from '@/lib/api';
 
@@ -34,12 +34,31 @@ function Section({ title, children }: any) {
     );
 }
 
+function DownloadBtn({ url, label, icon: Icon }: { url: string; label: string; icon: any }) {
+    return (
+        <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            download
+            className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white text-[10px] font-black uppercase tracking-widest rounded-[2px] hover:bg-[#1a3516] transition-all"
+        >
+            <Icon size={12} /> {label}
+        </a>
+    );
+}
+
 export default function ExhibitorInvoices({ data, cur, total, paid, balance, paidPct, regDate }: InvoicesProps) {
 
-    // Build full receipt URL if it's a relative path
     const receiptUrl = data.receiptUrl
         ? (data.receiptUrl.startsWith('http') ? data.receiptUrl : `${SERVER_URL}${data.receiptUrl}`)
         : null;
+
+    const registrationPdfUrl = data.registrationPdfUrl || null;
+    const receiptPdfUrl = data.receiptPdfUrl || null;
+
+    const txId = data.manualPaymentDetails?.transactionId || data.paymentId || '—';
+    const method = data.manualPaymentDetails?.method || (data.paymentMode === 'online' ? 'Razorpay (Online)' : '—');
 
     return (
         <motion.div key="invoices" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
@@ -67,8 +86,57 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                 {/* Payment Details */}
                 <Section title="Payment Details">
                     <Row2 l1="Payment Mode" v1={data.paymentMode} l2="Payment Type" v2={data.paymentType} />
-                    <Row2 l1="Transaction ID" v1={data.manualPaymentDetails?.transactionId || data.paymentId || '—'} l2="Method" v2={data.manualPaymentDetails?.method || '—'} />
+                    <Row2 l1="Transaction ID" v1={txId} l2="Method" v2={method} />
+                    {data.razorpayOrderId && (
+                        <Row2 l1="Razorpay Order ID" v1={data.razorpayOrderId} l2="Payment ID" v2={data.paymentId || '—'} />
+                    )}
                     <Row2 l1="Registration Date" v1={regDate} l2="Status" v2={<span className="font-bold uppercase text-[#23471d]">{data.status}</span>} />
+                </Section>
+
+                {/* Payment History */}
+                <Section title="Payment History">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="bg-[#23471d] text-white">
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Type</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Amount</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Mode</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Txn ID</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {paid > 0 ? (
+                                    <tr className="border-b border-slate-100 bg-emerald-50/40">
+                                        <td className="py-2 px-4 text-[11px] font-bold text-slate-700">
+                                            {data.paymentType === 'advance' ? 'Advance Payment' : 'Full Payment'}
+                                        </td>
+                                        <td className="py-2 px-4 text-[11px] font-black text-emerald-700">{cur}{paid.toLocaleString()}</td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-600">{method}</td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-600 font-mono">{txId}</td>
+                                        <td className="py-2 px-4">
+                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-[2px]">Paid</span>
+                                        </td>
+                                    </tr>
+                                ) : null}
+                                {balance > 0 && (
+                                    <tr className="border-b border-slate-100 bg-rose-50/40">
+                                        <td className="py-2 px-4 text-[11px] font-bold text-slate-700">Balance Due</td>
+                                        <td className="py-2 px-4 text-[11px] font-black text-rose-600">{cur}{balance.toLocaleString()}</td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-400">—</td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-400">—</td>
+                                        <td className="py-2 px-4">
+                                            <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black uppercase rounded-[2px]">Pending</span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {!paid && !balance && (
+                                    <tr><td colSpan={5} className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase">No payment records yet</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </Section>
 
                 {/* Stall & Pricing */}
@@ -79,30 +147,23 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                     <Row2 l1="GST (18%)" v1={`${cur}${(total - (data.participation?.amount || 0)).toLocaleString()}`} l2="Total" v2={<span className="font-extrabold text-[#23471d]">{cur}{total.toLocaleString()}</span>} />
                 </Section>
 
-                {/* Receipt Section - shown only when receipt exists */}
-                {receiptUrl && (
-                    <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-[2px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                            <CheckCircle size={18} className="text-emerald-600 shrink-0" />
-                            <div>
-                                <p className="text-[11px] font-black text-emerald-800 uppercase tracking-widest">Payment Receipt Available</p>
-                                <p className="text-[10px] text-emerald-600 font-medium mt-0.5">
-                                    Txn: {data.manualPaymentDetails?.transactionId || data.paymentId || 'N/A'} · {data.manualPaymentDetails?.method || data.paymentMode || ''}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex gap-2">
-                            <a
-                                href={receiptUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-[2px] hover:bg-emerald-700 transition-all"
-                            >
-                                <ExternalLink size={12} /> Download
-                            </a>
-                        </div>
+                {/* Documents */}
+                <Section title="Documents & Downloads">
+                    <div className="p-4 flex flex-wrap gap-3">
+                        {registrationPdfUrl && (
+                            <DownloadBtn url={registrationPdfUrl} label="Registration Form (PDF)" icon={FileText} />
+                        )}
+                        {receiptPdfUrl && (
+                            <DownloadBtn url={receiptPdfUrl} label="Payment Receipt (PDF)" icon={Receipt} />
+                        )}
+                        {receiptUrl && (
+                            <DownloadBtn url={receiptUrl} label="Uploaded Receipt" icon={Download} />
+                        )}
+                        {!registrationPdfUrl && !receiptPdfUrl && !receiptUrl && (
+                            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">No documents available yet</p>
+                        )}
                     </div>
-                )}
+                </Section>
 
                 {/* Invoice Actions */}
                 <div className="flex flex-wrap gap-3 pt-2">

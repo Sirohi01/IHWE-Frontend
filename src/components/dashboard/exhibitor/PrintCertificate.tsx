@@ -98,7 +98,6 @@ export function buildPrintHTML(data: any): string {
         ['Company / Firm Name', data.exhibitorName],
         ['Fascia / Brand Name', data.fasciaName || data.exhibitorName],
         ['Industry Sector', data.industrySector],
-        ['Nature of Business', data.natureOfBusiness],
         ['Type of Business', data.typeOfBusiness],
         ['Website', data.website],
         ['Landline', data.landlineNo],

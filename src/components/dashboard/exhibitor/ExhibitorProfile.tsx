@@ -133,7 +133,7 @@ export default function ExhibitorProfile({ data }: ProfileProps) {
                 {/* Company Info — read only */}
                 <Section title="Company Information">
                     <Row2 l1="Company Name" v1={data.exhibitorName} l2="Type of Business" v2={data.typeOfBusiness} />
-                    <Row2 l1="Industry / Sector" v1={data.industrySector} l2="Nature of Business" v2={data.natureOfBusiness} />
+                    <Row2 l1="Industry / Sector" v1={data.industrySector} l2="Type of Business" v2={data.typeOfBusiness} />
                     <Row2
                         l1="Website" v1={editing ? <input className={inputCls} value={form.website} onChange={e => inp('website', e.target.value)} placeholder="www.example.com" /> : data.website}
                         l2="Fascia Name" v2={editing ? <input className={inputCls} value={form.fasciaName} onChange={e => inp('fasciaName', e.target.value)} placeholder="Brand / Fascia name" /> : data.fasciaName}
