@@ -565,6 +565,27 @@ const BuyerRegistration = () => {
         };
 
         const razorpay = new (window as any).Razorpay(options);
+        
+        razorpay.on('payment.failed', async function (response: any) {
+            toast.error(`Payment failed: ${response.error?.description || "Unknown error"}`);
+            try {
+                await buyerRegistrationApi.submit({
+                    ...formData,
+                    registrationCategory: tempSelectedPackage?.name,
+                    registrationFee: `₹${tempSelectedPackage?.price}`,
+                    paymentStatus: "Failed",
+                    transactionId: response.error?.metadata?.payment_id || "FAILED",
+                    consentTerms: true,
+                    consentPaymentValid: true,
+                    consentMatchedExhibitors: true
+                });
+            } catch (error) {
+                console.error("Error saving failed payment entry:", error);
+            }
+            setShowTermsModal(false);
+            setShowPaymentConfirmModal(false);
+        });
+
         razorpay.open();
     };
 
@@ -1372,7 +1393,7 @@ const BuyerRegistration = () => {
     );
 };
 
-// Error Display Component
+
 const ErrorDisplay = ({ name, errors }: { name: string; errors: Record<string, string> }) => (
     errors[name] ? <span className="text-red-500 text-[10px] mt-0.5 block h-3 font-medium animate-in fade-in slide-in-from-top-1">{errors[name]}</span> : <div className="h-3" />
 );
