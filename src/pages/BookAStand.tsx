@@ -647,10 +647,18 @@ const BookAStand = () => {
                                     window.scrollTo({ top: 0, behavior: "smooth" });
                                 }, 2500);
                             } else {
+                                // Payment went through but backend save failed - save as failed for audit
+                                await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online', razorpayOrderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id }).catch(() => {});
                                 setPaymentModal({ status: 'failed' });
                             }
                         } catch {
+                            await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online' }).catch(() => {});
                             setPaymentModal({ status: 'failed' });
+                        }
+                    },
+                    modal: {
+                        ondismiss: () => {
+                            setIsLoading(false);
                         }
                     },
                     prefill: {
@@ -662,6 +670,24 @@ const BookAStand = () => {
                 };
 
                 const rzp = new (window as any).Razorpay(options);
+
+                rzp.on('payment.failed', async (response: any) => {
+                    setIsLoading(false);
+                    setPaymentModal({ status: 'failed' });
+                    // Save failed entry to DB
+                    try {
+                        await exhibitorRegistrationApi.submit({
+                            ...formData,
+                            status: 'payment-failed',
+                            paymentMode: 'online',
+                            razorpayOrderId: response.error?.metadata?.order_id || '',
+                            paymentId: response.error?.metadata?.payment_id || '',
+                        });
+                    } catch (e) {
+                        console.error('Failed to save payment-failed entry:', e);
+                    }
+                });
+
                 rzp.open();
                 setIsLoading(false);
             }
@@ -704,7 +730,7 @@ const BookAStand = () => {
                 status={paymentModal?.status ?? null}
                 stallNo={formData.participation.stallFor}
                 amount={`${formData.participation.currency === 'USD' ? '$' : '\u20B9'}${fmtAmt(formData.amountPaid)}`}
-                onClose={() => setPaymentModal(null)}
+                onClose={() => { setPaymentModal(null); setIsLoading(false); }}
             />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
             <section
