@@ -10,6 +10,7 @@ import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOvervie
 import ExhibitorProfile from '@/components/dashboard/exhibitor/ExhibitorProfile';
 import ExhibitorInvoices from '@/components/dashboard/exhibitor/ExhibitorInvoices';
 import ExhibitorEvents from '@/components/dashboard/exhibitor/ExhibitorEvents';
+import ExhibitorMSME from '@/components/dashboard/exhibitor/ExhibitorMSME';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 
@@ -22,7 +23,7 @@ export default function ExhibitorDashboard() {
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme'>('dashboard');
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
     const [pwdLoading, setPwdLoading] = useState(false);
@@ -182,6 +183,10 @@ export default function ExhibitorDashboard() {
                         fetchDashboard={fetchDashboard}
                         setActiveTab={setActiveTab}
                     />
+                )}
+
+                {activeTab === 'msme' && (
+                    <ExhibitorMSME data={data} />
                 )}
 
             </AnimatePresence>
