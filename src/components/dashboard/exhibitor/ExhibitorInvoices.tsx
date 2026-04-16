@@ -99,40 +99,58 @@ export default function ExhibitorInvoices({ data, cur, total, paid, balance, pai
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="bg-[#23471d] text-white">
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">#</th>
                                     <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Type</th>
                                     <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Amount</th>
-                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Mode</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Mode / Method</th>
                                     <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Txn ID</th>
+                                    <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Date</th>
                                     <th className="py-2 px-4 text-[10px] font-black uppercase tracking-wider text-left">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {paid > 0 ? (
+                                {data.paymentHistory?.length > 0 ? (
+                                    data.paymentHistory.map((h: any, i: number) => (
+                                        <tr key={i} className={`border-b border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}`}>
+                                            <td className="py-2 px-4 text-[11px] text-slate-400 font-bold">{i + 1}</td>
+                                            <td className="py-2 px-4 text-[11px] font-bold text-slate-700 capitalize">{h.paymentType || '—'}</td>
+                                            <td className="py-2 px-4 text-[11px] font-black text-emerald-700">{cur}{Number(h.amount || 0).toLocaleString()}</td>
+                                            <td className="py-2 px-4 text-[11px] text-slate-600">{h.method || h.paymentMode || '—'}</td>
+                                            <td className="py-2 px-4 text-[11px] text-slate-600 font-mono">{h.transactionId || h.razorpayPaymentId || '—'}</td>
+                                            <td className="py-2 px-4 text-[11px] text-slate-500">
+                                                {h.paidAt ? new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-[2px]">Paid</span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : paid > 0 ? (
+                                    // Fallback for old records without paymentHistory
                                     <tr className="border-b border-slate-100 bg-emerald-50/40">
-                                        <td className="py-2 px-4 text-[11px] font-bold text-slate-700">
-                                            {data.paymentType === 'advance' ? 'Advance Payment' : 'Full Payment'}
-                                        </td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-400 font-bold">1</td>
+                                        <td className="py-2 px-4 text-[11px] font-bold text-slate-700">{data.paymentType === 'advance' ? 'Advance' : 'Full'}</td>
                                         <td className="py-2 px-4 text-[11px] font-black text-emerald-700">{cur}{paid.toLocaleString()}</td>
                                         <td className="py-2 px-4 text-[11px] text-slate-600">{method}</td>
                                         <td className="py-2 px-4 text-[11px] text-slate-600 font-mono">{txId}</td>
+                                        <td className="py-2 px-4 text-[11px] text-slate-500">{regDate}</td>
                                         <td className="py-2 px-4">
                                             <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-[2px]">Paid</span>
                                         </td>
                                     </tr>
-                                ) : null}
+                                ) : (
+                                    <tr><td colSpan={7} className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase">No payment records yet</td></tr>
+                                )}
                                 {balance > 0 && (
                                     <tr className="border-b border-slate-100 bg-rose-50/40">
+                                        <td className="py-2 px-4 text-[11px] text-slate-400 font-bold">—</td>
                                         <td className="py-2 px-4 text-[11px] font-bold text-slate-700">Balance Due</td>
                                         <td className="py-2 px-4 text-[11px] font-black text-rose-600">{cur}{balance.toLocaleString()}</td>
-                                        <td className="py-2 px-4 text-[11px] text-slate-400">—</td>
-                                        <td className="py-2 px-4 text-[11px] text-slate-400">—</td>
+                                        <td colSpan={3} className="py-2 px-4 text-[11px] text-slate-400">—</td>
                                         <td className="py-2 px-4">
                                             <span className="px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-black uppercase rounded-[2px]">Pending</span>
                                         </td>
                                     </tr>
-                                )}
-                                {!paid && !balance && (
-                                    <tr><td colSpan={5} className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase">No payment records yet</td></tr>
                                 )}
                             </tbody>
                         </table>
