@@ -607,23 +607,12 @@ const BookAStand = () => {
                     return;
                 }
 
-                const orderRes = await fetch(`${SERVER_URL}/api/payment/create-order`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        amount: formData.amountPaid,
-                        currency: formData.participation.currency
-                    })
-                });
-                const orderData = await orderRes.json();
-
                 const options = {
                     key: RAZORPAY_KEY_ID,
-                    amount: orderData.order.amount,
+                    amount: Math.round(formData.amountPaid * 100),
                     currency: formData.participation.currency,
                     name: "IHWE Registration",
                     description: `Stand Booking - Stall ${formData.participation.stallFor}`,
-                    order_id: orderData.order.id,
                     handler: async (response: any) => {
                         setPaymentModal({ status: 'processing' });
                         try {
