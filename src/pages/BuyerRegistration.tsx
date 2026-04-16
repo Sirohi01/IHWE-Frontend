@@ -565,7 +565,7 @@ const BuyerRegistration = () => {
         };
 
         const razorpay = new (window as any).Razorpay(options);
-        
+
         razorpay.on('payment.failed', async function (response: any) {
             toast.error(`Payment failed: ${response.error?.description || "Unknown error"}`);
             try {
@@ -677,7 +677,7 @@ const BuyerRegistration = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans">
-            <section className="relative h-[140px] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
+            <section className="relative h-[450px] flex items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20" />
                 <div className="container mx-auto px-4 text-center text-white relative z-10">
                     <p className="text-[9px] uppercase tracking-[0.5em] mb-1 text-emerald-400 font-bold font-sans">IHWE 2026 - Global Connect</p>
