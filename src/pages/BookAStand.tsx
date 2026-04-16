@@ -264,13 +264,9 @@ const BookAStand = () => {
                     }));
                 }
             });
-
-            // Fetch all rates for this event to display in table
             stallRateApi.getAllByEvent(selectedEventId).then(rates => {
                 setAllRates(rates);
             });
-
-            // Update advance percentage from event (line 215)
             const ev = events.find(e => e._id === selectedEventId);
             if (ev) setOnlineAdvancePercent(ev.onlineAdvancePercentage);
         }
@@ -354,24 +350,24 @@ const BookAStand = () => {
         const discountAmount = withInc * (discPercent / 100);
         const subtotal = withInc - discountAmount;
         const gst = subtotal * 0.18;
-        const total = subtotal + gst;
+        const total = Math.round(subtotal + gst); // round to nearest rupee
 
         const currentAdvancePercent = onlineAdvancePercent;
         let paid = total;
         if (formData.paymentType === 'advance') {
-            paid = Number((total * (currentAdvancePercent / 100)).toFixed(2));
+            paid = Math.round(total * (currentAdvancePercent / 100));
         }
 
         setFormData(prev => ({
             ...prev,
             participation: {
                 ...prev.participation,
-                amount: Number(subtotal.toFixed(2)),
-                discount: Number(discountAmount.toFixed(2)),
-                total: Number(total.toFixed(2))
+                amount: Math.round(subtotal),
+                discount: Math.round(discountAmount),
+                total: total
             },
             amountPaid: paid,
-            balanceAmount: Number((total - paid).toFixed(2)),
+            balanceAmount: total - paid,
             advancePercentage: currentAdvancePercent
         }));
     }, [formData.participation.rate, formData.participation.stallSize, formData.participation.stallNo, formData.paymentType, onlineAdvancePercent]);
