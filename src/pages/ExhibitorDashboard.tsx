@@ -19,6 +19,8 @@ import ExhibitorChatTab from '@/components/dashboard/exhibitor/ExhibitorChatTab'
 // New admin-style layout components
 import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
 import ExhibitorStatsGrid from '@/components/dashboard/exhibitor2/ExhibitorStatsGrid';
+import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/ExhibitorModuleGrid';
+import HeroSection from '@/components/home/HeroSection';
 
 export default function ExhibitorDashboard() {
     const navigate = useNavigate();
@@ -146,14 +148,16 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'dashboard' && (
                     <div className="space-y-4">
-                        <div className="bg-white shadow-sm p-4">
-                            <ExhibitorStatsGrid
+                        <HeroSection onRegisterVisit={() => {}} />
+                        <div className="bg-white shadow-sm">
+                            <ExhibitorModuleGrid
                                 data={data}
                                 cur={cur}
                                 paid={paid}
                                 total={total}
                                 balance={balance}
                                 paidPct={paidPct}
+                                setActiveTab={setActiveTab}
                             />
                         </div>
                         <ExhibitorOverview
