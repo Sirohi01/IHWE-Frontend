@@ -13,6 +13,7 @@ import ExhibitorEvents from '@/components/dashboard/exhibitor/ExhibitorEvents';
 import ExhibitorMSME from '@/components/dashboard/exhibitor/ExhibitorMSME';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
+import StallExtras from '@/components/dashboard/exhibitor/StallExtras';
 
 // New admin-style layout components
 import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
@@ -23,7 +24,7 @@ export default function ExhibitorDashboard() {
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories'>('dashboard');
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
     const [pwdLoading, setPwdLoading] = useState(false);
@@ -187,6 +188,10 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'msme' && (
                     <ExhibitorMSME data={data} />
+                )}
+
+                {activeTab === 'accessories' && (
+                    <StallExtras data={data} />
                 )}
 
             </AnimatePresence>

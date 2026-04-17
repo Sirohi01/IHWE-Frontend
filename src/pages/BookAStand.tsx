@@ -606,13 +606,14 @@ const BookAStand = () => {
                     setIsLoading(false);
                     return;
                 }
+                const gatewayAmount = Math.round(formData.amountPaid * 1.025);
 
                 const options = {
                     key: RAZORPAY_KEY_ID,
-                    amount: Math.round(formData.amountPaid * 100),
+                    amount: Math.round(gatewayAmount * 100),
                     currency: formData.participation.currency,
                     name: "IHWE Registration",
-                    description: `Stand Booking - Stall ${formData.participation.stallFor}`,
+                    description: `Stand Booking - Stall ${formData.participation.stallFor} (incl. 2.5% gateway fee)`,
                     handler: async (response: any) => {
                         setPaymentModal({ status: 'processing' });
                         try {
@@ -632,7 +633,6 @@ const BookAStand = () => {
                                     window.scrollTo({ top: 0, behavior: "smooth" });
                                 }, 2500);
                             } else {
-                                // Payment went through but backend save failed - save as failed for audit
                                 await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online', razorpayOrderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id }).catch(() => {});
                                 setPaymentModal({ status: 'failed' });
                             }
@@ -659,7 +659,6 @@ const BookAStand = () => {
                 rzp.on('payment.failed', async (response: any) => {
                     setIsLoading(false);
                     setPaymentModal({ status: 'failed' });
-                    // Save failed entry to DB
                     try {
                         await exhibitorRegistrationApi.submit({
                             ...formData,
@@ -1386,12 +1385,20 @@ const BookAStand = () => {
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <div className="mt-3 p-3 bg-[#23471d]/5 border border-[#23471d]/20 rounded-sm flex justify-between items-center">
-                                                                <div>
-                                                                    <p className="text-[10px] font-bold text-[#23471d] uppercase">{formData.paymentType === 'full' ? 'Net Payable' : 'Advance Payable'}</p>
-                                                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Payable now</p>
+                                                            <div className="mt-3 p-3 bg-[#23471d]/5 border border-[#23471d]/20 rounded-sm">
+                                                                <div className="flex justify-between items-center">
+                                                                    <div>
+                                                                        <p className="text-[10px] font-bold text-[#23471d] uppercase">{formData.paymentType === 'full' ? 'Net Payable' : 'Advance Payable'}</p>
+                                                                        <p className="text-[9px] text-slate-400 font-bold uppercase">Payable now</p>
+                                                                    </div>
+                                                                    <p className="text-xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
                                                                 </div>
-                                                                <p className="text-xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                                {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
+                                                                    <div className="mt-2 pt-2 border-t border-[#23471d]/10 flex justify-between items-center">
+                                                                        <p className="text-[9px] text-slate-500 font-bold uppercase">+ 2.5% Gateway Fee</p>
+                                                                        <p className="text-[11px] font-black text-[#d26019]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(Math.round(formData.amountPaid * 1.025))}</p>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>

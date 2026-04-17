@@ -1,4 +1,4 @@
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award } from 'lucide-react';
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package } from 'lucide-react';
 
 interface SidebarProps {
     activeTab: string;
@@ -8,12 +8,12 @@ interface SidebarProps {
 }
 
 const navItems = [
-    { id: 'dashboard',   label: 'Dashboard',   icon: LayoutDashboard },
-    { id: 'profile',     label: 'Profile',     icon: User },
-    { id: 'invoices',    label: 'Invoices',    icon: FileText },
-    { id: 'msme',        label: 'MSME Details', icon: Award },
-    { id: 'exhibitions', label: 'My Events',   icon: Building2 },
-
+    { id: 'dashboard',    label: 'Dashboard',    icon: LayoutDashboard },
+    { id: 'profile',      label: 'Profile',      icon: User },
+    { id: 'invoices',     label: 'Invoices',     icon: FileText },
+    { id: 'accessories',  label: 'Accessories',  icon: Package },
+    { id: 'msme',         label: 'MSME Details', icon: Award },
+    { id: 'exhibitions',  label: 'My Events',    icon: Building2 },
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd }: SidebarProps) {

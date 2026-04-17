@@ -530,13 +530,14 @@ const BuyerRegistration = () => {
             toast.error("Failed to load payment gateway. Please try again.");
             return;
         }
+        const gatewayPrice = Math.round(tempSelectedPackage.price * 1.025);
 
         const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
-            amount: tempSelectedPackage.price * 100,
+            amount: gatewayPrice * 100,
             currency: "INR",
             name: "IHWE 2026",
-            description: `${tempSelectedPackage.name} Registration`,
+            description: `${tempSelectedPackage.name} Registration (incl. 2.5% gateway fee)`,
             handler: async function (response: any) {
                 setFormData(prev => ({
                     ...prev,
