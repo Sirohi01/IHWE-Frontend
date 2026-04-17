@@ -16,17 +16,33 @@ interface NavbarProps {
 export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpen, handleLogout, onChatClick, unreadChat = 0 }: NavbarProps) {
     const [showRM, setShowRM] = useState(false);
     const [rmDetails, setRmDetails] = useState<any>(null);
-
+    const [activePhone, setActivePhone] = useState<string | null>(null);
     const rmName = data?.spokenWith || data?.referredBy || null;
 
     useEffect(() => {
         if (!rmName) return;
-        // Fetch RM details directly by username
         fetch(`${API_URL}/admin/by-username/${encodeURIComponent(rmName)}`)
             .then(r => r.json())
             .then(res => { if (res.success && res.data) setRmDetails(res.data); })
-            .catch(() => {});
+            .catch(() => { });
     }, [rmName]);
+
+    const handleWhatsApp = (phone: string) => {
+        const cleanPhone = phone.replace(/\D/g, '');
+        const personName = `${data?.contact1?.firstName || ''} ${data?.contact1?.lastName || ''}`.trim() || 'Exhibitor';
+        const companyName = data?.exhibitorName || '—';
+        const regId = data?.registrationId || '—';
+        
+        const msg = `Hi, I am ${personName} from ${companyName}. My Exhibitor ID is ${regId}. I have a query regarding IHWE 2026: `;
+        const url = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+        setActivePhone(null);
+    };
+
+    const handleCall = (phone: string) => {
+        window.location.href = `tel:${phone}`;
+        setActivePhone(null);
+    };
 
     return (
         <div className="fixed top-0 inset-x-0 z-[100] h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 shadow-sm">
@@ -64,7 +80,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                         {showRM && (
                             <>
                                 {/* backdrop */}
-                                <div className="fixed inset-0 z-40" onClick={() => setShowRM(false)} />
+                                <div className="fixed inset-0 z-40" onClick={() => { setShowRM(false); setActivePhone(null); }} />
                                 <div className="absolute right-0 top-10 w-80 bg-white border border-slate-200 shadow-xl rounded-sm z-50 overflow-hidden">
                                     <div className="bg-[#23471d] px-4 py-3 flex items-center justify-between">
                                         <p className="text-[10px] font-black text-white uppercase tracking-widest">Your Relationship Manager</p>
@@ -86,24 +102,39 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                             </div>
                                         </div>
 
-                                        <div className="space-y-2 border-t border-slate-100 pt-3">
-                                            {(rmDetails?.mobile || rmDetails?.altMobile) && (
-                                                <div className="flex items-center gap-2">
-                                                    <Phone size={12} className="text-[#23471d] flex-shrink-0" />
-                                                    <div>
-                                                        {rmDetails?.mobile && (
-                                                            <a href={`tel:${rmDetails.mobile}`} className="text-[12px] font-bold text-slate-700 hover:text-[#23471d] block">
-                                                                {rmDetails.mobile}
-                                                            </a>
-                                                        )}
-                                                        {rmDetails?.altMobile && (
-                                                            <a href={`tel:${rmDetails.altMobile}`} className="text-[11px] text-slate-500 hover:text-[#23471d] block">
-                                                                {rmDetails.altMobile}
-                                                            </a>
-                                                        )}
+                                        <div className="space-y-4 border-t border-slate-100 pt-3">
+                                            {[rmDetails?.mobile, rmDetails?.altMobile].filter(Boolean).map((phone, idx) => (
+                                                <div key={idx} className="relative">
+                                                    <div className="flex items-center gap-2">
+                                                        <Phone size={12} className="text-[#23471d] flex-shrink-0" />
+                                                        <button 
+                                                            onClick={() => setActivePhone(phone)}
+                                                            className={`text-left transition-colors ${activePhone === phone ? 'text-[#23471d]' : 'text-slate-700 hover:text-[#23471d]'}`}
+                                                        >
+                                                            <p className="text-[12px] font-bold tracking-tight">{phone}</p>
+                                                            {idx > 0 && <p className="text-[9px] text-slate-400 font-bold uppercase">Alternative Number</p>}
+                                                        </button>
                                                     </div>
+
+                                                    {activePhone === phone && (
+                                                        <div className="mt-2 grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                                                            <button 
+                                                                onClick={() => handleWhatsApp(phone)}
+                                                                className="flex items-center justify-center gap-1.5 py-1.5 bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase rounded-sm border border-emerald-100 hover:bg-emerald-100 transition-colors"
+                                                            >
+                                                                <MessageSquare size={12} /> WhatsApp
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleCall(phone)}
+                                                                className="flex items-center justify-center gap-1.5 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase rounded-sm border border-blue-100 hover:bg-blue-100 transition-colors"
+                                                            >
+                                                                <Phone size={12} /> Call Now
+                                                            </button>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
+                                            ))}
+                                            
                                             {rmDetails?.email && (
                                                 <div className="flex items-center gap-2">
                                                     <Mail size={12} className="text-[#23471d] flex-shrink-0" />
@@ -112,12 +143,9 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                                     </a>
                                                 </div>
                                             )}
-                                            {!rmDetails?.mobile && !rmDetails?.email && (
-                                                <p className="text-[11px] text-slate-400">Contact details not available</p>
-                                            )}
                                         </div>
 
-                                        <p className="text-[10px] text-slate-400 border-t border-slate-100 pt-3 mt-3 leading-relaxed">
+                                        <p className="text-[10px] text-slate-400 border-t border-slate-100 pt-3 mt-3 leading-relaxed font-medium">
                                             For any queries regarding your stall booking, please reach out to your relationship manager.
                                         </p>
                                     </div>
