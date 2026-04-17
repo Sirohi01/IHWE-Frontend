@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     Gift, ShoppingCart, Package, ExternalLink,
-    Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2
+    Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2, Image as ImageIcon
 } from 'lucide-react';
-import { API_URL } from '@/lib/api';
+import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
 declare global { interface Window { Razorpay: any; } }
@@ -79,13 +79,23 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
     // ── cart helpers ────────────────────────────────────────────────────────────
     const addToCart = (item: any) => {
+        const available = item.availableQty || 0;
+        if (available <= 0) return toast.error('This item is currently out of stock');
+
         setCart(prev => {
             const exists = prev.find(c => c.accessoryId === item._id);
-            if (exists) return prev.map(c => c.accessoryId === item._id ? { ...c, qty: c.qty + 1 } : c);
+            if (exists) {
+                if (exists.qty >= available) {
+                    toast.error(`Maximum available quantity reached (${available})`);
+                    return prev;
+                }
+                return prev.map(c => c.accessoryId === item._id ? { ...c, qty: c.qty + 1 } : c);
+            }
             return [...prev, {
                 accessoryId: item._id,
                 name: item.name,
                 type: item.type,
+                availableQty: available, // Store to check in updateQty
                 qty: 1,
                 unitPrice: item.price || 0,
                 gstPercent: item.gstPercent || 18,
@@ -95,7 +105,17 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
     const updateQty = (id: string, delta: number) => {
         setCart(prev => prev
-            .map(c => c.accessoryId === id ? { ...c, qty: Math.max(1, c.qty + delta) } : c)
+            .map(c => {
+                if (c.accessoryId === id) {
+                    const newQty = c.qty + delta;
+                    if (delta > 0 && newQty > (c as any).availableQty) {
+                        toast.error(`Maximum available quantity reached (${(c as any).availableQty})`);
+                        return c;
+                    }
+                    return { ...c, qty: Math.max(1, newQty) };
+                }
+                return c;
+            })
         );
     };
 
@@ -175,6 +195,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             setCart([]);
                             setShowCart(false);
                             loadOrders();
+                            loadCatalog();
                         } else {
                             toast.error(verifyRes.message || 'Payment verification failed');
                         }
@@ -248,15 +269,21 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             {complimentaryItems.map((item: any) => (
-                                <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-2">
-                                    <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                        <Gift size={12} className="text-emerald-600" />
+                                <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
+                                    <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                        {item.imageUrl ? (
+                                            <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <Gift size={14} className="text-emerald-400" />
+                                        )}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
-                                        {item.description && <p className="text-[10px] text-slate-500 mt-0.5">{item.description}</p>}
-                                        {(item.length || item.width || item.height) && (
-                                            <p className="text-[10px] text-slate-400">{[item.length, item.width, item.height].filter(Boolean).join(' × ')}</p>
+                                        {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
+                                        {item.dimensionUnit && (item.length || item.width || item.height) && (
+                                            <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
+                                                Size: {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
+                                            </p>
                                         )}
                                         <div className="flex items-center gap-2 mt-1.5">
                                             <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
@@ -285,42 +312,57 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 const inCart = cart.find(c => c.accessoryId === item._id);
                                 return (
                                     <div key={item._id} className={`border rounded-[2px] p-3 flex flex-col gap-2 transition-all ${inCart ? 'border-[#23471d] bg-green-50/30' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
-                                        <div>
-                                            <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
-                                            {item.description && <p className="text-[10px] text-slate-500 mt-0.5">{item.description}</p>}
-                                            {(item.length || item.width || item.height) && (
-                                                <p className="text-[10px] text-slate-400">{[item.length, item.width, item.height].filter(Boolean).join(' × ')}</p>
-                                            )}
-                                            {item.category && (
-                                                <span className="inline-block mt-1 px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-bold uppercase rounded-full">{item.category}</span>
-                                            )}
+                                        <div className="flex gap-3">
+                                            <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                                {item.imageUrl ? (
+                                                    <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <ImageIcon size={18} className="text-slate-200" />
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[12px] font-bold text-slate-800 line-clamp-1">{item.name}</p>
+                                                {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
+                                                {item.dimensionUnit && (item.length || item.width || item.height) && (
+                                                    <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
+                                                        {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
+                                                    </p>
+                                                )}
+                                                {item.category && (
+                                                    <span className="inline-block mt-1 px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-bold uppercase rounded-full">{item.category}</span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-100">
                                             <div>
                                                 <p className="text-[10px] text-slate-400">Base: {fmt(item.price)}</p>
                                                 <p className="text-[13px] font-black text-[#23471d]">{fmt(totalPerUnit)} <span className="text-[9px] font-bold text-slate-400">/ {item.unit}</span></p>
-                                                <p className="text-[9px] text-slate-400">incl. {item.gstPercent}% GST</p>
+                                                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Stock Left: {item.availableQty || 0}</p>
                                             </div>
                                             {inCart ? (
                                                 <div className="flex items-center gap-1">
                                                     <button onClick={() => updateQty(item._id, -1)}
-                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100">
+                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100 transition-colors">
                                                         <Minus size={10} />
                                                     </button>
                                                     <span className="w-7 text-center text-[12px] font-black text-slate-800">{inCart.qty}</span>
                                                     <button onClick={() => updateQty(item._id, 1)}
-                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100">
+                                                        disabled={inCart.qty >= (item.availableQty || 0)}
+                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
                                                         <Plus size={10} />
                                                     </button>
                                                     <button onClick={() => removeFromCart(item._id)}
-                                                        className="w-6 h-6 flex items-center justify-center text-red-400 hover:text-red-600 ml-1">
+                                                        className="w-6 h-6 flex items-center justify-center text-red-400 hover:text-red-600 ml-1 transition-colors">
                                                         <Trash2 size={11} />
                                                     </button>
                                                 </div>
                                             ) : (
                                                 <button onClick={() => addToCart(item)}
-                                                    className="flex items-center gap-1 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-black uppercase rounded-[2px] hover:bg-[#1a3516] transition-all">
-                                                    <Plus size={11} /> Add
+                                                    disabled={(item.availableQty || 0) <= 0}
+                                                    className="flex items-center gap-1 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-black uppercase rounded-[2px] hover:bg-[#1a3516] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all">
+                                                    {(item.availableQty || 0) <= 0 ? 'Out of Stock' : (
+                                                        <><Plus size={11} /> Add</>
+                                                    )}
                                                 </button>
                                             )}
                                         </div>
