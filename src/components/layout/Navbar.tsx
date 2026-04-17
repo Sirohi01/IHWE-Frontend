@@ -490,6 +490,14 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     <Lock className="w-4 h-4 text-[#d26019]" />
                     Exhibitor Login
                   </Link>
+                  <Link
+                    to="/buyer-login"
+                    onClick={() => setMobileOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-slate-900 text-white rounded-xl font-bold text-[13px] uppercase tracking-widest shadow-md active:scale-[0.98] transition-all"
+                  >
+                    <Lock className="w-4 h-4 text-[#d26019]" />
+                    Buyer Login
+                  </Link>
                   <div className="grid grid-cols-2 gap-2">
                     <button className="flex items-center justify-center py-3.5 bg-white border border-slate-200 text-slate-800 rounded-xl font-bold text-[11px] uppercase tracking-widest active:scale-[0.98] transition-all">
                       Delegates
