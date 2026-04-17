@@ -15,7 +15,6 @@ const navItems = [
     { id: "invoices", label: "Accounts", icon: FileText },
     { id: "accessories", label: "Product and Services", icon: Package },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
-    { id: "exhibitions", label: "My Events", icon: Building2 },
 ];
 
 const msmeSubItems = [
@@ -103,6 +102,15 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                         </div>
                     )}
                 </div>
+
+                {/* ── My Events ── */}
+                <button
+                    onClick={() => setActiveTab("exhibitions")}
+                    className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === "exhibitions" ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                    <Building2 size={15} className="shrink-0" />
+                    {sidebarOpen && <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">My Events</span>}
+                    {sidebarOpen && activeTab === "exhibitions" && <ChevronRight size={12} className="ml-auto" />}
+                </button>
             </nav>
 
             <div className="px-2 pb-4">
