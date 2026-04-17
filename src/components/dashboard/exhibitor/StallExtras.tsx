@@ -11,6 +11,32 @@ declare global { interface Window { Razorpay: any; } }
 
 interface StallExtrasProps { data: any; }
 
+// ── CLEAN GRID from profile component ──────────────────────────────────────────
+function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
+    return (
+        <div className="border border-slate-200 rounded-md overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                {rows.map(([label, value], i) => (
+                    <div
+                        key={i}
+                        className="flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40 transition"
+                    >
+                        {/* Label */}
+                        <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r border-slate-200 bg-slate-50 flex items-center">
+                            {label}
+                        </div>
+
+                        {/* Value */}
+                        <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all">
+                            {value ?? '—'}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 // ── shared UI ──────────────────────────────────────────────────────────────────
 function Section({ title, icon: Icon, children }: any) {
     return (
@@ -59,7 +85,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
         fetch(`${API_URL}/stall-accessories/accessories`)
             .then(r => r.json())
             .then(res => setCatalog(res.data || []))
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => setLoadingCatalog(false));
     };
 
@@ -71,7 +97,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
         })
             .then(r => r.json())
             .then(res => setOrders(res.data || []))
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => setLoadingOrders(false));
     };
 
@@ -223,18 +249,14 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     )}
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-3 gap-3 mb-5">
-                    {[
-                        { label: 'Free Inclusions', value: complimentaryItems.length, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-                        { label: 'My Orders', value: orders.length, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-                        { label: 'Total Spent', value: fmt(totalSpent), color: 'text-[#23471d]', bg: 'bg-green-50', border: 'border-green-200' },
-                    ].map((s, i) => (
-                        <div key={i} className={`p-3 border-2 rounded-[2px] ${s.bg} ${s.border}`}>
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{s.label}</p>
-                            <p className={`text-xl font-extrabold ${s.color}`}>{s.value}</p>
-                        </div>
-                    ))}
+                {/* Stats using InfoGrid */}
+                <div className="mb-5">
+                    <InfoGrid rows={[
+                        ['Free Inclusions', complimentaryItems.length],
+                        ['My Orders', orders.length],
+                        ['Total Spent', fmt(totalSpent)],
+                        ['Stall ID', data?.registrationId || '—'],
+                    ]} />
                 </div>
 
                 {/* Complimentary */}
@@ -347,7 +369,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     )}
                 </Section>
 
-                {/* My Orders */}
+                {/* My Orders using InfoGrid for table */}
                 <Section title="My Purchase Orders" icon={Package}>
                     {loadingOrders ? (
                         <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
@@ -357,49 +379,51 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">No orders yet</p>
                         </div>
                     ) : (
-                        <div className="border border-slate-200 rounded-[2px] overflow-hidden">
-                            <table className="w-full text-sm">
-                                <thead>
-                                    <tr className="bg-[#23471d] text-white">
-                                        {['Order No', 'Items', 'Total', 'Status', 'Txn ID', 'Date', 'Receipt'].map(h => (
-                                            <th key={h} className="py-2.5 px-4 text-[10px] font-black uppercase tracking-wider text-left whitespace-nowrap">{h}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100">
-                                    {orders.map((order: any, i: number) => (
-                                        <tr key={order._id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}>
-                                            <td className="py-2.5 px-4 text-[11px] font-bold text-[#23471d] font-mono">{order.orderNo}</td>
-                                            <td className="py-2.5 px-4">
-                                                {order.items?.map((item: any, j: number) => (
-                                                    <div key={j} className="flex items-center gap-1">
-                                                        <CheckCircle2 size={9} className="text-emerald-500 flex-shrink-0" />
-                                                        <span className="text-[10px] text-slate-600">{item.qty}× {item.name}</span>
-                                                    </div>
-                                                ))}
-                                            </td>
-                                            <td className="py-2.5 px-4 text-[11px] font-black text-slate-800">{fmt(order.grandTotal)}</td>
-                                            <td className="py-2.5 px-4">
-                                                <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded-full border ${STATUS[order.paymentStatus] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
-                                                    {order.paymentStatus}
-                                                </span>
-                                            </td>
-                                            <td className="py-2.5 px-4 text-[10px] text-slate-500 font-mono">{order.transactionId || '—'}</td>
-                                            <td className="py-2.5 px-4 text-[10px] text-slate-500 whitespace-nowrap">
-                                                {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                            </td>
-                                            <td className="py-2.5 px-4">
-                                                {order.receiptUrl ? (
-                                                    <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer"
-                                                        className="flex items-center gap-1 text-[10px] font-bold text-[#23471d] hover:underline">
-                                                        <ExternalLink size={11} /> PDF
-                                                    </a>
-                                                ) : <span className="text-[10px] text-slate-400">—</span>}
-                                            </td>
+                        <div className="border border-slate-200 rounded-md overflow-hidden">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="bg-[#23471d] text-white">
+                                            {['Order No', 'Items', 'Total', 'Status', 'Txn ID', 'Date', 'Receipt'].map(h => (
+                                                <th key={h} className="py-2.5 px-4 text-[10px] font-black uppercase tracking-wider text-left whitespace-nowrap">{h}</th>
+                                            ))}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {orders.map((order: any, i: number) => (
+                                            <tr key={order._id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}>
+                                                <td className="py-2.5 px-4 text-[11px] font-bold text-[#23471d] font-mono whitespace-nowrap">{order.orderNo}</td>
+                                                <td className="py-2.5 px-4">
+                                                    {order.items?.map((item: any, j: number) => (
+                                                        <div key={j} className="flex items-center gap-1">
+                                                            <CheckCircle2 size={9} className="text-emerald-500 flex-shrink-0" />
+                                                            <span className="text-[10px] text-slate-600">{item.qty}× {item.name}</span>
+                                                        </div>
+                                                    ))}
+                                                </td>
+                                                <td className="py-2.5 px-4 text-[11px] font-black text-slate-800 whitespace-nowrap">{fmt(order.grandTotal)}</td>
+                                                <td className="py-2.5 px-4 whitespace-nowrap">
+                                                    <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded-full border ${STATUS[order.paymentStatus] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                                                        {order.paymentStatus}
+                                                    </span>
+                                                </td>
+                                                <td className="py-2.5 px-4 text-[10px] text-slate-500 font-mono whitespace-nowrap">{order.transactionId || '—'}</td>
+                                                <td className="py-2.5 px-4 text-[10px] text-slate-500 whitespace-nowrap">
+                                                    {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                </td>
+                                                <td className="py-2.5 px-4 whitespace-nowrap">
+                                                    {order.receiptUrl ? (
+                                                        <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer"
+                                                            className="flex items-center gap-1 text-[10px] font-bold text-[#23471d] hover:underline">
+                                                            <ExternalLink size={11} /> PDF
+                                                        </a>
+                                                    ) : <span className="text-[10px] text-slate-400">—</span>}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
                 </Section>
