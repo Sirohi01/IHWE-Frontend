@@ -1,4 +1,5 @@
-﻿import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown } from "lucide-react";
 
 interface SidebarProps {
     activeTab: string;
@@ -14,14 +15,30 @@ const navItems = [
     { id: "invoices", label: "Accounts", icon: FileText },
     { id: "accessories", label: "Product and Services", icon: Package },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
-    { id: "msme", label: "MSME Details", icon: Award },
     { id: "exhibitions", label: "My Events", icon: Building2 },
 ];
 
+const msmeSubItems = [
+    { id: "msme", label: "Udyam Details" },
+    { id: "psm_claim", label: "PSM Claim" },
+];
+
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
+    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim";
+    const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
+
+    const handleMsmeToggle = () => {
+        if (!sidebarOpen) {
+
+            setActiveTab("msme");
+            return;
+        }
+        setMsmeOpen(prev => !prev);
+    };
+
     return (
         <aside className={`fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 overflow-hidden ${sidebarOpen ? "w-56" : "w-14"}`}>
-            <nav className="flex-1 py-4 space-y-0.5 px-2">
+            <nav className="flex-1 py-4 space-y-0.5 px-2 overflow-y-auto">
                 {navItems.map(item => {
                     const Icon = item.icon;
                     const active = activeTab === item.id;
@@ -47,7 +64,47 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                         </button>
                     );
                 })}
+
+                {/* ── MSME Dropdown ── */}
+                <div>
+                    <button
+                        onClick={handleMsmeToggle}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${isMsmeActive ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                        <div className="relative shrink-0">
+                            <Award size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">MSME</span>
+                        )}
+                        {sidebarOpen && (
+                            <ChevronDown
+                                size={12}
+                                className={`ml-auto transition-transform duration-200 ${msmeOpen ? "rotate-180" : ""}`}
+                            />
+                        )}
+                    </button>
+
+
+                    {sidebarOpen && msmeOpen && (
+                        <div className="mt-0.5 ml-3 border-l border-slate-200 pl-2 space-y-0.5">
+                            {msmeSubItems.map(sub => {
+                                const active = activeTab === sub.id;
+                                return (
+                                    <button
+                                        key={sub.id}
+                                        onClick={() => setActiveTab(sub.id)}
+                                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all ${active ? "bg-[#23471d]/10 text-[#23471d] font-bold" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"}`}>
+                                        <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active ? "bg-[#23471d]" : "bg-slate-300"}`} />
+                                        <span className="text-[10px] font-semibold uppercase tracking-wider whitespace-nowrap">{sub.label}</span>
+                                        {active && <ChevronRight size={10} className="ml-auto" />}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
             </nav>
+
             <div className="px-2 pb-4">
                 <button onClick={onChangePwd} className="w-full flex items-center gap-3 px-2 py-2 rounded-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all">
                     <Lock size={15} className="shrink-0" />
