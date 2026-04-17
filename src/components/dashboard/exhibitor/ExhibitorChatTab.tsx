@@ -40,7 +40,7 @@ export default function ExhibitorChatTab({ data }: Props) {
         fetch(`${API_URL}/chat/messages/${roomId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(r => r.json())
             .then(res => { if (res.success) setMessages(res.data); })
-            .catch(() => {})
+            .catch(() => { })
             .finally(() => setLoading(false));
     }, [roomId]);
 
@@ -120,13 +120,13 @@ export default function ExhibitorChatTab({ data }: Props) {
                             <p className="text-[10px] text-white/60">
                                 {adminTyping ? <span className="text-emerald-300 font-bold">typing...</span>
                                     : adminOnline ? <span className="text-emerald-300">● Online</span>
-                                    : "Offline"}
+                                        : "Offline"}
                             </p>
                         </div>
                     </div>
                     <div className="flex items-center gap-1.5">
                         <div className={`w-2 h-2 rounded-full ${connected ? "bg-emerald-400" : "bg-slate-400"}`} />
-                        <span className="text-[9px] font-bold text-white/60 uppercase">{connected ? "Connected" : "Connecting..."}</span>
+                        <span className="text-[9px] font-bold text-white uppercase">{connected ? "Connected" : "Connecting..."}</span>
                     </div>
                 </div>
 
@@ -142,7 +142,7 @@ export default function ExhibitorChatTab({ data }: Props) {
                         </div>
                     ) : messages.map((msg: any, i: number) => {
                         const isMe = msg.senderType === "exhibitor";
-                        const showTime = i === 0 || new Date(msg.createdAt).getTime() - new Date(messages[i-1].createdAt).getTime() > 300000;
+                        const showTime = i === 0 || new Date(msg.createdAt).getTime() - new Date(messages[i - 1].createdAt).getTime() > 300000;
                         return (
                             <div key={msg._id || i}>
                                 {showTime && (
@@ -155,10 +155,9 @@ export default function ExhibitorChatTab({ data }: Props) {
                                         <div className="w-7 h-7 rounded-full bg-[#23471d]/10 flex items-center justify-center text-[9px] font-black text-[#23471d] flex-shrink-0 mr-2 mt-1">RM</div>
                                     )}
                                     <div className={`max-w-[72%] flex flex-col gap-0.5 ${isMe ? "items-end" : "items-start"}`}>
-                                        <div className={`px-3.5 py-2.5 text-[13px] leading-relaxed shadow-sm ${
-                                            isMe ? "bg-[#23471d] text-white rounded-2xl rounded-br-sm"
-                                                 : "bg-white text-slate-800 border border-slate-100 rounded-2xl rounded-bl-sm"
-                                        }`}>
+                                        <div className={`px-3.5 py-2.5 text-[13px] leading-relaxed shadow-sm ${isMe ? "bg-[#23471d] text-white rounded-2xl rounded-br-sm"
+                                                : "bg-white text-slate-800 border border-slate-100 rounded-2xl rounded-bl-sm"
+                                            }`}>
                                             {msg.message}
                                         </div>
                                         <div className="flex items-center gap-0.5 px-1">
@@ -176,7 +175,7 @@ export default function ExhibitorChatTab({ data }: Props) {
                             <div className="w-7 h-7 rounded-full bg-[#23471d]/10 flex items-center justify-center text-[9px] font-black text-[#23471d] flex-shrink-0">RM</div>
                             <div className="bg-white border border-slate-100 shadow-sm px-4 py-3 rounded-2xl rounded-bl-sm">
                                 <div className="flex gap-1 items-center">
-                                    {[0,1,2].map(i => <div key={i} className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: `${i*0.15}s` }} />)}
+                                    {[0, 1, 2].map(i => <div key={i} className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
                                 </div>
                             </div>
                         </div>
