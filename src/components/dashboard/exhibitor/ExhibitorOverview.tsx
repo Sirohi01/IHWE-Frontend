@@ -8,7 +8,6 @@ interface OverviewProps {
     setActiveTab: (tab: any) => void;
 }
 
-/* 🔥 SAME GRID AS PROFILE (4 fields per row) */
 function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
     return (
         <div className="border border-slate-200 rounded-sm overflow-hidden">
@@ -18,12 +17,12 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
                         key={i}
                         className="flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40 transition"
                     >
-                        {/* Label */}
+
                         <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r border-slate-200 bg-slate-50 flex items-center">
                             {label}
                         </div>
 
-                        {/* Value */}
+
                         <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all">
                             {value ?? '—'}
                         </div>
@@ -56,7 +55,7 @@ export default function ExhibitorOverview({
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="bg-white border border-slate-200 p-4 rounded-md">
 
-                {/* Header */}
+
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 pb-3 border-b">
                     <div>
                         <h2 className="text-[13px] font-bold uppercase text-slate-800">
@@ -77,7 +76,6 @@ export default function ExhibitorOverview({
                     </div>
                 </div>
 
-                {/* GRID SECTIONS */}
                 <div className="space-y-3">
 
                     <Section title="Registration Details">
