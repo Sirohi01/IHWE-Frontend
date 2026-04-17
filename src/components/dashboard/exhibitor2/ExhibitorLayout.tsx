@@ -11,9 +11,10 @@ interface LayoutProps {
     handleLogout: () => void;
     onChangePwd: () => void;
     children: React.ReactNode;
+    unreadChat?: number;
 }
 
-export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children }: LayoutProps) {
+export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children, unreadChat = 0 }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     return (
@@ -24,6 +25,8 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
                 handleLogout={handleLogout}
+                onChatClick={() => setActiveTab('chat')}
+                unreadChat={unreadChat}
             />
 
             <div className="flex pt-16 flex-1">
@@ -32,6 +35,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                     setActiveTab={setActiveTab}
                     sidebarOpen={sidebarOpen}
                     onChangePwd={onChangePwd}
+                    unreadChat={unreadChat}
                 />
 
                 <main

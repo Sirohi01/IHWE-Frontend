@@ -14,6 +14,7 @@ import ExhibitorMSME from '@/components/dashboard/exhibitor/ExhibitorMSME';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 import StallExtras from '@/components/dashboard/exhibitor/StallExtras';
+import ExhibitorChatTab from '@/components/dashboard/exhibitor/ExhibitorChatTab';
 
 // New admin-style layout components
 import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
@@ -24,7 +25,8 @@ export default function ExhibitorDashboard() {
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat'>('dashboard');
+    const [unreadChat, setUnreadChat] = useState(0);
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
     const [pwdLoading, setPwdLoading] = useState(false);
@@ -44,6 +46,12 @@ export default function ExhibitorDashboard() {
             if (res.success) {
                 setData(res.data);
                 if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
+                // Fetch unread chat count
+                if (res.data?._id) {
+                    fetch(`${API_URL}/chat/unread/${res.data._id}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }).then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => {});
+                }
             } else {
                 toast.error(res.message);
                 if (res.message === 'Token expired or invalid') {
@@ -129,9 +137,10 @@ export default function ExhibitorDashboard() {
             logo={logo}
             data={data}
             activeTab={activeTab}
-            setActiveTab={setActiveTab}
+            setActiveTab={(tab) => { setActiveTab(tab); if (tab === 'chat') setUnreadChat(0); }}
             handleLogout={handleLogout}
             onChangePwd={() => setShowChangePwd(true)}
+            unreadChat={unreadChat}
         >
             <AnimatePresence mode="wait">
 
@@ -192,6 +201,10 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'accessories' && (
                     <StallExtras data={data} />
+                )}
+
+                {activeTab === 'chat' && (
+                    <ExhibitorChatTab data={data} />
                 )}
 
             </AnimatePresence>

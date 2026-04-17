@@ -1319,7 +1319,9 @@ const BookAStand = () => {
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 {marketingStaff.map(s => (
-                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">{s.username}</SelectItem>
+                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">
+                                                                        {s.fullName ? `${s.fullName} (${s.username})` : s.username}
+                                                                    </SelectItem>
                                                                 ))}
                                                                 <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
                                                             </SelectContent>
