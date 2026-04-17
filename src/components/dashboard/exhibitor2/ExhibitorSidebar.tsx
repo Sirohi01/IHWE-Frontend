@@ -9,13 +9,13 @@ interface SidebarProps {
 }
 
 const navItems = [
-    { id: "dashboard",    label: "Dashboard",    icon: LayoutDashboard },
-    { id: "profile",      label: "Profile",      icon: User },
-    { id: "invoices",     label: "Accounts",     icon: FileText },
-    { id: "accessories",  label: "Accessories",  icon: Package },
-    { id: "chat",         label: "Chat Support", icon: MessageSquare },
-    { id: "msme",         label: "MSME Details", icon: Award },
-    { id: "exhibitions",  label: "My Events",    icon: Building2 },
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "profile", label: "Profile", icon: User },
+    { id: "invoices", label: "Accounts", icon: FileText },
+    { id: "accessories", label: "Product and Services", icon: Package },
+    { id: "chat", label: "Chat Support", icon: MessageSquare },
+    { id: "msme", label: "MSME Details", icon: Award },
+    { id: "exhibitions", label: "My Events", icon: Building2 },
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {

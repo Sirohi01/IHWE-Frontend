@@ -59,9 +59,9 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             icon: ShoppingBag,
             accent: '#7c3aed',
             light: '#f5f3ff',
-            badge: 'Coming Soon',
-            badgeOk: false,
-            tab: null,
+            badge: 'Active',
+            badgeOk: true,
+            tab: 'accessories',
         },
         {
             id: 'bsm',

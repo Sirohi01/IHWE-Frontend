@@ -253,7 +253,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                 {/* Header */}
                 <div className="pb-3 border-b border-gray-100 mb-4 flex items-start justify-between">
                     <div>
-                        <h1 className="text-xl font-bold text-slate-900 uppercase tracking-tight">Stall Extras</h1>
+                        <h1 className="text-xl font-bold text-slate-900 uppercase tracking-tight">Product and Services</h1>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
                             Complimentary inclusions & purchasable extras · {data?.registrationId}
                         </p>
