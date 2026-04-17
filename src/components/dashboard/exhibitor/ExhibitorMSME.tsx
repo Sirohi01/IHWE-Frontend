@@ -42,7 +42,7 @@ function Section({ title, children }: any) {
 
 const inputCls = "rounded border border-slate-300 h-8 text-[11px] px-2 w-full";
 
-const MSME_CATEGORIES = ['Manufacturer', 'Service Provider', 'Trader', 'Others'];
+const MSME_CATEGORIES = ['Manufacturer', 'Service Provider', 'Trader'];
 
 export default function ExhibitorMSME({ data }: MSMEProps) {
     const msme = data.msme || {};
