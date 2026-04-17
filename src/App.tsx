@@ -41,6 +41,7 @@ const BuyerLogin = lazy(() => import("./pages/BuyerLogin"));
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
+import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <BrochureDownloadPopup />
             <SeoHelmet />
             <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#071306]"><div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div></div>}>
               <Routes>
