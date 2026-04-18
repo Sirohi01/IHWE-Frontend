@@ -1,7 +1,8 @@
 import {
     Building2, Layers, Wallet, ShoppingBag,
     Handshake, Target, CalendarDays, Megaphone,
-    Wrench, FolderOpen, BarChart3, Bell
+    Wrench, FolderOpen, BarChart3, Bell,
+    Sparkles  // <-- new icon for sponsorship
 } from 'lucide-react';
 
 interface ModuleGridProps {
@@ -21,7 +22,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
     const modules = [
         {
             id: 'profile',
-            label: 'Company Profile',
+            label: 'profile Managment',
             desc: 'Brand info, contacts & digital assets',
             icon: Building2,
             accent: '#4f46e5',
@@ -63,6 +64,20 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: true,
             tab: 'accessories',
         },
+        // ======================= 🆕 SPONSORSHIP MODULE =======================
+        {
+            id: 'sponsorship',
+            label: 'Sponsorship',
+            desc: 'Gold | Silver | Booth branding | Lanyard',
+            icon: Sparkles,   // ya aap Trophy, Award, Star, BadgeDollarSign use kar sakte ho
+            accent: '#b45309', // warm amber/gold feel
+            light: '#fff7ed',
+            badge: data?.sponsorship?.tier ? 'Active' : 'Upgrade',
+            badgeOk: !!data?.sponsorship?.tier,
+            tab: null,        // agar sponsorship ka alag page ho to 'sponsorship' daal dena
+            highlight: true,  // ise highlight kar sakte ho
+        },
+        // ====================================================================
         {
             id: 'bsm',
             label: 'Buyer–Seller Meet',

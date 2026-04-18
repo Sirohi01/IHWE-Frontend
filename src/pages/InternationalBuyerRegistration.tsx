@@ -131,7 +131,7 @@ const BuyerRegistration = () => {
         emailAddress: "",
         website: "",
         pinCode: "",
-        country: "India",
+        country: "",
         stateProvince: "",
         city: "",
         registeredAddress: "",
@@ -293,7 +293,7 @@ const BuyerRegistration = () => {
         let error = "";
         const requiredFields = [
             'fullName', 'designation', 'companyName', 'businessType',
-            'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
+            'emailAddress', 'mobileNumber', 'registeredAddress', 'country', 'pinCode',
             'stateProvince', 'city', 'yearsInOperation', 'annualTurnover',
             'keyProductsServices', 'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
@@ -311,13 +311,13 @@ const BuyerRegistration = () => {
             error = "Invalid email format";
         } else if (name === 'mobileNumber' && value) {
 
-            if (!/^\d{10}$/.test(value)) {
-                error = "Mobile number must be exactly 10 digits";
+            if (value.length < 7) {
+                error = "Please enter a valid mobile number";
             }
-        } else if (name === 'alternateNumber' && value && !/^\d{10}$/.test(value)) {
-            error = "Alternate number must be exactly 10 digits";
-        } else if (name === 'pinCode' && value && !/^\d{6}$/.test(value)) {
-            error = "Pin code must be exactly 6 digits";
+        } else if (name === 'alternateNumber' && value && value.length < 7) {
+            error = "Please enter a valid alternate number";
+        } else if (name === 'pinCode' && value && value.length < 3) {
+            error = "Invalid Pin code";
         }
 
         setErrors(prev => ({ ...prev, [name]: error }));
@@ -328,18 +328,13 @@ const BuyerRegistration = () => {
         const { name, value } = e.target;
 
 
-        if (name === 'mobileNumber') {
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
-            setFormData(prev => ({ ...prev, [name]: digitsOnly }));
-            validateField(name, digitsOnly);
-        } else if (name === 'alternateNumber') {
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
-            setFormData(prev => ({ ...prev, [name]: digitsOnly }));
-            validateField(name, digitsOnly);
+        if (name === 'mobileNumber' || name === 'alternateNumber') {
+            const cleanValue = value.replace(/[^\d+]/g, ''); // Allow digits and +
+            setFormData(prev => ({ ...prev, [name]: cleanValue }));
+            validateField(name, cleanValue);
         } else if (name === 'pinCode') {
-            const digitsOnly = value.replace(/\D/g, '').slice(0, 6);
-            setFormData(prev => ({ ...prev, [name]: digitsOnly }));
-            validateField(name, digitsOnly);
+            setFormData(prev => ({ ...prev, [name]: value }));
+            validateField(name, value);
         } else if (['fullName', 'designation', 'companyName', 'specificProductRequirements'].includes(name)) {
             const lettersOnly = value.replace(/[^A-Za-z\s]/g, '');
             setFormData(prev => ({ ...prev, [name]: lettersOnly }));
@@ -386,7 +381,7 @@ const BuyerRegistration = () => {
             return false;
         }
 
-        if (!/^\d{10}$/.test(formData.mobileNumber)) {
+        if (formData.mobileNumber.length < 7) {
             return false;
         }
 
@@ -413,7 +408,7 @@ const BuyerRegistration = () => {
 
         const fieldsToValidate = [
             'fullName', 'designation', 'companyName', 'businessType',
-            'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
+            'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'country', 'pinCode',
             'stateProvince', 'city', 'yearsInOperation', 'annualTurnover',
             'keyProductsServices', 'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
@@ -435,8 +430,8 @@ const BuyerRegistration = () => {
             isValid = false;
         }
 
-        if (formData.mobileNumber && !/^\d{10}$/.test(formData.mobileNumber)) {
-            newErrors.mobileNumber = "Mobile number must be exactly 10 digits";
+        if (formData.mobileNumber && formData.mobileNumber.length < 7) {
+            newErrors.mobileNumber = "Please enter a valid mobile number";
             isValid = false;
         }
 
@@ -482,8 +477,8 @@ const BuyerRegistration = () => {
             toast.error(`Please enter a valid ${type} first.`);
             return;
         }
-        if (type === 'mobile' && !/^\d{10}$/.test(identifier)) {
-            toast.error("Please enter a valid 10-digit mobile number.");
+        if (type === 'mobile' && identifier.length < 7) {
+            toast.error("Please enter a valid mobile number.");
             return;
         }
         setIsVerifying(prev => ({ ...prev, [type]: true }));
@@ -751,7 +746,7 @@ const BuyerRegistration = () => {
                             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
                                 <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
                                     <div>
-                                        <h2 className="text-base font-bold uppercase tracking-wider font-sans">Domestic Buyer Registration</h2>
+                                        <h2 className="text-base font-bold uppercase tracking-wider font-sans">International Buyer Registration</h2>
                                         <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium font-sans">9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</p>
                                     </div>
                                     <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
@@ -774,11 +769,11 @@ const BuyerRegistration = () => {
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Mobile Number (10 digits) *</Label>
+                                                <Label className={labelClasses}>Mobile Number *</Label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
+                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="Mobile number with country code" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} /></div>
                                                     {!mobileOtpVerified && !mobileOtpSent && (
-                                                        <Button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile || formData.mobileNumber.length !== 10} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
+                                                        <Button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile || formData.mobileNumber.length < 7} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
                                                             {isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : 'Send OTP'}
                                                         </Button>
                                                     )}
@@ -806,7 +801,7 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div><Label className={labelClasses}>Alternate Number (10 digits) *</Label><Input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="10-digit alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Alternate Number *</Label><Input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="Alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Email Address (OTP) *</Label>
                                                 <div className="flex gap-2">
@@ -845,11 +840,23 @@ const BuyerRegistration = () => {
                                     </div>
 
                                     {/* Registered Address, State, City, Pin Code */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
                                         <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
+                                        <div>
+                                            <Label className={labelClasses}>Country *</Label>
+                                            <Select value={formData.country} onValueChange={(v) => handleSelectChange('country', v)}>
+                                                <SelectTrigger className={`${inputClasses} ${errors.country ? 'border-red-400' : ''}`}>
+                                                    <SelectValue placeholder="Select Country" />
+                                                </SelectTrigger>
+                                                <SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">
+                                                    {countries.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+                                            <ErrorDisplay name="country" errors={errors} />
+                                        </div>
                                         <div><Label className={labelClasses}>State/Province *</Label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
                                         <div><Label className={labelClasses}>City *</Label><Select value={formData.city} onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince || loadingLocations.cities}><SelectTrigger className={`${inputClasses} ${errors.city ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.cities ? "Loading..." : "Select City"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{cities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="city" errors={errors} /></div>
-                                        <div><Label className={labelClasses}>Pin Code (6 digits) *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} maxLength={6} /><ErrorDisplay name="pinCode" errors={errors} /></div>
+                                        <div><Label className={labelClasses}>Pin Code *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} /><ErrorDisplay name="pinCode" errors={errors} /></div>
                                     </div>
 
                                     {/* 3. Business Profile */}

@@ -88,7 +88,7 @@ const BuyerLanding = () => {
                                     Domestic Buyer <ArrowRight size={16} />
                                 </button>
                                 <button
-                                    onClick={() => navigate("/buyer-registration-form")}
+                                    onClick={() => navigate("/international-buyer-registration")}
                                     className="px-6 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all flex items-center gap-2"
                                 >
                                     International Buyer <ArrowRight size={16} />
