@@ -1055,42 +1055,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                         />
                     </Section>
 
-                    {(data.registrationPdfUrl || data.receiptPdfUrl || data.primaryCategory) && (
-                        <Section title="Official Documents & Category (From Admin)">
-                            <div className="p-3 bg-slate-50 border border-slate-200 rounded-md">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase">Assigned Categories</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            <span className="px-2 py-1 bg-[#23471d]/10 text-[#23471d] text-[10px] font-bold rounded">
-                                                {data.primaryCategory || 'Not Assigned'}
-                                            </span>
-                                            <span className="px-2 py-1 bg-[#d26019]/10 text-[#d26019] text-[10px] font-bold rounded">
-                                                {data.subCategory || 'No Sub-category'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2 text-right">
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase">Downloadable Forms</p>
-                                        <div className="flex justify-end gap-2">
-                                            {data.registrationPdfUrl && (
-                                                <a href={fixUrl(data.registrationPdfUrl)} target="_blank" rel="noopener noreferrer"
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
-                                                    <FileText size={12} /> Registration PDF
-                                                </a>
-                                            )}
-                                            {data.receiptPdfUrl && (
-                                                <a href={fixUrl(data.receiptPdfUrl)} target="_blank" rel="noopener noreferrer"
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d26019] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
-                                                    <FileText size={12} /> Payment Receipt
-                                                </a>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Section>
-                    )}
+
 
                     {/* All Upload Sections at Bottom */}
                     <div className="border-t border-slate-200 pt-4 mt-4">
