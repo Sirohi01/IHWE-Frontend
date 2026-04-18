@@ -44,6 +44,7 @@ const ExhibitorAccessoriesPage = lazy(() => import("./pages/exhibitor/ExhibitorA
 const ExhibitorMarketingPage = lazy(() => import("./pages/exhibitor/ExhibitorMarketingPage"));
 const ExhibitorChatPage = lazy(() => import("./pages/exhibitor/ExhibitorChatPage"));
 const ExhibitorMSMEPage = lazy(() => import("./pages/exhibitor/ExhibitorMSMEPage"));
+const ExhibitorStallManagementPage = lazy(() => import("./pages/exhibitor/ExhibitorStallManagementPage"));
 const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
@@ -112,6 +113,7 @@ const App = () => {
                     <Route path="profile" element={<ExhibitorProfilePage />} />
                     <Route path="invoices" element={<ExhibitorInvoicesPage />} />
                     <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
+                    <Route path="stall-management" element={<ExhibitorStallManagementPage />} />
                     <Route path="marketing" element={<ExhibitorMarketingPage />} />
                     <Route path="bsm" element={<ExhibitorBSMPage />} />
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />

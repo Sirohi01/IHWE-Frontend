@@ -40,11 +40,11 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfeff',
             badge: data?.participation?.stallFor ? 'Assigned' : 'Pending',
             badgeOk: !!data?.participation?.stallFor,
-            tab: null,
+            tab: 'stall-management',
         },
         {
             id: 'billing',
-            label: 'Billing & Payments',  // ✅ changed
+            label: 'Billing & Payments',
             desc: `${fmt(paid)} paid · ${fmt(balance)} due`,
             icon: Wallet,
             accent: balance > 0 ? '#e11d48' : '#16a34a',
