@@ -121,11 +121,11 @@ const App = () => {
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
                     <Route path="psm-claim" element={<ExhibitorMSMEPage />} />
+                    <Route path="annexure-d" element={<AnnexureD />} />
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                 </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
                 <Route path="/buyer-scan" element={<BuyerScan />} />
-                <Route path="/annexure_d" element={<AnnexureD />} />
               </Routes>
             </Suspense>
             <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
