@@ -259,12 +259,12 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             )}
                         </div>
 
-                        {/* Udhyam Details */}
+                        {/* Udhyam Details - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase flex items-center gap-2">
                                 <FileText size={12} /> Udhyam Details
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <select className={selectCls} value={form.udhyamType} onChange={e => inp('udhyamType', e.target.value)}>
                                     {UDYAM_TYPES.map(c => <option key={c}>{c}</option>)}
                                 </select>
@@ -273,20 +273,20 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             </div>
                         </div>
 
-                        {/* Enterprise Details */}
+                        {/* Enterprise Details - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">Enterprise Details</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <input className={inputCls} placeholder="Enterprise Name" value={form.enterpriseName} onChange={e => inp('enterpriseName', e.target.value)} />
                                 <input className={inputCls} placeholder="PAN Number" value={form.panNumber} onChange={e => inp('panNumber', e.target.value)} />
                                 <input className={inputCls} placeholder="GST Number" value={form.gstNumber} onChange={e => inp('gstNumber', e.target.value)} />
                             </div>
                         </div>
 
-                        {/* Contact Details with Gender */}
+                        {/* Contact Details with Gender - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">Contact Details</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <input className={inputCls} placeholder="Contact Person" value={form.contactPerson} onChange={e => inp('contactPerson', e.target.value)} />
                                 <select className={selectCls} value={form.gender} onChange={e => inp('gender', e.target.value)}>
                                     <option value="">Select Gender</option>
@@ -299,10 +299,10 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             </div>
                         </div>
 
-                        {/* Address Details (No Country) */}
+                        {/* Address Details - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">Address Details</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <input className={inputCls} placeholder="Address" value={form.address} onChange={e => inp('address', e.target.value)} />
                                 <input className={inputCls} placeholder="City" value={form.city} onChange={e => inp('city', e.target.value)} />
                                 <input className={inputCls} placeholder="State" value={form.state} onChange={e => inp('state', e.target.value)} />
@@ -310,10 +310,10 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             </div>
                         </div>
 
-                        {/* MSME Classification */}
+                        {/* MSME Classification - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">MSME Classification</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <select className={selectCls} value={form.msmeCategory} onChange={e => inp('msmeCategory', e.target.value)}>
                                     {MSME_CATEGORIES.map(c => <option key={c}>{c}</option>)}
                                 </select>
@@ -322,10 +322,10 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             </div>
                         </div>
 
-                        {/* DFO Details */}
+                        {/* DFO Details - 4 columns */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">DFO Details</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                                 <input className={inputCls} placeholder="DFO Location" value={form.dfoLocation} onChange={e => inp('dfoLocation', e.target.value)} />
                                 <input className={inputCls} placeholder="DFO Email" type="email" value={form.dfoEmail} onChange={e => inp('dfoEmail', e.target.value)} />
                                 <input className={inputCls} placeholder="DFO Mobile No" value={form.dfoMobileNo} onChange={e => inp('dfoMobileNo', e.target.value)} />
@@ -335,9 +335,11 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                         {/* Remarks & Certificate */}
                         <div>
                             <h3 className="text-[11px] font-bold text-[#23471d] mb-2 uppercase">Additional Information</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <input className={inputCls} placeholder="Remark" value={form.msmeRemark} onChange={e => inp('msmeRemark', e.target.value)} />
-                                <div>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                <div className="md:col-span-2">
+                                    <input className={inputCls} placeholder="Remark" value={form.msmeRemark} onChange={e => inp('msmeRemark', e.target.value)} />
+                                </div>
+                                <div className="md:col-span-2">
                                     <label className="text-[10px] text-slate-500 block mb-1">Upload Certificates / Images (multiple allowed)</label>
                                     <input
                                         type="file"
