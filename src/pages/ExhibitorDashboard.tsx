@@ -20,6 +20,8 @@ const TAB_ROUTES: Record<string, string> = {
     chat: '/exhibitor-dashboard/chat',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
+    annexure_c: '/exhibitor-dashboard/psm-claim/annexure-c',
+    declaration: '/exhibitor-dashboard/psm-claim/declaration',
     exhibitions: '/exhibitor-dashboard/exhibitions',
 };
 

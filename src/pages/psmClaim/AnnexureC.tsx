@@ -1,0 +1,359 @@
+import React, { useRef } from 'react';
+import { Download, Printer } from 'lucide-react';
+import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { jsPDF } from 'jspdf';
+import { toPng } from 'html-to-image';
+
+interface AnnexureCProps {
+    data?: any;
+}
+
+const AnnexureC: React.FC<AnnexureCProps> = ({ data: propData }) => {
+    const { data: ctxData } = useExhibitorCtx() || {};
+    const data = propData || ctxData;
+
+    const componentRef = useRef<HTMLDivElement>(null);
+    const [formData, setFormData] = React.useState({
+        fairName: data?.fairName || '',
+        companyName: data?.companyName || '',
+        applicationNo: '',
+        additionalCopies: 'No',
+        date: new Date().toLocaleDateString('en-GB'),
+        checks: {} as Record<number, boolean>,
+        pages: {} as Record<number, string>
+    });
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleDownload = async () => {
+        if (!componentRef.current) return;
+        
+        try {
+            const dataUrl = await toPng(componentRef.current, { 
+                quality: 1, 
+                pixelRatio: 3,
+                backgroundColor: '#ffffff',
+                style: {
+                    boxShadow: 'none',
+                    margin: '0',
+                    transform: 'none',
+                    borderRadius: '0'
+                }
+            });
+            
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            
+            const imgProps = pdf.getImageProperties(dataUrl);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`AnnexureC_${data?.companyName || 'Document'}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF. Please try the Print option instead.');
+        }
+    };
+
+    const updateCheck = (id: number) => {
+        setFormData(prev => ({
+            ...prev,
+            checks: { ...prev.checks, [id]: !prev.checks[id] }
+        }));
+    };
+
+    const updatePage = (id: number, val: string) => {
+        setFormData(prev => ({
+            ...prev,
+            pages: { ...prev.pages, [id]: val }
+        }));
+    };
+
+    const checklistItems = [
+        { id: 1, text: "Covering letter on Letter Head of unit/ enterprise", pg: "" },
+        { id: 2, text: "Claim Form (Annexure - D) filled by the unit/ enterprise", pg: "" },
+        { id: 3, text: "Print out of Online Application Form No. : UAM/DTF/ _______", pg: "" },
+        { id: 4, text: "Copy of UDYAM Regn. Certificate (self certified)", pg: "" },
+        { id: 5, text: "Original Invoice(s)/ Bill(s)", pg: "" },
+        { id: 6, text: "Original Receipt Voucher(s)", pg: "" },
+        { id: 7, text: "Participants Feed Back Report with photos (02)", pg: "" },
+        { id: 8, text: "Original Mandate Form (duly verified by the Bank)", pg: "" },
+        { id: 9, text: "Cancelled cheque of the concerned bank (original)", pg: "" },
+        { id: 10, text: "Original Pre-Receipt (signed & stamped) (In triplicate)", pg: "" },
+        {
+            id: 11, text: "Details of Agency creation for PFMS", pg: "", subItems: [
+                "(i) Name of the unit/ enterprise, complete postal address of unit/ enterprise with e-mail & mobile number (as given in Udyam Regn Certificate).",
+                "(ii) Name of the Director(s)/ Proprietor/ Partner(s)",
+                "(iii) Date of Birth (dd/mm/yyyy)",
+                "(iv) Gender (Male/ Female/ Transgender)",
+                "(v) Aadhaar Card Details (Director(s)/ Proprietor/ Partners)",
+                "(vi) Udyam Registration Certificate details.",
+                "(vii) GST Number (enclose a copy of certificate issued by an Appropriate Authority)",
+                "(viii) Bank details (Bank Account Number, Name of Bank, Branch name, IFSC, MICR of Branch).",
+                "(ix) Aadhaar linked Bank Account Number"
+            ]
+        },
+        { id: 12, text: "Copy of Aadhaar Card(s) (Director(s)/ Proprietor/ Partners)", pg: "" },
+        { id: 13, text: "Copy of GST Registration Certificate", pg: "" },
+        { id: 14, text: "Other related documents (PAN card) etc.", pg: "" },
+    ];
+
+    return (
+        <div className="max-w-5xl mx-auto p-4 md:p-8 bg-slate-50 min-h-screen">
+            <div className="flex justify-between items-center mb-6 no-print">
+                <div className="space-y-1">
+                    <h2 className="text-2xl font-bold text-slate-800">Annexure C</h2>
+                    <p className="text-sm text-slate-500">Check-list for reimbursement of claims under PMS Scheme</p>
+                </div>
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleDownload}
+                        className="flex items-center gap-2 bg-[#23471d] hover:bg-[#1a3515] text-white px-4 py-2 rounded-lg font-semibold transition-all shadow-md"
+                    >
+                        <Download size={18} />
+                        Download PDF
+                    </button>
+                    <button
+                        onClick={handlePrint}
+                        className="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg font-semibold transition-all shadow-sm"
+                    >
+                        <Printer size={18} />
+                        Print
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="printable-form"
+                ref={componentRef}
+                className="bg-white p-[20mm] shadow-2xl print:shadow-none print:p-0 mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-snug relative overflow-hidden"
+                style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+            >
+                {/* Header Decoration for Web View */}
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#23471d] no-print"></div>
+
+                <div className="text-center mb-6 mt-2">
+                    <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-2">ANNEXURE – C</h1>
+                    <h2 className="text-[15px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
+                        Check-list for reimbursement of claims under Component 5(A) : PMS Scheme
+                    </h2>
+                </div>
+
+                <div className="space-y-4 text-[13px] print:text-[11px]">
+                    <div className="space-y-3">
+                        <div className="flex items-end gap-2">
+                            <span className="shrink-0 font-bold uppercase text-[10px] print:text-black">Name of the Fair/ Exhibition:</span>
+                            <input
+                                type="text"
+                                value={formData.fairName}
+                                onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
+                                className="flex-1 border-b border-black px-1 font-medium bg-transparent outline-none"
+                            />
+                        </div>
+
+                        <div className="leading-snug">
+                            <span className="font-bold uppercase text-[10px] print:text-black mr-2">The following documents/ information have been received for reimbursement under PMS Scheme from M/s:</span>
+                            <input
+                                type="text"
+                                value={formData.companyName}
+                                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                                className="border-b border-black inline-block min-w-[350px] px-1 font-medium bg-transparent outline-none"
+                            />
+                        </div>
+
+                        <div className="text-right italic font-bold text-[10px] print:text-black pr-4">
+                            (Two additional copies submitted : {formData.additionalCopies})
+                            <div className="no-print mt-1">
+                                {['Yes', 'No'].map(opt => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => setFormData({ ...formData, additionalCopies: opt })}
+                                        className={`ml-2 px-2 py-0.5 border border-slate-300 rounded text-[10px] ${formData.additionalCopies === opt ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white'}`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <table className="w-full border-collapse">
+                        <thead>
+                            <tr className="font-bold bg-slate-50 print:bg-transparent">
+                                <th className="py-1.5 px-1 w-12 text-center">S. No.</th>
+                                <th className="py-1.5 px-3 text-left">Particulars</th>
+                                <th className="py-1.5 px-2 text-center w-36 text-[9px] uppercase">(Put '✓' or '×' in box)</th>
+                                <th className="py-1.5 px-2 text-center w-20 text-[9px] uppercase">Pg No.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {checklistItems.map((item) => (
+                                <React.Fragment key={item.id}>
+                                    <tr className=" ">
+                                        <td className="py-1.5 px-1 text-center align-middle">{item.id}.</td>
+                                        <td className="py-1.5 px-3 align-middle font-medium">
+                                            {item.id === 3 ? (
+                                                <div className="flex flex-wrap items-center gap-1">
+                                                    <span>Print out of Online Application Form No. : <strong>UAM/DTF/</strong></span>
+                                                    <input
+                                                        type="text"
+                                                        value={formData.applicationNo}
+                                                        onChange={(e) => setFormData({ ...formData, applicationNo: e.target.value })}
+                                                        className="border-b border-black px-1 bg-transparent outline-none w-24 font-bold"
+                                                    />
+                                                </div>
+                                            ) : item.text}
+                                            {item.subItems && (
+                                                <ul className="mt-1 space-y-0.5 pl-2 text-[10px] font-normal leading-tight">
+                                                    {item.subItems.map((sub, idx) => (
+                                                        <li key={idx} className="flex gap-1">
+                                                            <span className="shrink-0">{sub.substring(0, sub.indexOf(')') + 1)}</span>
+                                                            <span className="text-justify">{sub.substring(sub.indexOf(')') + 2)}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                        </td>
+                                        <td className="py-1.5 px-2 text-center align-middle">
+                                            <div
+                                                onClick={() => updateCheck(item.id)}
+                                                className="w-4 h-4 border border-black mx-auto cursor-pointer flex items-center justify-center bg-transparent"
+                                            >
+                                                {formData.checks[item.id] && <span className="text-black font-bold text-[10px]">✓</span>}
+                                            </div>
+                                        </td>
+                                        <td className="py-1.5 px-2 text-center align-middle">
+                                            <input
+                                                type="text"
+                                                value={formData.pages[item.id] || ''}
+                                                onChange={(e) => updatePage(item.id, e.target.value)}
+                                                className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[10px]"
+                                            />
+                                        </td>
+                                    </tr>
+                                </React.Fragment>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div className="pt-4 space-y-8">
+                        <p className="text-[11px] print:text-[10px] leading-snug">
+                            Documents/ information checked and verified the claim of the aforementioned unit / enterprise is found in order and eligible for reimbursement as per PMS Scheme guidelines.
+                        </p>
+
+                        <div className="flex justify-between items-end pr-10">
+                            <div className="w-48 text-left">
+                                <div className="no-print">
+                                    <input
+                                        type="text"
+                                        value={formData.date}
+                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                        className="border-b border-black mb-0.5 w-32 bg-transparent outline-none text-[10.5px]"
+                                    />
+                                </div>
+                                <div className="hidden print:block border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]">{formData.date}</div>
+                                <span className="block text-[9px] font-bold uppercase">Date</span>
+                            </div>
+                            <div className="text-center flex flex-col items-center">
+                                <div className="w-48 border-b border-black mb-0.5 h-6"></div>
+                                <span className="font-bold uppercase text-[10px]">Signature</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @media print {
+                    @page {
+                        size: A4;
+                        margin: 0;
+                    }
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        background: white !important;
+                        height: 100% !important;
+                        overflow: hidden !important; /* Prevents blank second page */
+                    }
+                    /* Remove any potential scrollbars */
+                    ::-webkit-scrollbar {
+                        display: none !important;
+                    }
+                    
+                    /* HIDE EVERYTHING */
+                    #root > *, 
+                    header, footer, nav, aside, 
+                    .no-print, button, .fixed, 
+                    img, [role="navigation"],
+                    [class*="Navbar"], [class*="Sidebar"],
+                    [class*="Layout"] > div:first-child {
+                        display: none !important;
+                        height: 0 !important;
+                        visibility: hidden !important;
+                    }
+                    
+                    /* Force target only the form to be visible and reset layout */
+                    #root, #root > div, [class*="Layout"], main, main > div, #printable-form {
+                        display: block !important;
+                        visibility: visible !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        border: none !important;
+                        width: 100% !important;
+                        height: auto !important;
+                        position: static !important;
+                        overflow: visible !important;
+                        background: transparent !important;
+                        background-color: transparent !important;
+                        box-shadow: none !important;
+                        flex: none !important;
+                        min-height: 0 !important;
+                        transform: none !important;
+                    }
+
+                    #printable-form {
+                        width: 100% !important;
+                        max-width: 210mm !important;
+                        margin: 0 auto !important;
+                        padding: 12mm 18mm !important;
+                        background: white !important;
+                        z-index: 99999 !important;
+                        box-sizing: border-box !important;
+                        position: relative !important;
+                        page-break-inside: avoid;
+                    }
+                    
+                    table, th, td, div, p, span {
+                        border-color: black !important;
+                        color: black !important;
+                    }
+                    input::placeholder {
+                        color: transparent !important;
+                    }
+                    input {
+                        border-bottom: black solid 1px !important;
+                        border-top: none !important;
+                        border-left: none !important;
+                        border-right: none !important;
+                    }
+                }
+            `}} />
+        </div>
+    );
+};
+
+export default AnnexureC;

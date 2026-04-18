@@ -19,24 +19,28 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
 
     return (
         <div className="min-h-screen flex flex-col bg-slate-100">
-            <ExhibitorNavbar
-                logo={logo}
-                data={data}
-                sidebarOpen={sidebarOpen}
-                setSidebarOpen={setSidebarOpen}
-                handleLogout={handleLogout}
-                onChatClick={() => setActiveTab('chat')}
-                unreadChat={unreadChat}
-            />
-
-            <div className="flex pt-16 flex-1">
-                <ExhibitorSidebar
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
+            <div className="no-print">
+                <ExhibitorNavbar
+                    logo={logo}
+                    data={data}
                     sidebarOpen={sidebarOpen}
-                    onChangePwd={onChangePwd}
+                    setSidebarOpen={setSidebarOpen}
+                    handleLogout={handleLogout}
+                    onChatClick={() => setActiveTab('chat')}
                     unreadChat={unreadChat}
                 />
+            </div>
+
+            <div className="flex pt-16 flex-1">
+                <div className="no-print">
+                    <ExhibitorSidebar
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        sidebarOpen={sidebarOpen}
+                        onChangePwd={onChangePwd}
+                        unreadChat={unreadChat}
+                    />
+                </div>
 
                 <main
                     className={`flex-1 transition-all duration-300 overflow-hidden p-3 sm:p-4
