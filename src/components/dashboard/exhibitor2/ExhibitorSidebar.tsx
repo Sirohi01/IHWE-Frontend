@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone } from "lucide-react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck } from "lucide-react";
 
 interface SidebarProps {
     activeTab: string;
@@ -15,6 +15,8 @@ const navItems = [
     { id: "invoices", label: "Accounts", icon: FileText },
     { id: "accessories", label: "Product and Services", icon: Package },
     { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
+    { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
+    { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
 ];
 

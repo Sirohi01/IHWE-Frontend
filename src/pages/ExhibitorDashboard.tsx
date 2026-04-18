@@ -8,6 +8,8 @@ import { API_URL, settingsApi } from '@/lib/api';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
 import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
 import ExhibitorProfile from '@/components/dashboard/exhibitor/ExhibitorProfile';
+import ExhibitorBSM from '@/components/dashboard/exhibitor/ExhibitorBSM';
+import ExhibitorCalendar from '@/components/dashboard/exhibitor/ExhibitorCalendar';
 import ExhibitorInvoices from '@/components/dashboard/exhibitor/ExhibitorInvoices';
 import ExhibitorEvents from '@/components/dashboard/exhibitor/ExhibitorEvents';
 import ExhibitorMSME from '@/components/dashboard/exhibitor/ExhibitorMSME';
@@ -28,7 +30,7 @@ export default function ExhibitorDashboard() {
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat' | 'marketing'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat' | 'marketing' | 'bsm' | 'calendar'>('dashboard');
     const [unreadChat, setUnreadChat] = useState(0);
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
@@ -176,6 +178,14 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'profile' && (
                     <ExhibitorProfile data={data} />
+                )}
+
+                {activeTab === 'bsm' && (
+                    <ExhibitorBSM data={data} />
+                )}
+
+                {activeTab === 'calendar' && (
+                    <ExhibitorCalendar data={data} />
                 )}
 
                 {activeTab === 'invoices' && (
