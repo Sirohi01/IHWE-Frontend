@@ -20,6 +20,7 @@ import ExhibitorChatTab from '@/components/dashboard/exhibitor/ExhibitorChatTab'
 import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
 import ExhibitorStatsGrid from '@/components/dashboard/exhibitor2/ExhibitorStatsGrid';
 import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/ExhibitorModuleGrid';
+import MarketingToolkit from '@/components/dashboard/exhibitor2/MarketingToolkit';
 import HeroSection from '@/components/home/HeroSection';
 
 export default function ExhibitorDashboard() {
@@ -27,7 +28,7 @@ export default function ExhibitorDashboard() {
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat' | 'marketing'>('dashboard');
     const [unreadChat, setUnreadChat] = useState(0);
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
@@ -209,6 +210,10 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'chat' && (
                     <ExhibitorChatTab data={data} />
+                )}
+
+                {activeTab === 'marketing' && (
+                    <MarketingToolkit data={data} />
                 )}
 
             </AnimatePresence>

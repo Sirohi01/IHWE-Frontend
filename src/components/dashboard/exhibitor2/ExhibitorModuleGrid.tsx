@@ -105,9 +105,9 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             icon: Megaphone,
             accent: '#ea580c',
             light: '#fff7ed',
-            badge: 'Coming Soon',
-            badgeOk: false,
-            tab: null,
+            badge: 'Active',
+            badgeOk: true,
+            tab: 'marketing',
         },
         {
             id: 'service',
