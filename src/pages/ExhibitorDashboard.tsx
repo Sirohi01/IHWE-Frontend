@@ -174,7 +174,7 @@ export default function ExhibitorDashboard() {
                 )}
 
                 {activeTab === 'profile' && (
-                    <ExhibitorProfile data={data} />
+                    <ExhibitorProfile data={data} setData={setData} />
                 )}
 
                 {activeTab === 'invoices' && (
