@@ -22,6 +22,7 @@ const TAB_ROUTES: Record<string, string> = {
     psm_claim: '/exhibitor-dashboard/psm-claim',
     'stall-management': '/exhibitor-dashboard/stall-management',
     exhibitions: '/exhibitor-dashboard/exhibitions',
+    documentation: '/exhibitor-dashboard/documentation',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -116,7 +117,7 @@ export default function ExhibitorDashboard() {
     if (!data) return null;
 
     return (
-        <ExhibitorCtx.Provider value={{ data, allRegistrations, fetchDashboard, setLoading }}>
+        <ExhibitorCtx.Provider value={{ data, setData, allRegistrations, fetchDashboard, setLoading }}>
             <ExhibitorLayout
                 logo={logo}
                 data={data}

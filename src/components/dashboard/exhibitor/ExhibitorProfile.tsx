@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Upload, FileText, Image as ImageIcon, ExternalLink } from 'lucide-react';
+import { Save, Upload, FileText, Image as ImageIcon, ExternalLink, Trash2 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -353,7 +353,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     );
 }
 
-// ─── FileUpload: defined OUTSIDE parent so React never remounts it ─────────────
+// ─── FileUpload: ...
 function FileUpload({ label, field, currentUrl, files, previews, onFileChange }: {
     label: string;
     field: string;
