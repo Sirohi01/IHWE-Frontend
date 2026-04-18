@@ -114,7 +114,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         {
             id: 'marketing',
             label: 'Marketing & Promotions',  // ✅ changed from 'Marketing Toolkit'
-            desc: 'Creatives, email & WhatsApp templates',
+            desc: 'Download pre-branded assets from our official IHWE team',
             icon: Megaphone,
             accent: '#ea580c',
             light: '#fff7ed',
