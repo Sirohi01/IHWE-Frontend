@@ -2,7 +2,7 @@ import {
     Building2, Layers, Wallet, ShoppingBag,
     Handshake, Target, CalendarDays, Megaphone,
     Wrench, FolderOpen, BarChart3, Bell,
-    Sparkles  // <-- new icon for sponsorship
+    Sparkles
 } from 'lucide-react';
 
 interface ModuleGridProps {
@@ -22,7 +22,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
     const modules = [
         {
             id: 'profile',
-            label: 'profile Managment',
+            label: 'Profile Management',
             desc: 'Brand info, contacts & digital assets',
             icon: Building2,
             accent: '#4f46e5',
@@ -44,7 +44,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'billing',
-            label: 'Billing & Accounts',
+            label: 'Billing & Payments',  // ✅ changed
             desc: `${fmt(paid)} paid · ${fmt(balance)} due`,
             icon: Wallet,
             accent: balance > 0 ? '#e11d48' : '#16a34a',
@@ -56,7 +56,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         {
             id: 'products',
             label: 'Products & Services',
-            desc: 'Your catalogue on website & app',
+            desc: 'Electricity, furniture & branding',
             icon: ShoppingBag,
             accent: '#7c3aed',
             light: '#f5f3ff',
@@ -64,23 +64,21 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: true,
             tab: 'accessories',
         },
-        // ======================= 🆕 SPONSORSHIP MODULE =======================
         {
             id: 'sponsorship',
             label: 'Sponsorship',
             desc: 'Gold | Silver | Booth branding | Lanyard',
-            icon: Sparkles,   // ya aap Trophy, Award, Star, BadgeDollarSign use kar sakte ho
-            accent: '#b45309', // warm amber/gold feel
+            icon: Sparkles,
+            accent: '#b45309',
             light: '#fff7ed',
             badge: data?.sponsorship?.tier ? 'Active' : 'Upgrade',
             badgeOk: !!data?.sponsorship?.tier,
-            tab: null,        // agar sponsorship ka alag page ho to 'sponsorship' daal dena
-            highlight: true,  // ise highlight kar sakte ho
+            tab: null,
+            highlight: true,
         },
-        // ====================================================================
         {
             id: 'bsm',
-            label: 'Buyer–Seller Meet',
+            label: 'Appointments & Meetings',  // ✅ changed from 'Buyer–Seller Meet'
             desc: 'Schedule & manage buyer meetings',
             icon: Handshake,
             accent: '#d97706',
@@ -92,7 +90,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'leads',
-            label: 'Leads Management',
+            label: 'Leads & Visitors',  // ✅ changed from 'Leads Management'
             desc: 'QR scans, enquiries & follow-ups',
             icon: Target,
             accent: '#db2777',
@@ -115,7 +113,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'marketing',
-            label: 'Marketing Toolkit',
+            label: 'Marketing & Promotions',  // ✅ changed from 'Marketing Toolkit'
             desc: 'Creatives, email & WhatsApp templates',
             icon: Megaphone,
             accent: '#ea580c',
@@ -124,17 +122,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: true,
             tab: 'marketing',
         },
-        {
-            id: 'service',
-            label: 'Service Requests',
-            desc: 'Electricity, furniture & branding',
-            icon: Wrench,
-            accent: '#475569',
-            light: '#f8fafc',
-            badge: 'Coming Soon',
-            badgeOk: false,
-            tab: null,
-        },
+
         {
             id: 'docs',
             label: 'Document Center',
@@ -157,17 +145,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: false,
             tab: null,
         },
-        {
-            id: 'notifications',
-            label: 'Notifications',
-            desc: 'SMS, WhatsApp & email alerts',
-            icon: Bell,
-            accent: '#ca8a04',
-            light: '#fefce8',
-            badge: 'Active',
-            badgeOk: true,
-            tab: null,
-        },
+
     ];
 
     return (
