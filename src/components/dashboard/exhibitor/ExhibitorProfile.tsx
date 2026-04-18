@@ -1126,74 +1126,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                             />
                         </div>
 
-                        <Section title="Additional Images">
-                            <div className="border border-slate-200 rounded-md p-4 bg-white">
-                                <div className="mb-4">
-                                    <label className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2 bg-[#23471d]/10 border border-[#23471d]/30 rounded-md cursor-pointer hover:bg-[#23471d]/20 transition-colors">
-                                        <Plus size={16} className="text-[#23471d]" />
-                                        <span className="text-[11px] font-bold text-[#23471d] uppercase">Add Multiple Images</span>
-                                        <input
-                                            type="file"
-                                            multiple
-                                            accept="image/*"
-                                            onChange={handleAdditionalImagesChange}
-                                            className="hidden"
-                                        />
-                                    </label>
-                                    <p className="text-[9px] text-slate-400 mt-1 ml-1">You can select multiple images at once (JPG, PNG, WEBP, max 5MB each)</p>
-                                </div>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                                    {existingAdditionalImages.map((url, idx) => (
-                                        <div key={`existing-${idx}`} className="relative group">
-                                            <div className="aspect-square w-full rounded-lg overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
-                                                <img
-                                                    src={fixUrl(url)}
-                                                    alt={`Additional ${idx + 1}`}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => removeExistingAdditionalImage(idx)}
-                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                            <span className="text-[8px] text-slate-400 mt-1 block text-center">Saved</span>
-                                        </div>
-                                    ))}
-
-                                    {additionalImagePreviews.map((url, idx) => (
-                                        <div key={`new-${idx}`} className="relative group">
-                                            <div className="aspect-square w-full rounded-lg overflow-hidden border border-slate-200 bg-slate-50 shadow-sm">
-                                                <img
-                                                    src={url}
-                                                    alt={`New ${idx + 1}`}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => removeNewAdditionalImage(idx)}
-                                                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                            <span className="text-[8px] text-green-600 mt-1 block text-center">New</span>
-                                        </div>
-                                    ))}
-
-                                    {existingAdditionalImages.length === 0 && additionalImagePreviews.length === 0 && (
-                                        <div className="col-span-full flex flex-col items-center justify-center py-8 text-center">
-                                            <ImageIcon size={32} className="text-slate-300 mb-2" />
-                                            <p className="text-[10px] text-slate-400">No additional images uploaded yet</p>
-                                            <p className="text-[9px] text-slate-300">Click above to add product/banner images</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </Section>
                     </div>
                 </div>
             </div>

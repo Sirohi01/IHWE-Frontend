@@ -225,27 +225,10 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                     <div className="space-y-4">
                         {/* Udhyam Verification Section */}
                         <div className="bg-blue-50 p-3 rounded border border-blue-200">
-                            <div className="flex items-end gap-2 flex-wrap">
-                                <div className="flex-1 min-w-[200px]">
-                                    <label className="text-[10px] font-bold text-slate-600 uppercase block mb-1">Udhyam Registration No. *</label>
-                                    <input
-                                        className={inputCls}
-                                        placeholder="e.g., UDYAM-XX-00-0000000"
-                                        value={form.udhyamRegNo}
-                                        onChange={e => inp('udhyamRegNo', e.target.value)}
-                                    />
-                                </div>
-                                <button
-                                    onClick={handleVerifyUdhyam}
-                                    disabled={verifying}
-                                    className="px-3 py-1.5 bg-[#23471d] text-white text-[11px] font-bold rounded flex items-center gap-1 whitespace-nowrap"
-                                >
-                                    {verifying ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
-                                    {verifying ? 'Verifying...' : 'Verify Udhyam'}
-                                </button>
+                            <div className="flex items-end justify-end gap-2">
                                 <button
                                     onClick={() => window.open('https://www.udyamregistration.gov.in/UdyamRegistration.aspx', '_blank')}
-                                    className="px-3 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded flex items-center gap-1 whitespace-nowrap"
+                                    className="px-3 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded flex items-center gap-1 whitespace-nowrap hover:bg-blue-700 transition-colors"
                                 >
                                     <ExternalLink size={12} />
                                     Register on Udhyam Portal
