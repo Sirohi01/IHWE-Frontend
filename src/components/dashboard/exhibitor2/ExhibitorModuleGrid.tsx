@@ -40,11 +40,11 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfeff',
             badge: data?.participation?.stallFor ? 'Assigned' : 'Pending',
             badgeOk: !!data?.participation?.stallFor,
-            tab: null,
+            tab: 'stall-management',
         },
         {
             id: 'billing',
-            label: 'Billing & Payments',  // ✅ changed
+            label: 'Billing & Payments',
             desc: `${fmt(paid)} paid · ${fmt(balance)} due`,
             icon: Wallet,
             accent: balance > 0 ? '#e11d48' : '#16a34a',
@@ -78,26 +78,14 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'bsm',
-            label: 'Appointments & Meetings',  // ✅ changed from 'Buyer–Seller Meet'
+            label: 'Buyer Seller Meet',  // ✅ renamed from 'Appointments & Meetings'
             desc: 'Schedule & manage buyer meetings',
             icon: Handshake,
             accent: '#d97706',
             light: '#fffbeb',
             badge: '⭐ Core Module',
             badgeOk: true,
-            tab: null,
-            highlight: true,
-        },
-        {
-            id: 'leads',
-            label: 'Leads & Visitors',  // ✅ changed from 'Leads Management'
-            desc: 'QR scans, enquiries & follow-ups',
-            icon: Target,
-            accent: '#db2777',
-            light: '#fdf2f8',
-            badge: '⭐ Core Module',
-            badgeOk: true,
-            tab: null,
+            tab: 'bsm',
             highlight: true,
         },
         {
@@ -109,11 +97,23 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#f0f9ff',
             badge: 'Coming Soon',
             badgeOk: false,
+            tab: 'calendar',
+        },
+        {
+            id: 'leads',
+            label: 'Leads & Visitors',
+            desc: 'QR scans, enquiries & follow-ups',
+            icon: Target,
+            accent: '#db2777',
+            light: '#fdf2f8',
+            badge: 'Coming Soon',
+            badgeOk: false,
             tab: null,
+            highlight: true,
         },
         {
             id: 'marketing',
-            label: 'Marketing & Promotions',  // ✅ changed from 'Marketing Toolkit'
+            label: 'Marketing & Promotions',
             desc: 'Download pre-branded assets from our official IHWE team',
             icon: Megaphone,
             accent: '#ea580c',
@@ -122,7 +122,6 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: true,
             tab: 'marketing',
         },
-
         {
             id: 'docs',
             label: 'Document Center',
@@ -132,17 +131,6 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfdf5',
             badge: 'Available',
             badgeOk: true,
-            tab: null,
-        },
-        {
-            id: 'analytics',
-            label: 'Analytics & ROI',
-            desc: 'Profile views, leads & conversion',
-            icon: BarChart3,
-            accent: '#7c3aed',
-            light: '#faf5ff',
-            badge: 'Coming Soon',
-            badgeOk: false,
             tab: null,
         },
 
