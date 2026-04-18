@@ -35,6 +35,16 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
+const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
+const ExhibitorProfilePage = lazy(() => import("./pages/exhibitor/ExhibitorProfilePage"));
+const ExhibitorInvoicesPage = lazy(() => import("./pages/exhibitor/ExhibitorInvoicesPage"));
+const ExhibitorBSMPage = lazy(() => import("./pages/exhibitor/ExhibitorBSMPage"));
+const ExhibitorCalendarPage = lazy(() => import("./pages/exhibitor/ExhibitorCalendarPage"));
+const ExhibitorAccessoriesPage = lazy(() => import("./pages/exhibitor/ExhibitorAccessoriesPage"));
+const ExhibitorMarketingPage = lazy(() => import("./pages/exhibitor/ExhibitorMarketingPage"));
+const ExhibitorChatPage = lazy(() => import("./pages/exhibitor/ExhibitorChatPage"));
+const ExhibitorMSMEPage = lazy(() => import("./pages/exhibitor/ExhibitorMSMEPage"));
+const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -97,7 +107,19 @@ const App = () => {
 
                 <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
                 <Route path="/buyer-login" element={<BuyerLogin />} />
-                <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />} />
+                <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />}>
+                    <Route index element={<ExhibitorDashboardHome />} />
+                    <Route path="profile" element={<ExhibitorProfilePage />} />
+                    <Route path="invoices" element={<ExhibitorInvoicesPage />} />
+                    <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
+                    <Route path="marketing" element={<ExhibitorMarketingPage />} />
+                    <Route path="bsm" element={<ExhibitorBSMPage />} />
+                    <Route path="calendar" element={<ExhibitorCalendarPage />} />
+                    <Route path="chat" element={<ExhibitorChatPage />} />
+                    <Route path="msme" element={<ExhibitorMSMEPage />} />
+                    <Route path="psm-claim" element={<ExhibitorMSMEPage />} />
+                    <Route path="exhibitions" element={<ExhibitorEventsPage />} />
+                </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
                 <Route path="/buyer-scan" element={<BuyerScan />} />
               </Routes>
