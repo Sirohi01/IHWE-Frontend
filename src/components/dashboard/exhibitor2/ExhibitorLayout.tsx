@@ -29,7 +29,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                 unreadChat={unreadChat}
             />
 
-            <div className="flex pt-16 flex-1">
+            <div className="flex pt-16 print:pt-0 flex-1">
                 <ExhibitorSidebar
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
@@ -39,8 +39,8 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                 />
 
                 <main
-                    className={`flex-1 transition-all duration-300 overflow-hidden p-3 sm:p-4
-                        ${sidebarOpen ? 'lg:ml-56' : 'lg:ml-14'}
+                    className={`flex-1 transition-all duration-300 overflow-hidden print:overflow-visible p-3 sm:p-4 print:p-0
+                        ${sidebarOpen ? 'lg:ml-56 print:ml-0' : 'lg:ml-14 print:ml-0'}
                     `}
                 >
                     <div className="w-full">

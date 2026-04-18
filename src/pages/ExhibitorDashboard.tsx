@@ -22,13 +22,14 @@ import ExhibitorStatsGrid from '@/components/dashboard/exhibitor2/ExhibitorStats
 import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/ExhibitorModuleGrid';
 import MarketingToolkit from '@/components/dashboard/exhibitor2/MarketingToolkit';
 import HeroSection from '@/components/home/HeroSection';
+import AnnexureD from "@/pages/psmClaim/AnnexureD";
 
 export default function ExhibitorDashboard() {
     const navigate = useNavigate();
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat' | 'marketing'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'profile' | 'invoices' | 'payments' | 'exhibitions' | 'msme' | 'accessories' | 'chat' | 'marketing' | 'psm_claim' | 'annexure_d'>('dashboard');
     const [unreadChat, setUnreadChat] = useState(0);
     const [showChangePwd, setShowChangePwd] = useState(false);
     const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
@@ -53,7 +54,7 @@ export default function ExhibitorDashboard() {
                 if (res.data?._id) {
                     fetch(`${API_URL}/chat/unread/${res.data._id}`, {
                         headers: { Authorization: `Bearer ${token}` }
-                    }).then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => {});
+                    }).then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => { });
                 }
             } else {
                 toast.error(res.message);
@@ -149,7 +150,7 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'dashboard' && (
                     <div className="space-y-4">
-                        <HeroSection onRegisterVisit={() => {}} />
+                        <HeroSection onRegisterVisit={() => { }} />
                         <div className="bg-white shadow-sm">
                             <ExhibitorModuleGrid
                                 data={data}
@@ -214,6 +215,10 @@ export default function ExhibitorDashboard() {
 
                 {activeTab === 'marketing' && (
                     <MarketingToolkit data={data} />
+                )}
+
+                {activeTab === 'annexure_d' && (
+                    <AnnexureD data={data} />
                 )}
 
             </AnimatePresence>
