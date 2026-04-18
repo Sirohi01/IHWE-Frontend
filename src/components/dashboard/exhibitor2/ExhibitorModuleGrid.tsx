@@ -78,7 +78,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'bsm',
-            label: 'Appointments & Meetings',  // ✅ changed from 'Buyer–Seller Meet'
+            label: 'Appointments & Meetings',
             desc: 'Schedule & manage buyer meetings',
             icon: Handshake,
             accent: '#d97706',
@@ -90,7 +90,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'leads',
-            label: 'Leads & Visitors',  // ✅ changed from 'Leads Management'
+            label: 'Leads & Visitors',
             desc: 'QR scans, enquiries & follow-ups',
             icon: Target,
             accent: '#db2777',
@@ -113,7 +113,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'marketing',
-            label: 'Marketing & Promotions',  // ✅ changed from 'Marketing Toolkit'
+            label: 'Marketing & Promotions',
             desc: 'Creatives, email & WhatsApp templates',
             icon: Megaphone,
             accent: '#ea580c',
