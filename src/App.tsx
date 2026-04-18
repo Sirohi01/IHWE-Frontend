@@ -21,6 +21,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
+const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
@@ -90,6 +91,7 @@ const App = () => {
                   <Route path="/refund-policy" element={<RefundPolicy />} />
                   <Route path="/buyer-registration" element={<BuyerLanding />} />
                   <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
+                  <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
 
