@@ -4,13 +4,14 @@ import { Save, Upload, FileText, Image as ImageIcon, ExternalLink } from 'lucide
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
-const DEFAULT_PLACEHOLDER = "https://res.cloudinary.com/dr8mld4i0/image/upload/v1776505293/exhibitor-docs/hhrxqt8fsepts1z2vxew.png";
+const DEFAULT_PLACEHOLDER = "https://placehold.co/400x400?text=No+Logo";
 
 const fixUrl = (url: string | null | undefined) => {
-    if (!url || url === 'undefined' || url === 'null') return DEFAULT_PLACEHOLDER;
+    if (!url || url === 'undefined' || url === 'null' || url === '') return DEFAULT_PLACEHOLDER;
     if (url.startsWith('http') || url.startsWith('blob:')) return url;
     const cleanPath = url.startsWith('/') ? url : `/${url}`;
-    return `${SERVER_URL}${cleanPath}`;
+    // Cloudinary usually returns full URLs, local uploads need SERVER_URL
+    return url.includes('res.cloudinary.com') ? url : `${SERVER_URL}${cleanPath}`;
 };
 
 interface ProfileProps {
@@ -162,7 +163,16 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
             });
 
             Object.entries(files).forEach(([field, file]) => {
-                formData.append(field, file);
+                const multerFieldMap: Record<string, string> = {
+                    companyLogoUrl: 'companyLogo',
+                    panCardFrontUrl: 'panCardFront',
+                    aadhaarCardFrontUrl: 'aadhaarCardFront',
+                    aadhaarCardBackUrl: 'aadhaarCardBack',
+                    gstCertificateUrl: 'gstCertificate',
+                    cancelledChequeUrl: 'cancelledCheque',
+                    representativePhotoUrl: 'representativePhoto'
+                };
+                formData.append(multerFieldMap[field] || field, file);
             });
 
             const res = await fetch(`${API_URL}/exhibitor-auth/update-profile?id=${data._id}`, {
@@ -249,8 +259,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
 
                     <Section title="Business Documents (KYC)">
                         <InfoGrid rows={[
-                            ['PAN Card Front', <FileUpload label="PAN Front" field="panCardFront" currentUrl={data.panCardFrontUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
-                            ['PAN Card Back', <FileUpload label="PAN Back" field="panCardBack" currentUrl={data.panCardBackUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
+                            ['PAN Card', <FileUpload label="PAN Card" field="panCardFront" currentUrl={data.panCardFrontUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
                             ['Aadhaar Front', <FileUpload label="Aadhaar Front" field="aadhaarCardFront" currentUrl={data.aadhaarCardFrontUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
                             ['Aadhaar Back', <FileUpload label="Aadhaar Back" field="aadhaarCardBack" currentUrl={data.aadhaarCardBackUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
                             ['GST Certificate', <FileUpload label="GST Certificate" field="gstCertificate" currentUrl={data.gstCertificateUrl} files={files} previews={previews} onFileChange={handleFileChange} />],
@@ -320,14 +329,14 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                                         <p className="text-[10px] font-bold text-slate-500 uppercase">Downloadable Forms</p>
                                         <div className="flex justify-end gap-2">
                                             {data.registrationPdfUrl && (
-                                                <a href={fixUrl(data.registrationPdfUrl)} target="_blank" rel="noopener noreferrer" 
-                                                   className="flex items-center gap-1.5 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
+                                                <a href={fixUrl(data.registrationPdfUrl)} target="_blank" rel="noopener noreferrer"
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
                                                     <FileText size={12} /> Registration PDF
                                                 </a>
                                             )}
                                             {data.receiptPdfUrl && (
-                                                <a href={fixUrl(data.receiptPdfUrl)} target="_blank" rel="noopener noreferrer" 
-                                                   className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d26019] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
+                                                <a href={fixUrl(data.receiptPdfUrl)} target="_blank" rel="noopener noreferrer"
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#d26019] text-white text-[10px] font-bold uppercase rounded shadow-sm hover:opacity-90">
                                                     <FileText size={12} /> Payment Receipt
                                                 </a>
                                             )}
@@ -338,17 +347,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                         </Section>
                     )}
 
-                </div>
-
-                {/* Bottom Save Bar */}
-                <div className="px-4 py-4 border-t bg-slate-50 flex justify-end gap-3">
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-1.5 px-6 py-2 bg-[#23471d] text-white text-[11px] font-bold uppercase rounded hover:bg-[#1a3516] disabled:opacity-50 transition-colors shadow-lg"
-                    >
-                        <Save size={14} /> {saving ? 'Submitting Details...' : 'Submit Profile for Admin Review'}
-                    </button>
                 </div>
             </div>
         </motion.div>
@@ -392,11 +390,11 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange }:
             </div>
             {(previews[field] || (currentUrl && isImage)) && (
                 <div className="mt-1 flex items-center gap-2 border border-slate-200 rounded p-1 bg-slate-50">
-                    <div className="w-8 h-8 rounded overflow-hidden flex items-center justify-center bg-white border border-slate-200">
+                    <div className="aspect-square bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center relative group overflow-hidden">
                         <img
-                            src={previews[field] || `${fixUrl(currentUrl)}${currentUrl && currentUrl.includes('?') ? '&' : '?'}v=${new Date().getTime()}`}
+                            src={previews[field] || fixUrl(currentUrl)}
                             alt={label}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                     {currentUrl && (
