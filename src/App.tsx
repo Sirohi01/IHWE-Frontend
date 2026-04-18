@@ -55,6 +55,7 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import AnnexureD from "@/pages/psmClaim/AnnexureD";
 
 const queryClient = new QueryClient();
 
@@ -121,6 +122,7 @@ const App = () => {
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
                     <Route path="psm-claim" element={<ExhibitorMSMEPage />} />
+                    <Route path="annexure-d" element={<AnnexureD />} />
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                     <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                 </Route>
