@@ -49,6 +49,7 @@ const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
 const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
 const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
+const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -127,6 +128,7 @@ const App = () => {
                     <Route path="declaration" element={<Declaration />} />
                     <Route path="feedback-report" element={<FeedbackReport />} />
                     <Route path="undertaking" element={<Undertaking />} />
+                    <Route path="pre-receipt" element={<PreReceipt />} />
                   </Route>
                   <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                 </Route>
