@@ -608,24 +608,23 @@ const BookAStand = () => {
 
         setIsLoading(true);
         try {
-            if (formData.paymentMode === 'online') {
-                const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-                if (!isLoaded) {
-                    Swal.fire('Error', 'Razorpay SDK failed to load.', 'error');
-                    setIsLoading(false);
-                    return;
-                }
-                const amountInInr = formData.participation.currency === 'USD'
-                    ? Math.round(formData.amountPaid * usdToInrRate)
-                    : formData.amountPaid;
-                const gatewayAmount = Math.round(amountInInr * 1.025);
+        if (formData.paymentMode === 'online') {
+            const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+            if (!isLoaded) {
+                Swal.fire('Error', 'Razorpay SDK failed to load.', 'error');
+                setIsLoading(false);
+                return;
+            }
+            const isUSD = formData.participation.currency === 'USD';
+            const finalAmount = formData.amountPaid;
+            const gatewayAmount = Math.round(finalAmount * 1.025 * 100) / 100;
 
                 const options = {
                     key: RAZORPAY_KEY_ID,
                     amount: Math.round(gatewayAmount * 100),
-                    currency: 'INR',
+                    currency: isUSD ? 'USD' : 'INR',
                     name: "IHWE Registration",
-                    description: `Stand Booking - Stall ${formData.participation.stallFor}${formData.participation.currency === 'USD' ? ` (USD @ ₹${usdToInrRate})` : ''} (incl. 2.5% gateway fee)`,
+                    description: `Stand Booking - Stall ${formData.participation.stallFor}${isUSD ? ' (International)' : ''} (incl. 2.5% gateway fee)`,
                     handler: async (response: any) => {
                         setPaymentModal({ status: 'processing' });
                         try {
@@ -1409,19 +1408,17 @@ const BookAStand = () => {
                                                                 </div>
                                                                 {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
                                                                     <div className="mt-2 pt-2 border-t border-[#23471d]/10 space-y-1">
-                                                                        {formData.participation.currency === 'USD' && (
-                                                                            <div className="flex justify-between items-center">
-                                                                                <p className="text-[9px] text-slate-500 font-bold uppercase">USD → INR @ ₹{usdToInrRate}</p>
-                                                                                <p className="text-[11px] font-black text-slate-700">₹{(Math.round(formData.amountPaid * usdToInrRate)).toLocaleString('en-IN')}</p>
-                                                                            </div>
-                                                                        )}
                                                                         <div className="flex justify-between items-center">
                                                                             <p className="text-[9px] text-slate-500 font-bold uppercase">+ 2.5% Gateway Fee</p>
-                                                                            <p className="text-[11px] font-black text-[#d26019]">₹{(Math.round(formData.amountPaid * (formData.participation.currency === 'USD' ? usdToInrRate : 1) * 1.025) - Math.round(formData.amountPaid * (formData.participation.currency === 'USD' ? usdToInrRate : 1))).toLocaleString('en-IN')}</p>
+                                                                            <p className="text-[11px] font-black text-[#d26019]">
+                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {(formData.amountPaid * 0.025).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                                                            </p>
                                                                         </div>
                                                                         <div className="flex justify-between items-center border-t border-[#23471d]/10 pt-1">
-                                                                            <p className="text-[10px] text-[#23471d] font-black uppercase">You Pay (INR)</p>
-                                                                            <p className="text-[13px] font-black text-[#23471d]">₹{Math.round(formData.amountPaid * (formData.participation.currency === 'USD' ? usdToInrRate : 1) * 1.025).toLocaleString('en-IN')}</p>
+                                                                            <p className="text-[10px] text-[#23471d] font-black uppercase">You Pay ({formData.participation.currency})</p>
+                                                                            <p className="text-[13px] font-black text-[#23471d]">
+                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {(formData.amountPaid * 1.025).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                                                            </p>
                                                                         </div>
                                                                     </div>
                                                                 )}

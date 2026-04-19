@@ -24,7 +24,8 @@ const TAB_ROUTES: Record<string, string> = {
     'stall-management': '/exhibitor-dashboard/stall-management',
     exhibitions: '/exhibitor-dashboard/exhibitions',
     participants_feedback: '/exhibitor-dashboard/participants-feedback',
-    mandate_form: '/exhibitor-dashboard/mandate-form'
+    mandate_form: '/exhibitor-dashboard/mandate-form',
+    documentation: '/exhibitor-dashboard/documentation',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -119,7 +120,7 @@ export default function ExhibitorDashboard() {
     if (!data) return null;
 
     return (
-        <ExhibitorCtx.Provider value={{ data, allRegistrations, fetchDashboard, setLoading }}>
+        <ExhibitorCtx.Provider value={{ data, setData, allRegistrations, fetchDashboard, setLoading }}>
             <ExhibitorLayout
                 logo={logo}
                 data={data}

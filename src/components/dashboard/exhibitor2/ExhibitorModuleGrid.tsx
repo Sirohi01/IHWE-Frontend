@@ -131,7 +131,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfdf5',
             badge: 'Available',
             badgeOk: true,
-            tab: null,
+            tab: 'documentation',
         },
 
     ];
