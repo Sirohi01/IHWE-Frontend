@@ -142,6 +142,10 @@ const BuyerRegistration = () => {
         yearOfEstablishment: "",
         gstNumber: "",
         panNumber: "",
+        natureOfBusiness: "",
+        yearsInBusiness: "",
+        numberOfOutlets: "",
+        annualTurnover: "",
         buyingFrequency: "",
         estimatedAnnualPurchaseValue: "",
         primaryProductInterest: "",
@@ -373,8 +377,9 @@ const BuyerRegistration = () => {
         const requiredFields = [
             'fullName', 'designation', 'companyName', 'businessType',
             'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
-            'stateProvince', 'city', 'yearsInOperation', 'annualTurnover',
-            'keyProductsServices', 'primaryProductInterest', 'buyingFrequency',
+            'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
+            'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
+            'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
             'matchmakingInterest', 'preferredMeetingDate', 'preferredTimeSlot'
         ];
@@ -418,6 +423,7 @@ const BuyerRegistration = () => {
             'fullName', 'designation', 'companyName', 'businessType',
             'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
             'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
+            'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
             'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
             'matchmakingInterest', 'preferredMeetingDate', 'preferredTimeSlot',
@@ -786,16 +792,16 @@ const BuyerRegistration = () => {
                                                                 { title: 'Hospitality & Institutional', items: ['Wellness Resort / Hospitality', 'Hotel / Resort', 'Corporate Buyer (Procurement / HR)', 'Government / PSU', 'NGO / Trust'] },
                                                                 { title: 'Professionals & Others', items: ['Consultant / Advisor', 'Startup Founder', 'Student / Researcher', 'Other (Please Specify)'] }
                                                             ];
-                                                            
+
                                                             const backendTypes = config?.companyTypes || [];
                                                             const allListedStaticItems = new Set(staticGroups.flatMap(g => g.items));
 
                                                             return staticGroups.map(group => {
                                                                 // Use backend data if available, otherwise fallback to static items to avoid empty dropdown on fast loads
-                                                                const groupItems = backendTypes.length > 0 
-                                                                    ? backendTypes.filter((t: string) => group.items.includes(t)) 
+                                                                const groupItems = backendTypes.length > 0
+                                                                    ? backendTypes.filter((t: string) => group.items.includes(t))
                                                                     : group.items;
-                                                                    
+
                                                                 // Add unlisted backend items to the last group to make sure NO data is lost
                                                                 if (group.title === 'Professionals & Others' && backendTypes.length > 0) {
                                                                     const unlisted = backendTypes.filter((t: string) => !allListedStaticItems.has(t));
@@ -807,12 +813,12 @@ const BuyerRegistration = () => {
 
                                                                 return (
                                                                     <SelectGroup key={group.title}>
-                                                                        <div 
-                                                                            className="px-2 py-2 text-xs font-semibold text-slate-700 bg-emerald-50/50 cursor-pointer flex justify-between items-center hover:bg-emerald-50 border-b border-emerald-100/50 transition-colors" 
-                                                                            onPointerDown={(e) => { 
-                                                                                e.preventDefault(); 
-                                                                                e.stopPropagation(); 
-                                                                                setOpenRoleGroup(openRoleGroup === group.title ? null : group.title); 
+                                                                        <div
+                                                                            className="px-2 py-2 text-xs font-semibold text-slate-700 bg-emerald-50/50 cursor-pointer flex justify-between items-center hover:bg-emerald-50 border-b border-emerald-100/50 transition-colors"
+                                                                            onPointerDown={(e) => {
+                                                                                e.preventDefault();
+                                                                                e.stopPropagation();
+                                                                                setOpenRoleGroup(openRoleGroup === group.title ? null : group.title);
                                                                             }}
                                                                         >
                                                                             {group.title}
@@ -922,6 +928,17 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Year of Establishment *</Label><Input required name="yearOfEstablishment" value={formData.yearOfEstablishment} onChange={handleChange} placeholder="e.g. 2010" className={`${inputClasses} ${errors.yearOfEstablishment ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearOfEstablishment" errors={errors} /></div>
                                             <div><Label className={labelClasses}>GST Number <span className="font-normal text-slate-500">(Optional but recommended)</span></Label><Input name="gstNumber" value={formData.gstNumber} onChange={handleChange} placeholder="GST Number" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>PAN Number <span className="font-normal text-slate-500">(Optional)</span></Label><Input name="panNumber" value={formData.panNumber} onChange={handleChange} placeholder="PAN Number" className={inputClasses} /></div>
+                                        </div>
+                                    </div>
+
+                                    {/* 2. Business Profile Details */}
+                                    <div className="space-y-2 pt-2">
+                                        <h3 className={sectionTitleClasses}> 2. Business Profile Details</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                            <div><Label className={labelClasses}>Nature of Business *</Label><Input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description (1-2 lines)" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Years in Business *</Label><Input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Number of Outlets / Branches *</Label><Input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select required value={formData.annualTurnover} onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={`${inputClasses} ${errors.annualTurnover ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Range" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Below 50 Lakhs', '50L – 2 Cr', '2 – 10 Cr', '10 Cr+'].map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="annualTurnover" errors={errors} /></div>
                                         </div>
                                     </div>
 
