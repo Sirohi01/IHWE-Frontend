@@ -13,13 +13,31 @@ import {
     Lock,
     AlertTriangle,
     Ban,
-    ChevronDown
+    ChevronDown,
+    X,
+    Store,
+    Factory,
+    Globe,
+    Laptop,
+    HeartPulse,
+    Leaf,
+    Hotel,
+    Briefcase,
+    ChevronsUpDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
@@ -132,6 +150,7 @@ const BuyerRegistration = () => {
         alternateNumber: "",
         emailAddress: "",
         website: "",
+        brandName: "",
         pinCode: "",
         country: "India",
         stateProvince: "",
@@ -146,13 +165,16 @@ const BuyerRegistration = () => {
         yearsInBusiness: "",
         numberOfOutlets: "",
         annualTurnover: "",
+        buyerIndustry: "",
         buyingFrequency: "",
         estimatedAnnualPurchaseValue: "",
         primaryProductInterest: "",
-        secondaryProductCategories: "",
+        secondaryProductCategories: [] as string[],
         specificProductRequirements: "",
         estimatedPurchaseVolume: "",
         budgetRange: "",
+        interestedInImporting: "No",
+        interestedInExporting: "No",
         preferredSupplierRegion: [] as string[],
         preferredState: "",
         preferredSupplierType: [] as string[],
@@ -175,6 +197,7 @@ const BuyerRegistration = () => {
         paymentMode: "Online/Razorpay",
         transactionId: "",
         paymentProof: null as File | null,
+        otherBusinessType: "",
         consentTerms: false,
         consentPaymentValid: false,
         consentMatchedExhibitors: false
@@ -358,18 +381,25 @@ const BuyerRegistration = () => {
         }
     };
 
-    const handleSelectChange = (name: string, value: string) => {
+    const handleSelectChange = (name: string, value: string | string[]) => {
         setErrors(prev => ({ ...prev, [name]: "" }));
 
         if (name === 'country') {
-            setFormData(prev => ({ ...prev, country: value, stateProvince: '', city: '' }));
+            setFormData(prev => ({ ...prev, country: value as string, stateProvince: '', city: '' }));
             return;
         }
         if (name === 'stateProvince') {
-            setFormData(prev => ({ ...prev, stateProvince: value, city: '' }));
+            setFormData(prev => ({ ...prev, stateProvince: value as string, city: '' }));
             return;
         }
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        setFormData(prev => {
+            const next = { ...prev, [name]: value };
+            if (name === 'businessType' && !value.toString().toLowerCase().includes('other')) {
+                next.otherBusinessType = "";
+            }
+            return next;
+        });
     };
 
     const isFormValidForPayment = () => {
@@ -379,7 +409,7 @@ const BuyerRegistration = () => {
             'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
             'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
             'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
-            'primaryProductInterest', 'buyingFrequency',
+            'buyerIndustry', 'primaryProductInterest', 'buyingFrequency',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
             'matchmakingInterest', 'preferredMeetingDate', 'preferredTimeSlot'
         ];
@@ -604,8 +634,13 @@ const BuyerRegistration = () => {
         razorpay.on('payment.failed', async function (response: any) {
             toast.error(`Payment failed: ${response.error?.description || "Unknown error"}`);
             try {
+                const finalBusinessType = formData.businessType.toString().toLowerCase().includes('other') && formData.otherBusinessType
+                    ? formData.otherBusinessType
+                    : formData.businessType;
+
                 await buyerRegistrationApi.submit({
                     ...formData,
+                    businessType: finalBusinessType,
                     registrationCategory: tempSelectedPackage?.name,
                     registrationFee: `₹${tempSelectedPackage?.price}`,
                     paymentStatus: "Failed",
@@ -637,8 +672,13 @@ const BuyerRegistration = () => {
     const submitFinal = async (transactionId: string) => {
         setIsSubmitting(true);
         try {
+            const finalBusinessType = formData.businessType.toString().toLowerCase().includes('other') && formData.otherBusinessType
+                ? formData.otherBusinessType
+                : formData.businessType;
+
             const res = await buyerRegistrationApi.submit({
                 ...formData,
+                businessType: finalBusinessType,
                 registrationCategory: tempSelectedPackage?.name,
                 registrationFee: `₹${tempSelectedPackage?.price}`,
                 paymentStatus: "Completed",
@@ -776,61 +816,97 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Company Name *</Label><Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={`${inputClasses} ${errors.companyName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyName" errors={errors} /></div>
                                             <div>
                                                 <Label className={labelClasses}>Business Role *</Label>
-                                                <Select required value={formData.businessType} onValueChange={(v) => handleSelectChange('businessType', v)}>
-                                                    <SelectTrigger className={`${inputClasses} ${errors.businessType ? 'border-red-400' : ''}`}>
-                                                        <SelectValue placeholder="Select Type" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-white font-sans text-[12px] max-h-[300px]">
-                                                        {(() => {
-                                                            const staticGroups = [
-                                                                { title: 'Trade & Distribution', items: ['Distributor', 'Super Distributor', 'Wholesaler', 'Retailer (Single Store)', 'Retail Chain / Multi-Store', 'Modern Trade Buyer'] },
-                                                                { title: 'Manufacturing & Business', items: ['Manufacturer', 'Private Label Buyer', 'Franchise Seeker', 'Investor'] },
-                                                                { title: 'International Trade', items: ['Importer', 'Exporter', 'International Buying Agent'] },
-                                                                { title: 'Online & Digital', items: ['E-commerce Seller', 'D2C Brand Owner'] },
-                                                                { title: 'Healthcare & Medical', items: ['Hospital / Clinic', 'Doctor / Medical Practitioner', 'Pharmacy / Chemist', 'Diagnostic Center'] },
-                                                                { title: 'Wellness & Lifestyle', items: ['Spa / Salon Owner', 'Wellness Center', 'Gym / Fitness Center', 'Yoga Studio', 'Nutritionist / Dietician'] },
-                                                                { title: 'Hospitality & Institutional', items: ['Wellness Resort / Hospitality', 'Hotel / Resort', 'Corporate Buyer (Procurement / HR)', 'Government / PSU', 'NGO / Trust'] },
-                                                                { title: 'Professionals & Others', items: ['Consultant / Advisor', 'Startup Founder', 'Student / Researcher', 'Other (Please Specify)'] }
-                                                            ];
+                                                {!formData.businessType.toString().toLowerCase().includes('other') ? (
+                                                    <Select required value={formData.businessType} onValueChange={(v) => handleSelectChange('businessType', v)}>
+                                                        <SelectTrigger className={`${inputClasses} ${errors.businessType ? 'border-red-400' : ''}`}>
+                                                            <SelectValue placeholder="Select Type" />
+                                                        </SelectTrigger>
+                                                        <SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">
+                                                            {(() => {
+                                                                const staticGroups = [
+                                                                    { title: 'Trade & Distribution', icon: <Store size={14} />, items: ['Distributor', 'Super Distributor', 'Wholesaler', 'Retailer (Single Store)', 'Retail Chain / Multi-Store', 'Modern Trade Buyer'] },
+                                                                    { title: 'Manufacturing & Business', icon: <Factory size={14} />, items: ['Manufacturer', 'Private Label Buyer', 'Franchise Seeker', 'Investor'] },
+                                                                    { title: 'International Trade', icon: <Globe size={14} />, items: ['Importer', 'Exporter', 'International Buying Agent'] },
+                                                                    { title: 'Online & Digital', icon: <Laptop size={14} />, items: ['E-commerce Seller', 'D2C Brand Owner'] },
+                                                                    { title: 'Healthcare & Medical', icon: <HeartPulse size={14} />, items: ['Hospital / Clinic', 'Doctor / Medical Practitioner', 'Pharmacy / Chemist', 'Diagnostic Center'] },
+                                                                    { title: 'Wellness & Lifestyle', icon: <Leaf size={14} />, items: ['Spa / Salon Owner', 'Wellness Center', 'Gym / Fitness Center', 'Yoga Studio', 'Nutritionist / Dietician'] },
+                                                                    { title: 'Hospitality & Institutional', icon: <Hotel size={14} />, items: ['Wellness Resort / Hospitality', 'Hotel / Resort', 'Corporate Buyer (Procurement / HR)', 'Government / PSU', 'NGO / Trust'] },
+                                                                    { title: 'Professionals & Others', icon: <Briefcase size={14} />, items: ['Consultant / Advisor', 'Startup Founder', 'Student / Researcher'] }
+                                                                ];
 
-                                                            const backendTypes = config?.companyTypes || [];
-                                                            const allListedStaticItems = new Set(staticGroups.flatMap(g => g.items));
+                                                                const backendTypes = config?.companyTypes || [];
+                                                                const allListedStaticItems = new Set(staticGroups.flatMap(g => g.items));
 
-                                                            return staticGroups.map(group => {
-                                                                // Use backend data if available, otherwise fallback to static items to avoid empty dropdown on fast loads
-                                                                const groupItems = backendTypes.length > 0
-                                                                    ? backendTypes.filter((t: string) => group.items.includes(t))
-                                                                    : group.items;
+                                                                const normalize = (s: string) => s.replace(/^\d+[\s\.)\-]+/, '').trim().toLowerCase();
 
-                                                                // Add unlisted backend items to the last group to make sure NO data is lost
-                                                                if (group.title === 'Professionals & Others' && backendTypes.length > 0) {
-                                                                    const unlisted = backendTypes.filter((t: string) => !allListedStaticItems.has(t));
-                                                                    groupItems.push(...unlisted);
-                                                                }
+                                                                return staticGroups.map(group => {
+                                                                    const staticNormalized = new Set(group.items.map(normalize));
 
-                                                                // If backend data is actively used and this group is empty, hide it
-                                                                if (backendTypes.length > 0 && groupItems.length === 0) return null;
+                                                                    const groupItems = backendTypes.length > 0
+                                                                        ? backendTypes.filter((t: string) => staticNormalized.has(normalize(t)))
+                                                                        : group.items;
 
-                                                                return (
-                                                                    <SelectGroup key={group.title}>
-                                                                        <div
-                                                                            className="px-2 py-2 text-xs font-semibold text-slate-700 bg-emerald-50/50 cursor-pointer flex justify-between items-center hover:bg-emerald-50 border-b border-emerald-100/50 transition-colors"
-                                                                            onPointerDown={(e) => {
-                                                                                e.preventDefault();
-                                                                                e.stopPropagation();
-                                                                                setOpenRoleGroup(openRoleGroup === group.title ? null : group.title);
-                                                                            }}
-                                                                        >
-                                                                            {group.title}
-                                                                            <ChevronDown size={14} className={`text-emerald-600 transition-transform duration-200 ${openRoleGroup === group.title ? 'rotate-180' : ''}`} />
-                                                                        </div>
-                                                                        {openRoleGroup === group.title && groupItems.map((t: string) => <SelectItem key={t} value={t} className="pl-6 font-medium text-slate-600">{t}</SelectItem>)}
-                                                                    </SelectGroup>
-                                                                );
-                                                            });
-                                                        })()}
-                                                    </SelectContent>
-                                                </Select>
+                                                                    if (group.title === 'Professionals & Others' && backendTypes.length > 0) {
+                                                                        const allStaticNormalized = new Set([...allListedStaticItems].map(normalize));
+                                                                        const unlisted = backendTypes.filter((t: string) => !allStaticNormalized.has(normalize(t)));
+
+                                                                        const existingNames = new Set(groupItems.map(normalize));
+                                                                        unlisted.forEach((u: string) => {
+                                                                            if (!existingNames.has(normalize(u))) {
+                                                                                groupItems.push(u);
+                                                                            }
+                                                                        });
+                                                                    }
+
+                                                                    if (backendTypes.length > 0 && groupItems.length === 0) return null;
+
+                                                                    return (
+                                                                        <SelectGroup key={group.title}>
+                                                                            <div
+                                                                                className="px-2 py-2 text-[11px] font-semibold text-slate-700 bg-emerald-50/50 cursor-pointer flex items-center justify-between hover:bg-emerald-50 border-b border-emerald-100/50 transition-colors"
+                                                                                onPointerDown={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    e.stopPropagation();
+                                                                                    setOpenRoleGroup(openRoleGroup === group.title ? null : group.title);
+                                                                                }}
+                                                                            >
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <span className="text-emerald-600 opacity-70">{group.icon}</span>
+                                                                                    {group.title}
+                                                                                </div>
+                                                                                <ChevronsUpDown size={12} className="text-slate-400" />
+                                                                            </div>
+                                                                            {openRoleGroup === group.title && groupItems.map((t: string) => (
+                                                                                <SelectItem key={t} value={t} className="pl-6 font-medium text-slate-600 text-[10px]">
+                                                                                    {t}
+                                                                                </SelectItem>
+                                                                            ))}
+                                                                        </SelectGroup>
+                                                                    );
+                                                                });
+                                                            })()}
+                                                        </SelectContent>
+                                                    </Select>
+                                                ) : (
+                                                    <div className="relative">
+                                                        <Input
+                                                            name="otherBusinessType"
+                                                            value={formData.otherBusinessType}
+                                                            onChange={handleChange}
+                                                            placeholder="Specify Business Role"
+                                                            className={`${inputClasses} pr-8 ${errors.otherBusinessType ? 'border-red-400' : ''}`}
+                                                            required
+                                                            autoFocus
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleSelectChange('businessType', '')}
+                                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 transition-colors"
+                                                        >
+                                                            <X className="h-3 w-3" />
+                                                        </button>
+                                                    </div>
+                                                )}
                                                 <ErrorDisplay name="businessType" errors={errors} />
                                             </div>
                                         </div>
@@ -921,13 +997,15 @@ const BuyerRegistration = () => {
 
                                     {/* 1. Basic Business Information */}
                                     <div className="space-y-2">
-                                        <h3 className={sectionTitleClasses}> 1. Basic Business Information</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 gap-y-4 gap-x-5">
+                                        <h3 className={sectionTitleClasses}> 1. Company Business Profile </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Company / Firm Name *</Label><Input required name="companyFirmName" value={formData.companyFirmName} onChange={handleChange} placeholder="Company / Firm Name" className={`${inputClasses} ${errors.companyFirmName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyFirmName" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Brand Name</Label><Input name="brandName" value={formData.brandName} onChange={handleChange} placeholder="Brand Name" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Business Type *</Label><Select required value={formData.basicBusinessType} onValueChange={(v) => handleSelectChange('basicBusinessType', v)}><SelectTrigger className={`${inputClasses} ${errors.basicBusinessType ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Proprietorship', 'Partnership', 'Pvt Ltd', 'LLP', 'Others'].map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="basicBusinessType" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Year of Establishment *</Label><Input required name="yearOfEstablishment" value={formData.yearOfEstablishment} onChange={handleChange} placeholder="e.g. 2010" className={`${inputClasses} ${errors.yearOfEstablishment ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearOfEstablishment" errors={errors} /></div>
                                             <div><Label className={labelClasses}>GST Number <span className="font-normal text-slate-500">(Optional but recommended)</span></Label><Input name="gstNumber" value={formData.gstNumber} onChange={handleChange} placeholder="GST Number" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>PAN Number <span className="font-normal text-slate-500">(Optional)</span></Label><Input name="panNumber" value={formData.panNumber} onChange={handleChange} placeholder="PAN Number" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Buyer Industry *</Label><Select required value={formData.buyerIndustry} onValueChange={(v) => handleSelectChange('buyerIndustry', v)}><SelectTrigger className={`${inputClasses} ${errors.buyerIndustry ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Industry" /></SelectTrigger><SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyerIndustry" errors={errors} /></div>
                                         </div>
                                     </div>
 
@@ -935,33 +1013,65 @@ const BuyerRegistration = () => {
                                     <div className="space-y-2 pt-2">
                                         <h3 className={sectionTitleClasses}> 2. Business Profile Details</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Nature of Business *</Label><Input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description (1-2 lines)" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Years in Business *</Label><Input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Number of Outlets / Branches *</Label><Input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select required value={formData.annualTurnover} onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={`${inputClasses} ${errors.annualTurnover ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Range" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Below 50 Lakhs', '50L – 2 Cr', '2 – 10 Cr', '10 Cr+'].map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="annualTurnover" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Nature of Business *</Label><Input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Years in Business *</Label><Input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Number of Outlets / Branches *</Label><Input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select required value={formData.annualTurnover} onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={`${inputClasses} ${errors.annualTurnover ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Range" /></SelectTrigger><SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">{(config?.annualTurnoverRanges || ['Below 50 Lakhs', '50L – 2 Cr', '2 – 10 Cr', '10 Cr+']).map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="annualTurnover" errors={errors} /></div>
                                         </div>
                                     </div>
+
+
+
+
 
                                     {/* 4. Sourcing & Buying Interests */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Sourcing & Buying Interests</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
-                                            <div>
+                                            <div className="md:col-span-1 lg:col-span-1">
                                                 <Label className={labelClasses}>Secondary Product Categories</Label>
-                                                <Select value={formData.secondaryProductCategories} onValueChange={(v) => handleSelectChange('secondaryProductCategories', v)}>
-                                                    <SelectTrigger className={inputClasses}>
-                                                        <SelectValue placeholder="Choose Interests" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-white font-sans text-[12px]">
-                                                        {config?.secondaryProductCategories?.map((c: string) => (
-                                                            <SelectItem key={c} value={c}>{c}</SelectItem>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            className={`${inputClasses} flex justify-between items-center font-normal px-3 hover:bg-white`}
+                                                        >
+                                                            <span className="truncate max-w-[150px]">
+                                                                {formData.secondaryProductCategories.length === 0
+                                                                    ? "Select Categories"
+                                                                    : formData.secondaryProductCategories.join(", ")
+                                                                }
+                                                            </span>
+                                                            <div className="flex items-center gap-1">
+                                                                {formData.secondaryProductCategories.length > 0 && (
+                                                                    <Badge variant="secondary" className="h-4 px-1 text-[10px] bg-emerald-100 text-emerald-700">
+                                                                        {formData.secondaryProductCategories.length}
+                                                                    </Badge>
+                                                                )}
+                                                                <ChevronDown className="h-4 w-4 opacity-50" />
+                                                            </div>
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent className="w-[200px] bg-white font-sans text-[12px] max-h-[300px] overflow-y-auto" align="start">
+                                                        {(config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']).map((cat: string) => (
+                                                            <DropdownMenuCheckboxItem
+                                                                key={cat}
+                                                                checked={formData.secondaryProductCategories.includes(cat)}
+                                                                onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', cat, !!checked)}
+                                                                onSelect={(e) => e.preventDefault()}
+                                                                className="text-[12px] focus:bg-emerald-50 focus:text-emerald-900"
+                                                            >
+                                                                {cat}
+                                                            </DropdownMenuCheckboxItem>
                                                         ))}
-                                                    </SelectContent>
-                                                </Select>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </div>
-                                            <div><Label className={labelClasses}>Estimated Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /><div className="h-3" /></div>
-                                            <div><Label className={labelClasses}>Budget Range</Label><Select value={formData.budgetRange} onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.budgetRanges?.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select><div className="h-3" /></div>
+                                            <div><Label className={labelClasses}>Interested in Importing Products?</Label><Select value={formData.interestedInImporting} onValueChange={(v) => handleSelectChange('interestedInImporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Interested in Export Partnerships?</Label><Select value={formData.interestedInExporting} onValueChange={(v) => handleSelectChange('interestedInExporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Estimated Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Budget Range</Label><Select value={formData.budgetRange} onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.budgetRanges?.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select></div>
                                         </div>
                                         <div className="mt-1">
                                             <Label className={labelClasses}>Specific Product Requirements</Label>
@@ -971,13 +1081,13 @@ const BuyerRegistration = () => {
 
                                     {/* 5. Supplier Preference */}
                                     <div className="space-y-2">
-                                        <h3 className={sectionTitleClasses}> Supplier Preference (India Only)</h3>
-                                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <h3 className={sectionTitleClasses}> Supplier Preference</h3>
+                                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Preferred Supplier Region *</Label>
                                                 <div className={`p-2 border rounded-lg bg-white ${errors.preferredSupplierRegion ? 'border-red-400' : 'border-slate-400'}`}>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {['North India', 'South India', 'East India', 'West India', 'Pan India'].map((r: string) => (
+                                                        {(config?.regions || ['North India', 'South India', 'East India', 'West India', 'Pan India', 'Global']).map((r: string) => (
                                                             <label key={r} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-[2px] cursor-pointer hover:border-emerald-500`}>
                                                                 <Checkbox checked={formData.preferredSupplierRegion.includes(r)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}
                                                             </label>
@@ -990,7 +1100,7 @@ const BuyerRegistration = () => {
                                                 <Label className={labelClasses}>Preferred Supplier Type *</Label>
                                                 <div className={`p-2 border rounded-lg bg-white ${errors.preferredSupplierType ? 'border-red-400' : 'border-slate-400'}`}>
                                                     <div className="flex flex-wrap gap-2">
-                                                        {['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler'].map((t: string) => (
+                                                        {(config?.supplierTypes || ['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler']).map((t: string) => (
                                                             <label key={t} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-[2px] cursor-pointer hover:border-emerald-500`}>
                                                                 <Checkbox checked={formData.preferredSupplierType.includes(t)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}
                                                             </label>
@@ -1005,7 +1115,7 @@ const BuyerRegistration = () => {
                                                     <SelectTrigger className={inputClasses}>
                                                         <SelectValue placeholder="Select State" />
                                                     </SelectTrigger>
-                                                    <SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">
+                                                    <SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">
                                                         {states.map(s => (
                                                             <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>
                                                         ))}
@@ -1020,11 +1130,11 @@ const BuyerRegistration = () => {
                                     <div className="space-y-2 ">
                                         <h3 className={sectionTitleClasses}> Purchase Intent & Capacity</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select value={formData.buyingFrequency} onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={`${inputClasses} ${errors.buyingFrequency ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['One-time', 'Monthly', 'Quarterly', 'Long-term'].map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyingFrequency" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Input name="estimatedAnnualPurchaseValue" value={formData.estimatedAnnualPurchaseValue} onChange={handleChange} placeholder="e.g. 50-100 Lakhs" className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`} /><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Immediate', '1–3 Months', '3–6 Months', 'Exploring'].map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select value={formData.buyingFrequency} onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={`${inputClasses} ${errors.buyingFrequency ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.buyingFrequencies || ['One-time', 'Monthly', 'Quarterly', 'Long-term']).map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyingFrequency" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{['Final Decision Maker', 'Influencer', 'Research Only'].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
                                         </div>
                                     </div>
 
@@ -1033,7 +1143,7 @@ const BuyerRegistration = () => {
                                         <div className="space-y-2">
                                             <h3 className={sectionTitleClasses}> Certification & Compliance</h3>
                                             <div className="flex flex-wrap gap-2 p-2 border rounded-lg bg-white">
-                                                {['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others'].map((c: string) => (
+                                                {(config?.certificationOptions || ['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others']).map((c: string) => (
                                                     <label key={c} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 px-2 py-0.5 rounded border border-slate-400 cursor-pointer hover:bg-emerald-50`}>
                                                         <Checkbox checked={formData.requiredCertifications.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('requiredCertifications', c, !!checked)} className="h-3 w-3" /> {c}
                                                     </label>
