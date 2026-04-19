@@ -1,12 +1,20 @@
-import React, { useRef, useState } from 'react';
-import { Download, Printer } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Download, Printer, Save, Loader2 } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
+import { psmClaimApi } from '@/services/psmClaimApi';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
-const Undertaking: React.FC = () => {
+interface Props { reportId?: string; }
+
+const Undertaking: React.FC<Props> = ({ reportId }) => {
+    const navigate = useNavigate();
     const { data: ctxData } = useExhibitorCtx() || {};
     const componentRef = useRef<HTMLDivElement>(null);
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(!!reportId);
 
     const [formData, setFormData] = useState({
         name: ctxData?.contactName || '',
@@ -26,6 +34,43 @@ const Undertaking: React.FC = () => {
         finYear: '2025-26',
         signatoryName: ctxData?.contactName || ''
     });
+
+    useEffect(() => {
+        if (reportId) {
+            const loadData = async () => {
+                try {
+                    const res = await psmClaimApi.getReportById('undertaking', reportId);
+                    if (res.success) {
+                        setFormData(res.data);
+                    }
+                } catch (error) {
+                    toast.error('Failed to load report data');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            loadData();
+        }
+    }, [reportId]);
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await psmClaimApi.saveReport('undertaking', {
+                ...formData,
+                id: reportId,
+                exhibitorId: ctxData?._id
+            });
+            if (res.success) {
+                toast.success(reportId ? 'Report updated' : 'Report saved');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+            }
+        } catch (error) {
+            toast.error('Failed to save report');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handlePrint = () => {
         window.print();
@@ -74,6 +119,14 @@ const Undertaking: React.FC = () => {
                     <p className="text-sm text-slate-500">Official Undertaking for PMS Scheme Reimbursement</p>
                 </div>
                 <div className="flex gap-3">
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {reportId ? 'Update Report' : 'Save Report'}
+                    </button>
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
@@ -147,9 +200,6 @@ const Undertaking: React.FC = () => {
                             <p>( <input type="text" value={formData.signatoryName} onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent text-center font-bold" /> )</p>
                             <p className="font-bold mt-1">Signature</p>
                             <p className="font-bold">Proprietor/ Partner/ Director</p>
-                        </div>
-
-                        <div className="pt-6 w-full flex justify-end pr-12">
                             <p className="font-bold italic">With Office seal</p>
                         </div>
                     </div>
@@ -161,74 +211,57 @@ const Undertaking: React.FC = () => {
                 @media print {
                     @page {
                         size: A4;
-                        margin: 0;
+                        margin: 0mm; /* Removes browser headers/footers */
                     }
                     * {
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
-                    html, body {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        background: white !important;
-                        height: 100% !important;
-                        overflow: hidden !important; /* Prevents blank second page */
-                    }
-                    /* Remove any potential scrollbars */
-                    ::-webkit-scrollbar {
-                        display: none !important;
-                    }
                     
-                    /* HIDE EVERYTHING */
-                    #root > *, 
-                    header, footer, nav, aside, 
-                    .no-print, button, .fixed, 
-                    img, [role="navigation"],
-                    [class*="Navbar"], [class*="Sidebar"],
-                    [class*="Layout"] > div:first-child {
+                    /* Hide non-essential layout elements */
+                    header, nav, aside, footer, 
+                    .no-print, .action-bar, .sidebar, .sidebar-overlay,
+                    [role="navigation"], button, 
+                    .SocialSidebar, .AdminWhatsAppFloat,
+                    [class*="ExhibitorNavbar"], [class*="ExhibitorSidebar"],
+                    [class*="SocialSidebar"], [class*="AdminWhatsAppFloat"] {
                         display: none !important;
                         height: 0 !important;
                         visibility: hidden !important;
                     }
-                    
-                    /* Force target only the form to be visible and reset layout */
-                    #root, #root > div, [class*="Layout"], main, main > div, #printable-form {
+
+                    /* Reset body and root for clean print */
+                    html, body, #root, #root > div, [class*="Layout"], main, main > div {
                         display: block !important;
                         visibility: visible !important;
                         margin: 0 !important;
                         padding: 0 !important;
-                        border: none !important;
                         width: 100% !important;
                         height: auto !important;
-                        position: static !important;
                         overflow: visible !important;
                         background: transparent !important;
-                        background-color: transparent !important;
                         box-shadow: none !important;
-                        flex: none !important;
-                        min-height: 0 !important;
-                        transform: none !important;
                     }
 
                     #printable-form {
+                        display: block !important;
+                        visibility: visible !important;
                         width: 100% !important;
-                        max-width: 210mm !important;
-                        margin: 0 auto !important;
-                        padding: 12mm 18mm !important;
+                        max-width: none !important;
+                        margin: 0 !important;
+                        padding: 15mm 20mm !important; /* Internal padding simulates page margins */
+                        box-shadow: none !important;
+                        word-break: break-word !important;
+                        zoom: 1;
+                        min-height: 297mm;
                         background: white !important;
-                        z-index: 99999 !important;
-                        box-sizing: border-box !important;
-                        position: relative !important;
-                        page-break-inside: avoid;
                     }
-
+                    
                     table, th, td, div, p, span {
                         border-color: black !important;
                         color: black !important;
                     }
-                    input::placeholder {
-                        color: transparent !important;
-                    }
+                    
                     input, textarea, select {
                         border-bottom: black solid 1px !important;
                         border-top: none !important;

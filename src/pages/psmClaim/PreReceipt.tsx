@@ -1,13 +1,20 @@
-import React, { useRef, useState } from 'react';
-import { Download, Printer } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Download, Printer, Save, Loader2 } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
 import { toast } from 'sonner';
+import { psmClaimApi } from '@/services/psmClaimApi';
+import { useNavigate } from 'react-router-dom';
 
-const PreReceipt: React.FC = () => {
+interface Props { reportId?: string; }
+
+const PreReceipt: React.FC<Props> = ({ reportId }) => {
+    const navigate = useNavigate();
     const { data: ctxData } = useExhibitorCtx() || {};
     const componentRef = useRef<HTMLDivElement>(null);
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(!!reportId);
 
     const [formData, setFormData] = useState({
         amount: '',
@@ -20,6 +27,43 @@ const PreReceipt: React.FC = () => {
         designation: 'Proprietor',
         date: new Date().toLocaleDateString('en-GB')
     });
+
+    useEffect(() => {
+        if (reportId) {
+            const loadData = async () => {
+                try {
+                    const res = await psmClaimApi.getReportById('pre-receipt', reportId);
+                    if (res.success) {
+                        setFormData(res.data);
+                    }
+                } catch (error) {
+                    toast.error('Failed to load report data');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            loadData();
+        }
+    }, [reportId]);
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await psmClaimApi.saveReport('pre-receipt', {
+                ...formData,
+                id: reportId,
+                exhibitorId: ctxData?._id
+            });
+            if (res.success) {
+                toast.success(reportId ? 'Report updated' : 'Report saved');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+            }
+        } catch (error) {
+            toast.error('Failed to save report');
+        } finally {
+            setSaving(false);
+        }
+    };
 
 
     const handlePrint = () => {
@@ -70,6 +114,14 @@ const PreReceipt: React.FC = () => {
                 </div>
                 <div className="flex gap-3">
                     <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {reportId ? 'Update Report' : 'Save Report'}
+                    </button>
+                    <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
                     >
@@ -91,19 +143,19 @@ const PreReceipt: React.FC = () => {
                 <div
                     id="printable-form"
                     ref={componentRef}
-                    className="bg-white p-[25mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[16px] leading-[1.8] relative overflow-hidden"
+                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[16px] leading-[1.8] relative overflow-hidden"
                     style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
                 >
                     <div className="text-right mb-4">
                         <span className="font-bold underline text-[18px]">Annexure</span>
                     </div>
 
-                    <div className="text-center mb-12">
+                    <div className="text-center mb-6">
                         <h1 className="text-[20px] font-bold underline">PRE- RECEIPT</h1>
-                        <p className="font-bold text-[15px] mt-4 uppercase">(TO BE SUBMITTED ON THE LETTER HEAD OF THE COMPANY)</p>
+                        <p className="font-bold text-[15px] mt-2 uppercase">(TO BE SUBMITTED ON THE LETTER HEAD OF THE COMPANY)</p>
                     </div>
 
-                    <div className="space-y-6 text-justify mt-10 text-[16px]">
+                    <div className="space-y-4 text-justify mt-4 text-[16px]">
                         <div className="flex items-end gap-x-2">
                             <span>Received a sum of Rs.</span>
                             <input
@@ -160,7 +212,7 @@ const PreReceipt: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="mt-12 flex flex-col items-end">
+                    <div className="mt-4 flex flex-col items-end">
                         <div className="border border-black w-28 h-36 flex items-center justify-center p-2 text-center text-[11px] leading-tight mb-4">
                             Affix the Revenue stamp
                         </div>
@@ -190,7 +242,7 @@ const PreReceipt: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="mt-16">
+                    <div className="mt-6">
                         <p className="font-bold text-[15px]">(<span className="underline">Note</span>: To be submitted in Triplicate)</p>
                     </div>
                 </div>
@@ -201,47 +253,52 @@ const PreReceipt: React.FC = () => {
                 @media print {
                     @page {
                         size: A4;
-                        margin: 0;
+                        margin: 0mm; /* Removes browser headers/footers */
                     }
                     * {
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
-                    html, body {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        background: white !important;
-                        height: 100% !important;
-                        overflow: visible !important;
-                    }
-                    /* Hide non-printable elements */
-                    #root > *:not(main), 
-                    header, footer, nav, aside, 
-                    .no-print, button, 
-                    [class*="Navbar"], [class*="Sidebar"] {
-                        display: none !important;
-                    }
                     
-                    #root, #root > div, main, main > div, #printable-form {
+                    /* Hide non-essential layout elements */
+                    header, nav, aside, footer, 
+                    .no-print, .action-bar, .sidebar, .sidebar-overlay,
+                    [role="navigation"], button, 
+                    .SocialSidebar, .AdminWhatsAppFloat,
+                    [class*="ExhibitorNavbar"], [class*="ExhibitorSidebar"],
+                    [class*="SocialSidebar"], [class*="AdminWhatsAppFloat"] {
+                        display: none !important;
+                        height: 0 !important;
+                        visibility: hidden !important;
+                    }
+
+                    /* Reset body and root for clean print */
+                    html, body, #root, #root > div, [class*="Layout"], main, main > div {
                         display: block !important;
                         visibility: visible !important;
                         margin: 0 !important;
                         padding: 0 !important;
-                        border: none !important;
                         width: 100% !important;
                         height: auto !important;
-                        position: static !important;
-                        background: white !important;
+                        overflow: visible !important;
+                        background: transparent !important;
                         box-shadow: none !important;
                     }
-                    
-                    #printable-form {
-                        padding: 40mm 20mm 20mm 20mm !important; /* Top margin for letterhead */
-                        width: 210mm !important;
-                        min-height: 297mm !important;
-                        box-sizing: border-box !important;
-                    }
 
+                    #printable-form {
+                        display: block !important;
+                        visibility: visible !important;
+                        width: 100% !important;
+                        max-width: none !important;
+                        margin: 0 !important;
+                        padding: 30mm 20mm 15mm 20mm !important; /* Top margin for letterhead */
+                        box-shadow: none !important;
+                        word-break: break-word !important;
+                        zoom: 1;
+                        min-height: 297mm;
+                        background: white !important;
+                    }
+                    
                     input {
                         border-bottom: 1px solid black !important;
                         background: transparent !important;

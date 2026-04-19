@@ -52,6 +52,8 @@ const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
 const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
 const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
+const PsmReports = lazy(() => import("./pages/psmClaim/PsmReports"));
+const PsmReportsTable = lazy(() => import("./pages/psmClaim/PsmReportsTable"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -130,12 +132,11 @@ const App = () => {
                   <Route path="msme" element={<ExhibitorMSMEPage />} />
                   <Route path="psm-claim">
                     <Route index element={<ExhibitorMSMEPage />} />
-                    <Route path="annexure-c" element={<AnnexureC />} />
-                    <Route path="annexure-d" element={<AnnexureD />} />
-                    <Route path="declaration" element={<Declaration />} />
-                    <Route path="feedback-report" element={<FeedbackReport />} />
-                    <Route path="undertaking" element={<Undertaking />} />
-                    <Route path="pre-receipt" element={<PreReceipt />} />
+                    <Route path="reports" element={<PsmReports />} />
+                    <Route path="reports/:type" element={<PsmReports />} />
+                    <Route path="reports/:type/:id" element={<PsmReports />} />
+                    <Route path="reports-table" element={<PsmReportsTable />} />
+                    <Route path="reports-table/:type" element={<PsmReportsTable />} />
                   </Route>
                   <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                   <Route path="documentation" element={<ExhibitorDocumentsPage />} />

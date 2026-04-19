@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Printer, Download } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 const ParticipantsFeedback = () => {
+    const [formData, setFormData] = useState({});
+
+    const handleInputChange = (key, value) => {
+        setFormData(prev => ({ ...prev, [key]: value }));
+    };
 
     const handlePrint = () => {
         document.title = "Participants_Feedback_Report";
@@ -125,9 +130,29 @@ const ParticipantsFeedback = () => {
                                     <td className="border border-black px-2 py-2 w-[40%] align-top leading-snug">{row.label}</td>
                                     <td className="border border-black px-2 py-2 w-[55%] align-top">
                                         {row.type === "textarea" ? (
-                                            <textarea className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:resize-none" rows={row.rows}></textarea>
+                                            <>
+                                                <textarea 
+                                                    className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:hidden overflow-hidden" 
+                                                    rows={row.rows}
+                                                    value={formData[row.no] || ''}
+                                                    onChange={(e) => handleInputChange(row.no, e.target.value)}
+                                                    onInput={(e) => {
+                                                        e.target.style.height = 'auto';
+                                                        e.target.style.height = e.target.scrollHeight + 'px';
+                                                    }}
+                                                ></textarea>
+                                                <div className="hidden print:block whitespace-pre-wrap break-words">{formData[row.no] || ''}</div>
+                                            </>
                                         ) : (
-                                            <input type="text" className="w-full min-h-[1.5rem] outline-none bg-transparent" />
+                                            <>
+                                                <input 
+                                                    type="text" 
+                                                    className="w-full min-h-[1.5rem] outline-none bg-transparent print:hidden" 
+                                                    value={formData[row.no] || ''}
+                                                    onChange={(e) => handleInputChange(row.no, e.target.value)}
+                                                />
+                                                <div className="hidden print:block whitespace-pre-wrap break-words">{formData[row.no] || ''}</div>
+                                            </>
                                         )}
                                     </td>
                                 </tr>
@@ -141,7 +166,17 @@ const ParticipantsFeedback = () => {
                                     <span className="font-bold block">[about 200 words along with photographs of event]</span>
                                 </td>
                                 <td className="border border-black px-2 py-3 w-[55%] align-top">
-                                    <textarea className="w-full min-h-[5rem] outline-none bg-transparent resize-none print:resize-none" rows={4}></textarea>
+                                    <textarea 
+                                        className="w-full min-h-[5rem] outline-none bg-transparent resize-none print:hidden overflow-hidden" 
+                                        rows={4}
+                                        value={formData["8"] || ''}
+                                        onChange={(e) => handleInputChange("8", e.target.value)}
+                                        onInput={(e) => {
+                                            e.target.style.height = 'auto';
+                                            e.target.style.height = e.target.scrollHeight + 'px';
+                                        }}
+                                    ></textarea>
+                                    <div className="hidden print:block whitespace-pre-wrap break-words">{formData["8"] || ''}</div>
                                 </td>
                             </tr>
 
@@ -158,9 +193,29 @@ const ParticipantsFeedback = () => {
                                     <td className="border border-black px-2 py-3 w-[40%] align-top font-bold leading-snug">{row.label}</td>
                                     <td className="border border-black px-2 py-3 w-[55%] align-top">
                                         {row.type === "textarea" ? (
-                                            <textarea className="w-full min-h-[4rem] outline-none bg-transparent resize-none print:resize-none" rows={row.rows}></textarea>
+                                            <>
+                                                <textarea 
+                                                    className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:hidden overflow-hidden" 
+                                                    rows={row.rows}
+                                                    value={formData[row.no] || ''}
+                                                    onChange={(e) => handleInputChange(row.no, e.target.value)}
+                                                    onInput={(e) => {
+                                                        e.target.style.height = 'auto';
+                                                        e.target.style.height = e.target.scrollHeight + 'px';
+                                                    }}
+                                                ></textarea>
+                                                <div className="hidden print:block whitespace-pre-wrap break-words">{formData[row.no] || ''}</div>
+                                            </>
                                         ) : (
-                                            <input type="text" className="w-full min-h-[1.5rem] outline-none bg-transparent" />
+                                            <>
+                                                <input 
+                                                    type="text" 
+                                                    className="w-full min-h-[1.5rem] outline-none bg-transparent print:hidden" 
+                                                    value={formData[row.no] || ''}
+                                                    onChange={(e) => handleInputChange(row.no, e.target.value)}
+                                                />
+                                                <div className="hidden print:block whitespace-pre-wrap break-words">{formData[row.no] || ''}</div>
+                                            </>
                                         )}
                                     </td>
                                 </tr>

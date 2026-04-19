@@ -1,24 +1,66 @@
 import React, { useRef } from 'react';
-import { Download, Printer } from 'lucide-react';
+import { Download, Printer, Save, Loader2 } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
+import { psmClaimApi } from '@/services/psmClaimApi';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface DeclarationProps {
-    data?: any;
+    reportId?: string;
 }
 
-const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
+const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
+    const navigate = useNavigate();
     const { data: ctxData } = useExhibitorCtx() || {};
-    const data = propData || ctxData;
     const componentRef = useRef<HTMLDivElement>(null);
+    const [saving, setSaving] = React.useState(false);
+    const [loading, setLoading] = React.useState(!!reportId);
 
     const [formData, setFormData] = React.useState({
-        name: data?.contactName || '',
+        name: ctxData?.contactName || '',
         designation: '',
         date: new Date().toLocaleDateString('en-GB'),
         place: ''
     });
+
+    React.useEffect(() => {
+        if (reportId) {
+            const loadData = async () => {
+                try {
+                    const res = await psmClaimApi.getReportById('declaration', reportId);
+                    if (res.success) {
+                        setFormData(res.data);
+                    }
+                } catch (error) {
+                    toast.error('Failed to load report data');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            loadData();
+        }
+    }, [reportId]);
+
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await psmClaimApi.saveReport('declaration', {
+                ...formData,
+                id: reportId,
+                exhibitorId: ctxData?._id
+            });
+            if (res.success) {
+                toast.success(reportId ? 'Report updated' : 'Report saved');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+            }
+        } catch (error) {
+            toast.error('Failed to save report');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handlePrint = () => {
         window.print();
@@ -51,7 +93,7 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
             pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`Declaration_${data?.companyName || 'Document'}.pdf`);
+            pdf.save(`Declaration_${ctxData?.companyName || 'Document'}.pdf`);
         } catch (error) {
             console.error('Error generating PDF:', error);
             alert('Failed to generate PDF. Please try the Print option instead.');
@@ -59,7 +101,7 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
     };
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto">
+        <div className="flex flex-col p-4 max-w-5xl mx-auto">
             {/* Header / Actions */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
                 <div>
@@ -67,6 +109,14 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                     <p className="text-sm text-slate-500">Review and print the declaration for PSM Claim</p>
                 </div>
                 <div className="flex gap-3">
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {reportId ? 'Update Report' : 'Save Report'}
+                    </button>
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
@@ -205,69 +255,57 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                         margin: 0 !important;
                         padding: 0 !important;
                         background: white !important;
-                        height: 100% !important;
-                        overflow: hidden !important; /* Prevents blank second page */
-                    }
-                    /* Remove any potential scrollbars */
-                    ::-webkit-scrollbar {
-                        display: none !important;
-                    }
                     
-                    /* HIDE EVERYTHING */
-                    #root > *, 
-                    header, footer, nav, aside, 
-                    .no-print, button, .fixed, 
-                    img, [role="navigation"],
-                    [class*="Navbar"], [class*="Sidebar"],
-                    [class*="Layout"] > div:first-child {
+                    /* Hide non-essential layout elements */
+                    header, nav, aside, footer, 
+                    .no-print, .action-bar, .sidebar, .sidebar-overlay,
+                    [role="navigation"], button, 
+                    .SocialSidebar, .AdminWhatsAppFloat,
+                    [class*="ExhibitorNavbar"], [class*="ExhibitorSidebar"],
+                    [class*="SocialSidebar"], [class*="AdminWhatsAppFloat"] {
                         display: none !important;
                         height: 0 !important;
                         visibility: hidden !important;
                     }
-                    
-                    /* Force target only the form to be visible and reset layout */
-                    #root, #root > div, [class*="Layout"], main, main > div, #printable-form {
+
+                    /* Reset body and root for clean print */
+                    html, body, #root, #root > div, [class*="Layout"], main, main > div {
                         display: block !important;
                         visibility: visible !important;
                         margin: 0 !important;
                         padding: 0 !important;
-                        border: none !important;
                         width: 100% !important;
                         height: auto !important;
-                        position: static !important;
                         overflow: visible !important;
                         background: transparent !important;
-                        background-color: transparent !important;
                         box-shadow: none !important;
-                        flex: none !important;
-                        min-height: 0 !important;
-                        transform: none !important;
                     }
 
                     #printable-form {
+                        display: block !important;
+                        visibility: visible !important;
                         width: 100% !important;
-                        max-width: 210mm !important;
-                        margin: 0 auto !important;
-                        padding: 12mm 18mm !important;
+                        max-width: none !important;
+                        margin: 0 !important;
+                        padding: 15mm 20mm !important; /* Internal padding simulates page margins */
+                        box-shadow: none !important;
+                        word-break: break-word !important;
+                        zoom: 1;
+                        min-height: 297mm;
                         background: white !important;
-                        z-index: 99999 !important;
-                        box-sizing: border-box !important;
-                        position: relative !important;
-                        page-break-inside: avoid;
                     }
                     
                     table, th, td, div, p, span {
                         border-color: black !important;
                         color: black !important;
                     }
-                    input::placeholder {
-                        color: transparent !important;
-                    }
+
                     input {
                         border-bottom: black solid 1px !important;
                         border-top: none !important;
                         border-left: none !important;
                         border-right: none !important;
+                        background: transparent !important;
                     }
                 }
             `}} />
