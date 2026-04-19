@@ -7,9 +7,10 @@ import { heroApi, SERVER_URL } from "@/lib/api";
 
 interface HeroSectionProps {
   onRegisterVisit: () => void;
+  forceNewTab?: boolean;
 }
 
-const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
+const HeroSection = ({ onRegisterVisit, forceNewTab }: HeroSectionProps) => {
   const [slides, setSlides] = useState<any[]>([]);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -238,6 +239,8 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
                   ) : (
                     <Link
                       to={slides[current].button1Url}
+                      target={forceNewTab ? "_blank" : undefined}
+                      rel={forceNewTab ? "noopener noreferrer" : undefined}
                       className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                     >
                       <span className="relative z-10 flex items-center gap-2">
@@ -279,6 +282,8 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
                 ) : (
                   <Link
                     to={slides[current].button3Url || "/conference"}
+                    target={forceNewTab ? "_blank" : undefined}
+                    rel={forceNewTab ? "noopener noreferrer" : undefined}
                     className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
@@ -307,6 +312,8 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
                 ) : (
                   <Link
                     to={slides[current].button2Url || "/book-a-stand"}
+                    target={forceNewTab ? "_blank" : undefined}
+                    rel={forceNewTab ? "noopener noreferrer" : undefined}
                     className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
