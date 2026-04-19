@@ -149,8 +149,8 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                 <div
                     id="printable-form"
                     ref={componentRef}
-                    className="bg-white p-[25mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[15px] leading-[1.8] relative overflow-hidden"
-                    style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+                     className="bg-white p-[25mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[15px] leading-[1.8] relative overflow-hidden"
+                    style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     <div className="text-center mb-12">
                         <h1 className="text-[18px] font-bold uppercase underline">UNDERTAKING</h1>
@@ -166,17 +166,17 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                                 <option value="Partner">Partner</option>
                                 <option value="Director">Director</option>
                             </select> of M/s
-                            <input type="text" value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} className="border-b border-black outline-none px-1 w-full mt-2 bg-transparent font-bold" />
+                            <input type="text" value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} className="border-b border-black outline-none px-1 w-[400px] bg-transparent font-bold mx-1" />
                             bearing Udyog Aadhaar Memorandum (UAM)/ Udyam Registration (UR) No.
-                            <input type="text" value={formData.udyamNumber} onChange={(e) => setFormData({ ...formData, udyamNumber: e.target.value })} className="border-b border-black outline-none px-1 w-80 bg-transparent font-bold" />
+                            <input type="text" value={formData.udyamNumber} onChange={(e) => setFormData({ ...formData, udyamNumber: e.target.value })} className="border-b border-black outline-none px-1 w-80 bg-transparent font-bold mt-1" />
                             located at Registered Office address of the unit/ enterprise:
-                            <textarea value={formData.officeAddress} onChange={(e) => setFormData({ ...formData, officeAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em]" rows={1} />,
+                            <textarea value={formData.officeAddress} onChange={(e) => setFormData({ ...formData, officeAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />,
                             Factory address of the unit/ enterprise:
-                            <textarea value={formData.factoryAddress} onChange={(e) => setFormData({ ...formData, factoryAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em]" rows={1} />
+                            <textarea value={formData.factoryAddress} onChange={(e) => setFormData({ ...formData, factoryAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />
                             engaged in the manufacturing activity of
-                            <input type="text" value={formData.manufacturingActivity} onChange={(e) => setFormData({ ...formData, manufacturingActivity: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold" />
+                            <input type="text" value={formData.manufacturingActivity} onChange={(e) => setFormData({ ...formData, manufacturingActivity: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold mt-1" />
                             do hereby confirm that the information given by me is correct and accurate. M/s
-                            <span className="font-bold underline px-1">{formData.companyName}</span> is eligible for reimbursement as per the Procurement & Marketing Support (PMS) Scheme guidelines. In case if, any information given above is found incorrect/ ineligible, then, I shall be liable to return the entire amount of reimbursement alongwith the prevailing rate of interest to the Government of India.
+                            <span className="font-bold underline px-1 whitespace-nowrap">{formData.companyName}</span> is eligible for reimbursement as per the Procurement & Marketing Support (PMS) Scheme guidelines. In case if, any information given above is found incorrect/ ineligible, then, I shall be liable to return the entire amount of reimbursement alongwith the prevailing rate of interest to the Government of India.
                         </p>
 
                         <p>

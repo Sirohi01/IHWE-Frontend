@@ -134,11 +134,10 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
         { id: 10, label: 'Number and value (in INR) of export inquiries generated in the event', value: formData.exportInquiries, key: 'exportInquiries' },
         { id: 11, label: 'Details of business finalized / orders booked in the event.', value: formData.businessFinalized, key: 'businessFinalized' },
         { id: 12, label: 'Other achievements such as joint ventures, technology transfer agreements, etc. (give details)', value: formData.otherAchievements, key: 'otherAchievements' },
-        { id: 13, label: 'Would you like to participate again in the event? If yes, reason for the same.', value: formData.participateAgain, key: 'participateAgain' },
     ];
 
     return (
-        <div className="flex flex-col p-4 max-w-5xl mx-auto">
+        <div className="flex flex-col p-4 max-w-5xl mx-auto" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
             {/* Header / Actions */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
                 <div>
@@ -177,7 +176,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                     id="printable-form"
                     ref={componentRef}
                     className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12px] leading-tight relative overflow-hidden"
-                    style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+                    style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     <div className="text-center mb-6">
                         <h1 className="text-[16px] font-bold uppercase underline">PARTICIPANTS FEEDBACK REPORT</h1>

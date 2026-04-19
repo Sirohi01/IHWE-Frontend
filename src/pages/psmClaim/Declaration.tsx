@@ -101,7 +101,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
     };
 
     return (
-        <div className="flex flex-col p-4 max-w-5xl mx-auto">
+        <div className="flex flex-col p-4 max-w-5xl mx-auto" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
             {/* Header / Actions */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
                 <div>
@@ -140,7 +140,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                     id="printable-form"
                     ref={componentRef}
                     className="bg-white p-[20mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-relaxed relative overflow-hidden"
-                    style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+                    style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     {/* Header Decoration */}
 

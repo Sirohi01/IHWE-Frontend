@@ -22,7 +22,7 @@ const AnnexureD = () => {
     };
 
     return (
-        <div id="printable-annexure-d" className="min-h-screen bg-gray-100 py-2 print:py-0 print:bg-white text-black font-serif">
+        <div id="printable-annexure-d" className="min-h-screen bg-gray-100 py-2 print:py-0 print:bg-white text-black" style={{ fontFamily: "'Inter', sans-serif" }}>
             <style>
                 {`
                 @media print {

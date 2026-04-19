@@ -129,15 +129,15 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
         { id: 10, text: "Original Pre-Receipt (signed & stamped) (In triplicate)", pg: "" },
         {
             id: 11, text: "Details of Agency creation for PFMS", pg: "", subItems: [
-                "(i) Name of the unit/ enterprise, complete postal address of unit/ enterprise with e-mail & mobile number (as given in Udyam Regn Certificate).",
-                "(ii) Name of the Director(s)/ Proprietor/ Partner(s)",
-                "(iii) Date of Birth (dd/mm/yyyy)",
-                "(iv) Gender (Male/ Female/ Transgender)",
-                "(v) Aadhaar Card Details (Director(s)/ Proprietor/ Partners)",
-                "(vi) Udyam Registration Certificate details.",
-                "(vii) GST Number (enclose a copy of certificate issued by an Appropriate Authority)",
-                "(viii) Bank details (Bank Account Number, Name of Bank, Branch name, IFSC, MICR of Branch).",
-                "(ix) Aadhaar linked Bank Account Number"
+                { left: "(i) Name of the unit/ enterprise, complete postal address of unit/ enterprise with e-mail & mobile number (as given in Udyam Regn Certificate).", right: "" },
+                { left: "(ii) Name of the Director(s)/ Proprietor/ Partner(s)", right: "" },
+                { left: "(iii) Date of Birth", right: "(dd/mm/yyyy)" },
+                { left: "(iv) Gender", right: "(Male/ Female/ Transgender)" },
+                { left: "(v) Aadhaar Card Details", right: "(Director(s)/ Proprietor/ Partners)" },
+                { left: "(vi) Udyam Registration Certificate details.", right: "" },
+                { left: "(vii) GST Number (enclose a copy of certificate issued by an Appropriate Authority)", right: "" },
+                { left: "(viii) Bank details (Bank Account Number, Name of Bank, Branch name, IFSC, MICR of Branch).", right: "" },
+                { left: "(ix) Aadhaar linked Bank Account Number", right: "" }
             ]
         },
         { id: 12, text: "Copy of Aadhaar Card(s) (Director(s)/ Proprietor/ Partners)", pg: "" },
@@ -146,7 +146,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
     ];
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto">
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
             {/* Header / Actions */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
                 <div className="space-y-1">
@@ -181,14 +181,14 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
             <div
                 id="printable-form"
                 ref={componentRef}
-                className="bg-white p-[20mm] shadow-2xl print:shadow-none print:p-0 mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-snug relative overflow-hidden"
-                style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+                className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-snug relative overflow-hidden"
+                style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
             >
                 {/* Header Decoration for Web View */}
 
-                <div className="text-center mb-6 mt-2">
-                    <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-2">ANNEXURE – C</h1>
-                    <h2 className="text-[15px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
+                <div className="text-center mb-3 mt-0">
+                    <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-1.5">ANNEXURE – C</h1>
+                    <h2 className="text-[14px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
                         Check-list for reimbursement of claims under Component 5(A) : PMS Scheme
                     </h2>
                 </div>
@@ -205,14 +205,17 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                             />
                         </div>
 
-                        <div className="leading-snug">
-                            <span className="font-bold uppercase text-[10px] print:text-black mr-2">The following documents/ information have been received for reimbursement under PMS Scheme from M/s:</span>
-                            <input
-                                type="text"
-                                value={formData.companyName}
-                                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                                className="border-b border-black inline-block min-w-[350px] px-1 font-medium bg-transparent outline-none"
-                            />
+                        <div className="flex flex-col gap-1">
+                            <span className="font-bold uppercase text-[10px] print:text-black">The following documents/ information have been received for reimbursement under PMS Scheme from:</span>
+                            <div className="flex items-end gap-2">
+                                <span className="font-bold text-[11px] shrink-0">M/s:</span>
+                                <input
+                                    type="text"
+                                    value={formData.companyName}
+                                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                                    className="border-b border-black flex-1 px-1 font-bold bg-transparent outline-none"
+                                />
+                            </div>
                         </div>
 
                         <div className="text-right italic font-bold text-[10px] print:text-black pr-4">
@@ -230,58 +233,67 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                             </div>
                         </div>
                     </div>
-
                     <table className="w-full border-collapse">
                         <thead>
-                            <tr className="font-bold bg-slate-50 print:bg-transparent">
-                                <th className="py-1.5 px-1 w-12 text-center">S. No.</th>
-                                <th className="py-1.5 px-3 text-left">Particulars</th>
-                                <th className="py-1.5 px-2 text-center w-36 text-[9px] uppercase">(Put '✓' or '×' in box)</th>
-                                <th className="py-1.5 px-2 text-center w-20 text-[9px] uppercase">Pg No.</th>
+                            <tr className="font-bold border-b border-black/80 bg-slate-100/50">
+                                <th className="py-1.5 px-1 w-12 text-center text-[10px]">S. No.</th>
+                                <th className="py-1.5 px-3 text-left text-[10px]">Particulars</th>
+                                <th className="py-1.5 px-1 text-center w-20 text-[8px] leading-tight flex-col items-center">
+                                    <div className="uppercase">(PUT '✓' OR 'x' IN BOX)</div>
+                                </th>
+                                <th className="py-1.5 px-1 text-center w-14 text-[9px] leading-tight font-bold">
+                                    PG NO.
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {checklistItems.map((item) => (
                                 <React.Fragment key={item.id}>
-                                    <tr className=" ">
-                                        <td className="py-1.5 px-1 text-center align-middle">{item.id}.</td>
-                                        <td className="py-1.5 px-3 align-middle font-medium">
+                                    <tr className="align-top">
+                                        <td className="py-2 px-1 text-center text-[10px]">{item.id}.</td>
+                                        <td className="py-2 px-3 font-medium text-[11px]">
                                             {item.id === 3 ? (
-                                                <div className="flex flex-wrap items-center gap-1">
-                                                    <span>Print out of Online Application Form No. : <strong>UAM/DTF/</strong></span>
+                                                <div className="flex items-center gap-1 whitespace-nowrap">
+                                                    <span className="shrink-0 text-[10.5px]">Print out of Online Application Form No. :</span>
+                                                    <span className="font-extrabold shrink-0 text-[10.5px]">UAM/DTF/</span>
                                                     <input
                                                         type="text"
                                                         value={formData.applicationNo}
                                                         onChange={(e) => setFormData({ ...formData, applicationNo: e.target.value })}
-                                                        className="border-b border-black px-1 bg-transparent outline-none w-24 font-bold"
+                                                        className="border-b border-black/40 px-1 bg-transparent outline-none flex-1 font-bold min-w-[30px] h-4 text-[10.5px]"
                                                     />
                                                 </div>
-                                            ) : item.text}
+                                            ) : (
+                                                <span className="leading-tight block">{item.text}</span>
+                                            )}
                                             {item.subItems && (
-                                                <ul className="mt-1 space-y-0.5 pl-2 text-[10px] font-normal leading-tight">
+                                                <ul className="mt-1 print:mt-0.5 space-y-1 print:space-y-0.5 pl-2 text-[10px] font-normal leading-tight">
                                                     {item.subItems.map((sub, idx) => (
-                                                        <li key={idx} className="flex gap-1">
-                                                            <span className="shrink-0">{sub.substring(0, sub.indexOf(')') + 1)}</span>
-                                                            <span className="text-justify">{sub.substring(sub.indexOf(')') + 2)}</span>
+                                                        <li key={idx} className="flex justify-between items-start gap-4">
+                                                            <div className="flex items-start flex-1 text-justify">
+                                                                <span className="shrink-0 font-bold w-6">{sub.left.split(' ')[0]}</span>
+                                                                <span className="flex-1">{sub.left.substring(sub.left.indexOf(' ') + 1)}</span>
+                                                            </div>
+                                                            {sub.right && <span className="shrink-0 italic opacity-80 text-[9px]">{sub.right}</span>}
                                                         </li>
                                                     ))}
                                                 </ul>
                                             )}
                                         </td>
-                                        <td className="py-1.5 px-2 text-center align-middle">
+                                        <td className="py-2 px-1 text-center">
                                             <div
                                                 onClick={() => updateCheck(item.id)}
-                                                className="w-4 h-4 border border-black mx-auto cursor-pointer flex items-center justify-center bg-transparent"
+                                                className="w-4 h-4 border border-black/40 mx-auto cursor-pointer flex items-center justify-center bg-transparent"
                                             >
-                                                {formData.checks[item.id] && <span className="text-black font-bold text-[10px]">✓</span>}
+                                                {formData.checks[item.id] && <span className="text-black font-bold text-[11px]">✓</span>}
                                             </div>
                                         </td>
-                                        <td className="py-1.5 px-2 text-center align-middle">
+                                        <td className="py-2 px-1 text-center">
                                             <input
                                                 type="text"
                                                 value={formData.pages[item.id] || ''}
                                                 onChange={(e) => updatePage(item.id, e.target.value)}
-                                                className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[10px]"
+                                                className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[11px]"
                                             />
                                         </td>
                                     </tr>
@@ -290,8 +302,8 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         </tbody>
                     </table>
 
-                    <div className="pt-4 space-y-8">
-                        <p className="text-[11px] print:text-[10px] leading-snug">
+                    <div className="pt-2 space-y-4">
+                        <p className="text-[10.5px] print:text-[10px] leading-snug">
                             Documents/ information checked and verified the claim of the aforementioned unit / enterprise is found in order and eligible for reimbursement as per PMS Scheme guidelines.
                         </p>
 
@@ -314,8 +326,6 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
 
@@ -366,11 +376,11 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         width: 100% !important;
                         max-width: none !important;
                         margin: 0 !important;
-                        padding: 15mm 20mm !important; /* Internal padding simulates page margins */
+                        padding: 10mm 15mm !important; /* Reduced padding to fit single page */
                         box-shadow: none !important;
                         word-break: break-word !important;
                         zoom: 1;
-                        min-height: 297mm;
+                        height: 297mm;
                         background: white !important;
                         position: relative !important;
                     }

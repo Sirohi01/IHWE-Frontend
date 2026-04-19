@@ -144,7 +144,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                     id="printable-form"
                     ref={componentRef}
                     className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[16px] leading-[1.8] relative overflow-hidden"
-                    style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
+                    style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     <div className="text-right mb-4">
                         <span className="font-bold underline text-[18px]">Annexure</span>
@@ -177,15 +177,15 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                             <span>Only)</span>
                         </div>
 
-                        <div className="leading-[2.0]">
-                            From the office of Development Commissioner (MSME), Govt. of India, Ministry of Micro, Small & Medium Enterprise (MSME) on account of financial assistance under component 5(I)(A): Participation of Individual MSE in Domestic Trade Fair/Exhibition
+                        <div className="leading-[2.0] flex flex-wrap items-end gap-x-1">
+                            From the office of Development Commissioner (MSME), Govt. of India, Ministry of Micro, Small & Medium Enterprise (MSME) on account of financial assistance under component 5(I)(A): Participation of Individual MSE in Domestic Trade Fair/Exhibition:
                             <input
                                 type="text"
                                 value={formData.fairName}
                                 onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
-                                className="border-b border-black outline-none px-1 w-full mt-2 bg-transparent font-bold"
+                                className="border-b border-black outline-none px-1 flex-1 min-w-[300px] bg-transparent font-bold"
                             />
-                            <div className="flex flex-wrap items-center mt-2 w-full">
+                            <div className="flex flex-wrap items-center w-full">
                                 (Name of Fair) from
                                 <input
                                     type="text"
@@ -205,12 +205,11 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                                     type="text"
                                     value={formData.venue}
                                     onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                                    className="border-b border-black outline-none px-1 w-44 bg-transparent font-bold mx-1"
+                                    className="border-b border-black outline-none px-1 flex-1 min-w-[200px] bg-transparent font-bold mx-1"
                                 />
                                 (Venue) under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
                             </div>
                         </div>
-                    </div>
 
                     <div className="mt-4 flex flex-col items-end">
                         <div className="border border-black w-28 h-36 flex items-center justify-center p-2 text-center text-[11px] leading-tight mb-4">
@@ -247,6 +246,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                     </div>
                 </div>
             </div>
+        </div>
 
             <style dangerouslySetInnerHTML={{
                 __html: `
