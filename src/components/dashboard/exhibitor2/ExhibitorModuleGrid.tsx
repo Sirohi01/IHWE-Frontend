@@ -112,6 +112,17 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: true,
             tab: 'documentation',
         },
+        {
+            id: 'msme',
+            label: 'Udyam Details',
+            desc: `Reg. No: ${data?.msme?.udhyamRegNo || 'Pending'}`,
+            icon: Sparkles,
+            accent: '#6366f1',
+            light: '#eef2ff',
+            badge: data?.msme?.udhyamRegNo ? 'Verified' : 'Update Required',
+            badgeOk: !!data?.msme?.udhyamRegNo,
+            tab: 'msme',
+        },
 
     ];
 
