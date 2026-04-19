@@ -29,10 +29,10 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ data: propData }) => {
 
     const handleDownload = async () => {
         if (!componentRef.current) return;
-        
+
         try {
-            const dataUrl = await toPng(componentRef.current, { 
-                quality: 1, 
+            const dataUrl = await toPng(componentRef.current, {
+                quality: 1,
                 pixelRatio: 3,
                 backgroundColor: '#ffffff',
                 style: {
@@ -42,17 +42,17 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ data: propData }) => {
                     borderRadius: '0'
                 }
             });
-            
+
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
                 format: 'a4'
             });
-            
+
             const imgProps = pdf.getImageProperties(dataUrl);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
+
             pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
             pdf.save(`AnnexureC_${data?.companyName || 'Document'}.pdf`);
         } catch (error) {
@@ -105,26 +105,26 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ data: propData }) => {
     ];
 
     return (
-        <div className="max-w-5xl mx-auto p-4 md:p-8 bg-slate-50 min-h-screen">
-            <div className="flex justify-between items-center mb-6 no-print">
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto">
+            {/* Header / Actions */}
+            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
                 <div className="space-y-1">
-                    <h2 className="text-2xl font-bold text-slate-800">Annexure C</h2>
+                    <h1 className="text-xl font-bold text-slate-800">Annexure C</h1>
                     <p className="text-sm text-slate-500">Check-list for reimbursement of claims under PMS Scheme</p>
                 </div>
                 <div className="flex gap-2">
                     <button
-                        onClick={handleDownload}
-                        className="flex items-center gap-2 bg-[#23471d] hover:bg-[#1a3515] text-white px-4 py-2 rounded-lg font-semibold transition-all shadow-md"
-                    >
-                        <Download size={18} />
-                        Download PDF
-                    </button>
-                    <button
                         onClick={handlePrint}
-                        className="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg font-semibold transition-all shadow-sm"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
                     >
                         <Printer size={18} />
-                        Print
+                        Print Document
+                    </button>
+                    <button
+                        onClick={handleDownload}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"                    >
+                        <Download size={18} />
+                        Download PDF
                     </button>
                 </div>
             </div>
@@ -136,7 +136,6 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ data: propData }) => {
                 style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
             >
                 {/* Header Decoration for Web View */}
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-[#23471d] no-print"></div>
 
                 <div className="text-center mb-6 mt-2">
                     <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-2">ANNEXURE – C</h1>

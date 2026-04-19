@@ -26,10 +26,10 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
 
     const handleDownload = async () => {
         if (!componentRef.current) return;
-        
+
         try {
-            const dataUrl = await toPng(componentRef.current, { 
-                quality: 1, 
+            const dataUrl = await toPng(componentRef.current, {
+                quality: 1,
                 pixelRatio: 3, // Higher resolution for professional print
                 backgroundColor: '#ffffff',
                 style: {
@@ -39,17 +39,17 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                     borderRadius: '0'
                 }
             });
-            
+
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'mm',
                 format: 'a4'
             });
-            
+
             const imgProps = pdf.getImageProperties(dataUrl);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
+
             pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
             pdf.save(`Declaration_${data?.companyName || 'Document'}.pdf`);
         } catch (error) {
@@ -85,15 +85,14 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
             </div>
 
             {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto bg-slate-100 p-2 sm:p-8 rounded-xl shadow-inner no-print">
-                <div 
+            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-8 rounded-xl">
+                <div
                     id="printable-form"
                     ref={componentRef}
                     className="bg-white p-[20mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-relaxed relative overflow-hidden"
                     style={{ fontFamily: "'Serif', 'Times New Roman', serif" }}
                 >
                     {/* Header Decoration */}
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-[#23471d] no-print"></div>
 
                     <div className="text-center mb-16 mt-8">
                         <h1 className="text-xl font-bold uppercase tracking-widest underline decoration-2 underline-offset-8">DECLARATION</h1>
@@ -101,7 +100,7 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
 
                     <div className="space-y-8 text-[15px] print:text-[14px]">
                         <p className="font-medium italic">I hereby declare that :</p>
-                        
+
                         <div className="flex gap-4 items-start pl-2">
                             <span className="font-bold shrink-0">(a)</span>
                             <p className="text-justify">
@@ -121,47 +120,55 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                             <div className="text-center border-t border-black pt-2 min-w-[250px]">
                                 <span className="font-bold uppercase text-[12px]">Signature of the Authorized Signatory</span>
                             </div>
-                            
+
                             <div className="w-[300px] space-y-4 pt-4">
                                 <div className="flex items-end gap-2">
                                     <span className="font-bold w-28 uppercase text-[11px]">Name:</span>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         value={formData.name}
-                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5"
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">{formData.name}</div>
+                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                        {formData.name || <span className="text-transparent">.</span>}
+                                    </div>
                                 </div>
                                 <div className="flex items-end gap-2">
                                     <span className="font-bold w-28 uppercase text-[11px]">Date:</span>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         value={formData.date}
-                                        onChange={(e) => setFormData({...formData, date: e.target.value})}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5"
+                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">{formData.date}</div>
+                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                        {formData.date || <span className="text-transparent">.</span>}
+                                    </div>
                                 </div>
                                 <div className="flex items-end gap-2">
                                     <span className="font-bold w-28 uppercase text-[11px]">Designation:</span>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         value={formData.designation}
-                                        onChange={(e) => setFormData({...formData, designation: e.target.value})}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5"
+                                        onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">{formData.designation}</div>
+                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                        {formData.designation || <span className="text-transparent">.</span>}
+                                    </div>
                                 </div>
                                 <div className="flex items-end gap-2">
                                     <span className="font-bold w-28 uppercase text-[11px]">Place:</span>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         value={formData.place}
-                                        onChange={(e) => setFormData({...formData, place: e.target.value})}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5"
+                                        onChange={(e) => setFormData({ ...formData, place: e.target.value })}
+                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">{formData.place}</div>
+                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                        {formData.place || <span className="text-transparent">.</span>}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -181,13 +188,8 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                         </div>
                     </div>
 
-                    {/* Footer Page Number */}
-                    <div className="absolute bottom-8 left-0 right-0 text-center text-[12px] font-bold print-only">
-                        14
-                    </div>
                 </div>
             </div>
-
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @media print {
@@ -204,26 +206,26 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                         padding: 0 !important;
                         background: white !important;
                         height: 100% !important;
+                        overflow: hidden !important; /* Prevents blank second page */
+                    }
+                    /* Remove any potential scrollbars */
+                    ::-webkit-scrollbar {
+                        display: none !important;
                     }
                     
-                    /* HIDE EVERYTHING EXCEPT THE DOCUMENT PATH */
-                    body > *:not(#root),
-                    #root > *:not(div),
-                    header, 
-                    footer, 
-                    nav, 
-                    aside,
-                    [class*="Navbar"], 
-                    [class*="Sidebar"],
-                    [class*="Layout"] > div:first-child,
-                    .no-print, 
-                    button {
+                    /* HIDE EVERYTHING */
+                    #root > *, 
+                    header, footer, nav, aside, 
+                    .no-print, button, .fixed, 
+                    img, [role="navigation"],
+                    [class*="Navbar"], [class*="Sidebar"],
+                    [class*="Layout"] > div:first-child {
                         display: none !important;
                         height: 0 !important;
                         visibility: hidden !important;
                     }
-
-                    /* UNSET DASHBOARD LAYOUT STYLES */
+                    
+                    /* Force target only the form to be visible and reset layout */
                     #root, #root > div, [class*="Layout"], main, main > div, #printable-form {
                         display: block !important;
                         visibility: visible !important;
@@ -246,36 +248,26 @@ const Declaration: React.FC<DeclarationProps> = ({ data: propData }) => {
                         width: 100% !important;
                         max-width: 210mm !important;
                         margin: 0 auto !important;
-                        padding: 20mm 25mm !important;
+                        padding: 12mm 18mm !important;
                         background: white !important;
                         z-index: 99999 !important;
                         box-sizing: border-box !important;
                         position: relative !important;
-                    }
-
-                    .print-only {
-                        display: block !important;
+                        page-break-inside: avoid;
                     }
                     
-                    input {
-                        display: none !important;
-                    }
-                    
-                    .hidden.print\\:block {
-                        display: block !important;
-                    }
-                    
-                    table, div, p, span {
+                    table, th, td, div, p, span {
+                        border-color: black !important;
                         color: black !important;
                     }
-                }
-                
-                @media screen {
-                    .print-only {
-                        display: none;
+                    input::placeholder {
+                        color: transparent !important;
                     }
-                    .hidden.print\\:block {
-                        display: none;
+                    input {
+                        border-bottom: black solid 1px !important;
+                        border-top: none !important;
+                        border-left: none !important;
+                        border-right: none !important;
                     }
                 }
             `}} />

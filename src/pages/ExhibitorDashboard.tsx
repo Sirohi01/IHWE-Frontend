@@ -22,6 +22,8 @@ const TAB_ROUTES: Record<string, string> = {
     psm_claim: '/exhibitor-dashboard/psm-claim',
     annexure_c: '/exhibitor-dashboard/psm-claim/annexure-c',
     declaration: '/exhibitor-dashboard/psm-claim/declaration',
+    feedback_report: '/exhibitor-dashboard/psm-claim/feedback-report',
+    undertaking: '/exhibitor-dashboard/psm-claim/undertaking',
     exhibitions: '/exhibitor-dashboard/exhibitions',
 };
 

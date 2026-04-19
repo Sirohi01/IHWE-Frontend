@@ -28,12 +28,14 @@ const msmeSubItems = [
             // { id: "psm_claim", label: "PSM Claim" },
             { id: "annexure_c", label: "Annexure C" },
             { id: "declaration", label: "Declaration" },
+            { id: "feedback_report", label: "Feedback Report" },
+            { id: "undertaking", label: "Undertaking" },
         ]
     },
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
-    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_c" || activeTab === "declaration";
+    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_c" || activeTab === "declaration" || activeTab === "feedback_report" || activeTab === "undertaking";
     const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
 
     const handleMsmeToggle = () => {
