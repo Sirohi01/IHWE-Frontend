@@ -173,10 +173,13 @@ const BuyerRegistration = () => {
         specificProductRequirements: "",
         estimatedPurchaseVolume: "",
         budgetRange: "",
+        purchaseFrequency: "",
+        businessModelPreference: "",
+        b2bMeetInterest: "Yes",
         interestedInImporting: "No",
         interestedInExporting: "No",
         preferredSupplierRegion: [] as string[],
-        preferredState: "",
+        preferredState: [] as string[],
         preferredSupplierType: [] as string[],
         preferredCompanySize: "",
         purchaseTimeline: "",
@@ -190,6 +193,13 @@ const BuyerRegistration = () => {
         preferredMeetingDate: "",
         preferredTimeSlot: "",
         requirePreScheduledB2B: "Yes",
+        preferredMeetingCategories: [] as string[],
+        preferredExhibitorTypes: [] as string[],
+        numberOfMeetingsInterested: "",
+        meetingObjectives: [] as string[],
+        preferredBusinessTypes: [] as string[],
+        meetingRequirements: "",
+        preferredMeetingDay: "",
         meetingPriorityLevel: "Medium",
         remarks: "",
         registrationCategory: "",
@@ -746,7 +756,7 @@ const BuyerRegistration = () => {
 
 
     const inputClasses = "w-full h-8 px-3 py-2 rounded-[2px] border border-slate-400 bg-white text-left text-[12px] font-medium text-slate-900 outline-none shadow-none transition-all ring-offset-background focus:border-[#23471d] focus:ring-[#23471d]/10 placeholder:text-slate-400 font-sans";
-    const labelClasses = "text-[12px] font-semibold text-slate-900 mb-0.5 block text-left font-sans";
+    const labelClasses = "text-[12px] font-semibold text-slate-900 mb-0.5 block text-left font-sans ";
     const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-1 border-b border-emerald-500/20 flex items-center gap-1.5 mb-3 uppercase tracking-tight font-sans";
     const buttonTextClasses = "text-[11px] font-bold uppercase tracking-wider font-sans";
 
@@ -1024,54 +1034,46 @@ const BuyerRegistration = () => {
 
 
 
-                                    {/* 4. Sourcing & Buying Interests */}
+
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Sourcing & Buying Interests</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
-                                            <div className="md:col-span-1 lg:col-span-1">
+                                            <div className="md:col-span-4 lg:col-span-5">
                                                 <Label className={labelClasses}>Secondary Product Categories</Label>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button
-                                                            variant="outline"
-                                                            className={`${inputClasses} flex justify-between items-center font-normal px-3 hover:bg-white`}
-                                                        >
-                                                            <span className="truncate max-w-[150px]">
-                                                                {formData.secondaryProductCategories.length === 0
-                                                                    ? "Select Categories"
-                                                                    : formData.secondaryProductCategories.join(", ")
-                                                                }
-                                                            </span>
-                                                            <div className="flex items-center gap-1">
-                                                                {formData.secondaryProductCategories.length > 0 && (
-                                                                    <Badge variant="secondary" className="h-4 px-1 text-[10px] bg-emerald-100 text-emerald-700">
-                                                                        {formData.secondaryProductCategories.length}
-                                                                    </Badge>
-                                                                )}
-                                                                <ChevronDown className="h-4 w-4 opacity-50" />
-                                                            </div>
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent className="w-[200px] bg-white font-sans text-[12px] max-h-[300px] overflow-y-auto" align="start">
+                                                <div className="mt-1 p-3 border border-slate-300 rounded-lg bg-white/50 max-h-[200px] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-inner">
+                                                    <div className="flex flex-wrap gap-2.5">
                                                         {(config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']).map((cat: string) => (
-                                                            <DropdownMenuCheckboxItem
+                                                            <label
                                                                 key={cat}
-                                                                checked={formData.secondaryProductCategories.includes(cat)}
-                                                                onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', cat, !!checked)}
-                                                                onSelect={(e) => e.preventDefault()}
-                                                                className="text-[12px] focus:bg-emerald-50 focus:text-emerald-900"
+                                                                className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-3 py-1 rounded-full border transition-all cursor-pointer ${formData.secondaryProductCategories.includes(cat)
+                                                                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-sm'
+                                                                    : 'bg-white border-slate-200 hover:border-emerald-400'
+                                                                    }`}
                                                             >
+                                                                <Checkbox
+                                                                    checked={formData.secondaryProductCategories.includes(cat)}
+                                                                    onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', cat, !!checked)}
+                                                                    className="h-3 w-3 border-emerald-500 data-[state=checked]:bg-emerald-500"
+                                                                />
                                                                 {cat}
-                                                            </DropdownMenuCheckboxItem>
+                                                            </label>
                                                         ))}
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div><Label className={labelClasses}>Interested in Importing Products?</Label><Select value={formData.interestedInImporting} onValueChange={(v) => handleSelectChange('interestedInImporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
                                             <div><Label className={labelClasses}>Interested in Export Partnerships?</Label><Select value={formData.interestedInExporting} onValueChange={(v) => handleSelectChange('interestedInExporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Estimated Purchase Volume</Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Budget Range</Label><Select value={formData.budgetRange} onValueChange={(v) => handleSelectChange('budgetRange', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Choose Budget" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.budgetRanges?.map((b: string) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><Label className={labelClasses}>Business Model Preference</Label><Select value={formData.businessModelPreference} onValueChange={(v) => handleSelectChange('businessModelPreference', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Model" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.businessModelOptions?.map((m: string) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
+
+                                            <div><Label className={labelClasses}>Estimated Monthly Purchase </Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Purchase Frequency</Label><Select value={formData.purchaseFrequency} onValueChange={(v) => handleSelectChange('purchaseFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Frequency" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.purchaseFrequencyOptions?.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
+
+
+                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
+                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
                                         </div>
                                         <div className="mt-1">
                                             <Label className={labelClasses}>Specific Product Requirements</Label>
@@ -1109,34 +1111,36 @@ const BuyerRegistration = () => {
                                                 </div>
                                                 <ErrorDisplay name="preferredSupplierType" errors={errors} />
                                             </div>
-                                            <div>
+                                            <div className="md:col-span-2">
                                                 <Label className={labelClasses}>Preferred State (Optional)</Label>
-                                                <Select value={formData.preferredState} onValueChange={(v) => handleSelectChange('preferredState', v)}>
-                                                    <SelectTrigger className={inputClasses}>
-                                                        <SelectValue placeholder="Select State" />
-                                                    </SelectTrigger>
-                                                    <SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">
+                                                <div className="mt-1 p-3 border border-slate-300 rounded-lg bg-white/50 max-h-[200px] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-inner">
+                                                    <div className="flex flex-wrap gap-2.5">
                                                         {states.map(s => (
-                                                            <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>
+                                                            <label
+                                                                key={s._id}
+                                                                className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2 py-0.5 rounded border transition-all cursor-pointer ${formData.preferredState.includes(s.name)
+                                                                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                                                                    : 'bg-white border-slate-200 hover:border-emerald-400'
+                                                                    }`}
+                                                            >
+                                                                <Checkbox
+                                                                    checked={formData.preferredState.includes(s.name)}
+                                                                    onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)}
+                                                                    className="h-3 w-3 border-emerald-500 data-[state=checked]:bg-emerald-500"
+                                                                />
+                                                                {s.name}
+                                                            </label>
                                                         ))}
-                                                    </SelectContent>
-                                                </Select>
+                                                        {states.length === 0 && <p className="text-[10px] text-slate-400">Select a country first or search states...</p>}
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div><Label className={labelClasses}>Preferred Company Size</Label><Select value={formData.preferredCompanySize} onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
                                         </div>
                                     </div>
 
                                     {/* 6. Purchase Intent & Capacity */}
-                                    <div className="space-y-2 ">
-                                        <h3 className={sectionTitleClasses}> Purchase Intent & Capacity</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Buying Frequency *</Label><Select value={formData.buyingFrequency} onValueChange={(v) => handleSelectChange('buyingFrequency', v)}><SelectTrigger className={`${inputClasses} ${errors.buyingFrequency ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.buyingFrequencies || ['One-time', 'Monthly', 'Quarterly', 'Long-term']).map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyingFrequency" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
-                                        </div>
-                                    </div>
+
 
                                     {/* 7. Certification & Compliance + 8. Pricing Preference */}
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-4 gap-x-5">
@@ -1159,41 +1163,290 @@ const BuyerRegistration = () => {
                                             </div>
                                         </div>
                                     </div>
-
                                     {/* 9. B2B Meeting Preferences */}
-                                    <div className="space-y-2">
+                                    <div className="space-y-4">
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Preferred Meeting Date *</Label><Input type="date" required name="preferredMeetingDate" value={formData.preferredMeetingDate} onChange={handleChange} className={`${inputClasses} ${errors.preferredMeetingDate ? 'border-red-400' : ''}`} /><ErrorDisplay name="preferredMeetingDate" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Preferred Time Slot *</Label><Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}><SelectTrigger className={`${inputClasses} ${errors.preferredTimeSlot ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Slot" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem><SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem><SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem></SelectContent></Select><ErrorDisplay name="preferredTimeSlot" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Pre-scheduled B2B *</Label><Select value={formData.requirePreScheduledB2B} onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><div className="h-3" /></div>
-                                            <div><Label className={labelClasses}>Meeting Priority Level *</Label><Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.meetingPriorityLevels || ['Low', 'Medium', 'High']).map((m: string) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select><div className="h-3" /></div>
+                                        <div className="flex flex-col gap-6">
+                                            {/* Top Card: Strategic Matchmaking Toggle */}
+                                            <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-emerald-50/40 rounded-xl border border-emerald-200 shadow-sm transition-all hover:bg-emerald-50/60 w-fit">
+                                                <div className="flex flex-col">
+                                                    <Label className="text-[12px] font-bold text-emerald-900 font-sans">Are you interested in Pre-scheduled B2B Meetings? *</Label>
+                                                    <p className="text-[10px] text-emerald-600/70 font-sans">Maximize your sourcing efficiency with curated meetings.</p>
+                                                </div>
+                                                <Select required value={formData.requirePreScheduledB2B} onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}>
+                                                    <SelectTrigger className={`${inputClasses} w-[110px] h-9 border-2 border-emerald-500/30 bg-white font-black text-emerald-900`}>
+                                                        <SelectValue placeholder="Yes/No" />
+                                                    </SelectTrigger>
+                                                    <SelectContent className="bg-white font-sans text-[12px]">
+                                                        <SelectItem value="Yes" className="font-bold text-emerald-700">✅ YES</SelectItem>
+                                                        <SelectItem value="No" className="font-bold text-slate-500">❌ NO</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            {formData.requirePreScheduledB2B === 'Yes' && (
+                                                <div className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                                                    {/* Section A: Matchmaking Categories & Types */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        <div className="space-y-2">
+                                                            <div className="flex justify-between items-center px-1">
+                                                                <Label className={labelClasses}>Preferred Meeting Categories *</Label>
+                                                                {formData.preferredMeetingCategories.length === 0 && <span className="text-[9px] text-red-500 font-bold uppercase animate-pulse">Required</span>}
+                                                            </div>
+                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[160px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {(config?.meetingCategoryOptions || []).map(cat => (
+                                                                        <label key={cat} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredMeetingCategories.includes(cat) ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
+                                                                            <Checkbox checked={formData.preferredMeetingCategories.includes(cat)} onCheckedChange={(checked) => handleCheckboxChange('preferredMeetingCategories', cat, !!checked)} className="h-3.5 w-3.5 border-emerald-500 data-[state=checked]:bg-emerald-500" />
+                                                                            {cat}
+                                                                        </label>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="space-y-2">
+                                                            <Label className={labelClasses}>Exhibitor Types to Meet</Label>
+                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[160px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {(config?.exhibitorTypeOptions || []).map(type => (
+                                                                        <label key={type} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredExhibitorTypes.includes(type) ? 'bg-[#23471d] border-[#23471d] text-white' : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
+                                                                            <Checkbox checked={formData.preferredExhibitorTypes.includes(type)} onCheckedChange={(checked) => handleCheckboxChange('preferredExhibitorTypes', type, !!checked)} className="h-3.5 w-3.5 border-emerald-500 data-[state=checked]:bg-emerald-500" />
+                                                                            {type}
+                                                                        </label>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Section B: Objectives & Business Types */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        <div className="space-y-2">
+                                                            <Label className={labelClasses}>💼 Meeting Objectives (Very Important) *</Label>
+                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[150px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {(config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private Label / OEM", "Investment / Business Expansion"]).map(obj => (
+                                                                        <label key={obj} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.meetingObjectives.includes(obj) ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-white border-slate-200 hover:border-amber-400'}`}>
+                                                                            <Checkbox checked={formData.meetingObjectives.includes(obj)} onCheckedChange={(checked) => handleCheckboxChange('meetingObjectives', obj, !!checked)} className="h-3.5 w-3.5 border-amber-500 data-[state=checked]:bg-amber-500" />
+                                                                            {obj}
+                                                                        </label>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="space-y-2">
+                                                            <Label className={labelClasses}>🏷 Preferred Business Type *</Label>
+                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[150px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {(config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private Label", "Franchise", "Exclusive Distribution"]).map(type => (
+                                                                        <label key={type} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredBusinessTypes.includes(type) ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:border-blue-400'}`}>
+                                                                            <Checkbox checked={formData.preferredBusinessTypes.includes(type)} onCheckedChange={(checked) => handleCheckboxChange('preferredBusinessTypes', type, !!checked)} className="h-3.5 w-3.5 border-blue-500 data-[state=checked]:bg-blue-500" />
+                                                                            {type}
+                                                                        </label>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Section C: Logistics & Scheduling */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-5 p-4 bg-slate-50/50 rounded-xl border border-slate-100">
+                                                        <div className="space-y-1.5 md:col-span-1">
+                                                            <Label className={labelClasses}>Preferred Day *</Label>
+                                                            <Select required value={formData.preferredMeetingDay} onValueChange={(v) => handleSelectChange('preferredMeetingDay', v)}>
+                                                                <SelectTrigger className={`${inputClasses} ${errors.preferredMeetingDay ? 'border-red-400' : ''}`}>
+                                                                    <SelectValue placeholder="Select Day" />
+                                                                </SelectTrigger>
+                                                                <SelectContent className="bg-white font-sans text-[12px]">
+                                                                    {(config?.meetingDayOptions || []).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <ErrorDisplay name="preferredMeetingDay" errors={errors} />
+                                                        </div>
+                                                        <div className="space-y-1.5 md:col-span-1">
+                                                            <Label className={labelClasses}>Time Slot *</Label>
+                                                            <Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}>
+                                                                <SelectTrigger className={`${inputClasses} ${errors.preferredTimeSlot ? 'border-red-400' : ''}`}>
+                                                                    <SelectValue placeholder="Select Slot" />
+                                                                </SelectTrigger>
+                                                                <SelectContent className="bg-white font-sans text-[12px]">
+                                                                    <SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem>
+                                                                    <SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem>
+                                                                    <SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <ErrorDisplay name="preferredTimeSlot" errors={errors} />
+                                                        </div>
+                                                        <div className="space-y-1.5 md:col-span-1">
+                                                            <Label className={labelClasses}>Number of Meetings *</Label>
+                                                            <Select value={formData.numberOfMeetingsInterested} onValueChange={(v) => handleSelectChange('numberOfMeetingsInterested', v)}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Approx count" />
+                                                                </SelectTrigger>
+                                                                <SelectContent className="bg-white font-sans text-[12px]">
+                                                                    {(config?.numberOfMeetingsOptions || ["3–5 Meetings", "5–10 Meetings", "10+ Meetings"]).map(count => (
+                                                                        <SelectItem key={count} value={count}>{count}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className="space-y-1.5 md:col-span-1">
+                                                            <Label className={labelClasses}>📈 Priority Level *</Label>
+                                                            <Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Priority" />
+                                                                </SelectTrigger>
+                                                                <SelectContent className="bg-white font-sans text-[12px]">
+                                                                    {(config?.meetingPriorityLevels || ['Low Priority (General networking)', 'Medium Priority (Exploring options)', 'High Priority (Actively looking to close deals)']).map(lvl => (
+                                                                        <SelectItem key={lvl} value={lvl}>{lvl}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Section D: Requirements */}
+                                                    <div className="space-y-2">
+                                                        <Label className={labelClasses}>📝 Specific Meeting Requirements</Label>
+                                                        <Textarea 
+                                                            name="meetingRequirements"
+                                                            placeholder="👉 Mention specific expectations, brands you want to meet, or items you are sourcing..."
+                                                            value={formData.meetingRequirements}
+                                                            onChange={handleChange}
+                                                            className="min-h-[100px] text-[12px] p-4 rounded-xl border-slate-300 bg-white/50 focus:bg-white transition-all custom-scrollbar"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
-                                    {/* 10. Registration Category - Always Visible, No Lock, Full Opacity */}
-                                    <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
-                                        <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
+                                <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
+                                    <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
 
-                                        <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
-                                            {!showMembershipOptions ? (
+                                    <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
+                                        {!showMembershipOptions ? (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                                                {passPackages.map((pkg: any) => {
+                                                    const meta = PACKAGE_METADATA[pkg.name] || {};
+                                                    const isSelected = formData.registrationCategory === pkg.name;
+                                                    const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
+                                                    const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
+
+                                                    return (
+                                                        <div
+                                                            key={pkg.name}
+                                                            onClick={() => handlePackageSelection(pkg)}
+                                                            className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
+                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                `}
+                                                        >
+                                                            {meta.badge && (
+                                                                <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
+                                                                    ⭐ {meta.badge}
+                                                                </div>
+                                                            )}
+
+                                                            <div className="mb-3">
+                                                                <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                    {pkg.name} – ₹{pkg.price}
+                                                                </h4>
+                                                                <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
+                                                                    {meta.tagline}
+                                                                </p>
+                                                            </div>
+
+                                                            <div className="flex-1 space-y-4">
+                                                                <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
+                                                                    {meta.description}
+                                                                </p>
+
+                                                                <div className="space-y-1.5">
+                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
+                                                                    <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                        {pkg.benefits.map((b: string, i: number) => (
+                                                                            <li key={i} className="flex items-start gap-2">
+                                                                                <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
+                                                                                <span>{b}</span>
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div className={`p-2 rounded-lg ${colorScheme} border`}>
+                                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
+                                                                    <p className="text-[10px] text-slate-700 font-semibold leading-snug">
+                                                                        {meta.whyChoose}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                `}>
+                                                                {meta.cta || "Select Plan"}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+
+                                                {/* Membership Trigger Card */}
+                                                <div
+                                                    onClick={() => setShowMembershipOptions(true)}
+                                                    className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
+                                                        `}
+                                                >
+                                                    <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
+                                                    <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
+                                                        View More Plans →
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-4">
+                                                <div className="flex items-center justify-between px-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                                        <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
+                                                    </div>
+                                                    <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                </div>
+
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                    {passPackages.map((pkg: any) => {
+                                                    {membershipPackages.map((pkg: any) => {
                                                         const meta = PACKAGE_METADATA[pkg.name] || {};
                                                         const isSelected = formData.registrationCategory === pkg.name;
-                                                        const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
-                                                        const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
+
+                                                        let colorScheme = 'border-blue-400 bg-blue-50/10';
+                                                        let accentColor = 'text-blue-700';
+                                                        let badgeColor = 'bg-blue-500';
+
+                                                        if (meta.color === 'yellow') {
+                                                            colorScheme = 'border-amber-400 bg-amber-50/10';
+                                                            accentColor = 'text-amber-700';
+                                                            badgeColor = 'bg-amber-400';
+                                                        } else if (meta.color === 'red') {
+                                                            colorScheme = 'border-red-400 bg-red-50/10';
+                                                            accentColor = 'text-red-700';
+                                                            badgeColor = 'bg-red-500';
+                                                        } else if (meta.color === 'green') {
+                                                            colorScheme = 'border-emerald-400 bg-emerald-50/10';
+                                                            accentColor = 'text-emerald-700';
+                                                            badgeColor = 'bg-emerald-500';
+                                                        }
 
                                                         return (
                                                             <div
                                                                 key={pkg.name}
                                                                 onClick={() => handlePackageSelection(pkg)}
-                                                                className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
-                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                `}
+                                                                className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    `}
                                                             >
                                                                 {meta.badge && (
-                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
+                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
                                                                         ⭐ {meta.badge}
                                                                     </div>
                                                                 )}
@@ -1233,391 +1486,293 @@ const BuyerRegistration = () => {
                                                                 </div>
 
                                                                 <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                `}>
+                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    `}>
                                                                     {meta.cta || "Select Plan"}
                                                                 </div>
                                                             </div>
                                                         );
                                                     })}
-
-                                                    {/* Membership Trigger Card */}
-                                                    <div
-                                                        onClick={() => setShowMembershipOptions(true)}
-                                                        className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
-                                                        `}
-                                                    >
-                                                        <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
-                                                        <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
-                                                            View More Plans →
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                            ) : (
-                                                <div className="space-y-4">
-                                                    <div className="flex items-center justify-between px-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
-                                                        </div>
-                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
-                                                    </div>
-
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                        {membershipPackages.map((pkg: any) => {
-                                                            const meta = PACKAGE_METADATA[pkg.name] || {};
-                                                            const isSelected = formData.registrationCategory === pkg.name;
-
-                                                            let colorScheme = 'border-blue-400 bg-blue-50/10';
-                                                            let accentColor = 'text-blue-700';
-                                                            let badgeColor = 'bg-blue-500';
-
-                                                            if (meta.color === 'yellow') {
-                                                                colorScheme = 'border-amber-400 bg-amber-50/10';
-                                                                accentColor = 'text-amber-700';
-                                                                badgeColor = 'bg-amber-400';
-                                                            } else if (meta.color === 'red') {
-                                                                colorScheme = 'border-red-400 bg-red-50/10';
-                                                                accentColor = 'text-red-700';
-                                                                badgeColor = 'bg-red-500';
-                                                            } else if (meta.color === 'green') {
-                                                                colorScheme = 'border-emerald-400 bg-emerald-50/10';
-                                                                accentColor = 'text-emerald-700';
-                                                                badgeColor = 'bg-emerald-500';
-                                                            }
-
-                                                            return (
-                                                                <div
-                                                                    key={pkg.name}
-                                                                    onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
-                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                    `}
-                                                                >
-                                                                    {meta.badge && (
-                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
-                                                                            ⭐ {meta.badge}
-                                                                        </div>
-                                                                    )}
-
-                                                                    <div className="mb-3">
-                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
-                                                                            {pkg.name} – ₹{pkg.price}
-                                                                        </h4>
-                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                            {meta.tagline}
-                                                                        </p>
-                                                                    </div>
-
-                                                                    <div className="flex-1 space-y-4">
-                                                                        <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                            {meta.description}
-                                                                        </p>
-
-                                                                        <div className="space-y-1.5">
-                                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
-                                                                                {pkg.benefits.map((b: string, i: number) => (
-                                                                                    <li key={i} className="flex items-start gap-2">
-                                                                                        <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
-                                                                                        <span>{b}</span>
-                                                                                    </li>
-                                                                                ))}
-                                                                            </ul>
-                                                                        </div>
-
-                                                                        <div className={`p-2 rounded-lg ${colorScheme} border`}>
-                                                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
-                                                                            <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                                {meta.whyChoose}
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                    `}>
-                                                                        {meta.cta || "Select Plan"}
-                                                                    </div>
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3 mt-4">
-                                                        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
-                                                        <p className="text-[11px] font-medium text-amber-800 leading-relaxed">
-                                                            <span className="font-black uppercase tracking-wider">⚠️ Important Note:</span> Expo entry is free for all visitors. Buyer–Seller Meet is conducted by the International Council of AYUSH (ICOA) at IHWE, ensuring curated B2B interactions and high-quality business engagement.
-                                                        </p>
-                                                    </div>
+                                                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3 mt-4">
+                                                    <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                                                    <p className="text-[11px] font-medium text-amber-800 leading-relaxed">
+                                                        <span className="font-black uppercase tracking-wider">⚠️ Important Note:</span> Expo entry is free for all visitors. Buyer–Seller Meet is conducted by the International Council of AYUSH (ICOA) at IHWE, ensuring curated B2B interactions and high-quality business engagement.
+                                                    </p>
                                                 </div>
-                                            )}
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
+                                </div>
 
 
 
-                                </form>
+                            </form>
                             </motion.div>
                         )}
-                    </AnimatePresence>
-                </div>
-            </section>
-
-            {/* Comprehensive Terms & Conditions Modal with Policies */}
-            <AnimatePresence>
-                {showTermsModal && tempSelectedPackage && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.9, y: 20 }}
-                            className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
-                        >
-                            {/* Header */}
-                            <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
-                                <div>
-                                    <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
-                                    <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium font-sans">
-                                        {tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}
-                                    </p>
-                                </div>
-                                <button onClick={() => setShowTermsModal(false)} className="hover:rotate-90 transition-transform text-white">
-                                    ✕
-                                </button>
-                            </div>
-
-                            {/* Policy Tabs */}
-                            <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
-                                <button
-                                    onClick={() => setActivePolicyTab('payment')}
-                                    className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'payment' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'}`}
-                                >
-                                    <FileText size={14} /> 1. Payment Terms
-                                </button>
-                                <button
-                                    onClick={() => policyConsents.paymentTerms && setActivePolicyTab('refund')}
-                                    disabled={!policyConsents.paymentTerms}
-                                    className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'refund' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                >
-                                    <AlertTriangle size={14} /> 2. Refund Policy
-                                </button>
-                                <button
-                                    onClick={() => policyConsents.refundPolicy && setActivePolicyTab('privacy')}
-                                    disabled={!policyConsents.refundPolicy}
-                                    className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'privacy' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                >
-                                    <Lock size={14} /> 3. Privacy Policy
-                                </button>
-                            </div>
-
-                            {/* Policy Content */}
-                            <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
-                                {loadingPolicies ? (
-                                    <div className="flex flex-col items-center justify-center py-20 gap-3">
-                                        <Loader2 className="animate-spin text-emerald-500" size={32} />
-                                        <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Legal Terms...</p>
-                                    </div>
-                                ) : (
-                                    <>
-                                        {activePolicyTab === 'payment' && (
-                                            <div className="space-y-4">
-                                                <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                                                    <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ IMPORTANT: STRICT NO REFUND POLICY</p>
-                                                    <p className="text-red-600 text-[11px] mt-1">All payments are FINAL, NON-REFUNDABLE, and NON-TRANSFERABLE under any circumstances.</p>
-                                                </div>
-                                                <div
-                                                    className="policy-content"
-                                                    dangerouslySetInnerHTML={{ __html: policiesData['payment']?.content || '<p class="text-slate-400">Loading payment terms...</p>' }}
-                                                />
-                                            </div>
-                                        )}
-
-                                        {activePolicyTab === 'refund' && (
-                                            <div className="space-y-4">
-                                                <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                                                    <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ STRICT NO REFUND POLICY</p>
-                                                    <p className="text-red-600 text-[11px] mt-1">All payments made to Namo Gange Wellness Pvt. Ltd. are strictly non-refundable and non-transferable.</p>
-                                                </div>
-                                                <div
-                                                    className="policy-content"
-                                                    dangerouslySetInnerHTML={{ __html: policiesData['refund']?.content || '<p class="text-slate-400">Loading refund policy...</p>' }}
-                                                />
-                                            </div>
-                                        )}
-
-                                        {activePolicyTab === 'privacy' && (
-                                            <div className="space-y-4">
-                                                <div
-                                                    className="policy-content"
-                                                    dangerouslySetInnerHTML={{ __html: policiesData['privacy']?.content || '<p class="text-slate-400">Loading privacy policy...</p>' }}
-                                                />
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-
-                            {/* Footer with Consent Checkboxes */}
-                            <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
-                                <div className="space-y-2">
-                                    {activePolicyTab === 'payment' && (
-                                        <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                            <Checkbox
-                                                id="consent-payment"
-                                                checked={policyConsents.paymentTerms}
-                                                onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, paymentTerms: !!checked }))}
-                                            />
-                                            <Label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                                I have read, understood, and agree to the <span className="font-bold text-[#23471d]">Payment Terms & Conditions</span>, including the strictly non-refundable and non-transferable policy.
-                                            </Label>
-                                        </div>
-                                    )}
-
-                                    {activePolicyTab === 'refund' && (
-                                        <div className="flex items-start gap-3 p-2 bg-white rounded border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                            <Checkbox
-                                                id="consent-refund"
-                                                checked={policyConsents.refundPolicy}
-                                                onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, refundPolicy: !!checked }))}
-                                            />
-                                            <Label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                                I have read, understood, and agree to the <span className="font-bold text-red-600">Refund & Cancellation Policy</span>, acknowledging that all payments are strictly non-refundable.
-                                            </Label>
-                                        </div>
-                                    )}
-
-                                    {activePolicyTab === 'privacy' && (
-                                        <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                            <Checkbox
-                                                id="consent-privacy"
-                                                checked={policyConsents.privacyPolicy}
-                                                onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, privacyPolicy: !!checked }))}
-                                            />
-                                            <Label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                                I hereby provide my consent for the collection, processing, storage, and sharing of my personal data in accordance with the <span className="font-bold text-[#23471d]">Privacy Policy</span>.
-                                            </Label>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex gap-2 mt-2">
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => setShowTermsModal(false)}
-                                        className={`flex-1 h-9 text-xs font-sans ${buttonTextClasses}`}
-                                    >
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        onClick={() => {
-                                            if (activePolicyTab === 'payment') setActivePolicyTab('refund');
-                                            else if (activePolicyTab === 'refund') setActivePolicyTab('privacy');
-                                            else confirmPackage();
-                                        }}
-                                        disabled={
-                                            (activePolicyTab === 'payment' && !policyConsents.paymentTerms) ||
-                                            (activePolicyTab === 'refund' && !policyConsents.refundPolicy) ||
-                                            (activePolicyTab === 'privacy' && !policyConsents.privacyPolicy)
-                                        }
-                                        className={`flex-1 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white ${buttonTextClasses} disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    >
-                                        {activePolicyTab === 'payment' && "Agree & Continue to Refund Policy →"}
-                                        {activePolicyTab === 'refund' && "Agree & Continue to Privacy Policy →"}
-                                        {activePolicyTab === 'privacy' && "Agree & Proceed to Payment 💳"}
-                                    </Button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* ── PAYMENT CONFIRMATION MODAL ── */}
-            <AnimatePresence>
-                {showPaymentConfirmModal && tempSelectedPackage && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.85, y: 30 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.85, y: 30 }}
-                            className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
-                        >
-                            {/* Header */}
-                            <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                    <CreditCard size={20} className="text-emerald-300" />
-                                </div>
-                                <div>
-                                    <h3 className="text-white font-black uppercase tracking-wider text-sm">Payment Confirmation</h3>
-                                    <p className="text-emerald-300 text-[10px] font-bold uppercase tracking-widest">{tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}</p>
-                                </div>
-                            </div>
-
-                            {/* Body */}
-                            <div className="p-6 space-y-5">
-                                {/* Non-refundable notice */}
-                                <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
-                                    <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
-                                    <div>
-                                        <p className="text-red-700 font-black text-sm uppercase tracking-wide mb-1">
-                                            ⚠️ IMPORTANT NOTICE
-                                        </p>
-                                        <p className="text-red-600 text-[13px] font-semibold leading-relaxed">
-                                            All payments are{" "}
-                                            <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-REFUNDABLE</span>{" "}
-                                            and{" "}
-                                            <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-TRANSFERABLE</span>.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Package summary */}
-                                <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
-                                    <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-slate-800 font-bold text-sm">{tempSelectedPackage?.name}</span>
-                                        <span className="text-[#23471d] font-black text-xl">₹{tempSelectedPackage?.price}</span>
-                                    </div>
-                                    <p className="text-[11px] text-slate-500 font-medium">9th International Health &amp; Wellness Expo 2026</p>
-                                </div>
-
-                                <p className="text-slate-500 text-[12px] leading-relaxed text-center">
-                                    By proceeding, you confirm that you have read and agreed to all policies.
-                                </p>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="px-6 pb-6 grid grid-cols-2 gap-3">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setShowPaymentConfirmModal(false)}
-                                    className="h-11 border-slate-300 text-slate-600 font-black text-[11px] uppercase tracking-wider rounded-lg hover:bg-slate-50"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    onClick={() => initiateRazorpayPayment()}
-                                    className="h-11 bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-[11px] uppercase tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-                                >
-                                    <CreditCard size={14} />
-                                    Proceed to Pay
-                                </Button>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                </AnimatePresence>
         </div>
+            </section >
+
+    {/* Comprehensive Terms & Conditions Modal with Policies */ }
+    <AnimatePresence>
+{
+    showTermsModal && tempSelectedPackage && (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto"
+        >
+            <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+            >
+                {/* Header */}
+                <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
+                    <div>
+                        <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
+                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium font-sans">
+                            {tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}
+                        </p>
+                    </div>
+                    <button onClick={() => setShowTermsModal(false)} className="hover:rotate-90 transition-transform text-white">
+                        ✕
+                    </button>
+                </div>
+
+                {/* Policy Tabs */}
+                <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
+                    <button
+                        onClick={() => setActivePolicyTab('payment')}
+                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'payment' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'}`}
+                    >
+                        <FileText size={14} /> 1. Payment Terms
+                    </button>
+                    <button
+                        onClick={() => policyConsents.paymentTerms && setActivePolicyTab('refund')}
+                        disabled={!policyConsents.paymentTerms}
+                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'refund' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                        <AlertTriangle size={14} /> 2. Refund Policy
+                    </button>
+                    <button
+                        onClick={() => policyConsents.refundPolicy && setActivePolicyTab('privacy')}
+                        disabled={!policyConsents.refundPolicy}
+                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'privacy' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                        <Lock size={14} /> 3. Privacy Policy
+                    </button>
+                </div>
+
+                {/* Policy Content */}
+                <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
+                    {loadingPolicies ? (
+                        <div className="flex flex-col items-center justify-center py-20 gap-3">
+                            <Loader2 className="animate-spin text-emerald-500" size={32} />
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Legal Terms...</p>
+                        </div>
+                    ) : (
+                        <>
+                            {activePolicyTab === 'payment' && (
+                                <div className="space-y-4">
+                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ IMPORTANT: STRICT NO REFUND POLICY</p>
+                                        <p className="text-red-600 text-[11px] mt-1">All payments are FINAL, NON-REFUNDABLE, and NON-TRANSFERABLE under any circumstances.</p>
+                                    </div>
+                                    <div
+                                        className="policy-content"
+                                        dangerouslySetInnerHTML={{ __html: policiesData['payment']?.content || '<p class="text-slate-400">Loading payment terms...</p>' }}
+                                    />
+                                </div>
+                            )}
+
+                            {activePolicyTab === 'refund' && (
+                                <div className="space-y-4">
+                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ STRICT NO REFUND POLICY</p>
+                                        <p className="text-red-600 text-[11px] mt-1">All payments made to Namo Gange Wellness Pvt. Ltd. are strictly non-refundable and non-transferable.</p>
+                                    </div>
+                                    <div
+                                        className="policy-content"
+                                        dangerouslySetInnerHTML={{ __html: policiesData['refund']?.content || '<p class="text-slate-400">Loading refund policy...</p>' }}
+                                    />
+                                </div>
+                            )}
+
+                            {activePolicyTab === 'privacy' && (
+                                <div className="space-y-4">
+                                    <div
+                                        className="policy-content"
+                                        dangerouslySetInnerHTML={{ __html: policiesData['privacy']?.content || '<p class="text-slate-400">Loading privacy policy...</p>' }}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+
+                {/* Footer with Consent Checkboxes */}
+                <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
+                    <div className="space-y-2">
+                        {activePolicyTab === 'payment' && (
+                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                <Checkbox
+                                    id="consent-payment"
+                                    checked={policyConsents.paymentTerms}
+                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, paymentTerms: !!checked }))}
+                                />
+                                <Label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                    I have read, understood, and agree to the <span className="font-bold text-[#23471d]">Payment Terms & Conditions</span>, including the strictly non-refundable and non-transferable policy.
+                                </Label>
+                            </div>
+                        )}
+
+                        {activePolicyTab === 'refund' && (
+                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                <Checkbox
+                                    id="consent-refund"
+                                    checked={policyConsents.refundPolicy}
+                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, refundPolicy: !!checked }))}
+                                />
+                                <Label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                    I have read, understood, and agree to the <span className="font-bold text-red-600">Refund & Cancellation Policy</span>, acknowledging that all payments are strictly non-refundable.
+                                </Label>
+                            </div>
+                        )}
+
+                        {activePolicyTab === 'privacy' && (
+                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                <Checkbox
+                                    id="consent-privacy"
+                                    checked={policyConsents.privacyPolicy}
+                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, privacyPolicy: !!checked }))}
+                                />
+                                <Label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                    I hereby provide my consent for the collection, processing, storage, and sharing of my personal data in accordance with the <span className="font-bold text-[#23471d]">Privacy Policy</span>.
+                                </Label>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex gap-2 mt-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowTermsModal(false)}
+                            className={`flex-1 h-9 text-xs font-sans ${buttonTextClasses}`}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (activePolicyTab === 'payment') setActivePolicyTab('refund');
+                                else if (activePolicyTab === 'refund') setActivePolicyTab('privacy');
+                                else confirmPackage();
+                            }}
+                            disabled={
+                                (activePolicyTab === 'payment' && !policyConsents.paymentTerms) ||
+                                (activePolicyTab === 'refund' && !policyConsents.refundPolicy) ||
+                                (activePolicyTab === 'privacy' && !policyConsents.privacyPolicy)
+                            }
+                            className={`flex-1 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white ${buttonTextClasses} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        >
+                            {activePolicyTab === 'payment' && "Agree & Continue to Refund Policy →"}
+                            {activePolicyTab === 'refund' && "Agree & Continue to Privacy Policy →"}
+                            {activePolicyTab === 'privacy' && "Agree & Proceed to Payment 💳"}
+                        </Button>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    )
+}
+            </AnimatePresence >
+
+    {/* ── PAYMENT CONFIRMATION MODAL ── */ }
+    <AnimatePresence>
+{
+    showPaymentConfirmModal && tempSelectedPackage && (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+        >
+            <motion.div
+                initial={{ scale: 0.85, y: 30 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.85, y: 30 }}
+                className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
+            >
+                {/* Header */}
+                <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                        <CreditCard size={20} className="text-emerald-300" />
+                    </div>
+                    <div>
+                        <h3 className="text-white font-black uppercase tracking-wider text-sm">Payment Confirmation</h3>
+                        <p className="text-emerald-300 text-[10px] font-bold uppercase tracking-widest">{tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}</p>
+                    </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-6 space-y-5">
+                    {/* Non-refundable notice */}
+                    <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
+                        <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
+                        <div>
+                            <p className="text-red-700 font-black text-sm uppercase tracking-wide mb-1">
+                                ⚠️ IMPORTANT NOTICE
+                            </p>
+                            <p className="text-red-600 text-[13px] font-semibold leading-relaxed">
+                                All payments are{" "}
+                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-REFUNDABLE</span>{" "}
+                                and{" "}
+                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-TRANSFERABLE</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Package summary */}
+                    <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
+                        <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
+                        <div className="flex justify-between items-center">
+                            <span className="text-slate-800 font-bold text-sm">{tempSelectedPackage?.name}</span>
+                            <span className="text-[#23471d] font-black text-xl">₹{tempSelectedPackage?.price}</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 font-medium">9th International Health &amp; Wellness Expo 2026</p>
+                    </div>
+
+                    <p className="text-slate-500 text-[12px] leading-relaxed text-center">
+                        By proceeding, you confirm that you have read and agreed to all policies.
+                    </p>
+                </div>
+
+                {/* Actions */}
+                <div className="px-6 pb-6 grid grid-cols-2 gap-3">
+                    <Button
+                        variant="outline"
+                        onClick={() => setShowPaymentConfirmModal(false)}
+                        className="h-11 border-slate-300 text-slate-600 font-black text-[11px] uppercase tracking-wider rounded-lg hover:bg-slate-50"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => initiateRazorpayPayment()}
+                        className="h-11 bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-[11px] uppercase tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                    >
+                        <CreditCard size={14} />
+                        Proceed to Pay
+                    </Button>
+                </div>
+            </motion.div>
+        </motion.div>
+    )
+}
+            </AnimatePresence >
+        </div >
     );
 };
 
