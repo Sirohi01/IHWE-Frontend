@@ -296,7 +296,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                             <Package size={20} />
                                         </div>
                                         <div>
-                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage Digital Profile / Catalog</h3>
+                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage your Products</h3>
                                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
                                         </div>
                                     </div>
