@@ -29,6 +29,8 @@ const msmeSubItems = [
         isDropdown: true,
         subItems: [
             { id: "annexure_d", label: "Annexure D" },
+            { id: "participants_feedback", label: "Participants Feedback" },
+            { id: "mandate_form", label: "Mandate Form" }
         ]
     },
 ];

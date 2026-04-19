@@ -23,6 +23,8 @@ const TAB_ROUTES: Record<string, string> = {
     annexure_d: '/exhibitor-dashboard/annexure-d',
     'stall-management': '/exhibitor-dashboard/stall-management',
     exhibitions: '/exhibitor-dashboard/exhibitions',
+    participants_feedback: '/exhibitor-dashboard/participants-feedback',
+    mandate_form: '/exhibitor-dashboard/mandate-form'
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
