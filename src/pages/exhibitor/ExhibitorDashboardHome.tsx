@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
 import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
 import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/ExhibitorModuleGrid';

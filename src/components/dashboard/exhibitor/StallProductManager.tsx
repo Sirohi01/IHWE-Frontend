@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Package, Plus, Search, Filter,
     MoreVertical, Edit2, Trash2, Eye,
@@ -6,7 +7,7 @@ import {
     Image as ImageIcon, X, Loader2,
     CheckCircle2, AlertCircle, ShoppingBag,
     Star, Tag, ExternalLink, Mail, Phone,
-    TrendingUp, Users, Info
+    TrendingUp, Users, Info, Layers
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -50,20 +51,19 @@ interface Analytics {
 }
 
 export default function StallProductManager({ data }: { data: any }) {
-    const [activeSection, setActiveSection] = useState<'products' | 'enquiries' | 'analytics'>('products');
+    const navigate = useNavigate();
+    const [activeSection, setActiveSection] = useState<'stall-info' | 'products' | 'enquiries' | 'analytics'>('stall-info');
     const [products, setProducts] = useState<Product[]>([]);
     const [analytics, setAnalytics] = useState<Analytics | null>(null);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
-    // Form states
+    // ... (keep previous state)
     const [showAddModal, setShowAddModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [formLoading, setFormLoading] = useState(false);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
-    // Product Enquiry States
     const [selectedEnquiryProduct, setSelectedEnquiryProduct] = useState<Product | null>(null);
     const [productEnquiries, setProductEnquiries] = useState<Enquiry[]>([]);
     const [enquiryLoading, setEnquiryLoading] = useState(false);
@@ -71,6 +71,10 @@ export default function StallProductManager({ data }: { data: any }) {
     const [units, setUnits] = useState<{ _id: string, unit: string }[]>([]);
 
     const backendBaseUrl = API_URL.replace('/api', '');
+    const cur = data?.participation?.currency === 'USD' ? '$' : '₹';
+    const total = data?.participation?.total || 0;
+    const paid = data?.amountPaid || 0;
+    const balance = data?.balanceAmount || 0;
 
     const fetchData = async () => {
         setIsRefreshing(true);
@@ -215,7 +219,10 @@ export default function StallProductManager({ data }: { data: any }) {
                         </div>
                     </div>
                     <button
-                        onClick={() => setShowAddModal(true)}
+                        onClick={() => {
+                            setActiveSection('products');
+                            setShowAddModal(true);
+                        }}
                         className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
                     >
                         <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
@@ -227,7 +234,8 @@ export default function StallProductManager({ data }: { data: any }) {
             {/* Navigation Tabs */}
             <div className="flex items-center border-b border-slate-200 bg-white px-6">
                 {[
-                    { id: 'products', label: 'My Products', icon: Package },
+                    { id: 'stall-info', label: 'Stall Information', icon: Info },
+                    { id: 'products', label: 'Product Listing', icon: Package },
                     { id: 'enquiries', label: 'All Enquiries', icon: Mail },
                     { id: 'analytics', label: 'Store Insights', icon: BarChart3 },
                 ].map(tab => (
@@ -235,8 +243,8 @@ export default function StallProductManager({ data }: { data: any }) {
                         key={tab.id}
                         onClick={() => setActiveSection(tab.id as any)}
                         className={`py-4 px-6 flex items-center gap-2 border-b-2 transition-all relative ${activeSection === tab.id
-                                ? 'border-[#23471d] text-[#23471d]'
-                                : 'border-transparent text-slate-500 hover:text-slate-800'
+                            ? 'border-[#23471d] text-[#23471d]'
+                            : 'border-transparent text-slate-500 hover:text-slate-800'
                             }`}
                     >
                         <tab.icon size={16} />
@@ -259,6 +267,78 @@ export default function StallProductManager({ data }: { data: any }) {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                 >
+                    {activeSection === 'stall-info' && (
+                        <div className="space-y-6">
+                            {/* Actions Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <button
+                                    onClick={() => navigate('/exhibitor-dashboard/accessories')}
+                                    className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#d26019] transition-all group shadow-sm flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-4 text-left">
+                                        <div className="w-12 h-12 bg-[#d26019]/5 text-[#d26019] rounded-sm flex items-center justify-center group-hover:bg-[#d26019] group-hover:text-white transition-all shrink-0">
+                                            <ShoppingBag size={20} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Extra Add-ons</h3>
+                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Book extra furniture, electricity & branding</p>
+                                        </div>
+                                    </div>
+                                    <ChevronRight size={16} className="text-slate-300 group-hover:text-[#d26019] group-hover:translate-x-0.5 transition-all" />
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveSection('products')}
+                                    className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#23471d] transition-all group shadow-sm flex items-center justify-between"
+                                >
+                                    <div className="flex items-center gap-4 text-left">
+                                        <div className="w-12 h-12 bg-[#23471d]/5 text-[#23471d] rounded-sm flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shrink-0">
+                                            <Package size={20} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage Digital Profile / Catalog</h3>
+                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
+                                        </div>
+                                    </div>
+                                    <ChevronRight size={16} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-0.5 transition-all" />
+                                </button>
+                            </div>
+
+                            {/* Info Grid */}
+                            <div className="grid-cols-1 lg:grid-cols-3">
+                                <div className="lg:col-span-2 space-y-6">
+                                    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
+                                        <div className="bg-slate-50 px-6 py-3 border-b flex items-center justify-between">
+                                            <div className="px-2 py-0.5 bg-[#23471d]/10 text-[#23471d] text-[8px] font-black uppercase rounded-sm border border-[#23471d]/20">Official Allocation</div>
+                                        </div>
+                                        <div className="p-4 grid grid-cols-2 sm:grid-cols-4">
+                                            {[
+                                                { label: 'Stall No.', value: data?.participation?.stallFor, icon: Target },
+                                                { label: 'Stall Type', value: data?.participation?.stallType, icon: Layers },
+                                                { label: 'Stall Size', value: `${data?.participation?.stallSize} SQM`, icon: Package },
+                                                { label: 'Scheme', value: data?.participation?.stallScheme, icon: Star },
+                                            ].map((item, i) => (
+                                                <div key={i} className="space-y-1.5">
+                                                    <div className="flex items-center gap-1.5 text-slate-400">
+                                                        <item.icon size={12} />
+                                                        <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
+                                                    </div>
+                                                    <p className="text-[13px] font-bold text-slate-900 uppercase">{item.value || 'N/A'}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden text-center p-12">
+                                        <ImageIcon className="mx-auto text-slate-100 mb-4" size={48} />
+                                        <h3 className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2">Technical Documents</h3>
+                                        <p className="text-[10px] font-medium text-slate-400 max-w-xs mx-auto mb-6 italics">Please visit the documentation section to download your stall technical manual and entry passes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {activeSection === 'products' && (
                         <ProductGrid
                             products={products}
@@ -452,8 +532,8 @@ export default function StallProductManager({ data }: { data: any }) {
                                                 name="price" type="number" placeholder="500"
                                                 className="flex-1 h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                             />
-                                            <select 
-                                                name="priceUnit" 
+                                            <select
+                                                name="priceUnit"
                                                 className="w-24 h-11 bg-slate-50 border border-slate-200 rounded-sm px-2 text-[10px] font-bold focus:bg-white outline-none"
                                             >
                                                 {units.length > 0 ? (
@@ -649,14 +729,14 @@ export default function StallProductManager({ data }: { data: any }) {
             <AnimatePresence>
                 {selectedProduct && (
                     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-                        <motion.div 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
-                            exit={{ opacity: 0 }} 
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             onClick={() => setSelectedProduct(null)}
                             className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
                         />
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
@@ -668,15 +748,15 @@ export default function StallProductManager({ data }: { data: any }) {
                                     <X size={24} />
                                 </button>
                             </div>
-                            
+
                             <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-50">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {selectedProduct.images?.map((img, i) => (
                                         <div key={i} className="group aspect-square bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm relative flex">
-                                            <img 
-                                                src={`${backendBaseUrl}${img}`} 
-                                                alt="" 
-                                                className="w-full h-full object-contain m-auto transition-transform duration-700 group-hover:scale-110" 
+                                            <img
+                                                src={`${backendBaseUrl}${img}`}
+                                                alt=""
+                                                className="w-full h-full object-contain m-auto transition-transform duration-700 group-hover:scale-110"
                                             />
                                             <div className="absolute top-3 left-3 px-2 py-1 bg-black/50 backdrop-blur-md text-white text-[9px] font-black rounded-sm border border-white/10">
                                                 IMAGE {i + 1}
@@ -693,8 +773,8 @@ export default function StallProductManager({ data }: { data: any }) {
     );
 }
 
-function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: { 
-    products: Product[], 
+function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
+    products: Product[],
     baseUrl: string,
     onDelete: (id: string) => void,
     onEnquiries: (p: Product) => void,
@@ -729,23 +809,23 @@ function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
                                 <span className="text-[8px] font-black uppercase mt-1">No Image</span>
                             </div>
                         )}
-                        
+
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                            <button 
+                            <button
                                 onClick={() => onView(p)}
                                 className="w-7 h-7 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-[#23471d] hover:text-white transition-all shadow-lg"
                                 title="View All Images"
                             >
                                 <Eye size={12} />
                             </button>
-                            <button 
+                            <button
                                 onClick={() => onEnquiries(p)}
                                 className="w-7 h-7 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-[#23471d] hover:text-white transition-all shadow-lg"
                                 title="View Leads"
                             >
                                 <MessageCircle size={12} />
                             </button>
-                            <button 
+                            <button
                                 onClick={() => onDelete(p._id)}
                                 className="w-7 h-7 bg-white text-red-500 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-lg"
                                 title="Delete"

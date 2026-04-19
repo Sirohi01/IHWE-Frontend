@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import MarketingToolkit from '@/components/dashboard/exhibitor2/MarketingToolkit';
 
 export default function ExhibitorMarketingPage() {

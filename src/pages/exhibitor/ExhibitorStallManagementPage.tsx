@@ -1,5 +1,5 @@
 import StallProductManager from "@/components/dashboard/exhibitor/StallProductManager";
-import { useExhibitorCtx } from "@/pages/ExhibitorDashboard";
+import { useExhibitorCtx } from "@/context/ExhibitorContext";
 
 export default function ExhibitorStallManagementPage() {
     const { data } = useExhibitorCtx();

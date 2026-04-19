@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import StallExtras from '@/components/dashboard/exhibitor/StallExtras';
 
 export default function ExhibitorAccessoriesPage() {
