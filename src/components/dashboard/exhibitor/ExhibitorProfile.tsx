@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Upload, FileText, Image as ImageIcon, ExternalLink, X, Plus, Trash2, Edit2, Check, XCircle, AlertCircle } from 'lucide-react';
+import { Save, Upload, FileText, Image as ImageIcon, ExternalLink, X, Plus, Trash2, Edit2, Check, XCircle, AlertCircle, Lock } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -19,7 +19,7 @@ interface ProfileProps {
     setData: (data: any) => void;
 }
 
-// Validation functions
+
 const validateWebsite = (url: string) => {
     if (!url) return true;
     const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
@@ -56,13 +56,22 @@ const validatePAN = (pan: string) => {
     return pattern.test(pan);
 };
 
-// Updated InfoGrid with validation
-function InfoGrid({ rows, onEdit, errors }: { rows: [string, React.ReactNode][], onEdit?: (index: number, label: string, value: string) => void, errors?: Record<string, string> }) {
+// Editable fields configuration
+const EDITABLE_FIELDS = [
+    'Company Name', 'Business Type', 'Industry', 'Website', 'Fascia Name',
+    'GST No.', 'VAT No.', 'PAN No.', 'Reg No.', 'Nature of Business',
+    'Address', 'City', 'State', 'Country', 'Pincode', 'Landline',
+    'First Name', 'Last Name', 'Designation', 'Mobile', 'Email', 'Alt No.', 'Salutation'
+];
+
+// Updated InfoGrid with edit mode and read-only mode
+function InfoGrid({ rows, onEdit, errors, isEditable = false }: { rows: [string, React.ReactNode][], onEdit?: (index: number, label: string, value: string) => void, errors?: Record<string, string>, isEditable?: boolean }) {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editValue, setEditValue] = useState<string>('');
     const [fieldError, setFieldError] = useState<string>('');
 
     const handleEdit = (index: number, label: string, currentValue: any) => {
+        if (!isEditable) return;
         setEditingIndex(index);
         setFieldError('');
         let valueToEdit = '';
@@ -110,20 +119,24 @@ function InfoGrid({ rows, onEdit, errors }: { rows: [string, React.ReactNode][],
         setFieldError('');
     };
 
+    const canEdit = (label: string) => {
+        return isEditable && EDITABLE_FIELDS.includes(label);
+    };
+
     return (
         <div className="border border-slate-200 rounded-md overflow-hidden">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 {rows.map(([label, value], i) => {
-                    const isEditable = value && typeof value === 'object' && 'props' in value &&
-                        (value.props.value !== undefined || value.props.onChange);
+                    const isEditableField = canEdit(label);
                     const error = errors?.[label] || '';
 
                     return (
                         <div
                             key={i}
-                            className={`group relative flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40 transition ${error ? 'bg-red-50' : ''}`}
+                            className={`group relative flex border-r border-b border-slate-200 last:border-r-0 transition ${error ? 'bg-red-50' : ''} ${!isEditableField && isEditable ? 'bg-slate-50/30' : ''}`}
                         >
-                            <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r border-slate-200 bg-slate-50 flex items-center">
+                            <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r border-slate-200 bg-slate-50 flex items-center gap-1">
+                                {!isEditableField && isEditable && <Lock size={8} className="text-slate-400" />}
                                 {label}
                             </div>
                             <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all min-h-[40px]">
@@ -159,7 +172,7 @@ function InfoGrid({ rows, onEdit, errors }: { rows: [string, React.ReactNode][],
                                 ) : (
                                     <>
                                         {value ?? '—'}
-                                        {isEditable && (
+                                        {isEditableField && (
                                             <button
                                                 onClick={() => handleEdit(i, label, value)}
                                                 className="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-0.5 bg-slate-100 rounded hover:bg-slate-200"
@@ -192,11 +205,15 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     );
 }
 
-const inputCls =
-    "h-7 text-[11px] border border-slate-300 rounded px-2 w-full outline-none focus:border-[#23471d] focus:ring-1 focus:ring-[#23471d]/20";
+const inputCls = (isEditable: boolean) =>
+    `h-7 text-[11px] border rounded px-2 w-full outline-none transition ${isEditable
+        ? 'border-slate-300 focus:border-[#23471d] focus:ring-1 focus:ring-[#23471d]/20 bg-white'
+        : 'border-slate-200 bg-slate-50 text-slate-500 cursor-not-allowed'
+    }`;
 
 export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     const [saving, setSaving] = useState(false);
+    const [isEditingMode, setIsEditingMode] = useState(false); // Main edit mode toggle
     const isDomestic = data.participation?.currency === 'INR';
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
@@ -280,6 +297,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                     alternateNo: data.contact2?.alternateNo || '',
                 },
             });
+            setIsEditingMode(false); // Reset edit mode when data changes
         }
 
         setFiles({});
@@ -304,13 +322,14 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     const [deletedAdditionalImages, setDeletedAdditionalImages] = useState<string[]>([]);
 
     const handleFileChange = (field: string, file: File | null) => {
+        if (!isEditingMode) return; // Only allow file changes in edit mode
+
         if (!file) {
             setFiles(prev => { const next = { ...prev }; delete next[field]; return next; });
             setPreviews(prev => { const next = { ...prev }; delete next[field]; return next; });
             return;
         }
 
-        // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             toast.error('File size should be less than 5MB');
             return;
@@ -324,12 +343,13 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     };
 
     const handleAdditionalImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!isEditingMode) return;
+
         const selectedFiles = Array.from(e.target.files || []);
         if (selectedFiles.length === 0) return;
 
         const imageFiles = selectedFiles.filter(f => f.type.startsWith('image/'));
 
-        // Validate each file size
         const validFiles = imageFiles.filter(f => f.size <= 5 * 1024 * 1024);
         if (validFiles.length !== imageFiles.length) {
             toast.error('Some files exceed 5MB limit and were skipped');
@@ -344,12 +364,16 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     };
 
     const removeNewAdditionalImage = (index: number) => {
+        if (!isEditingMode) return;
+
         URL.revokeObjectURL(additionalImagePreviews[index]);
         setAdditionalImageFiles(prev => prev.filter((_, i) => i !== index));
         setAdditionalImagePreviews(prev => prev.filter((_, i) => i !== index));
     };
 
     const removeExistingAdditionalImage = (index: number) => {
+        if (!isEditingMode) return;
+
         const imageUrl = existingAdditionalImages[index];
         setDeletedAdditionalImages(prev => [...prev, imageUrl]);
         setExistingAdditionalImages(prev => prev.filter((_, i) => i !== index));
@@ -358,27 +382,22 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     const validateAllFields = (): boolean => {
         const errors: Record<string, string> = {};
 
-        // Validate website
         if (form.website && !validateWebsite(form.website)) {
             errors['Website'] = 'Invalid website URL';
         }
 
-        // Validate GST
         if (form.gstNo && !validateGST(form.gstNo)) {
             errors['GST No.'] = 'Invalid GST format';
         }
 
-        // Validate PAN
         if (form.panNo && !validatePAN(form.panNo)) {
             errors['PAN No.'] = 'Invalid PAN format';
         }
 
-        // Validate pincode
         if (form.pincode && !validatePincode(form.pincode)) {
             errors['Pincode'] = 'Must be 6 digits';
         }
 
-        // Validate primary contact
         if (form.contact1.email && !validateEmail(form.contact1.email)) {
             errors['Email (Primary)'] = 'Invalid email format';
         }
@@ -386,7 +405,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
             errors['Mobile (Primary)'] = 'Must be 10 digits';
         }
 
-        // Validate secondary contact
         if (form.contact2.email && !validateEmail(form.contact2.email)) {
             errors['Email (Secondary)'] = 'Invalid email format';
         }
@@ -405,7 +423,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     };
 
     const handleEditField = (index: number, label: string, value: string) => {
-        // Map label to form field
         const fieldMap: Record<string, string> = {
             'Company Name': 'exhibitorName',
             'Business Type': 'typeOfBusiness',
@@ -441,7 +458,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                 inp(fieldName, value);
             }
 
-            // Clear validation error for this field if it exists
             if (validationErrors[label]) {
                 const newErrors = { ...validationErrors };
                 delete newErrors[label];
@@ -451,7 +467,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     };
 
     const handleSave = async () => {
-        // Validate all fields before saving
         if (!validateAllFields()) {
             return;
         }
@@ -461,7 +476,6 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
             const token = localStorage.getItem('exhibitorToken');
             const formData = new FormData();
 
-            // Merge company form with main form
             const allFormData = {
                 ...form,
                 exhibitorName: companyForm.exhibitorName,
@@ -524,6 +538,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                     setFiles({});
                     setPreviews({});
                     setValidationErrors({});
+                    setIsEditingMode(false); // Exit edit mode after saving
                 }
             } else {
                 toast.error(result.message || 'Update failed');
@@ -540,6 +555,55 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
     const inpC1 = (f: string, v: string) => setForm(p => ({ ...p, contact1: { ...p.contact1, [f]: v } }));
     const inpC2 = (f: string, v: string) => setForm(p => ({ ...p, contact2: { ...p.contact2, [f]: v } }));
 
+    const toggleEditMode = () => {
+        if (isEditingMode) {
+            // Cancel edit mode - revert changes
+            setCompanyForm({
+                exhibitorName: data.exhibitorName || '',
+                typeOfBusiness: data.typeOfBusiness || '',
+                industrySector: data.industrySector || '',
+            });
+            setForm({
+                website: data.website || '',
+                address: data.address || '',
+                city: data.city || '',
+                state: data.state || '',
+                country: data.country || '',
+                pincode: data.pincode || '',
+                landlineNo: data.landlineNo || '',
+                fasciaName: data.fasciaName || '',
+                gstNo: data.gstNo || '',
+                panNo: data.panNo || '',
+                natureOfBusiness: data.natureOfBusiness || '',
+                contact1: {
+                    title: data.contact1?.title || 'Mr.',
+                    firstName: data.contact1?.firstName || '',
+                    lastName: data.contact1?.lastName || '',
+                    email: data.contact1?.email || '',
+                    designation: data.contact1?.designation || '',
+                    mobile: data.contact1?.mobile || '',
+                    alternateNo: data.contact1?.alternateNo || '',
+                },
+                contact2: {
+                    title: data.contact2?.title || '',
+                    firstName: data.contact2?.firstName || '',
+                    lastName: data.contact2?.lastName || '',
+                    email: data.contact2?.email || '',
+                    designation: data.contact2?.designation || '',
+                    mobile: data.contact2?.mobile || '',
+                    alternateNo: data.contact2?.alternateNo || '',
+                },
+            });
+            setFiles({});
+            setPreviews({});
+            setAdditionalImageFiles([]);
+            setAdditionalImagePreviews([]);
+            setDeletedAdditionalImages([]);
+            setValidationErrors({});
+        }
+        setIsEditingMode(!isEditingMode);
+    };
+
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="bg-white rounded-md border border-slate-200 overflow-hidden shadow-sm">
@@ -550,170 +614,275 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                         <p className="text-[10px] text-slate-400">Registration ID: {data.registrationId}</p>
                     </div>
 
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-1.5 px-4 py-1.5 bg-[#23471d] text-white text-[10px] font-bold uppercase rounded hover:bg-[#1a3516] disabled:opacity-50 transition-colors shadow-sm"
-                    >
-                        <Save size={12} /> {saving ? 'Submitting...' : 'Submit to Admin'}
-                    </button>
+                    <div className="flex gap-2">
+                        {!isEditingMode ? (
+                            <button
+                                onClick={toggleEditMode}
+                                className="flex items-center gap-1.5 px-4 py-1.5 bg-blue-600 text-white text-[10px] font-bold uppercase rounded hover:bg-blue-700 transition-colors shadow-sm"
+                            >
+                                <Edit2 size={12} /> Edit Profile
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={toggleEditMode}
+                                    className="flex items-center gap-1.5 px-4 py-1.5 bg-gray-500 text-white text-[10px] font-bold uppercase rounded hover:bg-gray-600 transition-colors shadow-sm"
+                                >
+                                    <X size={12} /> Cancel
+                                </button>
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                    className="flex items-center gap-1.5 px-4 py-1.5 bg-[#23471d] text-white text-[10px] font-bold uppercase rounded hover:bg-[#1a3516] disabled:opacity-50 transition-colors shadow-sm"
+                                >
+                                    <Save size={12} /> {saving ? 'Submitting...' : 'Submit to Admin'}
+                                </button>
+                            </>
+                        )}
+                    </div>
                 </div>
 
                 <div className="p-4 space-y-4">
-
-                    <Section title="Company Information">
-                        <InfoGrid
-                            rows={[
-                                ['Company Name', <input className={inputCls} value={companyForm.exhibitorName} onChange={e => setCompanyForm(prev => ({ ...prev, exhibitorName: e.target.value }))} />],
-                                ['Business Type', <input className={inputCls} value={companyForm.typeOfBusiness} onChange={e => setCompanyForm(prev => ({ ...prev, typeOfBusiness: e.target.value }))} />],
-                                ['Industry', <input className={inputCls} value={companyForm.industrySector} onChange={e => setCompanyForm(prev => ({ ...prev, industrySector: e.target.value }))} />],
-                                ['Website', <input className={inputCls} placeholder="e.g. www.example.com" value={form.website} onChange={e => inp('website', e.target.value)} />],
-                                ['Fascia Name', <input className={inputCls} placeholder="Name on stall" value={form.fasciaName} onChange={e => inp('fasciaName', e.target.value)} />],
-                                [isDomestic ? 'GST No.' : 'VAT No.', <input className={inputCls} placeholder="e.g. 22AAAAA0000A1Z" value={form.gstNo} onChange={e => inp('gstNo', e.target.value)} />],
-                                [isDomestic ? 'PAN No.' : 'Reg No.', <input className={inputCls} placeholder="e.g. AAAAA1234A" value={form.panNo} onChange={e => inp('panNo', e.target.value)} />],
-                                ['Nature of Business', <input className={inputCls} placeholder="Exporter, Mfg, etc." value={form.natureOfBusiness} onChange={e => inp('natureOfBusiness', e.target.value)} />],
-                            ]}
-                            onEdit={handleEditField}
-                            errors={validationErrors}
-                        />
-                    </Section>
-
-                    <Section title="Address Details">
-                        <InfoGrid
-                            rows={[
-                                ['Address', <input className={inputCls} value={form.address} onChange={e => inp('address', e.target.value)} />],
-                                ['City', <input className={inputCls} value={form.city} onChange={e => inp('city', e.target.value)} />],
-                                ['State', <input className={inputCls} value={form.state} onChange={e => inp('state', e.target.value)} />],
-                                ['Country', <input className={inputCls} value={form.country} onChange={e => inp('country', e.target.value)} />],
-                                ['Pincode', <input className={inputCls} type="tel" placeholder="6 digits" maxLength={6} value={form.pincode} onChange={e => inp('pincode', e.target.value.replace(/\D/g, ''))} />],
-                                ['Landline', <input className={inputCls} type="tel" placeholder="Phone number" value={form.landlineNo} onChange={e => inp('landlineNo', e.target.value)} />],
-                            ]}
-                            onEdit={handleEditField}
-                            errors={validationErrors}
-                        />
-                    </Section>
-
-                    <Section title="Primary Contact">
-                        <InfoGrid
-                            rows={[
-                                ['Salutation', (
-                                    <select className={inputCls} value={form.contact1.title} onChange={e => inpC1('title', e.target.value)}>
-                                        <option value="Mr.">Mr.</option>
-                                        <option value="Ms.">Ms.</option>
-                                        <option value="Mrs.">Mrs.</option>
-                                        <option value="Dr.">Dr.</option>
-                                        <option value="Prof.">Prof.</option>
-                                    </select>
-                                )],
-                                ['First Name', <input className={inputCls} value={form.contact1.firstName} onChange={e => inpC1('firstName', e.target.value)} />],
-                                ['Last Name', <input className={inputCls} value={form.contact1.lastName} onChange={e => inpC1('lastName', e.target.value)} />],
-                                ['Designation', <input className={inputCls} value={form.contact1.designation} onChange={e => inpC1('designation', e.target.value)} />],
-                                ['Mobile', <input className={inputCls} type="tel" placeholder="10 digits" maxLength={10} value={form.contact1.mobile} onChange={e => inpC1('mobile', e.target.value.replace(/\D/g, ''))} />],
-                                ['Email', <input className={inputCls} type="email" placeholder="email@example.com" value={form.contact1.email} onChange={e => inpC1('email', e.target.value)} />],
-                                ['Alt No.', <input className={inputCls} type="tel" placeholder="Alternate number" value={form.contact1.alternateNo} onChange={e => inpC1('alternateNo', e.target.value)} />],
-                            ]}
-                            onEdit={handleEditField}
-                            errors={validationErrors}
-                        />
-                    </Section>
-
-                    <Section title="Secondary Contact">
-                        <InfoGrid
-                            rows={[
-                                ['Salutation', (
-                                    <select className={inputCls} value={form.contact2.title} onChange={e => inpC2('title', e.target.value)}>
-                                        <option value="">Select</option>
-                                        <option value="Mr.">Mr.</option>
-                                        <option value="Ms.">Ms.</option>
-                                        <option value="Mrs.">Mrs.</option>
-                                        <option value="Dr.">Dr.</option>
-                                        <option value="Prof.">Prof.</option>
-                                    </select>
-                                )],
-                                ['First Name', <input className={inputCls} value={form.contact2.firstName} onChange={e => inpC2('firstName', e.target.value)} />],
-                                ['Last Name', <input className={inputCls} value={form.contact2.lastName} onChange={e => inpC2('lastName', e.target.value)} />],
-                                ['Designation', <input className={inputCls} value={form.contact2.designation} onChange={e => inpC2('designation', e.target.value)} />],
-                                ['Mobile', <input className={inputCls} type="tel" placeholder="10 digits" maxLength={10} value={form.contact2.mobile} onChange={e => inpC2('mobile', e.target.value.replace(/\D/g, ''))} />],
-                                ['Email', <input className={inputCls} type="email" placeholder="email@example.com" value={form.contact2.email} onChange={e => inpC2('email', e.target.value)} />],
-                                ['Alt No.', <input className={inputCls} type="tel" placeholder="Alternate number" value={form.contact2.alternateNo} onChange={e => inpC2('alternateNo', e.target.value)} />],
-                            ]}
-                            onEdit={handleEditField}
-                            errors={validationErrors}
-                        />
-                    </Section>
-
-
-
-                    {/* All Upload Sections at Bottom */}
-                    <div className="border-t border-slate-200 pt-4 mt-4">
-                        <h3 className="text-[12px] font-bold text-slate-700 mb-3 uppercase tracking-wide">Document Uploads</h3>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mb-6">
-                            <FileUpload
-                                label="Company Logo"
-                                field="companyLogoUrl"
-                                currentUrl={data.companyLogoUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
+                    <div className={`transition-all duration-300 ${!isEditingMode ? 'opacity-90' : ''}`}>
+                        <Section title="Company Information">
+                            <InfoGrid
+                                rows={[
+                                    ['Company Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={companyForm.exhibitorName} onChange={e => setCompanyForm(prev => ({ ...prev, exhibitorName: e.target.value }))} /> :
+                                        <span className="text-[11px]">{companyForm.exhibitorName || '—'}</span>
+                                    ],
+                                    ['Business Type', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={companyForm.typeOfBusiness} onChange={e => setCompanyForm(prev => ({ ...prev, typeOfBusiness: e.target.value }))} /> :
+                                        <span className="text-[11px]">{companyForm.typeOfBusiness || '—'}</span>
+                                    ],
+                                    ['Industry', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={companyForm.industrySector} onChange={e => setCompanyForm(prev => ({ ...prev, industrySector: e.target.value }))} /> :
+                                        <span className="text-[11px]">{companyForm.industrySector || '—'}</span>
+                                    ],
+                                    ['Website', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} placeholder="e.g. www.example.com" value={form.website} onChange={e => inp('website', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.website || '—'}</span>
+                                    ],
+                                    ['Fascia Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} placeholder="Name on stall" value={form.fasciaName} onChange={e => inp('fasciaName', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.fasciaName || '—'}</span>
+                                    ],
+                                    [isDomestic ? 'GST No.' : 'VAT No.', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} placeholder="e.g. 22AAAAA0000A1Z" value={form.gstNo} onChange={e => inp('gstNo', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.gstNo || '—'}</span>
+                                    ],
+                                    [isDomestic ? 'PAN No.' : 'Reg No.', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} placeholder="e.g. AAAAA1234A" value={form.panNo} onChange={e => inp('panNo', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.panNo || '—'}</span>
+                                    ],
+                                    ['Nature of Business', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} placeholder="Exporter, Mfg, etc." value={form.natureOfBusiness} onChange={e => inp('natureOfBusiness', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.natureOfBusiness || '—'}</span>
+                                    ],
+                                ]}
+                                onEdit={handleEditField}
+                                errors={validationErrors}
+                                isEditable={isEditingMode}
                             />
+                        </Section>
 
-                            <FileUpload
-                                label="PAN Card"
-                                field="panCardFrontUrl"
-                                currentUrl={data.panCardFrontUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
+                        <Section title="Address Details">
+                            <InfoGrid
+                                rows={[
+                                    ['Address', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.address} onChange={e => inp('address', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.address || '—'}</span>
+                                    ],
+                                    ['City', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.city} onChange={e => inp('city', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.city || '—'}</span>
+                                    ],
+                                    ['State', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.state} onChange={e => inp('state', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.state || '—'}</span>
+                                    ],
+                                    ['Country', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.country} onChange={e => inp('country', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.country || '—'}</span>
+                                    ],
+                                    ['Pincode', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="6 digits" maxLength={6} value={form.pincode} onChange={e => inp('pincode', e.target.value.replace(/\D/g, ''))} /> :
+                                        <span className="text-[11px]">{form.pincode || '—'}</span>
+                                    ],
+                                    ['Landline', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="Phone number" value={form.landlineNo} onChange={e => inp('landlineNo', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.landlineNo || '—'}</span>
+                                    ],
+                                ]}
+                                onEdit={handleEditField}
+                                errors={validationErrors}
+                                isEditable={isEditingMode}
                             />
+                        </Section>
 
-                            <FileUpload
-                                label="Aadhaar Front"
-                                field="aadhaarCardFrontUrl"
-                                currentUrl={data.aadhaarCardFrontUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
+                        <Section title="Primary Contact">
+                            <InfoGrid
+                                rows={[
+                                    ['Salutation', isEditingMode ? (
+                                        <select className={inputCls(isEditingMode)} value={form.contact1.title} onChange={e => inpC1('title', e.target.value)}>
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Ms.">Ms.</option>
+                                            <option value="Mrs.">Mrs.</option>
+                                            <option value="Dr.">Dr.</option>
+                                            <option value="Prof.">Prof.</option>
+                                        </select>
+                                    ) : <span className="text-[11px]">{form.contact1.title || '—'}</span>],
+                                    ['First Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact1.firstName} onChange={e => inpC1('firstName', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact1.firstName || '—'}</span>
+                                    ],
+                                    ['Last Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact1.lastName} onChange={e => inpC1('lastName', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact1.lastName || '—'}</span>
+                                    ],
+                                    ['Designation', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact1.designation} onChange={e => inpC1('designation', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact1.designation || '—'}</span>
+                                    ],
+                                    ['Mobile', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="10 digits" maxLength={10} value={form.contact1.mobile} onChange={e => inpC1('mobile', e.target.value.replace(/\D/g, ''))} /> :
+                                        <span className="text-[11px]">{form.contact1.mobile || '—'}</span>
+                                    ],
+                                    ['Email', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="email" placeholder="email@example.com" value={form.contact1.email} onChange={e => inpC1('email', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact1.email || '—'}</span>
+                                    ],
+                                    ['Alt No.', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="Alternate number" value={form.contact1.alternateNo} onChange={e => inpC1('alternateNo', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact1.alternateNo || '—'}</span>
+                                    ],
+                                ]}
+                                onEdit={handleEditField}
+                                errors={validationErrors}
+                                isEditable={isEditingMode}
                             />
+                        </Section>
 
-                            <FileUpload
-                                label="Aadhaar Back"
-                                field="aadhaarCardBackUrl"
-                                currentUrl={data.aadhaarCardBackUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
+                        <Section title="Secondary Contact">
+                            <InfoGrid
+                                rows={[
+                                    ['Salutation', isEditingMode ? (
+                                        <select className={inputCls(isEditingMode)} value={form.contact2.title} onChange={e => inpC2('title', e.target.value)}>
+                                            <option value="">Select</option>
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Ms.">Ms.</option>
+                                            <option value="Mrs.">Mrs.</option>
+                                            <option value="Dr.">Dr.</option>
+                                            <option value="Prof.">Prof.</option>
+                                        </select>
+                                    ) : <span className="text-[11px]">{form.contact2.title || '—'}</span>],
+                                    ['First Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact2.firstName} onChange={e => inpC2('firstName', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact2.firstName || '—'}</span>
+                                    ],
+                                    ['Last Name', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact2.lastName} onChange={e => inpC2('lastName', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact2.lastName || '—'}</span>
+                                    ],
+                                    ['Designation', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} value={form.contact2.designation} onChange={e => inpC2('designation', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact2.designation || '—'}</span>
+                                    ],
+                                    ['Mobile', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="10 digits" maxLength={10} value={form.contact2.mobile} onChange={e => inpC2('mobile', e.target.value.replace(/\D/g, ''))} /> :
+                                        <span className="text-[11px]">{form.contact2.mobile || '—'}</span>
+                                    ],
+                                    ['Email', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="email" placeholder="email@example.com" value={form.contact2.email} onChange={e => inpC2('email', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact2.email || '—'}</span>
+                                    ],
+                                    ['Alt No.', isEditingMode ?
+                                        <input className={inputCls(isEditingMode)} type="tel" placeholder="Alternate number" value={form.contact2.alternateNo} onChange={e => inpC2('alternateNo', e.target.value)} /> :
+                                        <span className="text-[11px]">{form.contact2.alternateNo || '—'}</span>
+                                    ],
+                                ]}
+                                onEdit={handleEditField}
+                                errors={validationErrors}
+                                isEditable={isEditingMode}
                             />
+                        </Section>
 
-                            <FileUpload
-                                label="GST Certificate"
-                                field="gstCertificateUrl"
-                                currentUrl={data.gstCertificateUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
-                            />
+                        {/* Document Uploads Section */}
+                        <div className="border-t border-slate-200 pt-4 mt-4">
+                            <h3 className="text-[12px] font-bold text-slate-700 mb-3 uppercase tracking-wide">Document Uploads</h3>
 
-                            <FileUpload
-                                label="Cancelled Cheque"
-                                field="cancelledChequeUrl"
-                                currentUrl={data.cancelledChequeUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
-                            />
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mb-6">
+                                <FileUpload
+                                    label="Company Logo"
+                                    field="companyLogoUrl"
+                                    currentUrl={data.companyLogoUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
 
-                            <FileUpload
-                                label="Representative Photo"
-                                field="representativePhotoUrl"
-                                currentUrl={data.representativePhotoUrl}
-                                files={files}
-                                previews={previews}
-                                onFileChange={handleFileChange}
-                            />
+                                <FileUpload
+                                    label="PAN Card"
+                                    field="panCardFrontUrl"
+                                    currentUrl={data.panCardFrontUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+
+                                <FileUpload
+                                    label="Aadhaar Front"
+                                    field="aadhaarCardFrontUrl"
+                                    currentUrl={data.aadhaarCardFrontUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+
+                                <FileUpload
+                                    label="Aadhaar Back"
+                                    field="aadhaarCardBackUrl"
+                                    currentUrl={data.aadhaarCardBackUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+
+                                <FileUpload
+                                    label="GST Certificate"
+                                    field="gstCertificateUrl"
+                                    currentUrl={data.gstCertificateUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+
+                                <FileUpload
+                                    label="Cancelled Cheque"
+                                    field="cancelledChequeUrl"
+                                    currentUrl={data.cancelledChequeUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+
+                                <FileUpload
+                                    label="Representative Photo"
+                                    field="representativePhotoUrl"
+                                    currentUrl={data.representativePhotoUrl}
+                                    files={files}
+                                    previews={previews}
+                                    onFileChange={handleFileChange}
+                                    isEditable={isEditingMode}
+                                />
+                            </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -722,13 +891,14 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
 }
 
 // FileUpload component with validation
-function FileUpload({ label, field, currentUrl, files, previews, onFileChange }: {
+function FileUpload({ label, field, currentUrl, files, previews, onFileChange, isEditable }: {
     label: string;
     field: string;
     currentUrl?: string;
     files: Record<string, File>;
     previews: Record<string, string>;
     onFileChange: (field: string, file: File | null) => void;
+    isEditable: boolean;
 }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [showPreview, setShowPreview] = useState(false);
@@ -751,8 +921,12 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange }:
             <div className="flex flex-wrap items-center gap-1">
                 <button
                     type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1 px-2 py-1 bg-white border border-slate-300 rounded text-[9px] font-semibold text-slate-600 hover:bg-slate-100 transition-colors shadow-sm"
+                    onClick={() => isEditable && fileInputRef.current?.click()}
+                    disabled={!isEditable}
+                    className={`flex items-center gap-1 px-2 py-1 bg-white border rounded text-[9px] font-semibold transition-colors shadow-sm ${isEditable
+                        ? 'border-slate-300 text-slate-600 hover:bg-slate-100 cursor-pointer'
+                        : 'border-slate-200 text-slate-400 cursor-not-allowed'
+                        }`}
                 >
                     <Upload size={10} /> {hasFile ? 'Change' : (currentUrl ? 'Change' : 'Upload')}
                 </button>
@@ -767,7 +941,7 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange }:
                     </button>
                 )}
 
-                {hasFile && (
+                {hasFile && isEditable && (
                     <button
                         type="button"
                         onClick={() => onFileChange(field, null)}
@@ -783,6 +957,7 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange }:
                     className="hidden"
                     accept="image/*,.pdf"
                     onChange={(e) => onFileChange(field, e.target.files?.[0] || null)}
+                    disabled={!isEditable}
                 />
             </div>
 
