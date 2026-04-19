@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Download, Printer } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
 import { toast } from 'sonner';
@@ -125,7 +125,7 @@ const PreReceipt: React.FC = () => {
                             <span>Only)</span>
                         </div>
 
-                        <p className="leading-[2.0]">
+                        <div className="leading-[2.0]">
                             From the office of Development Commissioner (MSME), Govt. of India, Ministry of Micro, Small & Medium Enterprise (MSME) on account of financial assistance under component 5(I)(A): Participation of Individual MSE in Domestic Trade Fair/Exhibition
                             <input
                                 type="text"
@@ -157,7 +157,7 @@ const PreReceipt: React.FC = () => {
                                 />
                                 (Venue) under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
                             </div>
-                        </p>
+                        </div>
                     </div>
 
                     <div className="mt-12 flex flex-col items-end">

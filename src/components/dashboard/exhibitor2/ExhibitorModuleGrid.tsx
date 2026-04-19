@@ -40,11 +40,11 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfeff',
             badge: data?.participation?.stallFor ? 'Assigned' : 'Pending',
             badgeOk: !!data?.participation?.stallFor,
-            tab: null,
+            tab: 'stall-management',
         },
         {
             id: 'billing',
-            label: 'Billing & Payments',  // ✅ changed
+            label: 'Billing & Payments',
             desc: `${fmt(paid)} paid · ${fmt(balance)} due`,
             icon: Wallet,
             accent: balance > 0 ? '#e11d48' : '#16a34a',
@@ -53,29 +53,8 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: balance === 0,
             tab: 'invoices',
         },
-        {
-            id: 'products',
-            label: 'Products & Services',
-            desc: 'Electricity, furniture & branding',
-            icon: ShoppingBag,
-            accent: '#7c3aed',
-            light: '#f5f3ff',
-            badge: 'Active',
-            badgeOk: true,
-            tab: 'accessories',
-        },
-        {
-            id: 'sponsorship',
-            label: 'Sponsorship',
-            desc: 'Gold | Silver | Booth branding | Lanyard',
-            icon: Sparkles,
-            accent: '#b45309',
-            light: '#fff7ed',
-            badge: data?.sponsorship?.tier ? 'Active' : 'Upgrade',
-            badgeOk: !!data?.sponsorship?.tier,
-            tab: null,
-            highlight: true,
-        },
+
+
         {
             id: 'bsm',
             label: 'Buyer Seller Meet',  // ✅ renamed from 'Appointments & Meetings'
@@ -95,8 +74,8 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             icon: CalendarDays,
             accent: '#0284c7',
             light: '#f0f9ff',
-            badge: 'Coming Soon',
-            badgeOk: false,
+            badge: 'Active',
+            badgeOk: true,
             tab: 'calendar',
         },
         {
@@ -131,7 +110,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#ecfdf5',
             badge: 'Available',
             badgeOk: true,
-            tab: null,
+            tab: 'documentation',
         },
 
     ];

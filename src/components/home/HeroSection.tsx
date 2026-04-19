@@ -152,7 +152,7 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl -mt-20"
+            className="max-w-4xl mt-6"
           >
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -161,7 +161,9 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
               className="flex items-center gap-3 mb-6"
             >
               <span className="w-10 h-[1px] bg-white/40" />
-              <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2"
+                style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
+              >
                 <Sparkles size={12} className="text-white/70" />
                 {slides[current].subtitle}
               </span>
@@ -172,7 +174,8 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.9 }}
               className={cn(
-                "font-bold mb-6 leading-[1.15] tracking-tight text-white uppercase",
+                "font-bold leading-[1.05] tracking-tight text-white uppercase [&_p]:m-0 [&_p]:p-0",
+                slides[current].title2 ? "mb-1" : "mb-6",
                 !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
               )}
               style={{
@@ -181,6 +184,23 @@ const HeroSection = ({ onRegisterVisit }: HeroSectionProps) => {
               }}
               dangerouslySetInnerHTML={{ __html: slides[current].title }}
             />
+
+            {slides[current].title2 && (
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.9 }}
+                className={cn(
+                  "font-bold mb-6 leading-[1.05] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_p]:p-0",
+                  !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
+                )}
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined
+                }}
+                dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
+              />
+            )}
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

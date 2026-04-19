@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Download, Printer } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
 

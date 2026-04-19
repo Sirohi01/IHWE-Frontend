@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck } from "lucide-react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SidebarProps {
     activeTab: string;
@@ -13,10 +14,11 @@ const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "profile", label: "Profile", icon: User },
     { id: "invoices", label: "Accounts", icon: FileText },
-    { id: "accessories", label: "Product and Services", icon: Package },
+    { id: "stall-management", label: "Stall Management", icon: Building2 },
     { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
     { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
+    { id: "documentation", label: "Documentation", icon: FolderOpen },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
 ];
 
@@ -24,20 +26,24 @@ const msmeSubItems = [
     { id: "msme", label: "Udyam Details" },
     {
         id: "psm_claim", label: "PSM Claim",
+        isDropdown: true,
         subItems: [
-            // { id: "psm_claim", label: "PSM Claim" },
             { id: "annexure_c", label: "Annexure C" },
+            { id: "annexure_d", label: "Annexure D" },
             { id: "declaration", label: "Declaration" },
             { id: "feedback_report", label: "Feedback Report" },
             { id: "undertaking", label: "Undertaking" },
             { id: "pre_receipt", label: "Pre-Receipt" },
+            { id: "participants_feedback", label: "Participants Feedback" },
+            { id: "mandate_form", label: "Mandate Form" }
         ]
     },
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
-    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_c" || activeTab === "declaration" || activeTab === "feedback_report" || activeTab === "undertaking" || activeTab === "pre_receipt";
+    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_d" || activeTab === "annexure_c" || activeTab === "declaration" || activeTab === "feedback_report" || activeTab === "undertaking" || activeTab === "pre_receipt";
     const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
+    const [psmOpen, setPsmOpen] = useState(activeTab === "annexure_d" || activeTab === "psm_claim");
 
     const handleMsmeToggle = () => {
         if (!sidebarOpen) {
@@ -49,7 +55,7 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
     };
 
     return (
-        <aside className={`fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 overflow-hidden ${sidebarOpen ? "w-56" : "w-14"}`}>
+        <aside className={`fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 overflow-hidden print:hidden ${sidebarOpen ? "w-56" : "w-14"}`}>
             <nav className="flex-1 py-4 space-y-0.5 px-2 overflow-y-auto">
                 {navItems.map(item => {
                     const Icon = item.icon;
@@ -96,44 +102,91 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                         )}
                     </button>
 
+                    <AnimatePresence initial={false}>
+                        {sidebarOpen && msmeOpen && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.25, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                            >
+                                <div className="mt-1 mb-1 ml-[17px] border-l-2 border-slate-200 pl-2 space-y-1">
+                                    {msmeSubItems.map(sub => {
+                                        if (sub.isDropdown) {
+                                            const isGroupActive = activeTab === "annexure_d" || activeTab === "psm_claim";
+                                            return (
+                                                <div key={sub.id} className="flex flex-col w-full">
+                                                    <button
+                                                        onClick={() => setPsmOpen(!psmOpen)}
+                                                        className={`w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group ${isGroupActive ? "bg-[#23471d]/10 text-[#23471d]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                                                            }`}
+                                                    >
+                                                        <span
+                                                            className={`absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-white ${isGroupActive ? "bg-[#23471d] scale-100" : "bg-slate-300 scale-0 group-hover:scale-100"
+                                                                }`}
+                                                        />
+                                                        <span className={`text-[10px] uppercase tracking-wider whitespace-nowrap flex-1 ${isGroupActive ? "font-bold" : "font-semibold"}`}>
+                                                            {sub.label}
+                                                        </span>
+                                                        <ChevronDown size={12} className={`transition-transform duration-300 ${psmOpen ? "rotate-180" : ""}`} />
+                                                    </button>
 
-                    {sidebarOpen && msmeOpen && (
-                        <div className="mt-0.5 ml-3 border-l border-slate-200 pl-2 space-y-0.5">
-                            {msmeSubItems.map(sub => {
-                                const hasSubItems = 'subItems' in sub && sub.subItems && sub.subItems.length > 0;
-                                const isSubActive = activeTab === sub.id || (hasSubItems && sub.subItems?.some(s => s.id === activeTab));
+                                                    <AnimatePresence initial={false}>
+                                                        {psmOpen && (
+                                                            <motion.div
+                                                                initial={{ height: 0, opacity: 0 }}
+                                                                animate={{ height: "auto", opacity: 1 }}
+                                                                exit={{ height: 0, opacity: 0 }}
+                                                                transition={{ duration: 0.25, ease: "easeInOut" }}
+                                                                className="overflow-hidden"
+                                                            >
+                                                                <div className="mt-1 mb-1 ml-[8px] border-l border-slate-200 pl-2 space-y-0.5">
+                                                                    {sub.subItems?.map(nested => {
+                                                                        const nestedActive = activeTab === nested.id;
+                                                                        return (
+                                                                            <button
+                                                                                key={nested.id}
+                                                                                onClick={() => setActiveTab(nested.id)}
+                                                                                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all relative group ${nestedActive ? "text-[#23471d] font-bold" : "text-slate-500 hover:text-slate-800 font-semibold"
+                                                                                    }`}
+                                                                            >
+                                                                                <span className="text-[9px] uppercase tracking-wider whitespace-nowrap">{nested.label}</span>
+                                                                                {nestedActive && <ChevronRight size={10} className="ml-auto" />}
+                                                                            </button>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
+                                            );
+                                        }
 
-                                return (
-                                    <div key={sub.id} className="space-y-0.5">
-                                        <button
-                                            onClick={() => setActiveTab(sub.id)}
-                                            className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all ${activeTab === sub.id ? "bg-[#23471d]/10 text-[#23471d] font-bold" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"}`}>
-                                            <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${activeTab === sub.id ? "bg-[#23471d]" : "bg-slate-300"}`} />
-                                            <span className="text-[10px] font-semibold uppercase tracking-wider whitespace-nowrap">{sub.label}</span>
-                                            {hasSubItems && <ChevronDown size={10} className={`ml-auto transition-transform ${isSubActive ? 'rotate-0' : '-rotate-90'}`} />}
-                                        </button>
-
-                                        {hasSubItems && isSubActive && (
-                                            <div className="ml-4 border-l border-slate-100 pl-2 space-y-0.5">
-                                                {sub.subItems.map(nested => {
-                                                    const active = activeTab === nested.id;
-                                                    return (
-                                                        <button
-                                                            key={nested.id}
-                                                            onClick={() => setActiveTab(nested.id)}
-                                                            className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all ${active ? "bg-[#23471d]/10 text-[#23471d] font-bold" : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"}`}>
-                                                            <span className={`w-1 h-1 rounded-full shrink-0 ${active ? "bg-[#23471d]" : "bg-slate-300"}`} />
-                                                            <span className="text-[9px] font-medium uppercase tracking-wider whitespace-nowrap">{nested.label}</span>
-                                                        </button>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
+                                        const active = activeTab === sub.id;
+                                        return (
+                                            <button
+                                                key={sub.id}
+                                                onClick={() => setActiveTab(sub.id)}
+                                                className={`w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group ${active ? "bg-[#23471d]/10 text-[#23471d]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                                                    }`}
+                                            >
+                                                <span
+                                                    className={`absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-white ${active ? "bg-[#23471d] scale-100" : "bg-slate-300 scale-0 group-hover:scale-100"
+                                                        }`}
+                                                />
+                                                <span className={`text-[10px] uppercase tracking-wider whitespace-nowrap ${active ? "font-bold" : "font-semibold"}`}>
+                                                    {sub.label}
+                                                </span>
+                                                {active && <ChevronRight size={12} className="ml-auto" />}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
                 {/* ── My Events ── */}

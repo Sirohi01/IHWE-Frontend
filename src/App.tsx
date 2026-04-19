@@ -44,7 +44,9 @@ const ExhibitorAccessoriesPage = lazy(() => import("./pages/exhibitor/ExhibitorA
 const ExhibitorMarketingPage = lazy(() => import("./pages/exhibitor/ExhibitorMarketingPage"));
 const ExhibitorChatPage = lazy(() => import("./pages/exhibitor/ExhibitorChatPage"));
 const ExhibitorMSMEPage = lazy(() => import("./pages/exhibitor/ExhibitorMSMEPage"));
+const ExhibitorStallManagementPage = lazy(() => import("./pages/exhibitor/ExhibitorStallManagementPage"));
 const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
+const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
 const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
@@ -58,6 +60,9 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import AnnexureD from "@/pages/psmClaim/AnnexureD";
+import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
+import MandateForm from "@/pages/psmClaim/MandateForm";
 
 const queryClient = new QueryClient();
 
@@ -117,6 +122,7 @@ const App = () => {
                   <Route path="profile" element={<ExhibitorProfilePage />} />
                   <Route path="invoices" element={<ExhibitorInvoicesPage />} />
                   <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
+                  <Route path="stall-management" element={<ExhibitorStallManagementPage />} />
                   <Route path="marketing" element={<ExhibitorMarketingPage />} />
                   <Route path="bsm" element={<ExhibitorBSMPage />} />
                   <Route path="calendar" element={<ExhibitorCalendarPage />} />
@@ -125,12 +131,16 @@ const App = () => {
                   <Route path="psm-claim">
                     <Route index element={<ExhibitorMSMEPage />} />
                     <Route path="annexure-c" element={<AnnexureC />} />
+                    <Route path="annexure-d" element={<AnnexureD />} />
                     <Route path="declaration" element={<Declaration />} />
                     <Route path="feedback-report" element={<FeedbackReport />} />
                     <Route path="undertaking" element={<Undertaking />} />
                     <Route path="pre-receipt" element={<PreReceipt />} />
                   </Route>
                   <Route path="exhibitions" element={<ExhibitorEventsPage />} />
+                  <Route path="documentation" element={<ExhibitorDocumentsPage />} />
+                  <Route path="participants-feedback" element={<ParticipantsFeedback />} />
+                  <Route path="mandate-form" element={<MandateForm />} />
                 </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
                 <Route path="/buyer-scan" element={<BuyerScan />} />

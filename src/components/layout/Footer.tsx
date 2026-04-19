@@ -101,7 +101,7 @@ const Footer = () => {
       <div className="border-t border-slate-900 py-6 bg-black/20">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-bold uppercase tracking-widest">
           <span className="text-white font-inter">
-            © 2026 <span className="text-[#d26019]">Encodancy Pvt Ltd</span>. All rights reserved.
+          <span className="text-[#fff] font-20px">Designed & Developed by Encodency Pvt. Ltd.</span> <br />  © 2026 IHWE <span className="text-[#d26019] text-20px">Property of Namo Gange Wellness Pvt. Ltd. </span>. All rights reserved. 
           </span>
           <div className="flex gap-6">
             <Link to="/privacy-policy" className="text-white hover:text-[#d26019] transition-colors">Privacy Policy</Link>

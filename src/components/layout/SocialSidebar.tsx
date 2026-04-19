@@ -4,77 +4,77 @@ import { Facebook, Instagram, Youtube, Linkedin, Twitter } from "lucide-react";
 import { socialMediaApi, analyticsApi } from "@/lib/api";
 
 const SocialSidebar = () => {
-    const [isVisible, setIsVisible] = useState(false);
-    const [socialLinks, setSocialLinks] = useState({
-        facebook: "https://facebook.com",
-        instagram: "https://instagram.com",
-        twitter: "https://twitter.com",
-        youtube: "https://youtube.com",
-        linkedin: "https://linkedin.com",
-    });
+  const [isVisible, setIsVisible] = useState(false);
+  const [socialLinks, setSocialLinks] = useState({
+    facebook: "https://www.facebook.com/namogangewellness.event",
+    instagram: "https://instagram.com",
+    twitter: "https://twitter.com",
+    youtube: "https://youtube.com",
+    linkedin: "https://linkedin.com",
+  });
 
-    // Trigger animations after mount
-    useEffect(() => {
-        const timer = setTimeout(() => setIsVisible(true), 100);
-        
-        const fetchSocialLinks = async () => {
-            try {
-                const data = await socialMediaApi.get();
-                if (data) {
-                    setSocialLinks({
-                        facebook: data.facebook || "https://facebook.com",
-                        instagram: data.instagram || "https://instagram.com",
-                        twitter: data.twitter || "https://twitter.com",
-                        youtube: data.youtube || "https://youtube.com",
-                        linkedin: data.linkedin || "https://linkedin.com",
-                    });
-                }
-            } catch (error) {
-                console.error("Error fetching social links:", error);
-            }
-        };
-        fetchSocialLinks();
+  // Trigger animations after mount
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 100);
 
-        return () => clearTimeout(timer);
-    }, []);
+    const fetchSocialLinks = async () => {
+      try {
+        const data = await socialMediaApi.get();
+        if (data) {
+          setSocialLinks({
+            facebook: data.facebook || "https://www.facebook.com/namogangewellness.event",
+            instagram: data.instagram || "https://instagram.com",
+            twitter: data.twitter || "https://twitter.com",
+            youtube: data.youtube || "https://youtube.com",
+            linkedin: data.linkedin || "https://linkedin.com",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching social links:", error);
+      }
+    };
+    fetchSocialLinks();
 
-    // Static social media icons with dynamic links
-    const socialData = [
-        {
-            icon: Facebook,
-            url: socialLinks.facebook,
-            color: "#1877F2",
-            label: "Facebook",
-        },
-        {
-            icon: Instagram,
-            url: socialLinks.instagram,
-            color: "#E4405F",
-            label: "Instagram",
-        },
-        {
-            icon: Twitter,
-            url: socialLinks.twitter,
-            color: "#000000",
-            label: "Twitter",
-        },
-        {
-            icon: Youtube,
-            url: socialLinks.youtube,
-            color: "#FF0000",
-            label: "YouTube",
-        },
-        {
-            icon: Linkedin,
-            url: socialLinks.linkedin,
-            color: "#0A66C2",
-            label: "LinkedIn",
-        },
-    ];
+    return () => clearTimeout(timer);
+  }, []);
 
-    return (
-        <>
-            <style>{`
+  // Static social media icons with dynamic links
+  const socialData = [
+    {
+      icon: Facebook,
+      url: socialLinks.facebook,
+      color: "#1877F2",
+      label: "Facebook",
+    },
+    {
+      icon: Instagram,
+      url: socialLinks.instagram,
+      color: "#E4405F",
+      label: "Instagram",
+    },
+    {
+      icon: Twitter,
+      url: socialLinks.twitter,
+      color: "#000000",
+      label: "Twitter",
+    },
+    {
+      icon: Youtube,
+      url: socialLinks.youtube,
+      color: "#FF0000",
+      label: "YouTube",
+    },
+    {
+      icon: Linkedin,
+      url: socialLinks.linkedin,
+      color: "#0A66C2",
+      label: "LinkedIn",
+    },
+  ];
+
+  return (
+    <>
+      <style>{`
         @keyframes fallIn {
           from {
             transform: translateY(-100px) rotate(-180deg) scale(0.3);
@@ -292,89 +292,89 @@ const SocialSidebar = () => {
         }
       `}</style>
 
-            <div className="hidden lg:flex flex-col gap-3 fixed right-4 top-1/2 -translate-y-1/2 z-50">
-                {socialData.map((social, index) => {
-                    const Icon = social.icon;
+      <div className="hidden lg:flex flex-col gap-3 fixed right-1.5 top-1/2 -translate-y-1/2 z-50">
+        {socialData.map((social, index) => {
+          const Icon = social.icon;
 
-                    return (
-                        <div
-                            key={index}
-                            className={`social-item relative ${isVisible ? "visible" : ""}`}
-                            style={{ "--index": index } as React.CSSProperties}
-                        >
-                            {/* Glow */}
-                            <div
-                                className="glow-effect"
-                                style={{ backgroundColor: social.color }}
-                            />
+          return (
+            <div
+              key={index}
+              className={`social-item relative ${isVisible ? "visible" : ""}`}
+              style={{ "--index": index } as React.CSSProperties}
+            >
+              {/* Glow */}
+              <div
+                className="glow-effect"
+                style={{ backgroundColor: social.color }}
+              />
 
-                            {/* Ripple */}
-                            <div
-                                className="ripple-effect"
-                                style={{ borderColor: social.color }}
-                            />
+              {/* Ripple */}
+              <div
+                className="ripple-effect"
+                style={{ borderColor: social.color }}
+              />
 
-                            {/* Main Button */}
-                            <a
-                                href={social.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="social-button"
-                                style={{ borderColor: social.color }}
-                                onClick={() => analyticsApi.logClick(`Social: ${social.label}`)}
-                            >
-                                <div className="icon-wrapper">
-                                    <Icon size={18} style={{ color: social.color }} />
-                                </div>
+              {/* Main Button */}
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-button"
+                style={{ borderColor: social.color }}
+                onClick={() => analyticsApi.logClick(`Social: ${social.label}`)}
+              >
+                <div className="icon-wrapper">
+                  <Icon size={18} style={{ color: social.color }} />
+                </div>
 
-                                <div className="shine-effect" />
-                            </a>
+                <div className="shine-effect" />
+              </a>
 
-                            {/* Tooltip */}
-                            <div className="tooltip">
-                                <div
-                                    className="tooltip-content"
-                                    style={{ backgroundColor: social.color }}
-                                >
-                                    {social.label}
-                                    <div
-                                        className="tooltip-arrow"
-                                        style={{ borderLeftColor: social.color }}
-                                    ></div>
-                                </div>
-                            </div>
+              {/* Tooltip */}
+              <div className="tooltip">
+                <div
+                  className="tooltip-content"
+                  style={{ backgroundColor: social.color }}
+                >
+                  {social.label}
+                  <div
+                    className="tooltip-arrow"
+                    style={{ borderLeftColor: social.color }}
+                  ></div>
+                </div>
+              </div>
 
-                            {/* Particles */}
-                            <div
-                                className="particle"
-                                style={{
-                                    backgroundColor: social.color,
-                                    "--x": "30px",
-                                    "--y": "0px",
-                                } as React.CSSProperties}
-                            />
-                            <div
-                                className="particle"
-                                style={{
-                                    backgroundColor: social.color,
-                                    "--x": "-15px",
-                                    "--y": "26px",
-                                } as React.CSSProperties}
-                            />
-                            <div
-                                className="particle"
-                                style={{
-                                    backgroundColor: social.color,
-                                    "--x": "-15px",
-                                    "--y": "-26px",
-                                } as React.CSSProperties}
-                            />
-                        </div>
-                    );
-                })}
+              {/* Particles */}
+              <div
+                className="particle"
+                style={{
+                  backgroundColor: social.color,
+                  "--x": "30px",
+                  "--y": "0px",
+                } as React.CSSProperties}
+              />
+              <div
+                className="particle"
+                style={{
+                  backgroundColor: social.color,
+                  "--x": "-15px",
+                  "--y": "26px",
+                } as React.CSSProperties}
+              />
+              <div
+                className="particle"
+                style={{
+                  backgroundColor: social.color,
+                  "--x": "-15px",
+                  "--y": "-26px",
+                } as React.CSSProperties}
+              />
             </div>
-        </>
-    );
+          );
+        })}
+      </div>
+    </>
+  );
 };
 
 export default SocialSidebar;

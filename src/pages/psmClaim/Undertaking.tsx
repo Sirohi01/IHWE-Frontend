@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Download, Printer } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
 
@@ -134,7 +134,7 @@ const Undertaking: React.FC = () => {
                             pin code <input type="text" value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
                             from <input type="text" value={formData.fromDate} onChange={(e) => setFormData({ ...formData, fromDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
                             to <input type="text" value={formData.toDate} onChange={(e) => setFormData({ ...formData, toDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
-                            under Procurement & Marketing Support (PMS) Scheme during the financial year 202<input type="text" value={formData.finYear.split('-')[0].slice(-1)} className="border-b border-black outline-none w-4 text-center bg-transparent" /> - 2<input type="text" value={formData.finYear.split('-')[1].slice(-1)} className="border-b border-black outline-none w-4 text-center bg-transparent" /> .
+                            under Procurement & Marketing Support (PMS) Scheme during the financial year 202<input type="text" value={formData.finYear.split('-')[0].slice(-1)} readOnly className="border-b border-black outline-none w-4 text-center bg-transparent" /> - 2<input type="text" value={formData.finYear.split('-')[1].slice(-1)} readOnly className="border-b border-black outline-none w-4 text-center bg-transparent" /> .
                         </p>
 
                         <p className="mt-8">

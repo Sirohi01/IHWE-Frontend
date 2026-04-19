@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense, createContext, useContext } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { toast } from 'sonner';
 import { API_URL, settingsApi } from '@/lib/api';
@@ -6,8 +6,7 @@ import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 import { AnimatePresence } from 'framer-motion';
-export const ExhibitorCtx = createContext<any>(null);
-export const useExhibitorCtx = () => useContext(ExhibitorCtx);
+import { ExhibitorCtx } from '@/context/ExhibitorContext';
 
 const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',
@@ -20,12 +19,17 @@ const TAB_ROUTES: Record<string, string> = {
     chat: '/exhibitor-dashboard/chat',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
+    annexure_d: '/exhibitor-dashboard/psm-claim/annexure-d',
+    'stall-management': '/exhibitor-dashboard/stall-management',
     annexure_c: '/exhibitor-dashboard/psm-claim/annexure-c',
     declaration: '/exhibitor-dashboard/psm-claim/declaration',
     feedback_report: '/exhibitor-dashboard/psm-claim/feedback-report',
     undertaking: '/exhibitor-dashboard/psm-claim/undertaking',
     pre_receipt: '/exhibitor-dashboard/psm-claim/pre-receipt',
     exhibitions: '/exhibitor-dashboard/exhibitions',
+    participants_feedback: '/exhibitor-dashboard/participants-feedback',
+    mandate_form: '/exhibitor-dashboard/mandate-form',
+    documentation: '/exhibitor-dashboard/documentation',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -120,7 +124,7 @@ export default function ExhibitorDashboard() {
     if (!data) return null;
 
     return (
-        <ExhibitorCtx.Provider value={{ data, allRegistrations, fetchDashboard, setLoading }}>
+        <ExhibitorCtx.Provider value={{ data, setData, allRegistrations, fetchDashboard, setLoading }}>
             <ExhibitorLayout
                 logo={logo}
                 data={data}

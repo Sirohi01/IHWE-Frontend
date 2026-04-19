@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LogOut, Menu, X, ShieldCheck, User, Phone, Mail, MessageSquare } from 'lucide-react';
 import { SERVER_URL, API_URL } from '@/lib/api';
+import { BiSupport } from "react-icons/bi";
 import { io } from 'socket.io-client';
 
 interface NavbarProps {
@@ -32,7 +33,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
         const personName = `${data?.contact1?.firstName || ''} ${data?.contact1?.lastName || ''}`.trim() || 'Exhibitor';
         const companyName = data?.exhibitorName || '—';
         const regId = data?.registrationId || '—';
-        
+
         const msg = `Hi, I am ${personName} from ${companyName}. My Exhibitor ID is ${regId}. I have a query regarding IHWE 2026: `;
         const url = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
@@ -45,7 +46,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     };
 
     return (
-        <div className="fixed top-0 inset-x-0 z-[100] h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 shadow-sm">
+        <div className="fixed top-0 inset-x-0 z-[100] h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 shadow-sm print:hidden">
             {/* Left */}
             <div className="flex items-center gap-3">
                 <button onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -107,7 +108,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                                 <div key={idx} className="relative">
                                                     <div className="flex items-center gap-2">
                                                         <Phone size={12} className="text-[#23471d] flex-shrink-0" />
-                                                        <button 
+                                                        <button
                                                             onClick={() => setActivePhone(phone)}
                                                             className={`text-left transition-colors ${activePhone === phone ? 'text-[#23471d]' : 'text-slate-700 hover:text-[#23471d]'}`}
                                                         >
@@ -118,13 +119,13 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
 
                                                     {activePhone === phone && (
                                                         <div className="mt-2 grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleWhatsApp(phone)}
                                                                 className="flex items-center justify-center gap-1.5 py-1.5 bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase rounded-sm border border-emerald-100 hover:bg-emerald-100 transition-colors"
                                                             >
                                                                 <MessageSquare size={12} /> WhatsApp
                                                             </button>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleCall(phone)}
                                                                 className="flex items-center justify-center gap-1.5 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase rounded-sm border border-blue-100 hover:bg-blue-100 transition-colors"
                                                             >
@@ -134,7 +135,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                                     )}
                                                 </div>
                                             ))}
-                                            
+
                                             {rmDetails?.email && (
                                                 <div className="flex items-center gap-2">
                                                     <Mail size={12} className="text-[#23471d] flex-shrink-0" />
@@ -156,17 +157,36 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                 )}
 
                 {/* Chat notification button */}
-                {onChatClick && (
+                {/* {onChatClick && (
                     <button onClick={onChatClick}
                         className="relative p-2 rounded-sm hover:bg-slate-100 transition-colors"
                         title="Chat Support">
-                        <MessageSquare size={16} className="text-[#23471d]" />
+                        <BiSupport size={16} className="text-[#23471d]" />
                         {unreadChat > 0 && (
                             <span className="absolute -top-1 -right-1 bg-[#d26019] text-white text-[9px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-black">
                                 {unreadChat > 9 ? '9+' : unreadChat}
                             </span>
                         )}
                     </button>
+                )} */}
+                {onChatClick && (
+                    <div className="relative group bg-gray-100 rounded-full">
+                        <button
+                            onClick={onChatClick}
+                            className="relative p-2 rounded-full hover:bg-slate-100 transition-colors"
+                        >
+                            <BiSupport size={16} className="text-[#23471d]" />
+                            {unreadChat > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-[#d26019] text-white text-[9px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-black">
+                                    {unreadChat > 9 ? '9+' : unreadChat}
+                                </span>
+                            )}
+                        </button>
+                        {/* Custom Tooltip */}
+                        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-50">
+                            Chat Support
+                        </span>
+                    </div>
                 )}
 
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-sm">
