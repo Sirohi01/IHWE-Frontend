@@ -79,18 +79,6 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             tab: 'calendar',
         },
         {
-            id: 'leads',
-            label: 'Leads & Visitors',
-            desc: 'QR scans, enquiries & follow-ups',
-            icon: Target,
-            accent: '#db2777',
-            light: '#fdf2f8',
-            badge: 'Coming Soon',
-            badgeOk: false,
-            tab: null,
-            highlight: true,
-        },
-        {
             id: 'marketing',
             label: 'Marketing & Promotions',
             desc: 'Download pre-branded assets from our official IHWE team',
@@ -111,6 +99,17 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badge: 'Available',
             badgeOk: true,
             tab: 'documentation',
+        },
+        {
+            id: 'msme',
+            label: 'Udyam Details',
+            desc: `Reg. No: ${data?.msme?.udhyamRegNo || 'Pending'}`,
+            icon: Sparkles,
+            accent: '#6366f1',
+            light: '#eef2ff',
+            badge: data?.msme?.udhyamRegNo ? 'Verified' : 'Update Required',
+            badgeOk: !!data?.msme?.udhyamRegNo,
+            tab: 'msme',
         },
 
     ];

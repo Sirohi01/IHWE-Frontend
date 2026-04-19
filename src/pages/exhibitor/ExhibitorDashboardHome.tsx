@@ -19,7 +19,7 @@ export default function ExhibitorDashboardHome() {
 
     return (
         <div className="space-y-4">
-            <HeroSection onRegisterVisit={() => {}} />
+            <HeroSection onRegisterVisit={() => {}} forceNewTab={true} />
             <div className="bg-white shadow-sm">
                 <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
             </div>
