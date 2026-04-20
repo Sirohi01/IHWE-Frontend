@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Download, Printer, Save, Loader2, ChevronRight } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
@@ -6,6 +6,8 @@ import { toPng } from 'html-to-image';
 import { psmClaimApi } from '@/services/psmClaimApi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useReactToPrint } from 'react-to-print';
+import ReportHeader from './ReportHeader';
 
 interface DeclarationProps {
     reportId?: string;
@@ -15,32 +17,43 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
     const navigate = useNavigate();
     const { data: ctxData } = useExhibitorCtx() || {};
     const componentRef = useRef<HTMLDivElement>(null);
-    const [saving, setSaving] = React.useState(false);
-    const [loading, setLoading] = React.useState(!!reportId);
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(!!reportId);
+    const [isExporting, setIsExporting] = useState(false);
 
     const [formData, setFormData] = React.useState({
-        name: ctxData?.contactName || '',
-        designation: '',
+        fairName: ctxData?.fairName || '',
+        companyName: ctxData?.companyName || '',
+        place: '',
         date: new Date().toISOString().split('T')[0],
-        place: ''
+        name: ctxData?.contactName || '',
+        designation: ''
     });
 
-    React.useEffect(() => {
-        if (reportId) {
-            const loadData = async () => {
-                try {
-                    const res = await psmClaimApi.getReportById('declaration', reportId);
-                    if (res.success) {
-                        setFormData(res.data);
-                    }
-                } catch (error) {
-                    toast.error('Failed to load report data');
-                } finally {
-                    setLoading(false);
+    const handlePrint = useReactToPrint({
+        contentRef: componentRef,
+        documentTitle: `Declaration_${formData.companyName || 'Document'}`,
+    });
+
+    useEffect(() => {
+        const fetchReport = async () => {
+            if (!reportId) return;
+            try {
+                const res = await psmClaimApi.getReportById('declaration', reportId);
+                if (res.success) {
+                    setFormData({
+                        ...formData,
+                        ...res.data
+                    });
                 }
-            };
-            loadData();
-        }
+            } catch (error) {
+                console.error("Error fetching report:", error);
+                toast.error("Failed to load report data");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchReport();
     }, [reportId]);
 
     const handleSave = async () => {
@@ -62,24 +75,17 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
         }
     };
 
-    const handlePrint = () => {
-        window.print();
-    };
-
     const handleDownload = async () => {
         if (!componentRef.current) return;
+        setIsExporting(true);
 
         try {
+            await new Promise(resolve => setTimeout(resolve, 100));
             const dataUrl = await toPng(componentRef.current, {
                 quality: 1,
-                pixelRatio: 3, // Higher resolution for professional print
+                pixelRatio: 2,
                 backgroundColor: '#ffffff',
-                style: {
-                    boxShadow: 'none',
-                    margin: '0',
-                    transform: 'none',
-                    borderRadius: '0'
-                }
+                filter: (node: HTMLElement) => !node.classList?.contains('no-print'),
             });
 
             const pdf = new jsPDF({
@@ -93,56 +99,45 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
             pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`Declaration_${ctxData?.companyName || 'Document'}.pdf`);
+            pdf.save(`Declaration_${formData.companyName || 'Document'}.pdf`);
         } catch (error) {
             console.error('Error generating PDF:', error);
             alert('Failed to generate PDF. Please try the Print option instead.');
+        } finally {
+            setIsExporting(false);
         }
     };
 
-    return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
-            {/* Top Action Bar */}
-            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/declaration')}
-                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
-                        title="Back to Table"
-                    >
-                        <ChevronRight size={20} className="rotate-180" />
-                    </button>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-800">Declaration</h1>
-                        <p className="text-sm text-slate-500">Official declaration of claim validity</p>
-                    </div>
-                </div>
-                <div className="flex gap-3">
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
-                    >
-                        <Printer size={18} />
-                        Print Document
-                    </button>
-                    <button
-                        onClick={handleDownload}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
-                    >
-                        <Download size={18} />
-                        Download PDF
-                    </button>
-                </div>
-            </div>
+    if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-blue-600" /></div>;
 
-            {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-2 rounded-xl">
+    return (
+        <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
+            <ReportHeader title="Declaration" />
+
+            <div className="p-4 sm:p-8 flex flex-col items-center">
                 <div
-                    id="printable-form"
                     ref={componentRef}
-                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12.5px] leading-relaxed relative overflow-hidden"
+                    id="printable-form"
+                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12.5px] leading-relaxed relative overflow-hidden"
                     style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
+                    {/* Corner Action Icons - Only visible in Web View */}
+                    <div className="absolute top-4 right-4 flex gap-2 no-print">
+                        <button
+                            onClick={handlePrint}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Print Document"
+                        >
+                            <Printer size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Download PDF"
+                        >
+                            <Download size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                    </div>
                     {/* Header Decoration */}
 
                     <div className="text-center mb-16 mt-8">
@@ -179,9 +174,9 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
+                                        className={`flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                    <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.5rem]`}>
                                         {formData.name || <span className="text-transparent">.</span>}
                                     </div>
                                 </div>
@@ -191,9 +186,9 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                         type="date"
                                         value={formData.date}
                                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
+                                        className={`flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                    <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.5rem]`}>
                                         {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : <span className="text-transparent">.</span>}
                                     </div>
                                 </div>
@@ -203,9 +198,9 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                         type="text"
                                         value={formData.designation}
                                         onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
+                                        className={`flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                    <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.5rem]`}>
                                         {formData.designation || <span className="text-transparent">.</span>}
                                     </div>
                                 </div>
@@ -215,9 +210,9 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                         type="text"
                                         value={formData.place}
                                         onChange={(e) => setFormData({ ...formData, place: e.target.value })}
-                                        className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
+                                        className={`flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     />
-                                    <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
+                                    <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.5rem]`}>
                                         {formData.place || <span className="text-transparent">.</span>}
                                     </div>
                                 </div>

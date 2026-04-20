@@ -4,6 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { psmClaimApi } from '@/services/psmClaimApi';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { toast } from 'sonner';
+import { jsPDF } from 'jspdf';
+import { toPng } from 'html-to-image';
+import { useRef } from 'react';
+import ReportHeader from './ReportHeader';
 
 const AnnexureD = ({ reportId: propReportId }) => {
     const navigate = useNavigate();
@@ -11,8 +15,10 @@ const AnnexureD = ({ reportId: propReportId }) => {
     const reportId = propReportId || urlId;
 
     const { data: ctxData } = useExhibitorCtx() || {};
+    const componentRef = useRef(null);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(!!reportId);
+    const [isExporting, setIsExporting] = useState(false);
 
     const [formData, setFormData] = useState({
         implementingAgency: '',
@@ -30,7 +36,9 @@ const AnnexureD = ({ reportId: propReportId }) => {
         expenditureSpace: '',
         admissibleSpace: '',
         totalExpenditure: '',
-        totalAdmissible: ''
+        totalAdmissible: '',
+        date: '',
+        place: ''
     });
 
     useEffect(() => {
@@ -75,55 +83,79 @@ const AnnexureD = ({ reportId: propReportId }) => {
         window.print();
     };
 
-    const handleDownload = () => {
-        toast.info("Please use the 'Save as PDF' option in the print dialog.");
-        window.print();
+    const handleDownload = async () => {
+        if (!componentRef.current) return;
+        setIsExporting(true);
+
+        try {
+            const dataUrl = await toPng(componentRef.current, {
+                quality: 1,
+                pixelRatio: 3,
+                backgroundColor: '#ffffff',
+                filter: (node) => {
+                    if (node.classList && node.classList.contains('no-print')) {
+                        return false;
+                    }
+                    return true;
+                },
+                style: {
+                    boxShadow: 'none',
+                    margin: '0',
+                    transform: 'none',
+                    borderRadius: '0'
+                }
+            });
+
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const imgProps = pdf.getImageProperties(dataUrl);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`AnnexureD_${ctxData?.companyName || 'Document'}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            toast.error('Failed to generate PDF. Please try the Print option instead.');
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-[#23471d]" /></div>;
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
-            {/* Top Action Bar */}
-            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/annexure-d')}
-                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
-                        title="Back to Table"
-                    >
-                        <ChevronRight size={20} className="rotate-180" />
-                    </button>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-800">Annexure D</h1>
-                        <p className="text-sm text-slate-500">Claim form for reimbursement</p>
-                    </div>
-                </div>
-                <div className="flex gap-3">
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
-                    >
-                        <Printer size={18} />
-                        Print Document
-                    </button>
-                    <button
-                        onClick={handleDownload}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
-                    >
-                        <Download size={18} />
-                        Download PDF
-                    </button>
-                </div>
-            </div>
+        <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
+            <ReportHeader title="Annexure D" />
 
-            {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto p-2 rounded-xl">
+            <div className="p-4 sm:p-8 flex flex-col items-center">
                 <div
+                    ref={componentRef}
                     id="printable-form"
-                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12px] leading-tight relative overflow-hidden"
+                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12px] leading-tight relative overflow-hidden"
                     style={{ fontFamily: "'Inter', sans-serif" }}
                 >
+                    {/* Corner Action Icons - Only visible in Web View */}
+                    <div className="absolute top-4 right-4 flex gap-2 no-print">
+                        <button
+                            onClick={handlePrint}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Print Document"
+                        >
+                            <Printer size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Download PDF"
+                        >
+                            <Download size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                    </div>
                     <div className="text-center mb-8 font-bold">
                         <h1 className="text-lg underline uppercase">ANNEXURE - D</h1>
                         <h2 className="text-lg underline uppercase mt-2">CLAIM FORM</h2>
@@ -341,6 +373,41 @@ const AnnexureD = ({ reportId: propReportId }) => {
                             </tr>
                         </tbody>
                     </table>
+
+                    <div className="mt-8 space-y-4">
+                        <div className="flex justify-between items-end">
+                            <div className="space-y-4">
+                                <div className="flex gap-2 items-end">
+                                    <span className="font-bold text-xs">Place:</span>
+                                    <input
+                                        type="text"
+                                        value={formData.place}
+                                        onChange={(e) => setFormData({ ...formData, place: e.target.value })}
+                                        className="border-b border-black outline-none bg-transparent w-40 text-xs px-1"
+                                    />
+                                </div>
+                                <div className="flex gap-2 items-end">
+                                    <span className="font-bold text-xs">Date:</span>
+                                    <div className={`${isExporting ? 'hidden' : 'no-print'}`}>
+                                        <input
+                                            type="date"
+                                            value={formData.date}
+                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                            className="border-b border-black outline-none bg-transparent w-40 text-xs px-1"
+                                        />
+                                    </div>
+                                    <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black min-w-[100px] text-xs px-1`}>
+                                        {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-center w-64 pb-2">
+                                <div className="border-b border-black w-full mb-1"></div>
+                                <p className="font-bold text-xs uppercase">Signature of authorized signatory</p>
+                                <p className="text-[10px] italic">(With Office Seal)</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -373,6 +440,7 @@ const AnnexureD = ({ reportId: propReportId }) => {
                         width: 100% !important;
                         padding: 0 !important;
                         box-shadow: none !important;
+                        border: none !important;
                         zoom: 0.9;
                         display: flex;
                         flex-direction: column;

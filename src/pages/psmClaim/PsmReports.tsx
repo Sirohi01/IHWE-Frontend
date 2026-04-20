@@ -9,6 +9,7 @@ import Undertaking from './Undertaking';
 import PreReceipt from './PreReceipt';
 
 import MandateForm from './MandateForm';
+import PfmsDetails from './PfmsDetails';
 
 const reportTypes = [
     {
@@ -59,6 +60,13 @@ const reportTypes = [
         desc: 'Mandate form for the PMS Scheme',
         icon: ClipboardCheck,
         color: 'bg-green-500'
+    },
+    {
+        id: 'pfms-details',
+        label: 'PFMS Details',
+        desc: 'Details of Enterprise for agency creation on PFMS portal',
+        icon: ScrollText,
+        color: 'bg-indigo-500'
     }
 ];
 
@@ -75,6 +83,7 @@ const PsmReports: React.FC = () => {
             case 'undertaking': return <Undertaking reportId={id} />;
             case 'pre-receipt': return <PreReceipt reportId={id} />;
             case 'mandate-form': return <MandateForm reportId={id} />;
+            case 'pfms-details': return <PfmsDetails reportId={id} />;
             default: return null;
         }
     };

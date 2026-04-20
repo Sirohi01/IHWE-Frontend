@@ -13,6 +13,7 @@ const reportLabels: Record<string, string> = {
     'pre-receipt': 'Pre-Receipt',
     'participants-feedback': 'Participants Feedback',
     'mandate-form': 'Mandate Form',
+    'pfms-details': 'PFMS Details',
 };
 
 const PsmReportsTable: React.FC = () => {

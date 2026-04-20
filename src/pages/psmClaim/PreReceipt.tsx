@@ -6,15 +6,20 @@ import { toPng } from 'html-to-image';
 import { toast } from 'sonner';
 import { psmClaimApi } from '@/services/psmClaimApi';
 import { useNavigate } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
+import ReportHeader from './ReportHeader';
 
-interface Props { reportId?: string; }
+interface PreReceiptProps {
+    reportId?: string;
+}
 
-const PreReceipt: React.FC<Props> = ({ reportId }) => {
+const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
     const navigate = useNavigate();
     const { data: ctxData } = useExhibitorCtx() || {};
     const componentRef = useRef<HTMLDivElement>(null);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(!!reportId);
+    const [isExporting, setIsExporting] = useState(false);
 
     const [formData, setFormData] = useState({
         amount: '',
@@ -25,7 +30,13 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
         venue: 'New Delhi',
         signatoryName: ctxData?.contactName || '',
         designation: 'Proprietor',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        companyName: ctxData?.companyName || ''
+    });
+
+    const handlePrint = useReactToPrint({
+        contentRef: componentRef,
+        documentTitle: `Pre_Receipt_${formData.companyName || 'Document'}`,
     });
 
     useEffect(() => {
@@ -65,19 +76,21 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
         }
     };
 
-
-    const handlePrint = () => {
-        window.print();
-    };
-
     const handleDownload = async () => {
         if (!componentRef.current) return;
+        setIsExporting(true);
 
         try {
             const dataUrl = await toPng(componentRef.current, {
                 quality: 1,
                 pixelRatio: 3,
                 backgroundColor: '#ffffff',
+                filter: (node: HTMLElement) => {
+                    if (node.classList && node.classList.contains('no-print')) {
+                        return false;
+                    }
+                    return true;
+                },
                 style: {
                     boxShadow: 'none',
                     margin: '0',
@@ -97,56 +110,45 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
             pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`PreReceipt_${ctxData?.companyName || 'Document'}.pdf`);
+            pdf.save(`PreReceipt_${formData.companyName || 'Document'}.pdf`);
         } catch (error) {
             console.error('Error generating PDF:', error);
             toast.error('Failed to generate PDF. Please try the Print option instead.');
+        } finally {
+            setIsExporting(false);
         }
     };
 
-    return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
-            {/* Header / Actions */}
-            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/pre-receipt')}
-                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
-                        title="Back to Table"
-                    >
-                        <ChevronRight size={20} className="rotate-180" />
-                    </button>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-800">Pre-Receipt</h1>
-                        <p className="text-sm text-slate-500">Submit this document on company letterhead</p>
-                    </div>
-                </div>
-                <div className="flex gap-3">
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
-                    >
-                        <Printer size={18} />
-                        Print Document
-                    </button>
-                    <button
-                        onClick={handleDownload}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
-                    >
-                        <Download size={18} />
-                        Download PDF
-                    </button>
-                </div>
-            </div>
+    if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-blue-600" /></div>;
 
-            {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-8 rounded-xl">
+    return (
+        <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
+            <ReportHeader title="Pre-Receipt" />
+
+            <div className="p-4 sm:p-8 flex flex-col items-center">
                 <div
-                    id="printable-form"
                     ref={componentRef}
-                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[16px] leading-[1.8] relative overflow-hidden"
+                    id="printable-form"
+                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12.5px] leading-relaxed relative overflow-hidden"
                     style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
+                    {/* Corner Action Icons - Only visible in Web View */}
+                    <div className="absolute top-4 right-4 flex gap-2 no-print">
+                        <button
+                            onClick={handlePrint}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Print Document"
+                        >
+                            <Printer size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Download PDF"
+                        >
+                            <Download size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                    </div>
                     <div className="text-right mb-4">
                         <span className="font-bold underline text-[18px]">Annexure</span>
                     </div>
@@ -188,7 +190,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                             />
                             <div className="flex flex-wrap items-center w-full">
                                 (Name of Fair) from
-                                <div className="no-print mx-1">
+                                <div className={`${isExporting ? 'hidden' : 'no-print'} mx-1`}>
                                     <input
                                         type="date"
                                         value={formData.fromDate}
@@ -196,11 +198,11 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                                         className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center"
                                     />
                                 </div>
-                                <div className="hidden print:block border-b border-black min-w-[80px] font-bold text-center mx-1">
+                                <div className={`${isExporting ? 'block' : 'hidden print:block'} border-b border-black min-w-[80px] font-bold text-center mx-1`}>
                                     {formData.fromDate ? new Date(formData.fromDate).toLocaleDateString('en-GB') : ''}
                                 </div>
                                 to
-                                <div className="no-print mx-1">
+                                <div className={`${isExporting ? 'hidden' : 'no-print'} mx-1`}>
                                     <input
                                         type="date"
                                         value={formData.toDate}
@@ -208,7 +210,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                                         className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center"
                                     />
                                 </div>
-                                <div className="hidden print:block border-b border-black min-w-[80px] font-bold text-center mx-1">
+                                <div className={`${isExporting ? 'block' : 'hidden print:block'} border-b border-black min-w-[80px] font-bold text-center mx-1`}>
                                     {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
                                 </div>
                                 held at
@@ -225,7 +227,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                         <div className="mt-4 flex flex-col items-end">
                             <div className="flex gap-2 items-center mb-6 mr-10">
                                 <span className="font-bold">Date:</span>
-                                <div className="no-print">
+                                <div className={`${isExporting ? 'hidden' : 'no-print'}`}>
                                     <input
                                         type="date"
                                         value={formData.date}
@@ -233,7 +235,7 @@ const PreReceipt: React.FC<Props> = ({ reportId }) => {
                                         className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold"
                                     />
                                 </div>
-                                <div className="hidden print:block border-b border-black min-w-[100px] font-bold text-center">
+                                <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black min-w-[100px] font-bold text-center`}>
                                     {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
                                 </div>
                             </div>

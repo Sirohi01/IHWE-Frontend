@@ -6,6 +6,7 @@ import { toPng } from 'html-to-image';
 import { psmClaimApi } from '@/services/psmClaimApi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import ReportHeader from './ReportHeader';
 
 interface AnnexureCProps {
     reportId?: string;
@@ -17,6 +18,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
     const componentRef = useRef<HTMLDivElement>(null);
     const [saving, setSaving] = useState(false);
     const [loading, setLoading] = useState(!!reportId);
+    const [isExporting, setIsExporting] = useState(false);
     const [formData, setFormData] = React.useState({
         fairName: ctxData?.fairName || '',
         companyName: ctxData?.companyName || '',
@@ -70,12 +72,19 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
 
     const handleDownload = async () => {
         if (!componentRef.current) return;
+        setIsExporting(true);
 
         try {
             const dataUrl = await toPng(componentRef.current, {
                 quality: 1,
                 pixelRatio: 3,
                 backgroundColor: '#ffffff',
+                filter: (node: HTMLElement) => {
+                    if (node.classList && node.classList.contains('no-print')) {
+                        return false;
+                    }
+                    return true;
+                },
                 style: {
                     boxShadow: 'none',
                     margin: '0',
@@ -99,6 +108,8 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
         } catch (error) {
             console.error('Error generating PDF:', error);
             alert('Failed to generate PDF. Please try the Print option instead.');
+        } finally {
+            setIsExporting(false);
         }
     };
 
@@ -146,187 +157,175 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
     ];
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
-            {/* Top Action Bar */}
-            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/annexure-c')}
-                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
-                        title="Back to Table"
-                    >
-                        <ChevronRight size={20} className="rotate-180" />
-                    </button>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-800">Annexure C</h1>
-                        <p className="text-sm text-slate-500">Check-list for reimbursement of claims</p>
+        <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
+            <ReportHeader title="Annexure C" />
+
+            <div className="p-4 sm:p-5 flex flex-col items-center">
+                <div
+                    id="printable-form"
+                    ref={componentRef}
+                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-snug relative overflow-hidden"
+                    style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
+                >
+                    {/* Corner Action Icons - Only visible in Web View */}
+                    <div className="absolute top-4 right-4 flex gap-2 no-print">
+                        <button
+                            onClick={handlePrint}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Print Document"
+                        >
+                            <Printer size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Download PDF"
+                        >
+                            <Download size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
                     </div>
-                </div>
-                <div className="flex gap-3">
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
-                    >
-                        <Printer size={18} />
-                        Print Document
-                    </button>
-                    <button
-                        onClick={handleDownload}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
-                    >
-                        <Download size={18} />
-                        Download PDF
-                    </button>
-                </div>
-            </div>
+                    {/* Header Decoration for Web View */}
 
-            <div
-                id="printable-form"
-                ref={componentRef}
-                className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-snug relative overflow-hidden"
-                style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
-            >
-                {/* Header Decoration for Web View */}
+                    <div className="text-center mb-3 mt-0">
+                        <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-1.5">ANNEXURE – C</h1>
+                        <h2 className="text-[14px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
+                            Check-list for reimbursement of claims under Component 5(A) : PMS Scheme
+                        </h2>
+                    </div>
 
-                <div className="text-center mb-3 mt-0">
-                    <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-1.5">ANNEXURE – C</h1>
-                    <h2 className="text-[14px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
-                        Check-list for reimbursement of claims under Component 5(A) : PMS Scheme
-                    </h2>
-                </div>
-
-                <div className="space-y-4 text-[13px] print:text-[11px]">
-                    <div className="space-y-3">
-                        <div className="flex items-end gap-2">
-                            <span className="shrink-0 font-bold uppercase text-[10px] print:text-black">Name of the Fair/ Exhibition:</span>
-                            <input
-                                type="text"
-                                value={formData.fairName}
-                                onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
-                                className="flex-1 border-b border-black px-1 font-medium bg-transparent outline-none"
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <span className="font-bold uppercase text-[10px] print:text-black">The following documents/ information have been received for reimbursement under PMS Scheme from:</span>
+                    <div className="space-y-4 text-[13px] print:text-[11px]">
+                        <div className="space-y-3">
                             <div className="flex items-end gap-2">
-                                <span className="font-bold text-[11px] shrink-0">M/s:</span>
+                                <span className="shrink-0 font-bold uppercase text-[10px] print:text-black">Name of the Fair/ Exhibition:</span>
                                 <input
                                     type="text"
-                                    value={formData.companyName}
-                                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                                    className="border-b border-black flex-1 px-1 font-bold bg-transparent outline-none"
+                                    value={formData.fairName}
+                                    onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
+                                    className="flex-1 border-b border-black px-1 font-medium bg-transparent outline-none"
                                 />
                             </div>
-                        </div>
 
-                        <div className="text-right italic font-bold text-[10px] print:text-black pr-4">
-                            (Two additional copies submitted : {formData.additionalCopies})
-                            <div className="no-print mt-1">
-                                {['Yes', 'No'].map(opt => (
-                                    <button
-                                        key={opt}
-                                        onClick={() => setFormData({ ...formData, additionalCopies: opt })}
-                                        className={`ml-2 px-2 py-0.5 border border-slate-300 rounded text-[10px] ${formData.additionalCopies === opt ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white'}`}
-                                    >
-                                        {opt}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    <table className="w-full border-collapse">
-                        <thead>
-                            <tr className="font-bold border-b border-black/80 bg-slate-100/50">
-                                <th className="py-1.5 px-1 w-12 text-center text-[10px]">S. No.</th>
-                                <th className="py-1.5 px-3 text-left text-[10px]">Particulars</th>
-                                <th className="py-1.5 px-1 text-center w-20 text-[8px] leading-tight flex-col items-center">
-                                    <div className="uppercase">(PUT '✓' OR 'x' IN BOX)</div>
-                                </th>
-                                <th className="py-1.5 px-1 text-center w-14 text-[9px] leading-tight font-bold">
-                                    PG NO.
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {checklistItems.map((item) => (
-                                <React.Fragment key={item.id}>
-                                    <tr className="align-top">
-                                        <td className="py-2 px-1 text-center text-[10px]">{item.id}.</td>
-                                        <td className="py-2 px-3 font-medium text-[11px]">
-                                            {item.id === 3 ? (
-                                                <div className="flex items-center gap-1 whitespace-nowrap">
-                                                    <span className="shrink-0 text-[10.5px]">Print out of Online Application Form No. :</span>
-                                                    <span className="font-extrabold shrink-0 text-[10.5px]">UAM/DTF/</span>
-                                                    <input
-                                                        type="text"
-                                                        value={formData.applicationNo}
-                                                        onChange={(e) => setFormData({ ...formData, applicationNo: e.target.value })}
-                                                        className="border-b border-black/40 px-1 bg-transparent outline-none flex-1 font-bold min-w-[30px] h-4 text-[10.5px]"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span className="leading-tight block">{item.text}</span>
-                                            )}
-                                            {item.subItems && (
-                                                <ul className="mt-1 print:mt-0.5 space-y-1 print:space-y-0.5 pl-2 text-[10px] font-normal leading-tight">
-                                                    {item.subItems.map((sub, idx) => (
-                                                        <li key={idx} className="flex justify-between items-start gap-4">
-                                                            <div className="flex items-start flex-1 text-justify">
-                                                                <span className="shrink-0 font-bold w-6">{sub.left.split(' ')[0]}</span>
-                                                                <span className="flex-1">{sub.left.substring(sub.left.indexOf(' ') + 1)}</span>
-                                                            </div>
-                                                            {sub.right && <span className="shrink-0 italic opacity-80 text-[9px]">{sub.right}</span>}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </td>
-                                        <td className="py-2 px-1 text-center">
-                                            <div
-                                                onClick={() => updateCheck(item.id)}
-                                                className="w-4 h-4 border border-black/40 mx-auto cursor-pointer flex items-center justify-center bg-transparent"
-                                            >
-                                                {formData.checks[item.id] && <span className="text-black font-bold text-[11px]">✓</span>}
-                                            </div>
-                                        </td>
-                                        <td className="py-2 px-1 text-center">
-                                            <input
-                                                type="text"
-                                                value={formData.pages[item.id] || ''}
-                                                onChange={(e) => updatePage(item.id, e.target.value)}
-                                                className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[11px]"
-                                            />
-                                        </td>
-                                    </tr>
-                                </React.Fragment>
-                            ))}
-                        </tbody>
-                    </table>
-
-                    <div className="pt-2 space-y-4">
-                        <p className="text-[10.5px] print:text-[10px] leading-snug">
-                            Documents/ information checked and verified the claim of the aforementioned unit / enterprise is found in order and eligible for reimbursement as per PMS Scheme guidelines.
-                        </p>
-
-                        <div className="flex justify-between items-end pr-10">
-                            <div className="w-48 text-left">
-                                <div className="no-print">
+                            <div className="flex flex-col gap-1">
+                                <span className="font-bold uppercase text-[10px] print:text-black">The following documents/ information have been received for reimbursement under PMS Scheme from:</span>
+                                <div className="flex items-end gap-2">
+                                    <span className="font-bold text-[11px] shrink-0">M/s:</span>
                                     <input
-                                        type="date"
-                                        value={formData.date}
-                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        className="border-b border-black mb-0.5 w-40 bg-transparent outline-none text-[10.5px]"
+                                        type="text"
+                                        value={formData.companyName}
+                                        onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                                        className="border-b border-black flex-1 px-1 font-bold bg-transparent outline-none"
                                     />
                                 </div>
-                                <div className="hidden print:block border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]">
-                                    {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
-                                </div>
-                                <span className="block text-[9px] font-bold uppercase">Date</span>
                             </div>
-                            <div className="text-center flex flex-col items-center">
-                                <div className="w-48 border-b border-black mb-0.5 h-6"></div>
-                                <span className="font-bold uppercase text-[10px]">Signature of the Authorized Signatory</span>
+
+                            <div className="text-right italic font-bold text-[10px] print:text-black pr-4">
+                                (Two additional copies submitted : {formData.additionalCopies})
+                                <div className="no-print mt-1">
+                                    {['Yes', 'No'].map(opt => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => setFormData({ ...formData, additionalCopies: opt })}
+                                            className={`ml-2 px-2 py-0.5 border border-slate-300 rounded text-[10px] ${formData.additionalCopies === opt ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white'}`}
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="font-bold border-b border-black/80 bg-slate-100/50">
+                                    <th className="py-1.5 px-1 w-12 text-center text-[10px]">S. No.</th>
+                                    <th className="py-1.5 px-3 text-left text-[10px]">Particulars</th>
+                                    <th className="py-1.5 px-1 text-center w-20 text-[8px] leading-tight flex-col items-center">
+                                        <div className="uppercase">(PUT '✓' OR 'x' IN BOX)</div>
+                                    </th>
+                                    <th className="py-1.5 px-1 text-center w-14 text-[9px] leading-tight font-bold">
+                                        PG NO.
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {checklistItems.map((item) => (
+                                    <React.Fragment key={item.id}>
+                                        <tr className="align-top">
+                                            <td className="py-2 px-1 text-center text-[10px]">{item.id}.</td>
+                                            <td className="py-2 px-3 font-medium text-[11px]">
+                                                {item.id === 3 ? (
+                                                    <div className="flex items-center gap-1 whitespace-nowrap">
+                                                        <span className="shrink-0 text-[10.5px]">Print out of Online Application Form No. :</span>
+                                                        <span className="font-extrabold shrink-0 text-[10.5px]">UAM/DTF/</span>
+                                                        <input
+                                                            type="text"
+                                                            value={formData.applicationNo}
+                                                            onChange={(e) => setFormData({ ...formData, applicationNo: e.target.value })}
+                                                            className="border-b border-black/40 px-1 bg-transparent outline-none flex-1 font-bold min-w-[30px] h-4 text-[10.5px]"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <span className="leading-tight block">{item.text}</span>
+                                                )}
+                                                {item.subItems && (
+                                                    <ul className="mt-1 print:mt-0.5 space-y-1 print:space-y-0.5 pl-2 text-[10px] font-normal leading-tight">
+                                                        {item.subItems.map((sub, idx) => (
+                                                            <li key={idx} className="flex justify-between items-start gap-4">
+                                                                <div className="flex items-start flex-1 text-justify">
+                                                                    <span className="shrink-0 font-bold w-6">{sub.left.split(' ')[0]}</span>
+                                                                    <span className="flex-1">{sub.left.substring(sub.left.indexOf(' ') + 1)}</span>
+                                                                </div>
+                                                                {sub.right && <span className="shrink-0 italic opacity-80 text-[9px]">{sub.right}</span>}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </td>
+                                            <td className="py-2 px-1 text-center">
+                                                <div
+                                                    onClick={() => updateCheck(item.id)}
+                                                    className="w-4 h-4 border border-black/40 mx-auto cursor-pointer flex items-center justify-center bg-transparent"
+                                                >
+                                                    {formData.checks[item.id] && <span className="text-black font-bold text-[11px]">✓</span>}
+                                                </div>
+                                            </td>
+                                            <td className="py-2 px-1 text-center">
+                                                <input
+                                                    type="text"
+                                                    value={formData.pages[item.id] || ''}
+                                                    onChange={(e) => updatePage(item.id, e.target.value)}
+                                                    className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[11px]"
+                                                />
+                                            </td>
+                                        </tr>
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        <div className="pt-2 space-y-4">
+                            <p className="text-[10.5px] print:text-[10px] leading-snug">
+                                Documents/ information checked and verified the claim of the aforementioned unit / enterprise is found in order and eligible for reimbursement as per PMS Scheme guidelines.
+                            </p>
+
+                            <div className="flex justify-between items-end pr-10">
+                                <div className="w-48 text-left">
+                                    <div className="no-print">
+                                        <input
+                                            type="date"
+                                            value={formData.date}
+                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                            className="border-b border-black mb-0.5 w-40 bg-transparent outline-none text-[10.5px]"
+                                        />
+                                    </div>
+                                    <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]`}>
+                                        {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
+                                    </div>
+                                    <span className="block text-[9px] font-bold uppercase">Date</span>
+                                </div>
+                                <div className="text-center flex flex-col items-center">
+                                    <div className="w-48 border-b border-black mb-0.5 h-6"></div>
+                                    <span className="font-bold uppercase text-[10px]">Signature of the Authorized Signatory</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -344,6 +343,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                     {reportId ? 'Update Report' : 'Save Report'}
                 </button>
             </div>
+
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @media print {
@@ -394,6 +394,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         margin: 0 !important;
                         padding: 10mm 15mm !important; /* Reduced padding to fit single page */
                         box-shadow: none !important;
+                        border: none !important;
                         word-break: break-word !important;
                         zoom: 1;
                         height: 297mm;
@@ -401,8 +402,11 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         position: relative !important;
                     }
                     
-                    table, th, td, div, p, span {
+                    table, th, td {
                         border-color: black !important;
+                    }
+                    
+                    div, p, span {
                         color: black !important;
                     }
                     input::placeholder {

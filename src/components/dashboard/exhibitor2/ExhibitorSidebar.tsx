@@ -37,7 +37,8 @@ const msmeSubItems = [
                     { id: "undertaking", label: "Undertaking" },
                     { id: "pre_receipt", label: "Pre-Receipt" },
                     // { id: "participants_feedback", label: "Participants Feedback" },
-                    { id: "mandate_form", label: "Mandate Form" }
+                    { id: "mandate_form", label: "Mandate Form" },
+                    { id: "pfms_details", label: "PFMS Details" }
                 ]
             },
             {
@@ -49,7 +50,8 @@ const msmeSubItems = [
                     { id: "undertaking_table", label: "Undertaking" },
                     { id: "pre_receipt_table", label: "Pre-Receipt" },
                     // { id: "participants_feedback", label: "Participants Feedback" },
-                    { id: "mandate_form_table", label: "Mandate Form" }
+                    { id: "mandate_form_table", label: "Mandate Form" },
+                    { id: "pfms_details_table", label: "PFMS Details" }
                 ]
             },
         ]
