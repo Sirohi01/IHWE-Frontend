@@ -416,13 +416,18 @@ const BuyerRegistration = () => {
         // Check all required fields
         const requiredFields = [
             'fullName', 'designation', 'companyName', 'businessType',
-            'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
+            'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
             'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
             'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
-            'buyerIndustry', 'primaryProductInterest', 'buyingFrequency',
+            'buyerIndustry', 'primaryProductInterest',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
-            'matchmakingInterest', 'preferredMeetingDate', 'preferredTimeSlot'
+            'matchmakingInterest'
         ];
+
+        // Only require B2B specific fields if interested in pre-scheduled meetings
+        if (formData.requirePreScheduledB2B === 'Yes') {
+            requiredFields.push('preferredMeetingDay', 'preferredTimeSlot');
+        }
 
         for (const field of requiredFields) {
             if (!formData[field as keyof typeof formData]) {
@@ -447,6 +452,13 @@ const BuyerRegistration = () => {
             return false;
         }
 
+        // Check B2B multi-selects only if Yes
+        if (formData.requirePreScheduledB2B === 'Yes') {
+            if (formData.preferredMeetingCategories.length === 0) return false;
+            if (formData.meetingObjectives.length === 0) return false;
+            if (formData.preferredBusinessTypes.length === 0) return false;
+        }
+
         if (!emailOtpVerified || !mobileOtpVerified) {
             return false;
         }
@@ -458,17 +470,20 @@ const BuyerRegistration = () => {
         let isValid = true;
         const newErrors: Record<string, string> = {};
 
-
         const fieldsToValidate = [
             'fullName', 'designation', 'companyName', 'businessType',
-            'emailAddress', 'mobileNumber', 'alternateNumber', 'registeredAddress', 'pinCode',
+            'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
             'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
             'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
-            'primaryProductInterest', 'buyingFrequency',
+            'primaryProductInterest',
             'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
-            'matchmakingInterest', 'preferredMeetingDate', 'preferredTimeSlot',
-            'registrationCategory'
+            'matchmakingInterest', 'registrationCategory'
         ];
+
+        // Conditional B2B requirements
+        if (formData.requirePreScheduledB2B === 'Yes') {
+            fieldsToValidate.push('preferredMeetingDay', 'preferredTimeSlot');
+        }
 
         fieldsToValidate.forEach(field => {
             if (skipPackageCheck && field === 'registrationCategory') return;
@@ -497,6 +512,22 @@ const BuyerRegistration = () => {
         if (formData.preferredSupplierType.length === 0) {
             newErrors.preferredSupplierType = "Select at least one type";
             isValid = false;
+        }
+
+        // B2B multi-selects
+        if (formData.requirePreScheduledB2B === 'Yes') {
+            if (formData.preferredMeetingCategories.length === 0) {
+                newErrors.preferredMeetingCategories = "Select at least one category";
+                isValid = false;
+            }
+            if (formData.meetingObjectives.length === 0) {
+                newErrors.meetingObjectives = "Select at least one objective";
+                isValid = false;
+            }
+            if (formData.preferredBusinessTypes.length === 0) {
+                newErrors.preferredBusinessTypes = "Select business types";
+                isValid = false;
+            }
         }
 
         // 4. OTP Verification
@@ -581,14 +612,78 @@ const BuyerRegistration = () => {
     };
 
     const handlePackageSelection = (pkg: any) => {
-        // Allow selection always, but show warning if form incomplete
+        // Run validation to show exact errors to the user
+        const isValid = validateForm(true);
+
+        if (!isValid) {
+            // Find missing fields to tell the user exactly what's wrong
+            const requiredBase = [
+                'fullName', 'designation', 'companyName', 'businessType',
+                'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
+                'stateProvince', 'city', 'companyFirmName', 'basicBusinessType', 'yearOfEstablishment',
+                'natureOfBusiness', 'yearsInBusiness', 'numberOfOutlets', 'annualTurnover',
+                'buyerIndustry', 'primaryProductInterest',
+                'estimatedAnnualPurchaseValue', 'purchaseTimeline', 'roleInPurchaseDecision',
+                'matchmakingInterest'
+            ];
+
+            const b2bFields = formData.requirePreScheduledB2B === 'Yes'
+                ? ['preferredMeetingDay', 'preferredTimeSlot', 'preferredMeetingCategories', 'meetingObjectives', 'preferredBusinessTypes']
+                : [];
+
+            const allToCheck = [...requiredBase, ...b2bFields];
+            const missing = allToCheck.filter(f => {
+                const val = formData[f as keyof typeof formData];
+                return Array.isArray(val) ? val.length === 0 : !val;
+            });
+
+            const fieldNames: Record<string, string> = {
+                fullName: "Full Name",
+                designation: "Designation",
+                companyName: "Company Name",
+                businessType: "Business Role",
+                emailAddress: "Email Address",
+                mobileNumber: "Mobile Number",
+                registeredAddress: "Address",
+                pinCode: "Pin Code",
+                stateProvince: "State",
+                city: "City",
+                companyFirmName: "Firm Name",
+                basicBusinessType: "Firm Type",
+                yearOfEstablishment: "Year of Establishment",
+                natureOfBusiness: "Nature of Business",
+                yearsInBusiness: "Years in Business",
+                numberOfOutlets: "Number of Outlets",
+                annualTurnover: "Annual Turnover",
+                buyerIndustry: "Buyer Industry",
+                primaryProductInterest: "Primary Product Interest",
+                estimatedAnnualPurchaseValue: "Annual Purchase Value",
+                purchaseTimeline: "Purchase Timeline",
+                roleInPurchaseDecision: "Purchase Decision Role",
+                matchmakingInterest: "Matchmaking Interest",
+                preferredMeetingDay: "Meeting Day",
+                preferredTimeSlot: "Time Slot",
+                preferredMeetingCategories: "Meeting Categories",
+                meetingObjectives: "Meeting Objectives",
+                preferredBusinessTypes: "B2B Business Types"
+            };
+
+            const missingList = missing.map(f => fieldNames[f] || f).join(', ');
+
+            toast.error(`⚠️ Missing fields: ${missingList}. Please check highlighted sections.`);
+
+            // Scroll to the first error element for better UX
+            setTimeout(() => {
+                const firstError = document.querySelector('.border-red-400, .text-red-500, [data-error="true"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+            return;
+        }
+
         if (!isFormValidForPayment()) {
-            toast.warning("⚠️ Please complete all required fields, select preferences, and verify your contact details via OTP before proceeding to payment.");
-            // Scroll to top of form to show errors
-            const formElement = document.querySelector('form');
-            if (formElement) {
-                formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            toast.error("⚠️ Please verify OTP and complete all required sections.");
             return;
         }
 
@@ -1066,7 +1161,7 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Interested in Export Partnerships?</Label><Select value={formData.interestedInExporting} onValueChange={(v) => handleSelectChange('interestedInExporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
                                             <div><Label className={labelClasses}>Business Model Preference</Label><Select value={formData.businessModelPreference} onValueChange={(v) => handleSelectChange('businessModelPreference', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Model" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.businessModelOptions?.map((m: string) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
 
-                                            <div><Label className={labelClasses}>Estimated Monthly Purchase </Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 Units" className={inputClasses} /></div>
+                                            <div><Label className={labelClasses}>Estimated Monthly Purchase </Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 " className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Purchase Frequency</Label><Select value={formData.purchaseFrequency} onValueChange={(v) => handleSelectChange('purchaseFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Frequency" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.purchaseFrequencyOptions?.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
 
@@ -1166,53 +1261,48 @@ const BuyerRegistration = () => {
                                     {/* 9. B2B Meeting Preferences */}
                                     <div className="space-y-4">
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
-                                        <div className="flex flex-col gap-6">
-                                            {/* Top Card: Strategic Matchmaking Toggle */}
-                                            <div className="flex flex-col md:flex-row items-center gap-4 p-4 bg-emerald-50/40 rounded-xl border border-emerald-200 shadow-sm transition-all hover:bg-emerald-50/60 w-fit">
-                                                <div className="flex flex-col">
-                                                    <Label className="text-[12px] font-bold text-emerald-900 font-sans">Are you interested in Pre-scheduled B2B Meetings? *</Label>
-                                                    <p className="text-[10px] text-emerald-600/70 font-sans">Maximize your sourcing efficiency with curated meetings.</p>
-                                                </div>
-                                                <Select required value={formData.requirePreScheduledB2B} onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}>
-                                                    <SelectTrigger className={`${inputClasses} w-[110px] h-9 border-2 border-emerald-500/30 bg-white font-black text-emerald-900`}>
-                                                        <SelectValue placeholder="Yes/No" />
-                                                    </SelectTrigger>
-                                                    <SelectContent className="bg-white font-sans text-[12px]">
-                                                        <SelectItem value="Yes" className="font-bold text-emerald-700">✅ YES</SelectItem>
-                                                        <SelectItem value="No" className="font-bold text-slate-500">❌ NO</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
 
-                                            {formData.requirePreScheduledB2B === 'Yes' && (
-                                                <div className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-500">
-                                                    {/* Section A: Matchmaking Categories & Types */}
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        <div className="space-y-2">
-                                                            <div className="flex justify-between items-center px-1">
-                                                                <Label className={labelClasses}>Preferred Meeting Categories *</Label>
-                                                                {formData.preferredMeetingCategories.length === 0 && <span className="text-[9px] text-red-500 font-bold uppercase animate-pulse">Required</span>}
-                                                            </div>
-                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[160px] overflow-y-auto custom-scrollbar shadow-inner">
+                                        {/* Top Card: Strategic Matchmaking Toggle */}
+                                        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-emerald-50/40 rounded-lg border border-emerald-200">
+                                            <div>
+                                                <Label className="text-[12px] font-bold text-emerald-900">Interested in Pre-scheduled B2B Meetings? *</Label>
+                                                <p className="text-[10px] text-emerald-600/70">Maximize sourcing efficiency with curated meetings</p>
+                                            </div>
+                                            <Select value={formData.requirePreScheduledB2B} onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}>
+                                                <SelectTrigger className="w-[110px] h-8 text-[12px] border-emerald-500/30 bg-white font-semibold">
+                                                    <SelectValue placeholder="Select" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Yes" className="text-[12px]">✅ YES</SelectItem>
+                                                    <SelectItem value="No" className="text-[12px]">❌ NO</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                        {formData.requirePreScheduledB2B === 'Yes' && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+
+                                                {/* Section A: Categories & Types - 2 columns with fixed heights */}
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {/* Meeting Categories */}
+                                                    <div className="space-y-1.5">
+                                                        <div className="flex justify-between items-center">
+                                                            <Label className="text-[11px] font-semibold">Preferred Meeting Categories *</Label>
+                                                            {formData.preferredMeetingCategories.length === 0 &&
+                                                                <span className="text-[9px] text-red-500 font-bold">Required</span>
+                                                            }
+                                                        </div>
+                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
+                                                            <div className="p-2.5 max-h-[100px] overflow-y-auto custom-scrollbar">
                                                                 <div className="flex flex-wrap gap-2">
                                                                     {(config?.meetingCategoryOptions || []).map(cat => (
-                                                                        <label key={cat} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredMeetingCategories.includes(cat) ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
-                                                                            <Checkbox checked={formData.preferredMeetingCategories.includes(cat)} onCheckedChange={(checked) => handleCheckboxChange('preferredMeetingCategories', cat, !!checked)} className="h-3.5 w-3.5 border-emerald-500 data-[state=checked]:bg-emerald-500" />
-                                                                            {cat}
-                                                                        </label>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="space-y-2">
-                                                            <Label className={labelClasses}>Exhibitor Types to Meet</Label>
-                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[160px] overflow-y-auto custom-scrollbar shadow-inner">
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {(config?.exhibitorTypeOptions || []).map(type => (
-                                                                        <label key={type} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredExhibitorTypes.includes(type) ? 'bg-[#23471d] border-[#23471d] text-white' : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
-                                                                            <Checkbox checked={formData.preferredExhibitorTypes.includes(type)} onCheckedChange={(checked) => handleCheckboxChange('preferredExhibitorTypes', type, !!checked)} className="h-3.5 w-3.5 border-emerald-500 data-[state=checked]:bg-emerald-500" />
-                                                                            {type}
+                                                                        <label key={cat} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all whitespace-nowrap ${formData.preferredMeetingCategories.includes(cat)
+                                                                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                                                                            : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
+                                                                            <Checkbox checked={formData.preferredMeetingCategories.includes(cat)}
+                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredMeetingCategories', cat, !!checked)}
+                                                                                className="h-3 w-3 shrink-0" />
+                                                                            <span className="truncate">{cat}</span>
                                                                         </label>
                                                                     ))}
                                                                 </div>
@@ -1220,29 +1310,64 @@ const BuyerRegistration = () => {
                                                         </div>
                                                     </div>
 
-                                                    {/* Section B: Objectives & Business Types */}
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        <div className="space-y-2">
-                                                            <Label className={labelClasses}>💼 Meeting Objectives (Very Important) *</Label>
-                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[150px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                    {/* Exhibitor Types */}
+                                                    <div className="space-y-1.5">
+                                                        <Label className="text-[11px] font-semibold">Exhibitor Types to Meet</Label>
+                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
+                                                            <div className="p-2.5 max-h-[100px] overflow-y-auto custom-scrollbar">
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {(config?.exhibitorTypeOptions || []).map(type => (
+                                                                        <label key={type} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all whitespace-nowrap ${formData.preferredExhibitorTypes.includes(type)
+                                                                            ? 'bg-[#23471d] border-[#23471d] text-white'
+                                                                            : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
+                                                                            <Checkbox checked={formData.preferredExhibitorTypes.includes(type)}
+                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredExhibitorTypes', type, !!checked)}
+                                                                                className="h-3 w-3 shrink-0" />
+                                                                            <span className="truncate">{type}</span>
+                                                                        </label>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Section B: Objectives & Business Types - 2 columns with fixed heights */}
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {/* Meeting Objectives */}
+                                                    <div className="space-y-1.5">
+                                                        <Label className="text-[11px] font-semibold">💼 Meeting Objectives *</Label>
+                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
+                                                            <div className="p-2.5 max-h-[95px] overflow-y-auto custom-scrollbar">
                                                                 <div className="flex flex-wrap gap-2">
                                                                     {(config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private Label / OEM", "Investment / Business Expansion"]).map(obj => (
-                                                                        <label key={obj} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.meetingObjectives.includes(obj) ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-white border-slate-200 hover:border-amber-400'}`}>
-                                                                            <Checkbox checked={formData.meetingObjectives.includes(obj)} onCheckedChange={(checked) => handleCheckboxChange('meetingObjectives', obj, !!checked)} className="h-3.5 w-3.5 border-amber-500 data-[state=checked]:bg-amber-500" />
+                                                                        <label key={obj} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all ${formData.meetingObjectives.includes(obj)
+                                                                            ? 'bg-amber-50 border-amber-300 text-amber-700'
+                                                                            : 'bg-white border-slate-200 hover:border-amber-400'}`}>
+                                                                            <Checkbox checked={formData.meetingObjectives.includes(obj)}
+                                                                                onCheckedChange={(checked) => handleCheckboxChange('meetingObjectives', obj, !!checked)}
+                                                                                className="h-3 w-3 shrink-0" />
                                                                             {obj}
                                                                         </label>
                                                                     ))}
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                        <div className="space-y-2">
-                                                            <Label className={labelClasses}>🏷 Preferred Business Type *</Label>
-                                                            <div className="p-3 border border-slate-300 rounded-xl bg-white/60 h-[150px] overflow-y-auto custom-scrollbar shadow-inner">
+                                                    {/* Preferred Business Types */}
+                                                    <div className="space-y-1.5">
+                                                        <Label className="text-[11px] font-semibold">🏷 Preferred Business Type *</Label>
+                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
+                                                            <div className="p-2.5 max-h-[95px] overflow-y-auto custom-scrollbar">
                                                                 <div className="flex flex-wrap gap-2">
                                                                     {(config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private Label", "Franchise", "Exclusive Distribution"]).map(type => (
-                                                                        <label key={type} className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2.5 py-1 rounded border transition-all cursor-pointer ${formData.preferredBusinessTypes.includes(type) ? 'bg-blue-50 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:border-blue-400'}`}>
-                                                                            <Checkbox checked={formData.preferredBusinessTypes.includes(type)} onCheckedChange={(checked) => handleCheckboxChange('preferredBusinessTypes', type, !!checked)} className="h-3.5 w-3.5 border-blue-500 data-[state=checked]:bg-blue-500" />
+                                                                        <label key={type} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all ${formData.preferredBusinessTypes.includes(type)
+                                                                            ? 'bg-blue-50 border-blue-300 text-blue-700'
+                                                                            : 'bg-white border-slate-200 hover:border-blue-400'}`}>
+                                                                            <Checkbox checked={formData.preferredBusinessTypes.includes(type)}
+                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredBusinessTypes', type, !!checked)}
+                                                                                className="h-3 w-3 shrink-0" />
                                                                             {type}
                                                                         </label>
                                                                     ))}
@@ -1250,203 +1375,107 @@ const BuyerRegistration = () => {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    {/* Section C: Logistics & Scheduling */}
-                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-5 p-4 bg-slate-50/50 rounded-xl border border-slate-100">
-                                                        <div className="space-y-1.5 md:col-span-1">
-                                                            <Label className={labelClasses}>Preferred Day *</Label>
-                                                            <Select required value={formData.preferredMeetingDay} onValueChange={(v) => handleSelectChange('preferredMeetingDay', v)}>
-                                                                <SelectTrigger className={`${inputClasses} ${errors.preferredMeetingDay ? 'border-red-400' : ''}`}>
-                                                                    <SelectValue placeholder="Select Day" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="bg-white font-sans text-[12px]">
-                                                                    {(config?.meetingDayOptions || []).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
-                                                                </SelectContent>
-                                                            </Select>
-                                                            <ErrorDisplay name="preferredMeetingDay" errors={errors} />
-                                                        </div>
-                                                        <div className="space-y-1.5 md:col-span-1">
-                                                            <Label className={labelClasses}>Time Slot *</Label>
-                                                            <Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}>
-                                                                <SelectTrigger className={`${inputClasses} ${errors.preferredTimeSlot ? 'border-red-400' : ''}`}>
-                                                                    <SelectValue placeholder="Select Slot" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="bg-white font-sans text-[12px]">
-                                                                    <SelectItem value="Morning (10AM - 1PM)">Morning (10AM - 1PM)</SelectItem>
-                                                                    <SelectItem value="Afternoon (2PM - 4PM)">Afternoon (2PM - 4PM)</SelectItem>
-                                                                    <SelectItem value="Evening (4PM - 6PM)">Evening (4PM - 6PM)</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                            <ErrorDisplay name="preferredTimeSlot" errors={errors} />
-                                                        </div>
-                                                        <div className="space-y-1.5 md:col-span-1">
-                                                            <Label className={labelClasses}>Number of Meetings *</Label>
-                                                            <Select value={formData.numberOfMeetingsInterested} onValueChange={(v) => handleSelectChange('numberOfMeetingsInterested', v)}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Approx count" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="bg-white font-sans text-[12px]">
-                                                                    {(config?.numberOfMeetingsOptions || ["3–5 Meetings", "5–10 Meetings", "10+ Meetings"]).map(count => (
-                                                                        <SelectItem key={count} value={count}>{count}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                        <div className="space-y-1.5 md:col-span-1">
-                                                            <Label className={labelClasses}>📈 Priority Level *</Label>
-                                                            <Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Priority" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="bg-white font-sans text-[12px]">
-                                                                    {(config?.meetingPriorityLevels || ['Low Priority (General networking)', 'Medium Priority (Exploring options)', 'High Priority (Actively looking to close deals)']).map(lvl => (
-                                                                        <SelectItem key={lvl} value={lvl}>{lvl}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                {/* Section C: Logistics - Compact Grid without overflow */}
+                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-slate-50/50 rounded-lg border border-slate-100">
+                                                    <div>
+                                                        <Label className="text-[10px] font-semibold">Preferred Day *</Label>
+                                                        <Select value={formData.preferredMeetingDay} onValueChange={(v) => handleSelectChange('preferredMeetingDay', v)}>
+                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                                <SelectValue placeholder="Select Day" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {(config?.meetingDayOptions || ["Day 1", "Day 2", "Day 3"]).map(d =>
+                                                                    <SelectItem key={d} value={d} className="text-[12px]">{d}</SelectItem>
+                                                                )}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <ErrorDisplay name="preferredMeetingDay" errors={errors} />
                                                     </div>
 
-                                                    {/* Section D: Requirements */}
-                                                    <div className="space-y-2">
-                                                        <Label className={labelClasses}>📝 Specific Meeting Requirements</Label>
-                                                        <Textarea 
-                                                            name="meetingRequirements"
-                                                            placeholder="👉 Mention specific expectations, brands you want to meet, or items you are sourcing..."
-                                                            value={formData.meetingRequirements}
-                                                            onChange={handleChange}
-                                                            className="min-h-[100px] text-[12px] p-4 rounded-xl border-slate-300 bg-white/50 focus:bg-white transition-all custom-scrollbar"
-                                                        />
+                                                    <div>
+                                                        <Label className="text-[10px] font-semibold">Time Slot *</Label>
+                                                        <Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}>
+                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                                <SelectValue placeholder="Select Slot" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="Morning (10AM - 1PM)" className="text-[11px]">Morning (10AM-1PM)</SelectItem>
+                                                                <SelectItem value="Afternoon (2PM - 4PM)" className="text-[11px]">Afternoon (2PM-4PM)</SelectItem>
+                                                                <SelectItem value="Evening (4PM - 6PM)" className="text-[11px]">Evening (4PM-6PM)</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <ErrorDisplay name="preferredTimeSlot" errors={errors} />
+                                                    </div>
+
+                                                    <div>
+                                                        <Label className="text-[10px] font-semibold">Number of Meetings</Label>
+                                                        <Select value={formData.numberOfMeetingsInterested} onValueChange={(v) => handleSelectChange('numberOfMeetingsInterested', v)}>
+                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                                <SelectValue placeholder="Select Count" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {(["3–5 Meetings", "5–10 Meetings", "10+ Meetings"]).map(count =>
+                                                                    <SelectItem key={count} value={count} className="text-[11px]">{count}</SelectItem>
+                                                                )}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+
+                                                    <div>
+                                                        <Label className="text-[10px] font-semibold">Priority Level</Label>
+                                                        <Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}>
+                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                                <SelectValue placeholder="Select Priority" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {(['Low Priority', 'Medium Priority', 'High Priority']).map(lvl =>
+                                                                    <SelectItem key={lvl} value={lvl} className="text-[11px]">{lvl}</SelectItem>
+                                                                )}
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
 
-                                <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
-                                    <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
-
-                                    <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
-                                        {!showMembershipOptions ? (
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                {passPackages.map((pkg: any) => {
-                                                    const meta = PACKAGE_METADATA[pkg.name] || {};
-                                                    const isSelected = formData.registrationCategory === pkg.name;
-                                                    const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
-                                                    const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
-
-                                                    return (
-                                                        <div
-                                                            key={pkg.name}
-                                                            onClick={() => handlePackageSelection(pkg)}
-                                                            className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
-                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                `}
-                                                        >
-                                                            {meta.badge && (
-                                                                <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
-                                                                    ⭐ {meta.badge}
-                                                                </div>
-                                                            )}
-
-                                                            <div className="mb-3">
-                                                                <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
-                                                                    {pkg.name} – ₹{pkg.price}
-                                                                </h4>
-                                                                <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                    {meta.tagline}
-                                                                </p>
-                                                            </div>
-
-                                                            <div className="flex-1 space-y-4">
-                                                                <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                    {meta.description}
-                                                                </p>
-
-                                                                <div className="space-y-1.5">
-                                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                    <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
-                                                                        {pkg.benefits.map((b: string, i: number) => (
-                                                                            <li key={i} className="flex items-start gap-2">
-                                                                                <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
-                                                                                <span>{b}</span>
-                                                                            </li>
-                                                                        ))}
-                                                                    </ul>
-                                                                </div>
-
-                                                                <div className={`p-2 rounded-lg ${colorScheme} border`}>
-                                                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
-                                                                    <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                        {meta.whyChoose}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                `}>
-                                                                {meta.cta || "Select Plan"}
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-
-                                                {/* Membership Trigger Card */}
-                                                <div
-                                                    onClick={() => setShowMembershipOptions(true)}
-                                                    className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
-                                                        `}
-                                                >
-                                                    <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
-                                                    <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
-                                                        View More Plans →
-                                                    </div>
+                                                {/* Section D: Requirements - Fixed height textarea */}
+                                                <div className="space-y-1.5">
+                                                    <Label className="text-[11px] font-semibold">📝 Specific Meeting Requirements</Label>
+                                                    <Textarea
+                                                        name="meetingRequirements"
+                                                        placeholder="👉 Mention specific expectations, brands you want to meet, or items you are sourcing..."
+                                                        value={formData.meetingRequirements}
+                                                        onChange={handleChange}
+                                                        rows={2}
+                                                        className="text-[12px] p-3 rounded-lg border-slate-300 bg-white/50 resize-none min-h-[60px] max-h-[80px]"
+                                                    />
                                                 </div>
                                             </div>
-                                        ) : (
-                                            <div className="space-y-4">
-                                                <div className="flex items-center justify-between px-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                                        <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
-                                                    </div>
-                                                    <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
-                                                </div>
+                                        )}
+                                    </div>
 
+                                    <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
+                                        <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
+
+                                        <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
+                                            {!showMembershipOptions ? (
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                    {membershipPackages.map((pkg: any) => {
+                                                    {passPackages.map((pkg: any) => {
                                                         const meta = PACKAGE_METADATA[pkg.name] || {};
                                                         const isSelected = formData.registrationCategory === pkg.name;
-
-                                                        let colorScheme = 'border-blue-400 bg-blue-50/10';
-                                                        let accentColor = 'text-blue-700';
-                                                        let badgeColor = 'bg-blue-500';
-
-                                                        if (meta.color === 'yellow') {
-                                                            colorScheme = 'border-amber-400 bg-amber-50/10';
-                                                            accentColor = 'text-amber-700';
-                                                            badgeColor = 'bg-amber-400';
-                                                        } else if (meta.color === 'red') {
-                                                            colorScheme = 'border-red-400 bg-red-50/10';
-                                                            accentColor = 'text-red-700';
-                                                            badgeColor = 'bg-red-500';
-                                                        } else if (meta.color === 'green') {
-                                                            colorScheme = 'border-emerald-400 bg-emerald-50/10';
-                                                            accentColor = 'text-emerald-700';
-                                                            badgeColor = 'bg-emerald-500';
-                                                        }
+                                                        const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
+                                                        const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
 
                                                         return (
                                                             <div
                                                                 key={pkg.name}
                                                                 onClick={() => handlePackageSelection(pkg)}
-                                                                className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
-                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                    `}
+                                                                className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
+                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                `}
                                                             >
                                                                 {meta.badge && (
-                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
+                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
                                                                         ⭐ {meta.badge}
                                                                     </div>
                                                                 )}
@@ -1486,291 +1515,393 @@ const BuyerRegistration = () => {
                                                                 </div>
 
                                                                 <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                    `}>
+                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                `}>
                                                                     {meta.cta || "Select Plan"}
                                                                 </div>
                                                             </div>
                                                         );
                                                     })}
+
+                                                    {/* Membership Trigger Card */}
+                                                    <div
+                                                        onClick={() => setShowMembershipOptions(true)}
+                                                        className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
+                                                        `}
+                                                    >
+                                                        <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
+                                                        <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
+                                                            View More Plans →
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3 mt-4">
-                                                    <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
-                                                    <p className="text-[11px] font-medium text-amber-800 leading-relaxed">
-                                                        <span className="font-black uppercase tracking-wider">⚠️ Important Note:</span> Expo entry is free for all visitors. Buyer–Seller Meet is conducted by the International Council of AYUSH (ICOA) at IHWE, ensuring curated B2B interactions and high-quality business engagement.
-                                                    </p>
+                                            ) : (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between px-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
+                                                        </div>
+                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                                                        {membershipPackages.map((pkg: any) => {
+                                                            const meta = PACKAGE_METADATA[pkg.name] || {};
+                                                            const isSelected = formData.registrationCategory === pkg.name;
+
+                                                            let colorScheme = 'border-blue-400 bg-blue-50/10';
+                                                            let accentColor = 'text-blue-700';
+                                                            let badgeColor = 'bg-blue-500';
+
+                                                            if (meta.color === 'yellow') {
+                                                                colorScheme = 'border-amber-400 bg-amber-50/10';
+                                                                accentColor = 'text-amber-700';
+                                                                badgeColor = 'bg-amber-400';
+                                                            } else if (meta.color === 'red') {
+                                                                colorScheme = 'border-red-400 bg-red-50/10';
+                                                                accentColor = 'text-red-700';
+                                                                badgeColor = 'bg-red-500';
+                                                            } else if (meta.color === 'green') {
+                                                                colorScheme = 'border-emerald-400 bg-emerald-50/10';
+                                                                accentColor = 'text-emerald-700';
+                                                                badgeColor = 'bg-emerald-500';
+                                                            }
+
+                                                            return (
+                                                                <div
+                                                                    key={pkg.name}
+                                                                    onClick={() => handlePackageSelection(pkg)}
+                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    `}
+                                                                >
+                                                                    {meta.badge && (
+                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
+                                                                            ⭐ {meta.badge}
+                                                                        </div>
+                                                                    )}
+
+                                                                    <div className="mb-3">
+                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                            {pkg.name} – ₹{pkg.price}
+                                                                        </h4>
+                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
+                                                                            {meta.tagline}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    <div className="flex-1 space-y-4">
+                                                                        <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
+                                                                            {meta.description}
+                                                                        </p>
+
+                                                                        <div className="space-y-1.5">
+                                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
+                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                                {pkg.benefits.map((b: string, i: number) => (
+                                                                                    <li key={i} className="flex items-start gap-2">
+                                                                                        <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
+                                                                                        <span>{b}</span>
+                                                                                    </li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+
+                                                                        <div className={`p-2 rounded-lg ${colorScheme} border`}>
+                                                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
+                                                                            <p className="text-[10px] text-slate-700 font-semibold leading-snug">
+                                                                                {meta.whyChoose}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    `}>
+                                                                        {meta.cta || "Select Plan"}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3 mt-4">
+                                                        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                                                        <p className="text-[11px] font-medium text-amber-800 leading-relaxed">
+                                                            <span className="font-black uppercase tracking-wider">⚠️ Important Note:</span> Expo entry is free for all visitors. Buyer–Seller Meet is conducted by the International Council of AYUSH (ICOA) at IHWE, ensuring curated B2B interactions and high-quality business engagement.
+                                                        </p>
+                                                    </div>
                                                 </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+
+
+                                </form>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </section >
+
+            {/* Comprehensive Terms & Conditions Modal with Policies */}
+            <AnimatePresence>
+                {
+                    showTermsModal && tempSelectedPackage && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.9, y: 20 }}
+                                animate={{ scale: 1, y: 0 }}
+                                exit={{ scale: 0.9, y: 20 }}
+                                className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+                            >
+                                {/* Header */}
+                                <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
+                                    <div>
+                                        <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
+                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium font-sans">
+                                            {tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}
+                                        </p>
+                                    </div>
+                                    <button onClick={() => setShowTermsModal(false)} className="hover:rotate-90 transition-transform text-white">
+                                        ✕
+                                    </button>
+                                </div>
+
+                                {/* Policy Tabs */}
+                                <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
+                                    <button
+                                        onClick={() => setActivePolicyTab('payment')}
+                                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'payment' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'}`}
+                                    >
+                                        <FileText size={14} /> 1. Payment Terms
+                                    </button>
+                                    <button
+                                        onClick={() => policyConsents.paymentTerms && setActivePolicyTab('refund')}
+                                        disabled={!policyConsents.paymentTerms}
+                                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'refund' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        <AlertTriangle size={14} /> 2. Refund Policy
+                                    </button>
+                                    <button
+                                        onClick={() => policyConsents.refundPolicy && setActivePolicyTab('privacy')}
+                                        disabled={!policyConsents.refundPolicy}
+                                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'privacy' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        <Lock size={14} /> 3. Privacy Policy
+                                    </button>
+                                </div>
+
+                                {/* Policy Content */}
+                                <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
+                                    {loadingPolicies ? (
+                                        <div className="flex flex-col items-center justify-center py-20 gap-3">
+                                            <Loader2 className="animate-spin text-emerald-500" size={32} />
+                                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Legal Terms...</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {activePolicyTab === 'payment' && (
+                                                <div className="space-y-4">
+                                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ IMPORTANT: STRICT NO REFUND POLICY</p>
+                                                        <p className="text-red-600 text-[11px] mt-1">All payments are FINAL, NON-REFUNDABLE, and NON-TRANSFERABLE under any circumstances.</p>
+                                                    </div>
+                                                    <div
+                                                        className="policy-content"
+                                                        dangerouslySetInnerHTML={{ __html: policiesData['payment']?.content || '<p class="text-slate-400">Loading payment terms...</p>' }}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {activePolicyTab === 'refund' && (
+                                                <div className="space-y-4">
+                                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ STRICT NO REFUND POLICY</p>
+                                                        <p className="text-red-600 text-[11px] mt-1">All payments made to Namo Gange Wellness Pvt. Ltd. are strictly non-refundable and non-transferable.</p>
+                                                    </div>
+                                                    <div
+                                                        className="policy-content"
+                                                        dangerouslySetInnerHTML={{ __html: policiesData['refund']?.content || '<p class="text-slate-400">Loading refund policy...</p>' }}
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {activePolicyTab === 'privacy' && (
+                                                <div className="space-y-4">
+                                                    <div
+                                                        className="policy-content"
+                                                        dangerouslySetInnerHTML={{ __html: policiesData['privacy']?.content || '<p class="text-slate-400">Loading privacy policy...</p>' }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+
+                                {/* Footer with Consent Checkboxes */}
+                                <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
+                                    <div className="space-y-2">
+                                        {activePolicyTab === 'payment' && (
+                                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                                <Checkbox
+                                                    id="consent-payment"
+                                                    checked={policyConsents.paymentTerms}
+                                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, paymentTerms: !!checked }))}
+                                                />
+                                                <Label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                    I have read, understood, and agree to the <span className="font-bold text-[#23471d]">Payment Terms & Conditions</span>, including the strictly non-refundable and non-transferable policy.
+                                                </Label>
+                                            </div>
+                                        )}
+
+                                        {activePolicyTab === 'refund' && (
+                                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                                <Checkbox
+                                                    id="consent-refund"
+                                                    checked={policyConsents.refundPolicy}
+                                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, refundPolicy: !!checked }))}
+                                                />
+                                                <Label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                    I have read, understood, and agree to the <span className="font-bold text-red-600">Refund & Cancellation Policy</span>, acknowledging that all payments are strictly non-refundable.
+                                                </Label>
+                                            </div>
+                                        )}
+
+                                        {activePolicyTab === 'privacy' && (
+                                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
+                                                <Checkbox
+                                                    id="consent-privacy"
+                                                    checked={policyConsents.privacyPolicy}
+                                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, privacyPolicy: !!checked }))}
+                                                />
+                                                <Label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                    I hereby provide my consent for the collection, processing, storage, and sharing of my personal data in accordance with the <span className="font-bold text-[#23471d]">Privacy Policy</span>.
+                                                </Label>
                                             </div>
                                         )}
                                     </div>
+
+                                    <div className="flex gap-2 mt-2">
+                                        <Button
+                                            variant="outline"
+                                            onClick={() => setShowTermsModal(false)}
+                                            className={`flex-1 h-9 text-xs font-sans ${buttonTextClasses}`}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                if (activePolicyTab === 'payment') setActivePolicyTab('refund');
+                                                else if (activePolicyTab === 'refund') setActivePolicyTab('privacy');
+                                                else confirmPackage();
+                                            }}
+                                            disabled={
+                                                (activePolicyTab === 'payment' && !policyConsents.paymentTerms) ||
+                                                (activePolicyTab === 'refund' && !policyConsents.refundPolicy) ||
+                                                (activePolicyTab === 'privacy' && !policyConsents.privacyPolicy)
+                                            }
+                                            className={`flex-1 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white ${buttonTextClasses} disabled:opacity-50 disabled:cursor-not-allowed`}
+                                        >
+                                            {activePolicyTab === 'payment' && "Agree & Continue to Refund Policy →"}
+                                            {activePolicyTab === 'refund' && "Agree & Continue to Privacy Policy →"}
+                                            {activePolicyTab === 'privacy' && "Agree & Proceed to Payment 💳"}
+                                        </Button>
+                                    </div>
                                 </div>
-
-
-
-                            </form>
                             </motion.div>
-                        )}
-                </AnimatePresence>
-        </div>
-            </section >
-
-    {/* Comprehensive Terms & Conditions Modal with Policies */ }
-    <AnimatePresence>
-{
-    showTermsModal && tempSelectedPackage && (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto"
-        >
-            <motion.div
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
-            >
-                {/* Header */}
-                <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
-                    <div>
-                        <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
-                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium font-sans">
-                            {tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}
-                        </p>
-                    </div>
-                    <button onClick={() => setShowTermsModal(false)} className="hover:rotate-90 transition-transform text-white">
-                        ✕
-                    </button>
-                </div>
-
-                {/* Policy Tabs */}
-                <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
-                    <button
-                        onClick={() => setActivePolicyTab('payment')}
-                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'payment' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'}`}
-                    >
-                        <FileText size={14} /> 1. Payment Terms
-                    </button>
-                    <button
-                        onClick={() => policyConsents.paymentTerms && setActivePolicyTab('refund')}
-                        disabled={!policyConsents.paymentTerms}
-                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'refund' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                        <AlertTriangle size={14} /> 2. Refund Policy
-                    </button>
-                    <button
-                        onClick={() => policyConsents.refundPolicy && setActivePolicyTab('privacy')}
-                        disabled={!policyConsents.refundPolicy}
-                        className={`flex-1 px-4 py-2.5 text-[11px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${activePolicyTab === 'privacy' ? 'bg-white text-[#23471d] border-b-2 border-[#23471d]' : 'text-slate-500 hover:text-[#23471d]'} disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                        <Lock size={14} /> 3. Privacy Policy
-                    </button>
-                </div>
-
-                {/* Policy Content */}
-                <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
-                    {loadingPolicies ? (
-                        <div className="flex flex-col items-center justify-center py-20 gap-3">
-                            <Loader2 className="animate-spin text-emerald-500" size={32} />
-                            <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Loading Legal Terms...</p>
-                        </div>
-                    ) : (
-                        <>
-                            {activePolicyTab === 'payment' && (
-                                <div className="space-y-4">
-                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ IMPORTANT: STRICT NO REFUND POLICY</p>
-                                        <p className="text-red-600 text-[11px] mt-1">All payments are FINAL, NON-REFUNDABLE, and NON-TRANSFERABLE under any circumstances.</p>
-                                    </div>
-                                    <div
-                                        className="policy-content"
-                                        dangerouslySetInnerHTML={{ __html: policiesData['payment']?.content || '<p class="text-slate-400">Loading payment terms...</p>' }}
-                                    />
-                                </div>
-                            )}
-
-                            {activePolicyTab === 'refund' && (
-                                <div className="space-y-4">
-                                    <div className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
-                                        <p className="text-red-700 font-bold text-[11px] uppercase">⚠️ STRICT NO REFUND POLICY</p>
-                                        <p className="text-red-600 text-[11px] mt-1">All payments made to Namo Gange Wellness Pvt. Ltd. are strictly non-refundable and non-transferable.</p>
-                                    </div>
-                                    <div
-                                        className="policy-content"
-                                        dangerouslySetInnerHTML={{ __html: policiesData['refund']?.content || '<p class="text-slate-400">Loading refund policy...</p>' }}
-                                    />
-                                </div>
-                            )}
-
-                            {activePolicyTab === 'privacy' && (
-                                <div className="space-y-4">
-                                    <div
-                                        className="policy-content"
-                                        dangerouslySetInnerHTML={{ __html: policiesData['privacy']?.content || '<p class="text-slate-400">Loading privacy policy...</p>' }}
-                                    />
-                                </div>
-                            )}
-                        </>
-                    )}
-                </div>
-
-                {/* Footer with Consent Checkboxes */}
-                <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
-                    <div className="space-y-2">
-                        {activePolicyTab === 'payment' && (
-                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                <Checkbox
-                                    id="consent-payment"
-                                    checked={policyConsents.paymentTerms}
-                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, paymentTerms: !!checked }))}
-                                />
-                                <Label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                    I have read, understood, and agree to the <span className="font-bold text-[#23471d]">Payment Terms & Conditions</span>, including the strictly non-refundable and non-transferable policy.
-                                </Label>
-                            </div>
-                        )}
-
-                        {activePolicyTab === 'refund' && (
-                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-red-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                <Checkbox
-                                    id="consent-refund"
-                                    checked={policyConsents.refundPolicy}
-                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, refundPolicy: !!checked }))}
-                                />
-                                <Label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                    I have read, understood, and agree to the <span className="font-bold text-red-600">Refund & Cancellation Policy</span>, acknowledging that all payments are strictly non-refundable.
-                                </Label>
-                            </div>
-                        )}
-
-                        {activePolicyTab === 'privacy' && (
-                            <div className="flex items-start gap-3 p-2 bg-white rounded border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-bottom-2">
-                                <Checkbox
-                                    id="consent-privacy"
-                                    checked={policyConsents.privacyPolicy}
-                                    onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, privacyPolicy: !!checked }))}
-                                />
-                                <Label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
-                                    I hereby provide my consent for the collection, processing, storage, and sharing of my personal data in accordance with the <span className="font-bold text-[#23471d]">Privacy Policy</span>.
-                                </Label>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="flex gap-2 mt-2">
-                        <Button
-                            variant="outline"
-                            onClick={() => setShowTermsModal(false)}
-                            className={`flex-1 h-9 text-xs font-sans ${buttonTextClasses}`}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                if (activePolicyTab === 'payment') setActivePolicyTab('refund');
-                                else if (activePolicyTab === 'refund') setActivePolicyTab('privacy');
-                                else confirmPackage();
-                            }}
-                            disabled={
-                                (activePolicyTab === 'payment' && !policyConsents.paymentTerms) ||
-                                (activePolicyTab === 'refund' && !policyConsents.refundPolicy) ||
-                                (activePolicyTab === 'privacy' && !policyConsents.privacyPolicy)
-                            }
-                            className={`flex-1 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white ${buttonTextClasses} disabled:opacity-50 disabled:cursor-not-allowed`}
-                        >
-                            {activePolicyTab === 'payment' && "Agree & Continue to Refund Policy →"}
-                            {activePolicyTab === 'refund' && "Agree & Continue to Privacy Policy →"}
-                            {activePolicyTab === 'privacy' && "Agree & Proceed to Payment 💳"}
-                        </Button>
-                    </div>
-                </div>
-            </motion.div>
-        </motion.div>
-    )
-}
+                        </motion.div>
+                    )
+                }
             </AnimatePresence >
 
-    {/* ── PAYMENT CONFIRMATION MODAL ── */ }
-    <AnimatePresence>
-{
-    showPaymentConfirmModal && tempSelectedPackage && (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-        >
-            <motion.div
-                initial={{ scale: 0.85, y: 30 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.85, y: 30 }}
-                className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
-            >
-                {/* Header */}
-                <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                        <CreditCard size={20} className="text-emerald-300" />
-                    </div>
-                    <div>
-                        <h3 className="text-white font-black uppercase tracking-wider text-sm">Payment Confirmation</h3>
-                        <p className="text-emerald-300 text-[10px] font-bold uppercase tracking-widest">{tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}</p>
-                    </div>
-                </div>
+            {/* ── PAYMENT CONFIRMATION MODAL ── */}
+            <AnimatePresence>
+                {
+                    showPaymentConfirmModal && tempSelectedPackage && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.85, y: 30 }}
+                                animate={{ scale: 1, y: 0 }}
+                                exit={{ scale: 0.85, y: 30 }}
+                                className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
+                            >
+                                {/* Header */}
+                                <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                        <CreditCard size={20} className="text-emerald-300" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-white font-black uppercase tracking-wider text-sm">Payment Confirmation</h3>
+                                        <p className="text-emerald-300 text-[10px] font-bold uppercase tracking-widest">{tempSelectedPackage?.name} — ₹{tempSelectedPackage?.price}</p>
+                                    </div>
+                                </div>
 
-                {/* Body */}
-                <div className="p-6 space-y-5">
-                    {/* Non-refundable notice */}
-                    <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
-                        <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
-                        <div>
-                            <p className="text-red-700 font-black text-sm uppercase tracking-wide mb-1">
-                                ⚠️ IMPORTANT NOTICE
-                            </p>
-                            <p className="text-red-600 text-[13px] font-semibold leading-relaxed">
-                                All payments are{" "}
-                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-REFUNDABLE</span>{" "}
-                                and{" "}
-                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-TRANSFERABLE</span>.
-                            </p>
-                        </div>
-                    </div>
+                                {/* Body */}
+                                <div className="p-6 space-y-5">
+                                    {/* Non-refundable notice */}
+                                    <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
+                                        <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-red-700 font-black text-sm uppercase tracking-wide mb-1">
+                                                ⚠️ IMPORTANT NOTICE
+                                            </p>
+                                            <p className="text-red-600 text-[13px] font-semibold leading-relaxed">
+                                                All payments are{" "}
+                                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-REFUNDABLE</span>{" "}
+                                                and{" "}
+                                                <span className="bg-red-600 text-white px-1.5 py-0.5 rounded font-black text-[12px] mx-0.5">NON-TRANSFERABLE</span>.
+                                            </p>
+                                        </div>
+                                    </div>
 
-                    {/* Package summary */}
-                    <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
-                        <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
-                        <div className="flex justify-between items-center">
-                            <span className="text-slate-800 font-bold text-sm">{tempSelectedPackage?.name}</span>
-                            <span className="text-[#23471d] font-black text-xl">₹{tempSelectedPackage?.price}</span>
-                        </div>
-                        <p className="text-[11px] text-slate-500 font-medium">9th International Health &amp; Wellness Expo 2026</p>
-                    </div>
+                                    {/* Package summary */}
+                                    <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
+                                        <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-800 font-bold text-sm">{tempSelectedPackage?.name}</span>
+                                            <span className="text-[#23471d] font-black text-xl">₹{tempSelectedPackage?.price}</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-500 font-medium">9th International Health &amp; Wellness Expo 2026</p>
+                                    </div>
 
-                    <p className="text-slate-500 text-[12px] leading-relaxed text-center">
-                        By proceeding, you confirm that you have read and agreed to all policies.
-                    </p>
-                </div>
+                                    <p className="text-slate-500 text-[12px] leading-relaxed text-center">
+                                        By proceeding, you confirm that you have read and agreed to all policies.
+                                    </p>
+                                </div>
 
-                {/* Actions */}
-                <div className="px-6 pb-6 grid grid-cols-2 gap-3">
-                    <Button
-                        variant="outline"
-                        onClick={() => setShowPaymentConfirmModal(false)}
-                        className="h-11 border-slate-300 text-slate-600 font-black text-[11px] uppercase tracking-wider rounded-lg hover:bg-slate-50"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => initiateRazorpayPayment()}
-                        className="h-11 bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-[11px] uppercase tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-                    >
-                        <CreditCard size={14} />
-                        Proceed to Pay
-                    </Button>
-                </div>
-            </motion.div>
-        </motion.div>
-    )
-}
+                                {/* Actions */}
+                                <div className="px-6 pb-6 grid grid-cols-2 gap-3">
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setShowPaymentConfirmModal(false)}
+                                        className="h-11 border-slate-300 text-slate-600 font-black text-[11px] uppercase tracking-wider rounded-lg hover:bg-slate-50"
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        onClick={() => initiateRazorpayPayment()}
+                                        className="h-11 bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-[11px] uppercase tracking-wider rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                                    >
+                                        <CreditCard size={14} />
+                                        Proceed to Pay
+                                    </Button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )
+                }
             </AnimatePresence >
         </div >
     );
