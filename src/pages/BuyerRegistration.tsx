@@ -1136,7 +1136,7 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
                                             <div className="md:col-span-4 lg:col-span-5">
                                                 <Label className={labelClasses}>Secondary Product Categories</Label>
-                                                <div className="mt-1 p-3 border border-slate-300 rounded-lg bg-white/50 max-h-[200px] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-inner">
+                                                <div className="mt-1 p-3 border border-slate-400 rounded-lg bg-white h-[150px] overflow-y-auto overflow-x-hidden custom-scrollbar">
                                                     <div className="flex flex-wrap gap-2.5">
                                                         {(config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']).map((cat: string) => (
                                                             <label
@@ -1208,7 +1208,7 @@ const BuyerRegistration = () => {
                                             </div>
                                             <div className="md:col-span-2">
                                                 <Label className={labelClasses}>Preferred State (Optional)</Label>
-                                                <div className="mt-1 p-3 border border-slate-300 rounded-lg bg-white/50 max-h-[200px] overflow-y-auto overflow-x-hidden custom-scrollbar shadow-inner">
+                                                <div className="mt-1 p-3 border border-slate-400 rounded-lg bg-white h-[150px] overflow-y-auto overflow-x-hidden custom-scrollbar">
                                                     <div className="flex flex-wrap gap-2.5">
                                                         {states.map(s => (
                                                             <label
