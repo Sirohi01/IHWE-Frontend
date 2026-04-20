@@ -42,6 +42,161 @@ import { Textarea } from "@/components/ui/textarea";
 import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
 import { toast } from "sonner";
+import { useRef, useEffect as useEffectDropdown } from "react";
+
+// ─── Reusable Multi-Select Dropdown ─────────────────────────────────────────
+interface MultiSelectDropdownProps {
+    options: string[];
+    selected: string[];
+    onChange: (selected: string[]) => void;
+    placeholder?: string;
+    error?: boolean;
+    accentColor?: string;
+    badgeColor?: string;
+}
+
+const MultiSelectDropdown = ({
+    options,
+    selected,
+    onChange,
+    placeholder = "Select options",
+    error = false,
+    accentColor = "emerald",
+    badgeColor = "emerald",
+}: MultiSelectDropdownProps) => {
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffectDropdown(() => {
+        const handler = (e: MouseEvent) => {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, []);
+
+    const toggle = (item: string) => {
+        if (selected.includes(item)) {
+            onChange(selected.filter((s) => s !== item));
+        } else {
+            onChange([...selected, item]);
+        }
+    };
+
+    const accentClasses: Record<string, { bg: string; border: string; text: string; check: string; tag: string; tagText: string; tagX: string }> = {
+        emerald: {
+            bg: "bg-emerald-50",
+            border: "border-emerald-300",
+            text: "text-emerald-700",
+            check: "data-[state=checked]:bg-emerald-500 border-emerald-400",
+            tag: "bg-emerald-100 border-emerald-300",
+            tagText: "text-emerald-700",
+            tagX: "text-emerald-500 hover:text-emerald-700",
+        },
+        amber: {
+            bg: "bg-amber-50",
+            border: "border-amber-300",
+            text: "text-amber-700",
+            check: "data-[state=checked]:bg-amber-500 border-amber-400",
+            tag: "bg-amber-100 border-amber-300",
+            tagText: "text-amber-700",
+            tagX: "text-amber-500 hover:text-amber-700",
+        },
+        blue: {
+            bg: "bg-blue-50",
+            border: "border-blue-300",
+            text: "text-blue-700",
+            check: "data-[state=checked]:bg-blue-500 border-blue-400",
+            tag: "bg-blue-100 border-blue-300",
+            tagText: "text-blue-700",
+            tagX: "text-blue-500 hover:text-blue-700",
+        },
+        slate: {
+            bg: "bg-slate-50",
+            border: "border-slate-300",
+            text: "text-slate-700",
+            check: "data-[state=checked]:bg-slate-500 border-slate-400",
+            tag: "bg-slate-100 border-slate-300",
+            tagText: "text-slate-700",
+            tagX: "text-slate-500 hover:text-slate-700",
+        },
+    };
+
+    const ac = accentClasses[accentColor] || accentClasses.emerald;
+
+    return (
+        <div ref={ref} className="relative w-full">
+            {/* Trigger */}
+            <button
+                type="button"
+                onClick={() => setOpen((p) => !p)}
+                className={`w-full min-h-[32px] px-3 py-1.5 rounded-[2px] border text-left text-[12px] font-medium bg-white transition-all outline-none flex items-center justify-between gap-2 flex-wrap
+                    ${error ? "border-red-400" : open ? `border-[#23471d]` : "border-slate-400"} hover:border-[#23471d]`}
+            >
+                <span className="flex flex-wrap gap-1 flex-1">
+                    {selected.length === 0 ? (
+                        <span className="text-slate-400">{placeholder}</span>
+                    ) : (
+                        selected.slice(0, 3).map((s) => (
+                            <span
+                                key={s}
+                                className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${ac.tag} ${ac.tagText}`}
+                            >
+                                {s}
+                                <span
+                                    role="button"
+                                    onClick={(e) => { e.stopPropagation(); toggle(s); }}
+                                    className={`cursor-pointer ${ac.tagX}`}
+                                >
+                                    <X size={9} />
+                                </span>
+                            </span>
+                        ))
+                    )}
+                    {selected.length > 3 && (
+                        <span className={`inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full border ${ac.tag} ${ac.tagText}`}>
+                            +{selected.length - 3} more
+                        </span>
+                    )}
+                </span>
+                <ChevronDown
+                    size={14}
+                    className={`shrink-0 text-slate-400 transition-transform ${open ? "rotate-180" : ""}`}
+                />
+            </button>
+
+            {/* Dropdown Panel */}
+            {open && (
+                <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-[220px] overflow-y-auto custom-scrollbar">
+                    {options.length === 0 ? (
+                        <p className="text-[11px] text-slate-400 text-center py-3">No options available</p>
+                    ) : (
+                        options.map((opt) => {
+                            const isChecked = selected.includes(opt);
+                            return (
+                                <label
+                                    key={opt}
+                                    className={`flex items-center gap-2.5 px-3 py-2 cursor-pointer text-[12px] font-medium transition-colors
+                                        ${isChecked ? `${ac.bg} ${ac.text}` : "text-slate-700 hover:bg-slate-50"}`}
+                                >
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onCheckedChange={() => toggle(opt)}
+                                        className={`h-3.5 w-3.5 shrink-0 ${ac.check}`}
+                                    />
+                                    {opt}
+                                </label>
+                            );
+                        })
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+// ─────────────────────────────────────────────────────────────────────────────
 
 
 const loadRazorpayScript = () => {
@@ -915,7 +1070,7 @@ const BuyerRegistration = () => {
                                     {/* 1. Personal & Company Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Personal & Company Information</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Full Name *</Label><Input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={`${inputClasses} ${errors.fullName ? 'border-red-400' : ''}`} /><ErrorDisplay name="fullName" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Designation *</Label><Input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Current Position" className={`${inputClasses} ${errors.designation ? 'border-red-400' : ''}`} /><ErrorDisplay name="designation" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Company Name *</Label><Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={`${inputClasses} ${errors.companyName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyName" errors={errors} /></div>
@@ -1020,7 +1175,7 @@ const BuyerRegistration = () => {
                                     {/* 2. Contact Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Mobile Number (10 digits) *</Label>
                                                 <div className="flex gap-2">
@@ -1093,7 +1248,7 @@ const BuyerRegistration = () => {
                                     </div>
 
                                     {/* Registered Address, State, City, Pin Code */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                         <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
                                         <div><Label className={labelClasses}>State/Province *</Label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
                                         <div><Label className={labelClasses}>City *</Label><Select value={formData.city} onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince || loadingLocations.cities}><SelectTrigger className={`${inputClasses} ${errors.city ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.cities ? "Loading..." : "Select City"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{cities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="city" errors={errors} /></div>
@@ -1103,7 +1258,7 @@ const BuyerRegistration = () => {
                                     {/* 1. Basic Business Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> 1. Company Business Profile </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Company / Firm Name *</Label><Input required name="companyFirmName" value={formData.companyFirmName} onChange={handleChange} placeholder="Company / Firm Name" className={`${inputClasses} ${errors.companyFirmName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyFirmName" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Brand Name</Label><Input name="brandName" value={formData.brandName} onChange={handleChange} placeholder="Brand Name" className={inputClasses} /></div>
                                             <div><Label className={labelClasses}>Business Type *</Label><Select required value={formData.basicBusinessType} onValueChange={(v) => handleSelectChange('basicBusinessType', v)}><SelectTrigger className={`${inputClasses} ${errors.basicBusinessType ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Proprietorship', 'Partnership', 'Pvt Ltd', 'LLP', 'Others'].map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="basicBusinessType" errors={errors} /></div>
@@ -1117,7 +1272,7 @@ const BuyerRegistration = () => {
                                     {/* 2. Business Profile Details */}
                                     <div className="space-y-2 pt-2">
                                         <h3 className={sectionTitleClasses}> 2. Business Profile Details</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Nature of Business *</Label><Input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Years in Business *</Label><Input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Number of Outlets / Branches *</Label><Input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
@@ -1128,33 +1283,20 @@ const BuyerRegistration = () => {
 
 
 
-
-
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Sourcing & Buying Interests</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
                                             <div><Label className={labelClasses}>Primary Product Interest *</Label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
-                                            <div className="md:col-span-4 lg:col-span-5">
+                                            <div className="">
                                                 <Label className={labelClasses}>Secondary Product Categories</Label>
-                                                <div className="mt-1 p-3 border border-slate-400 rounded-lg bg-white h-[150px] overflow-y-auto overflow-x-hidden custom-scrollbar">
-                                                    <div className="flex flex-wrap gap-2.5">
-                                                        {(config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']).map((cat: string) => (
-                                                            <label
-                                                                key={cat}
-                                                                className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-3 py-1 rounded-full border transition-all cursor-pointer ${formData.secondaryProductCategories.includes(cat)
-                                                                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-sm'
-                                                                    : 'bg-white border-slate-200 hover:border-emerald-400'
-                                                                    }`}
-                                                            >
-                                                                <Checkbox
-                                                                    checked={formData.secondaryProductCategories.includes(cat)}
-                                                                    onCheckedChange={(checked) => handleCheckboxChange('secondaryProductCategories', cat, !!checked)}
-                                                                    className="h-3 w-3 border-emerald-500 data-[state=checked]:bg-emerald-500"
-                                                                />
-                                                                {cat}
-                                                            </label>
-                                                        ))}
-                                                    </div>
+                                                <div className="mt-1">
+                                                    <MultiSelectDropdown
+                                                        options={config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']}
+                                                        selected={formData.secondaryProductCategories}
+                                                        onChange={(val) => handleSelectChange('secondaryProductCategories', val)}
+                                                        placeholder="Select categories..."
+                                                        accentColor="emerald"
+                                                    />
                                                 </div>
                                             </div>
                                             <div><Label className={labelClasses}>Interested in Importing Products?</Label><Select value={formData.interestedInImporting} onValueChange={(v) => handleSelectChange('interestedInImporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
@@ -1169,93 +1311,79 @@ const BuyerRegistration = () => {
                                             <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
                                             <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
+                                            <div className="mt-1">
+                                                <Label className={labelClasses}>Specific Product Requirements</Label>
+                                                <Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1`} placeholder="Any custom needs..." />
+                                            </div>
                                         </div>
-                                        <div className="mt-1">
-                                            <Label className={labelClasses}>Specific Product Requirements</Label>
-                                            <Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1`} placeholder="Any custom needs..." />
-                                        </div>
+
                                     </div>
 
                                     {/* 5. Supplier Preference */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Supplier Preference</h3>
-                                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-x-5">
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Preferred Supplier Region *</Label>
-                                                <div className={`p-2 border rounded-lg bg-white ${errors.preferredSupplierRegion ? 'border-red-400' : 'border-slate-400'}`}>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {(config?.regions || ['North India', 'South India', 'East India', 'West India', 'Pan India', 'Global']).map((r: string) => (
-                                                            <label key={r} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-[2px] cursor-pointer hover:border-emerald-500`}>
-                                                                <Checkbox checked={formData.preferredSupplierRegion.includes(r)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierRegion', r, !!checked)} className="h-3 w-3" /> {r}
-                                                            </label>
-                                                        ))}
-                                                    </div>
-                                                </div>
+                                                <MultiSelectDropdown
+                                                    options={config?.regions || ['North India', 'South India', 'East India', 'West India', 'Pan India', 'Global']}
+                                                    selected={formData.preferredSupplierRegion}
+                                                    onChange={(val) => { handleSelectChange('preferredSupplierRegion', val); setErrors(p => ({ ...p, preferredSupplierRegion: '' })); }}
+                                                    placeholder="Select regions..."
+                                                    error={!!errors.preferredSupplierRegion}
+                                                    accentColor="emerald"
+                                                />
                                                 <ErrorDisplay name="preferredSupplierRegion" errors={errors} />
                                             </div>
                                             <div className="space-y-1">
                                                 <Label className={labelClasses}>Preferred Supplier Type *</Label>
-                                                <div className={`p-2 border rounded-lg bg-white ${errors.preferredSupplierType ? 'border-red-400' : 'border-slate-400'}`}>
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {(config?.supplierTypes || ['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler']).map((t: string) => (
-                                                            <label key={t} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-[2px] cursor-pointer hover:border-emerald-500`}>
-                                                                <Checkbox checked={formData.preferredSupplierType.includes(t)} onCheckedChange={(checked) => handleCheckboxChange('preferredSupplierType', t, !!checked)} className="h-3 w-3" /> {t}
-                                                            </label>
-                                                        ))}
-                                                    </div>
-                                                </div>
+                                                <MultiSelectDropdown
+                                                    options={config?.supplierTypes || ['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler']}
+                                                    selected={formData.preferredSupplierType}
+                                                    onChange={(val) => { handleSelectChange('preferredSupplierType', val); setErrors(p => ({ ...p, preferredSupplierType: '' })); }}
+                                                    placeholder="Select supplier types..."
+                                                    error={!!errors.preferredSupplierType}
+                                                    accentColor="emerald"
+                                                />
                                                 <ErrorDisplay name="preferredSupplierType" errors={errors} />
                                             </div>
-                                            <div className="md:col-span-2">
+                                            <div className="space-y-1">
                                                 <Label className={labelClasses}>Preferred State (Optional)</Label>
-                                                <div className="mt-1 p-3 border border-slate-400 rounded-lg bg-white h-[150px] overflow-y-auto overflow-x-hidden custom-scrollbar">
-                                                    <div className="flex flex-wrap gap-2.5">
-                                                        {states.map(s => (
-                                                            <label
-                                                                key={s._id}
-                                                                className={`flex items-center gap-2 text-[11px] font-medium text-slate-700 font-sans px-2 py-0.5 rounded border transition-all cursor-pointer ${formData.preferredState.includes(s.name)
-                                                                    ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                                                                    : 'bg-white border-slate-200 hover:border-emerald-400'
-                                                                    }`}
-                                                            >
-                                                                <Checkbox
-                                                                    checked={formData.preferredState.includes(s.name)}
-                                                                    onCheckedChange={(checked) => handleCheckboxChange('preferredState', s.name, !!checked)}
-                                                                    className="h-3 w-3 border-emerald-500 data-[state=checked]:bg-emerald-500"
-                                                                />
-                                                                {s.name}
-                                                            </label>
-                                                        ))}
-                                                        {states.length === 0 && <p className="text-[10px] text-slate-400">Select a country first or search states...</p>}
-                                                    </div>
-                                                </div>
+                                                <MultiSelectDropdown
+                                                    options={states.map(s => s.name)}
+                                                    selected={formData.preferredState}
+                                                    onChange={(val) => handleSelectChange('preferredState', val)}
+                                                    placeholder={states.length === 0 ? "Select country first..." : "Select states..."}
+                                                    accentColor="emerald"
+                                                />
                                             </div>
-                                            <div><Label className={labelClasses}>Preferred Company Size</Label><Select value={formData.preferredCompanySize} onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent></Select></div>
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Preferred Company Size</Label>
+                                                <Select value={formData.preferredCompanySize} onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}>
+                                                    <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger>
+                                                    <SelectContent className="bg-white font-sans text-[12px]">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className={labelClasses}>Certification & Compliance</Label>
+                                                <MultiSelectDropdown
+                                                    options={config?.certificationOptions || ['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others']}
+                                                    selected={formData.requiredCertifications}
+                                                    onChange={(val) => handleSelectChange('requiredCertifications', val)}
+                                                    placeholder="Select certifications..."
+                                                    accentColor="slate"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* 6. Purchase Intent & Capacity */}
-
-
-                                    {/* 7. Certification & Compliance + 8. Pricing Preference */}
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-4 gap-x-5">
-                                        <div className="space-y-2">
-                                            <h3 className={sectionTitleClasses}> Certification & Compliance</h3>
-                                            <div className="flex flex-wrap gap-2 p-2 border rounded-lg bg-white">
-                                                {(config?.certificationOptions || ['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others']).map((c: string) => (
-                                                    <label key={c} className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans bg-slate-50 px-2 py-0.5 rounded border border-slate-400 cursor-pointer hover:bg-emerald-50`}>
-                                                        <Checkbox checked={formData.requiredCertifications.includes(c)} onCheckedChange={(checked) => handleCheckboxChange('requiredCertifications', c, !!checked)} className="h-3 w-3" /> {c}
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <h3 className={sectionTitleClasses}> Pricing Preference</h3>
-                                            <div className="flex gap-4 p-2">
-                                                <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Premium'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Premium')} className="h-3 w-3" /> Premium</label>
-                                                <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Mid-Range'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Mid-Range')} className="h-3 w-3" /> Mid-Range</label>
-                                                <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
-                                            </div>
+                                    {/* 7. Pricing Preference */}
+                                    <div className="space-y-1">
+                                        <h3 className={sectionTitleClasses}>Pricing Preference</h3>
+                                        <div className="flex gap-4 p-2">
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Premium'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Premium')} className="h-3 w-3" /> Premium</label>
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Mid-Range'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Mid-Range')} className="h-3 w-3" /> Mid-Range</label>
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
                                         </div>
                                     </div>
                                     {/* 9. B2B Meeting Preferences */}
@@ -1263,126 +1391,79 @@ const BuyerRegistration = () => {
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
 
                                         {/* Top Card: Strategic Matchmaking Toggle */}
-                                        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-emerald-50/40 rounded-lg border border-emerald-200">
-                                            <div>
-                                                <Label className="text-[12px] font-bold text-emerald-900">Interested in Pre-scheduled B2B Meetings? *</Label>
-                                                <p className="text-[10px] text-emerald-600/70">Maximize sourcing efficiency with curated meetings</p>
-                                            </div>
-                                            <Select value={formData.requirePreScheduledB2B} onValueChange={(v) => handleSelectChange('requirePreScheduledB2B', v)}>
-                                                <SelectTrigger className="w-[110px] h-8 text-[12px] border-emerald-500/30 bg-white font-semibold">
-                                                    <SelectValue placeholder="Select" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="Yes" className="text-[12px]">✅ YES</SelectItem>
-                                                    <SelectItem value="No" className="text-[12px]">❌ NO</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
+
 
                                         {formData.requirePreScheduledB2B === 'Yes' && (
                                             <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
 
-                                                {/* Section A: Categories & Types - 2 columns with fixed heights */}
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {/* All 4 B2B dropdowns in one row */}
+                                                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
                                                     {/* Meeting Categories */}
                                                     <div className="space-y-1.5">
-                                                        <div className="flex justify-between items-center">
+                                                        <div className="flex justify-between items-center mb-1">
                                                             <Label className="text-[11px] font-semibold">Preferred Meeting Categories *</Label>
                                                             {formData.preferredMeetingCategories.length === 0 &&
                                                                 <span className="text-[9px] text-red-500 font-bold">Required</span>
                                                             }
                                                         </div>
-                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
-                                                            <div className="p-2.5 max-h-[100px] overflow-y-auto custom-scrollbar">
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {(config?.meetingCategoryOptions || []).map(cat => (
-                                                                        <label key={cat} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all whitespace-nowrap ${formData.preferredMeetingCategories.includes(cat)
-                                                                            ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                                                                            : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
-                                                                            <Checkbox checked={formData.preferredMeetingCategories.includes(cat)}
-                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredMeetingCategories', cat, !!checked)}
-                                                                                className="h-3 w-3 shrink-0" />
-                                                                            <span className="truncate">{cat}</span>
-                                                                        </label>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <MultiSelectDropdown
+                                                            options={config?.meetingCategoryOptions || []}
+                                                            selected={formData.preferredMeetingCategories}
+                                                            onChange={(val) => { handleSelectChange('preferredMeetingCategories', val); setErrors(p => ({ ...p, preferredMeetingCategories: '' })); }}
+                                                            placeholder="Select categories..."
+                                                            error={!!errors.preferredMeetingCategories}
+                                                            accentColor="emerald"
+                                                        />
+                                                        <ErrorDisplay name="preferredMeetingCategories" errors={errors} />
                                                     </div>
 
                                                     {/* Exhibitor Types */}
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold">Exhibitor Types to Meet</Label>
-                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
-                                                            <div className="p-2.5 max-h-[100px] overflow-y-auto custom-scrollbar">
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {(config?.exhibitorTypeOptions || []).map(type => (
-                                                                        <label key={type} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all whitespace-nowrap ${formData.preferredExhibitorTypes.includes(type)
-                                                                            ? 'bg-[#23471d] border-[#23471d] text-white'
-                                                                            : 'bg-white border-slate-200 hover:border-emerald-400'}`}>
-                                                                            <Checkbox checked={formData.preferredExhibitorTypes.includes(type)}
-                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredExhibitorTypes', type, !!checked)}
-                                                                                className="h-3 w-3 shrink-0" />
-                                                                            <span className="truncate">{type}</span>
-                                                                        </label>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <Label className="text-[11px] font-semibold mb-1 block">Exhibitor Types to Meet</Label>
+                                                        <MultiSelectDropdown
+                                                            options={config?.exhibitorTypeOptions || []}
+                                                            selected={formData.preferredExhibitorTypes}
+                                                            onChange={(val) => handleSelectChange('preferredExhibitorTypes', val)}
+                                                            placeholder="Select exhibitor types..."
+                                                            accentColor="emerald"
+                                                        />
                                                     </div>
-                                                </div>
 
-                                                {/* Section B: Objectives & Business Types - 2 columns with fixed heights */}
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     {/* Meeting Objectives */}
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold">💼 Meeting Objectives *</Label>
-                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
-                                                            <div className="p-2.5 max-h-[95px] overflow-y-auto custom-scrollbar">
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {(config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private Label / OEM", "Investment / Business Expansion"]).map(obj => (
-                                                                        <label key={obj} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all ${formData.meetingObjectives.includes(obj)
-                                                                            ? 'bg-amber-50 border-amber-300 text-amber-700'
-                                                                            : 'bg-white border-slate-200 hover:border-amber-400'}`}>
-                                                                            <Checkbox checked={formData.meetingObjectives.includes(obj)}
-                                                                                onCheckedChange={(checked) => handleCheckboxChange('meetingObjectives', obj, !!checked)}
-                                                                                className="h-3 w-3 shrink-0" />
-                                                                            {obj}
-                                                                        </label>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <Label className="text-[11px] font-semibold mb-1 block">💼 Meeting Objectives *</Label>
+                                                        <MultiSelectDropdown
+                                                            options={config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private Label / OEM", "Investment / Business Expansion"]}
+                                                            selected={formData.meetingObjectives}
+                                                            onChange={(val) => { handleSelectChange('meetingObjectives', val); setErrors(p => ({ ...p, meetingObjectives: '' })); }}
+                                                            placeholder="Select objectives..."
+                                                            error={!!errors.meetingObjectives}
+                                                            accentColor="amber"
+                                                        />
+                                                        <ErrorDisplay name="meetingObjectives" errors={errors} />
                                                     </div>
 
                                                     {/* Preferred Business Types */}
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold">🏷 Preferred Business Type *</Label>
-                                                        <div className="border border-slate-300 rounded-lg bg-white/60">
-                                                            <div className="p-2.5 max-h-[95px] overflow-y-auto custom-scrollbar">
-                                                                <div className="flex flex-wrap gap-2">
-                                                                    {(config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private Label", "Franchise", "Exclusive Distribution"]).map(type => (
-                                                                        <label key={type} className={`flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded border cursor-pointer transition-all ${formData.preferredBusinessTypes.includes(type)
-                                                                            ? 'bg-blue-50 border-blue-300 text-blue-700'
-                                                                            : 'bg-white border-slate-200 hover:border-blue-400'}`}>
-                                                                            <Checkbox checked={formData.preferredBusinessTypes.includes(type)}
-                                                                                onCheckedChange={(checked) => handleCheckboxChange('preferredBusinessTypes', type, !!checked)}
-                                                                                className="h-3 w-3 shrink-0" />
-                                                                            {type}
-                                                                        </label>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <Label className="text-[11px] font-semibold mb-1 block">🏷 Preferred Business Type *</Label>
+                                                        <MultiSelectDropdown
+                                                            options={config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private Label", "Franchise", "Exclusive Distribution"]}
+                                                            selected={formData.preferredBusinessTypes}
+                                                            onChange={(val) => { handleSelectChange('preferredBusinessTypes', val); setErrors(p => ({ ...p, preferredBusinessTypes: '' })); }}
+                                                            placeholder="Select business types..."
+                                                            error={!!errors.preferredBusinessTypes}
+                                                            accentColor="blue"
+                                                        />
+                                                        <ErrorDisplay name="preferredBusinessTypes" errors={errors} />
                                                     </div>
                                                 </div>
 
-                                                {/* Section C: Logistics - Compact Grid without overflow */}
-                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-3 bg-slate-50/50 rounded-lg border border-slate-100">
+                                                {/* Section C: Logistics */}
+                                                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                                     <div>
-                                                        <Label className="text-[10px] font-semibold">Preferred Day *</Label>
+                                                        <Label className={labelClasses}>Preferred Day *</Label>
                                                         <Select value={formData.preferredMeetingDay} onValueChange={(v) => handleSelectChange('preferredMeetingDay', v)}>
-                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                            <SelectTrigger className={`${inputClasses} ${errors.preferredMeetingDay ? 'border-red-400' : ''}`}>
                                                                 <SelectValue placeholder="Select Day" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1395,9 +1476,9 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[10px] font-semibold">Time Slot *</Label>
+                                                        <Label className={labelClasses}>Time Slot *</Label>
                                                         <Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}>
-                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                            <SelectTrigger className={`${inputClasses} ${errors.preferredTimeSlot ? 'border-red-400' : ''}`}>
                                                                 <SelectValue placeholder="Select Slot" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1410,9 +1491,9 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[10px] font-semibold">Number of Meetings</Label>
+                                                        <Label className={labelClasses}>Number of Meetings</Label>
                                                         <Select value={formData.numberOfMeetingsInterested} onValueChange={(v) => handleSelectChange('numberOfMeetingsInterested', v)}>
-                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Count" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1424,9 +1505,9 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className="text-[10px] font-semibold">Priority Level</Label>
+                                                        <Label className={labelClasses}>Priority Level</Label>
                                                         <Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}>
-                                                            <SelectTrigger className="h-8 text-[11px] mt-1">
+                                                            <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Priority" />
                                                             </SelectTrigger>
                                                             <SelectContent>
