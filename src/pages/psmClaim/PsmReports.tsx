@@ -8,6 +8,8 @@ import FeedbackReport from './FeedbackReport';
 import Undertaking from './Undertaking';
 import PreReceipt from './PreReceipt';
 
+import MandateForm from './MandateForm';
+
 const reportTypes = [
     {
         id: 'annexure-c',
@@ -52,13 +54,6 @@ const reportTypes = [
         color: 'bg-purple-500'
     },
     {
-        id: 'participants-feedback',
-        label: 'Participants Feedback',
-        desc: 'Feedback for the PMS Scheme',
-        icon: ClipboardCheck,
-        color: 'bg-green-500'
-    },
-    {
         id: 'mandate-form',
         label: 'Mandate Form',
         desc: 'Mandate form for the PMS Scheme',
@@ -79,22 +74,14 @@ const PsmReports: React.FC = () => {
             case 'feedback-report': return <FeedbackReport reportId={id} />;
             case 'undertaking': return <Undertaking reportId={id} />;
             case 'pre-receipt': return <PreReceipt reportId={id} />;
+            case 'mandate-form': return <MandateForm reportId={id} />;
             default: return null;
         }
     };
 
     if (type) {
         return (
-            <div className="space-y-4">
-                <div className="no-print p-4 bg-white border-b border-slate-200 sticky top-0 z-10">
-                    <button
-                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table')}
-                        className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
-                    >
-                        <ArrowLeft size={18} />
-                        Back to Reports Table
-                    </button>
-                </div>
+            <div className="w-full">
                 {renderForm()}
             </div>
         );

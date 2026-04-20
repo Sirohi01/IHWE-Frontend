@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Download, Printer, Save, Loader2 } from 'lucide-react';
+import { Download, Printer, Save, Loader2, ChevronRight } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
@@ -22,7 +22,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
         companyName: ctxData?.companyName || '',
         applicationNo: '',
         additionalCopies: 'No',
-        date: new Date().toLocaleDateString('en-GB'),
+        date: new Date().toISOString().split('T')[0],
         checks: {} as Record<number, boolean>,
         pages: {} as Record<number, string>
     });
@@ -55,7 +55,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
             });
             if (res.success) {
                 toast.success(reportId ? 'Report updated' : 'Report saved');
-                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table/annexure-c');
             }
         } catch (error) {
             toast.error('Failed to save report');
@@ -146,22 +146,23 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
     ];
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
-            {/* Header / Actions */}
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
+            {/* Top Action Bar */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div className="space-y-1">
-                    <h1 className="text-xl font-bold text-slate-800">Annexure C</h1>
-                    <p className="text-sm text-slate-500">Check-list for reimbursement of claims under PMS Scheme</p>
-                </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-4">
                     <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
+                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/annexure-c')}
+                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
+                        title="Back to Table"
                     >
-                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                        {reportId ? 'Update Report' : 'Save Report'}
+                        <ChevronRight size={20} className="rotate-180" />
                     </button>
+                    <div>
+                        <h1 className="text-xl font-bold text-slate-800">Annexure C</h1>
+                        <p className="text-sm text-slate-500">Check-list for reimbursement of claims</p>
+                    </div>
+                </div>
+                <div className="flex gap-3">
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
@@ -171,7 +172,8 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                     </button>
                     <button
                         onClick={handleDownload}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"                    >
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
+                    >
                         <Download size={18} />
                         Download PDF
                     </button>
@@ -311,24 +313,37 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                             <div className="w-48 text-left">
                                 <div className="no-print">
                                     <input
-                                        type="text"
+                                        type="date"
                                         value={formData.date}
                                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        className="border-b border-black mb-0.5 w-32 bg-transparent outline-none text-[10.5px]"
+                                        className="border-b border-black mb-0.5 w-40 bg-transparent outline-none text-[10.5px]"
                                     />
                                 </div>
-                                <div className="hidden print:block border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]">{formData.date}</div>
+                                <div className="hidden print:block border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]">
+                                    {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
+                                </div>
                                 <span className="block text-[9px] font-bold uppercase">Date</span>
                             </div>
                             <div className="text-center flex flex-col items-center">
                                 <div className="w-48 border-b border-black mb-0.5 h-6"></div>
-                                <span className="font-bold uppercase text-[10px]">Signature</span>
+                                <span className="font-bold uppercase text-[10px]">Signature of the Authorized Signatory</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Bottom Save Button */}
+            <div className="flex justify-center mb-12 no-print">
+                <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                >
+                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {reportId ? 'Update Report' : 'Save Report'}
+                </button>
+            </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @media print {
@@ -344,6 +359,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         margin: 0 !important;
                         padding: 0 !important;
                         background: white !important;
+                    }
                     
                     /* Hide non-essential layout elements */
                     header, nav, aside, footer, 
@@ -400,7 +416,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         background: transparent !important;
                     }
                 }
-            `}} />
+            ` }} />
         </div>
     );
 };

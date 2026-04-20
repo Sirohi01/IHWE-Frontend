@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Download, Printer, Save, Loader2 } from 'lucide-react';
+import { Download, Printer, Save, Loader2, ChevronRight } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
@@ -63,7 +63,7 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
             });
             if (res.success) {
                 toast.success(reportId ? 'Report updated' : 'Report saved');
-                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table/undertaking');
             }
         } catch (error) {
             toast.error('Failed to save report');
@@ -111,22 +111,23 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
     };
 
     return (
-        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto">
-            {/* Header / Actions */}
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
+            {/* Top Action Bar */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div>
-                    <h1 className="text-xl font-bold text-slate-800">Undertaking Form</h1>
-                    <p className="text-sm text-slate-500">Official Undertaking for PMS Scheme Reimbursement</p>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/undertaking')}
+                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
+                        title="Back to Table"
+                    >
+                        <ChevronRight size={20} className="rotate-180" />
+                    </button>
+                    <div>
+                        <h1 className="text-xl font-bold text-slate-800">Undertaking</h1>
+                        <p className="text-sm text-slate-500">Reimbursement eligibility confirmation</p>
+                    </div>
                 </div>
                 <div className="flex gap-3">
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
-                    >
-                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                        {reportId ? 'Update Report' : 'Save Report'}
-                    </button>
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
@@ -145,11 +146,11 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
             </div>
 
             {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-8 rounded-xl">
+            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-2 rounded-xl">
                 <div
                     id="printable-form"
                     ref={componentRef}
-                     className="bg-white p-[25mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[15px] leading-[1.8] relative overflow-hidden"
+                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12.5px] leading-relaxed relative overflow-hidden"
                     style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     <div className="text-center mb-12">
@@ -185,8 +186,20 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                             at stall No. <input type="text" value={formData.stallNo} onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
                             held at <input type="text" value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} className="border-b border-black outline-none px-1 w-40 bg-transparent font-bold" />
                             pin code <input type="text" value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
-                            from <input type="text" value={formData.fromDate} onChange={(e) => setFormData({ ...formData, fromDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
-                            to <input type="text" value={formData.toDate} onChange={(e) => setFormData({ ...formData, toDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
+                            from 
+                            <div className="no-print inline-block">
+                                <input type="date" value={formData.fromDate} onChange={(e) => setFormData({ ...formData, fromDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
+                            </div>
+                            <div className="hidden print:inline-block border-b border-black min-w-[100px] font-bold text-center">
+                                {formData.fromDate ? new Date(formData.fromDate).toLocaleDateString('en-GB') : ''}
+                            </div>
+                            to 
+                            <div className="no-print inline-block">
+                                <input type="date" value={formData.toDate} onChange={(e) => setFormData({ ...formData, toDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
+                            </div>
+                            <div className="hidden print:inline-block border-b border-black min-w-[100px] font-bold text-center">
+                                {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
+                            </div>
                             under Procurement & Marketing Support (PMS) Scheme during the financial year 202<input type="text" value={formData.finYear.split('-')[0].slice(-1)} readOnly className="border-b border-black outline-none w-4 text-center bg-transparent" /> - 2<input type="text" value={formData.finYear.split('-')[1].slice(-1)} readOnly className="border-b border-black outline-none w-4 text-center bg-transparent" /> .
                         </p>
 
@@ -206,6 +219,17 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                 </div>
             </div>
 
+            {/* Bottom Save Button */}
+            <div className="flex justify-center mb-12 no-print">
+                <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                >
+                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {reportId ? 'Update Report' : 'Save Report'}
+                </button>
+            </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @media print {
@@ -216,6 +240,12 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                     * {
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
+                    }
+
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        background: white !important;
                     }
                     
                     /* Hide non-essential layout elements */
@@ -273,7 +303,7 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                         appearance: none;
                     }
                 }
-            `}} />
+            ` }} />
         </div>
     );
 };

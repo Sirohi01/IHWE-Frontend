@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Download, Printer, Save, Loader2 } from 'lucide-react';
+import { Download, Printer, Save, Loader2, ChevronRight } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { jsPDF } from 'jspdf';
 import { toPng } from 'html-to-image';
@@ -21,7 +21,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
     const [formData, setFormData] = React.useState({
         name: ctxData?.contactName || '',
         designation: '',
-        date: new Date().toLocaleDateString('en-GB'),
+        date: new Date().toISOString().split('T')[0],
         place: ''
     });
 
@@ -53,7 +53,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             });
             if (res.success) {
                 toast.success(reportId ? 'Report updated' : 'Report saved');
-                navigate('/exhibitor-dashboard/psm-claim/reports-table');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table/declaration');
             }
         } catch (error) {
             toast.error('Failed to save report');
@@ -101,22 +101,23 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
     };
 
     return (
-        <div className="flex flex-col p-4 max-w-5xl mx-auto" style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
-            {/* Header / Actions */}
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
+            {/* Top Action Bar */}
             <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
-                <div>
-                    <h1 className="text-xl font-bold text-slate-800">Declaration Form</h1>
-                    <p className="text-sm text-slate-500">Review and print the declaration for PSM Claim</p>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/declaration')}
+                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
+                        title="Back to Table"
+                    >
+                        <ChevronRight size={20} className="rotate-180" />
+                    </button>
+                    <div>
+                        <h1 className="text-xl font-bold text-slate-800">Declaration</h1>
+                        <p className="text-sm text-slate-500">Official declaration of claim validity</p>
+                    </div>
                 </div>
                 <div className="flex gap-3">
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md active:scale-95 font-medium disabled:opacity-50"
-                    >
-                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                        {reportId ? 'Update Report' : 'Save Report'}
-                    </button>
                     <button
                         onClick={handlePrint}
                         className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
@@ -135,11 +136,11 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             </div>
 
             {/* A4 Document Wrapper */}
-            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-8 rounded-xl">
+            <div className="flex justify-center w-full overflow-x-auto p-2 sm:p-2 rounded-xl">
                 <div
                     id="printable-form"
                     ref={componentRef}
-                    className="bg-white p-[20mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] leading-relaxed relative overflow-hidden"
+                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12.5px] leading-relaxed relative overflow-hidden"
                     style={{ fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}
                 >
                     {/* Header Decoration */}
@@ -187,13 +188,13 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                 <div className="flex items-end gap-2">
                                     <span className="font-bold w-28 uppercase text-[11px]">Date:</span>
                                     <input
-                                        type="text"
+                                        type="date"
                                         value={formData.date}
                                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                                         className="flex-1 border-b border-black/30 px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 print:hidden"
                                     />
                                     <div className="hidden print:block flex-1 border-b border-black px-1 min-h-[1.5rem]">
-                                        {formData.date || <span className="text-transparent">.</span>}
+                                        {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : <span className="text-transparent">.</span>}
                                     </div>
                                 </div>
                                 <div className="flex items-end gap-2">
@@ -227,7 +228,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                         <div className="pt-20">
                             <div className="border border-black p-4 text-center space-y-3">
                                 <h3 className="font-bold uppercase text-[12px] underline underline-offset-4">Approval Flow Chart:</h3>
-                                <div className="flex items-center justify-center gap-4 text-[13px] font-bold">
+                                <div className="flex items-center justify-center gap-4 text-[12px] font-bold">
                                     <span>Claim submission by applicant Unit</span>
                                     <span>→</span>
                                     <span>Scrutiny</span>
@@ -237,9 +238,21 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
+            {/* Bottom Save Button */}
+            <div className="flex justify-center mb-12 no-print">
+                <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                >
+                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {reportId ? 'Update Report' : 'Save Report'}
+                </button>
+            </div>
+
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @media print {
@@ -255,6 +268,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                         margin: 0 !important;
                         padding: 0 !important;
                         background: white !important;
+                    }
                     
                     /* Hide non-essential layout elements */
                     header, nav, aside, footer, 
@@ -264,7 +278,6 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                     [class*="ExhibitorNavbar"], [class*="ExhibitorSidebar"],
                     [class*="SocialSidebar"], [class*="AdminWhatsAppFloat"] {
                         display: none !important;
-                        height: 0 !important;
                         visibility: hidden !important;
                     }
 
@@ -285,13 +298,10 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                         display: block !important;
                         visibility: visible !important;
                         width: 100% !important;
-                        max-width: none !important;
-                        margin: 0 !important;
-                        padding: 15mm 20mm !important; /* Internal padding simulates page margins */
+                        padding: 10mm 15mm !important;
                         box-shadow: none !important;
-                        word-break: break-word !important;
-                        zoom: 1;
-                        min-height: 297mm;
+                        zoom: 0.92;
+                        min-height: 280mm;
                         background: white !important;
                     }
                     
@@ -302,11 +312,10 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
 
                     input {
                         border-bottom: black solid 1px !important;
-                        border-top: none !important;
-                        border-left: none !important;
-                        border-right: none !important;
-                        background: transparent !important;
+                        // background: transparent !important;
                     }
+                    .pt-20 { pt-10 !important; }
+                    .mt-16 { mt-8 !important; }
                 }
             `}} />
         </div>

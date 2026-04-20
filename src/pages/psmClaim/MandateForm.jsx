@@ -1,275 +1,313 @@
-import React from 'react';
-import { Printer, Download } from 'lucide-react';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
+import { Printer, Download, ChevronRight, Save, Loader2 } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { psmClaimApi } from '@/services/psmClaimApi';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
+import { toast } from 'sonner';
 
-const MandateForm = () => {
+const MandateForm = ({ reportId: propReportId }) => {
+    const navigate = useNavigate();
+    const { id: urlId } = useParams();
+    const reportId = propReportId || urlId;
 
-    const handlePrint = () => {
-        document.title = "Mandate_Form";
-        window.print();
-    };
+    const { data: ctxData } = useExhibitorCtx() || {};
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(!!reportId);
 
-    const handleDownloadPdf = () => {
-        Swal.fire({ title: 'Generating PDF...', text: 'Please wait while your document is being prepared.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const [formData, setFormData] = useState({
+        accountHolderName: ctxData?.companyName || '',
+        contactAddress: ctxData?.address || '',
+        mobileNumber: ctxData?.mobile || '',
+        email: ctxData?.email || '',
+        accountName: ctxData?.companyName || '',
+        branchName: '',
+        branchCode: '',
+        accountNumber: '',
+        ifscCode: '',
+        accountType: '',
+        micrCode: '',
+        date: new Date().toISOString().split('T')[0],
+        customerName: ctxData?.contactName || '',
+        customerNameVerification: ctxData?.contactName || ''
+    });
 
-        const generatePDF = () => {
-            const element = document.getElementById('printable-mandate-form');
-            
-            // Hide buttons briefly during capture
-            const actionButtons = element.querySelector('.print\\:hidden');
-            if (actionButtons) actionButtons.style.display = 'none';
-
-            // Shrink briefly to fit on one PDF page
-            const originalZoom = element.style.zoom;
-            element.style.zoom = '0.7';
-
-            const opt = {
-                margin:       5,
-                filename:     'Mandate_Form.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    useEffect(() => {
+        if (reportId) {
+            const loadData = async () => {
+                try {
+                    const res = await psmClaimApi.getReportById('mandate-form', reportId);
+                    if (res.success && res.data) {
+                        setFormData(res.data.data || res.data);
+                    }
+                } catch (error) {
+                    toast.error('Failed to load report data');
+                } finally {
+                    setLoading(false);
+                }
             };
+            loadData();
+        }
+    }, [reportId]);
 
-            window.html2pdf().set(opt).from(element).save().then(() => {
-                // Restore UI
-                if (actionButtons) actionButtons.style.display = '';
-                element.style.zoom = originalZoom;
-                Swal.close();
-                Swal.fire('Success!', 'PDF downloaded successfully.', 'success');
-            }).catch((err) => {
-                if (actionButtons) actionButtons.style.display = '';
-                element.style.zoom = originalZoom;
-                Swal.close();
-                Swal.fire('Error', 'Failed to generate PDF.', 'error');
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await psmClaimApi.saveReport('mandate-form', {
+                data: formData,
+                id: reportId,
+                exhibitorId: ctxData?._id
             });
-        };
-
-        if (window.html2pdf) {
-            generatePDF();
-        } else {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-            document.body.appendChild(script);
-            script.onload = generatePDF;
+            if (res.success) {
+                toast.success(reportId ? 'Report updated' : 'Report saved');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table/mandate-form');
+            }
+        } catch (error) {
+            toast.error('Failed to save report');
+        } finally {
+            setSaving(false);
         }
     };
 
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleDownload = () => {
+        toast.info("Please use the 'Save as PDF' option in the print dialog.");
+        window.print();
+    };
+
+    if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-[#23471d]" /></div>;
+
     return (
-        <div id="printable-mandate-form" className="min-h-screen bg-gray-100 py-2 print:py-0 print:bg-white text-black font-sans">
-            <style>
-                {`
-                @media print {
-                    @page { margin: 5mm; }
-                    #printable-mandate-form {
-                        zoom: 0.85; 
-                    }
-                    #printable-mandate-form table {
-                        font-size: 13px;
-                    }
-                    #printable-mandate-form td, #printable-mandate-form th {
-                        padding-top: 5px !important;
-                        padding-bottom: 5px !important;
-                    }
-                    #printable-mandate-form textarea {
-                        min-height: 0 !important;
-                        height: auto !important;
-                    }
-                }
-                `}
-            </style>
-            
-            <div className="mx-auto bg-white p-6 md:p-8 print:p-0 shadow-xl print:shadow-none max-w-[1000px] print:max-w-none">
-                
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mb-6 print:hidden">
+        <div className="flex flex-col gap-6 p-4 max-w-5xl mx-auto min-h-screen">
+            {/* Top Action Bar */}
+            <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-slate-200 no-print">
+                <div className="flex items-center gap-4">
                     <button
-                        onClick={handleDownloadPdf}
-                        className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-1.5 px-6 rounded-md shadow transition-colors"
+                        onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports-table/mandate-form')}
+                        className="p-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
+                        title="Back to Table"
                     >
-                        <Download size={20} />
-                        Download PDF
+                        <ChevronRight size={20} className="rotate-180" />
                     </button>
+                    <div>
+                        <h1 className="text-xl font-bold text-slate-800">Mandate Form</h1>
+                        <p className="text-sm text-slate-500">Account and banking information</p>
+                    </div>
+                </div>
+                <div className="flex gap-3">
                     <button
                         onClick={handlePrint}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-6 rounded-md shadow transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white rounded-lg hover:bg-[#1a3516] transition-all shadow-md active:scale-95 font-medium"
                     >
-                        <Printer size={20} />
-                        Print Form
+                        <Printer size={18} />
+                        Print Document
+                    </button>
+                    <button
+                        onClick={handleDownload}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-all shadow-sm active:scale-95 font-medium"
+                    >
+                        <Download size={18} />
+                        Download PDF
                     </button>
                 </div>
-
-                {/* Header Section */}
-                <div className="text-center mb-6 leading-tight">
-                    <h1 className="text-lg md:text-xl font-bold uppercase mb-2">
-                        <span className="border-b-2 border-dashed border-gray-600 pb-1 px-2 uppercase bg-gray-200">MANDATE FORM</span>
-                    </h1>
-                    <h2 className="text-lg font-bold mb-6">
-                        <span className="border-b-2 border-dashed border-gray-600 pb-1 px-2 bg-gray-200">(Account/s Information form)</span>
-                    </h2>
-                    
-                    <p className="text-sm md:text-base font-bold uppercase leading-relaxed max-w-4xl mx-auto pl-2 pr-2">
-                        ELECTRONIC CLEARING SERVICE (CREDIT CLEARING) / REAL TIME GROSS SETLEMENT (RTGS) /
-                        <br />
-                        NATIONAL ELECTRONIC TRANSFER (NEFT) / INTRA BANK ACCOUNT TRANSFER FACILITY FOR
-                        <br />
-                        RECEIVING PAYMENTS
-                    </p>
-                </div>
-
-                {/* Table A: Details of Account Holder */}
-                <div className="w-full overflow-x-auto print:overflow-visible mb-6">
-                    <div className="font-bold mb-1">
-                        <span className="bg-gray-200 border-b-2 border-dashed border-gray-600 px-2 pb-0.5">A. DETAILS OF ACCOUNT HOLDER :</span>
-                    </div>
-                    <table className="w-full border-collapse border border-black text-sm">
-                        <tbody>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">NAME OF ACCOUNT HOLDERER / FIRM</td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">COMPLETE CONTACT ADDRESS</td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <textarea className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:resize-none" rows={2}></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">MOBILE NUMBER / PH NO</td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">E.MAIL</td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Table B: Bank Account Details */}
-                <div className="w-full overflow-x-auto print:overflow-visible mb-6">
-                    <div className="font-bold mb-1">
-                        <span className="bg-gray-200 border-b-2 border-dashed border-gray-600 px-2 pb-0.5">B. BANK ACCOUNT DETAILS :</span>
-                    </div>
-                    <table className="w-full border-collapse border border-black text-sm">
-                        <tbody>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug font-bold">
-                                    ACCOUNT NAME <br />
-                                    <span className="font-normal capitalize text-xs md:text-sm">(Name appearing in your Cheque Book)</span>
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">
-                                    BRANCH NAME WITH COMPLETE ADDRESS, TELEPHONE NO
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <textarea className="w-full min-h-[4rem] outline-none bg-transparent resize-none print:resize-none" rows={3}></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">
-                                    BRANCH CODE
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top font-bold leading-snug">
-                                    <span className="uppercase">COMPLETE BANK ACCOUNT NUMBER</span>
-                                    <span className="font-semibold block mt-1">(Please note that the Bank Account must be in the name of the Firm as appeared in the bill. In case of other Beneficiaries (Non-vendor) the Account name must be in the name of Applicant.</span>
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full min-h-[2rem] outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">
-                                    IFSC CODE
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">
-                                    TYPE OF ACCOUNT (SB/CURRENT/CASH CREDIT)
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top uppercase leading-snug">
-                                    MICR CODE OF BANK
-                                </td>
-                                <td className="border border-black px-3 py-2.5 w-[50%] align-top">
-                                    <input type="text" className="w-full outline-none bg-transparent" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                {/* Declaration Section */}
-                <div className="text-justify text-sm leading-relaxed mb-6">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I hereby declare that the particulars given above are correct and complete. If the transaction is delayed or not effected at all for reasons of incomplete or incorrect information I would not hold the user institution responsible. I have read the option invitation letter and agree to discharge responsibility expected or me as a participant under the scheme.
-                </div>
-
-                {/* Signatures Section 1 */}
-                <div className="flex justify-end mb-6">
-                    <div className="text-center flex flex-col items-center">
-                        <div className="flex items-center gap-1">
-                            <span>(</span>
-                            <input type="text" className="w-64 outline-none bg-transparent border-b border-dotted border-black px-1 text-center" />
-                            <span>)</span>
-                        </div>
-                        <div className="mt-1">Signature of Customer</div>
-                    </div>
-                </div>
-
-                {/* Bank Verification Section */}
-                <div className="mb-6 flex flex-col gap-4 text-sm">
-                    <div className="flex items-center gap-2">
-                        Date : <input type="text" className="w-40 border-b border-black outline-none bg-transparent px-1" />
-                    </div>
-                    <div>
-                        Certified that the particulars furnished above are correct as per our records.
-                    </div>
-                </div>
-
-                {/* Signatures Section 2 */}
-                <div className="flex justify-between items-end mb-8">
-                    <div className="text-sm font-semibold">
-                        (Bank's Stamp)
-                    </div>
-                    <div className="text-center flex flex-col items-center">
-                        <div className="flex items-center gap-1">
-                            <span>(</span>
-                            <input type="text" className="w-64 outline-none bg-transparent border-b border-dotted border-black px-1 text-center" />
-                            <span>)</span>
-                        </div>
-                        <div className="mt-1">Signature of Customer</div>
-                    </div>
-                </div>
-
-                {/* Footer Notes */}
-                <div className="font-bold text-sm">
-                    <div className="mb-3">N.B:</div>
-                    <div>Please attach a Cancelled Cheque along with the account information form.</div>
-                </div>
-
             </div>
+
+            {/* A4 Document Wrapper */}
+            <div className="flex justify-center w-full overflow-x-auto p-2 rounded-xl">
+                <div
+                    id="printable-form"
+                    className="bg-white p-[15mm] shadow-2xl mx-auto w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12px] leading-tight relative overflow-hidden"
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                    <div className="text-center mb-8">
+                        <h1 className="text-xl font-bold uppercase mb-2 border-b border-black">
+                            <span className="px-3 py-1">MANDATE FORM</span>
+                        </h1>
+                        <h2 className="text-lg font-bold mb-4 italic">(Account/s Information form)</h2>
+
+                        <p className="text-[11px] font-bold uppercase leading-relaxed max-w-2xl mx-auto">
+                            ELECTRONIC CLEARING SERVICE (CREDIT CLEARING) / REAL TIME GROSS SETTLEMENT (RTGS) /
+                            NATIONAL ELECTRONIC TRANSFER (NEFT) / INTRA BANK ACCOUNT TRANSFER FACILITY FOR
+                            RECEIVING PAYMENTS
+                        </p>
+                    </div>
+
+                    <div className="space-y-6">
+                        {/* Section A */}
+                        <div>
+                            <div className="font-bold mb-1 underline">A. DETAILS OF ACCOUNT HOLDER:</div>
+                            <table className="w-full border-collapse border border-black text-[11px]">
+                                <tbody>
+                                    <tr className="border-b border-black">
+                                        <td className="w-1/2 p-2 font-bold uppercase border-r border-black">NAME OF ACCOUNT HOLDER / FIRM</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.accountHolderName} onChange={(e) => setFormData({ ...formData, accountHolderName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">COMPLETE CONTACT ADDRESS</td>
+                                        <td className="p-2">
+                                            <textarea value={formData.contactAddress} onChange={(e) => setFormData({ ...formData, contactAddress: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">MOBILE NUMBER / PH NO</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.mobileNumber} onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 font-bold uppercase border-r border-black">E.MAIL</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent outline-none font-bold italic" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Section B */}
+                        <div>
+                            <div className="font-bold mb-1 underline">B. BANK ACCOUNT DETAILS:</div>
+                            <table className="w-full border-collapse border border-black text-[11px]">
+                                <tbody>
+                                    <tr className="border-b border-black">
+                                        <td className="w-1/2 p-2 font-bold uppercase border-r border-black">
+                                            ACCOUNT NAME <br />
+                                            <span className="font-normal normal-case italic text-[10px]">(Name appearing in your Cheque Book)</span>
+                                        </td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.accountName} onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">BRANCH NAME WITH ADDRESS, TELEPHONE NO</td>
+                                        <td className="p-2">
+                                            <textarea value={formData.branchName} onChange={(e) => setFormData({ ...formData, branchName: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">BRANCH CODE</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.branchCode} onChange={(e) => setFormData({ ...formData, branchCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold border-r border-black">
+                                            <span className="uppercase">COMPLETE BANK ACCOUNT NUMBER</span>
+                                            <p className="mt-1 font-normal normal-case text-[9px] leading-tight">
+                                                (Note: Account must be in Firm name as per bill/Applicant name).
+                                            </p>
+                                        </td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.accountNumber} onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">IFSC CODE</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.ifscCode} onChange={(e) => setFormData({ ...formData, ifscCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr className="border-b border-black">
+                                        <td className="p-2 font-bold uppercase border-r border-black">TYPE OF ACCOUNT (SB/CURRENT/CC)</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.accountType} onChange={(e) => setFormData({ ...formData, accountType: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 font-bold uppercase border-r border-black">MICR CODE OF BANK</td>
+                                        <td className="p-2">
+                                            <input type="text" value={formData.micrCode} onChange={(e) => setFormData({ ...formData, micrCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 text-justify text-[11px] leading-relaxed">
+                        I hereby declare that the particulars given above are correct and complete. If the transaction is delayed or not effected at all for reasons of incomplete or incorrect information I would not hold the user institution responsible. I have read the option invitation letter and agree to discharge responsibility expected of me as a participant under the scheme.
+                    </div>
+
+                    <div className="mt-10 flex justify-end">
+                        <div className="text-center w-64">
+                            <input type="text" value={formData.customerName} onChange={(e) => setFormData({ ...formData, customerName: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
+                            <p className="mt-1 font-bold">Signature of Customer</p>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 space-y-4 text-[11px]">
+                        <div className="flex gap-2 items-end">
+                            <span className="font-bold">Date:</span>
+                            <div className="no-print">
+                                <input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} className="border-b border-black outline-none bg-transparent w-40 font-bold" />
+                            </div>
+                            <div className="hidden print:block border-b border-black min-w-[100px] font-bold">
+                                {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
+                            </div>
+                        </div>
+                        <p className="font-bold">Certified that the particulars furnished above are correct as per our records.</p>
+
+                        <div className="flex justify-between items-end pt-8">
+                            <div className="italic font-bold">(Bank's Stamp)</div>
+                            <div className="text-center w-64">
+                                <input type="text" value={formData.customerNameVerification} onChange={(e) => setFormData({ ...formData, customerNameVerification: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
+                                <p className="mt-1 font-bold italic">Signature of Customer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-12 font-bold text-[11px] border-t border-black pt-4">
+                        <span className="underline">N.B:</span> Please attach a Cancelled Cheque along with the account information form.
+                    </div>
+                </div>
+            </div>
+
+            {/* Bottom Save Button */}
+            <div className="flex justify-center mb-12 no-print">
+                <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                >
+                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {reportId ? 'Update Report' : 'Save Report'}
+                </button>
+            </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @media print {
+                    @page { 
+                        size: A4; 
+                        margin: 8mm 15mm; 
+                    }
+                    .no-print { display: none !important; }
+                    body { background: white !important; }
+                    #printable-form {
+                        width: 100% !important;
+                        padding: 0 !important;
+                        box-shadow: none !important;
+                        zoom: 0.9;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        min-height: 255mm;
+                    }
+                    table, th, td { 
+                        border-color: black !important; 
+                        padding-top: 3px !important;
+                        padding-bottom: 3px !important;
+                    }
+                    input, textarea { border-bottom: none !important; }
+                    .space-y-6 { margin-top: 3mm !important; margin-bottom: 3mm !important; }
+                    .mt-12, .mt-10, .mt-8, .mt-6 { margin-top: 3mm !important; }
+                    textarea { min-height: 15mm !important; }
+                }
+            `}} />
         </div>
     );
 };
