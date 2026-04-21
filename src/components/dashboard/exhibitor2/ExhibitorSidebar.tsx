@@ -37,9 +37,10 @@ const msmeSubItems = [
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
-    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_d";
+    const isPsmActive = activeTab === "annexure_d" || activeTab === "participants_feedback" || activeTab === "mandate_form" || activeTab === "psm_claim";
+    const isMsmeActive = activeTab === "msme" || isPsmActive;
     const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
-    const [psmOpen, setPsmOpen] = useState(activeTab === "annexure_d" || activeTab === "psm_claim");
+    const [psmOpen, setPsmOpen] = useState(isPsmActive);
 
     const handleMsmeToggle = () => {
         if (!sidebarOpen) {
@@ -110,7 +111,7 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                                 <div className="mt-1 mb-1 ml-[17px] border-l-2 border-slate-200 pl-2 space-y-1">
                                     {msmeSubItems.map(sub => {
                                         if (sub.isDropdown) {
-                                            const isGroupActive = activeTab === "annexure_d" || activeTab === "psm_claim";
+                                            const isGroupActive = activeTab === "psm_claim" || activeTab === "annexure_d" || activeTab === "participants_feedback" || activeTab === "mandate_form";
                                             return (
                                                 <div key={sub.id} className="flex flex-col w-full">
                                                     <button
