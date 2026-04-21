@@ -166,13 +166,6 @@ export default function ExhibitorOverview({
                     >
                         Invoices
                     </button>
-
-                    <button
-                        onClick={() => openPrintWindow(data)}
-                        className="flex items-center gap-1 px-3 py-1.5 border text-[10px]"
-                    >
-                        <Printer size={12} /> Print
-                    </button>
                 </div>
 
             </div>
