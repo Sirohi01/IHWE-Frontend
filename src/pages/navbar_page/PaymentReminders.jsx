@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Receipt, CheckCircle2, Clock, AlertCircle, CreditCard, ArrowRight } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 
 export default function PaymentReminders() {
     const { data } = useExhibitorCtx();

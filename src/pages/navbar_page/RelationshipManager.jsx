@@ -12,7 +12,7 @@ import {
     ChevronRight,
     HeadphonesIcon
 } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL } from '@/lib/api';
 
 export default function RelationshipManager() {

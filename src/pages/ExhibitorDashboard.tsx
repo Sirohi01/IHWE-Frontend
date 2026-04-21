@@ -10,7 +10,7 @@ import { ExhibitorCtx } from '@/context/ExhibitorContext';
 
 const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',
-    profile: '/exhibitor-dashboard/profile',
+    profile: '/exhibitor-dashboard/ex-profile',
     invoices: '/exhibitor-dashboard/invoices',
     accessories: '/exhibitor-dashboard/accessories',
     marketing: '/exhibitor-dashboard/marketing',

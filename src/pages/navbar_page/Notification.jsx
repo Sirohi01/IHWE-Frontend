@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, MessageSquare, CreditCard, User, Info, Trash2, BellRing, ChevronRight, Calendar } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { useNavigate } from 'react-router-dom';
 
 const typeConfig = {

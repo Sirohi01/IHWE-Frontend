@@ -29,7 +29,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             light: '#eef2ff',
             badge: data?.exhibitorName ? 'Active' : 'Incomplete',
             badgeOk: !!data?.exhibitorName,
-            tab: 'profile',
+            tab: 'ex-profile',
         },
         {
             id: 'stall',
