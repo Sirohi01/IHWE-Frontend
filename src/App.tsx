@@ -47,6 +47,13 @@ const ExhibitorMSMEPage = lazy(() => import("./pages/exhibitor/ExhibitorMSMEPage
 const ExhibitorStallManagementPage = lazy(() => import("./pages/exhibitor/ExhibitorStallManagementPage"));
 const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
+const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
+const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
+const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
+const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
+const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
+const PsmReports = lazy(() => import("./pages/psmClaim/PsmReports"));
+const PsmReportsTable = lazy(() => import("./pages/psmClaim/PsmReportsTable"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -127,8 +134,14 @@ const App = () => {
                   <Route path="calendar" element={<ExhibitorCalendarPage />} />
                   <Route path="chat" element={<ExhibitorChatPage />} />
                   <Route path="msme" element={<ExhibitorMSMEPage />} />
-                  <Route path="psm-claim" element={<ExhibitorMSMEPage />} />
-                  <Route path="annexure-d" element={<AnnexureD />} />
+                  <Route path="psm-claim">
+                    <Route index element={<ExhibitorMSMEPage />} />
+                    <Route path="reports" element={<PsmReports />} />
+                    <Route path="reports/:type" element={<PsmReports />} />
+                    <Route path="reports/:type/:id" element={<PsmReports />} />
+                    <Route path="reports-table" element={<PsmReportsTable />} />
+                    <Route path="reports-table/:type" element={<PsmReportsTable />} />
+                  </Route>
                   <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                   <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                   <Route path="participants-feedback" element={<ParticipantsFeedback />} />

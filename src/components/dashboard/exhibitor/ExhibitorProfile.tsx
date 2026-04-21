@@ -428,8 +428,8 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
         setValidationErrors(errors);
 
         if (Object.keys(errors).length > 0) {
-            toast.error('Please fix validation errors before submitting');
-            return false;
+            const errorList = Object.entries(errors).map(([field, msg]) => `${field}: ${msg}`).join('\n');
+            toast.warning(`Some fields have format issues:\n${errorList}`);
         }
 
         return true;
