@@ -104,7 +104,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                     <span>Only)</span>
                 </div>
 
-                <p className="inline">
+                <div className="inline">
                     From the office of Development Commissioner (MSME), Govt. of India, Ministry of Micro, Small & Medium Enterprise (MSME) on account of financial assistance under component 5(I)(A): Participation of Individual MSE in Domestic Trade Fair/Exhibition:
                     <input
                         type="text"
@@ -144,7 +144,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         className="border-b border-black outline-none px-1 inline-block min-w-[150px] bg-transparent font-bold mx-1"
                     />
                     (Venue) under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
-                </p>
+                </div>
 
                 <div className="mt-12 flex flex-col items-end pt-10">
                     <div className="flex gap-2 items-center mb-6 mr-10 font-bold">

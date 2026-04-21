@@ -104,7 +104,7 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                     <span className="font-bold underline px-1 whitespace-nowrap">{formData.companyName}</span> is eligible for reimbursement as per the Procurement & Marketing Support (PMS) Scheme guidelines. In case if, any information given above is found incorrect/ ineligible, then, I shall be liable to return the entire amount of reimbursement alongwith the prevailing rate of interest to the Government of India.
                 </p>
 
-                <p className="leading-[2]">
+                <div className="leading-[2]">
                     2. That the aforesaid unit/ enterprise had participated in the Fair/ Exhibition
                     <input type="text" value={formData.exhibitionName} onChange={(e) => setFormData({ ...formData, exhibitionName: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold" />
                     at stall No. <input type="text" value={formData.stallNo} onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
@@ -125,28 +125,28 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                         {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
                     </div>
                     under Procurement & Marketing Support (PMS) Scheme during the financial year
-                    <input 
-                        type="text" 
-                        value={formData.finYear.split('-')[0]} 
+                    <input
+                        type="text"
+                        value={formData.finYear.split('-')[0]}
                         onChange={(e) => {
                             const val = e.target.value;
                             const [y1, y2] = formData.finYear.split('-');
                             setFormData({ ...formData, finYear: `${val}-${y2}` });
                         }}
-                        className="border-b border-black outline-none w-14 text-center bg-transparent font-bold ml-1" 
-                    /> 
-                    - 
-                    <input 
-                        type="text" 
-                        value={formData.finYear.split('-')[1]} 
+                        className="border-b border-black outline-none w-14 text-center bg-transparent font-bold ml-1"
+                    />
+                    -
+                    <input
+                        type="text"
+                        value={formData.finYear.split('-')[1]}
                         onChange={(e) => {
                             const val = e.target.value;
                             const [y1, y2] = formData.finYear.split('-');
                             setFormData({ ...formData, finYear: `${y1}-${val}` });
                         }}
-                        className="border-b border-black outline-none w-10 text-center bg-transparent font-bold" 
+                        className="border-b border-black outline-none w-10 text-center bg-transparent font-bold"
                     /> .
-                </p>
+                </div>
 
                 <p className="mt-12">
                     I do hereby solemnly affirm that the above mentioned information is correct and to the best of my knowledge.
