@@ -174,49 +174,49 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">1</td>
                                 <td className="border border-black px-3 py-2 print:py-1 w-[40%] font-bold">Name of the participating MSE unit</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold uppercase">
-                                    <input type="text" value={formData.mseUnitName} onChange={(e) => setFormData({...formData, mseUnitName: e.target.value})} className="w-full bg-transparent outline-none" />
+                                    <input type="text" value={formData.mseUnitName} placeholder="Enter Name of MSE unit" onChange={(e) => setFormData({...formData, mseUnitName: e.target.value})} className="w-full bg-transparent outline-none" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">2</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Address of Plant</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.plantAddress} onChange={(e) => setFormData({...formData, plantAddress: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12" />
+                                    <textarea value={formData.plantAddress} placeholder="Enter Complete Plant Address" onChange={(e) => setFormData({...formData, plantAddress: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">3</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Name of Proprietor / Partner / Director</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.proprietorName} onChange={(e) => setFormData({...formData, proprietorName: e.target.value})} className="w-full bg-transparent outline-none" />
+                                    <input type="text" value={formData.proprietorName} placeholder="Enter Name of Proprietor/Partner/Director" onChange={(e) => setFormData({...formData, proprietorName: e.target.value})} className="w-full bg-transparent outline-none" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">4</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Mobile number</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.mobileNumber} onChange={(e) => setFormData({...formData, mobileNumber: e.target.value})} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.mobileNumber} placeholder="Enter Mobile Number" onChange={(e) => setFormData({...formData, mobileNumber: e.target.value})} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">5</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">E-mail ID</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent outline-none italic" />
+                                    <input type="text" value={formData.email} placeholder="Enter E-mail ID" onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent outline-none italic" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">6</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Website</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.website} onChange={(e) => setFormData({...formData, website: e.target.value})} className="w-full bg-transparent outline-none italic" />
+                                    <input type="text" value={formData.website} placeholder="Enter Website URL" onChange={(e) => setFormData({...formData, website: e.target.value})} className="w-full bg-transparent outline-none italic" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">7</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Name, Venue, and Duration of event</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.eventDetails} onChange={(e) => setFormData({...formData, eventDetails: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.eventDetails} placeholder="Enter Name, Venue, and Duration of the event" onChange={(e) => setFormData({...formData, eventDetails: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
@@ -226,42 +226,42 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                                     <p className="mt-1 normal-case text-[9px]">[about 200 words along with photographs]</p>
                                 </td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.benefitsComments} onChange={(e) => setFormData({...formData, benefitsComments: e.target.value})} className="w-full bg-transparent outline-none resize-none h-32 print:h-24 leading-tight" />
+                                    <textarea value={formData.benefitsComments} placeholder="Enter comments regarding benefits (approx 200 words)..." onChange={(e) => setFormData({...formData, benefitsComments: e.target.value})} className="w-full bg-transparent outline-none resize-none h-32 print:h-24 leading-tight" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">9</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Number of visitors in the event</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.visitorCount} onChange={(e) => setFormData({...formData, visitorCount: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
+                                    <input type="text" value={formData.visitorCount} placeholder="Enter Visitor Count" onChange={(e) => setFormData({...formData, visitorCount: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">10</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Export inquiries generated (Number and Value)</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <input type="text" value={formData.exportInquiries} onChange={(e) => setFormData({...formData, exportInquiries: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
+                                    <input type="text" value={formData.exportInquiries} placeholder="Enter Number and Value in INR" onChange={(e) => setFormData({...formData, exportInquiries: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">11</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Details of business finalized / orders booked</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.businessFinalized} onChange={(e) => setFormData({...formData, businessFinalized: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.businessFinalized} placeholder="Enter details of business finalized / orders booked" onChange={(e) => setFormData({...formData, businessFinalized: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">12</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Other achievements (JVs, Tech transfer etc)</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.otherAchievements} onChange={(e) => setFormData({...formData, otherAchievements: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.otherAchievements} placeholder="Enter other achievements (e.g. JVs, Tech transfer)" onChange={(e) => setFormData({...formData, otherAchievements: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">13</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Would you like to participate again? (If yes, reason)</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.participateAgain} onChange={(e) => setFormData({...formData, participateAgain: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.participateAgain} placeholder="Yes/No and reason for participation" onChange={(e) => setFormData({...formData, participateAgain: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
@@ -280,10 +280,10 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                                         <tbody>
                                             {formData.techNoticed.map((tech, i) => (
                                                 <tr key={i} className={i === 0 ? 'border-b border-black' : ''}>
-                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.country} onChange={(e) => updateTech(i, 'country', e.target.value)} className="w-full bg-transparent outline-none" /></td>
-                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.sector} onChange={(e) => updateTech(i, 'sector', e.target.value)} className="w-full bg-transparent outline-none" /></td>
-                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.description} onChange={(e) => updateTech(i, 'description', e.target.value)} className="w-full bg-transparent outline-none" /></td>
-                                                    <td className="p-1 italic"><input type="text" value={tech.contact} onChange={(e) => updateTech(i, 'contact', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.country} placeholder="Country" onChange={(e) => updateTech(i, 'country', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.sector} placeholder="Sector" onChange={(e) => updateTech(i, 'sector', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.description} placeholder="Description" onChange={(e) => updateTech(i, 'description', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="p-1 italic"><input type="text" value={tech.contact} placeholder="Contact" onChange={(e) => updateTech(i, 'contact', e.target.value)} className="w-full bg-transparent outline-none" /></td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -294,7 +294,7 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                                 <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">15</td>
                                 <td className="border border-black px-3 py-2 print:py-1 font-bold">Remarks/Suggestions, if any</td>
                                 <td className="border border-black px-3 py-2 print:py-1">
-                                    <textarea value={formData.remarks} onChange={(e) => setFormData({...formData, remarks: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.remarks} placeholder="Enter any additional remarks or suggestions" onChange={(e) => setFormData({...formData, remarks: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                         </tbody>

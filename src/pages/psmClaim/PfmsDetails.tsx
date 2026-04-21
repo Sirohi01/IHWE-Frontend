@@ -131,6 +131,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
                                         className="w-full bg-transparent outline-none resize-none min-h-[60px] border-none font-bold"
                                         value={row.value as string}
                                         onChange={(e) => setFormData({ ...formData, [row.key!]: e.target.value })}
+                                        placeholder={`Enter ${row.label}`}
                                     />
                                 ) : row.isDate ? (
                                     <div className="relative">
@@ -164,6 +165,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
                                         className="w-full bg-transparent outline-none border-none font-bold"
                                         value={row.value as string}
                                         onChange={(e) => setFormData({ ...formData, [row.key!]: e.target.value })}
+                                        placeholder={`Enter ${row.label}`}
                                     />
                                 )}
                             </td>

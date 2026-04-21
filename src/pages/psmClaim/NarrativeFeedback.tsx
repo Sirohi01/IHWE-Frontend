@@ -94,6 +94,7 @@ const NarrativeFeedback: React.FC<Props> = ({ reportId }) => {
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     className="text-xl font-bold text-slate-800 outline-none w-full text-center bg-transparent border-b border-transparent focus:border-black/10 transition-colors"
+                    placeholder="Enter Report Title (e.g. Namo Gange Feedback)"
                 />
             </div>
 

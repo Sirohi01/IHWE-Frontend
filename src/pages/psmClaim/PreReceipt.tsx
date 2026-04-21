@@ -90,6 +90,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         value={formData.amount}
                         onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                         className="flex-1 border-b border-black outline-none px-1 bg-transparent font-bold"
+                        placeholder="Enter Amount (e.g. 10000)"
                     />
                 </div>
 
@@ -100,6 +101,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         value={formData.amountInWords}
                         onChange={(e) => setFormData({ ...formData, amountInWords: e.target.value })}
                         className="flex-1 border-b border-black outline-none px-1 bg-transparent font-bold"
+                        placeholder="Enter Amount in Words"
                     />
                     <span>Only)</span>
                 </div>
@@ -111,6 +113,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         value={formData.fairName}
                         onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
                         className="border-b border-black outline-none px-1 inline-block min-w-[300px] bg-transparent font-bold mx-1"
+                        placeholder="Enter Fair Name"
                     />
                     (Name of Fair) from
                     <div className={`${isExporting ? 'hidden' : 'no-print'} inline-block mx-1`}>
@@ -142,6 +145,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         value={formData.venue}
                         onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
                         className="border-b border-black outline-none px-1 inline-block min-w-[150px] bg-transparent font-bold mx-1"
+                        placeholder="Enter Venue"
                     />
                     (Venue) under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
                 </div>
@@ -176,6 +180,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                                     value={formData.signatoryName}
                                     onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })}
                                     className="border-b border-black outline-none px-1 w-32 bg-transparent text-center font-bold"
+                                    placeholder="Signatory Name"
                                 />
                                 <span>&</span>
                                 <input
@@ -183,6 +188,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                                     value={formData.designation}
                                     onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
                                     className="border-b border-black outline-none px-1 w-24 bg-transparent text-center font-bold"
+                                    placeholder="Designation"
                                 />
                                 <span>)</span>
                             </div>
