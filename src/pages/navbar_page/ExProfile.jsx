@@ -29,7 +29,7 @@ import {
     Download,
     Check
 } from 'lucide-react';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
