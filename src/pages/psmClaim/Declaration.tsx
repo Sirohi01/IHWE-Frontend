@@ -70,11 +70,11 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
         >
-            <div className="text-center mb-16 mt-8">
+            <div className="text-center mb-6 mt-2">
                 <h1 className="text-xl font-bold uppercase tracking-widest underline decoration-2 underline-offset-8">DECLARATION</h1>
             </div>
 
-            <div className="space-y-8 text-[15px] print:text-[14px]">
+            <div className="space-y-4 text-[15px] print:text-[14px]">
                 <p className="font-medium italic">I hereby declare that :</p>
 
                 <div className="flex gap-4 items-start pl-2">
@@ -92,23 +92,23 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                 </div>
 
                 {/* Signature Section */}
-                <div className="pt-20 flex flex-col items-end mr-10 space-y-4">
-                    <div className="w-[300px] space-y-4">
+                <div className="pt-6 flex flex-col items-end mr-10 space-y-2">
+                    <div className="w-[300px] space-y-2">
                         {[
                             { label: 'Name', key: 'name' },
                             { label: 'Date', key: 'date', isDate: true },
                             { label: 'Designation', key: 'designation' },
                             { label: 'Place', key: 'place' }
                         ].map((field) => (
-                            <div key={field.key} className="flex items-end gap-2">
-                                <span className="font-bold w-28 uppercase text-[11px]">{field.label}:</span>
+                            <div key={field.key} className="flex items-end gap-2 text-[13px]">
+                                <span className="font-bold w-28 uppercase text-[10px]">{field.label}:</span>
                                 <input
                                     type={field.isDate ? 'date' : 'text'}
                                     value={(formData as any)[field.key]}
                                     onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
                                     className={`flex-1 border-b border-black px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
                                 />
-                                <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.5rem] print-bold`}>
+                                <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.2rem] print-bold`}>
                                     {field.isDate
                                         ? ((formData as any)[field.key] ? new Date((formData as any)[field.key]).toLocaleDateString('en-GB') : '.')
                                         : ((formData as any)[field.key] || '.')
@@ -117,16 +117,16 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                             </div>
                         ))}
                     </div>
-                    <div className="text-center pt-4 min-w-[250px]">
-                        <span className="font-bold uppercase text-[12px]">(Signature of the Authorized Signatory)</span>
+                    <div className="text-center pt-2 min-w-[250px]">
+                        <span className="font-bold uppercase text-[11px]">(Signature of the Authorized Signatory)</span>
                     </div>
                 </div>
 
                 {/* Approval Flow Chart */}
-                <div className="pt-24 mt-auto">
-                    <div className="border border-black p-4 text-center space-y-3">
-                        <h3 className="font-bold uppercase text-[12px] underline underline-offset-4">Approval Flow Chart:</h3>
-                        <div className="flex items-center justify-center gap-4 text-[12px] font-bold">
+                <div className="pt-20 mt-auto">
+                    <div className="border border-black p-3 text-center space-y-2">
+                        <h3 className="font-bold uppercase text-[11px] underline underline-offset-4">Approval Flow Chart:</h3>
+                        <div className="flex items-center justify-center gap-4 text-[11px] font-bold">
                             <span>Claim submission by applicant Unit</span>
                             <span>→</span>
                             <span>Scrutiny</span>

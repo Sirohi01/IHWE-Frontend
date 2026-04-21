@@ -73,7 +73,7 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
         >
-            <div className="text-right mb-4">
+            <div className="text-right mb-4 mt-5">
                 <span className="font-bold underline text-[18px]">Annexure</span>
             </div>
 

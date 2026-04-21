@@ -44,7 +44,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
         handlePrint,
         handleDownload
     } = useReportActions({
-        reportType: 'pfms_details',
+        reportType: 'pfms-details',
         reportId,
         formData,
         componentRef,
@@ -55,7 +55,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
         if (reportId) {
             const fetchReport = async () => {
                 try {
-                    const res = await psmClaimApi.getReportById('pfms_details', reportId);
+                    const res = await psmClaimApi.getReportById('pfms-details', reportId);
                     if (res.success && res.data) {
                         setFormData(prev => ({ ...prev, ...(res.data.data || res.data) }));
                     }
@@ -102,6 +102,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            showUnderlines={false}
         >
             <div className="text-center mb-8 mt-10">
                 <h1 className="text-[15px] font-bold uppercase underline">
@@ -171,7 +172,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
                 </tbody>
             </table>
 
-            <div className="mt-12 flex flex-col items-end px-10 pb-20">
+            <div className="mt-8 flex flex-col items-end px-10 pb-10">
                 <div className="text-center w-64 pt-10">
                     <div className="border-b-2 border-black w-full h-1 mb-2"></div>
                     <p className="font-extrabold mt-1 uppercase text-[11px] tracking-wider">{formData.directorName}</p>

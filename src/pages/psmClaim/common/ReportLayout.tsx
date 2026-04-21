@@ -13,6 +13,7 @@ interface ReportLayoutProps {
     reportId?: string;
     isExporting?: boolean;
     maxWidth?: string;
+    showUnderlines?: boolean;
 }
 
 const ReportLayout: React.FC<ReportLayoutProps> = ({
@@ -25,7 +26,8 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
     saving,
     reportId,
     isExporting = false,
-    maxWidth = "210mm"
+    maxWidth = "210mm",
+    showUnderlines = true,
 }) => {
     return (
         <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
@@ -36,10 +38,10 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
                     ref={componentRef}
                     id="printable-form"
                     className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full text-[#000] text-[12px] leading-tight relative overflow-hidden"
-                    style={{ 
+                    style={{
                         fontFamily: "'Inter', sans-serif",
                         maxWidth: maxWidth,
-                        minHeight: "297mm" 
+                        minHeight: "297mm"
                     }}
                 >
                     {/* Corner Action Icons - Only visible in Web View */}
@@ -87,20 +89,27 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
                     body { background: white !important; }
                     #printable-form {
                         width: 100% !important;
-                        padding: 0 !important;
+                        padding: 10mm 5mm !important;
                         box-shadow: none !important;
-                        zoom: 1;
-                        display: flex;
-                        flex-direction: column;
-                        min-height: 277mm;
-                        border: none !important;
+                        zoom: 1 !important;
+                        display: block !important;
+                        min-height: auto !important;
                     }
                     table, th, td { 
                         border-color: black !important; 
-                        padding: 6px !important;
+                        padding: 8px 12px !important;
                     }
-                    input, textarea { border-bottom: none !important; border-top: none !important; border-left: none !important; border-right: none !important; }
-                    .print-bold { font-weight: bold !important; }
+                    input, textarea { 
+                        border-top: none !important; 
+                        border-left: none !important; 
+                        border-right: none !important;
+                        border-bottom: ${showUnderlines ? '1px solid black !important' : 'none !important'};
+                        background: transparent !important;
+                    }
+                    table { font-size: inherit; width: 100% !important; }
+                    tr, p, div { page-break-inside: auto !important; }
+                    /* Restore standard spacing in print mode */
+                    .space-y-6 > * + * { margin-top: 1.5rem !important; }
                 }
             `}} />
         </div>

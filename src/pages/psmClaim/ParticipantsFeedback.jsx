@@ -162,8 +162,8 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                             <Download size={18} className="group-hover:scale-110 transition-transform" />
                         </button>
                     </div>
-                    <div className="text-center mb-8 font-bold">
-                        <h1 className="text-lg underline uppercase">PARTICIPANTS FEEDBACK REPORT</h1>
+                    <div className="text-center mb-8 print:mb-4 font-bold">
+                        <h1 className="text-lg print:text-base underline uppercase">PARTICIPANTS FEEDBACK REPORT</h1>
                         <p className="text-[11px] mt-1 normal-case">(To be filled in by all individual participants separately)</p>
                         <p className="text-[11px] normal-case">(All columns should be filled)</p>
                     </div>
@@ -171,103 +171,103 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                     <table className="w-full border-collapse border border-black text-[11px]">
                         <tbody>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">1</td>
-                                <td className="border border-black px-3 py-2 w-[40%] font-bold">Name of the participating MSE unit</td>
-                                <td className="border border-black px-3 py-2 font-bold uppercase">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">1</td>
+                                <td className="border border-black px-3 py-2 print:py-1 w-[40%] font-bold">Name of the participating MSE unit</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold uppercase">
                                     <input type="text" value={formData.mseUnitName} onChange={(e) => setFormData({...formData, mseUnitName: e.target.value})} className="w-full bg-transparent outline-none" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">2</td>
-                                <td className="border border-black px-3 py-2 font-bold">Address of Plant</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.plantAddress} onChange={(e) => setFormData({...formData, plantAddress: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">2</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Address of Plant</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.plantAddress} onChange={(e) => setFormData({...formData, plantAddress: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">3</td>
-                                <td className="border border-black px-3 py-2 font-bold">Name of Proprietor / Partner / Director</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">3</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Name of Proprietor / Partner / Director</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.proprietorName} onChange={(e) => setFormData({...formData, proprietorName: e.target.value})} className="w-full bg-transparent outline-none" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">4</td>
-                                <td className="border border-black px-3 py-2 font-bold">Mobile number</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">4</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Mobile number</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.mobileNumber} onChange={(e) => setFormData({...formData, mobileNumber: e.target.value})} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">5</td>
-                                <td className="border border-black px-3 py-2 font-bold">E-mail ID</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">5</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">E-mail ID</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent outline-none italic" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">6</td>
-                                <td className="border border-black px-3 py-2 font-bold">Website</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">6</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Website</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.website} onChange={(e) => setFormData({...formData, website: e.target.value})} className="w-full bg-transparent outline-none italic" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">7</td>
-                                <td className="border border-black px-3 py-2 font-bold">Name, Venue, and Duration of event</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.eventDetails} onChange={(e) => setFormData({...formData, eventDetails: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">7</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Name, Venue, and Duration of event</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.eventDetails} onChange={(e) => setFormData({...formData, eventDetails: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">8</td>
-                                <td className="border border-black px-3 py-2 font-bold">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">8</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">
                                     Comments of participant regarding benefits
                                     <p className="mt-1 normal-case text-[9px]">[about 200 words along with photographs]</p>
                                 </td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.benefitsComments} onChange={(e) => setFormData({...formData, benefitsComments: e.target.value})} className="w-full bg-transparent outline-none resize-none h-32 leading-tight" />
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.benefitsComments} onChange={(e) => setFormData({...formData, benefitsComments: e.target.value})} className="w-full bg-transparent outline-none resize-none h-32 print:h-24 leading-tight" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">9</td>
-                                <td className="border border-black px-3 py-2 font-bold">Number of visitors in the event</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">9</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Number of visitors in the event</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.visitorCount} onChange={(e) => setFormData({...formData, visitorCount: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">10</td>
-                                <td className="border border-black px-3 py-2 font-bold">Export inquiries generated (Number and Value)</td>
-                                <td className="border border-black px-3 py-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">10</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Export inquiries generated (Number and Value)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
                                     <input type="text" value={formData.exportInquiries} onChange={(e) => setFormData({...formData, exportInquiries: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">11</td>
-                                <td className="border border-black px-3 py-2 font-bold">Details of business finalized / orders booked</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.businessFinalized} onChange={(e) => setFormData({...formData, businessFinalized: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">11</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Details of business finalized / orders booked</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.businessFinalized} onChange={(e) => setFormData({...formData, businessFinalized: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">12</td>
-                                <td className="border border-black px-3 py-2 font-bold">Other achievements (JVs, Tech transfer etc)</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.otherAchievements} onChange={(e) => setFormData({...formData, otherAchievements: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">12</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Other achievements (JVs, Tech transfer etc)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.otherAchievements} onChange={(e) => setFormData({...formData, otherAchievements: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">13</td>
-                                <td className="border border-black px-3 py-2 font-bold">Would you like to participate again? (If yes, reason)</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.participateAgain} onChange={(e) => setFormData({...formData, participateAgain: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">13</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Would you like to participate again? (If yes, reason)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.participateAgain} onChange={(e) => setFormData({...formData, participateAgain: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">14</td>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">14</td>
                                 <td colSpan={2} className="border border-black p-0">
-                                    <div className="px-3 py-2 font-bold italic border-b border-black">Details of technologies noticed useful for MSMEs in India:</div>
+                                    <div className="px-3 py-2 print:py-1 font-bold italic border-b border-black">Details of technologies noticed useful for MSMEs in India:</div>
                                     <table className="w-full border-collapse text-[10px]">
                                         <thead>
                                             <tr className="border-b border-black font-bold">
@@ -291,18 +291,18 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                                 </td>
                             </tr>
                             <tr>
-                                <td className="border border-black px-3 py-2 text-center w-10 font-bold">15</td>
-                                <td className="border border-black px-3 py-2 font-bold">Remarks/Suggestions, if any</td>
-                                <td className="border border-black px-3 py-2">
-                                    <textarea value={formData.remarks} onChange={(e) => setFormData({...formData, remarks: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 font-bold" />
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">15</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Remarks/Suggestions, if any</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.remarks} onChange={(e) => setFormData({...formData, remarks: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div className="mt-8 space-y-8 text-[11px]">
+                    <div className="mt-8 print:mt-4 space-y-8 print:space-y-4 text-[11px]">
                         <p className="font-bold italic">Enclosed: Photograph of allotted booth at the event venue.</p>
-                        <div className="flex justify-between items-end pt-4">
+                        <div className="flex justify-between items-end pt-4 print:pt-2">
                             <div className="flex gap-2 items-end">
                                 <span className="font-bold">Date:</span>
                                 <div className={`${isExporting ? 'hidden' : 'no-print'}`}>
@@ -350,17 +350,19 @@ const ParticipantsFeedback = ({ reportId: propReportId }) => {
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
-                        min-height: 270mm;
+                        min-height: auto !important;
                     }
                     table, th, td { 
                         border-color: black !important; 
-                        padding-top: 6px !important;
-                        padding-bottom: 6px !important;
+                        padding: 8px 12px !important;
                     }
-                    input, textarea { border-bottom: none !important; }
+                    input, textarea { 
+                        border-bottom: 1px solid black !important; 
+                        font-weight: bold !important;
+                    }
                     .mb-8, .mt-8, .mt-10, .mb-10 { margin-top: 5mm !important; margin-bottom: 5mm !important; }
                     .space-y-8 { margin-top: 6mm !important; margin-bottom: 6mm !important; }
-                    textarea { min-height: 15mm !important; }
+                    textarea { min-height: 15mm !important; height: auto !important; }
                 }
             `}} />
         </div>

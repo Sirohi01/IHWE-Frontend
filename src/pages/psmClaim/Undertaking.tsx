@@ -124,7 +124,28 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
                     <div className={`${isExporting ? 'inline-block' : 'hidden print:inline-block'} border-b border-black min-w-[100px] font-bold text-center print-bold`}>
                         {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
                     </div>
-                    under Procurement & Marketing Support (PMS) Scheme during the financial year 202<span className="font-bold">{formData.finYear.split('-')[0].slice(-1)}</span> - 2<span className="font-bold">{formData.finYear.split('-')[1].slice(-1)}</span> .
+                    under Procurement & Marketing Support (PMS) Scheme during the financial year
+                    <input 
+                        type="text" 
+                        value={formData.finYear.split('-')[0]} 
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            const [y1, y2] = formData.finYear.split('-');
+                            setFormData({ ...formData, finYear: `${val}-${y2}` });
+                        }}
+                        className="border-b border-black outline-none w-14 text-center bg-transparent font-bold ml-1" 
+                    /> 
+                    - 
+                    <input 
+                        type="text" 
+                        value={formData.finYear.split('-')[1]} 
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            const [y1, y2] = formData.finYear.split('-');
+                            setFormData({ ...formData, finYear: `${y1}-${val}` });
+                        }}
+                        className="border-b border-black outline-none w-10 text-center bg-transparent font-bold" 
+                    /> .
                 </p>
 
                 <p className="mt-12">
