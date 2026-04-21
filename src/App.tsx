@@ -65,6 +65,10 @@ import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
 import AnnexureD from "@/pages/psmClaim/AnnexureD";
 import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
 import MandateForm from "@/pages/psmClaim/MandateForm";
+import PaymentReminders from "@/pages/navbar_page/PaymentReminders";
+import Notification from "@/pages/navbar_page/Notification";
+import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
+import ExProfile from "@/pages/navbar_page/ExProfile";
 
 const queryClient = new QueryClient();
 
@@ -142,6 +146,10 @@ const App = () => {
                   <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                   <Route path="participants-feedback" element={<ParticipantsFeedback />} />
                   <Route path="mandate-form" element={<MandateForm />} />
+                  <Route path="reminders" element={<PaymentReminders />} />
+                  <Route path="notification" element={<Notification />} />
+                  <Route path="relationship-manager" element={<RelationshipManager />} />
+                  <Route path="ex-profile" element={<ExProfile />} />
                 </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
                 <Route path="/buyer-scan" element={<BuyerScan />} />

@@ -65,6 +65,11 @@ export default function ExhibitorInvoices({
 
     const txId = data.manualPaymentDetails?.transactionId || data.paymentId || '—';
     const method = data.manualPaymentDetails?.method || data.paymentMode || '—';
+    const fb = data.financeBreakdown || {};
+    const history = data.paymentHistory || [];
+    const latestPayment = history.length > 0 ? history[history.length - 1] : null;
+    const latestTxId = latestPayment?.transactionId || latestPayment?.razorpayPaymentId || data.paymentId || data.manualPaymentDetails?.transactionId || '—';
+    const latestMethod = latestPayment?.method || data.manualPaymentDetails?.method || data.paymentMode || '—';
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
@@ -93,12 +98,27 @@ export default function ExhibitorInvoices({
                     <InfoGrid rows={[
                         ['Payment Mode', data.paymentMode],
                         ['Payment Type', data.paymentType],
-                        ['Transaction ID', txId],
-                        ['Method', method],
+                        ['Transaction ID', latestTxId],
+                        ['Method', latestMethod],
                         ['Registration Date', regDate],
                         ['Status', data.status],
                     ]} />
                 </Section>
+
+                {/* Financial Breakdown */}
+                {fb.grossAmount > 0 && (
+                    <Section title="Financial Breakdown">
+                        <InfoGrid rows={[
+                            ['Gross Cost', `${cur}${(fb.grossAmount || 0).toLocaleString()}`],
+                            ...(fb.stallDiscountAmount > 0 ? [[`Stall Disc (${fb.stallDiscountPercent}%)`, `-${cur}${fb.stallDiscountAmount.toLocaleString()}`] as [string, React.ReactNode]] : []),
+                            ...(fb.discountAmount > 0 ? [[`FP Disc (${fb.discountPercent}%)`, `-${cur}${fb.discountAmount.toLocaleString()}`] as [string, React.ReactNode]] : []),
+                            ['Taxable Value', `${cur}${(fb.subtotal || 0).toLocaleString()}`],
+                            ['GST @ 18%', `+${cur}${(fb.gstAmount || 0).toLocaleString()}`],
+                            ...(fb.tdsAmount > 0 ? [[`TDS @ ${fb.tdsPercent}%`, `-${cur}${fb.tdsAmount.toLocaleString()}`] as [string, React.ReactNode]] : []),
+                            ['Net Payable', <span className="text-[#23471d] font-bold">{cur}{(fb.netPayable || 0).toLocaleString()}</span>],
+                        ]} />
+                    </Section>
+                )}
 
                 {/* Stall Details */}
                 <Section title="Stall & Pricing">
@@ -114,7 +134,6 @@ export default function ExhibitorInvoices({
                     ]} />
                 </Section>
 
-                {/* Payment History (same table keep) */}
                 <Section title="Payment History">
                     <div className="overflow-x-auto">
                         <table className="w-full text-[11px]">
@@ -123,22 +142,22 @@ export default function ExhibitorInvoices({
                                     <th className="p-2 text-left">#</th>
                                     <th className="p-2 text-left">Amount</th>
                                     <th className="p-2 text-left">Method</th>
-                                    <th className="p-2 text-left">Txn</th>
+                                    <th className="p-2 text-left">Txn ID</th>
                                     <th className="p-2 text-left">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.paymentHistory?.map((h: any, i: number) => (
-                                    <tr key={i} className="border-b">
-                                        <td className="p-2">{i + 1}</td>
-                                        <td className="p-2">{cur}{h.amount}</td>
-                                        <td className="p-2">{h.method}</td>
-                                        <td className="p-2">{h.transactionId}</td>
-                                        <td className="p-2">
-                                            {h.paidAt ? new Date(h.paidAt).toLocaleDateString() : '—'}
-                                        </td>
+                                {history.length > 0 ? history.map((h: any, i: number) => (
+                                    <tr key={i} className="border-b hover:bg-slate-50">
+                                        <td className="p-2 text-slate-400 font-bold">#{i + 1}</td>
+                                        <td className="p-2 font-bold text-[#23471d]">{cur}{Number(h.amount || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}</td>
+                                        <td className="p-2">{h.method || h.paymentMode || '—'}</td>
+                                        <td className="p-2 font-mono text-slate-600">{h.transactionId || h.razorpayPaymentId || '—'}</td>
+                                        <td className="p-2">{h.paidAt ? new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}</td>
                                     </tr>
-                                ))}
+                                )) : (
+                                    <tr><td colSpan={5} className="p-4 text-center text-slate-400 italic text-[10px]">No payment records yet</td></tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
