@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import ExhibitorNavbar from './ExhibitorNavbar';
 import ExhibitorSidebar from './ExhibitorSidebar';
+import SocialSidebar from '@/components/layout/SocialSidebar';
+import AdminWhatsAppFloat from './AdminWhatsAppFloat';
 
 interface LayoutProps {
     logo: string | null;
@@ -28,7 +30,8 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                 onChatClick={() => setActiveTab('chat')}
                 unreadChat={unreadChat}
             />
-
+            <SocialSidebar />
+            <AdminWhatsAppFloat data={data} />
             <div className="flex pt-16 print:pt-0 flex-1">
                 <ExhibitorSidebar
                     activeTab={activeTab}

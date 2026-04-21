@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
 import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
 import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/ExhibitorModuleGrid';
@@ -19,7 +19,7 @@ export default function ExhibitorDashboardHome() {
 
     return (
         <div className="space-y-4">
-            <HeroSection onRegisterVisit={() => {}} />
+            <HeroSection onRegisterVisit={() => {}} forceNewTab={true} />
             <div className="bg-white shadow-sm">
                 <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
             </div>

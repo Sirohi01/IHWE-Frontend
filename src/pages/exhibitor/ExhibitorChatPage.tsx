@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorChatTab from '@/components/dashboard/exhibitor/ExhibitorChatTab';
 
 export default function ExhibitorChatPage() {

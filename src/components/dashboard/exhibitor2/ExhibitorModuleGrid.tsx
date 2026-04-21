@@ -53,29 +53,8 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: balance === 0,
             tab: 'invoices',
         },
-        {
-            id: 'products',
-            label: 'Products & Services',
-            desc: 'Electricity, furniture & branding',
-            icon: ShoppingBag,
-            accent: '#7c3aed',
-            light: '#f5f3ff',
-            badge: 'Active',
-            badgeOk: true,
-            tab: 'accessories',
-        },
-        {
-            id: 'sponsorship',
-            label: 'Sponsorship',
-            desc: 'Gold | Silver | Booth branding | Lanyard',
-            icon: Sparkles,
-            accent: '#b45309',
-            light: '#fff7ed',
-            badge: data?.sponsorship?.tier ? 'Active' : 'Upgrade',
-            badgeOk: !!data?.sponsorship?.tier,
-            tab: null,
-            highlight: true,
-        },
+
+
         {
             id: 'bsm',
             label: 'Buyer Seller Meet',  // ✅ renamed from 'Appointments & Meetings'
@@ -95,21 +74,9 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             icon: CalendarDays,
             accent: '#0284c7',
             light: '#f0f9ff',
-            badge: 'Coming Soon',
-            badgeOk: false,
+            badge: 'Active',
+            badgeOk: true,
             tab: 'calendar',
-        },
-        {
-            id: 'leads',
-            label: 'Leads & Visitors',
-            desc: 'QR scans, enquiries & follow-ups',
-            icon: Target,
-            accent: '#db2777',
-            light: '#fdf2f8',
-            badge: 'Coming Soon',
-            badgeOk: false,
-            tab: null,
-            highlight: true,
         },
         {
             id: 'marketing',
@@ -132,6 +99,17 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badge: 'Available',
             badgeOk: true,
             tab: 'documentation',
+        },
+        {
+            id: 'msme',
+            label: 'Udyam Details',
+            desc: `Reg. No: ${data?.msme?.udhyamRegNo || 'Pending'}`,
+            icon: Sparkles,
+            accent: '#6366f1',
+            light: '#eef2ff',
+            badge: data?.msme?.udhyamRegNo ? 'Verified' : 'Update Required',
+            badgeOk: !!data?.msme?.udhyamRegNo,
+            tab: 'msme',
         },
 
     ];

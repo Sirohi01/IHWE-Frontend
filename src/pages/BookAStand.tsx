@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -161,14 +161,30 @@ const initialFormData = {
     spokenWith: '',
     filledBy: 'User',
     paymentMode: 'online' as 'manual' | 'online',
-    paymentType: 'full' as 'advance' | 'full',
+    paymentPlanType: 'full',
+    paymentPlanLabel: 'Full Payment',
     amountPaid: 0,
     balanceAmount: 0,
     advancePercentage: 50,
     status: 'pending',
     paymentId: '',
     razorpayOrderId: '',
-    razorpaySignature: ''
+    razorpaySignature: '',
+    chosenTdsPercent: 0,
+    financeBreakdown: {
+        grossAmount: 0,
+        stallDiscountPercent: 0,
+        stallDiscountAmount: 0,
+        subtotal1: 0,
+        discountPercent: 0,
+        discountAmount: 0,
+        subtotal: 0,
+        gstAmount: 0,
+        tdsPercent: 0,
+        tdsAmount: 0,
+        netPayable: 0,
+        isFullPayment: false
+    }
 };
 
 const BookAStand = () => {
@@ -207,6 +223,8 @@ const BookAStand = () => {
     const [isEmailLoading, setIsEmailLoading] = useState(false);
     const [isPhoneLoading, setIsPhoneLoading] = useState(false);
     const [verificationError, setVerificationError] = useState<string | null>(null);
+    const emailTimerRef = useRef<number | null>(null);
+    const phoneTimerRef = useRef<number | null>(null);
 
     // Initial Data Fetch
     useEffect(() => {
@@ -339,40 +357,120 @@ const BookAStand = () => {
     // Final Total Calculation
     useEffect(() => {
         const part = formData.participation;
-        const rate = Number(part.rate) || 0;
+        const selectedStall = availableStalls.find(s => s._id === part.stallNo);
+        if (!selectedStall) return;
+
         const size = Number(part.stallSize) || 0;
+        const rate = Number(part.rate) || 0;
+        const incrementPercent = selectedStall.incrementPercentage || 0;
+        
+        // 1. Gross cost before any discounts
+        const baseCost = size * rate;
+        const plIncrement = (baseCost * incrementPercent) / 100;
+        const grossCost = baseCost + plIncrement;
 
-        // Find selected stall for increments/discounts
-        const stall = availableStalls.find(s => s._id === part.stallNo);
-        const incPercent = stall?.incrementPercentage || 0;
-        const discPercent = stall?.discountPercentage || 0;
+        // 2. Stall specific discount
+        const stallDiscountPct = selectedStall.discountPercentage || 0;
+        const stallDiscountAmt = Math.round((grossCost * stallDiscountPct) / 100);
+        const subtotal1 = grossCost - stallDiscountAmt;
 
-        const baseAmount = rate * size;
-        const withInc = baseAmount * (1 + incPercent / 100);
-        const discountAmount = withInc * (discPercent / 100);
-        const subtotal = withInc - discountAmount;
-        const gst = subtotal * 0.18;
-        const total = Math.round(subtotal + gst); // round to nearest rupee
+        // 3. Organization-wide Full Payment Discount
+        const currentEvent = events.find(e => e._id === selectedEventId);
+        const selectedPlan = (currentEvent?.paymentPlans || []).find((p: any) => p.id === formData.paymentPlanType);
+        
+        // Check if full payment (either by ID or by 100% percentage)
+        const isFull = formData.paymentPlanType === 'full' || (selectedPlan && Number(selectedPlan.percentage) === 100);
+        
+        const fpDiscountPct = isFull ? (settings?.fullPaymentDiscount || 0) : 0;
+        const fpDiscountAmt = Math.round(subtotal1 * fpDiscountPct / 100);
+        const subtotal2 = subtotal1 - fpDiscountAmt;
 
-        const currentAdvancePercent = onlineAdvancePercent;
-        let paid = total;
-        if (formData.paymentType === 'advance') {
-            paid = Math.round(total * (currentAdvancePercent / 100));
+        // 4. GST 18% on taxable value (subtotal2)
+        const gstAmt = Math.round(subtotal2 * 0.18);
+
+        // 5. Invoice total (subtotal2 + GST) — what seller invoices
+        const invoiceTotal = subtotal2 + gstAmt;
+
+        // 6. TDS on taxable value only (subtotal2), NOT on GST
+        const tdsPct = formData.chosenTdsPercent || 0;
+        const tdsAmt = Math.round(subtotal2 * tdsPct / 100);
+
+        // 7. Net cash payable by buyer = invoiceTotal - TDS
+        const netPayable = invoiceTotal - tdsAmt;
+
+        // Calculate due now based on selected plan percentage
+        let planPercent = 100;
+        if (selectedPlan) {
+            planPercent = Number(selectedPlan.percentage);
+        } else if (!isFull) {
+            planPercent = onlineAdvancePercent;
         }
+
+        const advanceAmt = Math.round(netPayable * (planPercent / 100));
+        const balanceAmt = Math.round(netPayable - advanceAmt);
 
         setFormData(prev => ({
             ...prev,
             participation: {
                 ...prev.participation,
-                amount: Math.round(subtotal),
-                discount: Math.round(discountAmount),
-                total: total
+                amount: Math.round(subtotal2),
+                total: Math.round(invoiceTotal),
             },
-            amountPaid: paid,
-            balanceAmount: total - paid,
-            advancePercentage: currentAdvancePercent
+            paymentPlanLabel: selectedPlan ? selectedPlan.label : (isFull ? 'Full Payment' : `Advance (${onlineAdvancePercent}%)`),
+            amountPaid: advanceAmt,
+            balanceAmount: balanceAmt,
+            financeBreakdown: {
+                grossAmount: Math.round(grossCost),
+                stallDiscountPercent: stallDiscountPct,
+                stallDiscountAmount: Math.round(stallDiscountAmt),
+                subtotal1: Math.round(subtotal1),
+                discountPercent: fpDiscountPct,
+                discountAmount: Math.round(fpDiscountAmt),
+                subtotal: Math.round(subtotal2),
+                gstAmount: gstAmt,
+                tdsPercent: tdsPct,
+                tdsAmount: tdsAmt,
+                netPayable: Math.round(netPayable),
+                isFullPayment: isFull
+            }
         }));
-    }, [formData.participation.rate, formData.participation.stallSize, formData.participation.stallNo, formData.paymentType, onlineAdvancePercent]);
+
+    }, [
+        formData.participation.stallSize,
+        formData.participation.rate,
+        formData.participation.stallNo,
+        availableStalls,
+        formData.paymentPlanType,
+        formData.chosenTdsPercent,
+        settings,
+        onlineAdvancePercent
+    ]);
+
+    useEffect(() => {
+        if (emailTimer > 0) {
+            emailTimerRef.current = window.setInterval(() => {
+                setEmailTimer(prev => prev - 1);
+            }, 1000);
+        } else if (emailTimerRef.current) {
+            clearInterval(emailTimerRef.current);
+        }
+        return () => {
+            if (emailTimerRef.current) clearInterval(emailTimerRef.current);
+        };
+    }, [emailTimer]);
+
+    useEffect(() => {
+        if (phoneTimer > 0) {
+            phoneTimerRef.current = window.setInterval(() => {
+                setPhoneTimer(prev => prev - 1);
+            }, 1000);
+        } else if (phoneTimerRef.current) {
+            clearInterval(phoneTimerRef.current);
+        }
+        return () => {
+            if (phoneTimerRef.current) clearInterval(phoneTimerRef.current);
+        };
+    }, [phoneTimer]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -477,6 +575,21 @@ const BookAStand = () => {
             participation: {
                 ...prev.participation,
                 currency: type === 'domestic' ? 'INR' : 'USD'
+            },
+            chosenTdsPercent: 0,
+            financeBreakdown: {
+                grossAmount: 0,
+                stallDiscountPercent: 0,
+                stallDiscountAmount: 0,
+                subtotal1: 0,
+                discountPercent: 0,
+                discountAmount: 0,
+                subtotal: 0,
+                gstAmount: 0,
+                tdsPercent: 0,
+                tdsAmount: 0,
+                netPayable: 0,
+                isFullPayment: false
             },
             paymentMode: 'online'
         }));
@@ -633,7 +746,8 @@ const BookAStand = () => {
                                 razorpayOrderId: response.razorpay_order_id,
                                 paymentId: response.razorpay_payment_id,
                                 razorpaySignature: response.razorpay_signature,
-                                status: formData.paymentType === 'full' ? 'paid' : 'advance-paid'
+                                status: formData.balanceAmount === 0 ? 'paid' : 'advance-paid',
+                                paymentType: formData.balanceAmount === 0 ? 'full' : 'installment',
                             };
                             const submitRes = await exhibitorRegistrationApi.submit(finalData);
                             if (submitRes.success) {
@@ -1359,64 +1473,120 @@ const BookAStand = () => {
 
                                                     {/* Right: Summary Card */}
                                                     <div className="w-full">
-                                                        <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
-                                                            <div className="flex justify-between items-center mb-2">
-                                                                <h3 className="text-sm font-bold text-slate-900 uppercase">Booking Summary</h3>
-                                                                <select
-                                                                    value={formData.paymentType}
-                                                                    onChange={(e) => setFormData(prev => ({ ...prev, paymentType: e.target.value as 'full' | 'advance' }))}
-                                                                    className="h-7 px-2 border border-slate-500 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
-                                                                >
-                                                                    <option value="full">Full Payment</option>
-                                                                    <option value="advance">Advance ({onlineAdvancePercent}%)</option>
-                                                                </select>
+                                                        <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
+                                                            <div className="flex justify-between items-center mb-4">
+                                                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Financial Breakdown</h3>
+                                                                <div className="flex gap-3">
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">TDS (%)</span>
+                                                                        <select
+                                                                            value={formData.chosenTdsPercent}
+                                                                            onChange={(e) => setFormData(prev => ({ ...prev, chosenTdsPercent: Number(e.target.value) }))}
+                                                                            className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
+                                                                        >
+                                                                            <option value={0}>0%</option>
+                                                                            <option value={1}>1%</option>
+                                                                            <option value={2}>2%</option>
+                                                                            <option value={10}>10%</option>
+                                                                        </select>
+                                                                    </div>
+                                                                     <div className="flex flex-col gap-1">
+                                                                         <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
+                                                                         <select
+                                                                             value={formData.paymentPlanType}
+                                                                             onChange={(e) => setFormData(prev => ({ ...prev, paymentPlanType: e.target.value }))}
+                                                                             className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
+                                                                         >
+                                                                             {(() => {
+                                                                                 const ev = events.find(e => e._id === selectedEventId);
+                                                                                 const plans = ev?.paymentPlans || [];
+                                                                                 if (plans.length === 0) return (
+                                                                                     <>
+                                                                                         <option value="full">Full Payment (100%)</option>
+                                                                                         <option value="advance">Advance ({onlineAdvancePercent}%)</option>
+                                                                                     </>
+                                                                                 );
+                                                                                 return plans.map((p: any) => (
+                                                                                     <option key={p.id} value={p.id}>{p.label} ({p.percentage}%)</option>
+                                                                                 ));
+                                                                             })()}
+                                                                         </select>
+                                                                     </div>
+                                                                </div>
                                                             </div>
 
-                                                            <div className="space-y-1.5 text-xs border-t border-slate-500 pt-2">
-                                                                <div className="flex justify-between">
-                                                                    <span className="text-slate-500">Stall {formData.participation.stallFor || ''} - {formData.participation.stallSize} sqm</span>
-                                                                    <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}</span>
+                                                            <div className="space-y-2 text-xs border-t border-slate-100 pt-3">
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="text-slate-500 font-medium">Gross Cost (Space + PL)</span>
+                                                                    <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
                                                                 </div>
-                                                                {selectedStall?.incrementPercentage > 0 && (
-                                                                    <div className="flex justify-between text-orange-600">
-                                                                        <span>PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                        <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
+
+                                                                {formData.financeBreakdown.stallDiscountAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-green-600 bg-green-50 px-2 py-1 rounded-sm border border-green-100 italic">
+                                                                        <span className="text-[10px] font-bold">Stall Discount ({formData.financeBreakdown.stallDiscountPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
                                                                     </div>
                                                                 )}
-                                                                <div className="flex justify-between text-slate-500">
-                                                                    <span>GST (18%)</span>
-                                                                    <span className="font-bold">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total - formData.participation.amount)}</span>
+
+                                                                {formData.financeBreakdown.discountAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50 px-2 py-1 rounded-sm border border-orange-100 italic">
+                                                                        <span className="text-[10px] font-bold">Full Payment Discount ({formData.financeBreakdown.discountPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="flex justify-between items-center border-t border-slate-100 pt-1 text-slate-400">
+                                                                    <span className="text-[10px] uppercase font-bold">Net Taxable Value</span>
+                                                                    <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
                                                                 </div>
-                                                                <div className="flex justify-between border-t border-slate-500 pt-1.5">
-                                                                    <span className="font-bold text-slate-700 uppercase">Total</span>
-                                                                    <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total)}</span>
+
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="text-slate-500 font-medium text-[11px]">GST (18%)</span>
+                                                                    <span className="font-bold text-slate-900">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
                                                                 </div>
-                                                                {formData.paymentType === 'advance' && (
-                                                                    <div className="flex justify-between text-orange-600">
-                                                                        <span className="font-bold uppercase">Balance Later</span>
-                                                                        <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
+
+                                                                {formData.financeBreakdown.tdsAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-red-600 font-medium">
+                                                                        <span className="text-[11px]">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="flex justify-between items-center border-t border-slate-200 pt-2 bg-slate-50 px-2 py-1.5 rounded-sm">
+                                                                    <span className="font-black text-slate-700 uppercase tracking-tighter text-[11px]">Total Net Payable</span>
+                                                                    <span className="font-black text-[15px] text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
+                                                                </div>
+
+                                                                {formData.balanceAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50/50 px-2 py-1 rounded-sm">
+                                                                        <span className="font-bold uppercase text-[9px]">Balance Payment Later</span>
+                                                                        <span className="font-bold text-[11px]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <div className="mt-3 p-3 bg-[#23471d]/5 border border-[#23471d]/20 rounded-sm">
+
+                                                            <div className="mt-4 p-3 bg-[#23471d] rounded-sm text-white shadow-lg">
                                                                 <div className="flex justify-between items-center">
                                                                     <div>
-                                                                        <p className="text-[10px] font-bold text-[#23471d] uppercase">{formData.paymentType === 'full' ? 'Net Payable' : 'Advance Payable'}</p>
-                                                                        <p className="text-[9px] text-slate-400 font-bold uppercase">Payable now</p>
+                                                                        <p className="text-[10px] font-bold uppercase opacity-80">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
+                                                                        <p className="text-[8px] font-medium uppercase opacity-60">Verified Transaction</p>
                                                                     </div>
-                                                                    <p className="text-xl font-bold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                                    <div className="text-right">
+                                                                        <p className="text-2xl font-black leading-none">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                                    </div>
                                                                 </div>
+                                                                
                                                                 {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
-                                                                    <div className="mt-2 pt-2 border-t border-[#23471d]/10 space-y-1">
-                                                                        <div className="flex justify-between items-center">
-                                                                            <p className="text-[9px] text-slate-500 font-bold uppercase">+ 2.5% Gateway Fee</p>
-                                                                            <p className="text-[11px] font-black text-[#d26019]">
+                                                                    <div className="mt-3 pt-2 border-t border-white/20 space-y-1">
+                                                                        <div className="flex justify-between items-center opacity-80">
+                                                                            <p className="text-[9px] font-bold uppercase">+ 2.5% Gateway Fee</p>
+                                                                            <p className="text-[10px] font-bold">
                                                                                 {formData.participation.currency === 'INR' ? '₹' : '$'} {(formData.amountPaid * 0.025).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                                                             </p>
                                                                         </div>
-                                                                        <div className="flex justify-between items-center border-t border-[#23471d]/10 pt-1">
-                                                                            <p className="text-[10px] text-[#23471d] font-black uppercase">You Pay ({formData.participation.currency})</p>
-                                                                            <p className="text-[13px] font-black text-[#23471d]">
+                                                                        <div className="flex justify-between items-center border-t border-white/40 pt-1 text-yellow-400">
+                                                                            <p className="text-[10px] font-black uppercase tracking-wider">Final Payment Amount</p>
+                                                                            <p className="text-[14px] font-black">
                                                                                 {formData.participation.currency === 'INR' ? '₹' : '$'} {(formData.amountPaid * 1.025).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                                                             </p>
                                                                         </div>
