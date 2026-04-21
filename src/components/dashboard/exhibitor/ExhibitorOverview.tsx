@@ -120,6 +120,35 @@ export default function ExhibitorOverview({
                         ]} />
                     </Section>
 
+                    {data.paymentHistory && data.paymentHistory.length > 0 && (
+                        <Section title="Payment Transactions">
+                            <div className="border border-slate-200 rounded-sm overflow-hidden">
+                                <table className="w-full text-left text-[10px]">
+                                    <thead className="bg-slate-50 text-slate-500 uppercase border-b">
+                                        <tr>
+                                            <th className="px-3 py-2 font-bold">Date</th>
+                                            <th className="px-3 py-2 font-bold">Plan / Type</th>
+                                            <th className="px-3 py-2 font-bold">Method</th>
+                                            <th className="px-3 py-2 font-bold">Trans. ID</th>
+                                            <th className="px-3 py-2 font-bold text-right">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {data.paymentHistory.map((h: any, i: number) => (
+                                            <tr key={i} className="hover:bg-slate-50 transition">
+                                                <td className="px-3 py-2 text-slate-500">{new Date(h.paidAt).toLocaleDateString('en-GB')}</td>
+                                                <td className="px-3 py-2 font-bold uppercase text-slate-700">{h.paymentType}</td>
+                                                <td className="px-3 py-2 text-slate-600">{h.method}</td>
+                                                <td className="px-3 py-2 text-slate-400 font-mono italic">{h.transactionId || '—'}</td>
+                                                <td className="px-3 py-2 text-right font-black text-slate-900">{cur}{h.amount?.toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </Section>
+                    )}
+
                 </div>
 
                 {/* Actions */}
