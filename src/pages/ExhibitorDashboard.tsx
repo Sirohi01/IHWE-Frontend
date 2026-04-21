@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense, createContext, useContext } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { toast } from 'sonner';
 import { API_URL, settingsApi } from '@/lib/api';
@@ -6,8 +6,7 @@ import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 import { AnimatePresence } from 'framer-motion';
-export const ExhibitorCtx = createContext<any>(null);
-export const useExhibitorCtx = () => useContext(ExhibitorCtx);
+import { ExhibitorCtx } from '@/context/ExhibitorContext';
 
 const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',

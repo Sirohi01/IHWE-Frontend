@@ -1,4 +1,4 @@
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorInvoices from '@/components/dashboard/exhibitor/ExhibitorInvoices';
 
 export default function ExhibitorInvoicesPage() {

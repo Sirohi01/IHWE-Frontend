@@ -2,23 +2,23 @@ import { STATUS_CONFIG } from './types';
 import { SERVER_URL } from '@/lib/api';
 
 export function buildPrintHTML(data: any): string {
-    if (!data) return '';
-    const cur = data.participation?.currency === 'USD' ? '$' : '\u20B9';
-    const status = STATUS_CONFIG[data.status] || STATUS_CONFIG.pending;
-    const paid = data.amountPaid || 0;
-    const total = data.participation?.total || 0;
-    const balance = data.balanceAmount || 0;
-    const regDate = data.createdAt
-        ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : '—';
-    const printDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
-    const gstAmt = total - (data.participation?.amount || 0);
-    const contacts = [
-        { title: 'Primary Contact', c: data.contact1, color: '#23471d' },
-        { title: 'Secondary Contact', c: data.contact2, color: '#555' },
-    ].filter(({ c }) => c?.firstName);
+  if (!data) return '';
+  const cur = data.participation?.currency === 'USD' ? '$' : '\u20B9';
+  const status = STATUS_CONFIG[data.status] || STATUS_CONFIG.pending;
+  const paid = data.amountPaid || 0;
+  const total = data.participation?.total || 0;
+  const balance = data.balanceAmount || 0;
+  const regDate = data.createdAt
+    ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '—';
+  const printDate = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+  const gstAmt = total - (data.participation?.amount || 0);
+  const contacts = [
+    { title: 'Primary Contact', c: data.contact1, color: '#23471d' },
+    { title: 'Secondary Contact', c: data.contact2, color: '#555' },
+  ].filter(({ c }) => c?.firstName);
 
-    const contactHTML = contacts.map(({ title, c, color }) => `
+  const contactHTML = contacts.map(({ title, c, color }) => `
         <div>
             <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:${color};border-bottom:1px solid ${color};padding-bottom:4px;margin-bottom:10px">${title}</div>
             <div style="font-size:11px;font-weight:800;color:#1a1a1a">${[c.title, c.firstName, c.lastName].filter(Boolean).join(' ')}</div>
@@ -28,22 +28,22 @@ export function buildPrintHTML(data: any): string {
             ${c.alternateNo ? `<div style="font-size:9px;color:#888">✆ ${c.alternateNo} (Alt)</div>` : ''}
         </div>`).join('');
 
-    const sectorsHTML = data.selectedSectors?.length > 0
-        ? `<div style="margin-bottom:24px">
+  const sectorsHTML = data.selectedSectors?.length > 0
+    ? `<div style="margin-bottom:24px">
             <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#555;border-bottom:1px solid #e5e7eb;padding-bottom:4px;margin-bottom:10px">Selected Sectors</div>
             <div style="display:flex;flex-wrap:wrap;gap:6px">
                 ${data.selectedSectors.map((s: string) => `<span style="font-size:9px;font-weight:600;padding:3px 10px;border:1px solid #23471d;border-radius:20px;color:#23471d">${s}</span>`).join('')}
             </div>
         </div>` : '';
 
-    const receiptSection = (data.status === 'paid' || data.status === 'advance-paid') && data.receiptUrl
-        ? `<div style="margin-bottom:24px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:14px 18px">
+  const receiptSection = (data.status === 'paid' || data.status === 'advance-paid') && data.receiptUrl
+    ? `<div style="margin-bottom:24px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:14px 18px">
             <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#166534;margin-bottom:6px">Payment Receipt</div>
             <div style="font-size:10px;font-weight:600;color:#444">Receipt on file · Transaction ID: ${data.manualPaymentDetails?.transactionId || data.paymentId || 'N/A'}</div>
             <div style="font-size:10px;font-weight:600;color:#444;margin-top:2px">Method: ${data.manualPaymentDetails?.method || data.paymentMode || 'N/A'}</div>
         </div>` : '';
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/>
 <title>Exhibitor Registration Certificate · ${data.exhibitorName}</title>
 <style>
@@ -57,7 +57,7 @@ export function buildPrintHTML(data: any): string {
 <div style="border-bottom:3px solid #23471d;padding-bottom:16px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-start">
   <div>
     <div style="font-size:9px;font-weight:700;letter-spacing:.2em;color:#23471d;text-transform:uppercase;margin-bottom:4px">Namo Gange Trust Foundation</div>
-    <div style="font-size:22px;font-weight:900;color:#1a1a1a;letter-spacing:-.5px;line-height:1.1">Global Healthcare Excellence 2026</div>
+    <div style="font-size:22px;font-weight:900;color:#1a1a1a;letter-spacing:-.5px;line-height:1.1"> 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</div>
     <div style="font-size:9px;font-weight:600;color:#666;letter-spacing:.15em;text-transform:uppercase;margin-top:4px">Official Exhibitor Registration Certificate</div>
   </div>
   <div style="text-align:right">
@@ -95,12 +95,12 @@ export function buildPrintHTML(data: any): string {
   <div>
     <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#23471d;border-bottom:1px solid #23471d;padding-bottom:4px;margin-bottom:12px">Company Information</div>
     ${[
-        ['Company / Firm Name', data.exhibitorName],
-        ['Fascia / Brand Name', data.fasciaName || data.exhibitorName],
-        ['Industry Sector', data.industrySector],
-        ['Type of Business', data.typeOfBusiness],
-        ['Website', data.website],
-        ['Landline', data.landlineNo],
+      ['Company / Firm Name', data.exhibitorName],
+      ['Fascia / Brand Name', data.fasciaName || data.exhibitorName],
+      ['Industry Sector', data.industrySector],
+      ['Type of Business', data.typeOfBusiness],
+      ['Website', data.website],
+      ['Landline', data.landlineNo],
     ].filter(([, v]) => v).map(([l, v]) => `
         <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #e5e7eb;padding:5px 0;gap:8px">
             <span style="font-size:9px;color:#888;font-weight:600;flex-shrink:0">${l}</span>
@@ -118,11 +118,11 @@ export function buildPrintHTML(data: any): string {
   <div>
     <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#d26019;border-bottom:1px solid #d26019;padding-bottom:4px;margin-bottom:12px">Stall & Financial Details</div>
     ${[
-        ['Stall Number', data.participation?.stallFor || data.participation?.stallNo],
-        ['Stall Type', data.participation?.stallType],
-        ['Area', data.participation?.stallSize ? `${data.participation.stallSize} SQM` : null],
-        ['Dimensions', data.participation?.dimension],
-        ['Rate / SQM', data.participation?.rate ? `${cur}${data.participation.rate.toLocaleString('en-IN')}` : null],
+      ['Stall Number', data.participation?.stallFor || data.participation?.stallNo],
+      ['Stall Type', data.participation?.stallType],
+      ['Area', data.participation?.stallSize ? `${data.participation.stallSize} SQM` : null],
+      ['Dimensions', data.participation?.dimension],
+      ['Rate / SQM', data.participation?.rate ? `${cur}${data.participation.rate.toLocaleString('en-IN')}` : null],
     ].filter(([, v]) => v).map(([l, v]) => `
         <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #e5e7eb;padding:5px 0;gap:8px">
             <span style="font-size:9px;color:#888;font-weight:600">${l}</span>
@@ -183,12 +183,12 @@ ${receiptSection}
   <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:#555;margin-bottom:10px">Payment Details</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
     ${[
-        ['Payment Mode', data.paymentMode],
-        ['Payment Type', data.paymentType],
-        ['Transaction ID', data.manualPaymentDetails?.transactionId || data.paymentId || '—'],
-        ['Method', data.manualPaymentDetails?.method || '—'],
-        ['Referred By', data.referredBy || 'Direct'],
-        ['Spoken With', data.spokenWith || '—'],
+      ['Payment Mode', data.paymentMode],
+      ['Payment Type', data.paymentType],
+      ['Transaction ID', data.manualPaymentDetails?.transactionId || data.paymentId || '—'],
+      ['Method', data.manualPaymentDetails?.method || '—'],
+      ['Referred By', data.referredBy || 'Direct'],
+      ['Spoken With', data.spokenWith || '—'],
     ].map(([l, v]) => `
         <div style="display:flex;gap:8px;padding:4px 0;border-bottom:1px dotted #e5e7eb">
             <span style="font-size:9px;color:#888;font-weight:600;min-width:100px;flex-shrink:0">${l}</span>
@@ -213,16 +213,16 @@ ${receiptSection}
 }
 
 export function openPrintWindow(data: any) {
-    const html = buildPrintHTML(data);
-    const win = window.open('', '_blank', 'width=960,height=750');
-    if (!win) return;
-    win.document.write(html);
-    win.document.close();
-    win.focus();
-    setTimeout(() => win.print(), 600);
+  const html = buildPrintHTML(data);
+  const win = window.open('', '_blank', 'width=960,height=750');
+  if (!win) return;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 600);
 }
 
 export default function PrintCertificate({ data }: { data: any }) {
-    // This component is kept for legacy compatibility but print is now handled via openPrintWindow
-    return null;
+  // This component is kept for legacy compatibility but print is now handled via openPrintWindow
+  return null;
 }

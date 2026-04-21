@@ -14,7 +14,6 @@ const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "profile", label: "Profile", icon: User },
     { id: "invoices", label: "Accounts", icon: FileText },
-    { id: "accessories", label: "Product and Services", icon: Package },
     { id: "stall-management", label: "Stall Management", icon: Building2 },
     { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
