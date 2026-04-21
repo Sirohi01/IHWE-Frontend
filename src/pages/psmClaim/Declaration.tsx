@@ -111,8 +111,8 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                 />
                                 <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.2rem] print-bold`}>
                                     {field.isDate
-                                        ? ((formData as any)[field.key] ? new Date((formData as any)[field.key]).toLocaleDateString('en-GB') : '.')
-                                        : ((formData as any)[field.key] || '.')
+                                        ? ((formData as any)[field.key] ? new Date((formData as any)[field.key]).toLocaleDateString('en-GB') : '')
+                                        : ((formData as any)[field.key] || '')
                                     }
                                 </div>
                             </div>
