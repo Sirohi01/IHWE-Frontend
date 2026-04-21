@@ -14,6 +14,8 @@ const reportLabels: Record<string, string> = {
     'participants-feedback': 'Participants Feedback',
     'mandate-form': 'Mandate Form',
     'pfms-details': 'PFMS Details',
+    'covering-letter': 'Covering Letter',
+    'narrative-feedback': 'Narrative Feedback',
 };
 
 const PsmReportsTable: React.FC = () => {

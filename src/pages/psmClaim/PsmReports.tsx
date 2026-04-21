@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FileText, ArrowLeft, ChevronRight, ClipboardCheck, ScrollText, BadgeCheck, ShieldCheck, Receipt } from 'lucide-react';
+import { FileText, ArrowLeft, ChevronRight, ClipboardCheck, ScrollText, BadgeCheck, ShieldCheck, Receipt, MessageSquare } from 'lucide-react';
 import AnnexureC from './AnnexureC';
 import AnnexureD from './AnnexureD';
 import Declaration from './Declaration';
@@ -10,6 +10,8 @@ import PreReceipt from './PreReceipt';
 
 import MandateForm from './MandateForm';
 import PfmsDetails from './PfmsDetails';
+import CoveringLetter from './CoveringLetter';
+import NarrativeFeedback from './NarrativeFeedback';
 
 const reportTypes = [
     {
@@ -67,6 +69,20 @@ const reportTypes = [
         desc: 'Details of Enterprise for agency creation on PFMS portal',
         icon: ScrollText,
         color: 'bg-indigo-500'
+    },
+    {
+        id: 'covering-letter',
+        label: 'Covering Letter',
+        desc: 'Formal request letter for MSME Scheme Reimbursement',
+        icon: FileText,
+        color: 'bg-rose-500'
+    },
+    {
+        id: 'narrative-feedback',
+        label: 'Narrative Feedback',
+        desc: 'Detailed descriptive feedback about event participation',
+        icon: MessageSquare,
+        color: 'bg-teal-500'
     }
 ];
 
@@ -84,6 +100,8 @@ const PsmReports: React.FC = () => {
             case 'pre-receipt': return <PreReceipt reportId={id} />;
             case 'mandate-form': return <MandateForm reportId={id} />;
             case 'pfms-details': return <PfmsDetails reportId={id} />;
+            case 'covering-letter': return <CoveringLetter reportId={id} />;
+            case 'narrative-feedback': return <NarrativeFeedback reportId={id} />;
             default: return null;
         }
     };
