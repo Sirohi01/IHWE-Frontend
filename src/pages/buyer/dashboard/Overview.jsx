@@ -62,12 +62,11 @@ export default function Overview() {
 
     return (
         <div className="space-y-6 animate-fadeIn pb-10">
-            {/* Hero Section */}
+
             <div className="rounded-md overflow-hidden shadow-sm border border-slate-200">
                 <HeroSection onRegisterVisit={() => { }} forceNewTab={true} />
             </div>
 
-            {/* Main Content Card */}
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -85,8 +84,8 @@ export default function Overview() {
 
                     <div className="flex items-center gap-2">
                         <span className={`px-3 py-1 text-[10px] font-black border uppercase tracking-widest font-sans ${currentBuyer.paymentStatus === 'Completed'
-                                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                                : 'border-amber-200 bg-amber-50 text-amber-700'
+                            ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                            : 'border-amber-200 bg-amber-50 text-amber-700'
                             }`}>
                             {currentBuyer.paymentStatus}
                         </span>
