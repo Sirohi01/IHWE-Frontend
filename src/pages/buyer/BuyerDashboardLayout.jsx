@@ -6,7 +6,6 @@ import Navbar from '@/components/buyer/Navbar';
 export default function BuyerDashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Auto-collapse sidebar on mobile
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
@@ -44,7 +43,7 @@ export default function BuyerDashboardLayout() {
         </main>
       </div>
 
-      {/* Footer */}
+
       <footer className={`py-6 px-4 border-t border-slate-200 bg-white/50 text-center transition-all duration-300 ${sidebarOpen ? 'lg:ml-56' : 'lg:ml-14'}`}>
         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
           &copy; 2026 9th IHWE Buyer Portal. Powered by IHWE Tech Team.

@@ -58,14 +58,14 @@ const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
 const BuyerLogin = lazy(() => import("./pages/BuyerLogin"));
-const BuyerDashboardLayout = lazy(() => import("./pages/buyer/BuyerDashboardLayout"));
-const BuyerOverview = lazy(() => import("./pages/buyer/dashboard/Overview"));
-const BuyerRegistrationProfile = lazy(() => import("./pages/buyer/dashboard/RegistrationProfile"));
-const BuyerDetailsPage = lazy(() => import("./pages/buyer/dashboard/BuyerDetails"));
-const BuyerExhibitors = lazy(() => import("./pages/buyer/dashboard/Exhibitors"));
-const BuyerDirectoryPage = lazy(() => import("./pages/buyer/dashboard/BuyerDirectory"));
-const BuyerPaymentInfo = lazy(() => import("./pages/buyer/dashboard/PaymentInfo"));
-const BuyerHistory = lazy(() => import("./pages/buyer/dashboard/History"));
+import BuyerDashboardLayout from "./pages/buyer/BuyerDashboardLayout";
+import BuyerOverview from "./pages/buyer/dashboard/Overview";
+import BuyerRegistrationProfile from "./pages/buyer/dashboard/RegistrationProfile";
+import BuyerDetailsPage from "./pages/buyer/dashboard/BuyerDetails";
+import BuyerExhibitors from "./pages/buyer/dashboard/Exhibitors";
+import BuyerDirectoryPage from "./pages/buyer/dashboard/BuyerDirectory";
+import BuyerPaymentInfo from "./pages/buyer/dashboard/PaymentInfo";
+import BuyerHistory from "./pages/buyer/dashboard/History";
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
@@ -97,7 +97,7 @@ const App = () => {
               <Sonner />
               <BrochureDownloadPopup />
               <SeoHelmet />
-            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#071306]"><div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div></div>}>
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="w-10 h-10 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div></div>}>
               <Routes>
                 <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
                   <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
