@@ -386,37 +386,50 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
             errors['Website'] = 'Invalid website URL';
         }
 
-        if (form.gstNo && !validateGST(form.gstNo)) {
-            errors['GST No.'] = 'Invalid GST format';
+        if (isDomestic) {
+            if (form.gstNo && !validateGST(form.gstNo)) {
+                errors['GST No.'] = 'Invalid GST format';
+            }
+            if (form.panNo && !validatePAN(form.panNo)) {
+                errors['PAN No.'] = 'Invalid PAN format';
+            }
         }
 
-        if (form.panNo && !validatePAN(form.panNo)) {
-            errors['PAN No.'] = 'Invalid PAN format';
-        }
-
-        if (form.pincode && !validatePincode(form.pincode)) {
-            errors['Pincode'] = 'Must be 6 digits';
+        if (form.pincode) {
+            if (isDomestic && !validatePincode(form.pincode)) {
+                errors['Pincode'] = 'Must be 6 digits';
+            } else if (!isDomestic && form.pincode.length < 3) {
+                errors['Pincode'] = 'Too short';
+            }
         }
 
         if (form.contact1.email && !validateEmail(form.contact1.email)) {
             errors['Email (Primary)'] = 'Invalid email format';
         }
-        if (form.contact1.mobile && !validateMobile(form.contact1.mobile)) {
-            errors['Mobile (Primary)'] = 'Must be 10 digits';
+        if (form.contact1.mobile) {
+            if (isDomestic && !validateMobile(form.contact1.mobile)) {
+                errors['Mobile (Primary)'] = 'Must be 10 digits';
+            } else if (!isDomestic && form.contact1.mobile.length < 5) {
+                errors['Mobile (Primary)'] = 'Too short';
+            }
         }
 
         if (form.contact2.email && !validateEmail(form.contact2.email)) {
             errors['Email (Secondary)'] = 'Invalid email format';
         }
-        if (form.contact2.mobile && !validateMobile(form.contact2.mobile)) {
-            errors['Mobile (Secondary)'] = 'Must be 10 digits';
+        if (form.contact2.mobile) {
+            if (isDomestic && !validateMobile(form.contact2.mobile)) {
+                errors['Mobile (Secondary)'] = 'Must be 10 digits';
+            } else if (!isDomestic && form.contact2.mobile.length < 5) {
+                errors['Mobile (Secondary)'] = 'Too short';
+            }
         }
 
         setValidationErrors(errors);
 
         if (Object.keys(errors).length > 0) {
-            toast.error('Please fix validation errors before submitting');
-            return false;
+            const errorList = Object.entries(errors).map(([field, msg]) => `${field}: ${msg}`).join('\n');
+            toast.warning(`Some fields have format issues:\n${errorList}`);
         }
 
         return true;
