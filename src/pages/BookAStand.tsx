@@ -1476,7 +1476,42 @@ const BookAStand = () => {
                                                         <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
                                                             <div className="flex justify-between items-center mb-4">
                                                                 <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Financial Breakdown</h3>
-                                                                <div className="flex gap-3">
+                                                                <div className="flex gap-3 items-end">
+                                                                    {/* Payment Plan Buttons */}
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
+                                                                        <div className="flex gap-1 flex-wrap">
+                                                                            {(() => {
+                                                                                const ev = events.find((e: any) => e._id === selectedEventId);
+                                                                                const plans = ev?.paymentPlans || [];
+                                                                                const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
+                                                                                const firstInstallPlan = plans.find((p: any) => Number(p.percentage) < 100);
+                                                                                return (
+                                                                                    <>
+                                                                                        <button type="button"
+                                                                                            onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: fullPlan?.id || 'full', paymentPlanLabel: fullPlan?.label || 'Full Payment' }))}
+                                                                                            className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${(formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id) ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#23471d]'}`}>
+                                                                                            Full {settings?.fullPaymentDiscount > 0 ? `(-${settings.fullPaymentDiscount}%)` : ''}
+                                                                                        </button>
+                                                                                        {firstInstallPlan ? (
+                                                                                            <button type="button"
+                                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: firstInstallPlan.id, paymentPlanLabel: firstInstallPlan.label }))}
+                                                                                                className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${formData.paymentPlanType === firstInstallPlan.id ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
+                                                                                                {firstInstallPlan.label} ({firstInstallPlan.percentage}%)
+                                                                                            </button>
+                                                                                        ) : (
+                                                                                            <button type="button"
+                                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: 'advance', paymentPlanLabel: `Advance (${onlineAdvancePercent}%)` }))}
+                                                                                                className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${formData.paymentPlanType === 'advance' ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300'}`}>
+                                                                                                Advance ({onlineAdvancePercent}%)
+                                                                                            </button>
+                                                                                        )}
+                                                                                    </>
+                                                                                );
+                                                                            })()}
+                                                                        </div>
+                                                                    </div>
+                                                                    {/* TDS on right */}
                                                                     <div className="flex flex-col gap-1">
                                                                         <span className="text-[9px] font-bold text-slate-400 uppercase">TDS (%)</span>
                                                                         <select
@@ -1490,28 +1525,6 @@ const BookAStand = () => {
                                                                             <option value={10}>10%</option>
                                                                         </select>
                                                                     </div>
-                                                                     <div className="flex flex-col gap-1">
-                                                                         <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
-                                                                         <select
-                                                                             value={formData.paymentPlanType}
-                                                                             onChange={(e) => setFormData(prev => ({ ...prev, paymentPlanType: e.target.value }))}
-                                                                             className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
-                                                                         >
-                                                                             {(() => {
-                                                                                 const ev = events.find(e => e._id === selectedEventId);
-                                                                                 const plans = ev?.paymentPlans || [];
-                                                                                 if (plans.length === 0) return (
-                                                                                     <>
-                                                                                         <option value="full">Full Payment (100%)</option>
-                                                                                         <option value="advance">Advance ({onlineAdvancePercent}%)</option>
-                                                                                     </>
-                                                                                 );
-                                                                                 return plans.map((p: any) => (
-                                                                                     <option key={p.id} value={p.id}>{p.label} ({p.percentage}%)</option>
-                                                                                 ));
-                                                                             })()}
-                                                                         </select>
-                                                                     </div>
                                                                 </div>
                                                             </div>
 
