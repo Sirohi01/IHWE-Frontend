@@ -241,11 +241,12 @@ export default function ExProfile() {
                 {/* Header Section */}
                 <div className="print-header flex flex-col md:flex-row items-center gap-6 mb-2 border-b border-slate-200 pb-4">
                     <div className="w-20 h-20 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm relative shrink-0">
-                        <img src={previews.companyLogo || fixUrl(data?.companyLogoUrl)} alt="Logo" className="w-full h-full object-fit" />
+                        <img src={previews.companyLogo || fixUrl(data?.companyLogoUrl)} alt="Logo" className="w-full h-full object-cover" />
                         {isEditing && (
                             <label className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer no-print opacity-0 hover:opacity-100 transition-opacity">
                                 <Camera className="text-white" size={18} />
-                                <input type="file" className="hidden" accept="image/*,image/webp,image/avif" onChange={(e) => handleFileChange('companyLogo', e.target.files[0])} />                            </label>
+                                <input type="file" className="hidden" accept="image/*,image/webp,image/avif" onChange={(e) => handleFileChange('companyLogo', e.target.files[0])} />
+                            </label>
                         )}
                     </div>
 
@@ -303,12 +304,12 @@ export default function ExProfile() {
                         <table className="w-full border border-slate-200 rounded-lg overflow-hidden">
                             <thead>
                                 <tr className="bg-slate-50 text-[10px] font-black uppercase text-slate-500 border-b border-slate-200">
-                                    <th className="p-3">Stall Type</th>
-                                    <th className="p-3">Category</th>
-                                    <th className="p-3">Reg Ref</th>
-                                    <th className="p-3">Total Cost</th>
-                                    <th className="p-3">Amt Paid</th>
-                                    <th className="p-3">Balance</th>
+                                    <th className="p-1 border-r border-slate-200 text-left px-2">Stall Type</th>
+                                    <th className="p-1 border-r border-slate-200 text-left px-2">Category</th>
+                                    <th className="p-1 border-r border-slate-200 text-left px-2">Reg Ref</th>
+                                    <th className="p-1 border-r border-slate-200 text-left px-2">Total Cost</th>
+                                    <th className="p-1 border-r border-slate-200 text-emerald-600 text-left px-2">Amt Paid</th>
+                                    <th className="p-1 text-orange-500 text-left px-2">Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -349,34 +350,41 @@ export default function ExProfile() {
                         </table>
                     </TableSection>
 
-                    {/* 02. Address & Communication */}
                     <TableSection title="02. Registered Address & Communication">
                         <table className="w-full border border-slate-200 table-fixed">
                             <tbody>
                                 <tr>
-                                    <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-semibold text-slate-500 border border-slate-200 text-left">Mailing Address</th>
-                                    <td colSpan={5} className="p-1 border border-slate-200">
+                                    <th className="w-[12%] bg-slate-50 p-2 text-[12px] uppercase font-medium text-slate-500 border border-slate-200 text-left">Mailing Address</th>
+                                    <td colSpan={3} className="px-2 py-1 border border-slate-200 bg-white">
                                         {isEditing ? (
-                                            <textarea className="w-full bg-slate-50 p-1 font-medium text-xs outline-none" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} rows={2} />
-                                        ) : <span className="font-medium text-xs">{form.address}</span>}
+                                            <div className="space-y-1">
+                                                <textarea
+                                                    className="w-full bg-slate-50 p-1 font-medium text-xs outline-none border border-slate-100 rounded focus:border-slate-300"
+                                                    value={form.address}
+                                                    onChange={(e) => setForm({ ...form, address: e.target.value })}
+                                                    rows={2}
+                                                    placeholder="Street Address..."
+                                                />
+                                                <div className="flex gap-1">
+                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" />
+                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} placeholder="State" />
+                                                    <input className="w-16 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.pincode} onChange={(e) => setForm({ ...form, pincode: e.target.value })} placeholder="Zip" />
+                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} placeholder="Country" />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="font-medium text-xs leading-relaxed">
+                                                {form.address}{form.city && `, ${form.city}`}{form.state && `, ${form.state}`}{form.pincode && ` - ${form.pincode}`}{form.country && `, ${form.country}`}
+                                            </div>
+                                        )}
+                                    </td>
+                                    <th className="w-[12%] bg-slate-50 px-2 py-1 text-[10px] uppercase font-semibold text-slate-500 border border-slate-200 text-left">Landline No.</th>
+                                    <td className="px-2 py-1 border border-slate-200 bg-white">
+                                        {isEditing ? (
+                                            <input className="w-full bg-slate-50 p-1 font-medium text-xs outline-none border border-slate-100 rounded focus:border-slate-300" value={form.landlineNo} onChange={(e) => setForm({ ...form, landlineNo: e.target.value })} placeholder="Landline..." />
+                                        ) : <span className="font-medium text-xs">{form.landlineNo || '—'}</span>}
                                     </td>
                                 </tr>
-                                <DataRowTriple
-                                    l1="City" v1={form.city}
-                                    l2="State / Prov" v2={form.state}
-                                    l3="Pincode" v3={form.pincode}
-                                    edit={isEditing}
-                                    onV1={(v) => setForm({ ...form, city: v })}
-                                    onV2={(v) => setForm({ ...form, state: v })}
-                                    onV3={(v) => setForm({ ...form, pincode: v })}
-                                />
-                                <DataRow
-                                    l1="Country" v1={form.country}
-                                    l2="Landline / Contact" v2={form.landlineNo}
-                                    edit={isEditing}
-                                    onV1={(v) => setForm({ ...form, country: v })}
-                                    onV2={(v) => setForm({ ...form, landlineNo: v })}
-                                />
                             </tbody>
                         </table>
                     </TableSection>
@@ -386,10 +394,10 @@ export default function ExProfile() {
                         <table className="w-full border border-slate-200 mt-2">
                             <thead>
                                 <tr className="bg-slate-50 text-[10px] font-black uppercase text-slate-500 border-b border-slate-200">
-                                    <th className="w-[30%] p-1 text-[11px] border-r border-slate-200">Official Name</th>
-                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200">Designation</th>
-                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200">Mobile No</th>
-                                    <th className="w-[30%] p-1 text-[11px]">Email ID</th>
+                                    <th className="w-[30%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Official Name</th>
+                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Designation</th>
+                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Mobile No</th>
+                                    <th className="w-[30%] p-1 text-[11px] text-left px-2">Email ID</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -488,22 +496,45 @@ function TableSection({ title, children }) {
     );
 }
 
+function DataRowQuad({ l1, v1, l2, v2, l3, v3, l4, v4, edit, onV1, onV2, onV3, onV4 }) {
+    return (
+        <tr>
+            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l1}</th>
+            <td className="w-[30%] p-1 border border-slate-200">
+                {edit && onV1 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v1} onChange={(e) => onV1(e.target.value)} /> : <span className="font-medium text-[11px]">{v1 || '—'}</span>}
+            </td>
+            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l2}</th>
+            <td className="w-[10%] p-1 border border-slate-200">
+                {edit && onV2 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} /> : <span className="font-medium text-[11px]">{v2 || '—'}</span>}
+            </td>
+            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l3}</th>
+            <td className="w-[10%] p-1 border border-slate-200">
+                {edit && onV3 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v3} onChange={(e) => onV3(e.target.value)} /> : <span className="font-medium text-[11px]">{v3 || '—'}</span>}
+            </td>
+            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l4}</th>
+            <td className="w-[10%] p-1 border border-slate-200">
+                {edit && onV4 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v4} onChange={(e) => onV4(e.target.value)} /> : <span className="font-medium text-[11px]">{v4 || '—'}</span>}
+            </td>
+        </tr>
+    );
+}
+
 function DataRowTriple({ l1, v1, l2, v2, l3, v3, edit, onV1, onV2, onV3 }) {
     return (
         <tr>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200">{l1}</th>
+            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l1}</th>
             <td className="w-[21%] p-1 border border-slate-200">
                 {edit && onV1 ? (
                     <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v1} onChange={(e) => onV1(e.target.value)} />
                 ) : <span className="font-medium text-[12px]">{v1 || '—'}</span>}
             </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200">{l2}</th>
+            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l2}</th>
             <td className="w-[21%] p-1 border border-slate-200">
                 {edit && onV2 ? (
                     <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} />
                 ) : <span className="font-medium text-[12px]">{v2 || '—'}</span>}
             </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200">{l3}</th>
+            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l3}</th>
             <td className="w-[21%] p-1 border border-slate-200">
                 {edit && onV3 ? (
                     <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v3} onChange={(e) => onV3(e.target.value)} />
@@ -516,13 +547,13 @@ function DataRowTriple({ l1, v1, l2, v2, l3, v3, edit, onV1, onV2, onV3 }) {
 function DataRow({ l1, v1, l2, v2, edit, onV1, onV2 }) {
     return (
         <tr>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200">{l1}</th>
+            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l1}</th>
             <td colSpan={2} className="w-[38%] p-1 border border-slate-200">
                 {edit && onV1 ? (
                     <input className="w-full bg-slate-50 p-1 font-bold text-xs outline-none" value={v1} onChange={(e) => onV1(e.target.value)} />
                 ) : <span className="font-medium text-[12px]">{v1 || '—'}</span>}
             </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200">{l2}</th>
+            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l2}</th>
             <td colSpan={2} className="w-[38%] p-1 border border-slate-200">
                 {edit && onV2 ? (
                     <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} />
@@ -535,7 +566,7 @@ function DataRow({ l1, v1, l2, v2, edit, onV1, onV2 }) {
 function DataRowSingle({ l, v, edit, onV }) {
     return (
         <tr>
-            <th className="w-1/3 bg-slate-50 p-1 text-[12px] uppercase font-medium text-slate-500 border border-slate-200">{l}</th>
+            <th className="w-1/3 bg-slate-50 p-1 text-[12px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l}</th>
             <td className="p-1 border border-slate-200">
                 {edit ? (
                     <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v} onChange={(e) => onV(e.target.value)} />
