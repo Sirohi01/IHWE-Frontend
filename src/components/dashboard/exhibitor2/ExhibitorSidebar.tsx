@@ -12,9 +12,8 @@ interface SidebarProps {
 
 const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "profile", label: "Profile", icon: User },
-    { id: "invoices", label: "Accounts", icon: FileText },
-    { id: "accessories", label: "Product and Services", icon: Package },
+    // { id: "profile", label: "Profile", icon: User },
+    { id: "invoices", label: "Invoice and Receipts", icon: FileText },
     { id: "stall-management", label: "Stall Management", icon: Building2 },
     { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
@@ -29,17 +28,57 @@ const msmeSubItems = [
         id: "psm_claim", label: "PSM Claim",
         isDropdown: true,
         subItems: [
-            { id: "annexure_d", label: "Annexure D" },
-            { id: "participants_feedback", label: "Participants Feedback" },
-            { id: "mandate_form", label: "Mandate Form" }
+            {
+                id: "psm_reports", label: "Reports", isDropdown: true, subItems: [
+                    { id: "annexure_c", label: "Annexure C" },
+                    { id: "annexure_d", label: "Annexure D" },
+                    { id: "declaration", label: "Declaration" },
+                    { id: "feedback_report", label: "Feedback Report" },
+                    { id: "undertaking", label: "Undertaking" },
+                    { id: "pre_receipt", label: "Pre-Receipt" },
+                    // { id: "participants_feedback", label: "Participants Feedback" },
+                    { id: "mandate_form", label: "Mandate Form" },
+                    { id: "pfms_details", label: "PFMS Details" },
+                    { id: "covering_letter", label: "Covering Letter" },
+                    { id: "narrative_feedback", label: "Narrative Feedback" }
+                ]
+            },
+            {
+                id: "psm_reports_table", label: "Reports Table", isDropdown: true, subItems: [
+                    { id: "annexure_c_table", label: "Annexure C" },
+                    { id: "annexure_d_table", label: "Annexure D" },
+                    { id: "declaration_table", label: "Declaration" },
+                    { id: "feedback_report_table", label: "Feedback Report" },
+                    { id: "undertaking_table", label: "Undertaking" },
+                    { id: "pre_receipt_table", label: "Pre-Receipt" },
+                    // { id: "participants_feedback", label: "Participants Feedback" },
+                    { id: "mandate_form_table", label: "Mandate Form" },
+                    { id: "pfms_details_table", label: "PFMS Details" },
+                    { id: "covering_letter_table", label: "Covering Letter" },
+                    { id: "narrative_feedback_table", label: "Narrative Feedback" }
+                ]
+            },
         ]
     },
 ];
 
 export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
-    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || activeTab === "annexure_d";
+    const psmSubItems = msmeSubItems.find(i => i.id === "psm_claim")?.subItems || [];
+    const psmSubItemIds = psmSubItems.flatMap(si => [si.id, ...(si.subItems?.map(ni => ni.id) || [])]);
+    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || psmSubItemIds.includes(activeTab);
+
     const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
-    const [psmOpen, setPsmOpen] = useState(activeTab === "annexure_d" || activeTab === "psm_claim");
+    const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
+        const initial = [];
+        if (psmSubItemIds.includes(activeTab)) initial.push("psm_claim");
+        const activeSub = psmSubItems.find(si => si.subItems?.some(s => s.id === activeTab));
+        if (activeSub) initial.push(activeSub.id);
+        return initial;
+    });
+
+    const toggleGroup = (id: string) => {
+        setExpandedGroups(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+    };
 
     const handleMsmeToggle = () => {
         if (!sidebarOpen) {
@@ -110,11 +149,12 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                                 <div className="mt-1 mb-1 ml-[17px] border-l-2 border-slate-200 pl-2 space-y-1">
                                     {msmeSubItems.map(sub => {
                                         if (sub.isDropdown) {
-                                            const isGroupActive = activeTab === "annexure_d" || activeTab === "psm_claim";
+                                            const isGroupActive = activeTab === sub.id || sub.subItems?.some(s => s.id === activeTab);
+                                            const isOpen = expandedGroups.includes(sub.id);
                                             return (
                                                 <div key={sub.id} className="flex flex-col w-full">
                                                     <button
-                                                        onClick={() => setPsmOpen(!psmOpen)}
+                                                        onClick={() => toggleGroup(sub.id)}
                                                         className={`w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group ${isGroupActive ? "bg-[#23471d]/10 text-[#23471d]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
                                                             }`}
                                                     >
@@ -125,11 +165,11 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                                                         <span className={`text-[10px] uppercase tracking-wider whitespace-nowrap flex-1 ${isGroupActive ? "font-bold" : "font-semibold"}`}>
                                                             {sub.label}
                                                         </span>
-                                                        <ChevronDown size={12} className={`transition-transform duration-300 ${psmOpen ? "rotate-180" : ""}`} />
+                                                        {isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                                                     </button>
 
                                                     <AnimatePresence initial={false}>
-                                                        {psmOpen && (
+                                                        {isOpen && (
                                                             <motion.div
                                                                 initial={{ height: 0, opacity: 0 }}
                                                                 animate={{ height: "auto", opacity: 1 }}
@@ -139,6 +179,42 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                                                             >
                                                                 <div className="mt-1 mb-1 ml-[8px] border-l border-slate-200 pl-2 space-y-0.5">
                                                                     {sub.subItems?.map(nested => {
+                                                                        if (nested.isDropdown) {
+                                                                            const isNestedOpen = expandedGroups.includes(nested.id);
+                                                                            const isNestedActive = activeTab === nested.id || nested.subItems?.some(s => s.id === activeTab);
+                                                                            return (
+                                                                                <div key={nested.id} className="flex flex-col w-full">
+                                                                                    <button
+                                                                                        onClick={() => toggleGroup(nested.id)}
+                                                                                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all ${isNestedActive ? "text-[#23471d] font-bold" : "text-slate-500 hover:text-slate-800 font-semibold"}`}
+                                                                                    >
+                                                                                        <span className="text-[9px] uppercase tracking-wider whitespace-nowrap">{nested.label}</span>
+                                                                                        {isNestedOpen ? <ChevronDown size={10} className="ml-auto" /> : <ChevronRight size={10} className="ml-auto" />}
+                                                                                    </button>
+                                                                                    <AnimatePresence>
+                                                                                        {isNestedOpen && (
+                                                                                            <motion.div
+                                                                                                initial={{ height: 0, opacity: 0 }}
+                                                                                                animate={{ height: "auto", opacity: 1 }}
+                                                                                                exit={{ height: 0, opacity: 0 }}
+                                                                                                className="ml-2 border-l border-slate-100 pl-2 space-y-0.5"
+                                                                                            >
+                                                                                                {nested.subItems?.map(nn => (
+                                                                                                    <button
+                                                                                                        key={nn.id}
+                                                                                                        onClick={() => setActiveTab(nn.id)}
+                                                                                                        className={`w-full flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all ${activeTab === nn.id ? "text-[#23471d] font-bold bg-[#23471d]/5" : "text-slate-400 hover:text-slate-700 font-medium"}`}
+                                                                                                    >
+                                                                                                        <span className="text-[8px] uppercase tracking-widest">{nn.label}</span>
+                                                                                                    </button>
+                                                                                                ))}
+                                                                                            </motion.div>
+                                                                                        )}
+                                                                                    </AnimatePresence>
+                                                                                </div>
+                                                                            );
+                                                                        }
+
                                                                         const nestedActive = activeTab === nested.id;
                                                                         return (
                                                                             <button

@@ -1,10 +1,13 @@
-﻿import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, MessageSquare, Loader2, Check, CheckCheck } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import { API_URL, SERVER_URL } from "@/lib/api";
 
-interface Props { data: any; }
+interface Props { 
+    data: any; 
+    inNavbar?: boolean;
+}
 
 function timeStr(d: string) {
     return new Date(d).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
@@ -17,7 +20,7 @@ function Ticks({ msg }: { msg: any }) {
         : <Check size={11} className="text-slate-300 inline ml-1" />;
 }
 
-export default function ExhibitorChatTab({ data }: Props) {
+export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [messages, setMessages] = useState<any[]>([]);
     const [input, setInput] = useState("");
@@ -105,8 +108,8 @@ export default function ExhibitorChatTab({ data }: Props) {
     };
 
     return (
-        <motion.div key="chat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="bg-white shadow-md overflow-hidden" style={{ height: "calc(100vh - 140px)", display: "flex", flexDirection: "column" }}>
+        <motion.div key="chat" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ height: inNavbar ? "100%" : "auto" }}>
+            <div className={`bg-white shadow-md overflow-hidden ${inNavbar ? "" : "rounded-sm"}`} style={{ height: inNavbar ? "100%" : "calc(100vh - 140px)", display: "flex", flexDirection: "column" }}>
 
                 {/* Header */}
                 <div className="px-5 py-3 bg-[#23471d] flex items-center justify-between flex-shrink-0">

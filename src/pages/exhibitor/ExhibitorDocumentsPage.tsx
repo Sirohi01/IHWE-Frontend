@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { useExhibitorCtx } from '../ExhibitorDashboard';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorDocuments from '../../components/dashboard/exhibitor/ExhibitorDocuments';
 
 export default function ExhibitorDocumentsPage() {

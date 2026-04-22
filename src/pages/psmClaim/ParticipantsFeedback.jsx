@@ -1,237 +1,372 @@
-import React from 'react';
-import { Printer, Download } from 'lucide-react';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
+import { Printer, Download, ChevronRight, Save, Loader2 } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { psmClaimApi } from '@/services/psmClaimApi';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
+import { toast } from 'sonner';
+import { jsPDF } from 'jspdf';
+import { toPng } from 'html-to-image';
+import { useRef } from 'react';
 
-const ParticipantsFeedback = () => {
+const ParticipantsFeedback = ({ reportId: propReportId }) => {
+    const navigate = useNavigate();
+    const { id: urlId } = useParams();
+    const reportId = propReportId || urlId;
+    
+    const { data: ctxData } = useExhibitorCtx() || {};
+    const componentRef = useRef(null);
+    const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(!!reportId);
+    const [isExporting, setIsExporting] = useState(false);
 
-    const handlePrint = () => {
-        document.title = "Participants_Feedback_Report";
-        window.print();
-    };
+    const [formData, setFormData] = useState({
+        mseUnitName: ctxData?.companyName || '',
+        plantAddress: ctxData?.address || '',
+        proprietorName: ctxData?.contactName || '',
+        mobileNumber: ctxData?.mobile || '',
+        email: ctxData?.email || '',
+        website: '',
+        eventDetails: ctxData?.fairName || '',
+        benefitsComments: '',
+        visitorCount: '',
+        exportInquiries: '',
+        businessFinalized: '',
+        otherAchievements: '',
+        participateAgain: '',
+        techNoticed: [
+            { country: '', sector: '', description: '', contact: '' },
+            { country: '', sector: '', description: '', contact: '' }
+        ],
+        remarks: '',
+        date: new Date().toISOString().split('T')[0],
+        participantName: ctxData?.contactName || ''
+    });
 
-    const handleDownloadPdf = () => {
-        Swal.fire({ title: 'Generating PDF...', text: 'Please wait while your document is being prepared.', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-        const generatePDF = () => {
-            const element = document.getElementById('printable-participants-feedback');
-
-            // Hide buttons briefly during capture
-            const actionButtons = element.querySelector('.print\\:hidden');
-            if (actionButtons) actionButtons.style.display = 'none';
-
-            // Shrink briefly to fit on one PDF page
-            const originalZoom = element.style.zoom;
-            element.style.zoom = '0.7';
-
-            const opt = {
-                margin: 5,
-                filename: 'Participants_Feedback_Report.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    useEffect(() => {
+        if (reportId) {
+            const loadData = async () => {
+                try {
+                    const res = await psmClaimApi.getReportById('participants-feedback', reportId);
+                    if (res.success && res.data) {
+                        setFormData(res.data.data || res.data);
+                    }
+                } catch (error) {
+                    toast.error('Failed to load report data');
+                } finally {
+                    setLoading(false);
+                }
             };
+            loadData();
+        }
+    }, [reportId]);
 
-            window.html2pdf().set(opt).from(element).save().then(() => {
-                // Restore UI
-                if (actionButtons) actionButtons.style.display = '';
-                element.style.zoom = originalZoom;
-                Swal.close();
-                Swal.fire('Success!', 'PDF downloaded successfully.', 'success');
-            }).catch((err) => {
-                if (actionButtons) actionButtons.style.display = '';
-                element.style.zoom = originalZoom;
-                Swal.close();
-                Swal.fire('Error', 'Failed to generate PDF.', 'error');
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            const res = await psmClaimApi.saveReport('participants-feedback', {
+                data: formData,
+                id: reportId,
+                exhibitorId: ctxData?._id
             });
-        };
-
-        if (window.html2pdf) {
-            generatePDF();
-        } else {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-            document.body.appendChild(script);
-            script.onload = generatePDF;
+            if (res.success) {
+                toast.success(reportId ? 'Report updated' : 'Report saved');
+                navigate('/exhibitor-dashboard/psm-claim/reports-table/participants-feedback');
+            }
+        } catch (error) {
+            toast.error('Failed to save report');
+        } finally {
+            setSaving(false);
         }
     };
 
-    return (
-        <div id="printable-participants-feedback" className="min-h-screen bg-gray-100 py-2 print:py-0 print:bg-white text-black font-sans">
-            <style>
-                {`
-                @media print {
-                    @page { margin: 5mm; }
-                    #printable-participants-feedback {
-                        zoom: 0.85; 
+    const updateTech = (index, field, value) => {
+        const newTech = [...formData.techNoticed];
+        newTech[index][field] = value;
+        setFormData({ ...formData, techNoticed: newTech });
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const handleDownload = async () => {
+        if (!componentRef.current) return;
+        setIsExporting(true);
+
+        try {
+            const dataUrl = await toPng(componentRef.current, {
+                quality: 1,
+                pixelRatio: 3,
+                backgroundColor: '#ffffff',
+                filter: (node) => {
+                    if (node.classList && node.classList.contains('no-print')) {
+                        return false;
                     }
-                    #printable-participants-feedback table {
-                        font-size: 13px;
-                    }
-                    #printable-participants-feedback td, #printable-participants-feedback th {
-                        padding-top: 3px !important;
-                        padding-bottom: 3px !important;
-                    }
-                    #printable-participants-feedback textarea {
-                        min-height: 0 !important;
-                        height: auto !important;
-                    }
+                    return true;
+                },
+                style: {
+                    boxShadow: 'none',
+                    margin: '0',
+                    transform: 'none',
+                    borderRadius: '0'
                 }
-                `}
-            </style>
+            });
 
-            <div className="mx-auto bg-white p-6 md:p-8 print:p-0 shadow-xl print:shadow-none max-w-[1000px] print:max-w-none">
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
 
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mb-6 print:hidden">
-                    <button
-                        onClick={handleDownloadPdf}
-                        className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium py-1.5 px-6 rounded-md shadow transition-colors"
-                    >
-                        <Download size={20} />
-                        Download PDF
-                    </button>
-                    <button
-                        onClick={handlePrint}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-6 rounded-md shadow transition-colors"
-                    >
-                        <Printer size={20} />
-                        Print Form
-                    </button>
-                </div>
+            const imgProps = pdf.getImageProperties(dataUrl);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-                {/* Header Section */}
-                <div className="text-center mb-6 leading-tight">
-                    <h1 className="text-lg md:text-xl font-bold uppercase underline underline-offset-4 mb-2">PARTICIPANTS FEEDBACK REPORT</h1>
-                    <p className="text-sm md:text-base">(To be filled in by all individual participants separately)</p>
-                    <p className="text-sm md:text-base">(All columns should be filled)</p>
-                </div>
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`ParticipantsFeedback_${ctxData?.companyName || 'Document'}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF. Please try the Print option instead.');
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
-                {/* Main Table */}
-                <div className="w-full overflow-x-auto print:overflow-visible">
-                    <table className="w-full border-collapse border border-black text-sm">
+    if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-[#23471d]" /></div>;
+
+    return (
+        <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
+            <ReportHeader title="Participants Feedback" onSave={handleSave} saving={saving} reportId={reportId} />
+
+            <div className="p-4 sm:p-8 flex flex-col items-center">
+                <div
+                    ref={componentRef}
+                    id="printable-form"
+                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full max-w-[210mm] min-h-[297mm] text-[#000] text-[12px] leading-tight relative overflow-hidden"
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                    {/* Corner Action Icons - Only visible in Web View */}
+                    <div className="absolute top-4 right-4 flex gap-2 no-print">
+                        <button
+                            onClick={handlePrint}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Print Document"
+                        >
+                            <Printer size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                        <button
+                            onClick={handleDownload}
+                            className="p-2.5 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-full transition-all shadow-sm border border-slate-100 group"
+                            title="Download PDF"
+                        >
+                            <Download size={18} className="group-hover:scale-110 transition-transform" />
+                        </button>
+                    </div>
+                    <div className="text-center mb-8 print:mb-4 font-bold">
+                        <h1 className="text-lg print:text-base underline uppercase">PARTICIPANTS FEEDBACK REPORT</h1>
+                        <p className="text-[11px] mt-1 normal-case">(To be filled in by all individual participants separately)</p>
+                        <p className="text-[11px] normal-case">(All columns should be filled)</p>
+                    </div>
+
+                    <table className="w-full border-collapse border border-black text-[11px]">
                         <tbody>
-                            {/* Standard Rows */}
-                            {[
-                                { no: "1", label: "Name of the participating MSE unit", type: "input" },
-                                { no: "2", label: "Address of Plant", type: "textarea", rows: 2 },
-                                { no: "3", label: "Name of Proprietor / Partner / Director", type: "input" },
-                                { no: "4", label: "Mobile number of Proprietor / Partner / Director", type: "input" },
-                                { no: "5", label: "E-mail ID of Proprietor / Partner / Director", type: "input" },
-                                { no: "6", label: "Website of the participating MSE unit", type: "input" },
-                                { no: "7", label: "Name, Venue, and Duration of event", type: "textarea", rows: 2 },
-                            ].map((row, index) => (
-                                <tr key={index}>
-                                    <td className="border border-black px-2 py-2 text-center w-8 md:w-12 align-top">{row.no}</td>
-                                    <td className="border border-black px-2 py-2 w-[40%] align-top leading-snug">{row.label}</td>
-                                    <td className="border border-black px-2 py-2 w-[55%] align-top">
-                                        {row.type === "textarea" ? (
-                                            <textarea className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:resize-none" rows={row.rows}></textarea>
-                                        ) : (
-                                            <input type="text" className="w-full min-h-[1.5rem] outline-none bg-transparent" />
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-
-                            {/* Row 8: Comments with bold subtext */}
                             <tr>
-                                <td className="border border-black px-2 py-3 text-center w-8 md:w-12 align-top">8</td>
-                                <td className="border border-black px-2 py-3 w-[40%] align-top leading-snug">
-                                    <span className="font-bold block mb-2">Comments of the participant regarding benefits of participation in the event</span>
-                                    <span className="font-bold block">[about 200 words along with photographs of event]</span>
-                                </td>
-                                <td className="border border-black px-2 py-3 w-[55%] align-top">
-                                    <textarea className="w-full min-h-[5rem] outline-none bg-transparent resize-none print:resize-none" rows={4}></textarea>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">1</td>
+                                <td className="border border-black px-3 py-2 print:py-1 w-[40%] font-bold">Name of the participating MSE unit</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold uppercase">
+                                    <input type="text" value={formData.mseUnitName} placeholder="Enter Name of MSE unit" onChange={(e) => setFormData({...formData, mseUnitName: e.target.value})} className="w-full bg-transparent outline-none" />
                                 </td>
                             </tr>
-
-                            {/* Row 9-11 */}
-                            {[
-                                { no: "9", label: "Number of visitors in the event", type: "input" },
-                                { no: "10", label: "Number and value (in INR) of export inquiries generated in the event", type: "input" },
-                                { no: "11", label: "Details of business finalized / orders booked in the event.", type: "textarea", rows: 2 },
-                                { no: "12", label: "Other achievements such as joint ventures, technology transfer agreements, etc. (give details)", type: "textarea", rows: 3 },
-                                { no: "13", label: "Would you like to participate again in the event? If yes, reason for the same.", type: "textarea", rows: 2 },
-                            ].map((row, index) => (
-                                <tr key={`batch2-${index}`}>
-                                    <td className="border border-black px-2 py-3 text-center w-8 md:w-12 align-top">{row.no}</td>
-                                    <td className="border border-black px-2 py-3 w-[40%] align-top font-bold leading-snug">{row.label}</td>
-                                    <td className="border border-black px-2 py-3 w-[55%] align-top">
-                                        {row.type === "textarea" ? (
-                                            <textarea className="w-full min-h-[4rem] outline-none bg-transparent resize-none print:resize-none" rows={row.rows}></textarea>
-                                        ) : (
-                                            <input type="text" className="w-full min-h-[1.5rem] outline-none bg-transparent" />
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-
-                            {/* Row 14: Nested Table */}
                             <tr>
-                                <td className="border border-black px-2 py-3 text-center w-8 md:w-12 align-top">14</td>
-                                <td className="border border-black px-2 py-3 align-top leading-snug" colSpan={2}>
-                                    <div className="mb-3">
-                                        Details of technologies noticed in the event which would be useful for MSMEs in India (copies of the brochures and other relevant literature may be attached as separate sheet):
-                                    </div>
-                                    <table className="w-full border-collapse border border-black mt-2">
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">2</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Address of Plant</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.plantAddress} placeholder="Enter Complete Plant Address" onChange={(e) => setFormData({...formData, plantAddress: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">3</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Name of Proprietor / Partner / Director</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.proprietorName} placeholder="Enter Name of Proprietor/Partner/Director" onChange={(e) => setFormData({...formData, proprietorName: e.target.value})} className="w-full bg-transparent outline-none" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">4</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Mobile number</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.mobileNumber} placeholder="Enter Mobile Number" onChange={(e) => setFormData({...formData, mobileNumber: e.target.value})} className="w-full bg-transparent outline-none font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">5</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">E-mail ID</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.email} placeholder="Enter E-mail ID" onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full bg-transparent outline-none italic" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">6</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Website</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.website} placeholder="Enter Website URL" onChange={(e) => setFormData({...formData, website: e.target.value})} className="w-full bg-transparent outline-none italic" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">7</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Name, Venue, and Duration of event</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.eventDetails} placeholder="Enter Name, Venue, and Duration of the event" onChange={(e) => setFormData({...formData, eventDetails: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">8</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">
+                                    Comments of participant regarding benefits
+                                    <p className="mt-1 normal-case text-[9px]">[about 200 words along with photographs]</p>
+                                </td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.benefitsComments} placeholder="Enter comments regarding benefits (approx 200 words)..." onChange={(e) => setFormData({...formData, benefitsComments: e.target.value})} className="w-full bg-transparent outline-none resize-none h-32 print:h-24 leading-tight" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">9</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Number of visitors in the event</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.visitorCount} placeholder="Enter Visitor Count" onChange={(e) => setFormData({...formData, visitorCount: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">10</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Export inquiries generated (Number and Value)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <input type="text" value={formData.exportInquiries} placeholder="Enter Number and Value in INR" onChange={(e) => setFormData({...formData, exportInquiries: e.target.value})} className="w-full bg-transparent outline-none text-center font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">11</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Details of business finalized / orders booked</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.businessFinalized} placeholder="Enter details of business finalized / orders booked" onChange={(e) => setFormData({...formData, businessFinalized: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">12</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Other achievements (JVs, Tech transfer etc)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.otherAchievements} placeholder="Enter other achievements (e.g. JVs, Tech transfer)" onChange={(e) => setFormData({...formData, otherAchievements: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">13</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Would you like to participate again? (If yes, reason)</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.participateAgain} placeholder="Yes/No and reason for participation" onChange={(e) => setFormData({...formData, participateAgain: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">14</td>
+                                <td colSpan={2} className="border border-black p-0">
+                                    <div className="px-3 py-2 print:py-1 font-bold italic border-b border-black">Details of technologies noticed useful for MSMEs in India:</div>
+                                    <table className="w-full border-collapse text-[10px]">
                                         <thead>
-                                            <tr>
-                                                <th className="border border-black px-2 py-1.5 w-[20%] text-left font-bold text-sm">Country</th>
-                                                <th className="border border-black px-2 py-1.5 w-[20%] text-left font-bold text-sm">Field/Sector</th>
-                                                <th className="border border-black px-2 py-1.5 w-[30%] text-left font-bold text-sm">Description of Technology</th>
-                                                <th className="border border-black px-2 py-1.5 w-[30%] text-left font-bold text-sm">Contact details (phone number/e-mails etc.) of the company</th>
+                                            <tr className="border-b border-black font-bold">
+                                                <td className="border-r border-black p-1 text-center w-[20%]">Country</td>
+                                                <td className="border-r border-black p-1 text-center w-[20%]">Sector</td>
+                                                <td className="border-r border-black p-1 text-center w-[30%]">Description</td>
+                                                <td className="p-1 text-center w-[30%]">Contact Details</td>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                                <td className="border border-black px-2 py-1 align-top"><input type="text" className="w-full outline-none bg-transparent" /></td>
-                                            </tr>
+                                            {formData.techNoticed.map((tech, i) => (
+                                                <tr key={i} className={i === 0 ? 'border-b border-black' : ''}>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.country} placeholder="Country" onChange={(e) => updateTech(i, 'country', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.sector} placeholder="Sector" onChange={(e) => updateTech(i, 'sector', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="border-r border-black p-1 italic"><input type="text" value={tech.description} placeholder="Description" onChange={(e) => updateTech(i, 'description', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                    <td className="p-1 italic"><input type="text" value={tech.contact} placeholder="Contact" onChange={(e) => updateTech(i, 'contact', e.target.value)} className="w-full bg-transparent outline-none" /></td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
-
-                            {/* Row 15: Remarks */}
                             <tr>
-                                <td className="border border-black px-2 py-3 text-center w-8 md:w-12 align-top">15</td>
-                                <td className="border border-black px-2 py-3 w-[40%] align-top leading-snug">Remarks/Suggestions, if any</td>
-                                <td className="border border-black px-2 py-3 w-[55%] align-top">
-                                    <textarea className="w-full min-h-[3rem] outline-none bg-transparent resize-none print:resize-none" rows={3}></textarea>
+                                <td className="border border-black px-3 py-2 print:py-1 text-center w-10 font-bold">15</td>
+                                <td className="border border-black px-3 py-2 print:py-1 font-bold">Remarks/Suggestions, if any</td>
+                                <td className="border border-black px-3 py-2 print:py-1">
+                                    <textarea value={formData.remarks} placeholder="Enter any additional remarks or suggestions" onChange={(e) => setFormData({...formData, remarks: e.target.value})} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
 
-                {/* Footer Section */}
-                <div className="mt-6 flex flex-col gap-10">
-                    <div>
-                        Enclosed: Photograph of allotted booth at the event venue.
-                    </div>
-
-                    <div className="flex justify-between items-end pb-8">
-                        <div className="flex items-center gap-2">
-                            Date: <input type="text" className="w-40 border-b border-black outline-none bg-transparent px-1" />
+                    <div className="mt-8 print:mt-4 space-y-8 print:space-y-4 text-[11px]">
+                        <p className="font-bold italic">Enclosed: Photograph of allotted booth at the event venue.</p>
+                        <div className="flex justify-between items-end pt-4 print:pt-2">
+                            <div className="flex gap-2 items-end">
+                                <span className="font-bold">Date:</span>
+                                <div className={`${isExporting ? 'hidden' : 'no-print'}`}>
+                                    <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} className="border-b border-black outline-none bg-transparent w-40 font-bold" />
+                                </div>
+                                <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black min-w-[100px] font-bold`}>
+                                    {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
+                                </div>
+                            </div>
+                            <div className="text-center w-72">
+                                <input type="text" value={formData.participantName} onChange={(e) => setFormData({...formData, participantName: e.target.value})} className="w-full border-b border-black outline-none bg-transparent text-center font-bold uppercase" />
+                                <p className="mt-1 font-bold">Signature/Name/Designation of Participant</p>
+                            </div>
                         </div>
-                        <div className="text-right flex flex-col items-center sm:items-end">
-                            <input type="text" className="w-64 border-b border-black outline-none bg-transparent mb-1 px-1 text-center sm:text-right" />
-                            Signature/Name/Designation of Participant
-                        </div>
                     </div>
                 </div>
-
             </div>
+
+            {/* Bottom Save Button */}
+            <div className="flex justify-center mb-12 no-print">
+                <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                >
+                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {reportId ? 'Update Report' : 'Save Report'}
+                </button>
+            </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @media print {
+                    @page { 
+                        size: A4; 
+                        margin: 10mm 15mm; 
+                    }
+                    .no-print { display: none !important; }
+                    body { background: white !important; }
+                    #printable-form {
+                        width: 100% !important;
+                        padding: 10mm 0 !important;
+                        box-shadow: none !important;
+                        zoom: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        min-height: auto !important;
+                    }
+                    table, th, td { 
+                        border-color: black !important; 
+                        padding: 8px 12px !important;
+                    }
+                    input, textarea { 
+                        border-bottom: 1px solid black !important; 
+                        font-weight: bold !important;
+                    }
+                    .mb-8, .mt-8, .mt-10, .mb-10 { margin-top: 5mm !important; margin-bottom: 5mm !important; }
+                    .space-y-8 { margin-top: 6mm !important; margin-bottom: 6mm !important; }
+                    textarea { min-height: 15mm !important; height: auto !important; }
+                }
+            `}} />
         </div>
     );
 };
 
-export default ParticipantsFeedback;
+export default ParticipantsFeedback;

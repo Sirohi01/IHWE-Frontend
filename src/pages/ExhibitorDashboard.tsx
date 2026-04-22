@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense, createContext, useContext } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { toast } from 'sonner';
 import { API_URL, settingsApi } from '@/lib/api';
@@ -6,12 +6,11 @@ import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 import { AnimatePresence } from 'framer-motion';
-export const ExhibitorCtx = createContext<any>(null);
-export const useExhibitorCtx = () => useContext(ExhibitorCtx);
+import { ExhibitorCtx } from '@/context/ExhibitorContext';
 
 const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',
-    profile: '/exhibitor-dashboard/profile',
+    profile: '/exhibitor-dashboard/ex-profile',
     invoices: '/exhibitor-dashboard/invoices',
     accessories: '/exhibitor-dashboard/accessories',
     marketing: '/exhibitor-dashboard/marketing',
@@ -20,10 +19,30 @@ const TAB_ROUTES: Record<string, string> = {
     chat: '/exhibitor-dashboard/chat',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
-    annexure_d: '/exhibitor-dashboard/annexure-d',
+    annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
     'stall-management': '/exhibitor-dashboard/stall-management',
+    psm_reports: '/exhibitor-dashboard/psm-claim/reports',
+    psm_reports_table: '/exhibitor-dashboard/psm-claim/reports-table',
+    annexure_c_table: '/exhibitor-dashboard/psm-claim/reports-table/annexure-c',
+    annexure_d_table: '/exhibitor-dashboard/psm-claim/reports-table/annexure-d',
+    declaration_table: '/exhibitor-dashboard/psm-claim/reports-table/declaration',
+    feedback_report_table: '/exhibitor-dashboard/psm-claim/reports-table/feedback-report',
+    undertaking_table: '/exhibitor-dashboard/psm-claim/reports-table/undertaking',
+    pre_receipt_table: '/exhibitor-dashboard/psm-claim/reports-table/pre-receipt',
+    mandate_form_table: '/exhibitor-dashboard/psm-claim/reports-table/mandate-form',
+    pfms_details_table: '/exhibitor-dashboard/psm-claim/reports-table/pfms-details',
+    covering_letter_table: '/exhibitor-dashboard/psm-claim/reports-table/covering-letter',
+    narrative_feedback_table: '/exhibitor-dashboard/psm-claim/reports-table/narrative-feedback',
+    annexure_c: '/exhibitor-dashboard/psm-claim/reports/annexure-c',
+    declaration: '/exhibitor-dashboard/psm-claim/reports/declaration',
+    feedback_report: '/exhibitor-dashboard/psm-claim/reports/feedback-report',
+    undertaking: '/exhibitor-dashboard/psm-claim/reports/undertaking',
+    pre_receipt: '/exhibitor-dashboard/psm-claim/reports/pre-receipt',
+    pfms_details: '/exhibitor-dashboard/psm-claim/reports/pfms-details',
+    covering_letter: '/exhibitor-dashboard/psm-claim/reports/covering-letter',
+    narrative_feedback: '/exhibitor-dashboard/psm-claim/reports/narrative-feedback',
     exhibitions: '/exhibitor-dashboard/exhibitions',
-    participants_feedback: '/exhibitor-dashboard/participants-feedback',
+    // participants_feedback: '/exhibitor-dashboard/participants-feedback',
     mandate_form: '/exhibitor-dashboard/mandate-form',
     documentation: '/exhibitor-dashboard/documentation',
 };

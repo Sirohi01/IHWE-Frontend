@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_URL, settingsApi, SERVER_URL } from '@/lib/api';
 import Swal from 'sweetalert2';
+import { useAuth } from '@/context/BuyerAuthContext';
 
 const BuyerLogin = () => {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ const BuyerLogin = () => {
     const [buyerId, setBuyerId] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const { login } = useAuth();
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -77,11 +79,8 @@ const BuyerLogin = () => {
                     });
                 } else if (data.token) {
                     localStorage.setItem('buyerToken', data.token);
-                    localStorage.setItem('buyer_session', JSON.stringify(data.buyer));
                     toast.success('Welcome back!');
-                    
-                    // Redirect to the buyer dashboard app
-                    setTimeout(() => window.location.href = '/buyer-dashboard', 1000);
+                    login(data.buyer);
                 }
             } else {
                 showAlert('error', 'Login Failed', data.message || 'Check your details and try again.');
@@ -107,9 +106,8 @@ const BuyerLogin = () => {
 
             if (data.success && data.token) {
                 localStorage.setItem('buyerToken', data.token);
-                localStorage.setItem('buyer_session', JSON.stringify(data.buyer));
                 toast.success('Welcome!', { description: 'Opening your dashboard...' });
-                setTimeout(() => window.location.href = '/buyer-dashboard', 1000);
+                login(data.buyer);
             } else {
                 toast.error('Wrong Code', { description: data.message || 'Please enter the correct 6-digit code.' });
             }
