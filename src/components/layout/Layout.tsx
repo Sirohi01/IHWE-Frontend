@@ -19,12 +19,12 @@ const Layout = ({ children, onRegisterVisit }: LayoutProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col">
       <Topbar />
       <Navbar onRegisterVisit={onRegisterVisit} />
       <SocialSidebar />
       <WhatsAppFloat />
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin" /></div>}>
           {children}
         </Suspense>

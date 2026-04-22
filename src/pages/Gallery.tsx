@@ -152,10 +152,14 @@ const Gallery = () => {
                     : (items[0]?.thumbnail || items[0]?.src),
                 count: items.length,
                 date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
                 type: 'gallery'
             };
         }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'gallery'))
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
     }, [mediaItems, categories]);
 
     // MEDIA GALLERY EVENT LIST (filter to only categories of type 'media')
@@ -180,10 +184,14 @@ const Gallery = () => {
                     : (items[0]?.thumbnail || items[0]?.src),
                 count: items.length,
                 date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
                 type: 'media'
             };
         }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'media'))
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
     }, [mediaItems, categories]);
 
     const filteredItems = useMemo(() => {

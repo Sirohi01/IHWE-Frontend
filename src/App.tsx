@@ -25,6 +25,7 @@ const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalB
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
+const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
@@ -88,6 +89,7 @@ const App = () => {
                   <Route path="/exhibition" element={<Exhibition />} />
                   <Route path="/media-registration" element={<MediaRegistration />} />
                   <Route path="/speaker-registration" element={<SpeakerRegistration />} />
+                  <Route path="/seller-registration" element={<SellerRegistration />} />
                   <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
                   <Route path="/why-exhibit" element={<WhyExhibit />} />
                   <Route path="/partners" element={<Partners />} />

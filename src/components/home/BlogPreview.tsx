@@ -41,7 +41,7 @@ const BlogPreview = () => {
   if (blogs.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-22" style={{ backgroundColor: "#F7F8F0" }}>
+    <section className="py-16 lg:py-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
       <div className="container mx-auto px-4">
         {/* BRANDED HEADING */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">

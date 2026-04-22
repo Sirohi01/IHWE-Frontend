@@ -45,7 +45,6 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <ParallaxSection />
       {/* <GlobalPartners /> */}
       <Testimonials />
-      <StatsCounter />
        <FAQSection />
       <BlogPreview />
      

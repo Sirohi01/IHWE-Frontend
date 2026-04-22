@@ -233,6 +233,27 @@ export const globalPlatformApi = {
         return data.success ? data.data : null;
     }
 };
+export const eventOverviewApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/event-overview`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const aboutOrganizerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/about-organizer`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const ourJourneyApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/our-journey`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
 export const visionMissionApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/vision-mission`);
@@ -417,6 +438,45 @@ export const buyerRegistrationApi = {
     }
 };
 
+export const sellerRegistrationApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/seller-registration`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/seller-registration`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    delete: async (id: string) => {
+        const response = await fetch(`${API_URL}/seller-registration/${id}`, {
+            method: 'DELETE'
+        });
+        return await response.json();
+    },
+    createOrder: async (amount: number) => {
+        const response = await fetch(`${API_URL}/seller-registration/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        });
+        return await response.json();
+    },
+    verifyPayment: async (regId: string, paymentDetails: any) => {
+        const response = await fetch(`${API_URL}/seller-registration/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ regId, paymentDetails })
+        });
+        return await response.json();
+    }
+};
+
 export const otpApi = {
     request: async (identifier: string, type: 'email' | 'phone', name?: string) => {
         const response = await fetch(`${API_URL}/otp/request`, {
@@ -461,11 +521,11 @@ export const verifyApi = {
         });
         return await response.json();
     },
-    sendPhoneOtp: async (phone: string, profile: string = 'CONTACT') => {
+    sendPhoneOtp: async (phone: string, profile: string = 'CONTACT', name: string = '') => {
         const response = await fetch(`${API_URL}/verify/send-phone-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, profile })
+            body: JSON.stringify({ phone, profile, name: name || null })
         });
         return await response.json();
     },
