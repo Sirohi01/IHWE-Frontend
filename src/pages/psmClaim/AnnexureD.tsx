@@ -93,6 +93,10 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
         { label: 'Products manufactured/service rendered', key: 'products', isTextArea: true },
     ];
 
+    const getPlaceholder = (label: string) => {
+        return `Enter ${label.split(',')[0].split('(')[0].trim()}`;
+    };
+
     return (
         <ReportLayout
             title="Annexure D"
@@ -127,6 +131,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                         value={(formData as any)[sec.key]}
                                         onChange={(e) => setFormData({ ...formData, [sec.key]: e.target.value })}
                                         className="w-full outline-none bg-transparent resize-none h-16 print:h-12 border-none"
+                                        placeholder={getPlaceholder(sec.label)}
                                     />
                                 ) : (
                                     <input
@@ -134,6 +139,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                         value={(formData as any)[sec.key]}
                                         onChange={(e) => setFormData({ ...formData, [sec.key]: e.target.value })}
                                         className="w-full outline-none bg-transparent border-none font-bold"
+                                        placeholder={getPlaceholder(sec.label)}
                                     />
                                 )}
                             </td>
@@ -152,6 +158,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.eventDetails}
                                 onChange={(e) => setFormData({ ...formData, eventDetails: e.target.value })}
                                 className="w-full outline-none bg-transparent resize-none h-16 print:h-12 border-none"
+                                placeholder="Enter Event name, venue, duration"
                             />
                         </td>
                     </tr>
@@ -196,6 +203,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.expenditureTravel}
                                 onChange={(e) => setFormData({ ...formData, expenditureTravel: e.target.value })}
                                 className="w-full outline-none bg-transparent text-center border-none font-bold"
+                                placeholder="0.00"
                             />
                         </td>
                         <td className="border border-black px-2 py-2 print:py-1">
@@ -204,6 +212,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.admissibleTravel}
                                 onChange={(e) => setFormData({ ...formData, admissibleTravel: e.target.value })}
                                 className="w-full outline-none bg-transparent text-center border-none font-bold"
+                                placeholder="0.00"
                             />
                         </td>
                     </tr>
@@ -217,6 +226,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.expenditureSpace}
                                 onChange={(e) => setFormData({ ...formData, expenditureSpace: e.target.value })}
                                 className="w-full outline-none bg-transparent text-center border-none font-bold"
+                                placeholder="0.00"
                             />
                         </td>
                         <td className="border border-black px-2 py-2 print:py-1">
@@ -225,6 +235,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.admissibleSpace}
                                 onChange={(e) => setFormData({ ...formData, admissibleSpace: e.target.value })}
                                 className="w-full outline-none bg-transparent text-center border-none font-bold"
+                                placeholder="0.00"
                             />
                         </td>
                     </tr>
@@ -260,6 +271,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                                 value={formData.place}
                                 onChange={(e) => setFormData({ ...formData, place: e.target.value })}
                                 className="border-b border-black outline-none bg-transparent w-48 print:w-40 font-bold px-1"
+                                placeholder="Enter Place"
                             />
                         </div>
                         <div className="flex gap-2 items-end">

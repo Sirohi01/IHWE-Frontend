@@ -107,11 +107,12 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                                     value={(formData as any)[field.key]}
                                     onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
                                     className={`flex-1 border-b border-black px-1 bg-transparent outline-none focus:border-black transition-colors py-0.5 ${isExporting ? 'hidden' : 'print:hidden'}`}
+                                    placeholder={`Enter ${field.label}`}
                                 />
                                 <div className={`${isExporting ? 'block' : 'hidden print:block'} flex-1 border-b border-black px-1 min-h-[1.2rem] print-bold`}>
                                     {field.isDate
-                                        ? ((formData as any)[field.key] ? new Date((formData as any)[field.key]).toLocaleDateString('en-GB') : '.')
-                                        : ((formData as any)[field.key] || '.')
+                                        ? ((formData as any)[field.key] ? new Date((formData as any)[field.key]).toLocaleDateString('en-GB') : '')
+                                        : ((formData as any)[field.key] || '')
                                     }
                                 </div>
                             </div>

@@ -129,6 +129,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                             value={formData.fairName}
                             onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
                             className="flex-1 border-b border-black px-1 font-medium bg-transparent outline-none"
+                            placeholder="Enter Name of the Fair/ Exhibition"
                         />
                     </div>
 
@@ -141,6 +142,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                                 value={formData.companyName}
                                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                                 className="border-b border-black flex-1 px-1 font-bold bg-transparent outline-none"
+                                placeholder="Enter Company Name"
                             />
                         </div>
                     </div>
@@ -189,6 +191,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                                                     value={formData.applicationNo}
                                                     onChange={(e) => setFormData({ ...formData, applicationNo: e.target.value })}
                                                     className="border-b border-black/40 px-1 bg-transparent outline-none flex-1 font-bold min-w-[30px] h-4 text-[10.5px]"
+                                                    placeholder="Enter Number"
                                                 />
                                             </div>
                                         ) : (
@@ -222,6 +225,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                                             value={formData.pages[item.id] || ''}
                                             onChange={(e) => updatePage(item.id, e.target.value)}
                                             className="w-full border-b border-black/20 h-5 bg-transparent outline-none text-center font-bold text-[11px]"
+                                            placeholder="Pg"
                                         />
                                     </td>
                                 </tr>

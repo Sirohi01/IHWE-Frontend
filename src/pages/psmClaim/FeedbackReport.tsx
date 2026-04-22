@@ -123,6 +123,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                     onChange={(e) => setFormData({ ...formData, [row.key]: e.target.value })}
                                     className={`w-full bg-transparent outline-none resize-none min-h-[1.5rem] overflow-hidden border-none ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     rows={1}
+                                    placeholder="Enter details here..."
                                 />
                                 <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[1.5rem] text-[11px] print-bold`}>
                                     {row.value || '.'}
@@ -143,6 +144,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                 maxLength={200}
                                 onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
                                 className={`w-full bg-transparent outline-none resize-none min-h-[6rem] overflow-hidden border-none ${isExporting ? 'hidden' : 'print:hidden'}`}
+                                placeholder="Enter your comments regarding the benefits of participation..."
                             />
                             <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[6rem] text-[11px] print-bold`}>
                                 {formData.comments || '.'}
@@ -160,6 +162,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                     onChange={(e) => setFormData({ ...formData, [row.key]: e.target.value })}
                                     className={`w-full bg-transparent outline-none resize-none min-h-[1.5rem] overflow-hidden border-none ${isExporting ? 'hidden' : 'print:hidden'}`}
                                     rows={1}
+                                    placeholder="Enter details here..."
                                 />
                                 <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[1.5rem] text-[11px] print-bold`}>
                                     {row.value || '.'}
@@ -185,10 +188,10 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                     <tbody>
                                         {formData.technologies.map((tech, idx) => (
                                             <tr key={idx}>
-                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.country} onChange={(e) => updateTech(idx, 'country', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none text-center" rows={1} /></td>
-                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.field} onChange={(e) => updateTech(idx, 'field', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none text-center" rows={1} /></td>
-                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.description} onChange={(e) => updateTech(idx, 'description', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none" rows={1} /></td>
-                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.contact} onChange={(e) => updateTech(idx, 'contact', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none" rows={1} /></td>
+                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.country} onChange={(e) => updateTech(idx, 'country', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none text-center" rows={1} placeholder="Country" /></td>
+                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.field} onChange={(e) => updateTech(idx, 'field', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none text-center" rows={1} placeholder="Field/Sector" /></td>
+                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.description} onChange={(e) => updateTech(idx, 'description', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none" rows={1} placeholder="Description" /></td>
+                                                <td className="border border-black p-1 align-top break-words"><textarea value={tech.contact} onChange={(e) => updateTech(idx, 'contact', e.target.value)} className="w-full bg-transparent border-none outline-none resize-none" rows={1} placeholder="Contact Details" /></td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -205,6 +208,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                 value={formData.remarks}
                                 onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
                                 className={`w-full bg-transparent outline-none resize-none min-h-[2.5rem] border-none ${isExporting ? 'hidden' : 'print:hidden'}`}
+                                placeholder="Enter any additional remarks or suggestions..."
                             />
                             <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[2.5rem] text-[11px] print-bold`}>
                                 {formData.remarks || '.'}

@@ -99,6 +99,10 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
                         border-color: black !important; 
                         padding: 8px 12px !important;
                     }
+                    input::placeholder, textarea::placeholder { 
+                        color: transparent !important; 
+                        -webkit-text-fill-color: transparent !important;
+                    }
                     input, textarea { 
                         border-top: none !important; 
                         border-left: none !important; 

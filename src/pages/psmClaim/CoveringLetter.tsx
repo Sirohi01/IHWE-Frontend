@@ -21,8 +21,8 @@ const CoveringLetter: React.FC<Props> = ({ reportId }) => {
         exhibitionName: ctxData?.fairName || '8th International Health & Wellness Expo 2025',
         fromDate: '2025-07-11',
         toDate: '2025-07-13',
-        hallNo: '12',
-        stallNo: '33',
+        hallNo: '',
+        stallNo: '',
         venue: 'Pragatik Maidan, New Delhi',
         signatoryName: ctxData?.contactName || '',
         designation: 'Partner'
@@ -112,6 +112,7 @@ const CoveringLetter: React.FC<Props> = ({ reportId }) => {
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                         className="border-b border-black underline outline-none flex-1 bg-transparent font-bold"
+                        placeholder="Enter Subject (e.g. Regarding MSME Scheme Reimbursement)"
                     />
                 </div>
 
@@ -124,6 +125,7 @@ const CoveringLetter: React.FC<Props> = ({ reportId }) => {
                             value={formData.exhibitionName}
                             onChange={(e) => setFormData({ ...formData, exhibitionName: e.target.value })}
                             className="border-b border-black outline-none px-1 w-96 bg-transparent font-bold mx-1"
+                            placeholder="Enter Exhibition Name"
                         />
                         from
                         <div className={`${isExporting ? 'hidden' : 'no-print'} inline-block mx-1`}>
@@ -139,9 +141,9 @@ const CoveringLetter: React.FC<Props> = ({ reportId }) => {
                         <div className={`${isExporting ? 'inline-block' : 'hidden print:inline-block'} border-b border-black min-w-[100px] font-bold text-center`}>
                             {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
                         </div>
-                        held at Hall No. <input type="text" value={formData.hallNo} onChange={(e) => setFormData({ ...formData, hallNo: e.target.value })} className="border-b border-black outline-none px-1 w-12 bg-transparent font-bold text-center mx-1" />,
-                        Stall No. <input type="text" value={formData.stallNo} onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-12 bg-transparent font-bold text-center mx-1" />,
-                        <input type="text" value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold mx-1" />.
+                        held at Hall No. <input type="text" value={formData.hallNo} placeholder="11" onChange={(e) => setFormData({ ...formData, hallNo: e.target.value })} className="border-b border-black outline-none px-1 w-12 bg-transparent font-bold text-center mx-1" />,
+                        Stall No. <input type="text" value={formData.stallNo} placeholder="1" onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-12 bg-transparent font-bold text-center mx-1" />,
+                        <input type="text" value={formData.venue} placeholder="Enter Venue" onChange={(e) => setFormData({ ...formData, venue: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold mx-1" />.
                         We have duly enclosed all the documents required for MSME Scheme Reimbursement.
                     </div>
                     <p>Request you to kindly acknowledge & consider the same for an earliest refund of the amount, we'll be highly obliged.</p>

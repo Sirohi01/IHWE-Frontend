@@ -96,25 +96,25 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
                             <tr className="border-b border-black">
                                 <td className="w-1/2 p-2 print:p-1.5 font-bold uppercase border-r border-black">NAME OF ACCOUNT HOLDER / FIRM</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.accountHolderName} onChange={(e) => setFormData({ ...formData, accountHolderName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
+                                    <input type="text" value={formData.accountHolderName} placeholder="Enter Account Holder / Firm Name" onChange={(e) => setFormData({ ...formData, accountHolderName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">COMPLETE CONTACT ADDRESS</td>
                                 <td className="p-2 print:p-1.5">
-                                    <textarea value={formData.contactAddress} onChange={(e) => setFormData({ ...formData, contactAddress: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.contactAddress} placeholder="Enter complete contact address with state & pincode" onChange={(e) => setFormData({ ...formData, contactAddress: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">MOBILE NUMBER / PH NO</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.mobileNumber} onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.mobileNumber} placeholder="Enter Phone or Mobile Number" onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">E.MAIL</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent outline-none font-bold italic" />
+                                    <input type="text" value={formData.email} placeholder="Enter E-mail address" onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full bg-transparent outline-none font-bold italic" />
                                 </td>
                             </tr>
                         </tbody>
@@ -131,19 +131,19 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
                                     <span className="font-normal normal-case italic text-[9px] opacity-60">(Name appearing in your Cheque Book)</span>
                                 </td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.accountName} onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
+                                    <input type="text" value={formData.accountName} placeholder="Enter Account Name as in Cheque Book" onChange={(e) => setFormData({ ...formData, accountName: e.target.value })} className="w-full bg-transparent outline-none uppercase font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">BRANCH NAME WITH ADDRESS, TELEPHONE NO</td>
                                 <td className="p-2 print:p-1.5">
-                                    <textarea value={formData.branchName} onChange={(e) => setFormData({ ...formData, branchName: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
+                                    <textarea value={formData.branchName} placeholder="Enter Branch Name, Full Address and Telephone No." onChange={(e) => setFormData({ ...formData, branchName: e.target.value })} className="w-full bg-transparent outline-none resize-none h-16 print:h-12 font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">BRANCH CODE</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.branchCode} onChange={(e) => setFormData({ ...formData, branchCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.branchCode} placeholder="Enter Branch Code" onChange={(e) => setFormData({ ...formData, branchCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
@@ -154,25 +154,25 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
                                     </p>
                                 </td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.accountNumber} onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.accountNumber} placeholder="Enter Full Bank Account Number" onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">IFSC CODE</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.ifscCode} onChange={(e) => setFormData({ ...formData, ifscCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.ifscCode} placeholder="Enter IFSC Code" onChange={(e) => setFormData({ ...formData, ifscCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr className="border-b border-black">
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">TYPE OF ACCOUNT (SB/CURRENT/CC)</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.accountType} onChange={(e) => setFormData({ ...formData, accountType: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.accountType} placeholder="e.g. SB/CURRENT/CC" onChange={(e) => setFormData({ ...formData, accountType: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                             <tr>
                                 <td className="p-2 print:p-1.5 font-bold uppercase border-r border-black">MICR CODE OF BANK</td>
                                 <td className="p-2 print:p-1.5">
-                                    <input type="text" value={formData.micrCode} onChange={(e) => setFormData({ ...formData, micrCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
+                                    <input type="text" value={formData.micrCode} placeholder="Enter MICR Code" onChange={(e) => setFormData({ ...formData, micrCode: e.target.value })} className="w-full bg-transparent outline-none font-bold" />
                                 </td>
                             </tr>
                         </tbody>
@@ -186,7 +186,7 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
 
             <div className="mt-10 print:mt-4 flex justify-end pr-10 print:pr-4">
                 <div className="text-center w-64 print:w-48">
-                    <input type="text" value={formData.customerName} onChange={(e) => setFormData({ ...formData, customerName: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
+                    <input type="text" value={formData.customerName} placeholder="Enter Name of Customer" onChange={(e) => setFormData({ ...formData, customerName: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
                     <p className="mt-2 font-bold uppercase text-[9px]">Signature of Customer</p>
                 </div>
             </div>
@@ -207,7 +207,7 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
                 <div className="flex justify-between items-end pt-10 print:pt-4">
                     <div className="italic font-bold opacity-30 text-[18px] print:text-[14px]">Bank's Stamp</div>
                     <div className="text-center w-64 print:w-48">
-                        <input type="text" value={formData.customerNameVerification} onChange={(e) => setFormData({ ...formData, customerNameVerification: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
+                        <input type="text" value={formData.customerNameVerification} placeholder="Name for Verification" onChange={(e) => setFormData({ ...formData, customerNameVerification: e.target.value })} className="w-full border-b border-black outline-none bg-transparent text-center font-bold" />
                         <p className="mt-2 font-bold italic text-[9px]">Signature of Customer</p>
                     </div>
                 </div>

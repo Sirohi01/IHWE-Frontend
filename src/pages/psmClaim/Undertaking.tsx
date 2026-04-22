@@ -84,32 +84,32 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
 
             <div className="space-y-6 text-justify text-[13px] leading-relaxed">
                 <p className="leading-[2]">
-                    I, <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold" />
-                    S/D/o Sh. <input type="text" value={formData.parentName} onChange={(e) => setFormData({ ...formData, parentName: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold" />,
+                    I, <input type="text" value={formData.name} placeholder="Enter Name" onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold" />
+                    S/D/o Sh. <input type="text" value={formData.parentName} placeholder="Enter Son/Daughter of Name" onChange={(e) => setFormData({ ...formData, parentName: e.target.value })} className="border-b border-black outline-none px-1 w-64 bg-transparent font-bold" />,
                     <select value={formData.designation} onChange={(e) => setFormData({ ...formData, designation: e.target.value })} className="border-b border-black outline-none bg-transparent font-bold cursor-pointer">
                         <option value="Proprietor">Proprietor</option>
                         <option value="Partner">Partner</option>
                         <option value="Director">Director</option>
                     </select> of M/s
-                    <input type="text" value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} className="border-b border-black outline-none px-1 w-[400px] bg-transparent font-bold mx-1" />
+                    <input type="text" value={formData.companyName} placeholder="Enter Company Name" onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} className="border-b border-black outline-none px-1 w-[400px] bg-transparent font-bold mx-1" />
                     bearing Udyog Aadhaar Memorandum (UAM)/ Udyam Registration (UR) No.
-                    <input type="text" value={formData.udyamNumber} onChange={(e) => setFormData({ ...formData, udyamNumber: e.target.value })} className="border-b border-black outline-none px-1 w-80 bg-transparent font-bold mt-1" />
+                    <input type="text" value={formData.udyamNumber} placeholder="Enter Udyam Registration (UR) No." onChange={(e) => setFormData({ ...formData, udyamNumber: e.target.value })} className="border-b border-black outline-none px-1 w-80 bg-transparent font-bold mt-1" />
                     located at Registered Office address of the unit/ enterprise:
-                    <textarea value={formData.officeAddress} onChange={(e) => setFormData({ ...formData, officeAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />,
+                    <textarea value={formData.officeAddress} placeholder="Enter Registered Office address" onChange={(e) => setFormData({ ...formData, officeAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />,
                     Factory address of the unit/ enterprise:
-                    <textarea value={formData.factoryAddress} onChange={(e) => setFormData({ ...formData, factoryAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />
+                    <textarea value={formData.factoryAddress} placeholder="Enter Factory address" onChange={(e) => setFormData({ ...formData, factoryAddress: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold resize-none min-h-[1.8em] mt-1" rows={1} />
                     engaged in the manufacturing activity of
-                    <input type="text" value={formData.manufacturingActivity} onChange={(e) => setFormData({ ...formData, manufacturingActivity: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold mt-1" />
+                    <input type="text" value={formData.manufacturingActivity} placeholder="Enter manufacturing activity details" onChange={(e) => setFormData({ ...formData, manufacturingActivity: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold mt-1" />
                     do hereby confirm that the information given by me is correct and accurate. M/s
                     <span className="font-bold underline px-1 whitespace-nowrap">{formData.companyName}</span> is eligible for reimbursement as per the Procurement & Marketing Support (PMS) Scheme guidelines. In case if, any information given above is found incorrect/ ineligible, then, I shall be liable to return the entire amount of reimbursement alongwith the prevailing rate of interest to the Government of India.
                 </p>
 
                 <div className="leading-[2]">
                     2. That the aforesaid unit/ enterprise had participated in the Fair/ Exhibition
-                    <input type="text" value={formData.exhibitionName} onChange={(e) => setFormData({ ...formData, exhibitionName: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold" />
-                    at stall No. <input type="text" value={formData.stallNo} onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
-                    held at <input type="text" value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} className="border-b border-black outline-none px-1 w-40 bg-transparent font-bold" />
-                    pin code <input type="text" value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
+                    <input type="text" value={formData.exhibitionName} placeholder="Enter Fair/ Exhibition Name" onChange={(e) => setFormData({ ...formData, exhibitionName: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent font-bold" />
+                    at stall No. <input type="text" value={formData.stallNo} placeholder="No." onChange={(e) => setFormData({ ...formData, stallNo: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
+                    held at <input type="text" value={formData.venue} placeholder="Enter Venue" onChange={(e) => setFormData({ ...formData, venue: e.target.value })} className="border-b border-black outline-none px-1 w-40 bg-transparent font-bold" />
+                    pin code <input type="text" value={formData.pincode} placeholder="Pincode" onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} className="border-b border-black outline-none px-1 w-24 bg-transparent font-bold text-center" />
                     from
                     <div className={`${isExporting ? 'hidden' : 'no-print'} inline-block mx-1`}>
                         <input type="date" value={formData.fromDate} onChange={(e) => setFormData({ ...formData, fromDate: e.target.value })} className="border-b border-black outline-none px-1 w-32 bg-transparent font-bold text-center" />
@@ -156,7 +156,7 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
             <div className="mt-16 flex flex-col items-end pt-10">
                 <div className="text-center w-80">
                     <p className="flex justify-center items-center gap-1 font-bold">
-                        ( <input type="text" value={formData.signatoryName} onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent text-center font-bold" /> )
+                        ( <input type="text" value={formData.signatoryName} placeholder="Enter Signatory Name" onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })} className="border-b border-black outline-none px-1 w-full bg-transparent text-center font-bold" /> )
                     </p>
                     <p className="font-bold mt-2 uppercase text-[12px]">Signature</p>
                     <p className="font-bold text-[11px] text-slate-600">Proprietor/ Partner/ Director</p>

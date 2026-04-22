@@ -44,7 +44,7 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
         },
         {
             id: 'billing',
-            label: 'Billing & Payments',
+            label: 'Invoice and Receipts',
             desc: `${fmt(paid)} paid · ${fmt(balance)} due`,
             icon: Wallet,
             accent: balance > 0 ? '#e11d48' : '#16a34a',

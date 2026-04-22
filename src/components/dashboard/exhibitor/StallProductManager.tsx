@@ -7,7 +7,7 @@ import {
     Image as ImageIcon, X, Loader2,
     CheckCircle2, AlertCircle, ShoppingBag,
     Star, Tag, ExternalLink, Mail, Phone,
-    TrendingUp, Users, Info, Layers
+    TrendingUp, Users, Info, Layers, Calendar, MapPin
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -307,16 +307,47 @@ export default function StallProductManager({ data }: { data: any }) {
                             {/* Info Grid */}
                             <div className="grid-cols-1 lg:grid-cols-3">
                                 <div className="lg:col-span-2 space-y-6">
+                                    {/* Event Details */}
+                                    {data?.eventId && (
+                                        <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
+                                            <div className="bg-[#23471d] px-6 py-3 border-b flex items-center gap-2">
+                                                <Calendar size={14} className="text-white/80" />
+                                                <span className="text-[10px] font-black text-white uppercase tracking-widest">Event Details</span>
+                                            </div>
+                                            <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                                {[
+                                                    { label: 'Event Name', value: data.eventId?.name, icon: Star },
+                                                    { label: 'Venue / Location', value: data.eventId?.location, icon: MapPin },
+                                                    { label: 'Start Date', value: data.eventId?.startDate ? new Date(data.eventId.startDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : null, icon: Calendar },
+                                                    { label: 'End Date', value: data.eventId?.endDate ? new Date(data.eventId.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : null, icon: Calendar },
+                                                ].map((item, i) => (
+                                                    <div key={i} className="space-y-1.5">
+                                                        <div className="flex items-center gap-1.5 text-slate-400">
+                                                            <item.icon size={12} />
+                                                            <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
+                                                        </div>
+                                                        <p className="text-[12px] font-bold text-slate-900">{item.value || 'N/A'}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Stall Details */}
                                     <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
                                         <div className="bg-slate-50 px-6 py-3 border-b flex items-center justify-between">
                                             <div className="px-2 py-0.5 bg-[#23471d]/10 text-[#23471d] text-[8px] font-black uppercase rounded-sm border border-[#23471d]/20">Official Allocation</div>
                                         </div>
-                                        <div className="p-4 grid grid-cols-2 sm:grid-cols-4">
+                                        <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
                                             {[
                                                 { label: 'Stall No.', value: data?.participation?.stallFor, icon: Target },
                                                 { label: 'Stall Type', value: data?.participation?.stallType, icon: Layers },
-                                                { label: 'Stall Size', value: `${data?.participation?.stallSize} SQM`, icon: Package },
+                                                { label: 'Stall Size', value: data?.participation?.stallSize ? `${data.participation.stallSize} SQM` : null, icon: Package },
                                                 { label: 'Scheme', value: data?.participation?.stallScheme, icon: Star },
+                                                { label: 'Dimension', value: data?.participation?.dimension, icon: Layers },
+                                                { label: 'Rate / SQM', value: data?.participation?.rate ? `${cur} ${Number(data.participation.rate).toLocaleString('en-IN')}` : null, icon: Target },
+                                                { label: 'Currency', value: data?.participation?.currency, icon: Star },
+                                                { label: 'Reg. ID', value: data?.registrationId, icon: Target },
                                             ].map((item, i) => (
                                                 <div key={i} className="space-y-1.5">
                                                     <div className="flex items-center gap-1.5 text-slate-400">
