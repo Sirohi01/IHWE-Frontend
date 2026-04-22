@@ -55,7 +55,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                 const img = res?.data?.headerImage || res?.headerImage;
                 if (img) setHeaderImageUrl(img.startsWith('http') ? img : `${SERVER_URL}/${img.replace(/^\//, '')}`);
             })
-            .catch(() => {});
+            .catch(() => { });
     }, []);
 
     const fb = data.financeBreakdown || {};
@@ -158,7 +158,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '40%', verticalAlign: 'middle', textAlign: 'center' }}>
                                 <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>TAX INVOICE</div>
                                 <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{data.eventId?.name || '9th International Health & Wellness Expo 2026'}</div>
-                                
+
                             </td>
                             <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle', textAlign: 'right' }}>
                                 <div style={{ fontWeight: 700, fontSize: 12, color: '#1a3a6b' }}>Original Copy</div>
@@ -183,7 +183,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                         <tr>
                             {/* Buyer */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700 }}>M/s {data.exhibitorName || '—'}</div>
+                                <div style={{ fontWeight: 700 }}>{data.exhibitorName || '—'}</div>
                                 <div style={{ marginTop: 4 }}>{data.address || ''}{data.city ? ', ' + data.city : ''}</div>
                                 <div>{data.state || ''}{data.country ? ', ' + data.country : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
