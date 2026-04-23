@@ -9,9 +9,10 @@ import StatsCounter from "./StatsCounter";
 interface HeroSectionProps {
   onRegisterVisit: () => void;
   forceNewTab?: boolean;
+  hideStats?: boolean;
 }
 
-const HeroSection = ({ onRegisterVisit, forceNewTab }: HeroSectionProps) => {
+const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionProps) => {
   const [slides, setSlides] = useState<any[]>([]);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -369,7 +370,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab }: HeroSectionProps) => {
           transition={{ duration: 1.5, delay: 0.5 }}
         />
       </section >
-      <StatsCounter variant="hero" />
+      {!hideStats && <StatsCounter variant="hero" />}
     </>
   );
 };
