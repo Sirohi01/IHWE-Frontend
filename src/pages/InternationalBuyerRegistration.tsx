@@ -120,7 +120,7 @@ const BuyerRegistration = () => {
                         </Badge>
 
                         <h1 className="text-5xl md:text-8xl font-serif font-bold text-white mb-8 italic tracking-tighter leading-[1.1]">
-                            Opening <span className="text-emerald-400">Soon.</span>
+                            Coming <span className="text-emerald-400">Soon.</span>
                         </h1>
 
                         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent mx-auto mb-10 opacity-50" />
