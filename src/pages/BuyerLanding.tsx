@@ -68,7 +68,7 @@ const BuyerLanding = () => {
                                 </div>
                                 <div className="text-left">
                                     <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mb-1">Pre-Register Interest</p>
-                                    <p className="text-white font-medium">info@ihwe.in</p>
+                                    <p className="text-white font-medium">info@namogangewellness.com</p>
                                 </div>
                             </div>
 

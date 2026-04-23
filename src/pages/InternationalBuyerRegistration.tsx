@@ -97,12 +97,12 @@ const BuyerRegistration = () => {
         return (
             <div className="min-h-screen bg-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background with Overlay */}
-                <div 
+                <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
                     style={{ backgroundImage: `url(${HeroBg})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#23471d]/95 via-black/70 to-black/90" />
-                
+
                 {/* Animated Particles/Accents */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                     <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[100px] animate-pulse" />
@@ -118,13 +118,13 @@ const BuyerRegistration = () => {
                         <Badge className="mb-6 px-4 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] uppercase tracking-[0.3em] font-black rounded-full backdrop-blur-md">
                             International Buyer Registration
                         </Badge>
-                        
+
                         <h1 className="text-5xl md:text-8xl font-serif font-bold text-white mb-8 italic tracking-tighter leading-[1.1]">
                             Opening <span className="text-emerald-400">Soon.</span>
                         </h1>
-                        
+
                         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent mx-auto mb-10 opacity-50" />
-                        
+
                         <p className="text-white/70 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed tracking-wide">
                             The gateway to India's most exclusive health and wellness sourcing event is almost ready. Prepare for structured B2B networking at IHWE 2026.
                         </p>
@@ -136,7 +136,7 @@ const BuyerRegistration = () => {
                                 </div>
                                 <div className="text-left">
                                     <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mb-1">Pre-Register Interest</p>
-                                    <p className="text-white font-medium">info@ihwe.in</p>
+                                    <p className="text-white font-medium">info@namogangewellness.com</p>
                                 </div>
                             </div>
 
