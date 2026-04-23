@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const BuyerLanding = () => {
-    const isComingSoon = true;
+    const isComingSoon = false;
     const [heroData, setHeroData] = useState<any>(null);
     const navigate = useNavigate();
 

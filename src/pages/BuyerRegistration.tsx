@@ -261,7 +261,7 @@ const PACKAGE_METADATA: Record<string, any> = {
 };
 
 const BuyerRegistration = () => {
-    const isComingSoon = true;
+    const isComingSoon = false;
     const [config, setConfig] = useState<any>(null);
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
