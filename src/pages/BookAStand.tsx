@@ -665,7 +665,8 @@ const BookAStand = () => {
         setIsPhoneLoading(true);
         setVerificationError(null);
         try {
-            const res = await verifyApi.sendPhoneOtp(formData.contact1.mobile, 'EXHIBITOR');
+            const exhibitorName = `${formData.contact1.firstName || ''} ${formData.contact1.lastName || ''}`.trim() || formData.exhibitorName || 'Exhibitor';
+            const res = await verifyApi.sendPhoneOtp(formData.contact1.mobile, 'EXHIBITOR', exhibitorName);
             if (res.success) {
                 setPhoneTimer(60);
                 setVerificationError(null);

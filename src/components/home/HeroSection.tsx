@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { heroApi, SERVER_URL } from "@/lib/api";
+import StatsCounter from "./StatsCounter";
 
 interface HeroSectionProps {
   onRegisterVisit: () => void;
@@ -105,115 +106,116 @@ const HeroSection = ({ onRegisterVisit, forceNewTab }: HeroSectionProps) => {
   if (slides.length === 0) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/6' }}>
-      <AnimatePresence initial={false} custom={direction} mode="popLayout">
-        <motion.div
-          key={current}
-          custom={direction}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 200, damping: 30 },
-            opacity: { duration: 0.8 },
-            scale: { duration: 1.2 },
-          }}
-          className="absolute inset-0 z-0"
-        >
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent z-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
-          />
-          <motion.div
-            className="absolute inset-0"
-            initial={{ scale: 1.05 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 7, ease: "easeOut" }}
-          >
-            <img
-              src={getImageUrl(slides[current].image)}
-              alt={slides[current].title}
-              className="w-full h-full object-cover"
-            />
-          </motion.div>
-        </motion.div>
-      </AnimatePresence>
-
-      <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
-
-      <div className="hidden md:flex relative z-20 container mx-auto px-6 h-full flex-col justify-center items-start text-left text-white">
-        <AnimatePresence mode="wait">
+    <>
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/6' }}>
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mt-6"
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 200, damping: 30 },
+              opacity: { duration: 0.8 },
+              scale: { duration: 1.2 },
+            }}
+            className="absolute inset-0 z-0"
           >
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="flex items-center gap-3 mb-6"
-            >
-              <span className="w-10 h-[1px] bg-white/40" />
-              <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2"
-                style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
-              >
-                <Sparkles size={12} className="text-white/70" />
-                {slides[current].subtitle}
-              </span>
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.9 }}
-              className={cn(
-                "font-bold leading-[1.05] tracking-tight text-white uppercase [&_p]:m-0 [&_p]:p-0",
-                slides[current].title2 ? "mb-1" : "mb-6",
-                !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
-              )}
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined
-              }}
-              dangerouslySetInnerHTML={{ __html: slides[current].title }}
+              className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent z-10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.5 }}
             />
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: 1.05 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 7, ease: "easeOut" }}
+            >
+              <img
+                src={getImageUrl(slides[current].image)}
+                alt={slides[current].title}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
 
-            {slides[current].title2 && (
+        <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
+
+        <div className="hidden md:flex relative z-20 container mx-auto px-6 h-full flex-col justify-center items-start text-left text-white">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-4xl mt-6"
+            >
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="flex items-center gap-3 mb-6"
+              >
+                <span className="w-10 h-[1px] bg-white/40" />
+                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2"
+                  style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
+                >
+                  <Sparkles size={12} className="text-white/70" />
+                  {slides[current].subtitle}
+                </span>
+              </motion.div>
+
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35, duration: 0.9 }}
+                transition={{ delay: 0.3, duration: 0.9 }}
                 className={cn(
-                  "font-bold mb-6 leading-[1.05] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_p]:p-0",
-                  !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
+                  "font-bold leading-[1.05] tracking-tight text-white uppercase [&_p]:m-0 [&_p]:p-0",
+                  slides[current].title2 ? "mb-1" : "mb-6",
+                  !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
                 )}
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined
+                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined
                 }}
-                dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
+                dangerouslySetInnerHTML={{ __html: slides[current].title }}
               />
-            )}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.9 }}
-              className="font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined
-              }}
-              dangerouslySetInnerHTML={{ __html: slides[current].description }}
-            />
+              {slides[current].title2 && (
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.9 }}
+                  className={cn(
+                    "font-bold mb-6 leading-[1.05] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_p]:p-0",
+                    !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
+                  )}
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined
+                  }}
+                  dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
+                />
+              )}
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.9 }}
+                className="font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined
+                }}
+                dangerouslySetInnerHTML={{ __html: slides[current].description }}
+              />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -329,44 +331,46 @@ const HeroSection = ({ onRegisterVisit, forceNewTab }: HeroSectionProps) => {
         </AnimatePresence>
       </div>
 
-      <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => handleSlideChange(i)}
-            className="group relative flex items-center justify-end"
-          >
-            <motion.span
-              className="absolute right-0 text-[10px] font-semibold text-white/0 group-hover:text-white/70 transition-all duration-300 mr-20 uppercase tracking-[0.3em]"
-              whileHover={{ x: -10 }}
+        <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => handleSlideChange(i)}
+              className="group relative flex items-center justify-end"
             >
-              0{i + 1}
-            </motion.span>
-            <div className="relative w-16 h-[2px] bg-white/20 overflow-hidden">
               <motion.span
-                className={cn("absolute left-0 top-0 h-full bg-white")}
-                initial={{ width: "0%" }}
-                animate={{ width: i === current ? "100%" : "0%" }}
-                transition={{ duration: i === current ? 8 : 0.5, ease: "linear" }}
+                className="absolute right-0 text-[10px] font-semibold text-white/0 group-hover:text-white/70 transition-all duration-300 mr-20 uppercase tracking-[0.3em]"
+                whileHover={{ x: -10 }}
+              >
+                0{i + 1}
+              </motion.span>
+              <div className="relative w-16 h-[2px] bg-white/20 overflow-hidden">
+                <motion.span
+                  className={cn("absolute left-0 top-0 h-full bg-white")}
+                  initial={{ width: "0%" }}
+                  animate={{ width: i === current ? "100%" : "0%" }}
+                  transition={{ duration: i === current ? 8 : 0.5, ease: "linear" }}
+                />
+              </div>
+              <span
+                className={cn(
+                  "ml-4 w-2 h-2 rounded-full transition-all duration-300",
+                  i === current ? "bg-white scale-100" : "bg-white/30 scale-75 group-hover:bg-white/50",
+                )}
               />
-            </div>
-            <span
-              className={cn(
-                "ml-4 w-2 h-2 rounded-full transition-all duration-300",
-                i === current ? "bg-white scale-100" : "bg-white/30 scale-75 group-hover:bg-white/50",
-              )}
-            />
-          </button>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
 
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-30"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-      />
-    </section >
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-30"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+        />
+      </section >
+      <StatsCounter variant="hero" />
+    </>
   );
 };
 

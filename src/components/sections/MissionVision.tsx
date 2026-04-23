@@ -66,7 +66,7 @@ const MissionVision: React.FC = () => {
 
   return (
     <section 
-      className="py-16 text-white relative overflow-hidden"
+      className="py-8 text-white relative overflow-hidden"
       style={{ backgroundColor: data.backgroundColor }}
     >
       <div className="absolute right-0 top-0 w-1/3 h-full bg-white/5 skew-x-12 transform origin-top" />
@@ -74,26 +74,30 @@ const MissionVision: React.FC = () => {
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-start">
 
-          {/* OUR MISSION */}
-          <div className="text-center" data-aos="fade-right">
-            <IconCompMission className="w-12 h-12 text-[#d26019] mx-auto mb-5" />
-            <h2 className="text-2xl md:text-4xl font-inter mb-6">{data.mission.title}</h2>
-            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90">
-              {renderDescription(data.mission.description, data.mission.highlightText)}
-            </p>
+       
+                 {/* OUR VISION */}
+          <div className="text-left" data-aos="fade-left">
+            <IconCompVision className="w-8 h-8 text-[#d26019] mb-3" />
+            <h2 className="text-xl md:text-2xl font-inter mb-4">{data.vision.title}</h2>
+            <div className="text-base md:text-lg font-light leading-relaxed opacity-90 prose prose-invert max-w-none text-justify"
+              style={{ textAlign: 'justify' }}
+              dangerouslySetInnerHTML={{ __html: data.vision.description }} />
           </div>
 
-          {/* DIVIDER */}
+             {/* DIVIDER */}
           <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-3/4 bg-white/20" />
 
-          {/* OUR VISION */}
-          <div className="text-center" data-aos="fade-left">
-            <IconCompVision className="w-12 h-12 text-[#d26019] mx-auto mb-5" />
-            <h2 className="text-2xl md:text-4xl font-inter mb-6">{data.vision.title}</h2>
-            <p className="text-lg md:text-xl font-light leading-relaxed opacity-90">
-              {renderDescription(data.vision.description, data.vision.highlightText)}
-            </p>
+
+
+             {/* OUR MISSION */}
+          <div className="text-left" data-aos="fade-right">
+            <IconCompMission className="w-8 h-8 text-[#d26019] mb-3" />
+            <h2 className="text-xl md:text-2xl font-inter mb-4">{data.mission.title}</h2>
+            <div className="text-base md:text-lg font-light leading-relaxed opacity-90 prose prose-invert max-w-none text-justify"
+              style={{ textAlign: 'justify' }}
+              dangerouslySetInnerHTML={{ __html: data.mission.description }} />
           </div>
+
 
         </div>
       </div>
