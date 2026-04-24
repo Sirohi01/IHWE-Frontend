@@ -209,56 +209,7 @@ const loadRazorpayScript = () => {
     });
 };
 
-const PACKAGE_METADATA: Record<string, any> = {
-    "Standard Buyer Pass": {
-        tagline: "For Emerging Buyers & Business Explorers",
-        description: "Designed for professionals who want to explore new products, suppliers, and market opportunities through structured Buyer–Seller interactions.",
-        whyChoose: "A great starting point to explore opportunities and build initial business connections.",
-        cta: "Register Now",
-        color: "blue",
-        badge: null
-    },
-    "VIP Buyer Pass": {
-        tagline: "For Serious Buyers & Decision Makers",
-        description: "Crafted for high-intent buyers who are looking for structured, result-oriented meetings and premium networking.",
-        whyChoose: "Perfect for buyers who want focused meetings, comfort, and faster business outcomes.",
-        cta: "Upgrade to VIP",
-        badge: "Recommended",
-        color: "yellow"
-    },
-    "ICOA Standard Buyer Membership": {
-        tagline: "For Active Buyers & Market Explorers",
-        description: "The Buyer–Seller Meet at IHWE 2026 is being conducted in association with the International Council of AYUSH (ICOA), bringing you access to a trusted network of verified suppliers and brands.",
-        whyChoose: "Ideal for buyers who want to explore the AYUSH and wellness ecosystem and build reliable connections.",
-        cta: "Become a Member",
-        color: "blue",
-        badge: null
-    },
-    "ICOA VIP Buyer Membership": {
-        tagline: "For Serious Buyers & Decision Makers",
-        description: "Experience structured and high-value business networking through ICOA-curated Buyer–Seller Meets at IHWE and beyond.",
-        whyChoose: "Best suited for buyers who want focused meetings, verified suppliers, and faster business outcomes.",
-        cta: "Upgrade to VIP Membership",
-        badge: "Recommended",
-        color: "yellow"
-    },
-    "ICOA Elite Buyer Membership": {
-        tagline: "For High-Value & Institutional Buyers",
-        description: "An exclusive membership offering a fully managed sourcing experience through ICOA’s curated network and IHWE platform.",
-        whyChoose: "Designed for buyers who want a complete sourcing ecosystem with strategic business support.",
-        cta: "Get Elite Membership",
-        color: "red",
-        badge: null
-    },
-    "ICOA Buyer Membership": {
-        tagline: "For Serious Buyers Seeking Year-Round Opportunities",
-        description: "Extend your benefits beyond the event with ICOA Buyer Membership, offering continuous access to curated sourcing opportunities and supplier connections throughout the year.",
-        whyChoose: "Perfect for buyers who want continuous business opportunities, not just a one-time event experience.",
-        cta: "Get Membership",
-        badge: "Best Value",
-        color: "green"
-    }
-};
+
 
 const BuyerRegistration = () => {
     const isComingSoon = false;
@@ -1607,129 +1558,36 @@ const BuyerRegistration = () => {
 
                                     <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
                                         <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
-
-                                        <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
+                                        <div className="relative">
                                             {!showMembershipOptions ? (
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                    {passPackages.map((pkg: any) => {
-                                                        const meta = PACKAGE_METADATA[pkg.name] || {};
-                                                        const isSelected = formData.registrationCategory === pkg.name;
-                                                        const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
-                                                        const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
-
-                                                        return (
-                                                            <div
-                                                                key={pkg.name}
-                                                                onClick={() => handlePackageSelection(pkg)}
-                                                                className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
-                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                `}
-                                                            >
-                                                                {meta.badge && (
-                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
-                                                                        ⭐ {meta.badge}
-                                                                    </div>
-                                                                )}
-
-                                                                <div className="mb-3">
-                                                                    <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
-                                                                        {pkg.name} – ₹{pkg.price}
-                                                                    </h4>
-                                                                    <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                        {meta.tagline}
-                                                                    </p>
-                                                                </div>
-
-                                                                <div className="flex-1 space-y-4">
-                                                                    <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                        {meta.description}
-                                                                    </p>
-
-                                                                    <div className="space-y-1.5">
-                                                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                        <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
-                                                                            {pkg.benefits.map((b: string, i: number) => (
-                                                                                <li key={i} className="flex items-start gap-2">
-                                                                                    <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
-                                                                                    <span>{b}</span>
-                                                                                </li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </div>
-
-                                                                    <div className={`p-2 rounded-lg ${colorScheme} border`}>
-                                                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
-                                                                        <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                            {meta.whyChoose}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                `}>
-                                                                    {meta.cta || "Select Plan"}
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })}
-
-                                                    {/* Membership Trigger Card */}
-                                                    <div
-                                                        onClick={() => setShowMembershipOptions(true)}
-                                                        className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
-                                                        `}
-                                                    >
-                                                        <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
-                                                        <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
-                                                            View More Plans →
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ) : (
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center justify-between px-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
-                                                        </div>
-                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                    <div className="flex items-center gap-2 px-2">
+                                                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                                        <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Available Registration Passes</p>
                                                     </div>
 
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                        {membershipPackages.map((pkg: any) => {
-                                                            const meta = PACKAGE_METADATA[pkg.name] || {};
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+                                                        {passPackages.map((pkg: any) => {
                                                             const isSelected = formData.registrationCategory === pkg.name;
-
-                                                            let colorScheme = 'border-blue-400 bg-blue-50/10';
-                                                            let accentColor = 'text-blue-700';
-                                                            let badgeColor = 'bg-blue-500';
-
-                                                            if (meta.color === 'yellow') {
-                                                                colorScheme = 'border-amber-400 bg-amber-50/10';
-                                                                accentColor = 'text-amber-700';
-                                                                badgeColor = 'bg-amber-400';
-                                                            } else if (meta.color === 'red') {
-                                                                colorScheme = 'border-red-400 bg-red-50/10';
-                                                                accentColor = 'text-red-700';
-                                                                badgeColor = 'bg-red-500';
-                                                            } else if (meta.color === 'green') {
-                                                                colorScheme = 'border-emerald-400 bg-emerald-50/10';
-                                                                accentColor = 'text-emerald-700';
-                                                                badgeColor = 'bg-emerald-500';
-                                                            }
+                                                            const colorMap: Record<string, any> = {
+                                                                blue: { border: 'border-blue-400 bg-blue-50/10', accent: 'text-blue-700', badge: 'bg-emerald-500' },
+                                                                yellow: { border: 'border-amber-400 bg-amber-50/10', accent: 'text-amber-700', badge: 'bg-amber-400' },
+                                                                green: { border: 'border-emerald-400 bg-emerald-50/10', accent: 'text-emerald-700', badge: 'bg-emerald-500' },
+                                                                red: { border: 'border-red-400 bg-red-50/10', accent: 'text-red-700', badge: 'bg-red-500' }
+                                                            };
+                                                            const theme = colorMap[pkg.color] || colorMap.blue;
 
                                                             return (
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
                                                                         ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
-                                                                    {meta.badge && (
-                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
-                                                                            ⭐ {meta.badge}
+                                                                    {pkg.badge && (
+                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                            ⭐ {pkg.badge}
                                                                         </div>
                                                                     )}
 
@@ -1737,14 +1595,14 @@ const BuyerRegistration = () => {
                                                                         <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ₹{pkg.price}
                                                                         </h4>
-                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                            {meta.tagline}
+                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
+                                                                            {pkg.tagline}
                                                                         </p>
                                                                     </div>
 
                                                                     <div className="flex-1 space-y-4">
                                                                         <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                            {meta.description}
+                                                                            {pkg.description}
                                                                         </p>
 
                                                                         <div className="space-y-1.5">
@@ -1759,10 +1617,10 @@ const BuyerRegistration = () => {
                                                                             </ul>
                                                                         </div>
 
-                                                                        <div className={`p-2 rounded-lg ${colorScheme} border`}>
+                                                                        <div className={`p-2 rounded-lg ${theme.border} border`}>
                                                                             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
                                                                             <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                                {meta.whyChoose}
+                                                                                {pkg.whyChoose}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -1770,7 +1628,102 @@ const BuyerRegistration = () => {
                                                                     <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
                                                                         ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
                                                                     `}>
-                                                                        {meta.cta || "Select Plan"}
+                                                                        {pkg.cta || "Select Plan"}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+
+                                                        {/* Membership Trigger Card */}
+                                                        {membershipPackages.length > 0 && (
+                                                            <div
+                                                                onClick={() => setShowMembershipOptions(true)}
+                                                                className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
+                                                                `}
+                                                            >
+                                                                <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
+                                                                <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
+                                                                    View More Plans →
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between px-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
+                                                        </div>
+                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                                                        {membershipPackages.map((pkg: any) => {
+                                                            const isSelected = formData.registrationCategory === pkg.name;
+
+                                                            const colorThemes: any = {
+                                                                blue: { border: 'border-blue-400 bg-blue-50/10', accent: 'text-blue-700', badge: 'bg-blue-500' },
+                                                                yellow: { border: 'border-amber-400 bg-amber-50/10', accent: 'text-amber-700', badge: 'bg-amber-400' },
+                                                                green: { border: 'border-emerald-400 bg-emerald-50/10', accent: 'text-emerald-700', badge: 'bg-emerald-500' },
+                                                                red: { border: 'border-red-400 bg-red-50/10', accent: 'text-red-700', badge: 'bg-red-500' }
+                                                            };
+
+                                                            const theme = colorThemes[pkg.color || 'blue'] || colorThemes.blue;
+
+                                                            return (
+                                                                <div
+                                                                    key={pkg.name}
+                                                                    onClick={() => handlePackageSelection(pkg)}
+                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    `}
+                                                                >
+                                                                    {pkg.badge && (
+                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                            ⭐ {pkg.badge}
+                                                                        </div>
+                                                                    )}
+
+                                                                    <div className="mb-3">
+                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                            {pkg.name} – ₹{pkg.price}
+                                                                        </h4>
+                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
+                                                                            {pkg.tagline}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    <div className="flex-1 space-y-4">
+                                                                        <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
+                                                                            {pkg.description}
+                                                                        </p>
+
+                                                                        <div className="space-y-1.5">
+                                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
+                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                                {pkg.benefits.map((b: string, i: number) => (
+                                                                                    <li key={i} className="flex items-start gap-2">
+                                                                                        <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
+                                                                                        <span>{b}</span>
+                                                                                    </li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+
+                                                                        <div className={`p-2 rounded-lg ${theme.border} border`}>
+                                                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
+                                                                            <p className="text-[10px] text-slate-700 font-semibold leading-snug">
+                                                                                {pkg.whyChoose}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    `}>
+                                                                        {pkg.cta || "Select Plan"}
                                                                     </div>
                                                                 </div>
                                                             );
