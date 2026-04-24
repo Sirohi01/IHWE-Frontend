@@ -44,7 +44,7 @@ import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, po
 import { toast } from "sonner";
 import { useRef, useEffect as useEffectDropdown } from "react";
 
-// ─── Reusable Multi-Select Dropdown ─────────────────────────────────────────
+
 interface MultiSelectDropdownProps {
     options: string[];
     selected: string[];
@@ -128,7 +128,7 @@ const MultiSelectDropdown = ({
 
     return (
         <div ref={ref} className="relative w-full">
-            {/* Trigger */}
+
             <button
                 type="button"
                 onClick={() => setOpen((p) => !p)}
@@ -167,7 +167,7 @@ const MultiSelectDropdown = ({
                 />
             </button>
 
-            {/* Dropdown Panel */}
+
             {open && (
                 <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-[220px] overflow-y-auto custom-scrollbar">
                     {options.length === 0 ? (
@@ -196,7 +196,7 @@ const MultiSelectDropdown = ({
         </div>
     );
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 
 const loadRazorpayScript = () => {
@@ -520,7 +520,7 @@ const BuyerRegistration = () => {
     };
 
     const isFormValidForPayment = () => {
-        // Check all required fields
+
         const requiredFields = [
             'fullName', 'designation', 'companyName', 'businessType',
             'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
@@ -531,7 +531,7 @@ const BuyerRegistration = () => {
             'matchmakingInterest'
         ];
 
-        // Only require B2B specific fields if interested in pre-scheduled meetings
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             requiredFields.push('preferredMeetingDay', 'preferredTimeSlot');
         }
@@ -542,7 +542,7 @@ const BuyerRegistration = () => {
             }
         }
 
-        // Check format validations
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailAddress)) {
             return false;
         }
@@ -551,7 +551,7 @@ const BuyerRegistration = () => {
             return false;
         }
 
-        // Check multi-selects
+
         if (formData.preferredSupplierRegion.length === 0) {
             return false;
         }
@@ -559,7 +559,7 @@ const BuyerRegistration = () => {
             return false;
         }
 
-        // Check B2B multi-selects only if Yes
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             if (formData.preferredMeetingCategories.length === 0) return false;
             if (formData.meetingObjectives.length === 0) return false;
@@ -587,7 +587,7 @@ const BuyerRegistration = () => {
             'matchmakingInterest', 'registrationCategory'
         ];
 
-        // Conditional B2B requirements
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             fieldsToValidate.push('preferredMeetingDay', 'preferredTimeSlot');
         }
@@ -600,7 +600,7 @@ const BuyerRegistration = () => {
             }
         });
 
-        // 2. Format Validations
+
         if (formData.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailAddress)) {
             newErrors.emailAddress = "Invalid email format";
             isValid = false;
@@ -611,7 +611,7 @@ const BuyerRegistration = () => {
             isValid = false;
         }
 
-        // 3. Multi-selects
+
         if (formData.preferredSupplierRegion.length === 0) {
             newErrors.preferredSupplierRegion = "Select at least one region";
             isValid = false;
@@ -621,7 +621,7 @@ const BuyerRegistration = () => {
             isValid = false;
         }
 
-        // B2B multi-selects
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             if (formData.preferredMeetingCategories.length === 0) {
                 newErrors.preferredMeetingCategories = "Select at least one category";
@@ -637,7 +637,7 @@ const BuyerRegistration = () => {
             }
         }
 
-        // 4. OTP Verification
+
         if (!emailOtpVerified) {
             newErrors.emailAddress = "Please verify your email via OTP";
             isValid = false;
@@ -719,11 +719,11 @@ const BuyerRegistration = () => {
     };
 
     const handlePackageSelection = (pkg: any) => {
-        // Run validation to show exact errors to the user
+
         const isValid = validateForm(true);
 
         if (!isValid) {
-            // Find missing fields to tell the user exactly what's wrong
+
             const requiredBase = [
                 'fullName', 'designation', 'companyName', 'businessType',
                 'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
@@ -779,7 +779,7 @@ const BuyerRegistration = () => {
 
             toast.error(`⚠️ Missing fields: ${missingList}. Please check highlighted sections.`);
 
-            // Scroll to the first error element for better UX
+
             setTimeout(() => {
                 const firstError = document.querySelector('.border-red-400, .text-red-500, [data-error="true"]');
                 if (firstError) {
@@ -1749,7 +1749,7 @@ const BuyerRegistration = () => {
                 </div>
             </section >
 
-            {/* Comprehensive Terms & Conditions Modal with Policies */}
+
             <AnimatePresence>
                 {
                     showTermsModal && tempSelectedPackage && (
@@ -1765,7 +1765,7 @@ const BuyerRegistration = () => {
                                 exit={{ scale: 0.9, y: 20 }}
                                 className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
                             >
-                                {/* Header */}
+
                                 <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
                                     <div>
                                         <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
@@ -1778,7 +1778,7 @@ const BuyerRegistration = () => {
                                     </button>
                                 </div>
 
-                                {/* Policy Tabs */}
+
                                 <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
                                     <button
                                         onClick={() => setActivePolicyTab('payment')}
@@ -1802,7 +1802,7 @@ const BuyerRegistration = () => {
                                     </button>
                                 </div>
 
-                                {/* Policy Content */}
+
                                 <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
                                     {loadingPolicies ? (
                                         <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -1849,7 +1849,7 @@ const BuyerRegistration = () => {
                                     )}
                                 </div>
 
-                                {/* Footer with Consent Checkboxes */}
+
                                 <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
                                     <div className="space-y-2">
                                         {activePolicyTab === 'payment' && (
@@ -1925,7 +1925,7 @@ const BuyerRegistration = () => {
                 }
             </AnimatePresence >
 
-            {/* ── PAYMENT CONFIRMATION MODAL ── */}
+
             <AnimatePresence>
                 {
                     showPaymentConfirmModal && tempSelectedPackage && (
@@ -1941,7 +1941,7 @@ const BuyerRegistration = () => {
                                 exit={{ scale: 0.85, y: 30 }}
                                 className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
                             >
-                                {/* Header */}
+
                                 <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                                         <CreditCard size={20} className="text-emerald-300" />
@@ -1952,9 +1952,9 @@ const BuyerRegistration = () => {
                                     </div>
                                 </div>
 
-                                {/* Body */}
+
                                 <div className="p-6 space-y-5">
-                                    {/* Non-refundable notice */}
+
                                     <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
                                         <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
                                         <div>
@@ -1970,7 +1970,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* Package summary */}
+
                                     <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
                                         <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
                                         <div className="flex justify-between items-center">
@@ -1985,7 +1985,7 @@ const BuyerRegistration = () => {
                                     </p>
                                 </div>
 
-                                {/* Actions */}
+
                                 <div className="px-6 pb-6 grid grid-cols-2 gap-3">
                                     <Button
                                         variant="outline"
