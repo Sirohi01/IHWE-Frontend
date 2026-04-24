@@ -1566,7 +1566,7 @@ const BuyerRegistration = () => {
                                                         <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Available Registration Passes</p>
                                                     </div>
 
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
                                                         {passPackages.map((pkg: any) => {
                                                             const isSelected = formData.registrationCategory === pkg.name;
                                                             const colorMap: Record<string, any> = {
