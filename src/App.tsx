@@ -59,14 +59,15 @@ const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
 const BuyerLogin = lazy(() => import("./pages/BuyerLogin"));
-import BuyerDashboardLayout from "./pages/buyer/BuyerDashboardLayout";
-import BuyerOverview from "./pages/buyer/dashboard/Overview";
-import BuyerRegistrationProfile from "./pages/buyer/dashboard/RegistrationProfile";
-import BuyerDetailsPage from "./pages/buyer/dashboard/BuyerDetails";
-import BuyerExhibitors from "./pages/buyer/dashboard/Exhibitors";
-import BuyerDirectoryPage from "./pages/buyer/dashboard/BuyerDirectory";
-import BuyerPaymentInfo from "./pages/buyer/dashboard/PaymentInfo";
-import BuyerHistory from "./pages/buyer/dashboard/History";
+const BuyerDashboard = lazy(() => import("./pages/buyer/BuyerDashboard"));
+const BuyerDashboardHome = lazy(() => import("./pages/buyer/BuyerDashboardHome"));
+const BuyerProfilePage = lazy(() => import("./pages/buyer/tabs/BuyerProfilePage"));
+const BuyerChatPage = lazy(() => import("./pages/buyer/tabs/BuyerChatPage"));
+const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
+const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
+const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
+import { BuyerCalendarPage, BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
+
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
@@ -167,14 +168,15 @@ const App = () => {
                 <Route path="/buyer-scan" element={<BuyerScan />} />
 
                 {/* Buyer Dashboard Routes */}
-                <Route path="/buyer-dashboard" element={<BuyerDashboardLayout />}>
-                  <Route index element={<BuyerOverview />} />
-                  <Route path="profile" element={<BuyerRegistrationProfile />} />
-                  <Route path="details" element={<BuyerDetailsPage />} />
-                  <Route path="exhibitors" element={<BuyerExhibitors />} />
-                  <Route path="directory" element={<BuyerDirectoryPage />} />
-                  <Route path="payments" element={<BuyerPaymentInfo />} />
-                  <Route path="history" element={<BuyerHistory />} />
+                <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
+                  <Route index element={<BuyerDashboardHome />} />
+                  <Route path="profile" element={<BuyerProfilePage />} />
+                  <Route path="chat" element={<BuyerChatPage />} />
+                  <Route path="bsm" element={<BuyerBSMPage />} />
+                  <Route path="calendar" element={<BuyerCalendarPage />} />
+                  <Route path="invoices" element={<BuyerInvoicesPage />} />
+                  <Route path="notifications" element={<BuyerNotificationsPage />} />
+                  <Route path="documentation" element={<BuyerDocumentationPage />} />
                 </Route>
               </Routes>
             </Suspense>
