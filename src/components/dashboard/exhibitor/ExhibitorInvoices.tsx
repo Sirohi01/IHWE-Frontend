@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Printer, FileText, Receipt, Download } from 'lucide-react';
+import { Printer, FileText, Receipt } from 'lucide-react';
 import { SERVER_URL } from '@/lib/api';
 
 interface InvoicesProps {
@@ -42,7 +42,11 @@ function DownloadBtn({ url, label, icon: Icon }: any) {
 
 export default function ExhibitorInvoices({ data, settings, cur, total, paid, balance, paidPct, regDate }: InvoicesProps) {
     const printRef = useRef<HTMLDivElement>(null);
+    const receiptRef = useRef<HTMLDivElement>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
+    const history = data.paymentHistory || [];
+    const [selectedInvoiceIdx, setSelectedInvoiceIdx] = useState<number>(history.length > 0 ? 0 : -1);
+    const [viewMode, setViewMode] = useState<'invoice' | 'receipt'>('invoice');
 
     useEffect(() => {
         const token = localStorage.getItem('exhibitorToken');
@@ -61,17 +65,22 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const fb = data.financeBreakdown || {};
     const p = data.participation || {};
     const c1 = data.contact1 || {};
-    const history = data.paymentHistory || [];
-    const latestPayment = history.length > 0 ? history[history.length - 1] : null;
+    // Selected payment for current invoice view
+    const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
+    const latestPayment = selectedPayment || (history.length > 0 ? history[history.length - 1] : null);
     const latestTxId = latestPayment?.transactionId || latestPayment?.razorpayPaymentId || data.paymentId || data.manualPaymentDetails?.transactionId || '—';
     const latestMethod = latestPayment?.method || data.manualPaymentDetails?.method || data.paymentMode || '—';
 
-    const fmt = (n: number) => `${cur} ${Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-    const fmtNum = (n: number) => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    const isFullPayment = data.paymentPlanType === 'full' || fb.isFullPayment === true;
+    // Only show full payment discount if plan was actually full payment
+    const effectiveDiscount = (fb.stallDiscountAmount || 0) + (isFullPayment ? (fb.discountAmount || 0) : 0);
 
     const grossAmt = fb.grossAmount || p.amount || 0;
     const taxableVal = fb.subtotal || p.amount || 0;
+    const effectiveTaxableVal = isFullPayment ? taxableVal : (fb.subtotal1 || taxableVal + (fb.discountAmount || 0));
     const gstAmt = fb.gstAmount || Math.round(taxableVal * 0.18);
+    const fmt = (n: number) => `${cur} ${Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+    const fmtNum = (n: number) => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
     const cgst = Math.round(gstAmt / 2);
     const sgst = Math.round(gstAmt / 2);
     const tdsAmt = fb.tdsAmount || 0;
@@ -87,32 +96,35 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
 
     const receiptUrl = data.receiptUrl ? (data.receiptUrl.startsWith('http') ? data.receiptUrl : `${SERVER_URL}${data.receiptUrl}`) : null;
 
-    // Invoice No: 9IHWE/EX/INV/2026/001 format
+    // Invoice No: 9IHWE/EX/INV/2026/001/P1 format (P1, P2... for each payment)
     const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
     const invoiceYear = new Date().getFullYear();
-    const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}`;
+    const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
+    const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}${paymentSuffix}`;
     const invoiceDate = latestPayment?.paidAt ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : regDate;
+    // Amount for this specific invoice = this payment's amount
+    const thisPaymentAmt = selectedPayment ? selectedPayment.amount : (paid || netPayable);
+    // Cumulative paid up to and including this payment
+    const cumulativePaid = selectedInvoiceIdx >= 0
+        ? history.slice(0, selectedInvoiceIdx + 1).reduce((s: number, h: any) => s + (h.amount || 0), 0)
+        : paid;
+    const remainingAfter = Math.max(0, netPayable - cumulativePaid);
 
     const handlePrint = () => {
         const content = printRef.current;
         if (!content) return;
         const win = window.open('', '_blank', 'width=900,height=700');
         if (!win) return;
-        win.document.write(`<!DOCTYPE html><html><head><title>Tax Invoice - ${data.registrationId}</title>
+        win.document.write(`<!DOCTYPE html><html><head><title>Invoice ${invoiceNo} - ${data.registrationId}</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
-            .invoice-wrap { width: 100%; max-width: 900px; margin: 0 auto; padding: 10px; }
             table { width: 100%; border-collapse: collapse; }
             td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
-            .no-border td, .no-border th { border: none; }
-            .header-top { background: #1a3a6b; color: #fff; }
-            .section-title { background: #1a3a6b; color: #fff; font-weight: bold; text-align: center; padding: 4px; font-size: 12px; }
             .bold { font-weight: bold; }
             .right { text-align: right; }
             .center { text-align: center; }
-            .green { color: #23471d; }
-            .red { color: #dc2626; }
+            .no-print { display: none !important; }
             img { max-width: 100%; }
             @page { size: A4; margin: 8mm; }
         </style></head><body>`);
@@ -120,19 +132,68 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
         win.document.write('</body></html>');
         win.document.close();
         win.focus();
-        setTimeout(() => { win.print(); win.close(); }, 500);
+        setTimeout(() => { win.print(); win.close(); }, 600);
+    };
+
+    const handlePrintReceipt = () => {
+        const content = receiptRef.current;
+        if (!content) return;
+        const win = window.open('', '_blank', 'width=900,height=700');
+        if (!win) return;
+        win.document.write(`<!DOCTYPE html><html><head><title>Receipt ${invoiceNo} - ${data.registrationId}</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
+            table { width: 100%; border-collapse: collapse; }
+            td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
+            .no-print { display: none !important; }
+            img { max-width: 100%; }
+            @page { size: A4; margin: 8mm; }
+        </style></head><body>`);
+        win.document.write(content.innerHTML);
+        win.document.write('</body></html>');
+        win.document.close();
+        win.focus();
+        setTimeout(() => { win.print(); win.close(); }, 600);
     };
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Action Buttons */}
-            <div className="flex gap-2 flex-wrap mb-4 no-print">
-                <button onClick={handlePrint}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
-                    <Printer size={14} /> Print / Download Invoice
-                </button>
-                {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
-                {data.receiptPdfUrl && <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />}
+
+            {/* Action Buttons + Payment Selector in one row */}
+            <div className="flex items-center justify-between gap-3 mb-4 no-print flex-wrap">
+                {/* Left: Print + Download buttons */}
+                <div className="flex gap-2 flex-wrap items-center">
+                    <button onClick={handlePrint}
+                        className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
+                        <Printer size={14} /> Print Tax Invoice
+                    </button>
+                    {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
+                    {selectedPayment?.receiptPdfUrl && (
+                        <DownloadBtn url={selectedPayment.receiptPdfUrl} label={`Receipt #${selectedInvoiceIdx + 1} PDF`} icon={Receipt} />
+                    )}
+                    {!selectedPayment?.receiptPdfUrl && data.receiptPdfUrl && (
+                        <DownloadBtn url={data.receiptPdfUrl} label="Latest Receipt PDF" icon={Receipt} />
+                    )}
+                </div>
+
+                {/* Right: Payment dropdown */}
+                {history.length > 0 && (
+                    <div className="flex items-center gap-2">
+                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Payment:</label>
+                        <select
+                            value={selectedInvoiceIdx}
+                            onChange={(e) => setSelectedInvoiceIdx(Number(e.target.value))}
+                            className="px-3 py-2 border border-slate-300 rounded text-[11px] font-bold bg-white focus:border-[#1a3a6b] focus:ring-1 focus:ring-[#1a3a6b] outline-none"
+                        >
+                            {history.map((h: any, i: number) => (
+                                <option key={i} value={i}>
+                                    #{i + 1} — {cur} {Number(h.amount || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })} — {new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
             </div>
 
             {/* Printable Invoice */}
@@ -207,6 +268,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                                         ['Reg. ID', data.registrationId || '—'],
                                         ['Payment Mode', latestMethod],
                                         ['Txn. ID', latestTxId],
+                                        ['Payment Amount', `${cur} ${fmtNum(thisPaymentAmt)}`],
                                         ['Reverse Charge', 'No'],
                                     ].map(([label, value]) => (
                                         <tr key={label}>
@@ -241,8 +303,8 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{p.stallSize || 0} Sqm.</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(p.rate || 0)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(grossAmt)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum((fb.stallDiscountAmount || 0) + (fb.discountAmount || 0))}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxableVal)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(effectiveDiscount)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(effectiveTaxableVal)}</td>
                         </tr>
                         {/* Empty rows */}
                         {[1, 2, 3].map(i => (
@@ -310,9 +372,9 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                     <tbody>
                         <tr style={{ background: '#f8fafc' }}>
                             <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(invoiceTotal)}</td>
+                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(thisPaymentAmt))}</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Invoice Value</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(invoiceTotal)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(thisPaymentAmt)}</td>
                         </tr>
                     </tbody>
                 </table>

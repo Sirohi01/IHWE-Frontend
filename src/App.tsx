@@ -25,6 +25,7 @@ const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalB
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
+const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
@@ -58,6 +59,15 @@ const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
 const BuyerLogin = lazy(() => import("./pages/BuyerLogin"));
+import BuyerDashboardLayout from "./pages/buyer/BuyerDashboardLayout";
+import BuyerOverview from "./pages/buyer/dashboard/Overview";
+import BuyerRegistrationProfile from "./pages/buyer/dashboard/RegistrationProfile";
+import BuyerDetailsPage from "./pages/buyer/dashboard/BuyerDetails";
+import BuyerExhibitors from "./pages/buyer/dashboard/Exhibitors";
+import BuyerDirectoryPage from "./pages/buyer/dashboard/BuyerDirectory";
+import BuyerPaymentInfo from "./pages/buyer/dashboard/PaymentInfo";
+import BuyerHistory from "./pages/buyer/dashboard/History";
+import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
@@ -82,12 +92,13 @@ const App = () => {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <Toaster />
-          <Sonner />
           <BrowserRouter>
-            <BrochureDownloadPopup />
-            <SeoHelmet />
-            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#071306]"><div className="w-10 h-10 border-4 border-[#d26019] border-t-transparent rounded-full animate-spin"></div></div>}>
+            <BuyerAuthProvider>
+              <Toaster />
+              <Sonner />
+              <BrochureDownloadPopup />
+              <SeoHelmet />
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="w-10 h-10 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div></div>}>
               <Routes>
                 <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
                   <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
@@ -99,6 +110,7 @@ const App = () => {
                   <Route path="/exhibition" element={<Exhibition />} />
                   <Route path="/media-registration" element={<MediaRegistration />} />
                   <Route path="/speaker-registration" element={<SpeakerRegistration />} />
+                  <Route path="/seller-registration" element={<SellerRegistration />} />
                   <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
                   <Route path="/why-exhibit" element={<WhyExhibit />} />
                   <Route path="/partners" element={<Partners />} />
@@ -153,9 +165,21 @@ const App = () => {
                 </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
                 <Route path="/buyer-scan" element={<BuyerScan />} />
+
+                {/* Buyer Dashboard Routes */}
+                <Route path="/buyer-dashboard" element={<BuyerDashboardLayout />}>
+                  <Route index element={<BuyerOverview />} />
+                  <Route path="profile" element={<BuyerRegistrationProfile />} />
+                  <Route path="details" element={<BuyerDetailsPage />} />
+                  <Route path="exhibitors" element={<BuyerExhibitors />} />
+                  <Route path="directory" element={<BuyerDirectoryPage />} />
+                  <Route path="payments" element={<BuyerPaymentInfo />} />
+                  <Route path="history" element={<BuyerHistory />} />
+                </Route>
               </Routes>
             </Suspense>
             <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
+            </BuyerAuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>

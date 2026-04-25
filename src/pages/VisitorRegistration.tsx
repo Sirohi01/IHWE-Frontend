@@ -283,7 +283,8 @@ const VisitorRegistration = () => {
         }
         setIsSendingPhoneOtp(true);
         try {
-            const res = await verifyApi.sendPhoneOtp(formData.mobileNo);
+            const visitorName = `${formData.firstName || ''} ${formData.lastName || ''}`.trim() || 'Visitor';
+            const res = await verifyApi.sendPhoneOtp(formData.mobileNo, 'VISITOR', visitorName);
             if (res.success) {
                 setPhoneOtpSent(true);
                 setPhoneTimer(60);
