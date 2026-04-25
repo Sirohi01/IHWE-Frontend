@@ -8,8 +8,14 @@ import {
     Calendar,
     MapPin,
     Mic2,
-    Phone
+    Phone,
+    AtSign,
+    ShieldCheck,
+    Globe,
+    Lock
 } from "lucide-react";
+import HeroBg from "@/assets/buyer.jpg";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -225,7 +231,7 @@ const BookAStand = () => {
     const [verificationError, setVerificationError] = useState<string | null>(null);
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
-
+    const [isComingSoon, setIsComingSoon] = useState(true);
     // Initial Data Fetch
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -363,7 +369,7 @@ const BookAStand = () => {
         const size = Number(part.stallSize) || 0;
         const rate = Number(part.rate) || 0;
         const incrementPercent = selectedStall.incrementPercentage || 0;
-        
+
         // 1. Gross cost before any discounts
         const baseCost = size * rate;
         const plIncrement = (baseCost * incrementPercent) / 100;
@@ -377,10 +383,10 @@ const BookAStand = () => {
         // 3. Organization-wide Full Payment Discount
         const currentEvent = events.find(e => e._id === selectedEventId);
         const selectedPlan = (currentEvent?.paymentPlans || []).find((p: any) => p.id === formData.paymentPlanType);
-        
+
         // Check if full payment (either by ID or by 100% percentage)
         const isFull = formData.paymentPlanType === 'full' || (selectedPlan && Number(selectedPlan.percentage) === 100);
-        
+
         const fpDiscountPct = isFull ? (settings?.fullPaymentDiscount || 0) : 0;
         const fpDiscountAmt = Math.round(subtotal1 * fpDiscountPct / 100);
         const subtotal2 = subtotal1 - fpDiscountAmt;
@@ -594,10 +600,15 @@ const BookAStand = () => {
             paymentMode: 'online'
         }));
         if (type === 'international') {
-            fetch(`${API_URL}/exchange-rate/usd-to-inr`)
-                .then(r => r.json())
-                .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
-                .catch(() => {});
+
+            if (!isComingSoon) {
+                fetch(`${API_URL}/exchange-rate/usd-to-inr`)
+                    .then(r => r.json())
+                    .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
+                    .catch(() => { });
+            } else {
+                setIsComingSoon(true)
+            }
         }
     };
 
@@ -722,16 +733,16 @@ const BookAStand = () => {
 
         setIsLoading(true);
         try {
-        if (formData.paymentMode === 'online') {
-            const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-            if (!isLoaded) {
-                Swal.fire('Error', 'Razorpay SDK failed to load.', 'error');
-                setIsLoading(false);
-                return;
-            }
-            const isUSD = formData.participation.currency === 'USD';
-            const finalAmount = formData.amountPaid;
-            const gatewayAmount = Math.round(finalAmount * 1.025 * 100) / 100;
+            if (formData.paymentMode === 'online') {
+                const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+                if (!isLoaded) {
+                    Swal.fire('Error', 'Razorpay SDK failed to load.', 'error');
+                    setIsLoading(false);
+                    return;
+                }
+                const isUSD = formData.participation.currency === 'USD';
+                const finalAmount = formData.amountPaid;
+                const gatewayAmount = Math.round(finalAmount * 1.025 * 100) / 100;
 
                 const options = {
                     key: RAZORPAY_KEY_ID,
@@ -759,11 +770,11 @@ const BookAStand = () => {
                                     window.scrollTo({ top: 0, behavior: "smooth" });
                                 }, 2500);
                             } else {
-                                await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online', razorpayOrderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id }).catch(() => {});
+                                await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online', razorpayOrderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id }).catch(() => { });
                                 setPaymentModal({ status: 'failed' });
                             }
                         } catch {
-                            await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online' }).catch(() => {});
+                            await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online' }).catch(() => { });
                             setPaymentModal({ status: 'failed' });
                         }
                     },
@@ -833,7 +844,74 @@ const BookAStand = () => {
     const selectedStall = useMemo(() =>
         availableStalls.find(s => s._id === formData.participation.stallNo),
         [availableStalls, formData.participation.stallNo]);
+    if (isComingSoon && exhibitorType === 'international') {
+        return (
+            <div className="min-h-screen bg-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
+                {/* Background with Overlay */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
+                    style={{ backgroundImage: `url(${HeroBg})` }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-[#23471d]/95 via-black/70 to-black/90" />
 
+                {/* Animated Particles/Accents */}
+                <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                    <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[100px] animate-pulse" />
+                    <div className="absolute bottom-[10%] right-[5%] w-80 h-80 bg-emerald-600/10 rounded-full blur-[120px] animate-pulse" />
+                </div>
+
+                <div className="relative z-10 container mx-auto px-6 text-center max-w-4xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <Badge className="mb-6 px-4 py-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] uppercase tracking-[0.3em] font-black rounded-full backdrop-blur-md">
+                            International Exhibitor Registration
+                        </Badge>
+
+                        <h1 className="text-5xl md:text-8xl font-serif font-bold text-white mb-8 italic tracking-tighter leading-[1.1]">
+                            Coming <span className="text-emerald-400">Soon.</span>
+                        </h1>
+
+                        <div className="w-24 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent mx-auto mb-10 opacity-50" />
+
+                        <p className="text-white/70 text-lg md:text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed tracking-wide">
+                            The gateway to India's most exclusive health and wellness sourcing event is almost ready. Prepare for structured B2B networking at IHWE 2026.
+                        </p>
+
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                            <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl flex items-center gap-4 group hover:bg-white/10 transition-all duration-500 cursor-pointer">
+                                <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                                    <AtSign size={20} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mb-1">Pre-Register Interest</p>
+                                    <p className="text-white font-medium">info@ihwe.in</p>
+                                </div>
+                            </div>
+
+                            <Link to="/">
+                                <Button className="h-16 px-10 rounded-2xl bg-white text-black hover:bg-emerald-500 hover:text-white transition-all duration-500 text-sm font-black uppercase tracking-[0.2em] shadow-2xl group">
+                                    Explore Expo Site
+                                </Button>
+                            </Link>
+                        </div>
+
+                        <div className="mt-20 flex justify-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+                            <ShieldCheck className="text-white" size={32} />
+                            <Globe className="text-white" size={32} />
+                            <Lock className="text-white" size={32} />
+                        </div>
+                    </motion.div>
+                </div>
+
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 text-[9px] uppercase tracking-[0.5em] font-medium text-center">
+                    IHWE 2026 • 9th Edition • Global Wellness Sourcing
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-[#FDFDFD] text-slate-900 font-inter">
             <PaymentProcessingModal
@@ -1589,7 +1667,7 @@ const BookAStand = () => {
                                                                         <p className="text-2xl font-black leading-none">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
                                                                     </div>
                                                                 </div>
-                                                                
+
                                                                 {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
                                                                     <div className="mt-3 pt-2 border-t border-white/20 space-y-1">
                                                                         <div className="flex justify-between items-center opacity-80">
