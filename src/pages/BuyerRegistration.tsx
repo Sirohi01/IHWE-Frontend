@@ -1268,7 +1268,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* Registered Address, State, City, Pin Code */}
+
                                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                         <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
                                         <div><Label className={labelClasses}>State/Province *</Label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
@@ -1276,7 +1276,6 @@ const BuyerRegistration = () => {
                                         <div><Label className={labelClasses}>Pin Code (6 digits) *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} maxLength={6} /><ErrorDisplay name="pinCode" errors={errors} /></div>
                                     </div>
 
-                                    {/* 1. Basic Business Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> 1. Company Business Profile </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
@@ -1340,7 +1339,7 @@ const BuyerRegistration = () => {
 
                                     </div>
 
-                                    {/* 5. Supplier Preference */}
+
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Supplier Preference</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-x-5">
@@ -1398,7 +1397,6 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* 7. Pricing Preference */}
                                     <div className="space-y-1">
                                         <h3 className={sectionTitleClasses}>Pricing Preference</h3>
                                         <div className="flex gap-4 p-2">
@@ -1407,19 +1405,19 @@ const BuyerRegistration = () => {
                                             <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
                                         </div>
                                     </div>
-                                    {/* 9. B2B Meeting Preferences */}
+
                                     <div className="space-y-4">
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
 
-                                        {/* Top Card: Strategic Matchmaking Toggle */}
+
 
 
                                         {formData.requirePreScheduledB2B === 'Yes' && (
                                             <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
 
-                                                {/* All 4 B2B dropdowns in one row */}
+
                                                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                                                    {/* Meeting Categories */}
+
                                                     <div className="space-y-1.5">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <Label className="text-[11px] font-semibold">Preferred Meeting Categories *</Label>
@@ -1438,7 +1436,7 @@ const BuyerRegistration = () => {
                                                         <ErrorDisplay name="preferredMeetingCategories" errors={errors} />
                                                     </div>
 
-                                                    {/* Exhibitor Types */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">Exhibitor Types to Meet</Label>
                                                         <MultiSelectDropdown
@@ -1450,7 +1448,7 @@ const BuyerRegistration = () => {
                                                         />
                                                     </div>
 
-                                                    {/* Meeting Objectives */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">💼 Meeting Objectives *</Label>
                                                         <MultiSelectDropdown
@@ -1464,7 +1462,7 @@ const BuyerRegistration = () => {
                                                         <ErrorDisplay name="meetingObjectives" errors={errors} />
                                                     </div>
 
-                                                    {/* Preferred Business Types */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">🏷 Preferred Business Type *</Label>
                                                         <MultiSelectDropdown
@@ -1479,7 +1477,7 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Section C: Logistics */}
+
                                                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                                     <div>
                                                         <Label className={labelClasses}>Preferred Day *</Label>
@@ -1634,7 +1632,7 @@ const BuyerRegistration = () => {
                                                             );
                                                         })}
 
-                                                        {/* Membership Trigger Card */}
+
                                                         {membershipPackages.length > 0 && (
                                                             <div
                                                                 onClick={() => setShowMembershipOptions(true)}
