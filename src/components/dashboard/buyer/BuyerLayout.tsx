@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import BuyerNavbar from './BuyerNavbar';
 import BuyerSidebar from './BuyerSidebar';
+import SocialSidebar from '@/components/layout/SocialSidebar';
+import BuyerWhatsAppFloat from './BuyerWhatsAppFloat';
 
 interface LayoutProps {
     logo: string | null;
@@ -27,6 +29,8 @@ export default function BuyerLayout({ logo, data, activeTab, setActiveTab, handl
                 onChatClick={() => setActiveTab('chat')}
                 unreadChat={unreadChat}
             />
+            <SocialSidebar />
+            <BuyerWhatsAppFloat data={data} />
             <div className="flex pt-16 print:pt-0 flex-1">
                 <BuyerSidebar
                     activeTab={activeTab}

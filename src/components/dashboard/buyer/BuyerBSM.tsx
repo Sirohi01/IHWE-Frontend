@@ -90,7 +90,7 @@ export default function BuyerBSM({ data }: { data: any }) {
                 page: String(page), limit: String(LIMIT),
                 ...(debouncedSearch && { search: debouncedSearch }),
             });
-            const res = await fetch(`${API_URL}/exhibitor/public?${params}`, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await fetch(`${API_URL}/bsm/exhibitors?${params}`, { headers: { Authorization: `Bearer ${token}` } });
             const d = await res.json();
             if (d.success) { setExhibitors(d.data); setPagination(d.pagination); }
         } catch { toast.error("Failed to load exhibitors"); }

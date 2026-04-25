@@ -287,7 +287,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
                                 <div style={{ marginTop: 4 }}>Category: {exhibitorCategory}</div>
-                                <div>Registration Type: {data.registrationType || 'Stall Booking'}</div>
+                                <div>Registration Type: {data.registrationCategory || data.category || data.passType || 'Buyer Pass'}</div>
                                 <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: 0, verticalAlign: 'top', fontSize: 11 }}>

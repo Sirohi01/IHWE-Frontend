@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-    Lock, Mail, ArrowRight, ShieldCheck, Phone, CheckCircle2, 
-    Building2, ChevronLeft, Eye, EyeOff, Key, Sparkles, 
+import {
+    Lock, Mail, ArrowRight, ShieldCheck, Phone, CheckCircle2,
+    Building2, ChevronLeft, Eye, EyeOff, Key, Sparkles,
     Shield, IdCard as IdCardIcon, QrCode, User, Send, LogIn, Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,28 +27,28 @@ const BuyerLogin = () => {
 
     useEffect(() => {
         const fetchSettings = async () => {
-          try {
-            const data = await settingsApi.get();
-            if (data) setSettings(data);
-          } catch (error) {
-            console.error("Error fetching settings:", error);
-          }
+            try {
+                const data = await settingsApi.get();
+                if (data) setSettings(data);
+            } catch (error) {
+                console.error("Error fetching settings:", error);
+            }
         };
         fetchSettings();
     }, []);
 
     const showAlert = (icon: any, title: string, text: string) => {
         Swal.fire({
-          icon: icon,
-          title: title,
-          text: text,
-          confirmButtonColor: '#23471d',
-          background: '#f8f9fa',
-          customClass: {
-            title: 'text-xl font-bold font-inter',
-            popup: 'rounded-xl',
-            confirmButton: 'py-2 px-6 text-base font-semibold'
-          }
+            icon: icon,
+            title: title,
+            text: text,
+            confirmButtonColor: '#23471d',
+            background: '#f8f9fa',
+            customClass: {
+                title: 'text-xl font-bold font-inter',
+                popup: 'rounded-xl',
+                confirmButton: 'py-2 px-6 text-base font-semibold'
+            }
         });
     };
 
@@ -57,7 +57,7 @@ const BuyerLogin = () => {
         setLoading(true);
         try {
             const endpoint = loginMode === 'email' ? 'login' : 'send-mobile-otp';
-            const body = loginMode === 'email' 
+            const body = loginMode === 'email'
                 ? { email: email.trim(), password: password.trim() }
                 : { mobile: mobile.trim() };
 
@@ -72,10 +72,10 @@ const BuyerLogin = () => {
                 if (data.requiresOtp || loginMode === 'mobile') {
                     setBuyerId(data.buyerId);
                     setStep(2);
-                    toast.success('Wait! One more step.', { 
-                        description: loginMode === 'email' 
-                            ? 'We sent a code to your registered email.' 
-                            : 'We sent an OTP to your mobile.' 
+                    toast.success('Wait! One more step.', {
+                        description: loginMode === 'email'
+                            ? 'We sent a code to your registered email.'
+                            : 'We sent an OTP to your mobile.'
                     });
                 } else if (data.token) {
                     localStorage.setItem('buyerToken', data.token);
@@ -128,23 +128,23 @@ const BuyerLogin = () => {
 
                 <div className="container mx-auto px-4">
                     <div className="max-w-6xl mx-auto">
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="grid lg:grid-cols-2 gap-12 items-start"
                         >
                             <div className="space-y-8">
                                 <div>
-                                     <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#23471d] transition-all font-bold uppercase text-[10px] tracking-widest group">
+                                    <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#23471d] transition-all font-bold uppercase text-[10px] tracking-widest group">
                                         <ChevronLeft size={14} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
                                         <span>Back to Home</span>
                                     </Link>
                                 </div>
 
                                 <div className="flex items-center gap-6">
-                                    <img 
-                                        src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
-                                        alt="IHWE Logo" 
+                                    <img
+                                        src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"}
+                                        alt="IHWE Logo"
                                         className="h-24 w-auto object-contain"
                                     />
                                     <div className="h-16 w-px bg-slate-200" />
@@ -158,7 +158,7 @@ const BuyerLogin = () => {
 
                                 <div className="space-y-6">
                                     <p className="text-slate-600 text-lg leading-relaxed">
-                                        Welcome to the 9th International Health & Wellness Expo Buyer Portal. 
+                                        Welcome to the 9th International Health & Wellness Expo Buyer Portal.
                                         Manage your profile, access your badge, and connect with exhibitors globally.
                                     </p>
 
@@ -185,7 +185,7 @@ const BuyerLogin = () => {
 
                             <div className="bg-white border border-slate-200 p-8 md:p-10 shadow-xl relative min-h-[500px] flex flex-col justify-center">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
-                                
+
                                 <AnimatePresence mode="wait">
                                     {step === 1 ? (
                                         <motion.div

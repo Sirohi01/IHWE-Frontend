@@ -12,6 +12,7 @@ interface SidebarProps {
 
 const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "profile", label: "Profile Management", icon: User },
     { id: "invoices", label: "Invoice and Receipts", icon: FileText },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
     { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
