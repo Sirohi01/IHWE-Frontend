@@ -16,6 +16,7 @@ const TAB_ROUTES: Record<string, string> = {
     chat: '/buyer-dashboard/chat',
     documentation: '/buyer-dashboard/documentation',
     notifications: '/buyer-dashboard/notifications',
+    feedback: '/buyer-dashboard/feedback',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -92,10 +93,10 @@ export default function BuyerDashboard() {
                 body: JSON.stringify({ currentPassword: pwdForm.current, newPassword: pwdForm.newPwd })
             });
             const result = await res.json();
-            if (result.success) { 
-                toast.success('Password changed successfully'); 
-                setShowChangePwd(false); 
-                setPwdForm({ current: '', newPwd: '', confirm: '' }); 
+            if (result.success) {
+                toast.success('Password changed successfully');
+                setShowChangePwd(false);
+                setPwdForm({ current: '', newPwd: '', confirm: '' });
             }
             else toast.error(result.message);
         } catch { toast.error('Failed to change password'); }
