@@ -44,7 +44,7 @@ export default function BuyerDashboardLayout() {
       </div>
 
 
-      <footer className={`py-6 px-4 border-t border-slate-200 bg-white/50 text-center transition-all duration-300 ${sidebarOpen ? 'lg:ml-56' : 'lg:ml-14'}`}>
+      <footer className={`py-6 px-4 border-t border-slate-200 bg-white/50 text-center transition-all duration-300 ${sidebarOpen ? 'lg:ml-56' : 'lg:ml-14'} print:hidden`}>
         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
           &copy; 2026 9th IHWE Buyer Portal. Powered by IHWE Tech Team.
         </p>

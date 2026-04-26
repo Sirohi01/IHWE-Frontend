@@ -111,7 +111,17 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: !!data?.msme?.udhyamRegNo,
             tab: 'msme',
         },
-
+        {
+            id: 'feedback',
+            label: 'Feedback',
+            desc: 'Share your expo experience & suggestions',
+            icon: BarChart3,
+            accent: '#d26019',
+            light: '#fff7ed',
+            badge: 'New Form',
+            badgeOk: true,
+            tab: 'feedback',
+        },
     ];
 
     return (

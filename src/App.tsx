@@ -55,6 +55,8 @@ const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
 const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
 const PsmReports = lazy(() => import("./pages/psmClaim/PsmReports"));
 const PsmReportsTable = lazy(() => import("./pages/psmClaim/PsmReportsTable"));
+const ExhibitorFeedbackForm = lazy(() => import("./pages/exhibitor/ExhibitorFeedbackForm"));
+const BuyerFeedbackForm = lazy(() => import("./pages/buyer/dashboard/BuyerFeedbackForm"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -161,6 +163,7 @@ const App = () => {
                   <Route path="reminders" element={<PaymentReminders />} />
                   <Route path="notification" element={<Notification />} />
                   <Route path="relationship-manager" element={<RelationshipManager />} />
+                  <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                   <Route path="ex-profile" element={<ExProfile />} />
                 </Route>
                 <Route path="/visitor" element={<VisitorScan />} />
@@ -175,6 +178,7 @@ const App = () => {
                   <Route path="directory" element={<BuyerDirectoryPage />} />
                   <Route path="payments" element={<BuyerPaymentInfo />} />
                   <Route path="history" element={<BuyerHistory />} />
+                  <Route path="feedback" element={<BuyerFeedbackForm />} />
                 </Route>
               </Routes>
             </Suspense>

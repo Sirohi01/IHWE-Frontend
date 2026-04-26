@@ -10,6 +10,7 @@ const navItems = [
     { id: 'profile', label: 'My Profile', icon: User, path: '/buyer-dashboard/profile' },
     { id: 'payments', label: 'Payment History', icon: CreditCard, path: '/buyer-dashboard/payments' },
     { id: 'history', label: 'Activity Logs', icon: History, path: '/buyer-dashboard/history' },
+    { id: 'feedback', label: 'Buyer Feedback', icon: ClipboardList, path: '/buyer-dashboard/feedback' },
     { id: 'help', label: 'Support Hub', icon: HelpCircle, path: '/buyer-dashboard/support' },
 ];
 
@@ -31,7 +32,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 {navItems.map(item => {
                     const Icon = item.icon;
                     const active = location.pathname === item.path || (item.path === '/buyer-dashboard' && location.pathname === '/buyer-dashboard/');
-                    
+
                     return (
                         <button key={item.id} onClick={() => handleNav(item.path)}
                             className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${active ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>

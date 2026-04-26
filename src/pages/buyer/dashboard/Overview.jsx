@@ -136,6 +136,12 @@ export default function Overview() {
                     <button className="px-4 py-2 bg-[#23471d] text-white text-[10px] font-black uppercase tracking-widest font-sans hover:bg-[#1a3516] transition-colors">
                         Print Badge
                     </button>
+                    <button 
+                        onClick={() => window.location.href = '/buyer-dashboard/feedback'}
+                        className="px-4 py-2 bg-[#d26019] text-white text-[10px] font-black uppercase tracking-widest font-sans hover:bg-[#b05015] transition-colors"
+                    >
+                        Submit Feedback
+                    </button>
                     <button className="px-4 py-2 border border-slate-200 text-slate-600 text-[10px] font-black uppercase tracking-widest font-sans hover:bg-slate-50 transition-colors">
                         Support Desk
                     </button>
