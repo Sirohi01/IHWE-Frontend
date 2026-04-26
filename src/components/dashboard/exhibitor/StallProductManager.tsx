@@ -50,9 +50,13 @@ interface Analytics {
     recentEnquiries: Enquiry[];
 }
 
-export default function StallProductManager({ data }: { data: any }) {
+export default function StallProductManager({ data, mode = 'seller', initialSection = 'stall-info' }: { 
+    data: any, 
+    mode?: 'exhibitor' | 'seller',
+    initialSection?: 'stall-info' | 'products' | 'enquiries' | 'analytics'
+}) {
     const navigate = useNavigate();
-    const [activeSection, setActiveSection] = useState<'stall-info' | 'products' | 'enquiries' | 'analytics'>('stall-info');
+    const [activeSection, setActiveSection] = useState<'stall-info' | 'products' | 'enquiries' | 'analytics'>(initialSection);
     const [products, setProducts] = useState<Product[]>([]);
     const [analytics, setAnalytics] = useState<Analytics | null>(null);
     const [loading, setLoading] = useState(true);
@@ -203,60 +207,64 @@ export default function StallProductManager({ data }: { data: any }) {
                     <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-1">Stall Management</h2>
                     <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Digital Product Showcase & Lead Center</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
-                    <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Views</p>
-                        <div className="flex items-center gap-2">
-                            <span className="text-lg font-black text-slate-900">{analytics?.totalViews || 0}</span>
-                            <TrendingUp size={14} className="text-[#16a34a]" />
+                {mode === 'seller' && (
+                    <div className="flex flex-wrap items-center gap-4">
+                        <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Views</p>
+                            <div className="flex items-center gap-2">
+                                <span className="text-lg font-black text-slate-900">{analytics?.totalViews || 0}</span>
+                                <TrendingUp size={14} className="text-[#16a34a]" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Lead Conversion</p>
-                        <div className="flex items-center gap-2">
-                            <span className="text-lg font-black text-slate-900">{analytics?.totalEnquiries || 0}</span>
-                            <MessageCircle size={14} className="text-[#0284c7]" />
+                        <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Lead Conversion</p>
+                            <div className="flex items-center gap-2">
+                                <span className="text-lg font-black text-slate-900">{analytics?.totalEnquiries || 0}</span>
+                                <MessageCircle size={14} className="text-[#0284c7]" />
+                            </div>
                         </div>
+                        <button
+                            onClick={() => {
+                                setActiveSection('products');
+                                setShowAddModal(true);
+                            }}
+                            className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
+                        >
+                            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
+                            <span className="text-[11px] font-black uppercase tracking-widest">Add New Product</span>
+                        </button>
                     </div>
-                    <button
-                        onClick={() => {
-                            setActiveSection('products');
-                            setShowAddModal(true);
-                        }}
-                        className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
-                    >
-                        <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="text-[11px] font-black uppercase tracking-widest">Add New Product</span>
-                    </button>
-                </div>
+                )}
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex items-center border-b border-slate-200 bg-white px-6">
-                {[
-                    { id: 'stall-info', label: 'Stall Information', icon: Info },
-                    { id: 'products', label: 'Product Listing', icon: Package },
-                    { id: 'enquiries', label: 'All Enquiries', icon: Mail },
-                    { id: 'analytics', label: 'Store Insights', icon: BarChart3 },
-                ].map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveSection(tab.id as any)}
-                        className={`py-4 px-6 flex items-center gap-2 border-b-2 transition-all relative ${activeSection === tab.id
-                            ? 'border-[#23471d] text-[#23471d]'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
-                            }`}
-                    >
-                        <tab.icon size={16} />
-                        <span className="text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
-                        {tab.id === 'enquiries' && analytics?.totalEnquiries ? (
-                            <span className="ml-2 w-5 h-5 bg-[#d26019] text-white text-[9px] font-black flex items-center justify-center rounded-full">
-                                {analytics.totalEnquiries}
-                            </span>
-                        ) : null}
-                    </button>
-                ))}
-            </div>
+            {mode === 'seller' && (
+                <div className="flex items-center border-b border-slate-200 bg-white px-6">
+                    {[
+                        { id: 'stall-info', label: 'Stall Information', icon: Info },
+                        { id: 'products', label: 'Product Listing', icon: Package },
+                        { id: 'enquiries', label: 'All Enquiries', icon: Mail },
+                        { id: 'analytics', label: 'Store Insights', icon: BarChart3 },
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveSection(tab.id as any)}
+                            className={`py-4 px-6 flex items-center gap-2 border-b-2 transition-all relative ${activeSection === tab.id
+                                ? 'border-[#23471d] text-[#23471d]'
+                                : 'border-transparent text-slate-500 hover:text-slate-800'
+                                }`}
+                        >
+                            <tab.icon size={16} />
+                            <span className="text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
+                            {tab.id === 'enquiries' && analytics?.totalEnquiries ? (
+                                <span className="ml-2 w-5 h-5 bg-[#d26019] text-white text-[9px] font-black flex items-center justify-center rounded-full">
+                                    {analytics.totalEnquiries}
+                                </span>
+                            ) : null}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {/* Content Area */}
             <AnimatePresence mode="wait">
@@ -287,21 +295,23 @@ export default function StallProductManager({ data }: { data: any }) {
                                     <ChevronRight size={16} className="text-slate-300 group-hover:text-[#d26019] group-hover:translate-x-0.5 transition-all" />
                                 </button>
 
-                                <button
-                                    onClick={() => setActiveSection('products')}
-                                    className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#23471d] transition-all group shadow-sm flex items-center justify-between"
-                                >
-                                    <div className="flex items-center gap-4 text-left">
-                                        <div className="w-12 h-12 bg-[#23471d]/5 text-[#23471d] rounded-sm flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shrink-0">
-                                            <Package size={20} />
+                                {mode === 'seller' && (
+                                    <button
+                                        onClick={() => setActiveSection('products')}
+                                        className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#23471d] transition-all group shadow-sm flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center gap-4 text-left">
+                                            <div className="w-12 h-12 bg-[#23471d]/5 text-[#23471d] rounded-sm flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shrink-0">
+                                                <Package size={20} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage your Products</h3>
+                                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage your Products</h3>
-                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
-                                        </div>
-                                    </div>
-                                    <ChevronRight size={16} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-0.5 transition-all" />
-                                </button>
+                                        <ChevronRight size={16} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-0.5 transition-all" />
+                                    </button>
+                                )}
                             </div>
 
                             {/* Info Grid */}

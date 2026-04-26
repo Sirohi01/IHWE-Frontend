@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import DashboardHero from '@/components/dashboard/DashboardHero';
 import {
     CreditCard, CheckCircle2, Clock, AlertTriangle,
     Loader2, RefreshCw, Receipt,
@@ -58,6 +60,8 @@ interface PaymentSummary {
 
 export default function ExhibitorPaymentPage() {
     const { data, fetchDashboard } = useExhibitorCtx();
+    const location = useLocation();
+    const isSeller = location.pathname.includes('/seller-portal');
     const [summary, setSummary] = useState<PaymentSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [paying, setPaying] = useState(false);
@@ -312,11 +316,19 @@ export default function ExhibitorPaymentPage() {
     );
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full space-y-3 pb-6"
-        >
+        <div className="space-y-6 pb-6">
+            <DashboardHero 
+                pageId={isSeller ? "sl-payments" : "ex-payments"}
+                defaultTitle="Secure Payment Portal" 
+                defaultSubtitle="Manage your stall payments and transaction history"
+                type={isSeller ? "seller" : "exhibitor"} 
+            />
+
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full space-y-3"
+            >
             {/* ── Header Card ── */}
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                 <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a25] px-4 py-3 flex items-center justify-between gap-2">
@@ -871,5 +883,6 @@ export default function ExhibitorPaymentPage() {
                 )}
             </AnimatePresence>
         </motion.div>
+        </div>
     );
 }

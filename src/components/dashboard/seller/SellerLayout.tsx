@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import ExhibitorNavbar from './ExhibitorNavbar';
-import ExhibitorSidebar from './ExhibitorSidebar';
+import SellerNavbar from './SellerNavbar';
+import SellerSidebar from './SellerSidebar';
 import SocialSidebar from '@/components/layout/SocialSidebar';
-import AdminWhatsAppFloat from './AdminWhatsAppFloat';
 
 interface LayoutProps {
     logo: string | null;
@@ -14,37 +12,38 @@ interface LayoutProps {
     onChangePwd: () => void;
     children: React.ReactNode;
     unreadChat?: number;
+    access?: Record<string, boolean>;
 }
 
-export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children, unreadChat = 0 }: LayoutProps) {
+export default function SellerLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children, unreadChat = 0, access = {} }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     return (
         <div className="min-h-screen flex flex-col bg-slate-100">
-            <ExhibitorNavbar
+            <SellerNavbar
                 logo={logo}
                 data={data}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
                 handleLogout={handleLogout}
-                onChatClick={() => setActiveTab('chat')}
-                unreadChat={unreadChat}
             />
+            
             <SocialSidebar />
-            <AdminWhatsAppFloat data={data} />
-            <div className="flex pt-16 print:pt-0 flex-1">
-                <ExhibitorSidebar
+            
+            <div className="flex pt-16 flex-1">
+                <SellerSidebar
                     data={data}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     sidebarOpen={sidebarOpen}
                     onChangePwd={onChangePwd}
                     unreadChat={unreadChat}
+                    access={access}
                 />
 
                 <main
-                    className={`flex-1 transition-all duration-300 overflow-hidden print:overflow-visible p-3 sm:p-4 print:p-0
-                        ${sidebarOpen ? 'lg:ml-56 print:ml-0' : 'lg:ml-14 print:ml-0'}
+                    className={`flex-1 transition-all duration-300 overflow-hidden p-3 sm:p-4
+                        ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-14'}
                     `}
                 >
                     <div className="w-full">

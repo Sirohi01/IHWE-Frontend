@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion';
-import { Printer } from 'lucide-react';
-import { openPrintWindow } from './PrintCertificate';
 
 interface OverviewProps {
     data: any; cur: string; status: any; paidPct: number;
@@ -48,7 +46,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function ExhibitorOverview({
-    data, cur, status, paidPct, paid, total, balance, setActiveTab
+    data, cur, status, paidPct, paid, total, balance
 }: OverviewProps) {
 
     return (
@@ -149,23 +147,6 @@ export default function ExhibitorOverview({
                         </Section>
                     )}
 
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t">
-                    <button
-                        onClick={() => setActiveTab('profile')}
-                        className="px-3 py-1.5 bg-slate-800 text-white text-[10px] font-bold"
-                    >
-                        View Profile
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('invoices')}
-                        className="px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold"
-                    >
-                        Invoices
-                    </button>
                 </div>
 
             </div>

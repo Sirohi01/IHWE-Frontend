@@ -15,6 +15,8 @@ import {
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL } from '@/lib/api';
 
+import DashboardHero from '@/components/dashboard/DashboardHero';
+
 export default function RelationshipManager() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
@@ -67,20 +69,35 @@ export default function RelationshipManager() {
 
     if (!rmName) {
         return (
-            <div className="max-w-4xl mx-auto p-10 text-center bg-white rounded-sm border border-slate-200">
-                <HeadphonesIcon size={48} className="mx-auto text-slate-300 mb-4" />
-                <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">No Manager Assigned</h2>
-                <p className="text-slate-500 mt-2">Your relationship manager details will appear here once assigned.</p>
+            <div className="space-y-6">
+                 <DashboardHero 
+                    pageId="ex-rm" 
+                    defaultTitle="Support & Assistance" 
+                    defaultSubtitle="Dedicated Relationship Management for IHWE 2026"
+                    type="exhibitor" 
+                />
+                <div className="max-w-4xl mx-auto p-10 text-center bg-white rounded-xl border border-slate-200">
+                    <HeadphonesIcon size={48} className="mx-auto text-slate-300 mb-4" />
+                    <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">No Manager Assigned</h2>
+                    <p className="text-slate-500 mt-2">Your relationship manager details will appear here once assigned.</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full pb-10 px-4"
-        >
+        <div className="space-y-6 pb-10">
+            <DashboardHero 
+                pageId="ex-rm" 
+                defaultTitle="Support & Assistance" 
+                defaultSubtitle="Dedicated Relationship Management for IHWE 2026"
+                type="exhibitor" 
+            />
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full px-4"
+            >
             {/* Header Section */}
             <div className="bg-white p-4 rounded-sm shadow-sm border border-slate-200 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t-4 border-t-[#23471d]">
                 <div className=''>
@@ -267,5 +284,6 @@ export default function RelationshipManager() {
                 </div>
             </div>
         </motion.div>
+        </div>
     );
 }
