@@ -44,7 +44,7 @@ import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, po
 import { toast } from "sonner";
 import { useRef, useEffect as useEffectDropdown } from "react";
 
-// ─── Reusable Multi-Select Dropdown ─────────────────────────────────────────
+
 interface MultiSelectDropdownProps {
     options: string[];
     selected: string[];
@@ -128,7 +128,7 @@ const MultiSelectDropdown = ({
 
     return (
         <div ref={ref} className="relative w-full">
-            {/* Trigger */}
+
             <button
                 type="button"
                 onClick={() => setOpen((p) => !p)}
@@ -167,7 +167,7 @@ const MultiSelectDropdown = ({
                 />
             </button>
 
-            {/* Dropdown Panel */}
+
             {open && (
                 <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl max-h-[220px] overflow-y-auto custom-scrollbar">
                     {options.length === 0 ? (
@@ -196,7 +196,7 @@ const MultiSelectDropdown = ({
         </div>
     );
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 
 
 const loadRazorpayScript = () => {
@@ -209,56 +209,7 @@ const loadRazorpayScript = () => {
     });
 };
 
-const PACKAGE_METADATA: Record<string, any> = {
-    "Standard Buyer Pass": {
-        tagline: "For Emerging Buyers & Business Explorers",
-        description: "Designed for professionals who want to explore new products, suppliers, and market opportunities through structured Buyer–Seller interactions.",
-        whyChoose: "A great starting point to explore opportunities and build initial business connections.",
-        cta: "Register Now",
-        color: "blue",
-        badge: null
-    },
-    "VIP Buyer Pass": {
-        tagline: "For Serious Buyers & Decision Makers",
-        description: "Crafted for high-intent buyers who are looking for structured, result-oriented meetings and premium networking.",
-        whyChoose: "Perfect for buyers who want focused meetings, comfort, and faster business outcomes.",
-        cta: "Upgrade to VIP",
-        badge: "Recommended",
-        color: "yellow"
-    },
-    "ICOA Standard Buyer Membership": {
-        tagline: "For Active Buyers & Market Explorers",
-        description: "The Buyer–Seller Meet at IHWE 2026 is being conducted in association with the International Council of AYUSH (ICOA), bringing you access to a trusted network of verified suppliers and brands.",
-        whyChoose: "Ideal for buyers who want to explore the AYUSH and wellness ecosystem and build reliable connections.",
-        cta: "Become a Member",
-        color: "blue",
-        badge: null
-    },
-    "ICOA VIP Buyer Membership": {
-        tagline: "For Serious Buyers & Decision Makers",
-        description: "Experience structured and high-value business networking through ICOA-curated Buyer–Seller Meets at IHWE and beyond.",
-        whyChoose: "Best suited for buyers who want focused meetings, verified suppliers, and faster business outcomes.",
-        cta: "Upgrade to VIP Membership",
-        badge: "Recommended",
-        color: "yellow"
-    },
-    "ICOA Elite Buyer Membership": {
-        tagline: "For High-Value & Institutional Buyers",
-        description: "An exclusive membership offering a fully managed sourcing experience through ICOA’s curated network and IHWE platform.",
-        whyChoose: "Designed for buyers who want a complete sourcing ecosystem with strategic business support.",
-        cta: "Get Elite Membership",
-        color: "red",
-        badge: null
-    },
-    "ICOA Buyer Membership": {
-        tagline: "For Serious Buyers Seeking Year-Round Opportunities",
-        description: "Extend your benefits beyond the event with ICOA Buyer Membership, offering continuous access to curated sourcing opportunities and supplier connections throughout the year.",
-        whyChoose: "Perfect for buyers who want continuous business opportunities, not just a one-time event experience.",
-        cta: "Get Membership",
-        badge: "Best Value",
-        color: "green"
-    }
-};
+
 
 const BuyerRegistration = () => {
     const isComingSoon = false;
@@ -569,7 +520,7 @@ const BuyerRegistration = () => {
     };
 
     const isFormValidForPayment = () => {
-        // Check all required fields
+
         const requiredFields = [
             'fullName', 'designation', 'companyName', 'businessType',
             'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
@@ -580,7 +531,7 @@ const BuyerRegistration = () => {
             'matchmakingInterest'
         ];
 
-        // Only require B2B specific fields if interested in pre-scheduled meetings
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             requiredFields.push('preferredMeetingDay', 'preferredTimeSlot');
         }
@@ -591,7 +542,7 @@ const BuyerRegistration = () => {
             }
         }
 
-        // Check format validations
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailAddress)) {
             return false;
         }
@@ -600,7 +551,7 @@ const BuyerRegistration = () => {
             return false;
         }
 
-        // Check multi-selects
+
         if (formData.preferredSupplierRegion.length === 0) {
             return false;
         }
@@ -608,7 +559,7 @@ const BuyerRegistration = () => {
             return false;
         }
 
-        // Check B2B multi-selects only if Yes
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             if (formData.preferredMeetingCategories.length === 0) return false;
             if (formData.meetingObjectives.length === 0) return false;
@@ -636,7 +587,7 @@ const BuyerRegistration = () => {
             'matchmakingInterest', 'registrationCategory'
         ];
 
-        // Conditional B2B requirements
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             fieldsToValidate.push('preferredMeetingDay', 'preferredTimeSlot');
         }
@@ -649,7 +600,7 @@ const BuyerRegistration = () => {
             }
         });
 
-        // 2. Format Validations
+
         if (formData.emailAddress && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailAddress)) {
             newErrors.emailAddress = "Invalid email format";
             isValid = false;
@@ -660,7 +611,7 @@ const BuyerRegistration = () => {
             isValid = false;
         }
 
-        // 3. Multi-selects
+
         if (formData.preferredSupplierRegion.length === 0) {
             newErrors.preferredSupplierRegion = "Select at least one region";
             isValid = false;
@@ -670,7 +621,7 @@ const BuyerRegistration = () => {
             isValid = false;
         }
 
-        // B2B multi-selects
+
         if (formData.requirePreScheduledB2B === 'Yes') {
             if (formData.preferredMeetingCategories.length === 0) {
                 newErrors.preferredMeetingCategories = "Select at least one category";
@@ -686,7 +637,7 @@ const BuyerRegistration = () => {
             }
         }
 
-        // 4. OTP Verification
+
         if (!emailOtpVerified) {
             newErrors.emailAddress = "Please verify your email via OTP";
             isValid = false;
@@ -768,11 +719,11 @@ const BuyerRegistration = () => {
     };
 
     const handlePackageSelection = (pkg: any) => {
-        // Run validation to show exact errors to the user
+
         const isValid = validateForm(true);
 
         if (!isValid) {
-            // Find missing fields to tell the user exactly what's wrong
+
             const requiredBase = [
                 'fullName', 'designation', 'companyName', 'businessType',
                 'emailAddress', 'mobileNumber', 'registeredAddress', 'pinCode',
@@ -828,7 +779,7 @@ const BuyerRegistration = () => {
 
             toast.error(`⚠️ Missing fields: ${missingList}. Please check highlighted sections.`);
 
-            // Scroll to the first error element for better UX
+
             setTimeout(() => {
                 const firstError = document.querySelector('.border-red-400, .text-red-500, [data-error="true"]');
                 if (firstError) {
@@ -1317,7 +1268,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* Registered Address, State, City, Pin Code */}
+
                                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                         <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
                                         <div><Label className={labelClasses}>State/Province *</Label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
@@ -1325,7 +1276,6 @@ const BuyerRegistration = () => {
                                         <div><Label className={labelClasses}>Pin Code (6 digits) *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} maxLength={6} /><ErrorDisplay name="pinCode" errors={errors} /></div>
                                     </div>
 
-                                    {/* 1. Basic Business Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> 1. Company Business Profile </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
@@ -1389,7 +1339,7 @@ const BuyerRegistration = () => {
 
                                     </div>
 
-                                    {/* 5. Supplier Preference */}
+
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Supplier Preference</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-x-5">
@@ -1447,7 +1397,6 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* 7. Pricing Preference */}
                                     <div className="space-y-1">
                                         <h3 className={sectionTitleClasses}>Pricing Preference</h3>
                                         <div className="flex gap-4 p-2">
@@ -1456,19 +1405,19 @@ const BuyerRegistration = () => {
                                             <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
                                         </div>
                                     </div>
-                                    {/* 9. B2B Meeting Preferences */}
+
                                     <div className="space-y-4">
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
 
-                                        {/* Top Card: Strategic Matchmaking Toggle */}
+
 
 
                                         {formData.requirePreScheduledB2B === 'Yes' && (
                                             <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
 
-                                                {/* All 4 B2B dropdowns in one row */}
+
                                                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                                                    {/* Meeting Categories */}
+
                                                     <div className="space-y-1.5">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <Label className="text-[11px] font-semibold">Preferred Meeting Categories *</Label>
@@ -1487,7 +1436,7 @@ const BuyerRegistration = () => {
                                                         <ErrorDisplay name="preferredMeetingCategories" errors={errors} />
                                                     </div>
 
-                                                    {/* Exhibitor Types */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">Exhibitor Types to Meet</Label>
                                                         <MultiSelectDropdown
@@ -1499,7 +1448,7 @@ const BuyerRegistration = () => {
                                                         />
                                                     </div>
 
-                                                    {/* Meeting Objectives */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">💼 Meeting Objectives *</Label>
                                                         <MultiSelectDropdown
@@ -1513,7 +1462,7 @@ const BuyerRegistration = () => {
                                                         <ErrorDisplay name="meetingObjectives" errors={errors} />
                                                     </div>
 
-                                                    {/* Preferred Business Types */}
+
                                                     <div className="space-y-1.5">
                                                         <Label className="text-[11px] font-semibold mb-1 block">🏷 Preferred Business Type *</Label>
                                                         <MultiSelectDropdown
@@ -1528,7 +1477,7 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Section C: Logistics */}
+
                                                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                                     <div>
                                                         <Label className={labelClasses}>Preferred Day *</Label>
@@ -1607,129 +1556,36 @@ const BuyerRegistration = () => {
 
                                     <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
                                         <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
-
-                                        <div className="animate-in fade-in slide-in-from-bottom-5 duration-500">
+                                        <div className="relative">
                                             {!showMembershipOptions ? (
-                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                    {passPackages.map((pkg: any) => {
-                                                        const meta = PACKAGE_METADATA[pkg.name] || {};
-                                                        const isSelected = formData.registrationCategory === pkg.name;
-                                                        const colorScheme = meta.color === 'yellow' ? 'border-amber-400 bg-amber-50/10' : 'border-blue-400 bg-blue-50/10';
-                                                        const accentColor = meta.color === 'yellow' ? 'text-amber-700' : 'text-blue-700';
-
-                                                        return (
-                                                            <div
-                                                                key={pkg.name}
-                                                                onClick={() => handlePackageSelection(pkg)}
-                                                                className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
-                                                                    ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
-                                                                `}
-                                                            >
-                                                                {meta.badge && (
-                                                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 ${meta.color === 'yellow' ? 'bg-amber-400 text-white' : 'bg-emerald-500 text-white'}`}>
-                                                                        ⭐ {meta.badge}
-                                                                    </div>
-                                                                )}
-
-                                                                <div className="mb-3">
-                                                                    <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
-                                                                        {pkg.name} – ₹{pkg.price}
-                                                                    </h4>
-                                                                    <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                        {meta.tagline}
-                                                                    </p>
-                                                                </div>
-
-                                                                <div className="flex-1 space-y-4">
-                                                                    <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                        {meta.description}
-                                                                    </p>
-
-                                                                    <div className="space-y-1.5">
-                                                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                        <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
-                                                                            {pkg.benefits.map((b: string, i: number) => (
-                                                                                <li key={i} className="flex items-start gap-2">
-                                                                                    <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
-                                                                                    <span>{b}</span>
-                                                                                </li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </div>
-
-                                                                    <div className={`p-2 rounded-lg ${colorScheme} border`}>
-                                                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
-                                                                        <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                            {meta.whyChoose}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
-                                                                    ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                `}>
-                                                                    {meta.cta || "Select Plan"}
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    })}
-
-                                                    {/* Membership Trigger Card */}
-                                                    <div
-                                                        onClick={() => setShowMembershipOptions(true)}
-                                                        className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
-                                                        `}
-                                                    >
-                                                        <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
-                                                        <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
-                                                            View More Plans →
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ) : (
                                                 <div className="space-y-4">
-                                                    <div className="flex items-center justify-between px-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
-                                                        </div>
-                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                    <div className="flex items-center gap-2 px-2">
+                                                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                                                        <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Available Registration Passes</p>
                                                     </div>
 
                                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
-                                                        {membershipPackages.map((pkg: any) => {
-                                                            const meta = PACKAGE_METADATA[pkg.name] || {};
+                                                        {passPackages.map((pkg: any) => {
                                                             const isSelected = formData.registrationCategory === pkg.name;
-
-                                                            let colorScheme = 'border-blue-400 bg-blue-50/10';
-                                                            let accentColor = 'text-blue-700';
-                                                            let badgeColor = 'bg-blue-500';
-
-                                                            if (meta.color === 'yellow') {
-                                                                colorScheme = 'border-amber-400 bg-amber-50/10';
-                                                                accentColor = 'text-amber-700';
-                                                                badgeColor = 'bg-amber-400';
-                                                            } else if (meta.color === 'red') {
-                                                                colorScheme = 'border-red-400 bg-red-50/10';
-                                                                accentColor = 'text-red-700';
-                                                                badgeColor = 'bg-red-500';
-                                                            } else if (meta.color === 'green') {
-                                                                colorScheme = 'border-emerald-400 bg-emerald-50/10';
-                                                                accentColor = 'text-emerald-700';
-                                                                badgeColor = 'bg-emerald-500';
-                                                            }
+                                                            const colorMap: Record<string, any> = {
+                                                                blue: { border: 'border-blue-400 bg-blue-50/10', accent: 'text-blue-700', badge: 'bg-emerald-500' },
+                                                                yellow: { border: 'border-amber-400 bg-amber-50/10', accent: 'text-amber-700', badge: 'bg-amber-400' },
+                                                                green: { border: 'border-emerald-400 bg-emerald-50/10', accent: 'text-emerald-700', badge: 'bg-emerald-500' },
+                                                                red: { border: 'border-red-400 bg-red-50/10', accent: 'text-red-700', badge: 'bg-red-500' }
+                                                            };
+                                                            const theme = colorMap[pkg.color] || colorMap.blue;
 
                                                             return (
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
                                                                         ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
-                                                                    {meta.badge && (
-                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${badgeColor}`}>
-                                                                            ⭐ {meta.badge}
+                                                                    {pkg.badge && (
+                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                            ⭐ {pkg.badge}
                                                                         </div>
                                                                     )}
 
@@ -1737,14 +1593,14 @@ const BuyerRegistration = () => {
                                                                         <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ₹{pkg.price}
                                                                         </h4>
-                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${accentColor}`}>
-                                                                            {meta.tagline}
+                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
+                                                                            {pkg.tagline}
                                                                         </p>
                                                                     </div>
 
                                                                     <div className="flex-1 space-y-4">
                                                                         <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
-                                                                            {meta.description}
+                                                                            {pkg.description}
                                                                         </p>
 
                                                                         <div className="space-y-1.5">
@@ -1759,10 +1615,10 @@ const BuyerRegistration = () => {
                                                                             </ul>
                                                                         </div>
 
-                                                                        <div className={`p-2 rounded-lg ${colorScheme} border`}>
+                                                                        <div className={`p-2 rounded-lg ${theme.border} border`}>
                                                                             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
                                                                             <p className="text-[10px] text-slate-700 font-semibold leading-snug">
-                                                                                {meta.whyChoose}
+                                                                                {pkg.whyChoose}
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -1770,7 +1626,102 @@ const BuyerRegistration = () => {
                                                                     <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
                                                                         ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
                                                                     `}>
-                                                                        {meta.cta || "Select Plan"}
+                                                                        {pkg.cta || "Select Plan"}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+
+
+                                                        {membershipPackages.length > 0 && (
+                                                            <div
+                                                                onClick={() => setShowMembershipOptions(true)}
+                                                                className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
+                                                                `}
+                                                            >
+                                                                <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
+                                                                <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
+                                                                    View More Plans →
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-4">
+                                                    <div className="flex items-center justify-between px-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
+                                                        </div>
+                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
+                                                    </div>
+
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                                                        {membershipPackages.map((pkg: any) => {
+                                                            const isSelected = formData.registrationCategory === pkg.name;
+
+                                                            const colorThemes: any = {
+                                                                blue: { border: 'border-blue-400 bg-blue-50/10', accent: 'text-blue-700', badge: 'bg-blue-500' },
+                                                                yellow: { border: 'border-amber-400 bg-amber-50/10', accent: 'text-amber-700', badge: 'bg-amber-400' },
+                                                                green: { border: 'border-emerald-400 bg-emerald-50/10', accent: 'text-emerald-700', badge: 'bg-emerald-500' },
+                                                                red: { border: 'border-red-400 bg-red-50/10', accent: 'text-red-700', badge: 'bg-red-500' }
+                                                            };
+
+                                                            const theme = colorThemes[pkg.color || 'blue'] || colorThemes.blue;
+
+                                                            return (
+                                                                <div
+                                                                    key={pkg.name}
+                                                                    onClick={() => handlePackageSelection(pkg)}
+                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    `}
+                                                                >
+                                                                    {pkg.badge && (
+                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                            ⭐ {pkg.badge}
+                                                                        </div>
+                                                                    )}
+
+                                                                    <div className="mb-3">
+                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                            {pkg.name} – ₹{pkg.price}
+                                                                        </h4>
+                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
+                                                                            {pkg.tagline}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    <div className="flex-1 space-y-4">
+                                                                        <p className="text-[11px] text-slate-500 leading-relaxed italic border-l-2 border-slate-200 pl-2">
+                                                                            {pkg.description}
+                                                                        </p>
+
+                                                                        <div className="space-y-1.5">
+                                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
+                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                                {pkg.benefits.map((b: string, i: number) => (
+                                                                                    <li key={i} className="flex items-start gap-2">
+                                                                                        <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
+                                                                                        <span>{b}</span>
+                                                                                    </li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+
+                                                                        <div className={`p-2 rounded-lg ${theme.border} border`}>
+                                                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
+                                                                            <p className="text-[10px] text-slate-700 font-semibold leading-snug">
+                                                                                {pkg.whyChoose}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    `}>
+                                                                        {pkg.cta || "Select Plan"}
                                                                     </div>
                                                                 </div>
                                                             );
@@ -1796,7 +1747,7 @@ const BuyerRegistration = () => {
                 </div>
             </section >
 
-            {/* Comprehensive Terms & Conditions Modal with Policies */}
+
             <AnimatePresence>
                 {
                     showTermsModal && tempSelectedPackage && (
@@ -1812,7 +1763,7 @@ const BuyerRegistration = () => {
                                 exit={{ scale: 0.9, y: 20 }}
                                 className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
                             >
-                                {/* Header */}
+
                                 <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
                                     <div>
                                         <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
@@ -1825,7 +1776,7 @@ const BuyerRegistration = () => {
                                     </button>
                                 </div>
 
-                                {/* Policy Tabs */}
+
                                 <div className="flex border-b bg-slate-50 sticky top-[57px] z-10">
                                     <button
                                         onClick={() => setActivePolicyTab('payment')}
@@ -1849,7 +1800,7 @@ const BuyerRegistration = () => {
                                     </button>
                                 </div>
 
-                                {/* Policy Content */}
+
                                 <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
                                     {loadingPolicies ? (
                                         <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -1896,7 +1847,7 @@ const BuyerRegistration = () => {
                                     )}
                                 </div>
 
-                                {/* Footer with Consent Checkboxes */}
+
                                 <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col gap-3 sticky bottom-0">
                                     <div className="space-y-2">
                                         {activePolicyTab === 'payment' && (
@@ -1972,7 +1923,7 @@ const BuyerRegistration = () => {
                 }
             </AnimatePresence >
 
-            {/* ── PAYMENT CONFIRMATION MODAL ── */}
+
             <AnimatePresence>
                 {
                     showPaymentConfirmModal && tempSelectedPackage && (
@@ -1988,7 +1939,7 @@ const BuyerRegistration = () => {
                                 exit={{ scale: 0.85, y: 30 }}
                                 className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
                             >
-                                {/* Header */}
+
                                 <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                                         <CreditCard size={20} className="text-emerald-300" />
@@ -1999,9 +1950,9 @@ const BuyerRegistration = () => {
                                     </div>
                                 </div>
 
-                                {/* Body */}
+
                                 <div className="p-6 space-y-5">
-                                    {/* Non-refundable notice */}
+
                                     <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 flex items-start gap-3">
                                         <Ban size={22} className="text-red-600 shrink-0 mt-0.5" />
                                         <div>
@@ -2017,7 +1968,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* Package summary */}
+
                                     <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-4 space-y-2">
                                         <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">You are about to pay for:</p>
                                         <div className="flex justify-between items-center">
@@ -2032,7 +1983,7 @@ const BuyerRegistration = () => {
                                     </p>
                                 </div>
 
-                                {/* Actions */}
+
                                 <div className="px-6 pb-6 grid grid-cols-2 gap-3">
                                     <Button
                                         variant="outline"
