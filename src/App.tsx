@@ -48,6 +48,7 @@ const ExhibitorMSMEPage = lazy(() => import("./pages/exhibitor/ExhibitorMSMEPage
 const ExhibitorStallManagementPage = lazy(() => import("./pages/exhibitor/ExhibitorStallManagementPage"));
 const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
+const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
 const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
 const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
@@ -139,6 +140,7 @@ const App = () => {
                   <Route index element={<ExhibitorDashboardHome />} />
                   <Route path="profile" element={<ExhibitorProfilePage />} />
                   <Route path="invoices" element={<ExhibitorInvoicesPage />} />
+                  <Route path="payments" element={<ExhibitorPaymentPage />} />
                   <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
                   <Route path="stall-management" element={<ExhibitorStallManagementPage />} />
                   <Route path="marketing" element={<ExhibitorMarketingPage />} />

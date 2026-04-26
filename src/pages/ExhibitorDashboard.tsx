@@ -12,6 +12,7 @@ const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',
     profile: '/exhibitor-dashboard/ex-profile',
     invoices: '/exhibitor-dashboard/invoices',
+    payments: '/exhibitor-dashboard/payments',
     accessories: '/exhibitor-dashboard/accessories',
     marketing: '/exhibitor-dashboard/marketing',
     bsm: '/exhibitor-dashboard/bsm',

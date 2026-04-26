@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen } from "lucide-react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SidebarProps {
@@ -12,8 +12,8 @@ interface SidebarProps {
 
 const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    // { id: "profile", label: "Profile", icon: User },
     { id: "invoices", label: "Invoice and Receipts", icon: FileText },
+    { id: "payments", label: "Make Payment", icon: CreditCard },
     { id: "stall-management", label: "Stall Management", icon: Building2 },
     { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },

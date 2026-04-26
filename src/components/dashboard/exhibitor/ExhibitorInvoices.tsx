@@ -94,7 +94,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const sigUrl = settings?.authorizedSignature ? (settings.authorizedSignature.startsWith('http') ? settings.authorizedSignature : `${SERVER_URL}${settings.authorizedSignature}`) : null;
     const stampUrl = settings?.companyStamp ? (settings.companyStamp.startsWith('http') ? settings.companyStamp : `${SERVER_URL}${settings.companyStamp}`) : null;
 
-    const receiptUrl = data.receiptUrl ? (data.receiptUrl.startsWith('http') ? data.receiptUrl : `${SERVER_URL}${data.receiptUrl}`) : null;
+    const receiptUrl = data.receiptPdfUrl ? (data.receiptPdfUrl.startsWith('http') ? data.receiptPdfUrl : `${SERVER_URL}${data.receiptPdfUrl}`) : null;
 
     // Invoice No: 9IHWE/EX/INV/2026/001/P1 format (P1, P2... for each payment)
     const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
@@ -262,6 +262,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             {/* Seller Invoice Details */}
                             <td style={{ border: '1px solid #ccc', padding: 0, verticalAlign: 'top', fontSize: 11 }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <tbody>
                                     {[
                                         ['Invoice No.', invoiceNo],
                                         ['Invoice Date', invoiceDate],
@@ -276,6 +277,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                                             <td style={{ border: '1px solid #eee', padding: '3px 6px', fontSize: 10 }}>{value}</td>
                                         </tr>
                                     ))}
+                                    </tbody>
                                 </table>
                             </td>
                         </tr>

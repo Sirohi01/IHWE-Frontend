@@ -165,7 +165,6 @@ const initialFormData = {
     paymentPlanLabel: 'Full Payment',
     amountPaid: 0,
     balanceAmount: 0,
-    advancePercentage: 50,
     status: 'pending',
     paymentId: '',
     razorpayOrderId: '',
@@ -208,7 +207,6 @@ const BookAStand = () => {
 
     const [formData, setFormData] = useState(initialFormData);
 
-    const [onlineAdvancePercent, setOnlineAdvancePercent] = useState(50);
     const [exhibitorType, setExhibitorType] = useState<'domestic' | 'international' | null>(null);
     const [usdToInrRate, setUsdToInrRate] = useState<number>(86);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -252,8 +250,7 @@ const BookAStand = () => {
                     const initialEventId = urlEventId && actualEvents.find((e: any) => e._id === urlEventId) ? urlEventId : actualEvents[0]._id;
                     setSelectedEventId(initialEventId);
                     const selEvent = actualEvents.find((e: any) => e._id === initialEventId) || actualEvents[0];
-                    setFormData(prev => ({ ...prev, eventId: initialEventId, advancePercentage: selEvent.onlineAdvancePercentage }));
-                    setOnlineAdvancePercent(selEvent.onlineAdvancePercentage || 50);
+                    setFormData(prev => ({ ...prev, eventId: initialEventId }));
                 }
                 if (employeesRes) setMarketingStaff(Array.isArray(employeesRes) ? employeesRes : ((employeesRes as any).data || []));
                 if (staffRes) setStaff(Array.isArray(staffRes) ? staffRes : ((staffRes as any).data || []));
@@ -287,8 +284,6 @@ const BookAStand = () => {
             stallRateApi.getAllByEvent(selectedEventId).then(rates => {
                 setAllRates(rates);
             });
-            const ev = events.find(e => e._id === selectedEventId);
-            if (ev) setOnlineAdvancePercent(ev.onlineAdvancePercentage);
         }
     }, [selectedEventId, events]);
 
@@ -315,24 +310,6 @@ const BookAStand = () => {
             String(c.stateCode) === String(selectedState.stateCode)
         );
     }, [formData.state, states, cities]);
-
-    // OTP Timers
-    useEffect(() => {
-        let eTimer: any;
-        let pTimer: any;
-
-        if (emailTimer > 0) {
-            eTimer = setInterval(() => setEmailTimer(prev => prev - 1), 1000);
-        }
-        if (phoneTimer > 0) {
-            pTimer = setInterval(() => setPhoneTimer(prev => prev - 1), 1000);
-        }
-
-        return () => {
-            if (eTimer) clearInterval(eTimer);
-            if (pTimer) clearInterval(pTimer);
-        };
-    }, [emailTimer, phoneTimer]);
 
     // Rate Calculation Effect
     useEffect(() => {
@@ -399,12 +376,8 @@ const BookAStand = () => {
         const netPayable = invoiceTotal - tdsAmt;
 
         // Calculate due now based on selected plan percentage
-        let planPercent = 100;
-        if (selectedPlan) {
-            planPercent = Number(selectedPlan.percentage);
-        } else if (!isFull) {
-            planPercent = onlineAdvancePercent;
-        }
+        // If no plan selected or plan is full → 100% due now
+        const planPercent = selectedPlan ? Number(selectedPlan.percentage) : 100;
 
         const advanceAmt = Math.round(netPayable * (planPercent / 100));
         const balanceAmt = Math.round(netPayable - advanceAmt);
@@ -416,7 +389,7 @@ const BookAStand = () => {
                 amount: Math.round(subtotal2),
                 total: Math.round(invoiceTotal),
             },
-            paymentPlanLabel: selectedPlan ? selectedPlan.label : (isFull ? 'Full Payment' : `Advance (${onlineAdvancePercent}%)`),
+            paymentPlanLabel: selectedPlan ? selectedPlan.label : 'Full Payment',
             amountPaid: advanceAmt,
             balanceAmount: balanceAmt,
             financeBreakdown: {
@@ -443,7 +416,8 @@ const BookAStand = () => {
         formData.paymentPlanType,
         formData.chosenTdsPercent,
         settings,
-        onlineAdvancePercent
+        events,
+        selectedEventId
     ]);
 
     useEffect(() => {
@@ -733,25 +707,60 @@ const BookAStand = () => {
             const finalAmount = formData.amountPaid;
             const gatewayAmount = Math.round(finalAmount * 1.025 * 100) / 100;
 
+            // Step 1: Save registration first (status=pending) to get a DB _id for order creation
+            const pendingData = {
+                ...formData,
+                status: 'pending',
+                paymentMode: 'online',
+                amountPaid: 0,
+                balanceAmount: formData.financeBreakdown?.netPayable || 0,
+            };
+            const regRes = await exhibitorRegistrationApi.submit(pendingData);
+            if (!regRes.success || !regRes.data?._id) {
+                Swal.fire('Error', regRes.message || 'Failed to initiate registration. Please try again.', 'error');
+                setIsLoading(false);
+                return;
+            }
+            const registrationDbId = regRes.data._id;
+
+            // Step 2: Create Razorpay order on backend (gets a proper order_id)
+            const orderRes = await fetch(`${API_URL}/payment/create-order/${registrationDbId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: gatewayAmount })
+            });
+            const orderData = await orderRes.json();
+            if (!orderData.success) {
+                Swal.fire('Error', orderData.message || 'Failed to create payment order.', 'error');
+                setIsLoading(false);
+                return;
+            }
+
                 const options = {
-                    key: RAZORPAY_KEY_ID,
-                    amount: Math.round(gatewayAmount * 100),
+                    key: orderData.key || RAZORPAY_KEY_ID,
+                    amount: orderData.order.amount,
                     currency: isUSD ? 'USD' : 'INR',
                     name: "IHWE Registration",
                     description: `Stand Booking - Stall ${formData.participation.stallFor}${isUSD ? ' (International)' : ''} (incl. 2.5% gateway fee)`,
+                    order_id: orderData.order.id,
                     handler: async (response: any) => {
                         setPaymentModal({ status: 'processing' });
                         try {
-                            const finalData = {
-                                ...formData,
-                                razorpayOrderId: response.razorpay_order_id,
-                                paymentId: response.razorpay_payment_id,
-                                razorpaySignature: response.razorpay_signature,
-                                status: formData.balanceAmount === 0 ? 'paid' : 'advance-paid',
-                                paymentType: formData.balanceAmount === 0 ? 'full' : 'installment',
-                            };
-                            const submitRes = await exhibitorRegistrationApi.submit(finalData);
-                            if (submitRes.success) {
+                            // Step 3: Verify payment and update registration
+                            const verifyRes = await fetch(`${API_URL}/payment/verify-payment`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    registrationId: registrationDbId,
+                                    amountPaid: orderData.order.amount / 100,
+                                    paymentType: formData.balanceAmount === 0 ? 'full' : 'installment',
+                                })
+                            });
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.success) {
                                 setPaymentModal({ status: 'success' });
                                 setTimeout(() => {
                                     setPaymentModal(null);
@@ -759,11 +768,9 @@ const BookAStand = () => {
                                     window.scrollTo({ top: 0, behavior: "smooth" });
                                 }, 2500);
                             } else {
-                                await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online', razorpayOrderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id }).catch(() => {});
                                 setPaymentModal({ status: 'failed' });
                             }
                         } catch {
-                            await exhibitorRegistrationApi.submit({ ...formData, status: 'payment-failed', paymentMode: 'online' }).catch(() => {});
                             setPaymentModal({ status: 'failed' });
                         }
                     },
@@ -785,17 +792,8 @@ const BookAStand = () => {
                 rzp.on('payment.failed', async (response: any) => {
                     setIsLoading(false);
                     setPaymentModal({ status: 'failed' });
-                    try {
-                        await exhibitorRegistrationApi.submit({
-                            ...formData,
-                            status: 'payment-failed',
-                            paymentMode: 'online',
-                            razorpayOrderId: response.error?.metadata?.order_id || '',
-                            paymentId: response.error?.metadata?.payment_id || '',
-                        });
-                    } catch (e) {
-                        console.error('Failed to save payment-failed entry:', e);
-                    }
+                    // Registration already saved as pending — no need to re-submit
+                    console.error('Payment failed:', response.error?.description);
                 });
 
                 rzp.open();
@@ -1486,27 +1484,23 @@ const BookAStand = () => {
                                                                                 const ev = events.find((e: any) => e._id === selectedEventId);
                                                                                 const plans = ev?.paymentPlans || [];
                                                                                 const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
-                                                                                const firstInstallPlan = plans.find((p: any) => Number(p.percentage) < 100);
+                                                                                const installPlans = plans.filter((p: any) => Number(p.percentage) < 100).sort((a: any, b: any) => Number(a.percentage) - Number(b.percentage));
                                                                                 return (
                                                                                     <>
+                                                                                        {/* Full Payment */}
                                                                                         <button type="button"
                                                                                             onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: fullPlan?.id || 'full', paymentPlanLabel: fullPlan?.label || 'Full Payment' }))}
                                                                                             className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${(formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id) ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#23471d]'}`}>
                                                                                             Full {settings?.fullPaymentDiscount > 0 ? `(-${settings.fullPaymentDiscount}%)` : ''}
                                                                                         </button>
-                                                                                        {firstInstallPlan ? (
-                                                                                            <button type="button"
-                                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: firstInstallPlan.id, paymentPlanLabel: firstInstallPlan.label }))}
-                                                                                                className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${formData.paymentPlanType === firstInstallPlan.id ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
-                                                                                                {firstInstallPlan.label} ({firstInstallPlan.percentage}%)
+                                                                                        {/* All installment plans */}
+                                                                                        {installPlans.map((plan: any) => (
+                                                                                            <button key={plan.id} type="button"
+                                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: plan.id, paymentPlanLabel: plan.label }))}
+                                                                                                className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${formData.paymentPlanType === plan.id ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
+                                                                                                {plan.label} ({plan.percentage}%)
                                                                                             </button>
-                                                                                        ) : (
-                                                                                            <button type="button"
-                                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: 'advance', paymentPlanLabel: `Advance (${onlineAdvancePercent}%)` }))}
-                                                                                                className={`px-2 py-1 text-[10px] font-black rounded-[2px] border transition-all ${formData.paymentPlanType === 'advance' ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300'}`}>
-                                                                                                Advance ({onlineAdvancePercent}%)
-                                                                                            </button>
-                                                                                        )}
+                                                                                        ))}
                                                                                     </>
                                                                                 );
                                                                             })()}
