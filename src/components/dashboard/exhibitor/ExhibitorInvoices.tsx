@@ -65,14 +65,14 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const fb = data.financeBreakdown || {};
     const p = data.participation || {};
     const c1 = data.contact1 || {};
-    // Selected payment for current invoice view
+
     const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
     const latestPayment = selectedPayment || (history.length > 0 ? history[history.length - 1] : null);
     const latestTxId = latestPayment?.transactionId || latestPayment?.razorpayPaymentId || data.paymentId || data.manualPaymentDetails?.transactionId || '—';
     const latestMethod = latestPayment?.method || data.manualPaymentDetails?.method || data.paymentMode || '—';
 
     const isFullPayment = data.paymentPlanType === 'full' || fb.isFullPayment === true;
-    // Only show full payment discount if plan was actually full payment
+
     const effectiveDiscount = (fb.stallDiscountAmount || 0) + (isFullPayment ? (fb.discountAmount || 0) : 0);
 
     const grossAmt = fb.grossAmount || p.amount || 0;

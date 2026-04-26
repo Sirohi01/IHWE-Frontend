@@ -153,15 +153,14 @@ export default function ExhibitorBSM({ data }: { data: any }) {
     };
 
     const handleRequestMeeting = async () => {
-        if (!reqDate || !reqSlot) return toast.error("Please select date and time slot");
         try {
             const res = await fetch(`${API_URL}/bsm/exhibitor/request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ exhibitorId: data._id, buyerId: requestModal?._id, date: reqDate, timeSlot: reqSlot, remarks: reqRemarks })
+                body: JSON.stringify({ exhibitorId: data._id, buyerId: requestModal?._id, date: null, timeSlot: null, remarks: reqRemarks, eventId: eventData?._id })
             });
             const result = await res.json();
-            if (result.success) { toast.success("Meeting request sent!"); setRequestModal(null); fetchMeetingsAndEvent(); }
+            if (result.success) { toast.success("Interest expressed! Admin will schedule your meeting."); setRequestModal(null); fetchMeetingsAndEvent(); }
             else toast.error(result.message);
         } catch { toast.error("Network error"); }
     };
@@ -205,18 +204,22 @@ export default function ExhibitorBSM({ data }: { data: any }) {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-[12px] font-black text-slate-800 uppercase truncate">{m.buyerId?.fullName}</span>
+                                                <span className="text-[12px] font-black text-slate-800 uppercase truncate">{m.buyerId?.companyName}</span>
                                                 <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-sm font-bold uppercase tracking-tighter">{m.buyerId?.registrationId}</span>
                                             </div>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                                                <span className="flex items-center gap-1"><Briefcase size={12} /> {m.buyerId?.companyName}</span>
+                                                <span className="flex items-center gap-1"><Users size={12} /> {m.buyerId?.fullName || m.buyerId?.designation}</span>
                                                 <span className="flex items-center gap-1"><Globe2 size={12} /> {m.buyerId?.country}</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-wrap items-center gap-3 md:border-l md:pl-6">
                                             <div className="flex flex-col gap-1">
-                                                <span className="flex items-center gap-1.5 text-[11px] font-black text-slate-700"><Calendar size={12} className="text-[#23471d]" />{new Date(m.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}</span>
-                                                <span className="flex items-center gap-1.5 text-[11px] font-black text-slate-700"><Clock size={12} className="text-[#23471d]" />{m.timeSlot}</span>
+                                                <span className="flex items-center gap-1.5 text-[11px] font-black text-slate-700"><Calendar size={12} className="text-[#23471d]" />{m.date ? new Date(m.date).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) : 'Awaiting Assignment'}</span>
+                                                {m.timeSlot ? (
+                                                    <span className="flex items-center gap-1.5 text-[11px] font-black text-slate-700"><Clock size={12} className="text-[#23471d]" />{m.timeSlot}</span>
+                                                ) : (
+                                                    <span className="text-[8px] text-amber-600 uppercase font-black tracking-widest mt-0.5 animate-pulse">Slot Not Assigned</span>
+                                                )}
                                             </div>
                                             <div className="ml-auto flex flex-col items-end gap-2">
                                                 <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${m.status === 'Approved' ? 'bg-green-100 text-green-700' : m.status === 'Pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
@@ -352,21 +355,11 @@ export default function ExhibitorBSM({ data }: { data: any }) {
                                 <p className="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-1">Requesting meeting with {requestModal.fullName}</p>
                             </div>
                             <div className="p-6 space-y-5">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5 block">Meeting Date</label>
-                                        <select className="w-full h-10 bg-slate-50 border rounded-sm px-3 text-[12px] outline-none focus:border-[#23471d]" value={reqDate} onChange={e => setReqDate(e.target.value)}>
-                                            <option value="">Select Date...</option>
-                                            {getAvailableDates().map(d => <option key={d} value={d}>{new Date(d + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5 block">Preferred Slot</label>
-                                        <select className="w-full h-10 bg-slate-50 border rounded-sm px-3 text-[12px] outline-none focus:border-[#23471d]" value={reqSlot} onChange={e => setReqSlot(e.target.value)}>
-                                            <option value="">Select Slot...</option>
-                                            {["10:00 AM - 10:20 AM","10:30 AM - 10:50 AM","11:00 AM - 11:20 AM","11:30 AM - 11:50 AM","12:00 PM - 12:20 PM","12:30 PM - 12:50 PM","01:00 PM - 01:20 PM","01:30 PM - 01:50 PM","02:00 PM - 02:20 PM","02:30 PM - 02:50 PM","03:00 PM - 03:20 PM","03:30 PM - 03:50 PM","04:00 PM - 04:20 PM","04:30 PM - 04:50 PM","05:00 PM - 05:20 PM","05:30 PM - 05:50 PM","06:00 PM - 06:20 PM","06:30 PM - 06:50 PM","07:00 PM - 07:20 PM"].map(s => <option key={s} value={s}>{s}</option>)}
-                                        </select>
-                                    </div>
+                                <div className="bg-amber-50 border border-amber-100 p-4 rounded-sm">
+                                    <p className="text-[10px] text-amber-800 font-bold leading-relaxed uppercase tracking-tight">
+                                        <span className="bg-amber-500 text-white px-1.5 py-0.5 rounded-sm mr-1.5">Note:</span> 
+                                        By sending this invitation, you are expressing interest in meeting this buyer. The Admin will assign a specific time slot and venue, which you can then approve.
+                                    </p>
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5 block">Introduction / Agenda</label>
@@ -375,7 +368,7 @@ export default function ExhibitorBSM({ data }: { data: any }) {
                                 <div className="flex gap-3 pt-2">
                                     <button onClick={() => setRequestModal(null)} className="flex-1 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500 bg-slate-100 rounded-sm hover:bg-slate-200 transition-all">Discard</button>
                                     <button onClick={handleRequestMeeting} className="flex-[2] py-3 text-[10px] font-black uppercase tracking-widest text-white bg-[#23471d] rounded-sm shadow-xl shadow-[#23471d]/20 hover:bg-[#1a3516] transition-all flex items-center justify-center gap-2">
-                                        <Send size={14} /> Send Invitation
+                                        <Send size={14} /> Send Interest
                                     </button>
                                 </div>
                             </div>
@@ -401,11 +394,11 @@ function BuyerCard({ b, onOpen, featured }: { b: Buyer; onOpen: () => void; feat
                 </div>
                 <div className="min-w-0 flex-1">
                     <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest truncate block">{b.businessType || 'Buyer'}</span>
-                    <h4 className="text-[11px] font-black text-slate-800 uppercase truncate leading-tight">{b.fullName}</h4>
+                    <h4 className="text-[11px] font-black text-slate-800 uppercase truncate leading-tight">{b.companyName}</h4>
                 </div>
             </div>
             <div className="bg-slate-50 rounded-sm px-2 py-1.5 mb-2 border border-slate-100">
-                <p className="text-[10px] font-bold text-slate-700 uppercase truncate">{b.companyName}</p>
+                <p className="text-[10px] font-bold text-slate-700 uppercase truncate">{b.fullName || b.designation || 'Premium Buyer'}</p>
                 <span className="flex items-center gap-1 text-[8px] text-slate-400 font-bold uppercase mt-0.5"><Globe2 size={9} /> {b.country}</span>
             </div>
             <div className="flex items-center gap-1.5 mb-1 px-0.5">

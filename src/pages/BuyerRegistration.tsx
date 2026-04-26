@@ -1196,7 +1196,7 @@ const BuyerRegistration = () => {
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Mobile Number (10 digits) *</Label>
+                                                <Label className={labelClasses}>Mobile Number (10 digits) * <div className="inline-flex w-32 overflow-hidden align-middle ml-2 items-center h-4 relative"><motion.span initial={{ x: "100%" }} animate={{ x: "-100%" }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }} className="text-red-500 text-[10px] uppercase font-semibold whitespace-nowrap absolute">Our team will contact you</motion.span></div></Label>
                                                 <div className="flex gap-2">
                                                     <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
                                                     {!mobileOtpVerified && !mobileOtpSent && (
