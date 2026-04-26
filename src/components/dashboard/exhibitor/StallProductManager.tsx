@@ -305,7 +305,7 @@ export default function StallProductManager({ data }: { data: any }) {
                             </div>
 
                             {/* Info Grid */}
-                            <div className="grid-cols-1 lg:grid-cols-3">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 <div className="lg:col-span-2 space-y-6">
                                     {/* Event Details */}
                                     {data?.eventId && (
@@ -364,6 +364,49 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <ImageIcon className="mx-auto text-slate-100 mb-4" size={48} />
                                         <h3 className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2">Technical Documents</h3>
                                         <p className="text-[10px] font-medium text-slate-400 max-w-xs mx-auto mb-6 italics">Please visit the documentation section to download your stall technical manual and entry passes.</p>
+                                    </div>
+                                </div>
+
+                                {/* Venue Map Column */}
+                                <div className="space-y-6">
+                                    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden flex flex-col h-full shadow-sm">
+                                        <div className="bg-slate-50 px-6 py-4 border-b flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <MapPin size={14} className="text-[#23471d]" />
+                                                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Venue Location</span>
+                                            </div>
+                                            <a
+                                                href="https://www.google.com/maps/dir/?api=1&destination=Hall+9+Pragati+Maidan+New+Delhi"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[10px] font-black text-[#d26019] uppercase tracking-widest hover:underline flex items-center gap-1 group/link"
+                                            >
+                                                Directions <ExternalLink size={12} className="group-hover/link:translate-x-0.5 transition-transform" />
+                                            </a>
+                                        </div>
+                                        <div className="flex-1 min-h-[400px] bg-slate-50 relative">
+                                            <iframe
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7004.841695588523!2d77.23840569533094!3d28.617146362744233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce3292652f09b%3A0x5291514307e237c5!2sHall%20-%209!5e0!3m2!1sen!2sin!4v1777189507398!5m2!1sen!2sin"
+                                                width="100%"
+                                                height="100%"
+                                                style={{ border: 0 }}
+                                                allowFullScreen
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"
+                                                className="absolute inset-0"
+                                            />
+                                        </div>
+                                        <div className="p-5 bg-white border-t">
+                                            <div className="flex items-start gap-3">
+                                                <div className="w-8 h-8 bg-slate-100 rounded-sm flex items-center justify-center shrink-0">
+                                                    <MapPin size={16} className="text-slate-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[11px] font-black text-slate-900 uppercase leading-tight">Pragati Maidan, New Delhi</p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Hall - 9, IECC Complex, Pragati Maidan, New Delhi, Delhi 110001</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

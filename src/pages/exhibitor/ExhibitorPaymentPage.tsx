@@ -188,7 +188,7 @@ export default function ExhibitorPaymentPage() {
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
                                 registrationId: data._id,
-                                amountPaid: order.amount / 100,
+                                amountPaid: baseAmount,
                                 paymentType: installmentNumber ? `installment_${installmentNumber}` : 'online',
                                 installmentNumber
                             })
@@ -196,7 +196,6 @@ export default function ExhibitorPaymentPage() {
                         const verifyData = await verifyRes.json();
 
                         if (verifyData.success) {
-                            // Show success popup — display base amount (without gateway fee)
                             setPaymentSuccess({
                                 show: true,
                                 amount: baseAmount,
@@ -358,11 +357,10 @@ export default function ExhibitorPaymentPage() {
                         </div>
                     )}
                     {/* Payment Plan badge */}
-                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
-                        summary.paymentPlanType === 'full'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            : 'bg-blue-50 text-blue-700 border-blue-200'
-                    }`}>
+                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${summary.paymentPlanType === 'full'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-blue-50 text-blue-700 border-blue-200'
+                        }`}>
                         {summary.paymentPlanLabel || (summary.paymentPlanType === 'full' ? 'Full Payment' : 'Installment Plan')}
                     </span>
                 </div>
@@ -440,7 +438,7 @@ export default function ExhibitorPaymentPage() {
                                     <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
                                         <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
                                             <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block shrink-0"></span>
-                                            <span className="truncate">Stall Discount ({summary.finance.stallDiscountPercent}%)</span>
+                                            <span className="truncate">Stall Discount</span>
                                         </span>
                                         <span className="text-xs font-bold text-orange-600 shrink-0">−{fmt(summary.finance.stallDiscountAmount)}</span>
                                     </div>
@@ -451,7 +449,7 @@ export default function ExhibitorPaymentPage() {
                                     <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-emerald-50/40 gap-2">
                                         <span className="text-xs text-emerald-700 font-bold flex items-center gap-1.5 min-w-0">
                                             <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                                            <span className="truncate">Full Payment Discount ({summary.finance.discountPercent}%)</span>
+                                            <span className="truncate">Full Payment Discount</span>
                                         </span>
                                         <span className="text-xs font-black text-emerald-700 shrink-0">−{fmt(summary.finance.discountAmount)}</span>
                                     </div>
@@ -474,7 +472,7 @@ export default function ExhibitorPaymentPage() {
                                     <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
                                         <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
                                             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block shrink-0"></span>
-                                            <span className="truncate">TDS ({summary.finance.tdsPercent}% on taxable)</span>
+                                            <span className="truncate">TDS</span>
                                         </span>
                                         <span className="text-xs font-bold text-blue-600 shrink-0">−{fmt(summary.finance.tdsAmount)}</span>
                                     </div>
@@ -573,7 +571,9 @@ export default function ExhibitorPaymentPage() {
                                                 </div>
                                                 <div className="min-w-0 flex-1">
                                                     <div className="flex flex-wrap items-center gap-1.5">
-                                                        <p className="text-xs font-black text-gray-800">{inst.label || `Installment ${inst.installmentNumber}`}</p>
+                                                        <p className="text-xs font-black text-gray-800">
+                                                            {(inst.label || `Installment ${inst.installmentNumber}`).replace(/\s*\(\d+%\)/g, '')}
+                                                        </p>
                                                         {isLocked && (
                                                             <span className="text-[8px] font-black uppercase px-1.5 py-0.5 bg-gray-200 text-gray-500 rounded">Locked</span>
                                                         )}
@@ -582,8 +582,7 @@ export default function ExhibitorPaymentPage() {
                                                         )}
                                                     </div>
                                                     <p className="text-[10px] text-gray-500 mt-0.5">
-                                                        {inst.percentage}% of total
-                                                        {inst.dueDate && ` • Due: ${new Date(inst.dueDate).toLocaleDateString('en-IN')}`}
+                                                        {inst.dueDate && `Due: ${new Date(inst.dueDate).toLocaleDateString('en-IN')}`}
                                                     </p>
                                                     {isPaid && inst.paidAt && (
                                                         <p className="text-[10px] text-emerald-600 font-bold mt-0.5">
@@ -650,58 +649,57 @@ export default function ExhibitorPaymentPage() {
                         !isInstallmentPlan ||
                         (isInstallmentPlan && allInstallmentsPaid && remainingAfterInstallments > 0)
                     ) && (
-                        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                            <div className="px-5 py-3 border-b border-gray-100 flex items-center gap-2">
-                                <ShieldCheck className="w-3.5 h-3.5 text-[#23471d]" />
-                                <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
-                                    {summary.installments.length === 0 ? 'Secure Payment via Razorpay' : 'Pay Remaining Balance'}
-                                </p>
-                            </div>
-                            <div className="p-5">
-                                {/* Amount breakdown with gateway fee */}
-                                {(() => {
-                                    const { fee, total } = calcWithGatewayFee(totalPayable);
-                                    return (
-                                        <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 mb-4 space-y-2">
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-500 font-medium">Balance Due</span>
-                                                <span className="font-bold text-gray-800">{fmt(totalPayable)}</span>
+                            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                                <div className="px-5 py-3 border-b border-gray-100 flex items-center gap-2">
+                                    <ShieldCheck className="w-3.5 h-3.5 text-[#23471d]" />
+                                    <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                                        {summary.installments.length === 0 ? 'Secure Payment via Razorpay' : 'Pay Remaining Balance'}
+                                    </p>
+                                </div>
+                                <div className="p-5">
+                                    {(() => {
+                                        const { fee, total } = calcWithGatewayFee(totalPayable);
+                                        return (
+                                            <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 mb-4 space-y-2">
+                                                <div className="flex justify-between text-xs">
+                                                    <span className="text-gray-500 font-medium">Balance Due</span>
+                                                    <span className="font-bold text-gray-800">{fmt(totalPayable)}</span>
+                                                </div>
+                                                <div className="flex justify-between text-xs">
+                                                    <span className="text-gray-500 font-medium flex items-center gap-1">
+                                                        <Percent className="w-3 h-3 text-orange-500" />
+                                                        Gateway Fee ({RAZORPAY_CHARGE_PCT}%)
+                                                    </span>
+                                                    <span className="font-bold text-orange-600">+{fmt(fee)}</span>
+                                                </div>
+                                                <div className="border-t border-slate-200 pt-2 flex justify-between items-center">
+                                                    <span className="text-sm font-black text-gray-800 uppercase tracking-wide">You Pay</span>
+                                                    <span className="text-2xl font-black text-[#23471d]">{fmt(total)}</span>
+                                                </div>
                                             </div>
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-500 font-medium flex items-center gap-1">
-                                                    <Percent className="w-3 h-3 text-orange-500" />
-                                                    Gateway Fee ({RAZORPAY_CHARGE_PCT}%)
-                                                </span>
-                                                <span className="font-bold text-orange-600">+{fmt(fee)}</span>
-                                            </div>
-                                            <div className="border-t border-slate-200 pt-2 flex justify-between items-center">
-                                                <span className="text-sm font-black text-gray-800 uppercase tracking-wide">You Pay</span>
-                                                <span className="text-2xl font-black text-[#23471d]">{fmt(total)}</span>
-                                            </div>
-                                        </div>
-                                    );
-                                })()}
+                                        );
+                                    })()}
 
-                                <button
-                                    onClick={() => initiatePayment()}
-                                    disabled={paying || payingInstallment !== null}
-                                    className="w-full flex items-center justify-center gap-2 py-4 bg-[#23471d] text-white font-black text-sm uppercase tracking-wider rounded-xl hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-md hover:shadow-lg active:scale-[0.99]"
-                                >
-                                    {paying
-                                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing Payment...</>
-                                        : <><CreditCard className="w-4 h-4" /> Pay {fmt(calcWithGatewayFee(totalPayable).total)} Now</>
-                                    }
-                                </button>
+                                    <button
+                                        onClick={() => initiatePayment()}
+                                        disabled={paying || payingInstallment !== null}
+                                        className="w-full flex items-center justify-center gap-2 py-4 bg-[#23471d] text-white font-black text-sm uppercase tracking-wider rounded-xl hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-md hover:shadow-lg active:scale-[0.99]"
+                                    >
+                                        {paying
+                                            ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing Payment...</>
+                                            : <><CreditCard className="w-4 h-4" /> Pay {fmt(calcWithGatewayFee(totalPayable).total)} Now</>
+                                        }
+                                    </button>
 
-                                <div className="mt-3 flex items-center justify-center gap-3 text-[9px] text-gray-400 font-bold uppercase tracking-wider">
-                                    <span>UPI</span><span className="text-gray-200">|</span>
-                                    <span>Cards</span><span className="text-gray-200">|</span>
-                                    <span>Net Banking</span><span className="text-gray-200">|</span>
-                                    <span>Wallets</span>
+                                    <div className="mt-3 flex items-center justify-center gap-3 text-[9px] text-gray-400 font-bold uppercase tracking-wider">
+                                        <span>UPI</span><span className="text-gray-200">|</span>
+                                        <span>Cards</span><span className="text-gray-200">|</span>
+                                        <span>Net Banking</span><span className="text-gray-200">|</span>
+                                        <span>Wallets</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
                     {/* Fully Paid */}
                     {isFullyPaid && (
