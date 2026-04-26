@@ -965,14 +965,14 @@ const BuyerRegistration = () => {
     if (isComingSoon) {
         return (
             <div className="min-h-screen bg-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
-                {/* Background with Overlay */}
+
                 <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
                     style={{ backgroundImage: `url(${HeroBg})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#23471d]/95 via-black/70 to-black/90" />
 
-                {/* Animated Particles/Accents */}
+
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                     <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-emerald-500/10 rounded-full blur-[100px] animate-pulse" />
                     <div className="absolute bottom-[10%] right-[5%] w-80 h-80 bg-emerald-600/10 rounded-full blur-[120px] animate-pulse" />
@@ -1088,7 +1088,6 @@ const BuyerRegistration = () => {
                                 </div>
                                 <form onSubmit={handleSubmit} className="p-5 space-y-5">
 
-                                    {/* 1. Personal & Company Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Personal & Company Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
@@ -1193,12 +1192,11 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* 2. Contact Information */}
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Mobile Number (10 digits) *</Label>
+                                                <Label className={labelClasses}>Mobile Number (10 digits) * <div className="inline-flex w-32 overflow-hidden align-middle ml-2 items-center h-4 relative"><motion.span initial={{ x: "100%" }} animate={{ x: "-100%" }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }} className="text-red-500 text-[10px] uppercase font-semibold whitespace-nowrap absolute">Our team will contact you</motion.span></div></Label>
                                                 <div className="flex gap-2">
                                                     <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
                                                     {!mobileOtpVerified && !mobileOtpSent && (
@@ -1289,7 +1287,7 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    {/* 2. Business Profile Details */}
+
                                     <div className="space-y-2 pt-2">
                                         <h3 className={sectionTitleClasses}> 2. Business Profile Details</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
@@ -1538,7 +1536,7 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* Section D: Requirements - Fixed height textarea */}
+
                                                 <div className="space-y-1.5">
                                                     <Label className="text-[11px] font-semibold">📝 Specific Meeting Requirements</Label>
                                                     <Textarea
