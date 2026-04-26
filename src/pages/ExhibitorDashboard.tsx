@@ -45,6 +45,7 @@ const TAB_ROUTES: Record<string, string> = {
     // participants_feedback: '/exhibitor-dashboard/participants-feedback',
     mandate_form: '/exhibitor-dashboard/mandate-form',
     documentation: '/exhibitor-dashboard/documentation',
+    feedback: '/exhibitor-dashboard/feedback',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(

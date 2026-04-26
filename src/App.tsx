@@ -55,6 +55,8 @@ const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
 const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
 const PsmReports = lazy(() => import("./pages/psmClaim/PsmReports"));
 const PsmReportsTable = lazy(() => import("./pages/psmClaim/PsmReportsTable"));
+const ExhibitorFeedbackForm = lazy(() => import("./pages/exhibitor/ExhibitorFeedbackForm"));
+const BuyerFeedbackForm = lazy(() => import("./pages/buyer/dashboard/BuyerFeedbackForm"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
 const BuyerScan = lazy(() => import("./pages/BuyerScan"));
@@ -164,25 +166,27 @@ const App = () => {
                     <Route path="reminders" element={<PaymentReminders />} />
                     <Route path="notification" element={<Notification />} />
                     <Route path="relationship-manager" element={<RelationshipManager />} />
+                    <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                     <Route path="ex-profile" element={<ExProfile />} />
                   </Route>
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
 
-                {/* Buyer Dashboard Routes */}
-                <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
-                  <Route index element={<BuyerDashboardHome />} />
-                  <Route path="profile" element={<BuyerProfilePage />} />
-                  <Route path="chat" element={<BuyerChatPage />} />
-                  <Route path="bsm" element={<BuyerBSMPage />} />
-                  <Route path="calendar" element={<BuyerCalendarPage />} />
-                  <Route path="invoices" element={<BuyerInvoicesPage />} />
-                  <Route path="notifications" element={<BuyerNotificationsPage />} />
-                  <Route path="documentation" element={<BuyerDocumentationPage />} />
-                </Route>
-              </Routes>
-            </Suspense>
-            <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
+                  {/* Buyer Dashboard Routes */}
+                  <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
+                    <Route index element={<BuyerDashboardHome />} />
+                    <Route path="profile" element={<BuyerProfilePage />} />
+                    <Route path="chat" element={<BuyerChatPage />} />
+                    <Route path="bsm" element={<BuyerBSMPage />} />
+                    <Route path="calendar" element={<BuyerCalendarPage />} />
+                    <Route path="invoices" element={<BuyerInvoicesPage />} />
+                    <Route path="notifications" element={<BuyerNotificationsPage />} />
+                    <Route path="documentation" element={<BuyerDocumentationPage />} />
+                    <Route path="feedback" element={<BuyerFeedbackForm />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+              <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
             </BuyerAuthProvider>
           </BrowserRouter>
         </TooltipProvider>

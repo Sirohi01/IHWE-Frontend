@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen } from "lucide-react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen, ClipboardList } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SidebarProps {
@@ -18,6 +18,7 @@ const navItems = [
     { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
     { id: "documentation", label: "Documentation", icon: FolderOpen },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
+    { id: 'feedback', label: 'Buyer Feedback', icon: ClipboardList },
     { id: "notifications", label: "Notifications", icon: Megaphone },
 ];
 
