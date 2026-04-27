@@ -16,7 +16,7 @@ const navItems = [
     { id: "invoices", label: "Invoice and Receipts", icon: FileText },
     { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
     { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
-    { id: "documentation", label: "Documentation", icon: FolderOpen },
+    { id: "documentation", label: "Business Documents", icon: FolderOpen },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
     { id: 'feedback', label: 'Buyer Feedback', icon: ClipboardList },
     { id: "notifications", label: "Notifications", icon: Megaphone },
