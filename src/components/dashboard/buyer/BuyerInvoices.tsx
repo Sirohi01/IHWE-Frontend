@@ -60,8 +60,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
             })
             .catch(() => { });
     }, []);
-
-    // Get actual total amount
     const parseAmt = (val: any) => {
         if (typeof val === 'number') return val;
         if (typeof val === 'string') return Number(val.replace(/[^0-9.]/g, '')) || 0;
@@ -79,7 +77,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         return 0;
     })();
 
-    // Financial calculations
     const taxableVal = actualTotal > 0 ? Math.round(actualTotal / 1.18) : 0;
     const gstAmt = actualTotal - taxableVal;
     const cgst = Math.round(gstAmt / 2);
@@ -89,7 +86,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
     const latestPayment = selectedPayment || (history.length > 0 ? history[history.length - 1] : null);
 
-    // Transaction ID
+
     const latestTxId =
         latestPayment?.transactionId ||
         latestPayment?.razorpayPaymentId ||
@@ -102,7 +99,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         (data.manualPaymentDetails?.paymentId) ||
         '—';
 
-    // Payment Method
+
     const latestMethod =
         latestPayment?.method ||
         latestPayment?.paymentMethod ||
@@ -113,7 +110,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         data.paymentMethod ||
         '—';
 
-    // Payment Amount
+
     const thisPaymentAmt = (() => {
         if (selectedPayment?.amount) return parseAmt(selectedPayment.amount);
         if (selectedPayment?.paidAmount) return parseAmt(selectedPayment.paidAmount);
@@ -125,7 +122,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         return 0;
     })();
 
-    // Phone Number
+
     const exhibitorPhone =
         data.phone ||
         data.phoneNumber ||
@@ -143,7 +140,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const sigUrl = settings?.authorizedSignature ? (settings.authorizedSignature.startsWith('http') ? settings.authorizedSignature : `${SERVER_URL}${settings.authorizedSignature}`) : null;
     const stampUrl = settings?.companyStamp ? (settings.companyStamp.startsWith('http') ? settings.companyStamp : `${SERVER_URL}${settings.companyStamp}`) : null;
 
-    // Invoice No
+
     const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
     const invoiceYear = new Date().getFullYear();
     const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
@@ -175,7 +172,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         setTimeout(() => { win.print(); win.close(); }, 600);
     };
 
-    // Exhibitor information
+
     const exhibitorInfo = {
         name: data.fullName || data.exhibitorName || data.companyName || data.businessName || '—',
         address: data.address || data.registeredAddress || data.businessAddress || '',
@@ -190,7 +187,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         panNo: data.panNo || data.panNumber || ''
     };
 
-    // Category
+
     const exhibitorCategory = (() => {
         if (data.registrationCategory) return data.registrationCategory;
         if (data.category) return data.category;
@@ -200,7 +197,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Action Buttons */}
+
             <div className="flex items-center justify-between gap-3 mb-4 no-print flex-wrap">
                 <div className="flex gap-2 flex-wrap items-center">
                     <button onClick={handlePrint}
@@ -231,44 +228,20 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                 )}
             </div>
 
-            {/* Printable Invoice */}
             <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Arial, sans-serif' }}>
                 {headerImageUrl && (
                     <div style={{ marginBottom: 8, textAlign: 'center' }}>
                         <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
+                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
 
-                {/* HEADER TITLE */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
-                    <tbody>
-                        <tr>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>{companyName}</div>
-                                <div style={{ fontSize: 10, color: '#444', marginTop: 4 }}>{companyAddress}</div>
-                                {companyGst && <div style={{ fontSize: 10, marginTop: 2 }}><b>GSTIN:</b> {companyGst}</div>}
-                                {companyCin && <div style={{ fontSize: 10 }}><b>CIN:</b> {companyCin}</div>}
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '40%', verticalAlign: 'middle', textAlign: 'center' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>TAX INVOICE</div>
-                                <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{data.eventId?.name || '9th International Health & Wellness Expo 2026'}</div>
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle', textAlign: 'right' }}>
-                                <div style={{ fontWeight: 700, fontSize: 12, color: '#1a3a6b' }}>Original Copy</div>
-                                <div style={{ fontSize: 10, marginTop: 4 }}><b>Invoice No.:</b> {invoiceNo}</div>
-                                <div style={{ fontSize: 10 }}><b>Invoice Date:</b> {invoiceDate}</div>
-                                <div style={{ fontSize: 10 }}><b>Reg. ID:</b> {data.registrationId || '—'}</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                {/* MAIN INFO TABLE */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Event Details</th>
+                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Seller Invoice Details</th>
                         </tr>
                     </thead>
@@ -281,8 +254,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                 <div style={{ marginTop: 4 }}>Contact Person: {exhibitorInfo.contactPerson}</div>
                                 <div>Email: {exhibitorInfo.email}</div>
                                 <div>Phone: {exhibitorInfo.phone}</div>
-                                {exhibitorInfo.gstNo && <div>GSTIN: {exhibitorInfo.gstNo}</div>}
-                                {exhibitorInfo.panNo && <div>PAN: {exhibitorInfo.panNo}</div>}
+                                <div style={{ marginTop: 4 }}><b>GSTIN:</b> {exhibitorInfo.gstNo || '—'} / <b>PAN:</b> {exhibitorInfo.panNo || '—'}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
@@ -296,10 +268,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                         {[
                                             ['Invoice No.', invoiceNo],
                                             ['Invoice Date', invoiceDate],
-                                            ['Reg. ID', data.registrationId || '—'],
-                                            ['Payment Mode', latestMethod],
-                                            ['Txn. ID', latestTxId],
-                                            ['Payment Amount', `${cur} ${fmtNum(thisPaymentAmt)}`],
                                             ['Reverse Charge', 'No'],
                                         ].map(([label, value]) => (
                                             <tr key={label}>
@@ -314,7 +282,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* ITEM TABLE */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
@@ -351,7 +318,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* GST TABLE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
@@ -398,7 +365,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* INVOICE VALUE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <tbody>
                         <tr style={{ background: '#f8fafc' }}>
@@ -410,7 +377,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* TERMS */}
+
                 <div style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa' }}>
                     <div style={{ fontWeight: 700, marginBottom: 4 }}>Terms and Conditions:</div>
                     <div>1. Payments should be made through crossed cheque/D.D./RTGS/NEFT payable at Delhi, favouring {companyName}.</div>
@@ -418,7 +385,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     <div>3. All Disputes are subject to Delhi Jurisdiction.</div>
                 </div>
 
-                {/* BANK & SIGNATURE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
@@ -450,9 +417,9 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* FOOTER */}
+
                 <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
-                    <b>Registered Address:</b> {companyAddress}
+                    <b>9th International Health & Wellness Expo 2026</b>
                 </div>
             </div>
         </motion.div>
