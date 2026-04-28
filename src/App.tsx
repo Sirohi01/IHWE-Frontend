@@ -65,8 +65,7 @@ const SellerNotificationsPage = lazy(() => import("@/pages/exhibitor/seller/Sell
 const SellerProfilePage = lazy(() => import("@/pages/exhibitor/seller/SellerProfilePage"));
 const SellerStallBookingPage = lazy(() => import("@/pages/exhibitor/seller/SellerStallBookingPage"));
 const SellerMarketingPage = lazy(() => import("@/pages/exhibitor/seller/SellerMarketingPage")); // kept for fallback
-const SellerFeedbackForm = lazy(() => import("@/pages/feedbacks/SellerFeedbackForm"));
-// SellerMeetingSchedulerPage removed — using ExhibitorBSMPage for calendar
+const SellerCalendarPage = lazy(() => import("@/pages/exhibitor/seller/SellerCalendarPage"));
 const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
 const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
@@ -198,7 +197,7 @@ const App = () => {
                     <Route index element={<SellerDashboardHome />} />
                     <Route path="leads" element={<SellerLeadsPage />} />
                     <Route path="bsm" element={<ExhibitorBSMPage />} />
-                    <Route path="calendar" element={<ExhibitorBSMPage />} />
+                    <Route path="calendar" element={<SellerCalendarPage />} />
                     <Route path="product-export" element={<ProductExportPage />} />
                     <Route path="products" element={<SellerProductsPage />} />
                     <Route path="stall" element={<SellerStallBookingPage />} />

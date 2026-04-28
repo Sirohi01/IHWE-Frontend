@@ -330,7 +330,7 @@ const InternationalBuyerRegistration = () => {
             interested: "No"
         },
         registrationCategory: "",
-        registrationFee: "₹0",
+        registrationFee: "$0",
         transactionId: ""
     };
 
@@ -494,11 +494,11 @@ const InternationalBuyerRegistration = () => {
         const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID || "",
             amount: gatewayPrice * 100,
-            currency: "INR",
+            currency: "USD",
             name: "IHWE 2026",
             description: `${tempSelectedPackage.name} Registration`,
             handler: async (response: any) => {
-                setFormData(prev => ({ ...prev, registrationCategory: tempSelectedPackage.name, registrationFee: `₹${tempSelectedPackage.price}`, transactionId: response.razorpay_payment_id }));
+                setFormData(prev => ({ ...prev, registrationCategory: tempSelectedPackage.name, registrationFee: `$${tempSelectedPackage.price}`, transactionId: response.razorpay_payment_id }));
                 setShowTermsModal(false); setShowPaymentConfirmModal(false);
                 await submitFinal(response.razorpay_payment_id);
             },
@@ -519,7 +519,10 @@ const InternationalBuyerRegistration = () => {
                 else finalFormData.append(key, String(val));
             });
             Object.keys(files).forEach(key => { if (files[key]) finalFormData.append(key, files[key] as File); });
-            if (transactionId) finalFormData.append('transactionId', transactionId);
+            if (transactionId) {
+                finalFormData.append('transactionId', transactionId);
+                finalFormData.append('paymentStatus', 'Completed');
+            }
             const res = await internationalBuyerApi.submit(finalFormData);
             if (res.success) { setSubmitted(true); window.scrollTo({ top: 0, behavior: "smooth" }); }
             else toast.error(res.message || "Submission failed.");
@@ -852,7 +855,7 @@ const InternationalBuyerRegistration = () => {
                                                     </SelectContent>
                                                 </Select>
                                             </div>
-                                            <div><Label className={labelClasses}>Booking Amount Paid</Label><Input name="billingDetails.bookingAmountPaid" value={formData.billingDetails.bookingAmountPaid} onChange={handleInputChange} className={inputClasses} placeholder="e.g. ₹25000" /></div>
+                                            <div><Label className={labelClasses}>Booking Amount Paid</Label><Input name="billingDetails.bookingAmountPaid" value={formData.billingDetails.bookingAmountPaid} onChange={handleInputChange} className={inputClasses} placeholder="e.g. $25000" /></div>
                                             <div className="lg:col-span-2"><Label className={labelClasses}>UTR / Transaction ID</Label><Input name="billingDetails.utrTransactionId" value={formData.billingDetails.utrTransactionId} onChange={handleInputChange} className={inputClasses} placeholder="Transaction reference" /></div>
                                         </div>
                                     </div>
@@ -924,7 +927,7 @@ const InternationalBuyerRegistration = () => {
 
                                                                     <div className="mb-3">
                                                                         <h4 className="text-[15px] font-black leading-tight text-slate-800 group-hover:text-[#23471d] transition-colors">
-                                                                            {pkg.name} – ₹{pkg.price}
+                                                                            {pkg.name} – ${pkg.price}
                                                                         </h4>
                                                                         {pkg.tagline && (
                                                                             <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
@@ -1019,7 +1022,7 @@ const InternationalBuyerRegistration = () => {
 
                                                                     <div className="mb-3">
                                                                         <h4 className="text-[15px] font-black leading-tight text-slate-800 group-hover:text-[#23471d] transition-colors">
-                                                                            {pkg.name} – ₹{pkg.price}
+                                                                            {pkg.name} – ${pkg.price}
                                                                         </h4>
                                                                         {pkg.tagline && (
                                                                             <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
@@ -1086,7 +1089,7 @@ const InternationalBuyerRegistration = () => {
                         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm bg-black/40">
                             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                                 <div className="bg-[#23471d] p-4 text-white flex justify-between items-center">
-                                    <div><h3 className="font-bold text-[14px] uppercase tracking-widest">Declaration & Legal Terms</h3><p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em]">{tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}</p></div>
+                                    <div><h3 className="font-bold text-[14px] uppercase tracking-widest">Declaration & Legal Terms</h3><p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em]">{tempSelectedPackage?.name} - ${tempSelectedPackage?.price}</p></div>
                                     <button onClick={() => setShowTermsModal(false)}><X size={20} /></button>
                                 </div>
 
@@ -1150,8 +1153,8 @@ const InternationalBuyerRegistration = () => {
                                 <div className="p-8 space-y-6">
                                     <div className="space-y-2 border-b pb-4">
                                         <div className="flex justify-between"><span>Plan:</span><span className="font-bold">{tempSelectedPackage.name}</span></div>
-                                        <div className="flex justify-between"><span>Fee:</span><span className="font-bold">₹{tempSelectedPackage.price}</span></div>
-                                        <div className="flex justify-between text-[#23471d] font-black uppercase tracking-widest pt-2"><span>Total (+Tax/Fee):</span><span>₹{Math.round(tempSelectedPackage.price * 1.025)}</span></div>
+                                        <div className="flex justify-between"><span>Fee:</span><span className="font-bold">${tempSelectedPackage.price}</span></div>
+                                        <div className="flex justify-between text-[#23471d] font-black uppercase tracking-widest pt-2"><span>Total (+Tax/Fee):</span><span>${Math.round(tempSelectedPackage.price * 1.025)}</span></div>
                                     </div>
                                     <Button onClick={initiateRazorpayPayment} disabled={isSubmitting} className="w-full h-14 rounded-xl bg-[#23471d] font-black uppercase tracking-[0.2em] shadow-xl">Pay Now</Button>
                                 </div>

@@ -113,7 +113,7 @@ export default function BuyerOverview({
 
                 </div>
 
-                {/* Actions */}
+
                 <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t">
                     <button
                         onClick={() => setActiveTab('profile')}
