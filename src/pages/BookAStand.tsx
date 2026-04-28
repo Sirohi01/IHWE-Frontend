@@ -996,6 +996,36 @@ const BookAStand = () => {
                                                 International Exhibitor
                                             </button>
                                         </div>
+
+                                        {/* Registration Form Downloads */}
+                                        {(settings?.domesticRegistrationFormPdf?.trim() || settings?.internationalRegistrationFormPdf?.trim()) && (
+                                            <div className="flex justify-center gap-4 pt-2">
+                                                {settings?.domesticRegistrationFormPdf?.trim() && (
+                                                    <a
+                                                        href={settings.domesticRegistrationFormPdf.startsWith('http') ? settings.domesticRegistrationFormPdf : `${SERVER_URL}${settings.domesticRegistrationFormPdf}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        download
+                                                        className="flex items-center gap-2 px-4 py-2 border border-[#23471d] text-[#23471d] text-[11px] font-bold hover:bg-[#23471d] hover:text-white transition-all"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        Domestic Registration Form
+                                                    </a>
+                                                )}
+                                                {settings?.internationalRegistrationFormPdf?.trim() && (
+                                                    <a
+                                                        href={settings.internationalRegistrationFormPdf.startsWith('http') ? settings.internationalRegistrationFormPdf : `${SERVER_URL}${settings.internationalRegistrationFormPdf}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        download
+                                                        className="flex items-center gap-2 px-4 py-2 border border-[#d26019] text-[#d26019] text-[11px] font-bold hover:bg-[#d26019] hover:text-white transition-all"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        International Registration Form
+                                                    </a>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
