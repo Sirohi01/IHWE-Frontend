@@ -60,8 +60,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
             })
             .catch(() => { });
     }, []);
-
-    // Get actual total amount
     const parseAmt = (val: any) => {
         if (typeof val === 'number') return val;
         if (typeof val === 'string') return Number(val.replace(/[^0-9.]/g, '')) || 0;
@@ -79,7 +77,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         return 0;
     })();
 
-    // Financial calculations
     const taxableVal = actualTotal > 0 ? Math.round(actualTotal / 1.18) : 0;
     const gstAmt = actualTotal - taxableVal;
     const cgst = Math.round(gstAmt / 2);
@@ -237,7 +234,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
-                <div style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
+                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
 
 
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
