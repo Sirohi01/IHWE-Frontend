@@ -327,7 +327,7 @@ ${content.innerHTML}
                             {/* Buyer */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{data.exhibitorName || '—'}</div>
-                                <div style={{ marginTop: 4, textTransform: 'uppercase' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
+                                <div style={{ marginTop: 4, textTransform: 'capitalize' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
                                 <div>{data.state || ''}{data.country ? ', ' + data.country : ''}</div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
                                 <div>Email: {c1.email || '—'}</div>
@@ -351,6 +351,14 @@ ${content.innerHTML}
                                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
                                     <span style={{ fontWeight: 700 }}>Performa Inv. Date</span>
                                     <span>{invoiceDate}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                                    <span style={{ fontWeight: 700 }}>Created Time</span>
+                                    <span>{regDate}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ fontWeight: 700 }}>Created By</span>
+                                    <span style={{ textTransform: 'capitalize' }}>{data.filledBy && data.filledBy !== 'User' ? data.filledBy : 'Self'}</span>
                                 </div>
                             </td>
                         </tr>
