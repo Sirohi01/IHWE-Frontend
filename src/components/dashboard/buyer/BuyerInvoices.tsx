@@ -239,27 +239,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </div>
                 )}
 
-                {/* HEADER TITLE */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
-                    <tbody>
-                        <tr>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>{companyName}</div>
-                                <div style={{ fontSize: 10, marginTop: 2 }}><b>GSTIN:</b> 08AAAAA0000A1Z</div>
-                                <div style={{ fontSize: 10 }}><b>PAN:</b> AAAAA1234A</div>
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '40%', verticalAlign: 'middle', textAlign: 'center' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>TAX INVOICE</div>
-                                <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{data.eventId?.name || '9th International Health & Wellness Expo 2026'}</div>
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle', textAlign: 'right' }}>
-                                <div style={{ fontWeight: 700, fontSize: 12, color: '#1a3a6b' }}>Original Copy</div>
-                                <div style={{ fontSize: 10, marginTop: 4 }}><b>Invoice No.:</b> {invoiceNo}</div>
-                                <div style={{ fontSize: 10 }}><b>Invoice Date:</b> {invoiceDate}</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
 
                 {/* MAIN INFO TABLE */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
