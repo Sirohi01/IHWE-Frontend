@@ -102,6 +102,7 @@ import Notification from "@/pages/navbar_page/Notification";
 import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
 import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/international_vistor/AddInternationalVistor";
+import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
 const queryClient = new QueryClient();
 
