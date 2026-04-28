@@ -175,7 +175,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         setTimeout(() => { win.print(); win.close(); }, 600);
     };
 
-    // Exhibitor information
+
     const exhibitorInfo = {
         name: data.fullName || data.exhibitorName || data.companyName || data.businessName || '—',
         address: data.address || data.registeredAddress || data.businessAddress || '',
@@ -190,7 +190,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         panNo: data.panNo || data.panNumber || ''
     };
 
-    // Category
+
     const exhibitorCategory = (() => {
         if (data.registrationCategory) return data.registrationCategory;
         if (data.category) return data.category;
@@ -200,7 +200,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            {/* Action Buttons */}
+
             <div className="flex items-center justify-between gap-3 mb-4 no-print flex-wrap">
                 <div className="flex gap-2 flex-wrap items-center">
                     <button onClick={handlePrint}
@@ -231,21 +231,20 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                 )}
             </div>
 
-            {/* Printable Invoice */}
             <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Arial, sans-serif' }}>
                 {headerImageUrl && (
                     <div style={{ marginBottom: 8, textAlign: 'center' }}>
                         <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
+                <div style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
 
 
-                {/* MAIN INFO TABLE */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Event Details</th>
+                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Seller Invoice Details</th>
                         </tr>
                     </thead>
@@ -286,7 +285,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* ITEM TABLE */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
