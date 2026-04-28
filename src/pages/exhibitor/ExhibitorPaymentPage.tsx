@@ -368,13 +368,6 @@ export default function ExhibitorPaymentPage() {
                             </span>
                         </div>
                     )}
-                    {/* Payment Plan badge */}
-                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${summary.paymentPlanType === 'full'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : 'bg-blue-50 text-blue-700 border-blue-200'
-                        }`}>
-                        {summary.paymentPlanLabel || (summary.paymentPlanType === 'full' ? 'Full Payment' : 'Installment Plan')}
-                    </span>
                 </div>
             </div>
 

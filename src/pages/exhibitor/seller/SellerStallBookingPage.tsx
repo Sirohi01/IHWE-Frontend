@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-    MapPin, Building2, Ruler, DollarSign, 
+    MapPin, Building2, Ruler,
     CheckCircle2, AlertCircle, Send, Sparkles
 } from 'lucide-react';
 import { API_URL } from '@/lib/api';
@@ -10,14 +10,14 @@ import StallMap from '@/components/dashboard/seller/StallMap';
 interface Stall {
     _id: string;
     stallNumber: string;
-    hallNumber: string;
-    size: number;
-    type: string;
-    price: number;
-    currency: string;
+    length: number;
+    width: number;
+    area: number;
+    plScheme: string;
+    incrementPercentage: number;
+    discountPercentage: number;
     status: 'available' | 'booked' | 'reserved';
-    isCorner: boolean;
-    position: { x: number; y: number };
+    eventId: { _id: string; name: string };
 }
 
 export default function SellerStallBookingPage() {
@@ -33,7 +33,7 @@ export default function SellerStallBookingPage() {
 
     const handleStallSelect = (stall: Stall) => {
         setSelectedStall(stall);
-        toast.success(`Selected ${stall.stallNumber} - ${stall.size} sqm`);
+        toast.success(`Selected Stall ${stall.stallNumber} — ${stall.area} sqm`);
     };
 
     const handleBookStall = async () => {
@@ -54,11 +54,12 @@ export default function SellerStallBookingPage() {
                     details: {
                         stallId: selectedStall._id,
                         stallNumber: selectedStall.stallNumber,
-                        hallNumber: selectedStall.hallNumber,
-                        size: selectedStall.size,
-                        type: selectedStall.type,
-                        price: selectedStall.price,
-                        isCorner: selectedStall.isCorner
+                        area: selectedStall.area,
+                        length: selectedStall.length,
+                        width: selectedStall.width,
+                        plScheme: selectedStall.plScheme,
+                        eventId: selectedStall.eventId?._id,
+                        eventName: selectedStall.eventId?.name,
                     }
                 })
             });
@@ -224,39 +225,34 @@ export default function SellerStallBookingPage() {
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">
-                                        Stall Number
-                                    </p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Stall Number</p>
                                     <p className="text-xl font-black text-blue-900">{selectedStall.stallNumber}</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">
-                                        Hall
-                                    </p>
-                                    <p className="text-xl font-black text-blue-900">Hall {selectedStall.hallNumber}</p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Event</p>
+                                    <p className="text-sm font-black text-blue-900">{selectedStall.eventId?.name || '—'}</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">
-                                        Size
-                                    </p>
-                                    <p className="text-xl font-black text-blue-900">{selectedStall.size} sqm</p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Size</p>
+                                    <p className="text-xl font-black text-blue-900">{selectedStall.area} sqm</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">
-                                        Price
-                                    </p>
-                                    <p className="text-xl font-black text-blue-900">
-                                        {selectedStall.currency} {selectedStall.price.toLocaleString()}
-                                    </p>
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Dimensions</p>
+                                    <p className="text-xl font-black text-blue-900">{selectedStall.length}m × {selectedStall.width}m</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4 mt-4">
                                 <div className="flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full">
-                                    <span className="text-xs font-black text-blue-700 uppercase">{selectedStall.type}</span>
+                                    <span className="text-xs font-black text-blue-700 uppercase">{selectedStall.plScheme}</span>
                                 </div>
-                                {selectedStall.isCorner && (
-                                    <div className="flex items-center gap-2 px-3 py-1 bg-orange-100 rounded-full">
-                                        <span className="text-xs font-black text-orange-700 uppercase">Corner Stall</span>
+                                {selectedStall.incrementPercentage > 0 && (
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-red-100 rounded-full">
+                                        <span className="text-xs font-black text-red-700 uppercase">+{selectedStall.incrementPercentage}% Increment</span>
+                                    </div>
+                                )}
+                                {selectedStall.discountPercentage > 0 && (
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
+                                        <span className="text-xs font-black text-green-700 uppercase">-{selectedStall.discountPercentage}% Discount</span>
                                     </div>
                                 )}
                             </div>
