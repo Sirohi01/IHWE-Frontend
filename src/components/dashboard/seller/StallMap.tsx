@@ -38,11 +38,12 @@ interface EventInfo {
 interface StallMapProps {
     onStallSelect?: (stall: Stall) => void;
     selectedStallId?: string;
+    currentUserRegId?: string;
 }
 
 const BOOKED_PAGE_SIZE = 8;
 
-export default function StallMap({ onStallSelect, selectedStallId }: StallMapProps) {
+export default function StallMap({ onStallSelect, selectedStallId, currentUserRegId }: StallMapProps) {
     const [stalls, setStalls] = useState<Stall[]>([]);
     const [event, setEvent] = useState<EventInfo | null>(null);
     const [loading, setLoading] = useState(true);
@@ -73,11 +74,7 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
     };
 
     const handleStallClick = (stall: Stall) => {
-        if (stall.status === 'available' && onStallSelect) {
-            onStallSelect(stall);
-        } else if (stall.status !== 'available') {
-            toast.error('This stall is already booked or reserved');
-        }
+        // Do nothing - user cannot select stalls, only view their booked stall
     };
 
     const schemes = [...new Set(stalls.map(s => s.plScheme))].filter(Boolean);
@@ -102,8 +99,10 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
     );
 
     // Stall card styles
-    const getCardStyle = (status: string, isSelected: boolean) => {
-        if (isSelected) return {
+    const getCardStyle = (status: string, isSelected: boolean, bookedByRegId?: string) => {
+        // Show selected style for available stalls OR booked stalls that belong to current user
+        const isCurrentUserBooked = status === 'booked' && bookedByRegId === currentUserRegId;
+        if ((isSelected && status === 'available') || isCurrentUserBooked) return {
             wrapper: 'border-blue-500 bg-blue-600 shadow-lg shadow-blue-200 scale-[1.03]',
             number: 'text-white',
             meta: 'text-blue-100',
@@ -111,7 +110,7 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
         };
         switch (status) {
             case 'available': return {
-                wrapper: 'border-emerald-300 bg-gradient-to-br from-emerald-50 to-white hover:border-emerald-500 hover:shadow-md hover:shadow-emerald-100 cursor-pointer hover:scale-[1.02]',
+                wrapper: 'border-emerald-300 bg-gradient-to-br from-emerald-50 to-white opacity-60',
                 number: 'text-emerald-800',
                 meta: 'text-emerald-600',
                 scheme: 'text-emerald-400',
@@ -302,21 +301,20 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
                     </div>
 
                     {/* Grid */}
-                    <div className="p-5 bg-slate-50/50">
+                    <div className="p-5 bg-slate-50/50 relative">
                         {filteredStalls.length === 0 ? (
                             <div className="py-12 text-center">
                                 <p className="text-sm font-bold text-gray-400">No stalls match your filters</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 auto-rows-max relative z-0 overflow-visible">
                                 {filteredStalls.map(stall => {
                                     const isSelected = stall._id === selectedStallId;
-                                    const style = getCardStyle(stall.status, isSelected);
+                                    const style = getCardStyle(stall.status, isSelected, stall.bookedByInfo?.registrationId);
                                     return (
                                         <div
                                             key={stall._id}
-                                            onClick={() => handleStallClick(stall)}
-                                            className={`relative group border-2 rounded-xl p-3 transition-all duration-150 ${style.wrapper}`}
+                                            className={`relative group border-2 rounded-xl p-3 transition-all duration-150 overflow-visible ${style.wrapper}`}
                                         >
                                             {/* Status dot */}
                                             <div className={`absolute top-2.5 left-2.5 w-2 h-2 rounded-full ${getStatusDot(isSelected ? 'selected' : stall.status)} ${isSelected ? 'bg-white' : ''}`} />
@@ -351,28 +349,6 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
                                                     {stall.plScheme?.replace(' Open', '')}
                                                 </p>
                                             </div>
-
-                                            {/* Hover tooltip for booked stalls */}
-                                            {stall.status === 'booked' && stall.bookedByInfo && (
-                                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover:block z-30 pointer-events-none">
-                                                    <div className="bg-slate-900 text-white px-3.5 py-3 rounded-xl text-xs font-bold whitespace-nowrap shadow-2xl border border-slate-700 min-w-[160px]">
-                                                        <div className="flex items-center gap-1.5 mb-2 pb-2 border-b border-slate-700">
-                                                            <User className="w-3 h-3 text-red-400 shrink-0" />
-                                                            <span className="text-[9px] text-red-400 font-black uppercase tracking-wider">Booked By</span>
-                                                        </div>
-                                                        <p className="font-black text-white text-sm leading-tight">{stall.bookedByInfo.exhibitorName}</p>
-                                                        <p className="text-[9px] text-slate-400 font-mono mt-1">{stall.bookedByInfo.registrationId}</p>
-                                                        {stall.bookedByInfo.bookedAt && (
-                                                            <p className="text-[9px] text-slate-500 mt-0.5">
-                                                                {new Date(stall.bookedByInfo.bookedAt).toLocaleDateString('en-IN', {
-                                                                    day: '2-digit', month: 'short', year: 'numeric'
-                                                                })}
-                                                            </p>
-                                                        )}
-                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-slate-900" />
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
                                     );
                                 })}

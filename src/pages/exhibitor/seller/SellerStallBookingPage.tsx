@@ -342,6 +342,7 @@ export default function SellerStallBookingPage() {
             <StallMap 
                 onStallSelect={handleStallSelect}
                 selectedStallId={selectedStall?._id}
+                currentUserRegId={data?.registrationId}
             />
 
             {/* Info Cards */}
