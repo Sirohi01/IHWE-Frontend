@@ -9,28 +9,28 @@ import { ExhibitorCtx } from '@/context/ExhibitorContext';
 import { useSellerSubscription } from '@/hooks/useSellerSubscription';
 import { Lock, ArrowRight } from 'lucide-react';
 const ROUTE_FEATURE_MAP: Record<string, string> = {
-    '/seller-portal/leads':          'lead_access',
-    '/seller-portal/bsm':            'bsm_marketing',
-    '/seller-portal/calendar':       'meeting_scheduler',
+    '/seller-portal/leads': 'lead_access',
+    '/seller-portal/bsm': 'bsm_marketing',
+    '/seller-portal/calendar': 'meeting_scheduler',
     '/seller-portal/product-export': 'export_inquiry',
-    '/seller-portal/products':       'product_showcase',
-    '/seller-portal/marketing':      'bsm_marketing',
-    '/seller-portal/logistics':      'logistics',
-    '/seller-portal/conference':     'conference',
-    '/seller-portal/accessories':    'accessories',
-    '/seller-portal/reports':        'analytics_dashboard',
+    '/seller-portal/products': 'product_showcase',
+    '/seller-portal/marketing': 'bsm_marketing',
+    '/seller-portal/logistics': 'logistics',
+    '/seller-portal/conference': 'conference',
+    '/seller-portal/accessories': 'accessories',
+    '/seller-portal/reports': 'analytics_dashboard',
 };
 
 const FEATURE_LABELS: Record<string, string> = {
-    lead_access:        'Lead Management',
-    bsm_marketing:      'BSM Marketing',
-    meeting_scheduler:  'Meeting Calendar',
-    export_inquiry:     'Product Export',
-    product_showcase:   'Product Showcase',
-    logistics:          'Logistics & Operations',
-    conference:         'Conference Participation',
-    accessories:        'Stall Accessories',
-    analytics_dashboard:'Business Reports',
+    lead_access: 'Lead Management',
+    bsm_marketing: 'BSM Marketing',
+    meeting_scheduler: 'Meeting Calendar',
+    export_inquiry: 'Product Export',
+    product_showcase: 'Product Showcase',
+    logistics: 'Logistics & Operations',
+    conference: 'Conference Participation',
+    accessories: 'Stall Accessories',
+    analytics_dashboard: 'Business Reports',
 };
 function LockedPage({ featureKey, onUpgrade }: { featureKey: string; onUpgrade: () => void }) {
     return (
@@ -55,23 +55,24 @@ function LockedPage({ featureKey, onUpgrade }: { featureKey: string; onUpgrade: 
     );
 }
 const TAB_ROUTES: Record<string, string> = {
-    'seller-dashboard':  '/seller-portal',
-    'seller-leads':      '/seller-portal/leads',
-    'seller-bsm':        '/seller-portal/bsm',
-    'seller-calendar':   '/seller-portal/calendar',
-    'product-export':    '/seller-portal/product-export',
-    'seller-products':   '/seller-portal/products',
-    'stall-management':  '/seller-portal/stall',
-    'seller-marketing':  '/seller-portal/marketing',
-    'seller-sponsorship':'/seller-portal/sponsorship',
-    'seller-profile':    '/seller-portal/profile',
-    'payments':          '/seller-portal/payments',
-    'seller-logistics':  '/seller-portal/logistics',
+    'seller-dashboard': '/seller-portal',
+    'seller-leads': '/seller-portal/leads',
+    'seller-bsm': '/seller-portal/bsm',
+    'seller-calendar': '/seller-portal/calendar',
+    'product-export': '/seller-portal/product-export',
+    'seller-products': '/seller-portal/products',
+    'stall-management': '/seller-portal/stall',
+    'seller-marketing': '/seller-portal/marketing',
+    'seller-sponsorship': '/seller-portal/sponsorship',
+    'seller-profile': '/seller-portal/profile',
+    'payments': '/seller-portal/payments',
+    'seller-logistics': '/seller-portal/logistics',
     'seller-conference': '/seller-portal/conference',
-    'seller-reports':    '/seller-portal/reports',
+    'seller-reports': '/seller-portal/reports',
+    'seller-feedback': '/seller-portal/feedback',
     'seller-notifications': '/seller-portal/notifications',
-    'chat':              '/seller-portal/helpdesk',
-    'seller-accessories':'/seller-portal/accessories',
+    'chat': '/seller-portal/helpdesk',
+    'seller-accessories': '/seller-portal/accessories',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -128,7 +129,7 @@ export default function SellerPortal() {
                 }
                 fetch(`${API_URL}/chat/unread/${res.data._id}`, {
                     headers: { Authorization: `Bearer ${token}` }
-                }).then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => {});
+                }).then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => { });
             } else {
                 navigate('/exhibitor-login');
             }
@@ -141,10 +142,10 @@ export default function SellerPortal() {
         settingsApi.get().then(s => { if (s?.logo) setLogo(s.logo); });
     }, []);
 
-    const handleLogout = () => { 
-        localStorage.removeItem('exhibitorToken'); 
+    const handleLogout = () => {
+        localStorage.removeItem('exhibitorToken');
         localStorage.removeItem('selectedRegId');
-        navigate('/exhibitor-login'); 
+        navigate('/exhibitor-login');
     };
 
     if (loading || subLoading) return (
@@ -237,7 +238,7 @@ export default function SellerPortal() {
                     pwdLoading={false}
                     showPwd={showPwd}
                     setShowPwd={setShowPwd}
-                    onSubmit={() => {}}
+                    onSubmit={() => { }}
                 />
             </SellerLayout>
         </ExhibitorCtx.Provider>

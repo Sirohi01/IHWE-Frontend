@@ -1,10 +1,11 @@
-import { 
-    LayoutDashboard, Building2, 
-    Package, Handshake, Send, Award, 
-    CalendarCheck, Megaphone, MessageSquare, 
+import {
+    LayoutDashboard, Building2,
+    Package, Handshake, Send, Award,
+    CalendarCheck, Megaphone, MessageSquare,
     Lock, ChevronRight,
     Users, BarChart3, ArrowLeft,
-    Truck, ShoppingBag, AlertCircle, Bell
+    Truck, ShoppingBag, AlertCircle, Bell,
+    MessageSquareMore
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -49,8 +50,8 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
         {
             title: "BSM & Meetings",
             items: [
-                { id: "seller-bsm",      label: "BSM Management",    icon: Handshake, featureKey: "bsm_marketing" },
-                { id: "seller-calendar", label: "Meeting Calendar",   icon: CalendarCheck, featureKey: "meeting_scheduler" },
+                { id: "seller-bsm", label: "BSM Management", icon: Handshake, featureKey: "bsm_marketing" },
+                { id: "seller-calendar", label: "Meeting Calendar", icon: CalendarCheck, featureKey: "meeting_scheduler" },
             ]
         },
         {
@@ -74,9 +75,9 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
         {
             title: "Logistics",
             items: [
-                { id: "seller-conference",  label: "Conference",            icon: CalendarCheck, featureKey: "conference" },
+                { id: "seller-conference", label: "Conference", icon: CalendarCheck, featureKey: "conference" },
                 // { id: "seller-logistics",   label: "Logistics & Operations", icon: Truck, featureKey: "logistics" },
-                { id: "seller-accessories", label: "Accessories",            icon: ShoppingBag, featureKey: "accessories" },
+                { id: "seller-accessories", label: "Accessories", icon: ShoppingBag, featureKey: "accessories" },
             ]
         },
         {
@@ -99,6 +100,7 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
                 { id: "seller-notifications", label: "Notifications", icon: Bell, featureKey: null },
                 { id: "chat", label: "Helpdesk Support", icon: MessageSquare, featureKey: null },
                 { id: "seller-reports", label: "Reports Section", icon: BarChart3, featureKey: "analytics_dashboard" },
+                { id: "seller-feedback", label: "Seller Feedback", icon: MessageSquareMore, featureKey: null },
             ]
         }
     ];
@@ -107,11 +109,10 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
         <aside className={`fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 overflow-hidden print:hidden ${sidebarOpen ? "w-64" : "w-14"}`}>
             {/* Subscription status badge */}
             {sidebarOpen && (
-                <div className={`mx-3 mt-3 px-3 py-2 rounded-sm text-[9px] font-black uppercase tracking-wider flex items-center gap-2 ${
-                    isSubscribed 
-                        ? 'bg-green-50 text-green-700 border border-green-200' 
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
-                }`}>
+                <div className={`mx-3 mt-3 px-3 py-2 rounded-sm text-[9px] font-black uppercase tracking-wider flex items-center gap-2 ${isSubscribed
+                    ? 'bg-green-50 text-green-700 border border-green-200'
+                    : 'bg-amber-50 text-amber-700 border border-amber-200'
+                    }`}>
                     {isSubscribed ? (
                         <>
                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0" />
@@ -136,10 +137,10 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
                             const Icon = item.icon;
                             const active = activeTab === item.id;
                             const isLocked = item.featureKey !== null && !canAccess(item.featureKey);
-                            
+
                             return (
-                                <button 
-                                    key={item.id} 
+                                <button
+                                    key={item.id}
                                     onClick={() => !isLocked && setActiveTab(item.id)}
                                     title={isLocked ? `Requires: ${item.featureKey}` : item.label}
                                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-sm text-left transition-all relative group
@@ -165,7 +166,7 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
             </nav>
 
             <div className="p-3 border-t border-slate-100 space-y-1">
-                <button 
+                <button
                     onClick={() => navigate('/exhibitor-dashboard')}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-sm text-[#23471d] font-bold hover:bg-emerald-50 transition-all"
                 >
