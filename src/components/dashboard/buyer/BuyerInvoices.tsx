@@ -318,7 +318,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* GST TABLE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
@@ -365,7 +365,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* INVOICE VALUE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <tbody>
                         <tr style={{ background: '#f8fafc' }}>
@@ -377,7 +377,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* TERMS */}
+
                 <div style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa' }}>
                     <div style={{ fontWeight: 700, marginBottom: 4 }}>Terms and Conditions:</div>
                     <div>1. Payments should be made through crossed cheque/D.D./RTGS/NEFT payable at Delhi, favouring {companyName}.</div>
@@ -385,7 +385,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     <div>3. All Disputes are subject to Delhi Jurisdiction.</div>
                 </div>
 
-                {/* BANK & SIGNATURE */}
+
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
