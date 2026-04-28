@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Printer, FileText, Receipt } from 'lucide-react';
 import { SERVER_URL } from '@/lib/api';
@@ -42,11 +42,8 @@ function DownloadBtn({ url, label, icon: Icon }: any) {
 
 export default function ExhibitorInvoices({ data, settings, cur, total, paid, balance, paidPct, regDate }: InvoicesProps) {
     const printRef = useRef<HTMLDivElement>(null);
-    const receiptRef = useRef<HTMLDivElement>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
     const history = data.paymentHistory || [];
-    const [selectedInvoiceIdx, setSelectedInvoiceIdx] = useState<number>(history.length > 0 ? 0 : -1);
-    const [viewMode, setViewMode] = useState<'invoice' | 'receipt'>('invoice');
 
     useEffect(() => {
         const token = localStorage.getItem('exhibitorToken');
@@ -66,13 +63,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const p = data.participation || {};
     const c1 = data.contact1 || {};
 
-    const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
-    const latestPayment = selectedPayment || (history.length > 0 ? history[history.length - 1] : null);
-    const latestTxId = latestPayment?.transactionId || latestPayment?.razorpayPaymentId || data.paymentId || data.manualPaymentDetails?.transactionId || '—';
-    const latestMethod = latestPayment?.method || data.manualPaymentDetails?.method || data.paymentMode || '—';
-
     const isFullPayment = data.paymentPlanType === 'full' || fb.isFullPayment === true;
-
     const effectiveDiscount = (fb.stallDiscountAmount || 0) + (isFullPayment ? (fb.discountAmount || 0) : 0);
 
     const grossAmt = fb.grossAmount || p.amount || 0;
@@ -94,106 +85,182 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const sigUrl = settings?.authorizedSignature ? (settings.authorizedSignature.startsWith('http') ? settings.authorizedSignature : `${SERVER_URL}${settings.authorizedSignature}`) : null;
     const stampUrl = settings?.companyStamp ? (settings.companyStamp.startsWith('http') ? settings.companyStamp : `${SERVER_URL}${settings.companyStamp}`) : null;
 
-    const receiptUrl = data.receiptUrl ? (data.receiptUrl.startsWith('http') ? data.receiptUrl : `${SERVER_URL}${data.receiptUrl}`) : null;
-
-    // Invoice No: 9IHWE/EX/INV/2026/001/P1 format (P1, P2... for each payment)
+    // Invoice always represents the full contract — use latest payment date for invoice date
+    const latestPayment = history.length > 0 ? history[history.length - 1] : null;
     const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
     const invoiceYear = new Date().getFullYear();
-    const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
-    const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}${paymentSuffix}`;
-    const invoiceDate = latestPayment?.paidAt ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : regDate;
-    // Amount for this specific invoice = this payment's amount
-    const thisPaymentAmt = selectedPayment ? selectedPayment.amount : (paid || netPayable);
-    // Cumulative paid up to and including this payment
-    const cumulativePaid = selectedInvoiceIdx >= 0
-        ? history.slice(0, selectedInvoiceIdx + 1).reduce((s: number, h: any) => s + (h.amount || 0), 0)
-        : paid;
-    const remainingAfter = Math.max(0, netPayable - cumulativePaid);
+    const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}`;
+    const invoiceDate = latestPayment?.paidAt
+        ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+        : regDate;
 
     const handlePrint = () => {
         const content = printRef.current;
         if (!content) return;
-        const win = window.open('', '_blank', 'width=900,height=700');
-        if (!win) return;
-        win.document.write(`<!DOCTYPE html><html><head><title>Invoice ${invoiceNo} - ${data.registrationId}</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
-            table { width: 100%; border-collapse: collapse; }
-            td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
-            .bold { font-weight: bold; }
-            .right { text-align: right; }
-            .center { text-align: center; }
-            .no-print { display: none !important; }
-            img { max-width: 100%; }
-            @page { size: A4; margin: 8mm; }
-        </style></head><body>`);
-        win.document.write(content.innerHTML);
-        win.document.write('</body></html>');
-        win.document.close();
-        win.focus();
-        setTimeout(() => { win.print(); win.close(); }, 600);
-    };
+        
+        // Create iframe for printing
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iframeDoc) return;
+        
+        // Write complete HTML with inline styles
+        const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice ${invoiceNo} - ${data.registrationId}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { margin: 0; padding: 0; }
+        body { 
+            margin: 0; 
+            padding: 10mm; 
+            font-family: Arial, sans-serif; 
+            font-size: 11px; 
+            color: #000; 
+            background: white;
+            line-height: 1.5;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 12px;
+        }
+        td, th { 
+            border: 1px solid #000; 
+            padding: 6px 8px; 
+            vertical-align: top;
+            font-size: 11px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        th {
+            background: #1a3a6b;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px 4px;
+        }
+        img { 
+            max-width: 100%; 
+            height: auto; 
+            display: block;
+        }
+        .bold { font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-print { display: none !important; }
+        div { margin: 0; padding: 0; }
+        section { margin-bottom: 16px; }
+        
+        /* Terms section spacing */
+        div[style*="fontSize: 10"] {
+            margin-bottom: 20px !important;
+            padding: 8px !important;
+        }
+        
+        /* HSN Code column - keep on one line */
+        td:nth-child(3),
+        th:nth-child(3) {
+            white-space: nowrap;
+            font-size: 10px;
+        }
+        
+        /* HSN/SAC No. header - keep on one line */
+        th {
+            white-space: nowrap;
+        }
+        
+        /* Size column - make it smaller */
+        td:nth-child(5),
+        th:nth-child(5) {
+            width: 8%;
+            font-size: 9px;
+            padding: 4px 2px;
+        }
+        
+        /* Discount column - make it much smaller */
+        td:nth-child(8),
+        th:nth-child(8) {
+            width: 8%;
+            font-size: 9px;
+            padding: 4px 2px;
+            max-width: 50px;
+        }
+        
+        /* Amount column */
+        td:nth-child(7),
+        th:nth-child(7) {
+            width: 10%;
+            font-size: 10px;
+            padding: 4px 3px;
+        }
+        
+        /* Rate column */
+        td:nth-child(6),
+        th:nth-child(6) {
+            width: 10%;
+            font-size: 10px;
+            padding: 4px 3px;
+        }
+        
+        /* Total column - make it smaller */
+        td:nth-child(9),
+        th:nth-child(9) {
+            width: 11%;
+            font-size: 10px;
+            padding: 4px 3px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        @page { 
+            size: A4; 
+            margin: 8mm;
+        }
+        @media print { 
+            body { margin: 0; padding: 10mm; }
+            * { margin: 0 !important; padding: 0 !important; }
+            section { margin-bottom: 16px !important; }
+            table { margin-bottom: 12px !important; }
+            td, th { padding: 6px 8px !important; }
+            div[style*="fontSize: 10"] { margin-bottom: 20px !important; padding: 8px !important; }
+        }
+    </style>
+</head>
+<body>
+${content.innerHTML}
+</body>
+</html>`;
 
-    const handlePrintReceipt = () => {
-        const content = receiptRef.current;
-        if (!content) return;
-        const win = window.open('', '_blank', 'width=900,height=700');
-        if (!win) return;
-        win.document.write(`<!DOCTYPE html><html><head><title>Receipt ${invoiceNo} - ${data.registrationId}</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
-            table { width: 100%; border-collapse: collapse; }
-            td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
-            .no-print { display: none !important; }
-            img { max-width: 100%; }
-            @page { size: A4; margin: 8mm; }
-        </style></head><body>`);
-        win.document.write(content.innerHTML);
-        win.document.write('</body></html>');
-        win.document.close();
-        win.focus();
-        setTimeout(() => { win.print(); win.close(); }, 600);
+        iframeDoc.open();
+        iframeDoc.write(htmlContent);
+        iframeDoc.close();
+        
+        // Wait for content to fully load
+        setTimeout(() => {
+            iframe.contentWindow?.print();
+            // Clean up after printing
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 100);
+        }, 500);
     };
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
 
-            {/* Action Buttons + Payment Selector in one row */}
-            <div className="flex items-center justify-between gap-3 mb-4 no-print flex-wrap">
-                {/* Left: Print + Download buttons */}
-                <div className="flex gap-2 flex-wrap items-center">
-                    <button onClick={handlePrint}
-                        className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
-                        <Printer size={14} /> Print Tax Invoice
-                    </button>
-                    {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
-                    {selectedPayment?.receiptPdfUrl && (
-                        <DownloadBtn url={selectedPayment.receiptPdfUrl} label={`Receipt #${selectedInvoiceIdx + 1} PDF`} icon={Receipt} />
-                    )}
-                    {!selectedPayment?.receiptPdfUrl && data.receiptPdfUrl && (
-                        <DownloadBtn url={data.receiptPdfUrl} label="Latest Receipt PDF" icon={Receipt} />
-                    )}
-                </div>
-
-                {/* Right: Payment dropdown */}
-                {history.length > 0 && (
-                    <div className="flex items-center gap-2">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Payment:</label>
-                        <select
-                            value={selectedInvoiceIdx}
-                            onChange={(e) => setSelectedInvoiceIdx(Number(e.target.value))}
-                            className="px-3 py-2 border border-slate-300 rounded text-[11px] font-bold bg-white focus:border-[#1a3a6b] focus:ring-1 focus:ring-[#1a3a6b] outline-none"
-                        >
-                            {history.map((h: any, i: number) => (
-                                <option key={i} value={i}>
-                                    #{i + 1} — {cur} {Number(h.amount || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })} — {new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                )}
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
+                <button onClick={handlePrint}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
+                    <Printer size={14} /> Print Tax Invoice
+                </button>
+                {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
+                {data.receiptPdfUrl && <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />}
             </div>
 
             {/* Printable Invoice */}
@@ -206,38 +273,18 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                     </div>
                 )}
 
-                {/* ── INVOICE TITLE + META ── */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
-                    <tbody>
-                        <tr>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>{companyName}</div>
-                                <div style={{ fontSize: 10, color: '#444', marginTop: 4 }}>{companyAddress}</div>
-                                {companyGst && <div style={{ fontSize: 10, marginTop: 2 }}><b>GSTIN:</b> {companyGst}</div>}
-                                {companyCin && <div style={{ fontSize: 10 }}><b>CIN:</b> {companyCin}</div>}
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '40%', verticalAlign: 'middle', textAlign: 'center' }}>
-                                <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>TAX INVOICE</div>
-                                <div style={{ fontSize: 10, color: '#666', marginTop: 4 }}>{data.eventId?.name || '9th International Health & Wellness Expo 2026'}</div>
+                {/* ── TAX INVOICE TITLE ── */}
+                <div style={{ textAlign: 'center', marginBottom: 12, paddingBottom: 8 }}>
+                    <div style={{ fontWeight: 900, fontSize: 18, color: '#1a3a6b', marginBottom: 4 }}>Performa Inovice</div>
+                </div>
 
-                            </td>
-                            <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle', textAlign: 'right' }}>
-                                <div style={{ fontWeight: 700, fontSize: 12, color: '#1a3a6b' }}>Original Copy</div>
-                                <div style={{ fontSize: 10, marginTop: 4 }}><b>Invoice No.:</b> {invoiceNo}</div>
-                                <div style={{ fontSize: 10 }}><b>Invoice Date:</b> {invoiceDate}</div>
-                                <div style={{ fontSize: 10 }}><b>Reg. ID:</b> {data.registrationId || '—'}</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                {/* ── BUYER / SHIPMENT / SELLER ── */}
+                {/* ── BUYER / SHIPMENT / INVOICE DETAILS (3 columns) ── */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Seller Invoice Details</th>
+                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Invoice Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -249,7 +296,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                                 <div>{data.state || ''}{data.country ? ', ' + data.country : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
                                 <div>Email: {c1.email || '—'}</div>
-                                {data.gstNo && <div>GSTIN/PAN No.: {data.gstNo}</div>}
+                                {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN/PAN No.: {data.gstNo}</div>}
                             </td>
                             {/* Shipment */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
@@ -258,25 +305,22 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                                 <div>Scheme: {p.stallScheme || '—'}</div>
                                 <div>Dimension: {p.dimension || '—'} | Area: {p.stallSize || 0} Sqm</div>
                                 <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
+                                {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN/PAN No.: {data.gstNo}</div>}
                             </td>
-                            {/* Seller Invoice Details */}
-                            <td style={{ border: '1px solid #ccc', padding: 0, verticalAlign: 'top', fontSize: 11 }}>
-                                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                                    {[
-                                        ['Invoice No.', invoiceNo],
-                                        ['Invoice Date', invoiceDate],
-                                        ['Reg. ID', data.registrationId || '—'],
-                                        ['Payment Mode', latestMethod],
-                                        ['Txn. ID', latestTxId],
-                                        ['Payment Amount', `${cur} ${fmtNum(thisPaymentAmt)}`],
-                                        ['Reverse Charge', 'No'],
-                                    ].map(([label, value]) => (
-                                        <tr key={label}>
-                                            <td style={{ border: '1px solid #eee', padding: '3px 6px', fontWeight: 700, background: '#f8fafc', width: '45%', fontSize: 10 }}>{label}</td>
-                                            <td style={{ border: '1px solid #eee', padding: '3px 6px', fontSize: 10 }}>{value}</td>
-                                        </tr>
-                                    ))}
-                                </table>
+                            {/* Invoice Details */}
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                                    <span style={{ fontWeight: 700 }}>Invoice No.</span>
+                                    <span>{invoiceNo}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                                    <span style={{ fontWeight: 700 }}>Invoice Date</span>
+                                    <span>{invoiceDate}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ fontWeight: 700 }}>Reverse Charge</span>
+                                    <span>No</span>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -286,7 +330,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
-                            {['S.No.', 'Item Description', 'HSN Code', 'Qty.', 'Size', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
+                            {['S.No.', 'Item Description', 'HSN Code', 'Qty.', 'Size', 'Rate', 'Amount', 'Dis.', 'Total'].map(h => (
                                 <th key={h} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', textAlign: 'center', fontSize: 10 }}>{h}</th>
                             ))}
                         </tr>
@@ -313,8 +357,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}></td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
+                            <td colSpan={8} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                         </tr>
                     </tbody>
@@ -328,20 +371,13 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>HSN/SAC No.</th>
                             <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Item Value</th>
                             <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Qty.</th>
-                            <th colSpan={2} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10, textAlign: 'center' }}>CGST</th>
-                            <th colSpan={2} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10, textAlign: 'center' }}>SGST</th>
-                            <th colSpan={2} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10, textAlign: 'center' }}>IGST</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>CGST(%)</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Amount</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>SGST(%)</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Amount</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>IGST(%)</th>
+                            <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Amount</th>
                             <th style={{ border: '1px solid #1a3a6b', padding: '4px 6px', fontSize: 10 }}>Total Tax</th>
-                        </tr>
-                        <tr style={{ background: '#e8edf5' }}>
-                            <th colSpan={4} style={{ border: '1px solid #ccc', padding: '2px 6px' }}></th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>CGST(%)</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>Amount</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>SGST(%)</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>Amount</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>IGST(%)</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px', fontSize: 10 }}>Amount</th>
-                            <th style={{ border: '1px solid #ccc', padding: '2px 6px' }}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -359,22 +395,16 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
                         </tr>
                         <tr style={{ background: '#f8fafc' }}>
-                            <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(gstAmt)}</td>
+                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(gstAmt)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
                         </tr>
-                    </tbody>
-                </table>
-
-                {/* ── INVOICE VALUE ── */}
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
-                    <tbody>
                         <tr style={{ background: '#f8fafc' }}>
-                            <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(thisPaymentAmt))}</td>
+                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(netPayable))}</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Invoice Value</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(thisPaymentAmt)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(netPayable)}</td>
                         </tr>
                     </tbody>
                 </table>

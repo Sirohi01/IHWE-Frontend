@@ -1,7 +1,9 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorInvoices from '../../components/dashboard/exhibitor/ExhibitorInvoices';
 import { settingsApi } from '@/lib/api';
+
+import DashboardHero from '@/components/dashboard/DashboardHero';
 
 export default function ExhibitorInvoicesPage() {
     const { data } = useExhibitorCtx();
@@ -27,15 +29,23 @@ export default function ExhibitorInvoicesPage() {
         : '';
 
     return (
-        <ExhibitorInvoices
-            data={data}
-            settings={settings}
-            cur={cur}
-            total={total}
-            paid={paid}
-            balance={balance}
-            paidPct={paidPct}
-            regDate={regDate}
-        />
+        <div className="space-y-6">
+            <DashboardHero 
+                pageId="ex-invoices" 
+                defaultTitle="Invoices & Finance" 
+                defaultSubtitle="Track your payments and download official receipts"
+                type="exhibitor" 
+            />
+            <ExhibitorInvoices
+                data={data}
+                settings={settings}
+                cur={cur}
+                total={total}
+                paid={paid}
+                balance={balance}
+                paidPct={paidPct}
+                regDate={regDate}
+            />
+        </div>
     );
 }

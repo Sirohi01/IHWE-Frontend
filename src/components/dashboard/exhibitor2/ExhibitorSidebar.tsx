@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, Handshake, CalendarCheck, FolderOpen, MessageSquareMore } from "lucide-react";
+import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, CalendarCheck, FolderOpen, CreditCard, Store, ShoppingBag, Send, ExternalLink, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
+    data: any;
     activeTab: string;
     setActiveTab: (tab: any) => void;
     sidebarOpen: boolean;
@@ -10,60 +12,80 @@ interface SidebarProps {
     unreadChat?: number;
 }
 
-const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    // { id: "profile", label: "Profile", icon: User },
-    { id: "invoices", label: "Invoice and Receipts", icon: FileText },
-    { id: "stall-management", label: "Stall Management", icon: Building2 },
-    { id: "marketing", label: "Marketing Toolkit", icon: Megaphone },
-    { id: "bsm", label: "Buyer Seller Meet", icon: Handshake },
-    { id: "calendar", label: "Meeting Calendar", icon: CalendarCheck },
-    { id: "documentation", label: "Documentation", icon: FolderOpen },
-    { id: "feedback", label: "Feedback", icon: MessageSquareMore },
-    { id: "chat", label: "Chat Support", icon: MessageSquare },
-];
+export default function ExhibitorSidebar({ data, activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
+    const navigate = useNavigate();
+    const isSeller = data?.isSeller || false;
+    const isSubscribed = data?.sellerSubscription?.status === 'active';
 
-const msmeSubItems = [
-    { id: "msme", label: "Udyam Details" },
-    {
-        id: "psm_claim", label: "PSM Claim",
-        isDropdown: true,
-        subItems: [
-            {
-                id: "psm_reports", label: "Reports", isDropdown: true, subItems: [
-                    { id: "annexure_c", label: "Annexure C" },
-                    { id: "annexure_d", label: "Annexure D" },
-                    { id: "declaration", label: "Declaration" },
-                    { id: "feedback_report", label: "Feedback Report" },
-                    { id: "undertaking", label: "Undertaking" },
-                    { id: "pre_receipt", label: "Pre-Receipt" },
-                    // { id: "participants_feedback", label: "Participants Feedback" },
-                    { id: "mandate_form", label: "Mandate Form" },
-                    { id: "pfms_details", label: "PFMS Details" },
-                    { id: "covering_letter", label: "Covering Letter" },
-                    { id: "narrative_feedback", label: "Narrative Feedback" }
-                ]
-            },
-            {
-                id: "psm_reports_table", label: "Reports Table", isDropdown: true, subItems: [
-                    { id: "annexure_c_table", label: "Annexure C" },
-                    { id: "annexure_d_table", label: "Annexure D" },
-                    { id: "declaration_table", label: "Declaration" },
-                    { id: "feedback_report_table", label: "Feedback Report" },
-                    { id: "undertaking_table", label: "Undertaking" },
-                    { id: "pre_receipt_table", label: "Pre-Receipt" },
-                    // { id: "participants_feedback", label: "Participants Feedback" },
-                    { id: "mandate_form_table", label: "Mandate Form" },
-                    { id: "pfms_details_table", label: "PFMS Details" },
-                    { id: "covering_letter_table", label: "Covering Letter" },
-                    { id: "narrative_feedback_table", label: "Narrative Feedback" }
-                ]
-            },
-        ]
-    },
-];
+    const navItems = [
+        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { id: "stall-management", label: "Stall Information", icon: Building2 },
+        { id: "invoices", label: "Invoice and Receipts", icon: FileText },
+        { id: "payments", label: "Make Payment", icon: CreditCard },
+        { id: "documentation", label: "Documentation", icon: FolderOpen },
+        { id: "exhibitions", label: "My Events", icon: Star },
+        { id: "feedback", label: "Feedback", icon: MessageSquare },
+        { id: "chat", label: "Chat Support", icon: MessageSquare },
+    ];
 
-export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
+    const sellerSubItems = [
+        { id: "seller-dashboard", label: "Dashboard Home", icon: LayoutDashboard },
+        { id: "ex-profile", label: "Profile Management", icon: User },
+        { id: "stall-management", label: "Stall Booking", icon: Building2 },
+        { id: "payments", label: "Payment Management", icon: CreditCard },
+        { id: "seller-products", label: "Manage Products", icon: Package },
+        { id: "product-export", label: "Product Export", icon: Send },
+        { id: "seller-leads", label: "Lead Management", icon: Store },
+        { id: "seller-sponsorship", label: "Sponsorships", icon: Award },
+        { id: "seller-conference", label: "Conferences", icon: CalendarCheck },
+        ...(isSubscribed ? [{ id: "seller-marketing", label: "Marketing Toolkit", icon: Megaphone }] : []),
+        { id: "seller-logistics", label: "Logistics & Ops", icon: Package },
+        { id: "seller-reports", label: "Business Reports", icon: FileText },
+    ];
+
+    const isSellerActive = activeTab.startsWith('seller-') || activeTab === 'product-export' || activeTab === 'stall-management' || activeTab === 'ex-profile' || activeTab === 'payments';
+    const [sellerOpen, setSellerOpen] = useState(isSellerActive);
+
+    const msmeSubItems = [
+        { id: "msme", label: "Udyam Details" },
+        {
+            id: "psm_claim", label: "PSM Claim",
+            isDropdown: true,
+            subItems: [
+                {
+                    id: "psm_reports", label: "Reports", isDropdown: true, subItems: [
+                        { id: "annexure_c", label: "Annexure C" },
+                        { id: "annexure_d", label: "Annexure D" },
+                        { id: "declaration", label: "Declaration" },
+                        { id: "feedback_report", label: "Feedback Report" },
+                        { id: "undertaking", label: "Undertaking" },
+                        { id: "pre_receipt", label: "Pre-Receipt" },
+                        // { id: "participants_feedback", label: "Participants Feedback" },
+                        { id: "mandate_form", label: "Mandate Form" },
+                        { id: "pfms_details", label: "PFMS Details" },
+                        { id: "covering_letter", label: "Covering Letter" },
+                        { id: "narrative_feedback", label: "Narrative Feedback" }
+                    ]
+                },
+                {
+                    id: "psm_reports_table", label: "Reports Table", isDropdown: true, subItems: [
+                        { id: "annexure_c_table", label: "Annexure C" },
+                        { id: "annexure_d_table", label: "Annexure D" },
+                        { id: "declaration_table", label: "Declaration" },
+                        { id: "feedback_report_table", label: "Feedback Report" },
+                        { id: "undertaking_table", label: "Undertaking" },
+                        { id: "pre_receipt_table", label: "Pre-Receipt" },
+                        // { id: "participants_feedback", label: "Participants Feedback" },
+                        { id: "mandate_form_table", label: "Mandate Form" },
+                        { id: "pfms_details_table", label: "PFMS Details" },
+                        { id: "covering_letter_table", label: "Covering Letter" },
+                        { id: "narrative_feedback_table", label: "Narrative Feedback" }
+                    ]
+                },
+            ]
+        },
+    ];
+
     const psmSubItems = msmeSubItems.find(i => i.id === "psm_claim")?.subItems || [];
     const psmSubItemIds = psmSubItems.flatMap(si => [si.id, ...(si.subItems?.map(ni => ni.id) || [])]);
     const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || psmSubItemIds.includes(activeTab);
@@ -118,6 +140,66 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                         </button>
                     );
                 })}
+
+                {/* ── Seller Section ── */}
+                {!isSeller ? (
+                    // Not a seller yet — show "Become a Seller" button
+                    <button
+                        onClick={() => setActiveTab("become-seller")}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === "become-seller" ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                        <div className="relative shrink-0">
+                            <Store size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Become a Seller</span>
+                        )}
+                        {sidebarOpen && activeTab === "become-seller" && <ChevronRight size={12} className="ml-auto" />}
+                    </button>
+                ) : data?.sellerStatus === 'pending' ? (
+                    // Seller registered but pending admin approval
+                    <div className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm ${sidebarOpen ? 'bg-amber-50 border border-amber-200' : ''}`}>
+                        <div className="relative shrink-0 text-amber-500">
+                            <Store size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <div className="flex-1 min-w-0">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 block">Seller: Pending</span>
+                                <span className="text-[9px] text-amber-600 leading-tight block">Awaiting admin approval</span>
+                            </div>
+                        )}
+                    </div>
+                ) : data?.sellerStatus === 'active' && data?.sellerSubscription?.status !== 'active' ? (
+                    // Approved but no subscription — go to seller portal (sponsorship page inside)
+                    <button
+                        onClick={() => navigate("/seller-portal")}
+                        className="w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all bg-blue-50 border border-blue-200 hover:bg-blue-100">
+                        <div className="relative shrink-0 text-blue-600">
+                            <Store size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <div className="flex-1 min-w-0">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Seller Approved!</span>
+                                <span className="text-[9px] text-blue-600 leading-tight block">Buy a plan to activate</span>
+                            </div>
+                        )}
+                        {sidebarOpen && <ExternalLink size={11} className="ml-auto text-blue-400 shrink-0" />}
+                    </button>
+                ) : (
+                    // Active seller with subscription — show portal link
+                    <button
+                        onClick={() => navigate("/seller-portal")}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === 'seller-dashboard' ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                        <div className="relative shrink-0">
+                            <ShoppingBag size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Open Seller Portal</span>
+                        )}
+                        {sidebarOpen && (
+                            <ExternalLink size={12} className="ml-auto opacity-50" />
+                        )}
+                    </button>
+                )}
 
                 {/* ── MSME Dropdown ── */}
                 <div>
@@ -262,14 +344,6 @@ export default function ExhibitorSidebar({ activeTab, setActiveTab, sidebarOpen,
                     </AnimatePresence>
                 </div>
 
-                {/* ── My Events ── */}
-                <button
-                    onClick={() => setActiveTab("exhibitions")}
-                    className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === "exhibitions" ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
-                    <Building2 size={15} className="shrink-0" />
-                    {sidebarOpen && <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">My Events</span>}
-                    {sidebarOpen && activeTab === "exhibitions" && <ChevronRight size={12} className="ml-auto" />}
-                </button>
             </nav>
 
             <div className="px-2 pb-4">

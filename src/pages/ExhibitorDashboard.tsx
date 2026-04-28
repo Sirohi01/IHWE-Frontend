@@ -12,11 +12,13 @@ const TAB_ROUTES: Record<string, string> = {
     dashboard: '/exhibitor-dashboard',
     profile: '/exhibitor-dashboard/ex-profile',
     invoices: '/exhibitor-dashboard/invoices',
+    payments: '/exhibitor-dashboard/payments',
     accessories: '/exhibitor-dashboard/accessories',
     marketing: '/exhibitor-dashboard/marketing',
     bsm: '/exhibitor-dashboard/bsm',
     calendar: '/exhibitor-dashboard/calendar',
     chat: '/exhibitor-dashboard/chat',
+    feedback: '/exhibitor-dashboard/feedback',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
     annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
@@ -41,11 +43,22 @@ const TAB_ROUTES: Record<string, string> = {
     pfms_details: '/exhibitor-dashboard/psm-claim/reports/pfms-details',
     covering_letter: '/exhibitor-dashboard/psm-claim/reports/covering-letter',
     narrative_feedback: '/exhibitor-dashboard/psm-claim/reports/narrative-feedback',
-    exhibitions: '/exhibitor-dashboard/exhibitions',
-    // participants_feedback: '/exhibitor-dashboard/participants-feedback',
-    mandate_form: '/exhibitor-dashboard/mandate-form',
+    relationship_manager: '/exhibitor-dashboard/relationship-manager',
+    'ex-profile': '/exhibitor-dashboard/ex-profile',
+    'become-seller': '/exhibitor-dashboard/become-seller',
+    'seller-dashboard': '/exhibitor-dashboard/seller-dashboard',
+    'seller-products': '/exhibitor-dashboard/seller-dashboard/products',
+    'seller-bsm': '/exhibitor-dashboard/seller-dashboard/bsm',
+    'product-export': '/exhibitor-dashboard/seller-dashboard/product-export',
+    'seller-marketing': '/exhibitor-dashboard/seller-dashboard/marketing',
+    'seller-leads': '/exhibitor-dashboard/seller-dashboard/leads',
+    'seller-sponsorship': '/exhibitor-dashboard/seller-dashboard/sponsorship',
+    'seller-conference': '/exhibitor-dashboard/seller-dashboard/conference',
+    'seller-logistics': '/exhibitor-dashboard/seller-dashboard/logistics',
+    'seller-helpdesk': '/exhibitor-dashboard/seller-dashboard/helpdesk',
+    'seller-reports': '/exhibitor-dashboard/seller-dashboard/reports',
     documentation: '/exhibitor-dashboard/documentation',
-    feedback: '/exhibitor-dashboard/feedback',
+    exhibitions: '/exhibitor-dashboard/exhibitions',
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
@@ -76,13 +89,21 @@ export default function ExhibitorDashboard() {
     const fetchDashboard = async (regId?: string) => {
         const token = localStorage.getItem('exhibitorToken');
         if (!token) { navigate('/exhibitor-login'); return; }
+
+        // Persist selected regId — if not provided, use last selected one
+        if (regId) {
+            localStorage.setItem('selectedRegId', regId);
+        }
+        const effectiveRegId = regId || localStorage.getItem('selectedRegId');
+
         let url = `${API_URL}/exhibitor-auth/dashboard`;
-        if (regId) url += `?id=${regId}`;
+        if (effectiveRegId) url += `?id=${effectiveRegId}`;
         try {
             const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
             const res = await r.json();
             if (res.success) {
                 setData(res.data);
+                localStorage.setItem('selectedRegId', res.data._id);
                 if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
                 if (res.data?._id) {
                     fetch(`${API_URL}/chat/unread/${res.data._id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -92,6 +113,7 @@ export default function ExhibitorDashboard() {
                 toast.error(res.message);
                 if (res.message === 'Token expired or invalid') {
                     localStorage.removeItem('exhibitorToken');
+                    localStorage.removeItem('selectedRegId');
                     navigate('/exhibitor-login');
                 }
             }
@@ -108,7 +130,11 @@ export default function ExhibitorDashboard() {
         return () => { document.removeEventListener('visibilitychange', handleVisibility); clearInterval(poll); };
     }, []);
 
-    const handleLogout = () => { localStorage.removeItem('exhibitorToken'); navigate('/exhibitor-login'); };
+    const handleLogout = () => { 
+        localStorage.removeItem('exhibitorToken'); 
+        localStorage.removeItem('selectedRegId');
+        navigate('/exhibitor-login'); 
+    };
 
     const handleChangePassword = async (e: React.FormEvent) => {
         e.preventDefault();
