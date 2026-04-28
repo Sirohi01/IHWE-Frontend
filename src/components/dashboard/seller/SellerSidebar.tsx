@@ -16,15 +16,21 @@ interface SidebarProps {
     onChangePwd: () => void;
     unreadChat?: number;
     access?: Record<string, boolean>;
+    subInfo?: any;
 }
 
-export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0, access = {} }: SidebarProps) {
+export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0, access = {}, subInfo }: SidebarProps) {
     const navigate = useNavigate();
-    const isSubscribed = data?.sellerSubscription?.status === 'active';
+
+    // Use subInfo from hook (most accurate) — NEVER fallback to data field alone
+    // subInfo is fetched with selectedRegId so it's always registration-specific
+    const isSubscribed = subInfo?.subscription?.isActive === true;
+    const planName = subInfo?.planDetails?.name || null;
 
     const canAccess = (featureKey: string) => {
+        // access map comes from subscription-info API with correct regId
         if (Object.keys(access).length > 0) return access[featureKey] === true;
-        return isSubscribed;
+        return false; // no access if access map not loaded
     };
 
     const menuGroups = [
@@ -41,35 +47,36 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
             ]
         },
         {
-            title: "Lead & Meeting",
+            title: "BSM & Meetings",
+            items: [
+                { id: "seller-bsm",      label: "BSM Management",    icon: Handshake, featureKey: "bsm_marketing" },
+                { id: "seller-calendar", label: "Meeting Calendar",   icon: CalendarCheck, featureKey: "meeting_scheduler" },
+            ]
+        },
+        {
+            title: "Lead Management",
             items: [
                 { id: "seller-leads", label: "Lead Management", icon: Users, featureKey: "lead_access" },
-                { id: "seller-calendar", label: "Meeting Scheduler", icon: Handshake, featureKey: "meeting_scheduler" },
             ]
         },
         {
             title: "Sponsorship",
             items: [
-                { id: "seller-sponsorship", label: "Sponsorship Module", icon: Award, featureKey: null },
-            ]
-        },
-        {
-            title: "Conference",
-            items: [
-                { id: "seller-conference", label: "Conference Participation", icon: CalendarCheck, featureKey: "conference" },
+                { id: "seller-sponsorship", label: "Subscription Plans", icon: Award, featureKey: null },
             ]
         },
         {
             title: "Marketing",
             items: [
-                { id: "seller-marketing", label: "Marketing Support", icon: Megaphone, featureKey: "bsm_marketing" },
+                { id: "seller-marketing", label: "Marketing Toolkit", icon: Megaphone, featureKey: "bsm_marketing" },
             ]
         },
         {
             title: "Logistics",
             items: [
-                { id: "seller-logistics", label: "Logistics & Operations", icon: Truck, featureKey: "logistics" },
-                { id: "seller-accessories", label: "Accessories", icon: ShoppingBag, featureKey: "accessories" },
+                { id: "seller-conference",  label: "Conference",            icon: CalendarCheck, featureKey: "conference" },
+                // { id: "seller-logistics",   label: "Logistics & Operations", icon: Truck, featureKey: "logistics" },
+                { id: "seller-accessories", label: "Accessories",            icon: ShoppingBag, featureKey: "accessories" },
             ]
         },
         {
@@ -108,7 +115,7 @@ export default function SellerSidebar({ data, activeTab, setActiveTab, sidebarOp
                     {isSubscribed ? (
                         <>
                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0" />
-                            <span className="truncate">{data?.sellerSubscription?.plan || 'Active Plan'}</span>
+                            <span className="truncate">{planName || 'Active Plan'}</span>
                         </>
                     ) : (
                         <>

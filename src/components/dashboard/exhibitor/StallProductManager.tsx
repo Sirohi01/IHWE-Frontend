@@ -84,9 +84,12 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
         setIsRefreshing(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            const regParam = selectedRegId ? `?regId=${selectedRegId}` : '';
+
             const [pRes, aRes, uRes] = await Promise.all([
-                fetch(`${API_URL}/stall-products/my`, { headers: { Authorization: `Bearer ${token}` } }),
-                fetch(`${API_URL}/stall-products/analytics/summary`, { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API_URL}/stall-products/my${regParam}`, { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API_URL}/stall-products/analytics/summary${regParam}`, { headers: { Authorization: `Bearer ${token}` } }),
                 fetch(`${API_URL}/units`)
             ]);
 
@@ -130,6 +133,10 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
         try {
             const formData = new FormData(e.currentTarget);
             selectedImages.forEach(file => formData.append('images', file));
+
+            // Pass selectedRegId so product is created under the correct registration
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            if (selectedRegId) formData.append('regId', selectedRegId);
 
             const token = localStorage.getItem('exhibitorToken');
             const res = await fetch(`${API_URL}/stall-products`, {

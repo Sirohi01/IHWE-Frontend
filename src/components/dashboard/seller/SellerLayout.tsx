@@ -13,9 +13,10 @@ interface LayoutProps {
     children: React.ReactNode;
     unreadChat?: number;
     access?: Record<string, boolean>;
+    subInfo?: any;
 }
 
-export default function SellerLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children, unreadChat = 0, access = {} }: LayoutProps) {
+export default function SellerLayout({ logo, data, activeTab, setActiveTab, handleLogout, onChangePwd, children, unreadChat = 0, access = {}, subInfo }: LayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     return (
@@ -39,6 +40,7 @@ export default function SellerLayout({ logo, data, activeTab, setActiveTab, hand
                     onChangePwd={onChangePwd}
                     unreadChat={unreadChat}
                     access={access}
+                    subInfo={subInfo}
                 />
 
                 <main

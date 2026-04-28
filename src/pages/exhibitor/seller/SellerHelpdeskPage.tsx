@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { 
-    MessageSquare, Phone, Mail, 
-    Zap, Search, ChevronRight, 
-    LifeBuoy, HelpCircle, Clock,
-    CreditCard, Building2, FileText, Send
+    Phone,
+    Zap, ChevronRight, 
+    LifeBuoy, HelpCircle,
+    CreditCard, FileText, Send
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/api';
 import DashboardHero from '@/components/dashboard/DashboardHero';
 
 export default function SellerHelpdeskPage() {
-    const { data } = useExhibitorCtx();
+    const { } = useExhibitorCtx() || {};
     const [tickets, setTickets] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -30,12 +29,18 @@ export default function SellerHelpdeskPage() {
         try {
             setLoading(true);
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/seller-portal/service-requests`, {
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            const url = selectedRegId
+                ? `${API_URL}/seller-portal/service-requests?regId=${selectedRegId}`
+                : `${API_URL}/seller-portal/service-requests`;
+            const res = await fetch(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const d = await res.json();
             if (d.success) {
-                setTickets(d.data || []);
+                // Show only helpdesk tickets on this page
+                const helpdeskTickets = (d.data || []).filter((t: any) => t.serviceType === 'helpdesk');
+                setTickets(helpdeskTickets);
             }
         } catch (err) {
             console.error('Failed to fetch tickets:', err);
@@ -55,6 +60,7 @@ export default function SellerHelpdeskPage() {
         setSubmitting(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
+            const selectedRegId = localStorage.getItem('selectedRegId');
             const res = await fetch(`${API_URL}/seller-portal/service-request`, {
                 method: 'POST',
                 headers: { 
@@ -64,6 +70,7 @@ export default function SellerHelpdeskPage() {
                 body: JSON.stringify({
                     serviceType: 'helpdesk',
                     serviceName: form.category,
+                    ...(selectedRegId && { regId: selectedRegId }),
                     details: {
                         category: form.category,
                         priority: form.priority,
@@ -131,19 +138,14 @@ export default function SellerHelpdeskPage() {
                         <LifeBuoy size={12} className="text-orange-500" /> Professional support 24/7
                     </p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <button className="px-6 py-2.5 bg-emerald-600 text-white font-black text-[10px] uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-lg hover:bg-emerald-700 transition-all">
-                        <MessageSquare size={14} /> Live WhatsApp Support
-                    </button>
-                </div>
             </header>
 
             {/* Quick Contact Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                    { label: "Technical Support", value: "+91 98765 43210", icon: Zap, color: "text-blue-600", bg: "bg-blue-50" },
-                    { label: "Accounts & Billing", value: "accounts@ihwe.in", icon: CreditCard, color: "text-emerald-600", bg: "bg-emerald-50" },
-                    { label: "Relationship Manager", value: "Dr. Arun Sharma", icon: HelpCircle, color: "text-purple-600", bg: "bg-purple-50" },
+                    { label: "Technical Support", value: "+91-9654900525", icon: Zap, color: "text-blue-600", bg: "bg-blue-50" },
+                    { label: "Accounts & Billing", value: "info@namogangewellness.com", icon: CreditCard, color: "text-emerald-600", bg: "bg-emerald-50" },
+                    { label: "Founder", value: "Dr. Vijay Sharma", icon: HelpCircle, color: "text-purple-600", bg: "bg-purple-50" },
                 ].map((c, i) => (
                     <div key={i} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-[#23471d] transition-all cursor-pointer group">
                         <div className={`w-12 h-12 ${c.bg} ${c.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -292,7 +294,7 @@ export default function SellerHelpdeskPage() {
                             <Phone size={18} className="text-white" />
                             <div>
                                 <p className="text-[10px] font-black uppercase tracking-widest">24/7 Hotline</p>
-                                <p className="text-sm font-black">+91 99999 88888</p>
+                                <p className="text-sm font-black">+91 9654900525</p>
                             </div>
                         </div>
                     </div>

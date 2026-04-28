@@ -66,7 +66,12 @@ export function useSellerSubscription() {
             const token = localStorage.getItem('exhibitorToken');
             if (!token) { setLoading(false); return; }
 
-            const res = await fetch(`${API_URL}/seller-portal/subscription-info`, {
+            // Use selectedRegId so multi-registration users get correct subscription
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            let url = `${API_URL}/seller-portal/subscription-info`;
+            if (selectedRegId) url += `?regId=${selectedRegId}`;
+
+            const res = await fetch(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();

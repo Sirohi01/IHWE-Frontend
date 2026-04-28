@@ -58,7 +58,11 @@ export default function SellerLogisticsPage() {
         try {
             setLoading(true);
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/seller-portal/logistics-requests`, {
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            const url = selectedRegId
+                ? `${API_URL}/seller-portal/logistics-requests?regId=${selectedRegId}`
+                : `${API_URL}/seller-portal/logistics-requests`;
+            const res = await fetch(url, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const d = await res.json();
@@ -87,6 +91,7 @@ export default function SellerLogisticsPage() {
         setSubmitting(svc.key);
         try {
             const token = localStorage.getItem('exhibitorToken');
+            const selectedRegId = localStorage.getItem('selectedRegId');
             const res = await fetch(`${API_URL}/seller-portal/service-request`, {
                 method: 'POST',
                 headers: { 
@@ -96,6 +101,7 @@ export default function SellerLogisticsPage() {
                 body: JSON.stringify({
                     serviceType: 'logistics',
                     serviceName: svc.title,
+                    ...(selectedRegId && { regId: selectedRegId }),
                     details: { description: svc.desc, serviceKey: svc.key }
                 })
             });

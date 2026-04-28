@@ -742,12 +742,11 @@ export default function ExhibitorPaymentPage() {
                 >
                     {summary.paymentHistory && summary.paymentHistory.length > 0 ? (
                         <>
-                            {/* Desktop table */}
                             <div className="hidden sm:block overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-slate-50 border-b border-gray-200">
                                         <tr>
-                                            {['#', 'Type', 'Amount', 'Method', 'Transaction ID', 'Date'].map(h => (
+                                            {['#', 'Type', 'Amount', 'Method', 'Transaction ID', 'Date', 'Receipt'].map(h => (
                                                 <th key={h} className="px-4 py-3 text-left text-[9px] font-black text-gray-500 uppercase tracking-wider">{h}</th>
                                             ))}
                                         </tr>
@@ -767,6 +766,16 @@ export default function ExhibitorPaymentPage() {
                                                 <td className="px-4 py-3 text-xs text-gray-500 font-bold">
                                                     {h.paidAt ? new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
                                                 </td>
+                                                <td className="px-4 py-3 text-xs">
+                                                    {h.receiptPdfUrl ? (
+                                                        <a href={h.receiptPdfUrl} target="_blank" rel="noopener noreferrer" download
+                                                            className="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded font-bold transition">
+                                                            <Receipt size={12} /> Download
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-gray-300 text-[9px]">—</span>
+                                                    )}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -775,7 +784,7 @@ export default function ExhibitorPaymentPage() {
                             {/* Mobile cards */}
                             <div className="sm:hidden divide-y divide-gray-100">
                                 {summary.paymentHistory.map((h: any, i: number) => (
-                                    <div key={i} className="p-4 space-y-2">
+                                    <div key={i} className="p-4 space-y-3">
                                         <div className="flex items-center justify-between">
                                             <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">
                                                 {h.paymentType || 'Payment'}
@@ -792,6 +801,12 @@ export default function ExhibitorPaymentPage() {
                                             <p className="text-[9px] font-mono text-gray-400 truncate">
                                                 Txn: {h.transactionId || h.razorpayPaymentId}
                                             </p>
+                                        )}
+                                        {h.receiptPdfUrl && (
+                                            <a href={h.receiptPdfUrl} target="_blank" rel="noopener noreferrer" download
+                                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded font-bold text-[10px] transition">
+                                                <Receipt size={12} /> Download Receipt
+                                            </a>
                                         )}
                                     </div>
                                 ))}

@@ -219,16 +219,6 @@ export default function SellerSponsorshipPage() {
                     >
                         Subscription Plans
                     </button>
-                    <button
-                        onClick={() => setShowSponsorships(true)}
-                        className={`px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${
-                            showSponsorships
-                                ? 'bg-[#23471d] text-white'
-                                : 'bg-white text-slate-600 border-2 border-slate-300'
-                        }`}
-                    >
-                        Event Sponsorships
-                    </button>
                 </div>
                 <button onClick={fetchPlans} className="px-4 py-2.5 border-2 border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest rounded-lg flex items-center gap-2 hover:bg-white hover:border-slate-400 transition-all">
                     <RefreshCw size={12} /> Refresh

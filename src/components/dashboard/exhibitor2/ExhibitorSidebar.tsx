@@ -142,6 +142,7 @@ export default function ExhibitorSidebar({ data, activeTab, setActiveTab, sideba
 
                 {/* ── Seller Section ── */}
                 {!isSeller ? (
+                    // Not a seller yet — show "Become a Seller" button
                     <button
                         onClick={() => setActiveTab("become-seller")}
                         className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === "become-seller" ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
@@ -153,27 +154,50 @@ export default function ExhibitorSidebar({ data, activeTab, setActiveTab, sideba
                         )}
                         {sidebarOpen && activeTab === "become-seller" && <ChevronRight size={12} className="ml-auto" />}
                     </button>
-                ) : (
-                    <div>
-                        <button
-                            onClick={() => {
-                                navigate("/seller-portal");
-                            }}
-                            className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === 'seller-dashboard' ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
-                            <div className="relative shrink-0">
-                                <ShoppingBag size={15} />
+                ) : data?.sellerStatus === 'pending' ? (
+                    // Seller registered but pending admin approval
+                    <div className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm ${sidebarOpen ? 'bg-amber-50 border border-amber-200' : ''}`}>
+                        <div className="relative shrink-0 text-amber-500">
+                            <Store size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <div className="flex-1 min-w-0">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 block">Seller: Pending</span>
+                                <span className="text-[9px] text-amber-600 leading-tight block">Awaiting admin approval</span>
                             </div>
-                            {sidebarOpen && (
-                                <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Open Seller Portal</span>
-                            )}
-                            {sidebarOpen && (
-                                <ExternalLink
-                                    size={12}
-                                    className="ml-auto opacity-50"
-                                />
-                            )}
-                        </button>
+                        )}
                     </div>
+                ) : data?.sellerStatus === 'active' && data?.sellerSubscription?.status !== 'active' ? (
+                    // Approved but no subscription — go to seller portal (sponsorship page inside)
+                    <button
+                        onClick={() => navigate("/seller-portal")}
+                        className="w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all bg-blue-50 border border-blue-200 hover:bg-blue-100">
+                        <div className="relative shrink-0 text-blue-600">
+                            <Store size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <div className="flex-1 min-w-0">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Seller Approved!</span>
+                                <span className="text-[9px] text-blue-600 leading-tight block">Buy a plan to activate</span>
+                            </div>
+                        )}
+                        {sidebarOpen && <ExternalLink size={11} className="ml-auto text-blue-400 shrink-0" />}
+                    </button>
+                ) : (
+                    // Active seller with subscription — show portal link
+                    <button
+                        onClick={() => navigate("/seller-portal")}
+                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === 'seller-dashboard' ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                        <div className="relative shrink-0">
+                            <ShoppingBag size={15} />
+                        </div>
+                        {sidebarOpen && (
+                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Open Seller Portal</span>
+                        )}
+                        {sidebarOpen && (
+                            <ExternalLink size={12} className="ml-auto opacity-50" />
+                        )}
+                    </button>
                 )}
 
                 {/* ── MSME Dropdown ── */}

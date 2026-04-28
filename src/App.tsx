@@ -64,8 +64,8 @@ const SellerProductsPage = lazy(() => import("@/pages/exhibitor/seller/SellerPro
 const SellerNotificationsPage = lazy(() => import("@/pages/exhibitor/seller/SellerNotificationsPage"));
 const SellerProfilePage = lazy(() => import("@/pages/exhibitor/seller/SellerProfilePage"));
 const SellerStallBookingPage = lazy(() => import("@/pages/exhibitor/seller/SellerStallBookingPage"));
-const SellerMarketingPage = lazy(() => import("@/pages/exhibitor/seller/SellerMarketingPage"));
-const SellerMeetingSchedulerPage = lazy(() => import("@/pages/exhibitor/seller/SellerMeetingSchedulerPage"));
+const SellerMarketingPage = lazy(() => import("@/pages/exhibitor/seller/SellerMarketingPage")); // kept for fallback
+// SellerMeetingSchedulerPage removed — using ExhibitorBSMPage for calendar
 const AnnexureC = lazy(() => import("./pages/psmClaim/AnnexureC"));
 const Declaration = lazy(() => import("./pages/psmClaim/Declaration"));
 const FeedbackReport = lazy(() => import("./pages/psmClaim/FeedbackReport"));
@@ -190,11 +190,11 @@ const App = () => {
                     <Route index element={<SellerDashboardHome />} />
                     <Route path="leads" element={<SellerLeadsPage />} />
                     <Route path="bsm" element={<ExhibitorBSMPage />} />
-                    <Route path="calendar" element={<SellerMeetingSchedulerPage />} />
+                    <Route path="calendar" element={<ExhibitorBSMPage />} />
                     <Route path="product-export" element={<ProductExportPage />} />
                     <Route path="products" element={<SellerProductsPage />} />
                     <Route path="stall" element={<SellerStallBookingPage />} />
-                    <Route path="marketing" element={<SellerMarketingPage />} />
+                    <Route path="marketing" element={<ExhibitorMarketingPage />} />
                     <Route path="sponsorship" element={<SellerSponsorshipPage />} />
                     <Route path="sponsorship/:planId" element={<SellerSubscriptionPlanDetail />} />
                     <Route path="profile" element={<SellerProfilePage />} />

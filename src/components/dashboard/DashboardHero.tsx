@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { API_URL, SERVER_URL } from '@/lib/api';
 
@@ -25,26 +25,30 @@ export default function DashboardHero({ pageId, defaultTitle, defaultSubtitle, t
         fetchBanner();
     }, [pageId]);
 
-    const title = banner?.title || defaultTitle;
+    const title    = banner?.title    || defaultTitle;
     const subtitle = banner?.subtitle || defaultSubtitle;
-    const imageUrl = banner?.imageUrl ? `${SERVER_URL}${banner.imageUrl}` : (type === 'seller' ? '/seller-default-bg.jpg' : '/exhibitor-default-bg.jpg');
+    const imageUrl = banner?.imageUrl
+        ? `${SERVER_URL}${banner.imageUrl}`
+        : (type === 'seller' ? '/seller-default-bg.jpg' : '/exhibitor-default-bg.jpg');
 
     return (
-        <div className="relative w-full h-[180px] rounded-xl overflow-hidden mb-8 shadow-lg group">
-            {/* Background Image with Parallax effect */}
-            <motion.div 
-                initial={{ scale: 1.1 }}
-                animate={{ scale: 1 }}
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700"
-                style={{ backgroundImage: `url(${imageUrl})` }}
+        <div
+            className="relative w-full rounded-xl overflow-hidden mb-8 shadow-lg group"
+            style={{ aspectRatio: '4 / 1' }}
+        >
+            {/* Image — fills 4:1 container exactly, object-cover crops if needed */}
+            <img
+                src={imageUrl}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover object-center"
             />
-            
+
             {/* Gradient Overlays */}
             <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
-            
+
             {/* Content */}
-            <div className="relative h-full flex flex-col justify-center px-8 md:px-12">
+            <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-12">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}

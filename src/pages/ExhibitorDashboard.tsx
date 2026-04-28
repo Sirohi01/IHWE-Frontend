@@ -88,13 +88,22 @@ export default function ExhibitorDashboard() {
     const fetchDashboard = async (regId?: string) => {
         const token = localStorage.getItem('exhibitorToken');
         if (!token) { navigate('/exhibitor-login'); return; }
+
+        // Persist selected regId — if not provided, use last selected one
+        if (regId) {
+            localStorage.setItem('selectedRegId', regId);
+        }
+        const effectiveRegId = regId || localStorage.getItem('selectedRegId');
+
         let url = `${API_URL}/exhibitor-auth/dashboard`;
-        if (regId) url += `?id=${regId}`;
+        if (effectiveRegId) url += `?id=${effectiveRegId}`;
         try {
             const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
             const res = await r.json();
             if (res.success) {
                 setData(res.data);
+                // Keep selectedRegId in sync with actual loaded data
+                localStorage.setItem('selectedRegId', res.data._id);
                 if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
                 if (res.data?._id) {
                     fetch(`${API_URL}/chat/unread/${res.data._id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -104,6 +113,7 @@ export default function ExhibitorDashboard() {
                 toast.error(res.message);
                 if (res.message === 'Token expired or invalid') {
                     localStorage.removeItem('exhibitorToken');
+                    localStorage.removeItem('selectedRegId');
                     navigate('/exhibitor-login');
                 }
             }
@@ -120,7 +130,11 @@ export default function ExhibitorDashboard() {
         return () => { document.removeEventListener('visibilitychange', handleVisibility); clearInterval(poll); };
     }, []);
 
-    const handleLogout = () => { localStorage.removeItem('exhibitorToken'); navigate('/exhibitor-login'); };
+    const handleLogout = () => { 
+        localStorage.removeItem('exhibitorToken'); 
+        localStorage.removeItem('selectedRegId');
+        navigate('/exhibitor-login'); 
+    };
 
     const handleChangePassword = async (e: React.FormEvent) => {
         e.preventDefault();

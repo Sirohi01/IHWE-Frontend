@@ -129,6 +129,7 @@ export default function ExhibitorOverview({
                                             <th className="px-3 py-2 font-bold">Method</th>
                                             <th className="px-3 py-2 font-bold">Trans. ID</th>
                                             <th className="px-3 py-2 font-bold text-right">Amount</th>
+                                            <th className="px-3 py-2 font-bold">Receipt</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
@@ -139,6 +140,16 @@ export default function ExhibitorOverview({
                                                 <td className="px-3 py-2 text-slate-600">{h.method}</td>
                                                 <td className="px-3 py-2 text-slate-400 font-mono italic">{h.transactionId || '—'}</td>
                                                 <td className="px-3 py-2 text-right font-black text-slate-900">{cur}{h.amount?.toLocaleString()}</td>
+                                                <td className="px-3 py-2">
+                                                    {h.receiptPdfUrl ? (
+                                                        <a href={h.receiptPdfUrl} target="_blank" rel="noopener noreferrer" download
+                                                            className="text-blue-600 hover:text-blue-800 font-bold text-[9px] underline">
+                                                            Download
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-gray-300 text-[9px]">—</span>
+                                                    )}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

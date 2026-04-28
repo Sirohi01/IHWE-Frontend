@@ -381,8 +381,6 @@ export default function StallMap({ onStallSelect, selectedStallId }: StallMapPro
                     </div>
                 </div>
             )}
-
-            {/* ── Booked Stalls Table with Pagination ── */}
             {bookedCount > 0 && (
                 <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
                     {/* Header */}

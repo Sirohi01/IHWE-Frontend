@@ -18,7 +18,7 @@ export default function SellerDashboardHome() {
     const navigate = useNavigate();
     const [stats, setStats] = React.useState<any>(null);
 
-    const isSubscribed = data?.sellerSubscription?.status === 'active';
+    const isSubscribed = subInfo?.subscription?.isActive === true;
     const planDetails = subInfo?.planDetails;
     const daysRemaining = subInfo?.subscription?.daysRemaining ?? null;
 
@@ -26,7 +26,11 @@ export default function SellerDashboardHome() {
         const fetchStats = async () => {
             try {
                 const token = localStorage.getItem('exhibitorToken');
-                const res = await fetch(`${API_URL}/seller-portal/stats`, {
+                const selectedRegId = localStorage.getItem('selectedRegId');
+                const url = selectedRegId
+                    ? `${API_URL}/seller-portal/stats?regId=${selectedRegId}`
+                    : `${API_URL}/seller-portal/stats`;
+                const res = await fetch(url, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 const d = await res.json();
@@ -40,38 +44,39 @@ export default function SellerDashboardHome() {
 
     const goTo = (tab: string) => navigate(`/seller-portal/${tab === 'dashboard' ? '' : tab}`);
 
-    const cur = data?.participation?.currency === 'USD' ? '$' : '₹';
+    const cur = data?.participation?.currency === 'USD' ? '$' : '\u20B9';
     const status = STATUS_CONFIG[data?.status] || STATUS_CONFIG.pending;
-    const paid = data?.amountPaid || 0;
-    const total = data?.participation?.total || 0;
+    const paid    = data?.amountPaid || 0;
+    // Use financeBreakdown.netPayable as the true contract value (post-GST, post-TDS)
+    const total   = data?.financeBreakdown?.netPayable || data?.participation?.total || 0;
     const balance = data?.balanceAmount || 0;
     const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
 
     // Quick Summary Cards Data
     const profileCompletion = stats?.profileCompletion || 0;
-    const pendingFields = Math.ceil((100 - profileCompletion) / 6.25); // Approximate pending fields
-    
+    const pendingFields = Math.ceil((100 - profileCompletion) / 6.25);
+
     const summaryCards = [
-        { label: 'Stall Booking', value: data?.participation?.stallFor || 'Not Assigned', subtext: `${data?.participation?.stallSize || 0} sqm`, icon: Package, color: '#0284c7' },
-        { label: 'Payment Status', value: `${paidPct}%`, subtext: `${cur}${paid.toLocaleString()} / ${cur}${total.toLocaleString()}`, icon: CheckCircle2, color: paidPct === 100 ? '#059669' : '#d97706' },
-        { label: 'Pending Due', value: `${cur}${balance.toLocaleString()}`, subtext: balance > 0 ? 'Payment Required' : 'Fully Paid', icon: CalendarCheck, color: balance > 0 ? '#dc2626' : '#059669' },
-        { label: 'Visitor Leads', value: stats?.totalLeads || 0, subtext: 'Verified Inquiries', icon: Users, color: '#7c3aed' },
-        { label: 'Meeting Requests', value: stats?.meetingRequests || 0, subtext: 'Pending Confirmations', icon: Handshake, color: '#ea580c' },
-        { label: 'Sponsorship Status', value: isSubscribed ? 'Active' : 'Inactive', subtext: isSubscribed ? planDetails?.name : 'No Plan', icon: Award, color: isSubscribed ? '#059669' : '#64748b' },
-        { label: 'Profile Completion', value: `${profileCompletion}%`, subtext: profileCompletion === 100 ? 'Complete' : `${pendingFields} fields pending`, icon: Users, color: profileCompletion === 100 ? '#059669' : '#2563eb' },
-        { label: 'Document Status', value: data?.kycStatus || 'Pending', subtext: 'KYC Verification', icon: Package, color: data?.kycStatus === 'approved' ? '#059669' : '#d97706' },
+        { label: 'Stall Booking',      value: data?.participation?.stallFor || 'Not Assigned', subtext: `${data?.participation?.stallSize || 0} sqm`,                                    icon: Package,      color: '#0284c7' },
+        { label: 'Payment Status',     value: `${paidPct}%`,                                   subtext: `${cur}${paid.toLocaleString()} / ${cur}${total.toLocaleString()}`,              icon: CheckCircle2, color: paidPct === 100 ? '#059669' : '#d97706' },
+        { label: 'Pending Due',        value: `${cur}${balance.toLocaleString()}`,              subtext: balance > 0 ? 'Payment Required' : 'Fully Paid',                                icon: CalendarCheck,color: balance > 0 ? '#dc2626' : '#059669' },
+        { label: 'Visitor Leads',      value: stats?.totalLeads || 0,                          subtext: stats?.maxLeads > 0 ? `of ${stats.maxLeads} plan limit` : 'Verified Inquiries',                                                            icon: Users,        color: '#7c3aed' },
+        { label: 'Meeting Requests',   value: stats?.meetingRequests || 0,                     subtext: 'Pending Confirmations',                                                         icon: Handshake,    color: '#ea580c' },
+        { label: 'Sponsorship Status', value: isSubscribed ? 'Active' : 'Inactive',            subtext: isSubscribed ? planDetails?.name : 'No Plan',                                   icon: Award,        color: isSubscribed ? '#059669' : '#64748b' },
+        { label: 'Profile Completion', value: `${profileCompletion}%`,                         subtext: profileCompletion === 100 ? 'Complete' : `${pendingFields} fields pending`,      icon: Users,        color: profileCompletion === 100 ? '#059669' : '#2563eb' },
+        { label: 'Document Status',    value: data?.kycStatus || 'Pending',                    subtext: 'KYC Verification',                                                              icon: Package,      color: data?.kycStatus === 'approved' ? '#059669' : '#d97706' },
     ];
 
     const modules = [
-        { id: 'leads',      label: 'Lead Management',   desc: `${stats?.totalLeads || 0} Verified buyer leads`,  icon: Users,        accent: '#ea580c', light: '#fff7ed', tab: 'leads',          featureKey: 'lead_access' },
-        { id: 'bsm',        label: 'Meeting Scheduler',    desc: '1-on-1 Buyer-Seller Meetings',                    icon: Handshake,    accent: '#d97706', light: '#fffbeb', tab: 'bsm',            featureKey: 'bsm_marketing' },
-        { id: 'export',     label: 'Product Export',    desc: 'Global trade & export desk',                      icon: Send,         accent: '#2563eb', light: '#eff6ff', tab: 'product-export', featureKey: 'export_inquiry' },
-        { id: 'products',   label: 'Manage Products',   desc: 'Catalog & digital showroom',                      icon: Package,      accent: '#059669', light: '#ecfdf5', tab: 'products',       featureKey: 'product_showcase' },
-        { id: 'marketing',  label: 'Marketing Support',     desc: 'Custom promos & social assets',                   icon: Megaphone,    accent: '#e11d48', light: '#fff1f2', tab: 'marketing',      featureKey: 'bsm_marketing' },
-        { id: 'logistics',  label: 'Logistics & Operations',   desc: 'Booth setup & services',                          icon: Truck,        accent: '#7c3aed', light: '#f5f3ff', tab: 'logistics',      featureKey: 'logistics' },
-        { id: 'conference', label: 'Conference Participation',       desc: 'Sessions & speaker slots',                        icon: CalendarCheck,accent: '#0891b2', light: '#ecfeff', tab: 'conference',     featureKey: 'conference' },
-        { id: 'accessories',label: 'Accessories',       desc: 'Order stall accessories',                         icon: ShoppingBag,  accent: '#d97706', light: '#fffbeb', tab: 'accessories',    featureKey: 'accessories' },
-        { id: 'reports',    label: 'Reports Section',  desc: `${stats?.totalViews || 0} Total views tracked`,   icon: BarChart3,    accent: '#6366f1', light: '#eef2ff', tab: 'reports',        featureKey: 'analytics_dashboard' },
+        { id: 'leads',       label: 'Lead Management',          desc: `${stats?.totalLeads || 0} Verified buyer leads`,  icon: Users,         accent: '#ea580c', light: '#fff7ed', tab: 'leads',          featureKey: 'lead_access' },
+        { id: 'bsm',         label: 'Meeting Scheduler',        desc: '1-on-1 Buyer-Seller Meetings',                    icon: Handshake,     accent: '#d97706', light: '#fffbeb', tab: 'bsm',            featureKey: 'bsm_marketing' },
+        { id: 'export',      label: 'Product Export',           desc: 'Global trade & export desk',                      icon: Send,          accent: '#2563eb', light: '#eff6ff', tab: 'product-export', featureKey: 'export_inquiry' },
+        { id: 'products',    label: 'Manage Products',          desc: 'Catalog & digital showroom',                      icon: Package,       accent: '#059669', light: '#ecfdf5', tab: 'products',       featureKey: 'product_showcase' },
+        { id: 'marketing',   label: 'Marketing Support',        desc: 'Custom promos & social assets',                   icon: Megaphone,     accent: '#e11d48', light: '#fff1f2', tab: 'marketing',      featureKey: 'bsm_marketing' },
+        { id: 'logistics',   label: 'Logistics & Operations',   desc: 'Booth setup & services',                          icon: Truck,         accent: '#7c3aed', light: '#f5f3ff', tab: 'logistics',      featureKey: 'logistics' },
+        { id: 'conference',  label: 'Conference Participation', desc: 'Sessions & speaker slots',                        icon: CalendarCheck, accent: '#0891b2', light: '#ecfeff', tab: 'conference',     featureKey: 'conference' },
+        { id: 'accessories', label: 'Accessories',              desc: 'Order stall accessories',                         icon: ShoppingBag,   accent: '#d97706', light: '#fffbeb', tab: 'accessories',    featureKey: 'accessories' },
+        { id: 'reports',     label: 'Reports Section',          desc: `${stats?.totalViews || 0} Total views tracked`,   icon: BarChart3,     accent: '#6366f1', light: '#eef2ff', tab: 'reports',        featureKey: 'analytics_dashboard' },
     ];
 
     return (
@@ -136,19 +141,10 @@ export default function SellerDashboardHome() {
                     {summaryCards.map((card, idx) => {
                         const Icon = card.icon;
                         return (
-                            <div
-                                key={idx}
-                                className="group relative overflow-hidden border rounded-[3px] p-4 transition-all bg-white border-slate-200 hover:shadow-md"
-                            >
-                                <div
-                                    className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-5 group-hover:opacity-10 transition-all duration-500"
-                                    style={{ background: card.color }}
-                                />
+                            <div key={idx} className="group relative overflow-hidden border rounded-[3px] p-4 transition-all bg-white border-slate-200 hover:shadow-md">
+                                <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-5 group-hover:opacity-10 transition-all duration-500" style={{ background: card.color }} />
                                 <div className="flex items-start justify-between mb-3 relative z-10">
-                                    <div
-                                        className="w-9 h-9 rounded-[3px] flex items-center justify-center shadow-sm"
-                                        style={{ background: card.color }}
-                                    >
+                                    <div className="w-9 h-9 rounded-[3px] flex items-center justify-center shadow-sm" style={{ background: card.color }}>
                                         <Icon className="w-4 h-4 text-white" strokeWidth={2.5} />
                                     </div>
                                 </div>
@@ -181,27 +177,16 @@ export default function SellerDashboardHome() {
                                         : 'bg-white border-slate-200 hover:shadow-md cursor-pointer'
                                 }`}
                             >
-                                <div
-                                    className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-5 group-hover:opacity-10 transition-all duration-500"
-                                    style={{ background: mod.accent }}
-                                />
+                                <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-5 group-hover:opacity-10 transition-all duration-500" style={{ background: mod.accent }} />
                                 <div className="flex items-start justify-between mb-3 relative z-10">
-                                    <div
-                                        className="w-9 h-9 rounded-[3px] flex items-center justify-center shadow-sm"
-                                        style={{ background: isLocked ? '#94a3b8' : mod.accent }}
-                                    >
+                                    <div className="w-9 h-9 rounded-[3px] flex items-center justify-center shadow-sm" style={{ background: isLocked ? '#94a3b8' : mod.accent }}>
                                         {isLocked
                                             ? <Lock className="w-4 h-4 text-white" />
                                             : <Icon className="w-4 h-4 text-white" strokeWidth={2.5} />
                                         }
                                     </div>
-                                    <span
-                                        className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-[2px]"
-                                        style={{
-                                            background: isLocked ? '#f1f5f9' : mod.light,
-                                            color: isLocked ? '#94a3b8' : mod.accent
-                                        }}
-                                    >
+                                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-[2px]"
+                                        style={{ background: isLocked ? '#f1f5f9' : mod.light, color: isLocked ? '#94a3b8' : mod.accent }}>
                                         {isLocked ? 'Locked' : 'Active'}
                                     </span>
                                 </div>

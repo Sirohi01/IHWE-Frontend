@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
     MapPin, Building2, Ruler,
-    CheckCircle2, AlertCircle, Send, Sparkles
+    CheckCircle2, AlertCircle, Send, Sparkles, Info
 } from 'lucide-react';
 import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import StallMap from '@/components/dashboard/seller/StallMap';
+import { useExhibitorCtx } from '@/context/ExhibitorContext';
+import DashboardHero from '@/components/dashboard/DashboardHero';
 
 interface Stall {
     _id: string;
@@ -21,6 +23,7 @@ interface Stall {
 }
 
 export default function SellerStallBookingPage() {
+    const { data } = useExhibitorCtx();
     const [selectedStall, setSelectedStall] = useState<Stall | null>(null);
     const [showCustomRequest, setShowCustomRequest] = useState(false);
     const [customRequest, setCustomRequest] = useState({
@@ -115,13 +118,69 @@ export default function SellerStallBookingPage() {
 
     return (
         <div className="space-y-6">
+            <DashboardHero
+                pageId="sl-stall"
+                defaultTitle="Stall Booking"
+                defaultSubtitle="Manage your stall allocation and request custom space"
+                type="seller"
+            />
+            {/* ── Your Current Stall ── */}
+            {data?.participation?.stallFor || data?.participation?.stallNo ? (
+                <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a25] rounded-xl p-5 flex flex-wrap items-center gap-5 shadow-sm">
+                    <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shrink-0">
+                        <CheckCircle2 size={24} className="text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[9px] text-white/50 font-black uppercase tracking-widest mb-0.5">Your Allocated Stall</p>
+                        <p className="text-2xl font-black text-white leading-none">
+                            {data.participation.stallFor || data.participation.stallNo}
+                        </p>
+                        <p className="text-xs text-white/70 font-bold mt-1">
+                            {data.participation.stallType && `${data.participation.stallType} • `}
+                            {data.participation.stallSize ? `${data.participation.stallSize} sqm` : ''}
+                            {data.participation.stallScheme && ` • ${data.participation.stallScheme}`}
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                        {data.participation.stallSize && (
+                            <div className="bg-white/10 rounded-lg px-4 py-2 text-center">
+                                <p className="text-[9px] text-white/50 font-black uppercase">Size</p>
+                                <p className="text-lg font-black text-white">{data.participation.stallSize} sqm</p>
+                            </div>
+                        )}
+                        {data.eventId?.name && (
+                            <div className="bg-white/10 rounded-lg px-4 py-2 text-center">
+                                <p className="text-[9px] text-white/50 font-black uppercase">Event</p>
+                                <p className="text-sm font-black text-white">{data.eventId.name}</p>
+                            </div>
+                        )}
+                        <div className={`rounded-lg px-4 py-2 text-center ${
+                            data.status === 'paid' ? 'bg-emerald-500/20' :
+                            data.status === 'advance-paid' ? 'bg-cyan-500/20' :
+                            'bg-amber-500/20'
+                        }`}>
+                            <p className="text-[9px] text-white/50 font-black uppercase">Status</p>
+                            <p className="text-sm font-black text-white capitalize">{data.status}</p>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center gap-3">
+                    <Info size={18} className="text-amber-600 shrink-0" />
+                    <div>
+                        <p className="text-sm font-black text-amber-800">No Stall Allocated Yet</p>
+                        <p className="text-xs text-amber-600 mt-0.5">You haven't been assigned a stall. Contact admin or book a new stall below.</p>
+                    </div>
+                </div>
+            )}
+
             {/* Header */}
-            <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a24] text-white rounded-lg p-6">
+            <div className="bg-gradient-to-r from-slate-700 to-slate-800 text-white rounded-lg p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-black uppercase tracking-tight mb-2">Stall Booking</h1>
-                        <p className="text-sm text-white/80 font-bold">
-                            Select your preferred stall location from the interactive map
+                        <h1 className="text-xl font-black uppercase tracking-tight mb-1">Stall Map & Booking</h1>
+                        <p className="text-sm text-white/70 font-bold">
+                            View all stalls for the current event. Available stalls can be requested.
                         </p>
                     </div>
                     <button

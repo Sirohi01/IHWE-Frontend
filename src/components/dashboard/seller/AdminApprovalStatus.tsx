@@ -85,10 +85,14 @@ export default function AdminApprovalStatus({ data }: AdminApprovalStatusProps) 
         {
             key: 'stall_approval',
             label: 'Stall Allocation',
-            status: data?.stallApprovalStatus || 'pending',
-            description: 'Stall booking confirmation',
+            status: (data?.participation?.stallFor || data?.participation?.stallNo)
+                ? 'approved'
+                : 'pending',
+            description: data?.participation?.stallFor
+                ? `Stall ${data.participation.stallFor} — ${data.participation.stallSize || 0} sqm`
+                : 'Stall booking confirmation',
             icon: Building2,
-            updatedAt: data?.stallApprovedAt
+            updatedAt: data?.participation?.stallFor ? data?.createdAt : undefined
         },
         {
             key: 'payment_confirmation',
@@ -236,7 +240,7 @@ export default function AdminApprovalStatus({ data }: AdminApprovalStatusProps) 
                 <div className="mt-6 p-4 bg-blue-50 border border-blue-100 rounded-lg">
                     <p className="text-[10px] text-blue-600 font-medium leading-relaxed">
                         <strong className="font-black">Need Help?</strong> If you have any questions about the approval process, 
-                        please contact our support team via the Helpdesk section or call us at +91 99999 88888.
+                        please contact our support team via the Helpdesk section or call us at +91 9654900525.
                     </p>
                 </div>
             </div>
