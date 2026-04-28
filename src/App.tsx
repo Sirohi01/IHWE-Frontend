@@ -173,7 +173,7 @@ const App = () => {
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
 
-                  {/* Buyer Dashboard Routes */}
+
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />
                     <Route path="profile" element={<BuyerProfilePage />} />
