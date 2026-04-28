@@ -68,7 +68,8 @@ const BuyerChatPage = lazy(() => import("./pages/buyer/tabs/BuyerChatPage"));
 const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
 const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
-import { BuyerCalendarPage, BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
+const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
+import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
@@ -172,7 +173,7 @@ const App = () => {
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
 
-                  {/* Buyer Dashboard Routes */}
+
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />
                     <Route path="profile" element={<BuyerProfilePage />} />
