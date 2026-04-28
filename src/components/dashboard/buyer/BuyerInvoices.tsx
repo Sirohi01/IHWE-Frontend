@@ -86,7 +86,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
     const latestPayment = selectedPayment || (history.length > 0 ? history[history.length - 1] : null);
 
-    // Transaction ID
+
     const latestTxId =
         latestPayment?.transactionId ||
         latestPayment?.razorpayPaymentId ||
@@ -99,7 +99,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         (data.manualPaymentDetails?.paymentId) ||
         '—';
 
-    // Payment Method
+
     const latestMethod =
         latestPayment?.method ||
         latestPayment?.paymentMethod ||
@@ -110,7 +110,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         data.paymentMethod ||
         '—';
 
-    // Payment Amount
+
     const thisPaymentAmt = (() => {
         if (selectedPayment?.amount) return parseAmt(selectedPayment.amount);
         if (selectedPayment?.paidAmount) return parseAmt(selectedPayment.paidAmount);
@@ -122,7 +122,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         return 0;
     })();
 
-    // Phone Number
+
     const exhibitorPhone =
         data.phone ||
         data.phoneNumber ||
@@ -140,7 +140,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const sigUrl = settings?.authorizedSignature ? (settings.authorizedSignature.startsWith('http') ? settings.authorizedSignature : `${SERVER_URL}${settings.authorizedSignature}`) : null;
     const stampUrl = settings?.companyStamp ? (settings.companyStamp.startsWith('http') ? settings.companyStamp : `${SERVER_URL}${settings.companyStamp}`) : null;
 
-    // Invoice No
+
     const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
     const invoiceYear = new Date().getFullYear();
     const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
@@ -417,7 +417,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     </tbody>
                 </table>
 
-                {/* FOOTER */}
+
                 <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
                     <b>9th International Health & Wellness Expo 2026</b>
                 </div>

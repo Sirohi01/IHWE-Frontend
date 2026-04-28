@@ -16,11 +16,18 @@ export default function BuyerCalendar({ data }: { data: any }) {
 
     const fetchData = async () => {
         try {
+            const bId = data?._id || data?.id;
+            if (!bId || bId === 'undefined') {
+                console.error("Buyer ID missing from context data:", data);
+                setLoading(false);
+                return;
+            }
+
             const token = localStorage.getItem('buyerToken');
             const eventId = typeof data.eventId === 'object' ? data.eventId._id : data.eventId;
 
             const [mRes, eRes] = await Promise.all([
-                fetch(`${API_URL}/bsm/buyer/${data._id}`, { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API_URL}/bsm/buyer/${bId}`, { headers: { Authorization: `Bearer ${token}` } }),
                 fetch(`${API_URL}/events/current`, { headers: { Authorization: `Bearer ${token}` } })
             ]);
 
@@ -28,7 +35,8 @@ export default function BuyerCalendar({ data }: { data: any }) {
             const eData = await eRes.json();
 
             if (mData.success) {
-                setMeetings(mData.data.filter((m: any) => m.status === 'Approved'));
+                // Show both Approved and Pending meetings so they don't "disappear" from the calendar
+                setMeetings(mData.data.filter((m: any) => ['Approved', 'Pending'].includes(m.status)));
             }
 
             if (eData.success && eData.data?.startDate && eData.data?.endDate) {
@@ -62,8 +70,10 @@ export default function BuyerCalendar({ data }: { data: any }) {
     const toDateStr = (dateVal: string) => {
         if (!dateVal) return '';
         const d = new Date(dateVal);
-        // Using UTC methods to ensure consistent date string regardless of browser timezone
-        return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
     };
 
     const dayMeetings = meetings.filter(m => m.date && toDateStr(m.date) === selectedDate);
@@ -141,6 +151,13 @@ export default function BuyerCalendar({ data }: { data: any }) {
                                                 </span>
                                             </div>
                                         )}
+                                        <div className="md:border-l md:pl-6">
+                                            <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest ${
+                                                m.status === 'Approved' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                                            }`}>
+                                                {m.status}
+                                            </span>
+                                        </div>
                                     </div>
                                 </motion.div>
                             ))}
