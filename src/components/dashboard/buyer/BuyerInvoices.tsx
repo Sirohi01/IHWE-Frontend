@@ -245,9 +245,8 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <tr>
                             <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '30%', verticalAlign: 'middle' }}>
                                 <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>{companyName}</div>
-                                <div style={{ fontSize: 10, color: '#444', marginTop: 4 }}>{companyAddress}</div>
-                                {companyGst && <div style={{ fontSize: 10, marginTop: 2 }}><b>GSTIN:</b> {companyGst}</div>}
-                                {companyCin && <div style={{ fontSize: 10 }}><b>CIN:</b> {companyCin}</div>}
+                                <div style={{ fontSize: 10, marginTop: 2 }}><b>GSTIN:</b> 08AAAAA0000A1Z</div>
+                                <div style={{ fontSize: 10 }}><b>PAN:</b> AAAAA1234A</div>
                             </td>
                             <td style={{ border: '1px solid #1a3a6b', padding: 8, width: '40%', verticalAlign: 'middle', textAlign: 'center' }}>
                                 <div style={{ fontWeight: 900, fontSize: 16, color: '#1a3a6b' }}>TAX INVOICE</div>
@@ -257,7 +256,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                 <div style={{ fontWeight: 700, fontSize: 12, color: '#1a3a6b' }}>Original Copy</div>
                                 <div style={{ fontSize: 10, marginTop: 4 }}><b>Invoice No.:</b> {invoiceNo}</div>
                                 <div style={{ fontSize: 10 }}><b>Invoice Date:</b> {invoiceDate}</div>
-                                <div style={{ fontSize: 10 }}><b>Reg. ID:</b> {data.registrationId || '—'}</div>
                             </td>
                         </tr>
                     </tbody>
@@ -281,8 +279,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                 <div style={{ marginTop: 4 }}>Contact Person: {exhibitorInfo.contactPerson}</div>
                                 <div>Email: {exhibitorInfo.email}</div>
                                 <div>Phone: {exhibitorInfo.phone}</div>
-                                {exhibitorInfo.gstNo && <div>GSTIN: {exhibitorInfo.gstNo}</div>}
-                                {exhibitorInfo.panNo && <div>PAN: {exhibitorInfo.panNo}</div>}
+                                <div style={{ marginTop: 4 }}><b>GSTIN:</b> {exhibitorInfo.gstNo || '—'} / <b>PAN:</b> {exhibitorInfo.panNo || '—'}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
@@ -296,10 +293,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                         {[
                                             ['Invoice No.', invoiceNo],
                                             ['Invoice Date', invoiceDate],
-                                            ['Reg. ID', data.registrationId || '—'],
-                                            ['Payment Mode', latestMethod],
-                                            ['Txn. ID', latestTxId],
-                                            ['Payment Amount', `${cur} ${fmtNum(thisPaymentAmt)}`],
                                             ['Reverse Charge', 'No'],
                                         ].map(([label, value]) => (
                                             <tr key={label}>
@@ -452,7 +445,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
 
                 {/* FOOTER */}
                 <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
-                    <b>Registered Address:</b> {companyAddress}
+                    <b>9th International Health & Wellness Expo 2026</b>
                 </div>
             </div>
         </motion.div>
