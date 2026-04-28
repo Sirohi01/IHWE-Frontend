@@ -18,6 +18,7 @@ const TAB_ROUTES: Record<string, string> = {
     bsm: '/exhibitor-dashboard/bsm',
     calendar: '/exhibitor-dashboard/calendar',
     chat: '/exhibitor-dashboard/chat',
+    feedback: '/exhibitor-dashboard/feedback',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
     annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
@@ -102,7 +103,6 @@ export default function ExhibitorDashboard() {
             const res = await r.json();
             if (res.success) {
                 setData(res.data);
-                // Keep selectedRegId in sync with actual loaded data
                 localStorage.setItem('selectedRegId', res.data._id);
                 if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
                 if (res.data?._id) {

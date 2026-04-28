@@ -24,6 +24,7 @@ export default function ExhibitorSidebar({ data, activeTab, setActiveTab, sideba
         { id: "payments", label: "Make Payment", icon: CreditCard },
         { id: "documentation", label: "Documentation", icon: FolderOpen },
         { id: "exhibitions", label: "My Events", icon: Star },
+        { id: "feedback", label: "Feedback", icon: MessageSquare },
         { id: "chat", label: "Chat Support", icon: MessageSquare },
     ];
 

@@ -377,6 +377,40 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         </div>
                                     </div>
 
+                                    {/* Google Maps Section */}
+                                    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
+                                        <div className="bg-slate-50 px-6 py-3 border-b flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <MapPin size={14} className="text-[#23471d]" />
+                                                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Venue Location & Directions</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 space-y-4">
+                                            <div className="relative w-full h-[450px] rounded-sm overflow-hidden border border-slate-200">
+                                                <iframe 
+                                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.40515138456!2d77.24287917613687!3d28.61761698475674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce3292652f09b%3A0x5291514307e237c5!2sHall%20-%209!5e0!3m2!1sen!2sin!4v1777211227510!5m2!1sen!2sin" 
+                                                    width="100%" 
+                                                    height="100%" 
+                                                    style={{ border: 0 }} 
+                                                    allowFullScreen 
+                                                    loading="lazy" 
+                                                    referrerPolicy="no-referrer-when-downgrade"
+                                                    title="Venue Location Map"
+                                                />
+                                            </div>
+                                            <a
+                                                href="https://www.google.com/maps/place/Hall+-+9/@28.6176169,77.2428791,17z/data=!3m1!4b1!4m6!3m5!1s0x390ce3292652f09b:0x5291514307e237c5!8m2!3d28.6176169!4d77.245454!16s%2Fg%2F11c5q5y5qy?entry=ttu"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-full h-12 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center justify-center gap-2 transition-all shadow-md group"
+                                            >
+                                                <MapPin size={18} className="group-hover:scale-110 transition-transform" />
+                                                <span className="text-[11px] font-black uppercase tracking-widest">Open in Google Maps</span>
+                                                <ExternalLink size={14} className="opacity-70" />
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <div className="bg-white border border-slate-200 rounded-sm overflow-hidden text-center p-12">
                                         <ImageIcon className="mx-auto text-slate-100 mb-4" size={48} />
                                         <h3 className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2">Technical Documents</h3>
