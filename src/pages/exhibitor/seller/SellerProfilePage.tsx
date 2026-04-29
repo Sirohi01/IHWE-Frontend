@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import {
     Building2, User, Mail, Phone, Globe,
@@ -10,8 +10,6 @@ import {
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import DashboardHero from '@/components/dashboard/DashboardHero';
-
-// ── Read-only info row ────────────────────────────────────────────────────────
 const InfoRow = ({ label, value }: { label: string; value?: string }) => (
     value ? (
         <div className="flex flex-col gap-0.5">
@@ -25,9 +23,10 @@ const inputCls = "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded
 const labelCls = "text-[10px] font-black text-slate-600 uppercase tracking-widest mb-1.5 block";
 
 export default function SellerProfilePage() {
-    const { data, fetchDashboard } = useExhibitorCtx();
+    const { data, fetchDashboard, setData } = useExhibitorCtx();
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState<string | null>(null);
+    const initializedRef = useRef<string | null>(null);
 
     const [profile, setProfile] = useState({
         brandName: '',
@@ -46,10 +45,10 @@ export default function SellerProfilePage() {
     });
 
     const [availableCategories, setAvailableCategories] = useState<string[]>([]);
-
-    // Pre-fill from exhibitor data
+    // Pre-fill from exhibitor data — re-initialize when registration changes
     useEffect(() => {
-        if (data) {
+        if (data && initializedRef.current !== data._id) {
+            initializedRef.current = data._id;
             setProfile({
                 brandName:          data.brandName          || data.fasciaName || data.exhibitorName || '',
                 companyDescription: data.companyDescription || '',
@@ -153,7 +152,16 @@ export default function SellerProfilePage() {
                 body: JSON.stringify(profile)
             });
             const d = await res.json();
-            if (d.success) { toast.success('Profile updated successfully'); fetchDashboard(); }
+            if (d.success) {
+                toast.success('Profile updated successfully');
+                // Update context data directly so UI reflects changes immediately
+                // Also update the ref to the new data._id so form doesn't reset
+                setData((prev: any) => {
+                    const updated = { ...prev, ...d.data };
+                    initializedRef.current = updated._id;
+                    return updated;
+                });
+            }
             else toast.error(d.message || 'Update failed');
         } catch { toast.error('Failed to update profile'); }
         finally { setLoading(false); }
