@@ -23,11 +23,9 @@ const MissionVision: React.FC = () => {
     const fetchData = async () => {
       try {
         const result = await visionMissionApi.get();
-        if (result) {
-          setData(result);
-        }
+        if (result) setData(result);
       } catch (error) {
-        console.error("Error fetching Vision & Mission data:", error);
+        console.error('Error fetching Vision & Mission data:', error);
       } finally {
         setLoading(false);
       }
@@ -35,69 +33,98 @@ const MissionVision: React.FC = () => {
     fetchData();
   }, []);
 
-  const renderDescription = (text: string, highlight: string) => {
-    if (!highlight || !text.includes(highlight)) return text;
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-    return (
-      <>
-        {parts.map((part, index) => 
-          part.toLowerCase() === highlight.toLowerCase() ? (
-            <span key={index} className="text-[#d26019] font-medium">{part}</span>
-          ) : (
-            part
-          )
-        )}
-      </>
-    );
-  };
-
   if (loading) {
     return (
-      <div className="py-16 flex justify-center items-center bg-[#23471d]">
-        <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      <div className="py-20 flex justify-center items-center" style={{ background: '#0d2a1e' }}>
+        <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!data) return null;
 
-  const IconCompMission = (LucideIcons as any)[data.mission.icon] || LucideIcons.Target;
-  const IconCompVision = (LucideIcons as any)[data.vision.icon] || LucideIcons.Milestone;
+  const IconCompMission = (LucideIcons as any)[data.mission.icon] || LucideIcons.Shield;
+  const IconCompVision = (LucideIcons as any)[data.vision.icon] || LucideIcons.Sun;
+
+  const visionPills = ['Preventive Healthcare', 'Holistic Wellness', 'Sustainable Living'];
+  const missionPills = ['AYUSH', 'Digital Health', 'Wellness Innovation'];
 
   return (
-    <section 
-      className="py-8 text-white relative overflow-hidden"
-      style={{ backgroundColor: data.backgroundColor }}
+    <section
+      className="py-10 relative overflow-hidden"
+      style={{ background: '#0d2a1e', fontFamily: "'DM Sans', sans-serif" }}
     >
-      <div className="absolute right-0 top-0 w-1/3 h-full bg-white/5 skew-x-12 transform origin-top" />
-      <div className="absolute left-0 bottom-0 w-1/4 h-full bg-white/3 -skew-x-12 transform origin-bottom" />
-      <div className="container mx-auto px-4 max-w-6xl relative z-10">
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+      {/* Glow accents */}
+      <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(190,130,60,0.08) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }} />
+      <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(80,200,120,0.06) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
-       
-                 {/* OUR VISION */}
-          <div className="text-left" data-aos="fade-left">
-            <IconCompVision className="w-8 h-8 text-[#d26019] mb-3" />
-            <h2 className="text-xl md:text-2xl font-inter mb-4">{data.vision.title}</h2>
-            <div className="text-base md:text-lg font-light leading-relaxed opacity-90 prose prose-invert max-w-none text-justify"
-              style={{ textAlign: 'justify' }}
-              dangerouslySetInnerHTML={{ __html: data.vision.description }} />
+      <div className="relative z-10 max-w-5xl mx-auto px-6">
+        <div className="grid md:grid-cols-[1fr_1px_1fr] gap-x-10 items-start">
+
+          {/* Vision */}
+          <div className="" data-aos="fade-up">
+            {/* <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-5"
+              style={{ border: '1px solid rgba(200,160,85,0.3)' }}>
+              <IconCompVision size={18} style={{ color: '#c8a055' }} />
+            </div> */}
+            <p className="text-xs font-medium tracking-widest mb-3 flex items-center gap-2"
+              style={{ color: '#c8a055', letterSpacing: '1.8px', textTransform: 'uppercase' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />
+              {data.vision.title}
+            </p>
+            <h2 className="text-2xl font-semibold mb-4 leading-tight"
+              style={{ fontFamily: "'Playfair Display', serif", color: '#f0ece3' }}>
+              India as a Global Wellness Hub
+            </h2>
+            <div
+              className="text-sm leading-relaxed mb-3"
+              style={{ color: 'rgba(240,236,227,0.68)', fontWeight: 300 }}
+              dangerouslySetInnerHTML={{ __html: data.vision.description }}
+            />
+            <div className="flex flex-wrap gap-2 mt-4">
+              {visionPills.map((p) => (
+                <span key={p} className="rounded-full px-3 py-1 text-xs"
+                  style={{ background: 'rgba(200,160,85,0.1)', border: '1px solid rgba(200,160,85,0.2)', color: 'rgba(200,160,85,0.9)' }}>
+                  {p}
+                </span>
+              ))}
+            </div>
           </div>
 
-             {/* DIVIDER */}
-          <div className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-3/4 bg-white/20" />
+          {/* Divider */}
+          <div className="hidden md:block self-stretch my-2" style={{ background: 'rgba(255,255,255,0.1)' }} />
 
-
-
-             {/* OUR MISSION */}
-          <div className="text-left" data-aos="fade-right">
-            <IconCompMission className="w-8 h-8 text-[#d26019] mb-3" />
-            <h2 className="text-xl md:text-2xl font-inter mb-4">{data.mission.title}</h2>
-            <div className="text-base md:text-lg font-light leading-relaxed opacity-90 prose prose-invert max-w-none text-justify"
-              style={{ textAlign: 'justify' }}
-              dangerouslySetInnerHTML={{ __html: data.mission.description }} />
+          {/* Mission */}
+          <div className="" data-aos="fade-up" data-aos-delay="100">
+            {/* <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-5"
+              style={{ border: '1px solid rgba(200,160,85,0.3)' }}>
+              <IconCompMission size={18} style={{ color: '#c8a055' }} />
+            </div> */}
+            <p className="text-xs font-medium tracking-widest mb-3 flex items-center gap-2"
+              style={{ color: '#c8a055', letterSpacing: '1.8px', textTransform: 'uppercase' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />
+              {data.mission.title}
+            </p>
+            <h2 className="text-2xl font-semibold mb-4 leading-tight"
+              style={{ fontFamily: "'Playfair Display', serif", color: '#f0ece3' }}>
+              World-Class B2B Health Platform
+            </h2>
+            <div
+              className="text-sm leading-relaxed mb-3"
+              style={{ color: 'rgba(240,236,227,0.68)', fontWeight: 300 }}
+              dangerouslySetInnerHTML={{ __html: data.mission.description }}
+            />
+            <div className="flex flex-wrap gap-2 mt-4">
+              {missionPills.map((p) => (
+                <span key={p} className="rounded-full px-3 py-1 text-xs"
+                  style={{ background: 'rgba(200,160,85,0.1)', border: '1px solid rgba(200,160,85,0.2)', color: 'rgba(200,160,85,0.9)' }}>
+                  {p}
+                </span>
+              ))}
+            </div>
           </div>
-
 
         </div>
       </div>
