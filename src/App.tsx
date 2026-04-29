@@ -103,6 +103,7 @@ import Notification from "@/pages/navbar_page/Notification";
 import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
 import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/international_vistor/AddInternationalVistor";
+import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
 const queryClient = new QueryClient();
 
@@ -211,6 +212,7 @@ const App = () => {
                     <Route path="logistics" element={<SellerLogisticsPage />} />
                     <Route path="conference" element={<SellerConferencePage />} />
                     <Route path="reports" element={<SellerReportsPage />} />
+                    <Route path="feedback" element={<SellerFeedbackForm />} />
                     <Route path="helpdesk" element={<SellerHelpdeskPage />} />
                     <Route path="notifications" element={<SellerNotificationsPage />} />
                     <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
