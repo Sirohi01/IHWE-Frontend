@@ -332,7 +332,7 @@ ${content.innerHTML}
                         <tr>
                             {/* Buyer */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700 }}>{data.exhibitorName || '—'}</div>
+                                <div style={{ fontWeight: 700, textTransform: 'capitalize' }}>{data.exhibitorName || '—'}</div>
                                 <div style={{ marginTop: 4, textTransform: 'capitalize' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
                                 <div>{data.state || ''}{data.country ? ', ' + data.country : ''}</div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
