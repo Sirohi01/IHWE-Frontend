@@ -168,6 +168,12 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
             margin-right: auto !important;
             text-align: center;
         }
+        .dark-header-cell {
+            background: #0d1f3c !important;
+            color: #ffffff !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
         section { margin-bottom: 16px; }
         
         /* Terms section spacing */
@@ -366,8 +372,18 @@ ${content.innerHTML}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#0d1f3c', color: '#fff' }}>
-                            {['S.No.', 'Item Description', 'HSN Code', 'Qty.', 'Area', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
-                                <th key={h} style={{ border: '1px solid #0d1f3c', padding: '4px 6px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>{h}</th>
+                            {[
+                                { label: 'S.No.', width: '3%' },
+                                { label: 'Item Description', width: '45%' },
+                                { label: 'HSN Code', width: '7%' },
+                                { label: 'Qty.', width: '3%' },
+                                { label: 'Area', width: '6%' },
+                                { label: 'Rate', width: '7%' },
+                                { label: 'Amount', width: '7%' },
+                                { label: 'Discount', width: '7%' },
+                                { label: 'Total', width: '10%' },
+                            ].map(h => (
+                                <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 8, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
                             ))}
                         </tr>
                     </thead>
@@ -431,15 +447,19 @@ ${content.innerHTML}
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
                         </tr>
                         <tr style={{ background: '#f8fafc' }}>
-                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(gstAmt)}</td>
+                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}></td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}></td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
+                        </tr>
+                        {/* Net Payable heading row */}
+                        <tr style={{ background: '#0d1f3c' }}>
+                            <td colSpan={11} className="dark-header-cell" style={{ border: '1px solid #0d1f3c', padding: '5px 8px', fontWeight: 700, fontSize: 11, color: '#fff', textAlign: 'center', letterSpacing: '0.05em', background: '#0d1f3c', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' } as any}>Net Payable Amount</td>
                         </tr>
                         <tr style={{ background: '#f8fafc' }}>
                             <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
                             <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(netPayable))}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Invoice Value</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(netPayable)}</td>
                         </tr>
                     </tbody>
@@ -487,7 +507,10 @@ ${content.innerHTML}
 
                 {/* ── FOOTER ── */}
                 <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
-                    <b>Register Address:</b> {companyAddress}
+                    <b>Register Address:</b> First Floor, E-1, Opposite KFC, Kalkaji Main Market, South Delhi-110019, Delhi, India
+                </div>
+                <div style={{ fontSize: 8, textAlign: 'center', color: '#999', marginTop: 4, }}>
+                    This is a computer generated document and does not require a physical signature.
                 </div>
 
             </div>
