@@ -453,6 +453,9 @@ ${content.innerHTML}
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
                         </tr>
                         {/* Net Payable heading row */}
+                        <tr style={{ height: 8 }}>
+                            {Array(11).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
+                        </tr>
                         <tr style={{ background: '#0d1f3c' }}>
                             <td colSpan={11} className="dark-header-cell" style={{ border: '1px solid #0d1f3c', padding: '5px 8px', fontWeight: 700, fontSize: 11, color: '#fff', textAlign: 'center', letterSpacing: '0.05em', background: '#0d1f3c', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' } as any}>Net Payable Amount</td>
                         </tr>
