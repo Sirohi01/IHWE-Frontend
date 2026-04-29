@@ -145,7 +145,18 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const invoiceYear = new Date().getFullYear();
     const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
     const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}${paymentSuffix}`;
-    const invoiceDate = latestPayment?.paidAt ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : regDate;
+    const formatDate = (dateInput: any) => {
+        if (!dateInput) return '—';
+        let d = new Date(dateInput);
+        if (isNaN(d.getTime()) && typeof dateInput === 'string' && dateInput.includes('/')) {
+            const parts = dateInput.split('/');
+            if (parts.length === 3) d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        }
+        if (isNaN(d.getTime())) return String(dateInput);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+    };
+
+    const invoiceDate = formatDate(latestPayment?.paidAt || regDate);
 
     const handlePrint = () => {
         const content = printRef.current;
@@ -154,7 +165,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         if (!win) return;
         win.document.write(`<!DOCTYPE html><html><head><title>Invoice ${invoiceNo} - ${data.registrationId}</title>
         <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+            * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
             table { width: 100%; border-collapse: collapse; }
             td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
@@ -173,15 +184,20 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     };
 
 
+    const toTitleCase = (str: any) => {
+        if (typeof str !== 'string' || !str) return str;
+        return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+    };
+
     const exhibitorInfo = {
-        name: data.fullName || data.exhibitorName || data.companyName || data.businessName || '—',
-        address: data.address || data.registeredAddress || data.businessAddress || '',
-        city: data.city || '',
-        state: data.state || data.stateProvince || '',
-        country: data.country || '',
+        name: toTitleCase(data.fullName || data.exhibitorName || data.companyName || data.businessName || '—'),
+        address: toTitleCase(data.address || data.registeredAddress || data.businessAddress || ''),
+        city: toTitleCase(data.city || ''),
+        state: toTitleCase(data.state || data.stateProvince || ''),
+        country: toTitleCase(data.country || ''),
         pincode: data.pincode || data.pinCode || '',
-        contactPerson: data.contactPersonName || data.fullName || data.representativeName || '—',
-        email: data.email || data.emailAddress || data.contactEmail || '—',
+        contactPerson: toTitleCase(data.contactPersonName || data.fullName || data.representativeName || '—'),
+        email: (data.email || data.emailAddress || data.contactEmail || '—').toLowerCase(),
         phone: exhibitorPhone,
         gstNo: data.gstNo || data.gstNumber || '',
         panNo: data.panNo || data.panNumber || ''
@@ -234,7 +250,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
-                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
+                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px', padding: '10px 0' }}>Tax Invoice</div>
 
 
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
@@ -242,7 +258,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <tr>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Seller Invoice Details</th>
+                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}> Invoice Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -254,13 +270,19 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                 <div style={{ marginTop: 4 }}>Contact Person: {exhibitorInfo.contactPerson}</div>
                                 <div>Email: {exhibitorInfo.email}</div>
                                 <div>Phone: {exhibitorInfo.phone}</div>
-                                <div style={{ marginTop: 4 }}><b>GSTIN:</b> {exhibitorInfo.gstNo || '—'} / <b>PAN:</b> {exhibitorInfo.panNo || '—'}</div>
+                                <div style={{ marginTop: 4 }}>
+                                    {exhibitorInfo.gstNo ? (
+                                        <><b>GSTIN/PAN</b> {exhibitorInfo.gstNo}</>
+                                    ) : (
+                                        <><b>PAN:</b> {exhibitorInfo.panNo || '—'}</>
+                                    )}
+                                </div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
-                                <div style={{ marginTop: 4 }}>Category: {exhibitorCategory}</div>
-                                <div>Registration Type: {data.registrationCategory || data.category || data.passType || 'Buyer Pass'}</div>
-                                <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
+
+                                <div style={{ marginTop: 4 }}>Place of Supply: Hall No. 8, 9, 10, Pragati Maidan, New Delhi, Bharat</div>
+                                <div style={{ marginTop: 4 }}>GSTIN: {exhibitorInfo.gstNo || '—'}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: 0, verticalAlign: 'top', fontSize: 11 }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -269,8 +291,10 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                             ['Invoice No.', invoiceNo],
                                             ['Invoice Date', invoiceDate],
                                             ['Reverse Charge', 'No'],
+                                            ['Created By', data.adminName || data.addedByName || data.createdByAdminName || (data.addedByAdmin || data.createdByAdmin ? 'Admin' : 'Self')],
+                                            ['Created Time', data.createdAt ? new Date(data.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }) : '—'],
                                         ].map(([label, value]) => (
-                                            <tr key={label}>
+                                            <tr key={label as string}>
                                                 <td style={{ border: '1px solid #eee', padding: '3px 6px', fontWeight: 700, background: '#f8fafc', width: '45%', fontSize: 10 }}>{label}</td>
                                                 <td style={{ border: '1px solid #eee', padding: '3px 6px', fontSize: 10 }}>{value}</td>
                                             </tr>
@@ -285,7 +309,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
-                            {['S.No.', 'Item Description', 'HSN Code', 'Qty.', 'Size', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
+                            {['S.No.', 'Item Description', 'SAC Code', 'Qty.', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
                                 <th key={h} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', textAlign: 'center', fontSize: 10 }}>{h}</th>
                             ))}
                         </tr>
@@ -299,7 +323,6 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>998596</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>—</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>0.00</td>
@@ -307,11 +330,11 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         </tr>
                         {[1, 2, 3].map(i => (
                             <tr key={i} style={{ height: 24 }}>
-                                {Array(9).fill(0).map((_, j) => <td key={j} style={{ border: '1px solid #ccc' }}> </td>)}
+                                {Array(8).fill(0).map((_, j) => <td key={j} style={{ border: '1px solid #ccc' }}> </td>)}
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}> </td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}> </td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                         </tr>
@@ -357,8 +380,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
                         </tr>
                         <tr style={{ background: '#f8fafc' }}>
-                            <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{gstAmt === 0 ? 'Zero' : toWords(gstAmt)}</td>
+                            <td colSpan={9} style={{ border: '1px solid #ccc', padding: '4px 6px' }}></td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
                         </tr>
@@ -397,31 +419,54 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     <tbody>
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10 }}>
-                                <div><b>Bank Name:</b> Kotak Mahindra Bank</div>
-                                <div><b>Account No.:</b> 6812013962</div>
-                                <div><b>IFSC Code:</b> KKBK0004584</div>
-                                <div><b>Branch Name:</b> Jagriti Enclave, Anand Vihar, Delhi</div>
-                            </td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
-                                <div style={{ height: 60 }}></div>
-                                <div style={{ borderTop: '1px solid #000', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
-                            </td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
-                                <div style={{ height: 60, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-                                    {sigUrl && <img src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
-                                    {stampUrl && <img src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
-                                </div>
-                                <div style={{ borderTop: '1px solid #000', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                <table style={{ borderCollapse: 'collapse' }}>
+                                <tbody>
+                                    <tr>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>Bank Name</td>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                        <td style={{ border: 'none', padding: '0 0 4px 0' }}>Kotak Mahindra Bank</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>Account No.</td>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                        <td style={{ border: 'none', padding: '0 0 4px 0' }}>6812013962</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>IFSC Code</td>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                        <td style={{ border: 'none', padding: '0 0 4px 0' }}>KKBK0004584</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0', whiteSpace: 'nowrap', verticalAlign: 'top' }}>Branch Name</td>
+                                        <td style={{ fontWeight: 700, border: 'none', padding: '0 4px', verticalAlign: 'top' }}>:</td>
+                                        <td style={{ border: 'none', padding: '0', verticalAlign: 'top' }}>Jagriti Enclave, Anand Vihar, Delhi</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+            </td>
+            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
+                <div style={{ height: 60 }}></div>
+                <div style={{ borderTop: '1px solid #e5e7eb', width: '120px', margin: '0 auto', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
+            </td>
+            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
+                <div style={{ height: 60, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+                    {sigUrl && <img src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
+                    {stampUrl && <img src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
+                </div>
+                <div style={{ borderTop: '1px solid #e5e7eb', width: '120px', margin: '0 auto', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
+            </td>
+        </tr>
+                    </tbody >
+                </table >
 
 
                 <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
-                    <b>9th International Health & Wellness Expo 2026</b>
+                    <b>Register Address:</b> First Floor, E-1, Opposite KFC, Kalkaji Main Market, South Delhi-110019, Delhi, India
                 </div>
-            </div>
-        </motion.div>
+                <div style={{ fontSize: 8, textAlign: 'center', color: '#999', marginTop: 4, }}>
+                    This is a computer generated document and does not require a physical signature.
+                </div>
+            </div >
+        </motion.div >
     );
 }
