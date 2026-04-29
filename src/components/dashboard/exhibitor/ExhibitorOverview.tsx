@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion';
-import { Printer } from 'lucide-react';
-import { openPrintWindow } from './PrintCertificate';
 
 interface OverviewProps {
     data: any; cur: string; status: any; paidPct: number;
@@ -48,7 +46,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function ExhibitorOverview({
-    data, cur, status, paidPct, paid, total, balance, setActiveTab
+    data, cur, status, paidPct, paid, total, balance
 }: OverviewProps) {
 
     return (
@@ -131,6 +129,7 @@ export default function ExhibitorOverview({
                                             <th className="px-3 py-2 font-bold">Method</th>
                                             <th className="px-3 py-2 font-bold">Trans. ID</th>
                                             <th className="px-3 py-2 font-bold text-right">Amount</th>
+                                            <th className="px-3 py-2 font-bold">Receipt</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
@@ -141,6 +140,16 @@ export default function ExhibitorOverview({
                                                 <td className="px-3 py-2 text-slate-600">{h.method}</td>
                                                 <td className="px-3 py-2 text-slate-400 font-mono italic">{h.transactionId || '—'}</td>
                                                 <td className="px-3 py-2 text-right font-black text-slate-900">{cur}{h.amount?.toLocaleString()}</td>
+                                                <td className="px-3 py-2">
+                                                    {h.receiptPdfUrl ? (
+                                                        <a href={h.receiptPdfUrl} target="_blank" rel="noopener noreferrer" download
+                                                            className="text-blue-600 hover:text-blue-800 font-bold text-[9px] underline">
+                                                            Download
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-gray-300 text-[9px]">—</span>
+                                                    )}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -149,23 +158,6 @@ export default function ExhibitorOverview({
                         </Section>
                     )}
 
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t">
-                    <button
-                        onClick={() => setActiveTab('profile')}
-                        className="px-3 py-1.5 bg-slate-800 text-white text-[10px] font-bold"
-                    >
-                        View Profile
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('invoices')}
-                        className="px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold"
-                    >
-                        Invoices
-                    </button>
                 </div>
 
             </div>

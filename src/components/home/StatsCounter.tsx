@@ -59,8 +59,8 @@ const StatCard = ({ icon, end, prefix = "", suffix, label, bg, overlay, delay, s
             />
 
             {/* Dark Professional Overlay */}
-            <div 
-                className="absolute inset-0 transition-colors duration-500 group-hover:bg-black/50" 
+            <div
+                className="absolute inset-0 transition-colors duration-500 group-hover:bg-black/50"
                 style={{ backgroundColor: `rgba(0, 0, 0, ${overlay})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
@@ -123,7 +123,7 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
             },
             { threshold: 0.1 }
         );
-        
+
         observer.observe(sectionRef.current);
         return () => observer.disconnect();
     }, [loading]);
