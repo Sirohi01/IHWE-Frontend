@@ -122,40 +122,6 @@ const App = () => {
               <Sonner />
               <BrochureDownloadPopup />
               <SeoHelmet />
-            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="w-10 h-10 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div></div>}>
-              <Routes>
-                <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
-                  <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/advisory-board" element={<AdvisoryBoard />} />
-                  <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
-                  <Route path="/book-a-stand" element={<BookAStand />} />
-                  <Route path="/visitor-registration" element={<VisitorRegistration />} />
-                  <Route path="/exhibition" element={<Exhibition />} />
-                  <Route path="/media-registration" element={<MediaRegistration />} />
-                  <Route path="/speaker-registration" element={<SpeakerRegistration />} />
-                  <Route path="/seller-registration" element={<SellerRegistration />} />
-                  <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
-                  <Route path="/why-exhibit" element={<WhyExhibit />} />
-                  <Route path="/partners" element={<Partners />} />
-                  <Route path="/conference" element={<Conference />} />
-                  <Route path="/exhibitors" element={<Exhibitors />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/blog/:id" element={<BlogDetail />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/gallery" element={<Gallery />} />
-                  <Route path="/travel-accommodation" element={<TravelAccommodation />} />
-                  <Route path="/e-promotion" element={<EPromotion />} />
-                  <Route path="/download-badge" element={<DownloadBadge />} />
-                  <Route path="/why-visit" element={<WhyVisit />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-of-service" element={<TermsOfService />} />
-                  <Route path="/refund-policy" element={<RefundPolicy />} />
-                  <Route path="/buyer-registration" element={<BuyerLanding />} />
-                  <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
-                  <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
-                   <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
-                  <Route path="*" element={<NotFound />} />
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50"><div className="w-10 h-10 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div></div>}>
                 <Routes>
                   <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
@@ -189,6 +155,7 @@ const App = () => {
                     <Route path="/buyer-registration" element={<BuyerLanding />} />
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
+                    <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
@@ -198,7 +165,7 @@ const App = () => {
                     <Route index element={<ExhibitorDashboardHome />} />
                     <Route path="profile" element={<ExhibitorProfilePage />} />
                     <Route path="invoices" element={<ExhibitorInvoicesPage />} />
-                  <Route path="payments" element={<ExhibitorPaymentPage />} />
+                    <Route path="payments" element={<ExhibitorPaymentPage />} />
                     <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
                     <Route path="stall-management" element={<ExhibitorStallManagementPage />} />
                     <Route path="marketing" element={<ExhibitorMarketingPage />} />
@@ -223,12 +190,12 @@ const App = () => {
                     <Route path="relationship-manager" element={<RelationshipManager />} />
                     <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                     <Route path="ex-profile" element={<ExProfile />} />
-                  
-                   {/* Seller Specific Routes */}
-                  <Route path="become-seller" element={<ExhibitorSellerRegistrationPage />} />
-                </Route>
 
-                <Route path="/seller-portal" element={<SellerPortal />}>
+                    {/* Seller Specific Routes */}
+                    <Route path="become-seller" element={<ExhibitorSellerRegistrationPage />} />
+                  </Route>
+
+                  <Route path="/seller-portal" element={<SellerPortal />}>
                     <Route index element={<SellerDashboardHome />} />
                     <Route path="leads" element={<SellerLeadsPage />} />
                     <Route path="bsm" element={<ExhibitorBSMPage />} />
@@ -250,7 +217,6 @@ const App = () => {
                   </Route>
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
-
 
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />

@@ -45,7 +45,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <ConferenceSeminars />
       <ExhibitionCategories />
       <BeyondExhibition />
-      <EventHighlights />
+      {/* <EventHighlights /> */}
       <AboutSection />
       <DownloadsSection />
       <MarqueeStrip />
@@ -63,9 +63,9 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <ParallaxSection />
       {/* <GlobalPartners /> */}
       <Testimonials />
-       <FAQSection />
+      <FAQSection />
       <BlogPreview />
-     
+
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
     </>
   );
