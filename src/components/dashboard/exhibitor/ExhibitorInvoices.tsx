@@ -315,8 +315,8 @@ ${content.innerHTML}
                 )}
 
                 {/* ── TAX INVOICE TITLE ── */}
-                <div style={{ textAlign: 'center', marginBottom: 20, paddingBottom: 12 }}>
-                    <div style={{ fontWeight: 500, fontSize: 18, color: '#0d1f3c', marginBottom: 4 }}>Performa Inovice</div>
+                <div style={{ textAlign: 'center', marginBottom: 8, paddingBottom: 2 }}>
+                    <div style={{ fontWeight: 500, fontSize: 18, color: '#0d1f3c', marginBottom: 2 }}>Performa Inovice</div>
                 </div>
 
                 {/* ── BUYER / SHIPMENT / INVOICE DETAILS (3 columns) ── */}
