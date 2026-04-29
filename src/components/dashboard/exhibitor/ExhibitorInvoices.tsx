@@ -488,10 +488,18 @@ ${content.innerHTML}
                     <tbody>
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10 }}>
-                                <div><b>Bank Name:</b> Kotak Mahindra Bank</div>
-                                <div><b>Account No.:</b> 6812013962</div>
-                                <div><b>IFSC Code:</b> KKBK0004584</div>
-                                <div><b>Branch Name:</b> Jagriti Enclave, Anand Vihar, Delhi</div>
+                                {[
+                                    { label: 'Bank Name', value: 'Kotak Mahindra Bank' },
+                                    { label: 'Account No.', value: '6812013962' },
+                                    { label: 'IFSC Code', value: 'KKBK0004584' },
+                                    { label: 'Branch', value: 'Jagriti Enclave, Anand Vihar, Delhi' },
+                                ].map(({ label, value }) => (
+                                    <div key={label} style={{ display: 'flex', marginBottom: 2 }}>
+                                        <span style={{ fontWeight: 'bold', width: 62, flexShrink: 0 }}>{label}</span>
+                                        <span style={{ fontWeight: 'bold', marginRight: 4 }}>: </span>
+                                        <span>{value}</span>
+                                    </div>
+                                ))}
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                                 <div style={{ height: 60 }}></div>
