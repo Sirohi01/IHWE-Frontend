@@ -136,6 +136,19 @@ export const featuredServicesApi = {
     }
 };
 
+export const serviceDetailApi = {
+    getByCardId: async (cardId: string) => {
+        const response = await fetch(`${API_URL}/service-details/${cardId}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    },
+    getBySlug: async (slug: string) => {
+        const response = await fetch(`${API_URL}/service-details/slug/${slug}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const faqApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/faq`);
