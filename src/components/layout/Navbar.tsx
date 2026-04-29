@@ -161,22 +161,20 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
       <motion.nav
         className={`${
           scrolled 
-            ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-1 border-b border-slate-200/60" 
-            : "relative z-[100] bg-white border-b border-slate-200 py-2 shadow-sm"
+            ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60" 
+            : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
         } transition-all duration-500`}
       >
       <div className="container mx-auto px-6 max-w-[1400px]">
-        {/* ... desktop section stays same, skipping to line 384 ... */}
-
         {/* ─── Desktop Nav ─── */}
-        <div className="hidden xl:flex items-center justify-between py-0 relative h-16">
+        <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
 
           <Link to="/" className="relative z-[150] h-full flex items-center min-w-[200px]">
             {settings?.logo ? (
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
-                className="absolute top-1/2 -translate-y-1/2 left-0 h-32 md:h-40 w-auto object-contain transition-transform duration-500 drop-shadow-[0_8px_15px_rgba(0,0,0,0.1)] group-hover:scale-105"
+                className="absolute top-1/2 -translate-y-1/2 left-0 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)] group-hover:scale-105"
               />
             ) : (
                 <div className="flex flex-col">
@@ -414,7 +412,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
-                className="absolute top-1/2 -translate-y-1/2 left-0 h-24 w-auto object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.1)]"
+                className="absolute top-1/2 -translate-y-1/2 left-0 h-32 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
               />
             ) : (
               <span className="text-xl font-black text-[#23471d] tracking-tighter">IHWE</span>

@@ -27,6 +27,7 @@ const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
+const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -155,6 +156,7 @@ const App = () => {
                     <Route path="/buyer-registration" element={<BuyerLanding />} />
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
+                    <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
@@ -217,7 +219,6 @@ const App = () => {
                   </Route>
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
-
 
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />
