@@ -151,10 +151,6 @@ const EventHighlights = () => {
                         {renderTitle()}
                     </div>
 
-                    <div className="flex flex-col items-center lg:items-end gap-2.5">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Event Begins In</span>
-                        <EventCountdown targetDateString={data?.countdownDate} />
-                    </div>
                 </div>
 
                 {/* Main grid — both columns same height */}

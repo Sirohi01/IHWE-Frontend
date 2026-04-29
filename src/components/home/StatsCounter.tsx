@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Globe, Users, TrendingUp, Heart } from "lucide-react";
+import { Globe, Users, TrendingUp, Heart, Building } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { countersApi, SERVER_URL } from "@/lib/api";
 
 const ICON_MAP: Record<string, any> = {
@@ -58,8 +59,8 @@ const StatCard = ({ icon, end, prefix = "", suffix, label, bg, overlay, delay, s
             />
 
             {/* Dark Professional Overlay */}
-            <div 
-                className="absolute inset-0 transition-colors duration-500 group-hover:bg-black/50" 
+            <div
+                className="absolute inset-0 transition-colors duration-500 group-hover:bg-black/50"
                 style={{ backgroundColor: `rgba(0, 0, 0, ${overlay})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
@@ -122,7 +123,7 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
             },
             { threshold: 0.1 }
         );
-        
+
         observer.observe(sectionRef.current);
         return () => observer.disconnect();
     }, [loading]);
@@ -145,7 +146,7 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
             },
             {
                 number: 1500, sup: "+", label: "EXHIBITORS", sub: "Across 8 Successful Editions",
-                icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" /><path d="M21 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" /></svg>
+                icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" /><path d="M21 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" /></svg>
             },
             {
                 number: 10, sup: "+", label: "YEARS", sub: "Legacy of Trust & Growth",

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, cloneElement } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp } from "lucide-react";
 import StatsCounter from "@/components/home/StatsCounter";
 import ExhibitorLogos from "@/components/home/ExhibitorLogos";
 import GlobalPlatform from "@/components/sections/GlobalPlatform";
@@ -10,6 +10,11 @@ import WhoShouldAttend from "@/components/sections/WhoShouldAttend";
 import OrganizedBy from "@/components/sections/OrganizedBy";
 import { heroBackgroundApi, eventOverviewApi, SERVER_URL, visionMissionApi, aboutOrganizerApi, ourJourneyApi } from "@/lib/api";
 import * as LucideIcons from "lucide-react";
+import PragatiMaidanImg from "@/assets/Pragati-Maidan.jpg";
+import InternationalImg from "@/assets/international.png";
+import ConferenceImg from "@/assets/conference.png";
+import B2BImg from "@/assets/b2b.png";
+import AwardImg from "@/assets/global.png";
 
 const CounterItem = ({ icon, number, sup, label, sub, prefix }: any) => {
   const [count, setCount] = useState(0);
@@ -78,27 +83,27 @@ const STATS = [
 const VENUE_STATS = [
   {
     end: 220, prefix: "180–", suffix: "", label: "EXHIBITORS", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
   },
   {
     end: 11000, prefix: "9,000–", suffix: "", label: "VISITORS", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
   },
   {
     end: 650, prefix: "500–", suffix: "", label: "B2B BUYERS", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
   },
   {
     end: 100, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
   },
   {
     end: 7, prefix: "5–", suffix: "", label: "COUNTRIES PARTICIPATION", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
   },
   {
     end: 700, prefix: "₹500–", suffix: " Cr+", label: "BUSINESS OPPORTUNITIES", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
   },
 ];
 
@@ -121,14 +126,14 @@ const VenueStatItem = ({ stat, visible, delay }: { stat: typeof VENUE_STATS[0], 
   }, [visible, stat.end, delay]);
 
   return (
-    <div className="flex flex-col items-center text-center py-5 px-3">
-      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center mb-3" style={{ borderColor: `${stat.iconColor}40` }}>
+    <div className="flex flex-col items-center text-center py-1.5 px-3">
+      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center mb-1.5" style={{ borderColor: `${stat.iconColor}40` }}>
         {stat.icon(stat.iconColor)}
       </div>
       <p className="font-black text-[15px] leading-tight" style={{ color: stat.iconColor, fontFamily: "'Inter', sans-serif" }}>
         {stat.prefix}{count.toLocaleString()}{stat.suffix}
       </p>
-      <p className="text-black text-[9px] uppercase tracking-[0.15em] font-bold mt-1" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</p>
+      <p className="text-black text-[9px] uppercase tracking-[0.15em] font-bold mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</p>
     </div>
   );
 };
@@ -142,7 +147,7 @@ const VenueStats = () => {
     return () => observer.disconnect();
   }, []);
   return (
-    <div ref={ref} className="border-t border-b border-gray-200">
+    <div ref={ref} className="">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-200">
         {VENUE_STATS.map((stat, i) => <VenueStatItem key={i} stat={stat} visible={visible} delay={i * 120} />)}
       </div>
@@ -156,6 +161,75 @@ const About = () => {
   const [visionMission, setVisionMission] = useState<any>(null);
   const [organizerData, setOrganizerData] = useState<any>(null);
   const [journeyData, setJourneyData] = useState<any>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const wrap = canvas.parentElement!;
+
+    const resize = () => {
+      canvas.width = wrap.offsetWidth;
+      canvas.height = wrap.offsetHeight;
+    };
+    resize();
+
+    const dots = Array.from({ length: 45 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.8 + 0.5,
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7,
+      a: Math.random() * 0.7 + 0.3,
+    }));
+
+    let animId: number;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      dots.forEach((d) => {
+        d.x += d.vx;
+        d.y += d.vy;
+        if (d.x < 0) d.x = canvas.width;
+        if (d.x > canvas.width) d.x = 0;
+        if (d.y < 0) d.y = canvas.height;
+        if (d.y > canvas.height) d.y = 0;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(243,183,27,${d.a})`;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < dots.length; i++) {
+        for (let j = i + 1; j < dots.length; j++) {
+          const dx = dots[i].x - dots[j].x;
+          const dy = dots[i].y - dots[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 90) {
+            ctx.beginPath();
+            ctx.moveTo(dots[i].x, dots[i].y);
+            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.strokeStyle = `rgba(243,183,27,${0.25 * (1 - dist / 90)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+    window.addEventListener("resize", resize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchHero = async () => {
@@ -215,6 +289,7 @@ const About = () => {
   const infoBar1 = heroData?.infoBar1 || "";
   const infoBar2 = heroData?.infoBar2 || "";
   const infoBar3 = heroData?.infoBar3 || "";
+  const heroHeading = heroData?.heading || "";
 
   return (
     <div className="bg-[#FFFDF1] font-inter">
@@ -241,6 +316,13 @@ const About = () => {
                 className="font-semibold mb-0 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
                 style={{ fontSize: `${titleFontSize}px`, fontFamily: "'Inter', sans-serif", lineHeight: 1.2, display: 'block' }}
                 dangerouslySetInnerHTML={{ __html: heroTitle }}
+              />
+            )}
+            {heroHeading && (
+              <h2
+                className="font-bold mb-2 tracking-tight text-white/90"
+                style={{ fontSize: '24px', fontFamily: "'Inter', sans-serif", lineHeight: 1.3, marginTop: '10px' }}
+                dangerouslySetInnerHTML={{ __html: heroHeading }}
               />
             )}
             {heroTitle2 && (
@@ -350,7 +432,7 @@ const About = () => {
       <GlobalPlatform />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
-<section className=" pb-12 bg-white">
+<section className="pt-0 pb-4 bg-white">
   <div className="container mx-auto px-11">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
@@ -424,7 +506,7 @@ const About = () => {
 
 
       {/* ABOUT THE ORGANIZER */}
-      <section className="py-10 bg-[#FFFDF1] border-t border-gray-100">
+      <section className="pt-6 pb-4 bg-[#FFFDF1] border-t border-gray-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
 
@@ -523,7 +605,7 @@ const About = () => {
       </section>
 
       {/* OUR JOURNEY & FLAGSHIP EVENTS */}
-      <section className="py-6 bg-[#FFFDF1] border-t border-gray-100">
+      <section className="pt-2 pb-6 bg-[#FFFDF1] border-t border-gray-100">
         <div className="container mx-auto px-6">
 
           {/* Header */}
@@ -640,175 +722,74 @@ const About = () => {
       <MissionVision />
 
 
-{/* FROM INDIA TO THE WORLD - Global Platform Section */}
-<section
-  className="py-0 overflow-hidden border-t border-gray-100 relative"
-  style={{ fontFamily: "'Roboto', sans-serif", background: '#ffffff' }}
+  {/* FROM INDIA TO THE WORLD - Full Width */}
+{/* <section
+  className="w-full overflow-hidden relative border-t border-gray-100"
+  style={{ fontFamily: "'DM Sans', sans-serif", background: '#faf9f6' }}
 >
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Roboto:wght@300;400;500;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap');
 
-    .ihwe-bullet-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #fef3c7;
-      border: 1.5px solid #d97706;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .ihwe-pillar-card {
+    .fw-card {
+      background: #fff;
+      border: 1px solid #e8e2d9;
+      border-left: 3px solid #d26019;
+      border-radius: 4px;
+      padding: 20px 18px 18px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 11px;
-      padding: 22px 10px 18px;
-      background: #ffffff;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 12px;
-      cursor: default;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.22s, border-color 0.22s;
     }
-
-    .ihwe-pillar-card:hover {
-      transform: translateY(-5px);
+    .fw-card:hover {
+      box-shadow: 0 6px 28px rgba(210,96,25,0.10);
       border-color: #d26019;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
   `}</style>
 
-  {/* ── World-map dot + arc background ── */}
-  <div className="absolute inset-0" style={{ pointerEvents: 'none' }}>
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 1200 440"
-      preserveAspectRatio="xMidYMid slice"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Dot grid */}
-      <g opacity="0.08" fill="#d26019">
-        {[30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 400, 430].map((cy, ri) =>
-          Array.from({ length: 30 }, (_, ci) => {
-            const cx = ci * 40 + (ri % 2 === 0 ? 20 : 40);
-            const r = (ri + ci) % 3 === 0 ? 1.4 : 0.75;
-            return <circle key={`${ri}-${ci}`} cx={cx} cy={cy} r={r} />;
-          })
-        )}
-      </g>
 
-      {/* Connection arcs */}
-      <g stroke="#d26019" strokeWidth="0.5" opacity="0.1" fill="none">
-        <path d="M100,140 Q300,60 550,120" />
-        <path d="M550,120 Q750,180 950,110" />
-        <path d="M950,110 Q1100,70 1180,140" />
-        <path d="M100,140 Q250,200 420,190" />
-        <path d="M420,190 Q600,230 780,200" />
-        <path d="M780,200 Q950,170 1100,220" />
-        <path d="M200,260 Q400,300 600,270" />
-        <path d="M600,270 Q820,320 1050,270" />
-        <path d="M550,120 Q580,200 600,270" />
-        <path d="M950,110 Q960,160 1050,270" />
-      </g>
+  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg,transparent,#d26019 25%,#d4a843 60%,transparent)' }} />
 
-      {/* Node dots */}
-      <g fill="#d26019" opacity="0.15">
-        {[
-          [100, 140], [550, 120], [950, 110], [1180, 140],
-          [420, 190], [780, 200], [1100, 220], [600, 270],
-          [200, 260], [1050, 270],
-        ].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r={i === 5 ? 5 : 3.5} />
-        ))}
-      </g>
 
-      {/* India golden highlight */}
-      <circle cx="780" cy="200" r="12" fill="none" stroke="#d4a843" strokeWidth="1.2" opacity="0.45" />
-      <circle cx="780" cy="200" r="6" fill="#d4a843" opacity="0.9" />
+  <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+    <svg width="100%" height="100%" viewBox="0 0 1400 420" preserveAspectRatio="xMidYMid slice">
+      <g opacity="0.04" fill="#d26019">
+        {[80,180,280,380].map(cy => [80,200,320,440,560,680,800,920,1040,1160,1280].map(cx => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={cx < 500 ? 1.2 : 0.8} />
+        )))}
+      </g>
+      <g stroke="#d26019" strokeWidth="0.5" opacity="0.06" fill="none">
+        <path d="M120,360 Q400,200 700,240"/>
+        <path d="M700,240 Q1000,280 1280,220"/>
+      </g>
+      <circle cx="700" cy="240" r="16" fill="none" stroke="#d4a843" strokeWidth="0.8" opacity="0.15"/>
+      <circle cx="700" cy="240" r="5" fill="#d4a843" opacity="0.18"/>
     </svg>
   </div>
 
-  {/* Gradient overlay */}
-  <div
-    className="absolute inset-0"
-    style={{
-      background:
-        'linear-gradient(110deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.92) 45%, rgba(255,255,255,0.85) 100%)',
-      pointerEvents: 'none',
-    }}
-  />
 
-  {/* ── Two-column grid ── */}
-  <div
-    className="relative z-10 grid grid-cols-1 lg:grid-cols-2"
-    style={{ minHeight: '420px' }}
-  >
-    {/* ════ LEFT PANEL ════ */}
-    <div
-      className="flex flex-col justify-center"
-      style={{
-        padding: '52px 48px 52px 52px',
-        borderRight: '1px solid rgba(0,0,0,0.05)',
-      }}
-    >
-      {/* Eyebrow */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
-        <span style={{ width: '32px', height: '2px', background: '#d4a843', flexShrink: 0, display: 'inline-block' }} />
-        <span
-          style={{
-            color: '#d26019',
-            fontFamily: "'Roboto', sans-serif",
-            fontWeight: 700,
-            fontSize: '9.5px',
-            letterSpacing: '0.24em',
-            textTransform: 'uppercase',
-          }}
-        >
-          From India to the World
-        </span>
+  <div className="relative z-10 w-full" style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr', gap: '0 64px', padding: '56px 64px' }}>
+
+
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+        <span style={{ width: 28, height: 1.5, background: '#d26019', flexShrink: 0, display: 'inline-block' }} />
+        <span style={{ fontSize: 9, fontWeight: 500, letterSpacing: '2.8px', textTransform: 'uppercase', color: '#d26019' }}>From India to the World</span>
       </div>
 
-      {/* Title */}
-      <h2
-        style={{
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '32px',
-          fontWeight: 900,
-          color: '#1a2e1a',
-          lineHeight: 1.22,
-          marginBottom: '14px',
-        }}
-      >
-        From a National Expo
-        <br />
-        to a{' '}
-        <span style={{ color: '#d26019', fontStyle: 'italic' }}>Global Platform</span>
+      <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 36, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.18, marginBottom: 6 }}>
+        From a National Expo<br />
+        to a <span style={{ color: '#d26019' }}>Global Platform</span>
       </h2>
 
-      {/* Gold divider */}
-      <div style={{ width: '36px', height: '2px', background: '#d26019', marginBottom: '18px' }} />
-
-      {/* Intro */}
-      <p
-        style={{
-          fontFamily: "'Roboto', sans-serif",
-          fontSize: '13px',
-          lineHeight: 1.8,
-          color: '#4b5563',
-          fontWeight: 400,
-          marginBottom: '22px',
-        }}
-      >
+      <div style={{ width: 28, height: 1.5, background: '#d4a843', margin: '14px 0 16px' }} />
+      <p style={{ fontSize: 12.5, lineHeight: 1.85, color: '#555', fontWeight: 300, marginBottom: 22 }}>
         The 9th Edition – Global Edition marks a strategic evolution of IHWE, designed to attract:
       </p>
 
-      {/* Bullet list */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {[
           'International Exhibitors & Global Brands',
           'Buyers, Distributors & Importers',
@@ -816,241 +797,127 @@ const About = () => {
           'Investors, Startups & Innovators',
           'Government Bodies, Embassies & Policymakers',
         ].map((item, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div className="ihwe-bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none" width="10" height="10">
-                <path
-                  d="M2 6l3 3 5-5"
-                  stroke="#d97706"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <span
-              style={{
-                fontFamily: "'Roboto', sans-serif",
-                fontSize: '13px',
-                fontWeight: 600,
-                color: '#1a2e1a',
-                lineHeight: 1.5,
-              }}
-            >
-              {item}
-            </span>
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#d26019', flexShrink: 0, display: 'inline-block' }} />
+            <span style={{ fontSize: 13, fontWeight: 400, color: '#222', lineHeight: 1.4 }}>{item}</span>
           </div>
         ))}
       </div>
     </div>
 
-    {/* ════ RIGHT PANEL ════ */}
-    <div
-      className="flex flex-col justify-center"
-      style={{ padding: '52px 52px 52px 48px' }}
-    >
-      {/* Eyebrow */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-        <span style={{ width: '32px', height: '2px', background: '#d26019', flexShrink: 0, display: 'inline-block' }} />
-        <span
-          style={{
-            color: '#d26019',
-            fontFamily: "'Roboto', sans-serif",
-            fontWeight: 700,
-            fontSize: '9.5px',
-            letterSpacing: '0.24em',
-            textTransform: 'uppercase',
-          }}
-        >
-          Four Pillars of Growth
-        </span>
+  
+    <div style={{ background: 'linear-gradient(180deg,transparent,rgba(210,96,25,0.13) 30%,rgba(210,96,25,0.13) 70%,transparent)' }} />
+
+
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+        <span style={{ width: 28, height: 1.5, background: '#d26019', flexShrink: 0, display: 'inline-block' }} />
+        <span style={{ fontSize: 9, fontWeight: 500, letterSpacing: '2.8px', textTransform: 'uppercase', color: '#d26019' }}>Four Pillars of Growth</span>
       </div>
 
-      {/* 4 Pillar Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {[
           {
-            label: 'Global\nExhibitors',
-            sub: 'Showcase to a global audience',
-            icon: (
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
-                <circle cx="9" cy="7" r="4" />
-                <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" />
-              </svg>
-            ),
+            num: '01', label: 'Global Exhibitors', sub: 'Showcase to a worldwide audience',
+            icon: <><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87"/></>
           },
           {
-            label: 'International\nBuyers',
-            sub: 'Connect with decision makers',
-            icon: (
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
-                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-            ),
+            num: '02', label: 'International Buyers', sub: 'Connect with decision makers',
+            icon: <><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></>
           },
           {
-            label: 'Policy &\nKnowledge',
-            sub: 'Dialogue, insights & roadmaps',
-            icon: (
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-              </svg>
-            ),
+            num: '03', label: 'Policy & Knowledge', sub: 'Dialogue, insights & roadmaps',
+            icon: <><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></>
           },
           {
-            label: 'Investment &\nInnovation',
-            sub: 'Growth & collaboration',
-            icon: (
-              <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
-                <line x1="12" y1="20" x2="12" y2="10" />
-                <line x1="18" y1="20" x2="18" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="16" />
-                <path d="M2 20h20" />
-              </svg>
-            ),
+            num: '04', label: 'Investment & Innovation', sub: 'Growth & collaboration',
+            icon: <><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/><path d="M2 20h20"/></>
           },
         ].map((card, i) => (
-          <div key={i} className="ihwe-pillar-card">
-            {/* Icon box */}
-            <div
-              style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '10px',
-                background: '#fef3c7',
-                border: '1.2px solid #d97706',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
-            >
-              {card.icon}
+          <div key={i} className="fw-card">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ width: 36, height: 36, borderRadius: 6, background: '#fef7ee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">{card.icon}</svg>
+              </div>
+              <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500, color: 'rgba(210,96,25,0.18)', lineHeight: 1 }}>{card.num}</span>
             </div>
-
-            {/* Label */}
-            <p
-              style={{
-                fontFamily: "'Roboto', sans-serif",
-                fontSize: '10.5px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.09em',
-                lineHeight: 1.4,
-                color: '#1a2e1a',
-                whiteSpace: 'pre-line',
-              }}
-            >
-              {card.label}
-            </p>
-
-            {/* Sub */}
-            <p
-              style={{
-                fontFamily: "'Roboto', sans-serif",
-                fontSize: '11px',
-                lineHeight: 1.5,
-                color: '#4b5563',
-                fontWeight: 400,
-              }}
-            >
-              {card.sub}
-            </p>
+            <div style={{ fontSize: 12, fontWeight: 500, color: '#1a1a1a', letterSpacing: '0.2px', lineHeight: 1.3 }}>{card.label}</div>
+            <div style={{ fontSize: 11.5, color: '#888', fontWeight: 300, lineHeight: 1.45, marginTop: -4 }}>{card.sub}</div>
           </div>
         ))}
       </div>
     </div>
+
   </div>
-</section>
+</section> */}
 
       {/* ONE PLATFORM. FOUR POWERFUL PILLARS. */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="container mx-auto px-6">
+      <section className="pt-4 pb-16 bg-white border-t border-gray-100">
+        <div className="container mx-auto px-8 lg:px-12 max-w-7xl">
+          
+          <div className="text-center mb-2">
+            <h2 className="font-bold text-[18px] text-[#1e3a8a] uppercase tracking-[0.2em]" style={{ fontFamily: "'Inter', sans-serif" }}>
+              ONE PLATFORM. FOUR POWERFUL PILLARS.
+            </h2>
+          </div>
 
-          <p className="flex items-center justify-center gap-3 text-[#d26019] font-semibold text-[15px] uppercase tracking-[0.28em] mb-2"
-            style={{ fontFamily: "'Inter', sans-serif" }}>
-            <span className="inline-block w-9 h-[1.5px] bg-[#d26019]" />
-            One Platform
-            <span className="inline-block w-9 h-[1.5px] bg-[#d26019]" />
-          </p>
-          <h2 className="text-center font-black text-[28px] text-[#1a2e1a] mb-2 leading-[1.2]"
-            style={{ fontFamily: "'Inter', sans-serif" }}>
-            Four Powerful Pillars
-          </h2>
-          <p className="text-center text-gray-400 text-[13px] mb-11"
-            style={{ fontFamily: "'Inter', sans-serif" }}>
-            Everything you need — under one roof, at one event.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               {
-                title: "INTERNATIONAL EXHIBITION",
-                titleColor: "#1e40af", // Professional blue
-                desc: "Showcase products, launch innovations and expand to global markets.",
-                iconBg: "#1e40af",
-                icon: <Globe className="w-[22px] h-[22px] text-white" />,
-                img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80",
+                title: ["INTERNATIONAL", "EXHIBITION"],
+                themeColor: "#1e40af",
+                desc: "Spanning 40,000+ sq ft across three halls, featuring 200+ exhibitors from 8 key sectors including Medical, AYUSH, Wellness, and Digital Health. Witness live demos, finalize deals, and explore global innovations in dedicated country pavilions for specialized high-level networking and business growth.",
+                icon: <Globe className="w-5 h-5 text-white" />,
+                img: InternationalImg,
               },
               {
-                title: "AROGYA SANGOSHTHI (17th EDITION)",
-                titleColor: "#166534", // Professional green
-                desc: "Knowledge-driven conference on policy, innovation and preventive healthcare.",
-                iconBg: "#166534",
-                icon: <GraduationCap className="w-[22px] h-[22px] text-white" />,
-                img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=500&q=80",
+                title: ["CONFERENCE &", "KNOWLEDGE SUMMIT"],
+                themeColor: "#16a34a",
+                desc: "The 18th Edition, Arogya Sangoshthi, offers 30+ insightful sessions over 3 days, with 150+ distinguished speakers including government officials and industry CEOs. Explore critical discussions across 6 thematic tracks, attracting 2,000+ delegates for knowledge exchange and policy dialogue.",
+                icon: <GraduationCap className="w-5 h-5 text-white" />,
+                img: ConferenceImg,
               },
               {
-                title: "GLOBAL HEALTH EXCELLENCE AWARDS",
-                titleColor: "#b45309", // Professional gold/amber
-                desc: "Recognizing excellence, innovation and leadership across the sector.",
-                iconBg: "#b45309",
-                icon: <Trophy className="w-[22px] h-[22px] text-white" />,
-                img: "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=500&q=80",
+                title: ["GLOBAL EXCELLENCE", "AWARDS"],
+                themeColor: "#d97706",
+                desc: "Our prestigious 3rd Edition program, a formal evening ceremony on Day 2, recognizes ground breaking achievements and fosters brand authority. Categories include Best Healthcare Innovation, Excellence in AYUSH, and Wellness Entrepreneur of the Year, acknowledging pioneering start ups and influential industry leaders",
+                icon: <Trophy className="w-5 h-5 text-white" />,
+                img: AwardImg,
               },
               {
-                title: "BUYER–SELLER MEET (B2B PLATFORM)",
-                titleColor: "#6b21a8", // Professional purple
-                desc: "Pre-scheduled meetings for trade partnerships, exports and collaborations.",
-                iconBg: "#6b21a8",
-                icon: <Handshake className="w-[22px] h-[22px] text-white" />,
-                img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=500&q=80",
+                title: ["B2B BUYER-SELLER", "MEET"],
+                themeColor: "#7c3aed",
+                desc: "Designed to forge powerful partnerships and drive global commerce, this pillar facilitates pre-scheduled 1-on-1 meetings within dedicated business lounges. We host international buyer delegations from key markets, offering professional matchmaking services with a target of 500+ impactful B2B meetings.",
+                icon: <Handshake className="w-5 h-5 text-white" />,
+                img: B2BImg,
               },
             ].map((pillar, i) => (
-              <div key={i}
-                className="bg-white border-2 border-gray-100 transition-all duration-400 flex flex-col items-center text-center group relative rounded-xl hover:border-gray-200">
-                {/* Image */}
-                <div className="relative w-full h-[180px] overflow-hidden">
-                  <img src={pillar.img} alt={pillar.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" />
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+              <div key={i} 
+                className="bg-white border-[1.5px] rounded-[1.25rem] flex flex-col group transition-all duration-300 hover:shadow-xl relative"
+                style={{ borderColor: `${pillar.themeColor}55` }}>
+                
+                {/* Image Area - Minimized gap from border */}
+                <div className="p-[4px]">
+                  <div className="relative h-[160px] overflow-hidden rounded-[1rem]">
+                    <img src={pillar.img} alt={pillar.title.join(" ")} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-black/10" />
+                  </div>
                 </div>
 
-                {/* Overlapping Icon Circle - Moved outside overflow container to prevent clipping */}
-                <div className="absolute top-[152px] left-1/2 -translate-x-1/2 w-14 h-14 rounded-full border-[4px] border-white flex items-center justify-center shadow-lg z-10 transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: pillar.iconBg }}>
+                {/* Overlapping Icon - Adjusted top to account for minimized padding */}
+                <div className="absolute top-[137px] left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-[3px] border-white flex items-center justify-center shadow-md z-30 transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: pillar.themeColor }}>
                   {pillar.icon}
                 </div>
 
-                {/* Content */}
-                <div className="pt-10 pb-8 px-6 flex flex-col items-center flex-1">
-                  {/* Title with animated underline */}
-                  <div className="relative mb-4 group-hover:mb-5 transition-all duration-300">
-                    <h3 className="font-bold text-[14px] leading-[1.3] uppercase tracking-wide px-2"
-                      style={{ color: pillar.titleColor, fontFamily: "'Inter', sans-serif" }}>
-                      {pillar.title}
-                    </h3>
-                    <span
-                      className="absolute left-1/2 -bottom-1 h-[2px] w-0 -translate-x-1/2 group-hover:w-full transition-all duration-500 ease-in-out"
-                      style={{ backgroundColor: pillar.titleColor }}
-                    />
-                  </div>
-
-                  <p className="text-gray-800 text-[12.5px] leading-[1.65] font-medium"
+                {/* Content Area */}
+                <div className="pt-6 pb-5 px-5 text-center flex flex-col flex-1">
+                  <h3 className="font-extrabold text-[13px] leading-[1.3] uppercase tracking-wide mb-4 flex flex-col items-center justify-center"
+                    style={{ color: pillar.themeColor, fontFamily: "'Inter', sans-serif" }}>
+                    <span>{pillar.title[0]}</span>
+                    <span>{pillar.title[1]}</span>
+                  </h3>
+                  <p className="text-gray-600 text-[11px] leading-relaxed font-medium text-justify"
                     style={{ fontFamily: "'Inter', sans-serif" }}>
                     {pillar.desc}
                   </p>
@@ -1058,19 +925,18 @@ const About = () => {
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* OUR VENUE - Why Pragati Maidan */}
-      <section className="py-16 bg-white border-t border-gray-100">
+      <section className="pt-4 pb-4 bg-white border-t border-gray-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
             {/* LEFT - Venue Image - NO border radius */}
             <div className="relative overflow-hidden group">
               <img
-                src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80"
+                src={PragatiMaidanImg}
                 alt="Pragati Maidan, New Delhi"
                 className="w-full h-[340px] object-cover group-hover:scale-[1.04] transition-transform duration-500"
               />
@@ -1098,7 +964,7 @@ const About = () => {
                 Our Venue
               </p>
               <h2 className="font-black text-[32px] text-[#23471d] leading-[1.25] mb-0" style={{ fontFamily: "'Inter', sans-serif" }}>
-                Why Pragati Maidan,New Delhi?
+                Why Pragati Maidan, New Delhi?
               </h2>
               <div className="w-9 h-[2px] bg-[#d26019] my-5" />
 
@@ -1107,36 +973,36 @@ const About = () => {
                 {[
                   {
                     color: "#d26019", bg: "#fff3eb",
-                    text: "India's premier international exhibition & convention venue",
+                    text: "India's premier international exhibition & convention venue with world-class facilities",
                     icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></>
                   },
                   {
                     color: "#23471d", bg: "#edf7ed",
-                    text: "Excellent connectivity — Metro, Airport & Central Delhi",
+                    text: "Excellent connectivity via dedicated Metro, International Airport & Central Delhi hubs",
                     icon: <><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></>
                   },
                   {
                     color: "#d26019", bg: "#fff3eb",
-                    text: "World-class infrastructure with modern exhibition halls",
+                    text: "State-of-the-art infrastructure featuring modern air-conditioned exhibition hall space",
                     icon: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></>
                   },
                   {
                     color: "#23471d", bg: "#edf7ed",
-                    text: "Preferred destination for global trade fairs & exhibitions",
+                    text: "Preferred global destination for high-profile trade fairs, congresses & mega exhibitions",
                     icon: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>
                   },
                   {
                     color: "#d26019", bg: "#fff3eb",
-                    text: "Close to government ministries, embassies & institutions",
+                    text: "Strategically located close to key government ministries, foreign embassies & institutions",
                     icon: <><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></>
                   },
                   {
                     color: "#23471d", bg: "#edf7ed",
-                    text: "A perfect environment for global business & networking",
+                    text: "A perfect business-centric environment designed for global networking & deal-making",
                     icon: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                   },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
+                  <div key={i} className="flex items-center gap-3">
                     {/* Circle with border + icon inside - like image 2 */}
                     <div
                       className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
@@ -1156,7 +1022,7 @@ const About = () => {
                       </svg>
                     </div>
                     <p
-                      className="text-[#2a2a2a] text-[12.5px] leading-[1.6] mt-[6px] font-medium"
+                      className="text-[#2a2a2a] text-[12.5px] leading-[1.6] font-medium"
                       style={{ fontFamily: "'Inter', sans-serif" }}>
                       {item.text}
                     </p>
@@ -1166,195 +1032,93 @@ const About = () => {
             </div>
           </div>
 
-          {/* THE SCALE. THE IMPACT. */}
-          <div className="mt-14 border-t border-gray-100 pt-10">
-            <p className="flex items-center justify-center gap-3 text-[#d26019] font-semibold text-[10px] uppercase tracking-[0.28em] mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
-              <span className="inline-block w-8 h-[1.5px] bg-[#d26019]" />
+         
+        </div>
+      </section>
+
+      <section className="py-6 bg-[#23471d] relative overflow-hidden border-t border-white/5">
+  {/* Particle Canvas */}
+  <canvas
+    ref={canvasRef}
+    className="pointer-events-none absolute inset-0 opacity-50"
+  />
+
+  <div className="container mx-auto px-6 relative z-10">
+    <div className="flex flex-col lg:flex-row items-center justify-start gap-10 lg:gap-40">
+      {/* Text Side */}
+      <div className="text-center lg:text-left max-w-2xl" data-aos="fade-right">
+        <div className="flex items-center justify-center lg:justify-start gap-2.5 mb-1.5">
+          <div className="h-[1.5px] w-6 bg-[#F3B71B]" />
+          <span className="text-[#F3B71B] font-bold text-[10px] uppercase tracking-[0.25em]">
+            Ignite Your Growth
+          </span>
+        </div>
+        <h3
+          className="text-white font-extrabold text-2xl md:text-3xl mb-1 leading-tight"
+          style={{ fontFamily: "'Inter', sans-serif" }}
+        >
+          Be Part of India's Global Wellness Movement
+        </h3>
+        <p className="text-white/70 font-medium text-[12px] max-w-xl">
+          Exhibit. Connect. Collaborate. Grow. Join healthcare leaders in building the future of wellness.
+        </p>
+      </div>
+
+      {/* Buttons Side: 2x2 Grid */}
+      <div
+        className="grid grid-cols-2 gap-4 w-full lg:w-auto"
+        data-aos="fade-left"
+      >
+        {[
+          { label: "BOOK YOUR STALL", link: "/book-a-stand", style: "gold" },
+          { label: "REGISTER AS BUYER", link: "/buyer-registration", style: "white" },
+          { label: "REGISTER AS DELEGATE", link: "/contact", style: "white" },
+          { label: "REGISTER AS VISITOR", link: "/contact", style: "white" },
+        ].map((btn, i) => (
+          <Link
+            key={i}
+            to={btn.link}
+            className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[150px]
+              ${btn.style === "gold" ? "bg-[#F3B71B] text-[#1a3516] hover:bg-white" : ""}
+              ${btn.style === "white" ? "bg-white text-[#23471d] hover:bg-[#F3B71B]" : ""}
+            `}
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            {btn.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+ {/* THE SCALE. THE IMPACT. */}
+          <div className="mt-1 border-t border-gray-100 pt-6">
+            <p className="flex items-center justify-center gap-3 text-[#d26019] font-extrabold text-[15px] uppercase tracking-[0.28em] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
+              <span className="inline-block w-8 h-[1.5px] bg-[#d26019] " />
               The Scale. The Impact.
               <span className="inline-block w-8 h-[1.5px] bg-[#d26019]" />
             </p>
-            <VenueStats />
-          </div>
-        </div>
-      </section>
-
-      {/* WHO WE ARE + ORGANISED BY */}
-      <section className="py-16 bg-[#FFFDF1] border-t border-gray-100">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-12">
-
-            {/* LEFT - Who We Are */}
-            <div>
-              <p className="flex items-center gap-2 text-[#d26019] font-semibold text-[10px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <span className="inline-block w-6 h-[1.5px] bg-[#d26019]" />
-                Who We Are
-              </p>
-              <h2 className="text-[#23471d] font-black text-3xl leading-[1.3] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
-                A Mission-Driven Platform<br />for a Healthier Tomorrow
-              </h2>
-              <p className="text-gray-900 text-sm leading-[1.8] mb-8" style={{ fontFamily: "'Inter', sans-serif" }}>
-                IHWE is more than an event — it is a long-term ecosystem that drives business growth, knowledge exchange, innovation and global partnerships for a healthier, sustainable future.
-              </p>
-
-              {/* 4 features - NO cards, just icon + text like image 1 & 2 */}
-              <div className="grid grid-cols-2 gap-x-6 gap-y-6">
-                {[
-                  {
-                    label: "Promoting Preventive Healthcare",
-                    color: "#d26019",
-                    icon: <HeartPulse className="w-10 h-10" strokeWidth={1.5} />,
-                  },
-                  {
-                    label: "Bridging Tradition with Innovation",
-                    color: "#22c55e",
-                    icon: <Sprout className="w-10 h-10" strokeWidth={1.5} />,
-                  },
-                  {
-                    label: "Strengthening Global Trade & Collaboration",
-                    color: "#3b82f6",
-                    icon: <Globe className="w-10 h-10" strokeWidth={1.5} />,
-                  },
-                  {
-                    label: "Building a Sustainable Wellness Future",
-                    color: "#8b5cf6",
-                    icon: <Leaf className="w-10 h-10" strokeWidth={1.5} />,
-                  },
-                ].map((item, i) => (
-                  <div key={i} className="flex flex-col items-center text-center gap-2">
-                    <div style={{ color: item.color }}>
-                      {item.icon}
-                    </div>
-                    <p className="text-[#1a2e1a] font-semibold text-[11px] leading-snug" style={{ fontFamily: "'Inter', sans-serif" }}>
-                      {item.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* RIGHT - Organised By */}
-            <div className="mt-8 lg:mt-0">
-              <p className="flex items-center gap-2 text-[#d26019] font-semibold text-[10px] uppercase tracking-[0.22em] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
-                <span className="inline-block w-6 h-[1.5px] bg-[#d26019]" />
-                Organised By
-              </p>
-
-              <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-md mt-6">
-
-                {/* Two org cards side by side */}
-                <div className="grid grid-cols-2 divide-x divide-gray-400 bg-white">
-                  {[
-                    {
-                      name: "Namo Gange Wellness Pvt. Ltd.",
-                      desc: "A professional exhibition & conference management company since 2016, responsible for end-to-end event execution, partnerships, exhibitor & sponsor management and global outreach.",
-                      logo: "/logos/namo-gange-wellness.png",
-                    },
-                    {
-                      name: "Namo Gange Trust",
-                      desc: "A socio-spiritual, non-profit organization registered under NGO Darpan (NITI Aayog), Government of India, providing visionary guidance and social credibility to the mission.",
-                      logo: "/logos/namo-gange-trust.png",
-                    },
-                  ].map((org, i) => (
-                    <div key={i} className="flex flex-col gap-3 p-5 hover:bg-[#fffaf7] transition-colors duration-200">
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 shrink-0">
-                        <img
-                          src={org.logo}
-                          alt={org.name}
-                          className="w-full h-full object-contain p-1"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style="width:32px;height:32px;opacity:0.35"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[#23471d] font-bold text-[13px] mb-2 leading-snug" style={{ fontFamily: "'Inter', sans-serif" }}>
-                          {org.name}
-                        </p>
-                        <p className="text-gray-900 text-[11.5px] leading-[1.7]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                          {org.desc}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Dark green badge bar */}
-                <div className="grid grid-cols-3 divide-x divide-white/20 bg-[#23471d]">
-                  {[
-                    {
-                      label: "Transparency & Compliance",
-                      icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
-                    },
-                    {
-                      label: "Professional Execution",
-                      icon: <><circle cx="12" cy="8" r="4" /><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /></>,
-                    },
-                    {
-                      label: "Institutional Trust & Confidence",
-                      icon: <><circle cx="12" cy="12" r="10" /><path d="M9 12l2 2 4-4" /></>,
-                    },
-                  ].map((badge, i) => (
-                    <div key={i} className="flex flex-col items-center justify-center gap-2 py-4 px-3 text-center">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 shrink-0">
-                        {badge.icon}
-                      </svg>
-                      <p className="text-white font-bold text-[9px] uppercase tracking-[0.12em] leading-[1.4]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                        {badge.label}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* CTA BANNER */}
-      <section className="py-10 bg-[#23471d]">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <div>
-              <h3 className="text-white font-black text-xl mb-1" style={{ fontFamily: "'Inter', sans-serif" }}>Be Part of India's Global Wellness Movement</h3>
-              <p className="text-[#d26019] font-semibold text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>Exhibit. Connect. Collaborate. Grow.</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              {[
-                { label: "BOOK YOUR STALL", link: "/book-a-stand", style: "orange" },
-                { label: "REGISTER AS BUYER", link: "/buyer-registration", style: "white" },
-                { label: "APPLY FOR AWARDS", link: "/contact", style: "white" },
-              ].map((btn, i) => (
-                <Link key={i} to={btn.link}
-                  className={`px-5 py-2.5 text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200
-                    ${btn.style === 'orange' ? 'bg-[#d26019] text-white hover:bg-[#b8521a]' : ''}
-                    ${btn.style === 'outline' ? 'bg-transparent border border-white text-white hover:bg-white hover:text-[#23471d]' : ''}
-                    ${btn.style === 'white' ? 'bg-white text-[#23471d] hover:bg-gray-100' : ''}
-                  `}
-                  style={{ fontFamily: "'Inter', sans-serif" }}>
-                  {btn.label}
-                </Link>
-              ))}
+            <div className="bg-[#f0f9f1] py-2 px-5 rounded-2xl border border-[#23471d15]">
+              <VenueStats />
             </div>
           </div>
-        </div>
-      </section>
-
+    
+ 
 
       {/* WHY ATTEND SECTION */}
-      <WhyAttend />
+      {/* <WhyAttend /> */}
 
 
 
-      <StatsCounter />
+      {/* <StatsCounter /> */}
 
 
 
       {/* WHO SHOULD ATTEND */}
-      <WhoShouldAttend />
-      <OrganizedBy />
+      {/* <WhoShouldAttend /> */}
+      {/* <OrganizedBy /> */}
 
       <ExhibitorLogos />
 

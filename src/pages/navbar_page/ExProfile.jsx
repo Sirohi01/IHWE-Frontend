@@ -33,6 +33,8 @@ import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 
+import DashboardHero from '@/components/dashboard/DashboardHero';
+
 const DEFAULT_PLACEHOLDER = "https://placehold.co/400x400?text=No+Logo";
 
 const fixUrl = (url) => {
@@ -205,7 +207,13 @@ export default function ExProfile() {
     };
 
     return (
-        <div className="w-full pb-2 min-h-screen bg-white font-sans text-slate-900">
+        <div className="w-full pb-2 min-h-screen bg-white font-sans text-slate-900 space-y-6">
+            <DashboardHero 
+                pageId="ex-profile" 
+                defaultTitle="Exhibitor Profile" 
+                defaultSubtitle="Manage your corporate identity and official participation records"
+                type="exhibitor" 
+            />
             {/* Optimized Document Print CSS - Fixed for Tables */}
             <style dangerouslySetInnerHTML={{
                 __html: `
