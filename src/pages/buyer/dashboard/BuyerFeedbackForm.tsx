@@ -361,6 +361,12 @@ export default function BuyerFeedbackForm() {
         }));
     };
 
+    const formatDate = (dateStr: string) => {
+        if (!dateStr) return '';
+        const [y, m, d] = dateStr.split('-');
+        return `${d}-${m}-${y}`;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.isDeclared) {
@@ -509,7 +515,7 @@ export default function BuyerFeedbackForm() {
             <div className="hidden print:block w-full">
                 <img
                     src="/feedbackform_header.jpeg"
-                    className="w-full h-auto block"
+                    className="w-full h-[120px] object-cover block"
                     alt="IHWE Header"
                 />
             </div>
@@ -747,14 +753,14 @@ export default function BuyerFeedbackForm() {
                     </div>
                 </FeedbackSection>
 
-                <div className="bg-white border-2 border-[#23471d]/5 rounded-2xl p-6 flex flex-col gap-6 mb-12 shadow-lg print:shadow-none print:border-none print:p-0 print:mb-0 print:mt-2 print:bg-[#f8f9fa] print:rounded-lg print:px-4 print:py-1.5">
-                    <div className="flex items-start gap-4">
-                        <input type="checkbox" id="f-dec" checked={form.isDeclared} onChange={e => setForm(f => ({ ...f, isDeclared: e.target.checked }))} className="mt-1 w-5.5 h-5.5 border-[#23471d] accent-[#23471d] print:hidden focus:ring-0 cursor-pointer" />
-                        <label htmlFor="f-dec" className="text-[13px] font-bold text-slate-700 cursor-pointer flex-1 italic leading-relaxed print:text-[9pt] print:font-bold print:text-black">
+                <div className="bg-white border-2 border-[#23471d]/5 rounded-2xl p-6 flex flex-col gap-6 mb-12 shadow-lg">
+                    <div className="flex items-center gap-4">
+                        <input type="checkbox" id="f-dec" checked={form.isDeclared} onChange={e => setForm(f => ({ ...f, isDeclared: e.target.checked }))} className="mt-1 w-5.5 h-5.5 border-[#23471d] accent-[#23471d] focus:ring-0 cursor-pointer" />
+                        <label htmlFor="f-dec" className="text-[13px] font-bold text-slate-700 cursor-pointer flex-1 italic leading-relaxed">
                             "I confirm that the feedback provided above is true and based on my business experience."
                         </label>
                     </div>
-                    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-50 pt-8 print:border-none print:pt-2">
+                    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-50 pt-8 print:border-none print:pt-2 print:hidden">
                         <div className="flex-1 min-w-[250px] flex items-center gap-5">
                             <div className="flex-1">
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[8pt] print:font-bold print:text-slate-600 print:mb-0.5">AUTHORIZED DIGITAL SIGNATURE</p>
@@ -771,15 +777,26 @@ export default function BuyerFeedbackForm() {
                         </div>
                         <div className="print:hidden"><button type="submit" className="h-12 px-14 bg-[#23471d] hover:bg-[#1a3516] text-white text-[12px] font-black uppercase tracking-widest rounded shadow-xl flex items-center gap-2.5 transition-all active:scale-95">Submit Official Feedback <ArrowRight size={20} /></button></div>
                     </div>
+                    {/* Mandatory Signature & Date - Reordered for Visibility */}
+                    <div className="hidden print:flex px-6 justify-between items-start mb-2 print:mt-0 print:mb-0">
+                        <div className="flex flex-col">
+                            <div className="text-[18pt] font-signature border-b-[1pt] border-black min-w-[250px] max-w-[300px]"> {form.digitalSignature || ''}</div>
+                            <p className="text-[8pt] font-bold text-slate-600 uppercase tracking-widest mt-2">AUTHORIZED DIGITAL SIGNATURE</p>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[11pt] font-bold text-black border-b-[1pt] border-black min-w-[120px] text-right">{formatDate(form.date)}</span>
+                            <p className="text-[8pt] font-bold text-slate-600 uppercase tracking-widest mt-2">DOCUMENT DATE</p>
+                        </div>
+                    </div>
                 </div>
             </form>
 
             {/* Print Footer Template */}
-            <div className="hidden print:block print-footer relative print:mt-1 mt-3 pt-2 print:pb-0 pb-[20px] overflow-hidden">
+            <div className="hidden print:block print-footer relative print:mt-1 mt-3 pt-2 print:pb-0 pb-1 overflow-hidden">
                 <div className="px-6 flex justify-between items-start relative z-10">
                     <div className="flex-1">
-                        <h4 className="text-[24pt] font-signature text-[#b48a3c] mb-2 leading-none">Thank You!</h4>
-                        <p className="text-[9pt] font-bold text-[#555] mb-10 max-w-[450px]">Your valuable feedback will help us improve and create better experiences for you in the future.</p>
+                        <h4 className="text-[15pt] font-signature text-[#b48a3c] mb-2 leading-none">Thank You!</h4>
+                        <p className="text-[8pt] font-bold text-[#555] mb-9 max-w-[450px]">Your valuable feedback will help us improve and create better experiences for you in the future.</p>
                     </div>
 
                     <div className="opacity-10 absolute -bottom-4 right-6 pointer-events-none">
@@ -804,7 +821,7 @@ export default function BuyerFeedbackForm() {
             </div>
 
             {/* New Image Footer for Print */}
-            {/* <div className="hidden print:block w-full">
+            {/* <div className="hidden print:block w-full print-footer h-[5px]">
                 <img
                     src="/feedbackform_fooder.jpeg"
                     className="w-full h-auto block"
@@ -821,11 +838,16 @@ export default function BuyerFeedbackForm() {
                     @page { size: A4; margin: 0; }
                     body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     html, body { 
-                        background: white !important; 
-                        font-family: Arial, sans-serif !important;
+                        background: white !important;
+                    font-family: Arial, sans-serif !important;
                         width: 210mm !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
+                        height: 297mm !important;
+                        margin: 0 !important; 
+                        padding: 0 !important; 
+                        overflow: hidden !important;
+                        background: white !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
                     }
                     main, #root, #root > div { 
                         padding: 0 !important; 
@@ -876,6 +898,8 @@ export default function BuyerFeedbackForm() {
                         width: 100% !important;
                         margin: 0 !important;
                         padding-bottom: 0 !important;
+                        background-color: #f1f7fd !important;
+                        min-height: 80px !important;
                     }
                 }
             `}} />
