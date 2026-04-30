@@ -1,15 +1,19 @@
 import { CheckCircle2, FileDown, ArrowRight, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 import participateImg from '@/assets/participate.webp';
 
 const WhyParticipate = () => {
   const points = [
-    "Meet qualified buyers & decision makers",
-    "Launch new products & showcase innovations",
-    "Expand your network & distribution channels",
-    "Stay ahead with industry insights & trends"
+    "Meet genuine buyers, distributors, retailers, and healthcare professionals",
+    "Generate high-quality B2B & B2C leads with faster business conversions",
+    "Launch new products with maximum visibility and market impact",
+    "Expand your dealer, distributor, franchise, and export network",
+     "Strengthen brand presence through live demos and media exposure",
+    "Connect with investors, CEOs, doctors, and key decision-makers",
+    "Achieve higher ROI with direct customer engagement and trust building"
   ];
 
   return (
@@ -33,10 +37,8 @@ const WhyParticipate = () => {
             Your Gateway to <span className="text-[#346739]">Growth</span>
           </h2>
 
-          <p className="text-[13.5px] text-gray-600 leading-[1.7] mb-6 max-w-[480px] text-justify">
-            The International Health & Wellness Expo brings together the entire
-            healthcare ecosystem under one roof, creating unparalleled opportunities
-            to connect, collaborate and grow.
+          <p className="text-[13.5px] font-semibold text-[#071c3d] leading-[1.7] mb-6 max-w-[480px] text-justify">
+          The International Health & Wellness Expo 2026 is a leading platform for health, wellness, fitness, beauty, Ayurveda, organic products, and medical innovation—bringing together top brands, buyers, investors, and industry leaders from India and worldwide.
           </p>
 
           <div className="space-y-3 mb-8">
@@ -49,14 +51,20 @@ const WhyParticipate = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-6">
-            <Button className="bg-[#0b4d17] hover:bg-[#073610] text-white px-8 h-11 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center gap-3 shadow-lg transition-all group">
-              Exhibit With Us
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/book-a-stand">
+              <Button className="bg-[#0b4d17] hover:bg-[#073610] text-white px-8 h-11 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center gap-3 shadow-lg transition-all group">
+                Exhibit With Us
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
 
-            <button className="flex items-center gap-2 text-[#2f8f3a] font-bold uppercase tracking-wider text-[11px] hover:underline transition-all">
+            <a 
+              href="/pdf.pdf" 
+              download 
+              className="flex items-center gap-2 text-[#2f8f3a] font-bold uppercase tracking-wider text-[11px] hover:underline transition-all"
+            >
               <FileDown className="w-5 h-5" /> Download Brochure
-            </button>
+            </a>
           </div>
         </motion.div>
 
@@ -88,6 +96,22 @@ const WhyParticipate = () => {
                   Grow Your Business.
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* New 3-point bullets below image */}
+          <div className="flex justify-start items-center gap-8 mt-8 ml-6">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#2f8f3a]" fill="#2f8f3a" color="#fff" />
+              <span className="text-[14px] font-bold text-[#071c3d] tracking-tight uppercase">Exhibit</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#2f8f3a]" fill="#2f8f3a" color="#fff" />
+              <span className="text-[14px] font-bold text-[#071c3d] tracking-tight uppercase">Connect</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-[#2f8f3a]" fill="#2f8f3a" color="#fff" />
+              <span className="text-[14px] font-bold text-[#071c3d] tracking-tight uppercase">Grow</span>
             </div>
           </div>
         </motion.div>

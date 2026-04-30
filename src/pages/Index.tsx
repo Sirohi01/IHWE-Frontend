@@ -1,5 +1,8 @@
 import HeroSection from "@/components/home/HeroSection";
 import AboutSection from "@/components/home/AboutSection";
+import AttendanceInfo from "@/components/home/AttendanceInfo";
+import EventInfoBanner from "@/components/home/EventInfoBanner";
+import HealthcareSectors from "@/components/home/HealthcareSectors";
 import MarqueeStrip from "@/components/home/MarqueeStrip";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import StatsCounter from "@/components/home/StatsCounter";
@@ -45,25 +48,28 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <ConferenceSeminars />
       <ExhibitionCategories />
       <BeyondExhibition />
-      <EventHighlights />
-      <AboutSection />
-      <DownloadsSection />
-      <MarqueeStrip />
-      <WhoWeAre />
+      <AttendanceInfo />
+      <EventInfoBanner />
+      <HealthcareSectors />
+        <MarqueeStrip />
+      {/* <AboutSection /> */}
+      {/* <DownloadsSection /> */}
+    
+      {/* <WhoWeAre /> */}
 
-      <IndustryZones />
+      {/* <IndustryZones /> */}
       <GallerySection />
 
-      <ExhibitorLogos />
+      {/* <ExhibitorLogos /> */}
       {/* <ExhibitionGrid /> */}
       {/* <CountersSection /> */}
       {/* <KeyHighlights /> */}
       {/* <PastParticipants /> */}
 
-      <ParallaxSection />
+      {/* <ParallaxSection /> */}
       {/* <GlobalPartners /> */}
-      <Testimonials />
-       <FAQSection />
+      {/* <Testimonials />
+       <FAQSection /> */}
       <BlogPreview />
      
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
