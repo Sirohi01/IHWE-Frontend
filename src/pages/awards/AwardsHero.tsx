@@ -31,10 +31,10 @@ const AwardsHero = () => {
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-8 flex flex-col items-start"
+            className="lg:col-span-8 flex  flex-col items-start"
           >
             {/* Awards Logo */}
-            <div className="flex justify-start mb-1 w-full">
+            <div className="flex justify-start w-full -mt-8 mb-1">
               <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
             </div>
 
@@ -53,7 +53,7 @@ const AwardsHero = () => {
               {/* <h1 className="font-[800] text-[25px] md:text-[38px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1> */}
             </div>
 
-            <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight">
+            <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight mt-4">
               Honouring Excellence in Healthcare, Wellness & Innovation
             </p>
 

@@ -43,7 +43,7 @@ const AwardsGallery = () => {
         >
           <div className="flex items-center justify-center gap-3">
             <div className="h-[2px] w-6 bg-[#1a6b3c]" />
-            <span className="text-[#1a6b3c] text-[11px] font-black uppercase tracking-[0.3em]">
+            <span className="text-[#1a6b3c] text-[14px] font-black uppercase tracking-[0.3em]">
               Glimpses of Past Editions
             </span>
             <div className="h-[2px] w-6 bg-[#1a6b3c]" />

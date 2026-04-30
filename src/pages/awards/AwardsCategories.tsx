@@ -46,7 +46,7 @@ const AwardsCategories = () => {
           viewport={{ once: true }}
           className="text-center mb-1"
         >
-          <p className="text-[#008d48] text-[9px] font-black uppercase tracking-[0.3em] mb-0.5">
+          <p className="text-[#008d48] text-[14px] font-black uppercase tracking-[0.3em] mb-0.5">
             Award Categories
           </p>
           <h2 className="text-[24px] md:text-[32px] font-bold font-serif text-[#003366] mb-1 leading-tight">
@@ -94,7 +94,7 @@ const AwardsCategories = () => {
                   <div className="w-24 h-24" />
                 )}
               </div>
-              <p className="text-center text-[12px] font-semibold leading-tight" style={{ color: "#0a2e5c" }}>
+              <p className="text-center text-[14px] font-semibold leading-tight" style={{ color: "#0a2e5c" }}>
                 {cat.title}
               </p>
             </motion.div>

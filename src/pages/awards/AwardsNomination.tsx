@@ -23,7 +23,7 @@ const AwardsNomination = () => {
           viewport={{ once: true }}
           className="text-center mb-2"
         >
-          <span className="text-[#008d48] text-[9px] font-black uppercase tracking-[0.25em] block mb-0.5">
+          <span className="text-[#008d48] text-[14px] font-black uppercase tracking-[0.25em] block mb-0.5">
             NOMINATION PROCESS
           </span>
           <h2 className="text-[20px] md:text-[26px] font-bold font-serif" style={{ color: navyColor }}>
@@ -59,7 +59,7 @@ const AwardsNomination = () => {
                 <h3 className="text-[12px] font-black mb-1 uppercase tracking-tight leading-tight" style={{ color: navyColor }}>
                   {step.title}
                 </h3>
-                <p className="text-slate-600 text-[10.5px] font-medium leading-[1.3] max-w-[200px] whitespace-pre-line">
+                <p className="text-slate-600 text-[12px] font-medium leading-[1.3] max-w-[200px] whitespace-pre-line">
                   {step.desc}
                 </p>
               </motion.div>

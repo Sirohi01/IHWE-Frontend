@@ -30,19 +30,19 @@ const AwardsSponsorship = () => {
             viewport={{ once: true }}
             className="flex-[0.8] bg-[#002447] rounded-[16px] p-6 md:p-8 flex flex-col justify-center items-start text-left relative overflow-hidden"
           >
-            <span className="text-[#99cc00] text-[9px] font-black uppercase tracking-[0.25em] mb-2 block">
+            <span className="text-[#99cc00] text-[14px] font-black uppercase tracking-[0.25em] mb-2 block">
               SPONSORSHIP OPPORTUNITIES
             </span>
-            <h2 className="text-white text-[24px] md:text-[30px] font-bold font-serif leading-tight mb-2">
+            <h2 className="text-white text-[32px] md:text-[34px] font-bold font-serif leading-tight mb-2">
               Partner With Prestige
             </h2>
             <p className="text-white/60 text-[12px] md:text-[13px] mb-5 max-w-[340px] leading-relaxed font-medium">
               Showcase your brand to a highly targeted audience of healthcare leaders, innovators and decision makers.
             </p>
 
-            <button className="flex items-center bg-[#008d48] text-white rounded-lg text-[13px] font-black uppercase tracking-widest self-start transition-all hover:bg-[#007a3e] overflow-hidden shadow-lg group">
-              <span className="px-5 py-3 tracking-tighter">DOWNLOAD SPONSORSHIP DECK</span>
-              <div className="bg-black/10 px-3 py-3 border-l border-white/20">
+            <button className="flex items-center bg-[#008d48] text-white  rounded-lg text-[13px] font-black uppercase tracking-widest self-start transition-all hover:bg-[#007a3e] overflow-hidden shadow-lg group">
+              <span className="px-6 py-3.5">DOWNLOAD SPONSORSHIP DECK</span>
+              <div className="bg-black/10 px-4 py-4 border-l border-white/20">
                 <Download className="w-4 h-4" />
               </div>
             </button>
