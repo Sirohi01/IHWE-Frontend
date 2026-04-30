@@ -107,6 +107,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            showUnderlines={false}
         >
             <div className="text-center mb-6 print:mb-2 font-bold mt-2 print:mt-0">
                 <h1 className="text-lg print:text-base underline uppercase">ANNEXURE - D</h1>

@@ -69,6 +69,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            isLetterhead={true}
         >
             <div className="text-center mb-6 mt-2">
                 <h1 className="text-xl font-bold uppercase tracking-widest underline decoration-2 underline-offset-8">DECLARATION</h1>
