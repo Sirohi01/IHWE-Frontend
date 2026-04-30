@@ -23,7 +23,10 @@ export default function RelationshipManager() {
     const [rmDetails, setRmDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentTime, setCurrentTime] = useState(new Date());
-    const rmName = data?.spokenWith || data?.referredBy || null;
+    // filledBy stores the actual admin username (e.g. "manish")
+    // spokenWith stores a freeform name string — not reliable for DB lookup
+    const rmUsername = data?.filledBy && data.filledBy !== 'User' ? data.filledBy : null;
+    const rmName = data?.spokenWith || data?.filledBy || null;
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -31,18 +34,18 @@ export default function RelationshipManager() {
     }, []);
 
     useEffect(() => {
-        if (!rmName) {
+        if (!rmUsername) {
             setLoading(false);
             return;
         }
-        fetch(`${API_URL}/admin/by-username/${encodeURIComponent(rmName)}`)
+        fetch(`${API_URL}/admin/by-username/${encodeURIComponent(rmUsername)}`)
             .then(r => r.json())
             .then(res => {
                 if (res.success && res.data) setRmDetails(res.data);
                 setLoading(false);
             })
             .catch(() => setLoading(false));
-    }, [rmName]);
+    }, [rmUsername]);
 
     const handleWhatsApp = (phone) => {
         const cleanPhone = phone.replace(/\D/g, '');

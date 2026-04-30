@@ -103,6 +103,16 @@ export default function AdminApprovalStatus({ data }: AdminApprovalStatusProps) 
             updatedAt: data?.lastPaymentAt
         },
         {
+            key: 'bank_verification',
+            label: 'Bank Details Verification',
+            status: data?.bankVerificationStatus || 'pending',
+            description: data?.bankDetails?.bankName
+                ? `${data.bankDetails.bankName} — ${data.bankDetails.accountType || ''}`
+                : 'Bank account verification',
+            icon: CreditCard,
+            updatedAt: data?.bankVerifiedAt
+        },
+        {
             key: 'sponsorship_approval',
             label: 'Sponsorship',
             status: data?.sellerSubscription?.status || 'inactive',
@@ -215,6 +225,7 @@ export default function AdminApprovalStatus({ data }: AdminApprovalStatusProps) 
                                                 <p className="text-[10px] text-orange-600 font-medium">
                                                     {stage.key === 'kyc_approval' && 'Please upload all required KYC documents to proceed.'}
                                                     {stage.key === 'payment_confirmation' && 'Complete your payment to proceed with verification.'}
+                                                    {stage.key === 'bank_verification' && 'Please add your bank details in the profile section.'}
                                                     {stage.key === 'stall_approval' && 'Stall allocation is pending. Our team will assign your stall soon.'}
                                                     {stage.key === 'seller_approval' && 'Your seller registration is under review by our team.'}
                                                     {stage.key === 'sponsorship_approval' && 'Choose a subscription plan to activate sponsorship benefits.'}

@@ -32,7 +32,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
             { country: '', field: '', description: '', contact: '' }
         ],
         remarks: '',
-        date: new Date().toISOString().split('T')[0],
+        date: '',
         companyName: ctxData?.companyName || ''
     });
 
@@ -126,7 +126,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                     placeholder="Enter details here..."
                                 />
                                 <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[1.5rem] text-[11px] print-bold`}>
-                                    {row.value || '.'}
+                                    {row.value || ''}
                                 </div>
                             </td>
                         </tr>
@@ -147,7 +147,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                 placeholder="Enter your comments regarding the benefits of participation..."
                             />
                             <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[6rem] text-[11px] print-bold`}>
-                                {formData.comments || '.'}
+                                {formData.comments || ''}
                             </div>
                         </td>
                     </tr>
@@ -165,7 +165,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                     placeholder="Enter details here..."
                                 />
                                 <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[1.5rem] text-[11px] print-bold`}>
-                                    {row.value || '.'}
+                                    {row.value || ''}
                                 </div>
                             </td>
                         </tr>
@@ -211,7 +211,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                                 placeholder="Enter any additional remarks or suggestions..."
                             />
                             <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} whitespace-pre-wrap break-words min-h-[2.5rem] text-[11px] print-bold`}>
-                                {formData.remarks || '.'}
+                                {formData.remarks || ''}
                             </div>
                         </td>
                     </tr>
@@ -233,7 +233,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                             />
                         </div>
                         <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black min-w-[100px] font-bold text-[11px] print-bold`}>
-                            {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : '.'}
+                            {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
                         </div>
                     </div>
                     <div className="flex flex-col items-center">

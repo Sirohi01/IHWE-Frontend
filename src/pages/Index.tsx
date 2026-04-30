@@ -52,6 +52,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <EventInfoBanner />
       <HealthcareSectors />
         <MarqueeStrip />
+      {/* <EventHighlights /> */}
       {/* <AboutSection /> */}
       {/* <DownloadsSection /> */}
     
@@ -71,7 +72,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       {/* <Testimonials />
        <FAQSection /> */}
       <BlogPreview />
-     
+
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
     </>
   );

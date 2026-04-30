@@ -172,7 +172,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                                 <div className="uppercase">(PUT '✓' OR 'x' IN BOX)</div>
                             </th>
                             <th className="py-1.5 px-1 text-center w-14 text-[9px] leading-tight font-bold">
-                                PG NO.
+                                Pg No.
                             </th>
                         </tr>
                     </thead>
