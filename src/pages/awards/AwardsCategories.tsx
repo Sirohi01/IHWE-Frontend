@@ -36,38 +36,44 @@ const stats = [
 
 const AwardsCategories = () => {
   return (
-    <section className="py-8 md:py-12 bg-[#edf7f2]">
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
+    <section className="py-6 md:py-8 bg-[#edf7f2]">
       <div className="container mx-auto px-6 max-w-[1280px]">
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center mb-1"
         >
-          <p className="text-[#008d48] text-[10px] font-extrabold uppercase tracking-[0.3em] mb-2">
+          <p className="text-[#008d48] text-[9px] font-black uppercase tracking-[0.3em] mb-0.5">
             Award Categories
           </p>
-          <h2 className="text-[26px] md:text-[34px] font-bold font-serif text-[#003366] mb-4">
+          <h2 className="text-[24px] md:text-[32px] font-bold font-serif text-[#003366] mb-1 leading-tight">
             Recognizing Leaders Across the Health & Wellness Ecosystem
           </h2>
 
-          <div className="flex items-center justify-center gap-3">
-            <div className="h-px flex-1 max-w-[200px] bg-[#b6ddc8]" />
-            <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
-              <path
-                d="M11 20C11 20 3 15 3 9C3 4 11 1 11 1C11 1 19 4 19 9C19 15 11 20 11 20Z"
-                fill="#008d48" fillOpacity="0.15" stroke="#008d48" strokeWidth="1.5"
+          <div className="flex items-center justify-center gap-2 mb-0">
+            <div className="h-[1.5px] flex-1 max-w-[200px] bg-[#b6ddc8] opacity-60" />
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="rotate-[15deg]">
+              <path 
+                d="M21 3C21 3 14 3.5 9 8.5C4 13.5 3 21 3 21C3 21 10.5 20 15.5 15C20.5 10 21 3 21 3Z" 
+                fill="#008d48" 
+              />
+              <path 
+                d="M3 21L12 12" 
+                stroke="white" 
+                strokeWidth="1.5" 
+                strokeLinecap="round" 
+                opacity="0.3"
               />
             </svg>
-            <div className="h-px flex-1 max-w-[200px] bg-[#b6ddc8]" />
+            <div className="h-[1.5px] flex-1 max-w-[200px] bg-[#b6ddc8] opacity-60" />
           </div>
         </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4 mt-1">
           {awardCategories.map((cat, idx) => (
             <motion.div
               key={idx}
@@ -100,23 +106,24 @@ const AwardsCategories = () => {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#002b5c] rounded-2xl px-6 md:px-8 py-5 grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="bg-[#002b5c] rounded-2xl px-8 md:px-12 py-8 grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {stats.map((stat, idx) => (
-            <div key={idx} className="flex items-center gap-3 relative">
+            <div key={idx} className="flex items-center gap-4 relative">
               {idx !== 0 && (
-                <div className="hidden md:block absolute -left-2 top-1/2 -translate-y-1/2 h-8 w-px bg-white/20" />
+                <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 h-12 w-px bg-white/20" />
               )}
-              <div className="w-10 h-10 overflow-hidden flex items-center justify-center shrink-0">
+              {/* Removed overflow-hidden to prevent icon clipping during scale */}
+              <div className="w-14 h-14 flex items-center justify-center shrink-0">
                 {stat.icon ? (
-                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.3]" />
+                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.5]" />
                 ) : null}
               </div>
               <div>
-                <div className="text-white text-[24px] md:text-[28px] font-black leading-none">
+                <div className="text-white text-[28px] md:text-[34px] font-black leading-none">
                   {stat.number}
                 </div>
-                <div className="text-white/55 text-[9px] font-bold uppercase tracking-widest mt-0.5">
+                <div className="text-white/60 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] mt-1">
                   {stat.label}
                 </div>
               </div>
