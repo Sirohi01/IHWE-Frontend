@@ -91,22 +91,26 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
     const lastThreeDigits = seqNum.slice(-3);
     const invoiceNo = `NGW/${invoiceYear}-${nextYear}/PI/${lastThreeDigits}`;
     const invoiceDate = latestPayment?.paidAt
-        ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+        ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+        : regDate;
+    const createdDateTime = data.createdAt
+        ? (() => {
+            const d = new Date(data.createdAt);
+            const date = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+            const time = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+            return `${date}, ${time}`;
+          })()
         : regDate;
 
     const handlePrint = () => {
         const content = printRef.current;
         if (!content) return;
-        
-        // Create iframe for printing
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
         
         const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
         if (!iframeDoc) return;
-        
-        // Write complete HTML with inline styles
         const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
@@ -118,11 +122,13 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
         body { 
             margin: 0; 
             padding: 10mm; 
-            font-family: Arial, sans-serif; 
+            font-family: Calibri, Arial, Helvetica, sans-serif; 
             font-size: 11px; 
+            font-weight: 400;
             color: #000000 !important; 
             background: white;
             line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
@@ -136,6 +142,8 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
             padding: 6px 8px; 
             vertical-align: top;
             font-size: 11px;
+            font-family: Calibri, Arial, Helvetica, sans-serif;
+            font-weight: 400;
             word-wrap: break-word;
             overflow-wrap: break-word;
             color: #000000 !important;
@@ -145,7 +153,8 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
             color: #ffffff !important;
             font-weight: bold;
             text-align: center;
-            padding: 6px 4px;
+            padding: 3px 2px;
+            font-size: 10px;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
@@ -159,6 +168,10 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
         .center { text-align: center; }
         .no-print { display: none !important; }
         div { margin: 0; padding: 0; }
+        .terms-box { padding: 6px 8px !important; margin-bottom: 8px !important; }
+        .invoice-title-bar { padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; }
+        .bank-details-table { width: auto !important; margin-bottom: 0 !important; }
+        .bank-details-table td { border: none !important; padding: 1px 4px 1px 0 !important; font-size: 10px !important; line-height: 1.3 !important; white-space: nowrap !important; }
         .auth-sig-line {
             border-top: 1px solid #ccc;
             padding-top: 4px;
@@ -305,7 +318,7 @@ ${content.innerHTML}
             </div>
 
             {/* Printable Invoice */}
-            <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Arial, sans-serif' }}>
+            <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif' }}>
 
                 {/* ── HEADER IMAGE ── */}
                 {headerImageUrl && (
@@ -315,54 +328,69 @@ ${content.innerHTML}
                 )}
 
                 {/* ── TAX INVOICE TITLE ── */}
-                <div style={{ textAlign: 'center', marginBottom: 8, paddingBottom: 2 }}>
-                    <div style={{ fontWeight: 500, fontSize: 18, color: '#0d1f3c', marginBottom: 2 }}>Performa Inovice</div>
+                <div className="invoice-title-bar" style={{ textAlign: 'center', marginBottom: 8, paddingTop: 10, paddingBottom: 10 }}>
+                    <div style={{ fontWeight: 400, fontSize: 18, color: '#0d1f3c', marginBottom: 2, }}>PROFORMA INVOICE</div>
                 </div>
 
                 {/* ── BUYER / SHIPMENT / INVOICE DETAILS (3 columns) ── */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Performa Invoice Details</th>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}>Client Name &amp; Address</th>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '34%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}>Shipment Details</th>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}> Proforma Invoice Details</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             {/* Buyer */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700, textTransform: 'capitalize' }}>{data.exhibitorName || '—'}</div>
-                                <div style={{ marginTop: 4, textTransform: 'capitalize' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}</div>
-                                <div>{data.state || ''}{data.country ? ', ' + data.country : ''}</div>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.exhibitorName || '—'}</div>
+                                <div style={{ marginTop: 4, textTransform: 'capitalize' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}, {data.state || ''}{data.country ? ', ' + data.country : ''}</div>
+                                <div></div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
                                 <div>Email: {c1.email || '—'}</div>
                                 {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN.: {data.gstNo}</div>}
                             </td>
                             {/* Shipment */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase'  }}>{data.eventId?.name || '9th IHWE 2026'}</div>
                                 <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
                                 {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN.: {data.gstNo}</div>}
                             </td>
                             {/* Invoice Details */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                                    <span style={{ fontWeight: 700 }}>Performa Inv. No.</span>
-                                    <span>{invoiceNo}</span>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                                    <span style={{ fontWeight: 700 }}>Performa Inv. Date</span>
-                                    <span>{invoiceDate}</span>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                                    <span style={{ fontWeight: 700 }}>Created Time</span>
-                                    <span>{regDate}</span>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <span style={{ fontWeight: 700 }}>Created By</span>
-                                    <span style={{ textTransform: 'capitalize' }}>{data.filledBy && data.filledBy !== 'User' ? data.filledBy : 'Self'}</span>
-                                </div>
+                                <table className="bank-details-table" style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma Inv No.</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceNo}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma Inv. Date</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Time</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{createdDateTime}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize' }}>
+                                                {!data.filledBy || data.filledBy === 'User'
+                                                    ? 'Self'
+                                                    : (data.filledByFullName || data.filledBy)
+                                                        .split(' ')
+                                                        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                                                        .join(' ')}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
                     </tbody>
@@ -374,16 +402,16 @@ ${content.innerHTML}
                         <tr style={{ background: '#0d1f3c', color: '#fff' }}>
                             {[
                                 { label: 'S.No.', width: '3%' },
-                                { label: 'Item Description', width: '45%' },
+                                { label: 'Item Description', width: '52%' },
                                 { label: 'HSN Code', width: '7%' },
                                 { label: 'Qty.', width: '3%' },
                                 { label: 'Area', width: '6%' },
-                                { label: 'Rate', width: '7%' },
-                                { label: 'Amount', width: '7%' },
-                                { label: 'Discount', width: '7%' },
-                                { label: 'Total', width: '10%' },
+                                { label: 'Rate', width: '6%' },
+                                { label: 'Amount', width: '6%' },
+                                { label: 'Discount', width: '6%' },
+                                { label: 'Total', width: '7%' },
                             ].map(h => (
-                                <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 8, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
+                                <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
                             ))}
                         </tr>
                     </thead>
@@ -391,8 +419,9 @@ ${content.innerHTML}
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px' }}>
-                                <div style={{ fontWeight: 700 }}>{data.eventId?.name || 'IHWE 2026'}</div>
-                                <div style={{ fontSize: 10, color: '#555' }}>Exhibition Stall | {p.stallType} | Stall No. {p.stallFor} | {p.stallScheme}  | Hall No. 8, 9, 10 | {p.dimension}</div>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.eventId?.name || 'IHWE 2026'}</div>
+                                <div style={{ fontSize: 10, color: '#555' }}>Exhibition Stall | {p.stallType} | Stall No. {p.stallFor} | {p.stallScheme} {p.dimension} |  Hall No. 8, 9, 10 Pragati
+Maidan, New Delhi, Bharat - 110001</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>998596</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
@@ -419,17 +448,17 @@ ${content.innerHTML}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#0d1f3c', color: '#fff' }}>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>S.No.</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN/SAC No.</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Item Value</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Qty.</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>CGST(%)</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>SGST(%)</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>IGST(%)</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Total Tax</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>S.No.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN/SAC No.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Item Value</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Qty.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>CGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>SGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>IGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Total Tax</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -456,9 +485,6 @@ ${content.innerHTML}
                         <tr style={{ height: 8 }}>
                             {Array(11).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
                         </tr>
-                        <tr style={{ background: '#0d1f3c' }}>
-                            <td colSpan={11} className="dark-header-cell" style={{ border: '1px solid #0d1f3c', padding: '5px 8px', fontWeight: 700, fontSize: 11, color: '#fff', textAlign: 'center', letterSpacing: '0.05em', background: '#0d1f3c', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact' } as any}>Net Payable Amount</td>
-                        </tr>
                         <tr style={{ background: '#f8fafc' }}>
                             <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
                             <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(netPayable))}</td>
@@ -469,37 +495,58 @@ ${content.innerHTML}
                 </table>
 
                 {/* ── TERMS ── */}
-                <div style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa' }}>
+                <div className="terms-box" style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa', paddingBottom: 2 }}>
                     <div style={{ fontWeight: 700, marginBottom: 4 }}>Terms and Conditions:</div>
-                    <div>1. Payments should be made through crossed cheque/D.D./RTGS/NEFT payable at Delhi, favouring {companyName}.</div>
-                    <div>2. Interest @24% p.a will be charged if the payment is not made within 7 days from the date of issue of bill.</div>
-                    <div>3. All Disputes are subject to Delhi Jurisdiction.</div>
+                    <div>1. Payment must be made in favor of {companyName} via Cheque / DD / RTGS / NEFT / UPI only.</div>
+                    <div>2. Full payment is due within the stipulated invoice period.</div>
+                    <div>3. Delay in payment shall attract interest @24% per annum.</div>
+                    <div>4. Booking / services shall be confirmed only after receipt of payment.</div>
+                    <div>5. Cancellation or amendments shall be subject to company policy and management approval.</div>
+                    <div>6. All disputes are subject to Delhi Jurisdiction only.</div>
+                    {/* <div style={{ marginTop: 6, fontStyle: 'italic' }}>This is a computer-generated invoice and does not require a physical signature.</div> */}
                 </div>
 
                 {/* ── BANK & SIGNATURE ── */}
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#0d1f3c', color: '#fff' }}>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>NGW/PL Bank Details</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Client Signature</th>
-                            <th style={{ border: '1px solid #0d1f3c', padding: '4px 6px', width: '34%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>For {companyName}</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10 }}>NGWPL Bank Details</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10 }}>Client Signature</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '34%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10 }}>For {companyName}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10 }}>
-                                {[
-                                    { label: 'Bank Name', value: 'Kotak Mahindra Bank' },
-                                    { label: 'Account No.', value: '6812013962' },
-                                    { label: 'IFSC Code', value: 'KKBK0004584' },
-                                    { label: 'Branch', value: 'Jagriti Enclave, Anand Vihar, Delhi' },
-                                ].map(({ label, value }) => (
-                                    <div key={label} style={{ display: 'flex', marginBottom: 2 }}>
-                                        <span style={{ fontWeight: 'bold', width: 62, flexShrink: 0 }}>{label}</span>
-                                        <span style={{ fontWeight: 'bold', marginRight: 4 }}>: </span>
-                                        <span>{value}</span>
-                                    </div>
-                                ))}
+                                <table className="bank-details-table" style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: 'auto' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Bank Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Kotak Mahindra Bank</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Namo Gange Wellness Pvt. Ltd.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account No.</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>6812013962</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>IFSC Code</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>KKBK0004584</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Branch Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Jagriti Enclave, Anand Vihar, Delhi</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                                 <div style={{ height: 60 }}></div>
@@ -517,10 +564,10 @@ ${content.innerHTML}
                 </table>
 
                 {/* ── FOOTER ── */}
-                <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
+                <div style={{ fontSize: 12, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6 }}>
                     <b>Register Address:</b> First Floor, E-1, Opposite KFC, Kalkaji Main Market, South Delhi-110019, Delhi, India
                 </div>
-                <div style={{ fontSize: 8, textAlign: 'center', color: '#999', marginTop: 4, }}>
+                <div style={{ fontSize: 11, textAlign: 'center', color: '#999', marginTop: 4, }}>
                     This is a computer generated document and does not require a physical signature.
                 </div>
 
@@ -528,3 +575,4 @@ ${content.innerHTML}
         </motion.div>
     );
 }
+
