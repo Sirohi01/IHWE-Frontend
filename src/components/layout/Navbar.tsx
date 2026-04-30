@@ -176,7 +176,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               <img
                 src={awardsLogo}
                 alt="Awards Logo"
-                className="absolute top-1/2 -translate-y-1/2 left-0 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
+                className="absolute top-1/2 -translate-y-1/2 left-4 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
               />
             ) : settings?.logo ? (
               <img
