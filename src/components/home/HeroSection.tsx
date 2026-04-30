@@ -97,7 +97,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
   if (isLoading) {
     return (
-      <section className="relative w-full overflow-hidden bg-black flex items-center justify-center" style={{ aspectRatio: '16/5.3' }}>
+      <section className="relative w-full overflow-hidden bg-black flex items-center justify-center" style={{ aspectRatio: '16/5.5' }}>
         <div className="w-12 h-12 rounded-full border-4 border-white/20 border-t-white animate-spin" />
       </section>
     );
@@ -107,7 +107,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
   return (
     <>
-      <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/5.3' }}>
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/5.62' }}>
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
