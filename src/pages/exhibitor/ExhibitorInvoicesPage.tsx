@@ -1,7 +1,9 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorInvoices from '../../components/dashboard/exhibitor/ExhibitorInvoices';
 import { settingsApi } from '@/lib/api';
+
+import DashboardHero from '@/components/dashboard/DashboardHero';
 
 export default function ExhibitorInvoicesPage() {
     const { data } = useExhibitorCtx();
@@ -23,19 +25,27 @@ export default function ExhibitorInvoicesPage() {
     const balance = data.balanceAmount || 0;
     const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
     const regDate = data.createdAt
-        ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+        ? new Date(data.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
         : '';
 
     return (
-        <ExhibitorInvoices
-            data={data}
-            settings={settings}
-            cur={cur}
-            total={total}
-            paid={paid}
-            balance={balance}
-            paidPct={paidPct}
-            regDate={regDate}
-        />
+        <div className="space-y-6">
+            <DashboardHero 
+                pageId="ex-invoices" 
+                defaultTitle="Invoices & Finance" 
+                defaultSubtitle="Track your payments and download official receipts"
+                type="exhibitor" 
+            />
+            <ExhibitorInvoices
+                data={data}
+                settings={settings}
+                cur={cur}
+                total={total}
+                paid={paid}
+                balance={balance}
+                paidPct={paidPct}
+                regDate={regDate}
+            />
+        </div>
     );
 }

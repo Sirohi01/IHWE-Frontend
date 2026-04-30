@@ -1,6 +1,6 @@
 import {
     Building2, Layers, Wallet, ShoppingBag,
-    Handshake, Target, CalendarDays, Megaphone,
+    Target, Megaphone,
     Wrench, FolderOpen, BarChart3, Bell,
     Sparkles
 } from 'lucide-react';
@@ -53,31 +53,6 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: balance === 0,
             tab: 'invoices',
         },
-
-
-        {
-            id: 'bsm',
-            label: 'Buyer Seller Meet',  // ✅ renamed from 'Appointments & Meetings'
-            desc: 'Schedule & manage buyer meetings',
-            icon: Handshake,
-            accent: '#d97706',
-            light: '#fffbeb',
-            badge: '⭐ Core Module',
-            badgeOk: true,
-            tab: 'bsm',
-            highlight: true,
-        },
-        {
-            id: 'calendar',
-            label: 'Meeting Calendar',
-            desc: 'Daily schedule & reminders',
-            icon: CalendarDays,
-            accent: '#0284c7',
-            light: '#f0f9ff',
-            badge: 'Active',
-            badgeOk: true,
-            tab: 'calendar',
-        },
         {
             id: 'marketing',
             label: 'Marketing & Promotions',
@@ -111,7 +86,17 @@ export default function ExhibitorModuleGrid({ setActiveTab, paid, total, balance
             badgeOk: !!data?.msme?.udhyamRegNo,
             tab: 'msme',
         },
-
+        {
+            id: 'feedback',
+            label: 'Feedback',
+            desc: 'Share your expo experience & suggestions',
+            icon: BarChart3,
+            accent: '#d26019',
+            light: '#fff7ed',
+            badge: 'New Form',
+            badgeOk: true,
+            tab: 'feedback',
+        },
     ];
 
     return (

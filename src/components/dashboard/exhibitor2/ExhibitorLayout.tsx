@@ -34,6 +34,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
             <AdminWhatsAppFloat data={data} />
             <div className="flex pt-16 print:pt-0 flex-1">
                 <ExhibitorSidebar
+                    data={data}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     sidebarOpen={sidebarOpen}

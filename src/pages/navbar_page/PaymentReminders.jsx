@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Receipt, CheckCircle2, Clock, AlertCircle, CreditCard, ArrowRight } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 
+import DashboardHero from '@/components/dashboard/DashboardHero';
+
 export default function PaymentReminders() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
@@ -25,11 +27,18 @@ export default function PaymentReminders() {
         : '—';
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="w-full pb-10"
-        >
+        <div className="space-y-6 pb-10">
+            <DashboardHero 
+                pageId="ex-reminders" 
+                defaultTitle="Payment & Outstanding Summary" 
+                defaultSubtitle="Stay updated with your pending payments and ensure seamless participation"
+                type="exhibitor" 
+            />
+            <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full px-4"
+            >
             {/* Header Section */}
             <div className="bg-white px-6 py-3 rounded-sm shadow-sm border border-slate-200 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t-4 border-t-[#d26019]">
                 <div>
@@ -212,5 +221,6 @@ export default function PaymentReminders() {
                 })()}
             </div>
         </motion.div>
+        </div>
     );
 }

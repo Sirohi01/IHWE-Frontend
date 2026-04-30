@@ -5,7 +5,10 @@ import {
     CheckCircle,
     Send, ChevronRight,
     ShieldCheck,
-    Loader2
+    Loader2,
+    MapPin,
+    Globe,
+    ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,15 +30,20 @@ const PURPOSE_GENERAL = [
 ];
 
 const PURPOSE_CORPORATE = [
-    "Business Meeting",
-    "Networking & Industry Interaction",
-    "Partnership / Collaboration Discussion",
-    "Exploring Business Opportunities",
-    "Exhibitor / Vendor Meeting",
-    "Product Sourcing / Procurement",
-    "Market Research",
-    "Investment Opportunities",
-    "Conference / Seminar Participation",
+    // "Business Meeting",
+    // "Networking & Industry Interaction",
+    // "Partnership / Collaboration Discussion",
+    // "Exploring Business Opportunities",
+    // "Exhibitor / Vendor Meeting",
+    // "Product Sourcing / Procurement",
+    // "Market Research",
+    // "Investment Opportunities",
+    // "Conference / Seminar Participation",
+    "Business Networking", "Product Sourcing", "Distributor Search",
+    "Franchise Opportunity", "Investment Opportunity", "Medical Tourism",
+    "Healthcare Collaboration", "Wellness Industry Exploration",
+    "Ayurveda & AYUSH Interest", "Conference Participation",
+    "Knowledge Sessions", "Startup Collaboration", "Government Delegation", "General Visit",
 ];
 
 const INTEREST_GENERAL = [
@@ -50,18 +58,24 @@ const INTEREST_GENERAL = [
 ];
 
 const INTEREST_CORPORATE = [
-    "Medical, Healthcare & Hospital Solutions",
-    "Medical Technology, Diagnostics & Devices",
-    "AYUSH & Traditional Systems of Medicine",
-    "Nutrition, Organic & Health Foods",
-    "Beauty, Personal Care & Aesthetic Wellness",
-    "Mental Health, Yoga & Spiritual Wellness",
-    "Wellness, Fitness & Lifestyle",
-    "Institutions, Government Bodies & Startups",
+    // "Medical, Healthcare & Hospital Solutions",
+    // "Medical Technology, Diagnostics & Devices",
+    // "AYUSH & Traditional Systems of Medicine",
+    // "Nutrition, Organic & Health Foods",
+    // "Beauty, Personal Care & Aesthetic Wellness",
+    // "Mental Health, Yoga & Spiritual Wellness",
+    // "Wellness, Fitness & Lifestyle",
+    // "Institutions, Government Bodies & Startups",
+    "Business Networking", "Product Sourcing", "Distributor Search",
+    "Franchise Opportunity", "Investment Opportunity", "Medical Tourism",
+    "Healthcare Collaboration", "Wellness Industry Exploration",
+    "Ayurveda & AYUSH Interest", "Conference Participation",
+    "Knowledge Sessions", "Startup Collaboration", "Government Delegation", "General Visit",
 ];
 
 const VisitorRegistration = () => {
     const [visitorType, setVisitorType] = useState("corporate");
+    const [selected, setSelected] = useState<string | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
     const [heroData, setHeroData] = useState<any>(null);
     const [events, setEvents] = useState<any[]>([]);
@@ -114,7 +128,6 @@ const VisitorRegistration = () => {
     const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
     const [emailTimer, setEmailTimer] = useState(0);
     const [phoneTimer, setPhoneTimer] = useState(0);
-    const [selected, setSelected] = useState<"domestic" | "international" | null>(null);
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -266,6 +279,8 @@ const VisitorRegistration = () => {
             const res = await verifyApi.verifyEmailOtp(formData.email, emailOtp);
             if (res.success) {
                 setEmailVerified(true);
+                setEmailOtpSent(false);
+                setEmailOtp("");
             } else {
                 alert(res.message || "Invalid OTP");
             }
@@ -305,6 +320,8 @@ const VisitorRegistration = () => {
             const res = await verifyApi.verifyPhoneOtp(formData.mobileNo, phoneOtp);
             if (res.success) {
                 setPhoneVerified(true);
+                setPhoneOtpSent(false);
+                setPhoneOtp("");
             } else {
                 alert(res.message || "Invalid OTP");
             }
@@ -405,6 +422,7 @@ const VisitorRegistration = () => {
                         purposeOfVisit: [],
                         areaOfInterest: []
                     });
+                    setSelected(null);
                     setEmailVerified(false);
                     setPhoneVerified(false);
                     setIsSuccess(false);
@@ -466,65 +484,6 @@ const VisitorRegistration = () => {
             {/* ── MAIN CONTENT ── */}
             <section className="pt-8 pb-24 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">
-                    <motion.div
-                        key="form"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
-                    >
-
-                        {/* ================= VISITOR SELECTION ================= */}
-                        {!selected && (
-                            <>
-                                <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 justify-between items-center">
-                                    <h3 className="text-[22px] mb-2 font-semibold text-[#d26019]">
-                                        Welcome to the 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
-                                    </h3>
-
-                                    <p className="mb-2">
-                                        Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH, organic, and sustainable industries under one roof.
-                                    </p>
-
-                                    <p className="mb-2">
-                                        Whether you are a visitor discovering innovations or a corporate buyer seeking meaningful business connections, IHWE offers a high-value, curated experience with India’s most trusted brands and manufacturers.
-                                    </p>
-
-                                    <p className="mb-2">
-                                        Register now and be part of a powerful global movement in health & wellness.
-                                    </p>
-                                </div>
-
-                                <div className="text-center py-12 space-y-6">
-
-                                    <h2 className="text-2xl font-bold text-slate-800">
-                                        Choose Visitor Category
-                                    </h2>
-
-                                    <div className="flex justify-center gap-6">
-
-                                        <button
-                                            onClick={() => setSelected("domestic")}
-                                            className="px-4 py-2 bg-[#23471d] text-white font-semibold shadow hover:scale-105 transition-all"
-                                        >
-                                            Domestic Visitor
-                                        </button>
-
-                                        <button
-                                            onClick={() => { setSelected("international"); setFormData(prev => ({ ...prev, country: "", state: "", city: "" })); }}
-                                            className="px-4 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all"
-                                        >
-                                            International Visitor
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </>
-                        )}
-
-
-                    </motion.div>
-
                     <div className="space-y-8">
                         <AnimatePresence mode="wait">
                             {isSuccess && (
@@ -556,7 +515,7 @@ const VisitorRegistration = () => {
                                         <Button
                                             onClick={() => {
                                                 setIsSuccess(false);
-                                                setSelected(null); // ✅ IMPORTANT (back to buttons)
+                                                setSelected(null);
                                             }}
                                             className="h-11 px-8 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-xs font-bold uppercase tracking-widest"
                                         >
@@ -572,25 +531,199 @@ const VisitorRegistration = () => {
                                 </motion.div>
                             )}
 
-                            {selected === "domestic" && !isSuccess && (
+                            {!isSuccess && !selected && (
+                                <motion.div
+                                    key="selection"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden"
+                                >
+                                    {/* ── TOP BANNER ── */}
+                                    <div className="relative bg-gradient-to-r from-[#23471d] via-[#2d5a25] to-[#1a3515]  py-1 overflow-hidden">
+                                        {/* Decorative circles */}
+                                        <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                                        <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-white/5" />
+                                        <div className="absolute top-4 right-32 w-16 h-16 rounded-full bg-[#d26019]/20" />
+
+                                        <div className="relative bg-gradient-to-r from-[#23471d] via-[#2d5a25] to-[#1a3515] px-10 py-2 overflow-hidden">
+                                            {/* Decorative circles */}
+                                            <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/5" />
+                                            <div className="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-white/5" />
+                                            <div className="absolute top-4 right-32 w-16 h-16 rounded-full bg-[#d26019]/20" />
+
+                                            <div className="relative z-10 flex items-center justify-between gap-6">
+                                                {/* LEFT: Title */}
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-[#d26019]" />
+                                                        <p className="text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">
+                                                            9th Edition • IHWE Global 2026
+                                                        </p>
+                                                    </div>
+                                                    <h2 className="text-2xl md:text-xl font-medium text-white leading-tight mb-1 tracking-tight">
+                                                        International Health & Wellness Expo 2026
+                                                    </h2>
+                                                    <p className="text-xs font-semibold text-white/50 uppercase tracking-[0.2em]">
+                                                        Experience the Epicenter of Global Holistic Health
+                                                    </p>
+                                                </div>
+
+                                                {/* RIGHT: Seminar Button */}
+                                                <div className="shrink-0">
+                                                    <button className="flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#d26019] hover:bg-[#a84c14] active:scale-95 transition-all duration-150 border border-[#d26019]/50 shadow-lg shadow-black/20">
+                                                        {/* <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" /> */}
+                                                        <span className="text-sm font-medium text-white uppercase tracking-[0.2em]">Join Conference & Seminar Sessions </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ── ORANGE ACCENT BAR ── */}
+                                    <div className="h-1 bg-gradient-to-r from-[#d26019] via-[#e8821f] to-[#d26019]" />
+
+                                    <div className="px-8 md:px-10 py-4 space-y-5">
+
+                                        {/* ── DESCRIPTION ── */}
+                                        <div className="space-y-3">
+                                            <p className="text-sm text-slate-600 leading-relaxed">
+                                                Step into IHWE 2026 — the world's premier confluence of{' '}
+                                                <span className="font-bold text-[#23471d]">Healthcare, AYUSH, Organic innovations,</span>{' '}
+                                                and <span className="font-bold text-[#23471d]">Sustainable living.</span>{' '}
+                                                This is more than an expo; it is a global stage where tradition meets technology and visionaries meet opportunity.
+                                            </p>
+                                            <p className="text-sm text-slate-600 leading-relaxed">
+                                                Whether you're discovering the future of wellness or a corporate buyer forging strategic global partnerships, IHWE 2026 offers a curated, high-impact environment with India's most prestigious brands and manufacturers.
+                                            </p>
+                                            <p className="text-sm font-bold text-[#d26019] italic border-l-2 border-[#d26019] pl-3">
+                                                Join the movement. Shaping the future of wellness, together.
+                                            </p>
+                                        </div>
+
+                                        {/* ── WHY ATTEND ── */}
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]">Why Attend IHWE 2026</p>
+                                                <div className="flex-1 h-px bg-slate-100" />
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                {[
+                                                    { title: 'B2B Networking', desc: 'Exclusive access to global manufacturers and industry leaders.', icon: '🤝', color: 'bg-green-50 border-green-100' },
+                                                    { title: 'Innovation Hub', desc: 'Live demonstrations of the latest AYUSH and Medical-Tech solutions.', icon: '💡', color: 'bg-orange-50 border-orange-100' },
+                                                    { title: 'Knowledge Exchange', desc: "Entry to high-level seminars and 'Arogya Sangosthi' sessions.", icon: '📚', color: 'bg-blue-50 border-blue-100' },
+                                                ].map((item) => (
+                                                    <div key={item.title} className={`flex items-start gap-3 p-4 rounded-2xl border ${item.color}`}>
+                                                        <span className="text-lg mt-0.5 shrink-0">{item.icon}</span>
+                                                        <div>
+                                                            <p className="text-xs font-black text-slate-800 mb-1">{item.title}</p>
+                                                            <p className="text-[11px] text-slate-500 leading-relaxed">{item.desc}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* ── VISITOR CATEGORY ── */}
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.25em]">Select Your Visitor Category</p>
+                                                <div className="flex-1 h-px bg-slate-100" />
+                                            </div>
+                                            <p className="text-xs text-slate-400 mb-5">To begin your journey, please choose the category that applies to you:</p>
+
+                                            <div className="flex justify-center items-center gap-14">
+
+                                                {/* Domestic */}
+                                                <div
+                                                    onClick={() => setSelected("domestic")}
+                                                    className="cursor-pointer select-none group "
+                                                >
+                                                    <div className="relative rounded-xl border-2 border-[#23471d]/20 bg-[#23471d] overflow-hidden active:scale-[0.97] active:brightness-90 hover:brightness-110 hover:shadow-lg hover:shadow-green-200 transition-all duration-150">
+
+                                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/20 rounded-l-xl" />
+
+                                                        <div className="flex items-center gap-3 px-4 py-4 pl-5">
+                                                            <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform duration-200">
+                                                                🇮🇳
+                                                            </div>
+
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-lg font-bold text-white leading-tight">Domestic Visitor</p>
+                                                                <p className="text-[10px] font-semibold text-white/60 uppercase tracking-wider mt-0.5">For residents within India</p>
+                                                            </div>
+
+                                                            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center shrink-0 group-hover:bg-white/30 transition-all duration-150">
+                                                                <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                                                                    <path d="M3 7h8M7 3l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* International */}
+                                                <Link
+                                                    to="/international-visitor-registration"
+                                                    className="cursor-pointer select-none group"
+                                                >
+                                                    <div className="relative rounded-xl border-2 border-[#d26019]/20 bg-[#d26019] overflow-hidden active:scale-[0.97] active:brightness-90 hover:brightness-110 hover:shadow-lg hover:shadow-orange-200 transition-all duration-150">
+
+                                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/20 rounded-l-xl" />
+
+                                                        <div className="flex items-center gap-3 px-4 py-4 pl-5">
+                                                            <div className="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform duration-200">
+                                                                🌍
+                                                            </div>
+
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-lg font-bold text-white leading-tight">International Visitor</p>
+                                                                <p className="text-[10px] font-semibold text-white/60 uppercase tracking-wider mt-0.5">For delegates from overseas</p>
+                                                            </div>
+
+                                                            <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center shrink-0 group-hover:bg-white/30 transition-all duration-150">
+                                                                <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                                                                    <path d="M3 7h8M7 3l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+
+                                            </div>
+                                        </div>
+
+                                        {/* ── FOOTER NOTE ── */}
+                                        <div className="flex items-center gap-3 pt-2 border-t border-slate-50">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#23471d] shrink-0" />
+                                            <p className="text-[10px] text-slate-400 font-medium">
+                                                Registration is free. Your data is secure and will only be used for event purposes.
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {!isSuccess && selected === "domestic" && (
                                 <motion.div
                                     key="form"
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
-                                    className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
+                                    className="bg-white border border-slate-300 shadow-2xl rounded-lg overflow-hidden"
                                 >
 
-                                    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+                                    <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a25] border-b border-slate-200  px-8 py-4 flex justify-between items-center">
                                         {/* LEFT SIDE */}
                                         <div>
                                             <h2
-                                                className="text-xl font-bold text-slate-900 uppercase"
+                                                className="text-xl font-medium text-slate-200 uppercase"
                                                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                             >
                                                 Domestic Visitor Registration
                                             </h2>
-                                            <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
+                                            <p className="text-[10px] text-slate-200 uppercase tracking-[0.2em] mt-0.5 font-bold">
                                                 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
                                             </p>
                                         </div>
@@ -658,7 +791,7 @@ const VisitorRegistration = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
 
                                                 <div>
-                                                    <Label className={labelClasses}>FIRST NAME *</Label>
+                                                    <Label className={labelClasses}>FIRST NAME <span className=" text-red-500">*</span></Label>
                                                     <Input
                                                         name="firstName"
                                                         value={formData.firstName}
@@ -667,7 +800,7 @@ const VisitorRegistration = () => {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <Label className={labelClasses}>LAST NAME *</Label>
+                                                    <Label className={labelClasses}>LAST NAME <span className=" text-red-500">*</span></Label>
                                                     <Input
                                                         name="lastName"
                                                         value={formData.lastName}
@@ -677,7 +810,7 @@ const VisitorRegistration = () => {
                                                 </div>
                                                 {visitorType === "corporate" && (
                                                     <div>
-                                                        <Label className={labelClasses}>DESIGNATION *</Label>
+                                                        <Label className={labelClasses}>DESIGNATION <span className=" text-red-500">*</span></Label>
                                                         <Input
                                                             name="designation"
                                                             value={formData.designation}
@@ -687,7 +820,7 @@ const VisitorRegistration = () => {
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <Label className={labelClasses}>GENDER *</Label>
+                                                    <Label className={labelClasses}>GENDER <span className=" text-red-500">*</span></Label>
                                                     <Select
                                                         onValueChange={(v) => setFormData(prev => ({ ...prev, gender: v }))}
                                                         value={formData.gender}
@@ -714,7 +847,7 @@ const VisitorRegistration = () => {
 
                                                 {/* Phone & OTP Row */}
                                                 <div className="relative flex flex-col group">
-                                                    <Label className={labelClasses}>MOBILE NO. (WHATSAPP) *</Label>
+                                                    <Label className={labelClasses}>MOBILE NO. (WHATSAPP) <span className=" text-red-500">*</span></Label>
                                                     <div className="relative flex items-center">
                                                         <Input
                                                             name="mobileNo"
@@ -748,7 +881,7 @@ const VisitorRegistration = () => {
                                                 </div>
                                                 {/* Email & OTP Row */}
                                                 <div className="relative flex flex-col group lg:col-span-2">
-                                                    <Label className={labelClasses}>EMAIL ADDRESS *</Label>
+                                                    <Label className={labelClasses}>EMAIL ADDRESS <span className=" text-red-500">*</span></Label>
                                                     <div className="relative flex items-center">
                                                         <Input
                                                             name="email"
@@ -852,7 +985,7 @@ const VisitorRegistration = () => {
                                                 </h3>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
                                                     <div className="lg:col-span-2">
-                                                        <Label className={labelClasses}>COMPANY NAME *</Label>
+                                                        <Label className={labelClasses}>COMPANY NAME <span className=" text-red-500">*</span></Label>
                                                         <Input
                                                             name="companyName"
                                                             value={formData.companyName}
@@ -861,7 +994,7 @@ const VisitorRegistration = () => {
                                                         />
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>COMPANY WEBSITE *</Label>
+                                                        <Label className={labelClasses}>COMPANY WEBSITE <span className=" text-red-500">*</span></Label>
                                                         <Input
                                                             name="companyWebsite"
                                                             value={formData.companyWebsite}
@@ -870,7 +1003,7 @@ const VisitorRegistration = () => {
                                                         />
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>INDUSTRY/SECTOR *</Label>
+                                                        <Label className={labelClasses}>INDUSTRY/SECTOR <span className=" text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, industry: v }))}
                                                             value={formData.industry}
@@ -889,7 +1022,7 @@ const VisitorRegistration = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>COMPANY SIZE *</Label>
+                                                        <Label className={labelClasses}>COMPANY SIZE <span className=" text-red-500">*</span></Label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, companySize: v }))}
                                                             value={formData.companySize}
@@ -907,7 +1040,7 @@ const VisitorRegistration = () => {
                                                     </div>
                                                     {visitorType != "corporate" && (
                                                         <div>
-                                                            <Label className={labelClasses}>COUNTRY *</Label>
+                                                            <Label className={labelClasses}>COUNTRY <span className=" text-red-500">*</span></Label>
                                                             <Select
                                                                 onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })}
                                                                 value={formData.country}
@@ -924,7 +1057,7 @@ const VisitorRegistration = () => {
                                                         </div>
                                                     )}
                                                     <div>
-                                                        <Label className={labelClasses}>STATE *</Label>
+                                                        <Label className={labelClasses}>STATE <span className=" text-red-500">*</span></Label>
                                                         <Select
                                                             disabled={!formData.country || loadingStates}
                                                             onValueChange={(v) => handleInputChange({ target: { name: 'state', value: v } })}
@@ -941,7 +1074,7 @@ const VisitorRegistration = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>CITY *</Label>
+                                                        <Label className={labelClasses}>CITY <span className=" text-red-500">*</span></Label>
                                                         <Select
                                                             disabled={!formData.state || loadingCities}
                                                             onValueChange={(v) => handleInputChange({ target: { name: 'city', value: v } })}
@@ -958,7 +1091,7 @@ const VisitorRegistration = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>Pincode *</Label>
+                                                        <Label className={labelClasses}>Pincode <span className=" text-red-500">*</span></Label>
                                                         <Input
                                                             name="companyPincode"
                                                             value={formData.companyPincode}
@@ -974,7 +1107,7 @@ const VisitorRegistration = () => {
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                             {/* Purpose of Visit */}
                                             <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit *</Label>
+                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit <span className=" text-red-500">*</span></Label>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                                     {(visitorType === "corporate" ? PURPOSE_CORPORATE : PURPOSE_GENERAL).map((opt) => (
                                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
@@ -991,7 +1124,7 @@ const VisitorRegistration = () => {
 
                                             {/* Area of Interest */}
                                             <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest *</Label>
+                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest <span className=" text-red-500">*</span></Label>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                                     {(visitorType === "corporate" ? INTEREST_CORPORATE : INTEREST_GENERAL).map((opt) => (
                                                         <label key={opt} className="flex items-center gap-3 cursor-pointer group">
@@ -1010,7 +1143,7 @@ const VisitorRegistration = () => {
                                         {visitorType === "corporate" && (
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
                                                 <div className="space-y-4 text-left">
-                                                    <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? *</Label>
+                                                    <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? <span className=" text-red-500">*</span></Label>
                                                     <RadioGroup
                                                         value={formData.schedulingB2B}
                                                         onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
@@ -1099,275 +1232,6 @@ const VisitorRegistration = () => {
 
                             )}
 
-                            {selected === "international" && !isSuccess && (
-                                <motion.div
-                                    key="intl-form"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
-                                >
-                                    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center gap-6">
-                                        <div>
-                                            <h2 className="text-xl font-bold text-slate-900 uppercase" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                                                International Visitor Registration
-                                            </h2>
-                                            <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
-                                                9th Edition · IHWE Global Edition 2026
-                                            </p>
-                                        </div>
-                                        <div className="flex items-end gap-4">
-                                            <div className="flex flex-col gap-1 min-w-[220px]">
-                                                <Label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">Registering For (Event) *</Label>
-                                                <Select required value={formData.registrationFor} onValueChange={(v) => setFormData(prev => ({ ...prev, registrationFor: v }))}>
-                                                    <SelectTrigger className="h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
-                                                        <SelectValue placeholder="Select Event" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {events.map((ev: any) => (
-                                                            <SelectItem key={ev._id} value={ev.name} className="text-xs">{ev.name}</SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <form onSubmit={handleSubmit} className="p-8 space-y-4 font-inter">
-
-                                        {/* ── PERSONAL DETAILS ── */}
-                                        <div>
-                                            <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5">
-                                                Personal Information
-                                            </h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
-                                                <div>
-                                                    <Label className={labelClasses}>FIRST NAME *</Label>
-                                                    <Input name="firstName" value={formData.firstName} onChange={handleInputChange} required placeholder="Enter First Name" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>LAST NAME *</Label>
-                                                    <Input name="lastName" value={formData.lastName} onChange={handleInputChange} required placeholder="Enter Last Name" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>DESIGNATION *</Label>
-                                                    <Input name="designation" value={formData.designation} onChange={handleInputChange} required placeholder="Enter Designation" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>PASSPORT / ID NO. (OPTIONAL)</Label>
-                                                    <Input name="alternateNo" value={formData.alternateNo} onChange={handleInputChange} placeholder="Passport / National ID" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>NATIONALITY *</Label>
-                                                    <Select onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })} value={formData.country}>
-                                                        <SelectTrigger className={inputClasses}>
-                                                            <SelectValue placeholder="Select Country" />
-                                                        </SelectTrigger>
-                                                        <SelectContent className="max-h-[300px] bg-white">
-                                                            {countries.filter(c => c.name?.toLowerCase() !== 'india').map(c => (
-                                                                <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
-                                                            ))}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-
-                                                {/* Mobile OTP */}
-                                                <div className="relative flex flex-col group">
-                                                    <Label className={labelClasses}>MOBILE NO. (WHATSAPP) *</Label>
-                                                    <div className="relative flex items-center">
-                                                        <Input name="mobileNo" value={formData.mobileNo} onChange={handleInputChange} disabled={phoneVerified || phoneOtpSent} required placeholder="+1 / +44 / +91..." className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} />
-                                                        {!phoneVerified && (
-                                                            <button type="button" onClick={sendPhoneOtp} disabled={isSendingPhoneOtp || !formData.mobileNo || phoneTimer > 0} className="absolute right-1 px-3 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all">
-                                                                {isSendingPhoneOtp ? "..." : phoneTimer > 0 ? `${phoneTimer}s` : phoneOtpSent ? "RE-SEND" : "SEND OTP"}
-                                                            </button>
-                                                        )}
-                                                        {phoneVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
-                                                    </div>
-                                                </div>
-
-                                                {/* Email OTP */}
-                                                <div className="relative flex flex-col group lg:col-span-2">
-                                                    <Label className={labelClasses}>EMAIL ADDRESS *</Label>
-                                                    <div className="relative flex items-center">
-                                                        <Input name="email" value={formData.email} onChange={handleInputChange} disabled={emailVerified || emailOtpSent} type="email" required placeholder="Enter Business Email" className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} />
-                                                        {!emailVerified && (
-                                                            <button type="button" onClick={sendEmailOtp} disabled={isSendingEmailOtp || !formData.email || emailTimer > 0} className="absolute right-1 px-3 py-1 bg-[#d26019] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all">
-                                                                {isSendingEmailOtp ? "..." : emailTimer > 0 ? `${emailTimer}s` : emailOtpSent ? "RE-SEND" : "SEND OTP"}
-                                                            </button>
-                                                        )}
-                                                        {emailVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* OTP inputs */}
-                                            <AnimatePresence>
-                                                {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
-                                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 overflow-hidden">
-                                                        <div>
-                                                            {phoneOtpSent && !phoneVerified && (
-                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
-                                                                    <Input value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)} placeholder="WhatsApp OTP" className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs" maxLength={6} inputMode="numeric" />
-                                                                    <Button type="button" onClick={confirmPhoneOtp} disabled={isVerifyingPhone || phoneOtp.length < 4} className="h-9 bg-[#23471d] hover:bg-[#1a3516] text-[10px] font-bold px-4">{isVerifyingPhone ? "..." : "VERIFY"}</Button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div>
-                                                            {emailOtpSent && !emailVerified && (
-                                                                <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
-                                                                    <Input value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)} placeholder="Email OTP" className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs" maxLength={6} inputMode="numeric" />
-                                                                    <Button type="button" onClick={confirmEmailOtp} disabled={isVerifyingEmail || emailOtp.length < 4} className="h-9 bg-[#d26019] hover:bg-[#a84c14] text-[10px] font-bold px-4">{isVerifyingEmail ? "..." : "VERIFY"}</Button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-
-                                        {/* ── ORGANISATION DETAILS ── */}
-                                        <div className="space-y-2">
-                                            <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-400 pb-1.5">
-                                                Organisation & Business Details
-                                            </h3>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-4">
-                                                <div>
-                                                    <Label className={labelClasses}>ORGANISATION NAME *</Label>
-                                                    <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required placeholder="Enter Organisation Name" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>ORGANISATION WEBSITE</Label>
-                                                    <Input name="companyWebsite" value={formData.companyWebsite} onChange={handleInputChange} placeholder="www.example.com" className={inputClasses} />
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>INDUSTRY / SECTOR *</Label>
-                                                    <Select onValueChange={(v) => setFormData(prev => ({ ...prev, industry: v }))} value={formData.industry}>
-                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Sector" /></SelectTrigger>
-                                                        <SelectContent className="bg-white">
-                                                            <SelectItem value="ayush">AYUSH & Traditional Medicine</SelectItem>
-                                                            <SelectItem value="agriculture">Agriculture & Organic</SelectItem>
-                                                            <SelectItem value="fitness">Fitness & Wellness</SelectItem>
-                                                            <SelectItem value="healthcare">Healthcare Services</SelectItem>
-                                                            <SelectItem value="pharma">Pharmaceutical</SelectItem>
-                                                            <SelectItem value="medtech">Medical Technology</SelectItem>
-                                                            <SelectItem value="others">Others</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>ORGANISATION SIZE</Label>
-                                                    <Select onValueChange={(v) => setFormData(prev => ({ ...prev, companySize: v }))} value={formData.companySize}>
-                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger>
-                                                        <SelectContent className="bg-white">
-                                                            <SelectItem value="1-10">1–10 Employees</SelectItem>
-                                                            <SelectItem value="11-50">11–50 Employees</SelectItem>
-                                                            <SelectItem value="51-200">51–200 Employees</SelectItem>
-                                                            <SelectItem value="200+">200+ Employees</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>COUNTRY / REGION *</Label>
-                                                    <Select onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })} value={formData.country}>
-                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Country" /></SelectTrigger>
-                                                        <SelectContent className="max-h-[300px] bg-white">
-                                                            {countries.filter(c => c.name?.toLowerCase() !== 'india').map(c => <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>)}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>STATE / PROVINCE</Label>
-                                                    <Select disabled={!formData.country || loadingStates} onValueChange={(v) => handleInputChange({ target: { name: 'state', value: v } })} value={formData.state}>
-                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder={loadingStates ? "Loading..." : "Select State"} /></SelectTrigger>
-                                                        <SelectContent className="max-h-[300px] bg-white">
-                                                            {states.map(s => <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>)}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>CITY *</Label>
-                                                    <Select disabled={!formData.state || loadingCities} onValueChange={(v) => handleInputChange({ target: { name: 'city', value: v } })} value={formData.city}>
-                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder={loadingCities ? "Loading..." : "Select City"} /></SelectTrigger>
-                                                        <SelectContent className="max-h-[300px] bg-white">
-                                                            {cities.map(ct => <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>)}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                <div>
-                                                    <Label className={labelClasses}>ZIP / POSTAL CODE</Label>
-                                                    <Input name="companyPincode" value={formData.companyPincode} onChange={handleInputChange} placeholder="Enter Postal Code" className={inputClasses} />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* ── PURPOSE & INTEREST ── */}
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                            <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit *</Label>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                                    {PURPOSE_CORPORATE.map((opt) => (
-                                                        <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                            <Checkbox checked={formData.purposeOfVisit.includes(opt)} onCheckedChange={(checked: boolean) => handlePurposeChange(opt, checked)} className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                                            <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest *</Label>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                                    {INTEREST_CORPORATE.map((opt) => (
-                                                        <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                            <Checkbox checked={formData.areaOfInterest.includes(opt)} onCheckedChange={(checked: boolean) => handleInterestChange(opt, checked)} className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                                            <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* ── B2B & REQUIREMENTS ── */}
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-2">
-                                            <div className="space-y-3 text-left">
-                                                <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Interested in Pre-Scheduled B2B Meetings? *</Label>
-                                                <RadioGroup value={formData.schedulingB2B} onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))} className="flex gap-6">
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem value="yes" id="intl-b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                                        <Label htmlFor="intl-b2b-yes" className="text-[12px] font-bold text-slate-700 cursor-pointer">Yes</Label>
-                                                    </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem value="no" id="intl-b2b-no" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                                        <Label htmlFor="intl-b2b-no" className="text-[12px] font-bold text-slate-700 cursor-pointer">No</Label>
-                                                    </div>
-                                                </RadioGroup>
-                                            </div>
-                                            <div>
-                                                <Label className={labelClasses}>SPECIFIC REQUIREMENTS / NOTES (OPTIONAL)</Label>
-                                                <Input name="anyRequirement" value={formData.anyRequirement} onChange={handleInputChange} placeholder="Any specific requirements or notes..." className={inputClasses} />
-                                            </div>
-                                        </div>
-
-                                        {/* ── SUBSCRIBE ── */}
-                                        <div className="pt-2">
-                                            <label className="flex items-center gap-3 cursor-pointer group">
-                                                <Checkbox checked={formData.subscribeNewsletter} onCheckedChange={(checked: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: !!checked }))} className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                                <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide">Subscribe to IHWE Global Updates & Newsletters</span>
-                                            </label>
-                                        </div>
-
-                                        {/* ── SUBMIT ── */}
-                                        <div className="pt-6 flex flex-col items-center">
-                                            <Button type="submit" disabled={loading || !emailVerified || !phoneVerified} className="w-full max-w-56 h-12 rounded-sm bg-[#d26019] hover:bg-[#a84c14] text-white font-bold text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed">
-                                                {loading ? <><Loader2 className="w-5 h-5 animate-spin" /><span>SUBMITTING...</span></> : <>SUBMIT REGISTRATION <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>}
-                                            </Button>
-                                            <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2">
-                                                <ShieldCheck size={12} className="text-[#d26019]" />
-                                                International Visitor · Secure Portal
-                                            </p>
-                                        </div>
-                                    </form>
-                                </motion.div>
-                            )}
                         </AnimatePresence>
                     </div>
                 </div>

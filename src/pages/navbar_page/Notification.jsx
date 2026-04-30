@@ -12,6 +12,8 @@ const typeConfig = {
     system: { icon: <Info size={15} />, bg: 'bg-slate-50', text: 'text-slate-600', badge: 'bg-slate-100', badgeText: 'text-slate-700' },
 };
 
+import DashboardHero from '@/components/dashboard/DashboardHero';
+
 export default function Notification() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
@@ -128,21 +130,28 @@ export default function Notification() {
     };
 
     return (
-        <div className="w-full pb-20 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="w-full pb-20 space-y-6">
+            <DashboardHero 
+                pageId="ex-notifications" 
+                defaultTitle="Notification Center" 
+                defaultSubtitle="Manage your alerts and stay updated with system actions"
+                type="exhibitor" 
+            />
+
             {/* Header */}
-            <div className="bg-white rounded-lg px-5 py-3 mb-4 flex items-center justify-between border border-slate-100 shadow-sm">
+            <div className="bg-white rounded-xl px-5 py-3 flex items-center justify-between border border-slate-100 shadow-sm">
                 <div className="flex items-center gap-4">
                     <div className="w-11 h-11 rounded-full border border-slate-100 flex items-center justify-center bg-slate-50">
                         <Bell size={20} className="text-slate-400" />
                     </div>
                     <div>
-                        <h1 className="text-base font-semibold text-slate-600 uppercase tracking-tight">Notification center</h1>
-                        <p className="text-[11px] text-slate-400">Manage your alerts and system actions</p>
+                        <h2 className="text-sm font-black text-slate-600 uppercase tracking-tight">Status Overview</h2>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Real-time alerts for your profile</p>
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-widest">Unread</p>
-                    <p className="text-2xl font-medium text-emerald-500">{unreadCount}</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Unread</p>
+                    <p className="text-2xl font-black text-emerald-500">{unreadCount}</p>
                 </div>
             </div>
 

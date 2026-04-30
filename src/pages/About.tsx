@@ -289,6 +289,7 @@ const About = () => {
   const infoBar1 = heroData?.infoBar1 || "";
   const infoBar2 = heroData?.infoBar2 || "";
   const infoBar3 = heroData?.infoBar3 || "";
+  const heroHeading = heroData?.heading || "";
 
   return (
     <div className="bg-[#FFFDF1] font-inter">
@@ -315,6 +316,13 @@ const About = () => {
                 className="font-semibold mb-0 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
                 style={{ fontSize: `${titleFontSize}px`, fontFamily: "'Inter', sans-serif", lineHeight: 1.2, display: 'block' }}
                 dangerouslySetInnerHTML={{ __html: heroTitle }}
+              />
+            )}
+            {heroHeading && (
+              <h2
+                className="font-bold mb-2 tracking-tight text-white/90"
+                style={{ fontSize: '24px', fontFamily: "'Inter', sans-serif", lineHeight: 1.3, marginTop: '10px' }}
+                dangerouslySetInnerHTML={{ __html: heroHeading }}
               />
             )}
             {heroTitle2 && (

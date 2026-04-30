@@ -451,6 +451,56 @@ export const buyerRegistrationApi = {
     }
 };
 
+export const internationalExhibitorApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/international-exhibitor/register`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/international-exhibitor`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getConfig: async () => {
+        const response = await fetch(`${API_URL}/international-exhibitor/config`);
+        return await response.json();
+    }
+};
+
+export const internationalBuyerApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/international-buyer/register`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/international-buyer`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getConfig: async () => {
+        const response = await fetch(`${API_URL}/international-buyer/config`);
+        return await response.json();
+    },
+    updateConfig: async (payload: any) => {
+        const response = await fetch(`${API_URL}/international-buyer/config`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    }
+};
+
 export const sellerRegistrationApi = {
     submit: async (payload: any) => {
         const isFormData = payload instanceof FormData;
