@@ -123,7 +123,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
             <div className="space-y-4 text-[13px] print:text-[11px]">
                 <div className="space-y-3">
                     <div className="flex items-end gap-2">
-                        <span className="shrink-0 font-bold uppercase text-[10px] print:text-black">Name of the Fair/ Exhibition:</span>
+                        <span className="shrink-0 font-bold text-[10px] print:text-black">Name of the Fair/ Exhibition:</span>
                         <input
                             type="text"
                             value={formData.fairName}
@@ -134,9 +134,9 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <span className="font-bold uppercase text-[10px] print:text-black">The following documents/ information have been received for reimbursement under PMS Scheme from:</span>
+                        <span className="font-bold text-[10px] print:text-black">The following documents/ information have been received for reimbursement under PMS Scheme from</span>
                         <div className="flex items-end gap-2">
-                            <span className="font-bold text-[11px] shrink-0">M/s:</span>
+                            <span className="font-bold text-[11px] shrink-0">M/s</span>
                             <input
                                 type="text"
                                 value={formData.companyName}

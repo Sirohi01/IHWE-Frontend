@@ -75,12 +75,12 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
             </div>
 
             <div className="space-y-4 text-[15px] print:text-[14px]">
-                <p className="font-medium italic">I hereby declare that :</p>
+                <p className="font-medium">I hereby declare that :</p>
 
                 <div className="flex gap-4 items-start pl-2">
                     <span className="font-bold shrink-0">(a)</span>
                     <p className="text-justify leading-relaxed">
-                        Above information is correct and is based on the actual expenditure incurred. In case any of the statement/ information furnished in application / document is later found to be wrong or in correct or misleading, I do hereby bind myself and my unit to pay to the Government on demand the full amount received as reimbursement in respect within seven days of the demand.
+                        Above information is correct and is based on the actual expenditure incurred. In case any of the statement/ information furnished in application / document is later found to be wrong or in correct or misleading. I do hereby bind myself and my unit to pay to the Government on demand the full amount received as reimbursement in respect within seven days of the demand.
                     </p>
                 </div>
 
@@ -93,6 +93,9 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
 
                 {/* Signature Section */}
                 <div className="pt-6 flex flex-col items-end mr-10 space-y-2">
+                    <div className="text-center pt-6 min-w-[450px]">
+                        <span className="font-bold text-[11px]">Signature of the Authorized Signatory</span>
+                    </div>
                     <div className="w-[300px] space-y-2">
                         {[
                             { label: 'Name', key: 'name' },
@@ -101,7 +104,7 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                             { label: 'Place', key: 'place' }
                         ].map((field) => (
                             <div key={field.key} className="flex items-end gap-2 text-[13px]">
-                                <span className="font-bold w-28 uppercase text-[10px]">{field.label}:</span>
+                                <span className="font-bold w-28 text-[10px]">{field.label}:</span>
                                 <input
                                     type={field.isDate ? 'date' : 'text'}
                                     value={(formData as any)[field.key]}
@@ -118,15 +121,13 @@ const Declaration: React.FC<DeclarationProps> = ({ reportId }) => {
                             </div>
                         ))}
                     </div>
-                    <div className="text-center pt-2 min-w-[250px]">
-                        <span className="font-bold uppercase text-[11px]">(Signature of the Authorized Signatory)</span>
-                    </div>
+
                 </div>
 
                 {/* Approval Flow Chart */}
                 <div className="pt-20 mt-auto">
                     <div className="border border-black p-3 text-center space-y-2">
-                        <h3 className="font-bold uppercase text-[11px] underline underline-offset-4">Approval Flow Chart:</h3>
+                        <h3 className="font-bold text-[11px]">Approval Flow Chart:</h3>
                         <div className="flex items-center justify-center gap-4 text-[11px] font-bold">
                             <span>Claim submission by applicant Unit</span>
                             <span>→</span>

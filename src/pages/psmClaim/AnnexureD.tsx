@@ -85,12 +85,12 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
     const sections = [
         { label: 'Name of Implementing agency', key: 'implementingAgency' },
         { label: 'Name of the Applicant Unit', key: 'applicantUnit' },
-        { label: 'Complete address, phone, Fax, e-mail', key: 'address', isTextArea: true },
-        { label: 'Udyam Registration Number', key: 'udyamRegistration' },
-        { label: 'Category (General/Women/SC/ST/NER/PH)', key: 'entrepreneurCategory' },
-        { label: 'Type of the unit (Micro or Small)', key: 'unitType' },
+        { label: 'Complete address, phone, Fax, e-mail including name of the proprietor/partner', key: 'address', isTextArea: true },
+        { label: 'Udyam Registration Number (PL enclose copy)', key: 'udyamRegistration' },
+        { label: 'Category (General/Women/SC/ST/NER/PH) (PL enclose the copy of the document, as applicable)', key: 'entrepreneurCategory' },
+        { label: 'Type of the unit (Micro or Small) (whichever applicable)', key: 'unitType' },
         { label: 'Category (Manufacturing/Service)', key: 'unitCategory' },
-        { label: 'Products manufactured/service rendered', key: 'products', isTextArea: true },
+        { label: 'Products manufactured/service rendered by applicant unit', key: 'products', isTextArea: true },
     ];
 
     const getPlaceholder = (label: string) => {
@@ -117,7 +117,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
             <table className="w-full border-collapse border border-black text-[12px] print:text-[10px]">
                 <tbody>
                     <tr>
-                        <td colSpan={3} className="border border-black px-3 py-2 print:py-1 font-bold bg-gray-50 print:bg-transparent uppercase tracking-wider">
+                        <td colSpan={3} className="border border-black px-3 py-2 print:py-1 font-bold bg-gray-50 print:bg-transparent tracking-wider">
                             PART - I : Entrepreneurs' Details :
                         </td>
                     </tr>
@@ -146,13 +146,13 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                         </tr>
                     ))}
                     <tr>
-                        <td colSpan={3} className="border border-black px-3 py-2 print:py-1 font-bold bg-gray-50 print:bg-transparent uppercase tracking-wider">
+                        <td colSpan={3} className="border border-black px-3 py-2 print:py-1 font-bold bg-gray-50 print:bg-transparent tracking-wider">
                             PART-II: Event details
                         </td>
                     </tr>
                     <tr>
                         <td className="border border-black px-2 py-2 print:py-0.5 text-center w-10 align-top font-bold">9.</td>
-                        <td className="border border-black px-3 py-2 print:py-0.5 font-bold">Name of event, venue, duration</td>
+                        <td className="border border-black px-3 py-2 print:py-0.5 font-bold">Name of event participated, venue, duration of trade fair / exhibition</td>
                         <td className="border border-black px-3 py-2 print:py-0.5">
                             <textarea
                                 value={formData.eventDetails}
@@ -164,7 +164,12 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                     </tr>
                     <tr>
                         <td className="border border-black px-2 py-2 print:py-0.5 text-center w-10 align-top font-bold">10.</td>
-                        <td className="border border-black px-3 py-2 print:py-0.5 font-bold">Feedback: [about 200 words]</td>
+                        <td className="border border-black px-3 py-2 print:py-0.5 font-bold">
+                            Feedback: [about 200 words] <br />
+                            Include details about new business tie-ups achieved
+                            through the event. B2B Knowledge on new technology,
+                            opportunityfor market expansion etc.
+                        </td>
                         <td className="border border-black px-3 py-2 print:py-0.5">
                             <textarea
                                 value={formData.feedback}
@@ -180,13 +185,18 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
             <table className="w-full border-collapse border border-black border-t-0 text-[12px] print:text-[10px] mt-4 print:mt-1">
                 <thead>
                     <tr className="bg-gray-50 print:bg-transparent font-bold">
-                        <td colSpan={4} className="border border-black px-3 py-2 print:py-1 uppercase tracking-wider">PART -III : Payment Details (DETAILS OF CLAIM in Rs.)</td>
+                        {/* <td className="border border-black px-3 py-2 print:py-1 uppercase tracking-wider"></td> */}
+                        <td colSpan={4} className="border border-black px-3 py-2 print:py-1 tracking-wider">PART -III : Payment Details</td>
+                    </tr>
+                    <tr className="bg-gray-50 print:bg-transparent font-bold">
+                        <td className="border border-black px-3 py-2 print:py-1 uppercase tracking-wider"></td>
+                        <td colSpan={3} className="border border-black px-3 py-2 text-center print:py-1 tracking-wider">DETAILS OF CLAIM (in Rs.)</td>
                     </tr>
                     <tr className="text-center font-bold">
-                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Scheme Component</th>
+                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Name of Scheme Component</th>
                         <th className="border border-black px-2 py-2 print:py-1 w-[40%]">Items</th>
-                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Actual Exp. (in Rs.)</th>
-                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Admissible (in Rs.)</th>
+                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Actual Expenditure <br />(in Rs.)</th>
+                        <th className="border border-black px-2 py-2 print:py-1 w-[20%]">Amount Admissible as per Scheme guidelines <br /> (in Rs.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -195,7 +205,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                             Domestic Trade Fairs / Exhibitions
                         </td>
                         <td className="border border-black px-3 py-2 print:py-1 text-[10px] print:text-[9px] leading-tight">
-                            Contingency expenditure including travel, (attach expenditure copy)
+                            Contingency expenditure including travel, (attach expenditure copy for travel/publicity/ freight charges)
                         </td>
                         <td className="border border-black px-2 py-2 print:py-1">
                             <input
@@ -218,7 +228,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                     </tr>
                     <tr>
                         <td className="border border-black px-3 py-2 print:py-1 text-[10px] print:text-[9px] leading-tight">
-                            Space Rent (stall rent) (Attach invoice / bill)
+                            Space Rent (stall rent) [Minimum booth/ stall size provided by fair organiser] (Attach invoice / bill)
                         </td>
                         <td className="border border-black px-2 py-2 print:py-1">
                             <input
@@ -240,7 +250,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                         </td>
                     </tr>
                     <tr className="font-bold">
-                        <td colSpan={2} className="border border-black px-3 py-2 print:py-1 text-center uppercase tracking-widest text-[11px] print:text-[10px]">Total (in Rs.)</td>
+                        <td colSpan={2} className="border border-black px-3 py-2 print:py-1 text-right uppercase tracking-widest text-[11px] print:text-[10px]">Total (in Rs.)</td>
                         <td className="border border-black px-2 py-2 print:py-1">
                             <input
                                 type="number"
@@ -289,7 +299,7 @@ const AnnexureD: React.FC<Props> = ({ reportId }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="text-center w-64 print:w-56">
+                    <div className="mt-20 text-center w-64 print:w-56">
                         <div className="border-b-2 border-black w-full mb-2 print:mb-1 h-1"></div>
                         <p className="font-extrabold text-[10px] print:text-[9px] uppercase tracking-wider">Signature of authorized signatory</p>
                         <p className="text-[9px] print:text-[8px] italic opacity-60">(With Office Seal)</p>
