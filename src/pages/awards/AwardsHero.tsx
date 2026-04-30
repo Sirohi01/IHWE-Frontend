@@ -7,9 +7,10 @@ const AwardsHero = () => {
   const navyColor = "#0a2e5c";
   const greenColor = "#008d48";
   const darkYellow = "#a67c00"; 
+  const jakartaFont = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
 
   return (
-    <section className="relative w-full min-h-[450px] lg:min-h-[600px] xl:min-h-[80vh] flex flex-col justify-center overflow-hidden bg-white">
+    <section className="relative w-full min-h-[450px] lg:min-h-[600px] xl:min-h-[80vh] flex flex-col justify-center overflow-hidden bg-white" style={jakartaFont}>
       
       <div 
         className="absolute inset-0 z-0"
@@ -21,8 +22,8 @@ const AwardsHero = () => {
         }}
       ></div>
 
-      {/* Reduced vertical padding for tighter fit */}
-      <div className="container mx-auto px-6 max-w-[1400px] relative z-10 pt-4 pb-4 -mt-10">
+      {/* Reduced Max-Width to 1280px to push alignment inward */}
+      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 pt-4 pb-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
           <motion.div 
@@ -40,13 +41,13 @@ const AwardsHero = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-0 leading-[1.0] tracking-tight">
-              <h1 className="font-extrabold text-[40px] md:text-[58px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1>
-              <h1 className="font-extrabold text-[40px] md:text-[58px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1>
-              <h1 className="font-extrabold text-[30px] md:text-[42px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1>
+            <div className="flex flex-col gap-0 leading-[1.0] tracking-tighter">
+              <h1 className="font-[900] text-[40px] md:text-[58px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1>
+              <h1 className="font-[900] text-[40px] md:text-[58px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1>
+              <h1 className="font-[900] text-[30px] md:text-[42px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1>
             </div>
 
-            <p className="text-[#555] text-[16px] md:text-[19px] font-medium mt-4 mb-4 tracking-tight">
+            <p className="text-[#555] text-[16px] md:text-[19px] font-semibold mt-4 mb-4 tracking-tight">
               Honouring Excellence in Healthcare, Wellness & Innovation
             </p>
 
@@ -86,13 +87,13 @@ const AwardsHero = () => {
               <Link 
                 to="/visitor-registration"
                 className="text-white px-7 py-3 rounded-md text-[12px] font-black uppercase tracking-[0.1em] flex items-center gap-2.5 shadow-lg transition-all hover:scale-[1.02]"
-                style={{ backgroundColor: greenColor }}
+                style={{ ...jakartaFont, backgroundColor: greenColor }}
               >
-                NOMINATE NOW <span className="text-[14px]">→</span>
+                NOMINATE NOW <span className="text-[16px]">→</span>
               </Link>
               <button 
                 className="bg-white px-7 py-3 rounded-md text-[12px] font-black uppercase tracking-[0.1em] border-2 transition-all hover:bg-slate-50 shadow-md"
-                style={{ borderColor: navyColor, color: navyColor }}
+                style={{ ...jakartaFont, borderColor: navyColor, color: navyColor }}
               >
                 BECOME A SPONSOR
               </button>

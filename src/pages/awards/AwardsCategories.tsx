@@ -37,9 +37,10 @@ const stats = [
 const AwardsCategories = () => {
   return (
     <section className="py-8 md:py-12 bg-[#edf7f2]">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      {/* Reduced Max-Width to 1280px to push alignment inward */}
+      <div className="container mx-auto px-6 max-w-[1280px]">
 
-        {/* Header - Tighter margins */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -94,7 +95,7 @@ const AwardsCategories = () => {
           ))}
         </div>
 
-        {/* Stats Strip - Compact */}
+        {/* Stats Strip */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

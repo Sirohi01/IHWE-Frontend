@@ -14,10 +14,9 @@ const AwardsNomination = () => {
 
   return (
     <section className="py-4 md:py-6 bg-white overflow-hidden">
-      {/* Standardized to Navbar Width (1400px) for Logo Alignment */}
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      {/* Reduced Max-Width to 1280px to push alignment inward */}
+      <div className="container mx-auto px-6 max-w-[1280px]">
         
-        {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -32,7 +31,6 @@ const AwardsNomination = () => {
           </h2>
         </motion.div>
 
-        {/* Process Image Container - FULL WIDTH */}
         <div className="flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.99 }}
@@ -48,7 +46,6 @@ const AwardsNomination = () => {
             />
           </motion.div>
 
-          {/* Steps Text Grid - FULL WIDTH */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-y-4 gap-x-4 w-full mt-1 px-4">
             {steps.map((step, idx) => (
               <motion.div 

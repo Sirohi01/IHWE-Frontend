@@ -30,11 +30,10 @@ const galleryItems = [
 
 const AwardsGallery = () => {
   return (
-    <section className="py-8 md:py-12 bg-white">
-      {/* Standardized to Navbar Width (1400px) for Logo Alignment */}
-      <div className="container mx-auto px-6 max-w-[1400px]">
+    <section className="py-6 md:py-8 bg-white">
+      {/* Reduced Max-Width to 1280px to push alignment inward */}
+      <div className="container mx-auto px-6 max-w-[1280px]">
 
-        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -51,8 +50,7 @@ const AwardsGallery = () => {
           </div>
         </motion.div>
 
-        {/* Gallery grid — Wider Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {galleryItems.map((item, idx) => (
             <motion.div
               key={idx}
@@ -67,7 +65,6 @@ const AwardsGallery = () => {
                 alt={item.alt}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              {/* Overlay with label */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a1e3c]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                 <p className="text-white text-[11px] font-bold uppercase tracking-wide leading-tight">
                   {item.label}
@@ -77,7 +74,6 @@ const AwardsGallery = () => {
           ))}
         </div>
 
-        {/* View gallery button */}
         <div className="flex justify-center">
           <button className="inline-flex items-center gap-2 border-2 border-slate-200 hover:border-[#1a6b3c] text-slate-600 hover:text-[#1a6b3c] font-bold px-7 py-2.5 rounded-full text-[11px] uppercase tracking-[0.15em] transition-all duration-300">
             <ImageIcon className="w-4 h-4" />

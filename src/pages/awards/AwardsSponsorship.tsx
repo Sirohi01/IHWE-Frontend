@@ -19,10 +19,11 @@ const sponsorTypes = [
 const AwardsSponsorship = () => {
   return (
     <section className="py-4 md:py-6 bg-[#f4faff] overflow-hidden">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      {/* Reduced Max-Width to 1280px to push alignment inward */}
+      <div className="container mx-auto px-6 max-w-[1280px]">
         <div className="flex flex-col lg:flex-row gap-3 items-stretch">
 
-          {/* LEFT — Branding Card (Super Compact & Exact Content) */}
+          {/* LEFT — Branding Card */}
           <motion.div
             initial={{ opacity: 0, x: -25 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -47,7 +48,7 @@ const AwardsSponsorship = () => {
             </button>
           </motion.div>
 
-          {/* RIGHT — Sponsorship Grid (Ultra Compact) */}
+          {/* RIGHT — Sponsorship Grid */}
           <div className="flex-[1.6] grid grid-cols-2 md:grid-cols-4 gap-3">
             {sponsorTypes.map((type, idx) => (
               <motion.div

@@ -5,16 +5,15 @@ import ctaImg from "../../assets/cta.png";
 const AwardsCTA = () => {
   return (
     <section className="relative overflow-hidden">
-      {/* Standardized to Navbar Width (1400px) for Logo Alignment */}
       <div 
         className="w-full py-4 md:py-5 flex items-center min-h-[100px]"
         style={{
           background: "linear-gradient(90deg, #002b5c 0%, #002b5c 40%, #008d48 100%)"
         }}
       >
-        <div className="container mx-auto px-6 max-w-[1400px] flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Reduced Max-Width to 1280px to push alignment inward */}
+        <div className="container mx-auto px-6 max-w-[1280px] flex flex-col md:flex-row items-center justify-between gap-6">
           
-          {/* Left Branding & Text */}
           <div className="flex items-center gap-6">
             <div className="shrink-0 w-24 h-24 md:w-30 md:h-30 overflow-hidden flex items-center justify-center -my-4">
               <img 
@@ -35,7 +34,6 @@ const AwardsCTA = () => {
             </div>
           </div>
 
-          {/* Right Action Buttons */}
           <div className="flex flex-wrap items-center gap-4">
             <button className="bg-[#008d48] text-white px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-[#007a3e] border border-white/10 shadow-lg">
               NOMINATE NOW
