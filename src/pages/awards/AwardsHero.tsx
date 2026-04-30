@@ -35,7 +35,7 @@ const AwardsHero = () => {
           >
             {/* Awards Logo */}
             <div className="mb-4">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-32 w-auto object-contain" />
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-32 w-80 object-fill" />
             </div>
 
             <div className="flex items-center gap-4 mb-2">
