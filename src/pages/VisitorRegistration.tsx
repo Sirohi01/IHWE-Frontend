@@ -116,6 +116,8 @@ const VisitorRegistration = () => {
         areaOfInterest: [] as string[]
     });
 
+    const defaultEventName = "9th Edition of International Health & Wellness Expo 2026";
+
     const [emailOtp, setEmailOtp] = useState("");
     const [phoneOtp, setPhoneOtp] = useState("");
     const [emailOtpSent, setEmailOtpSent] = useState(false);
@@ -344,10 +346,11 @@ const VisitorRegistration = () => {
         setLoading(true);
         try {
             let payload: any = {};
+            const eventName = formData.registrationFor || (events.length > 0 ? events[0].name : defaultEventName);
 
             if (visitorType === 'general') {
                 payload = {
-                    registrationFor: formData.registrationFor,
+                    registrationFor: eventName,
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
@@ -367,7 +370,7 @@ const VisitorRegistration = () => {
                 };
             } else {
                 payload = {
-                    registrationFor: formData.registrationFor,
+                    registrationFor: eventName,
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     email: formData.email,
@@ -441,6 +444,8 @@ const VisitorRegistration = () => {
     useEffect(() => {
         if (events.length > 0 && !formData.registrationFor) {
             setFormData(prev => ({ ...prev, registrationFor: events[0].name }));
+        } else if (events.length === 0 && !formData.registrationFor) {
+            setFormData(prev => ({ ...prev, registrationFor: defaultEventName }));
         }
     }, [events]);
 
