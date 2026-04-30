@@ -56,10 +56,10 @@ const MainConferences: React.FC = () => {
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Section label */}
         <div className="text-center mb-10">
-          <p className="text-[16px] font-bold text-[#4E9F3D] uppercase tracking-widest mb-2">
+          <h2 className="text-[24px] font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2">
             3 DAYS. 3 POWERFUL <span className="text-[#1E88E5]">CONFERENCES</span>.{" "}
             <span className="text-[#0B2C66]">18 GAME-CHANGING SESSIONS.</span>
-          </p>
+          </h2>
           <div className="h-1 w-20 bg-[#4E9F3D] mx-auto mt-2 rounded-full" />
         </div>
 

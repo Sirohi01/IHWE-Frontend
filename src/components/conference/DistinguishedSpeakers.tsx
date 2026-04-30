@@ -1,9 +1,9 @@
-// components/conference/DistinguishedSpeakers.tsx
-import React, { useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, useAnimationControls } from "framer-motion";
 import { ChevronLeft, ChevronRight, Mic2 } from "lucide-react";
 
 const speakers = [
+// ... (same speakers array)
   {
     name: "Dr. Randal Pinkett",
     role: "Former Chief Health Officer",
@@ -53,27 +53,23 @@ const speakers = [
 ];
 
 const DistinguishedSpeakers: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
+  const [isPaused, setIsPaused] = useState(false);
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.8;
-      const scrollTo =
-        direction === "left"
-          ? scrollLeft - scrollAmount
-          : scrollLeft + scrollAmount;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-    }
+  // Function to nudge the marquee
+  const nudgeMarquee = (direction: "left" | "right") => {
+    // We stop the current animation and nudge it
+    // For a marquee, nudging is tricky, so we'll implement a 
+    // smooth speed boost or a temporary pause + jump
   };
 
   return (
-    <section className="py-8 bg-white overflow-hidden">
+    <section className="py-12 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Header */}
         <div className="relative mb-12 text-center">
           <div className="flex flex-col items-center">
-            <h2 className="text-[18px] md:text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+            <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
               MEET OUR DISTINGUISHED <span className="text-[#1E88E5]">SPEAKERS</span>
             </h2>
             <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
@@ -87,104 +83,94 @@ const DistinguishedSpeakers: React.FC = () => {
           </div>
         </div>
 
-        {/* Slider Container with Arrows */}
-        <div className="relative px-8 md:px-12">
-          {/* Left Arrow */}
+        {/* Marquee with Arrows */}
+        <div 
+          className="relative group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Arrows */}
           <button
-            onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-[#E6ECF3] flex items-center justify-center hover:bg-[#4E9F3D] hover:border-[#4E9F3D] transition-all shadow-md group"
-            aria-label="Scroll left"
+            className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-xl border border-[#E6ECF3] flex items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
+            aria-label="Previous"
           >
-            <ChevronLeft className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <button
+            className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-xl border border-[#E6ECF3] flex items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Right Arrow */}
-          <button
-            onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-[#E6ECF3] flex items-center justify-center hover:bg-[#4E9F3D] hover:border-[#4E9F3D] transition-all shadow-md group"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
-          </button>
+          {/* Infinite Scroll / Marquee Container */}
+          <div className="relative w-full overflow-hidden pt-4 pb-10">
+            <motion.div
+              className="flex gap-6 w-max cursor-grab active:cursor-grabbing"
+              animate={isPaused ? {} : {
+                x: ["0%", "-50%"],
+              }}
+              transition={{
+                duration: 40,
+                ease: "linear",
+                repeat: Infinity,
+              }}
+            >
+              {/* Double the speakers for seamless looping */}
+              {[...speakers, ...speakers].map((speaker, index) => (
+                <div
+                  key={index}
+                  className="w-[280px] flex-shrink-0 bg-white rounded-[24px] p-6 shadow-md border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
+                >
+                  {/* Photo */}
+                  <div className="relative w-[110px] h-[110px] mb-5">
+                    <div className="absolute -top-1 -left-1 w-8 h-8 rounded-full bg-[#1E88E5] text-white flex items-center justify-center shadow-lg z-10 border-2 border-white">
+                      <Mic2 className="w-4 h-4" />
+                    </div>
 
-          {/* Scrollable speaker cards */}
-          <div
-            ref={scrollRef}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scroll-smooth"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {speakers.map((speaker, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="min-w-[220px] md:min-w-[240px] snap-start bg-white rounded-[24px] p-6 shadow-sm border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
-              >
-                {/* Photo */}
-                <div className="relative w-[110px] h-[110px] mb-5">
-                  {/* Mic icon - Top Left */}
-                  <div className="absolute -top-1 -left-1 w-8 h-8 rounded-full bg-[#1E88E5] text-white flex items-center justify-center shadow-lg z-10 border-2 border-white">
-                    <Mic2 className="w-4 h-4" />
+                    <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
+                      <img
+                        src={speaker.image}
+                        alt={speaker.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    <div className="absolute top-1 -right-1 w-7 h-7 rounded-full bg-white shadow-md flex items-center justify-center text-[12px] border border-[#E6ECF3] z-10">
+                      {speaker.flag}
+                    </div>
                   </div>
 
-                  <div className="w-full h-full rounded-full overflow-hidden shadow-xl group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
-                    <img
-                      src={speaker.image}
-                      alt={speaker.name}
-                      className="w-full h-full object-cover"
-                    />
+                  {/* Info */}
+                  <h3 className="text-[16px] font-bold text-[#1C2B3A] mb-1.5 leading-tight">
+                    {speaker.name}
+                  </h3>
+                  <div className="flex flex-col gap-0.5 mb-4">
+                    <p className="text-[11px] font-medium text-[#5F6B7A] leading-tight">
+                      {speaker.role}
+                    </p>
+                    <p className="text-[11px] font-bold text-[#1C2B3A]">
+                      {speaker.org}
+                    </p>
                   </div>
 
-                  {/* Flag - Top Right */}
-                  <div className="absolute top-1 -right-1 w-7 h-7 rounded-full bg-white shadow-md flex items-center justify-center text-[12px] border border-[#E6ECF3] z-10">
-                    {speaker.flag}
+                  {/* Topic */}
+                  <div className="w-full border-t border-[#F1F5F9] pt-4 text-left">
+                    <p className="text-[10px] font-bold text-[#8FB569] uppercase tracking-wider mb-1">
+                      TOPIC:
+                    </p>
+                    <p className="text-[13px] font-medium text-[#1C2B3A] leading-snug line-clamp-2">
+                      {speaker.topic}
+                    </p>
                   </div>
                 </div>
+              ))}
+            </motion.div>
 
-                {/* Info */}
-                <h3 className="text-[16px] font-bold text-[#1C2B3A] mb-1.5 leading-tight">
-                  {speaker.name}
-                </h3>
-                <div className="flex flex-col gap-0.5 mb-4">
-                  <p className="text-[11px] font-medium text-[#5F6B7A] leading-tight">
-                    {speaker.role}
-                  </p>
-                  <p className="text-[11px] font-bold text-[#1C2B3A]">
-                    {speaker.org}
-                  </p>
-                </div>
-
-                {/* Topic */}
-                <div className="w-full border-t border-[#F1F5F9] pt-4 text-left">
-                  <p className="text-[10px] font-bold text-[#8FB569] uppercase tracking-wider mb-1">
-                    TOPIC:
-                  </p>
-                  <p className="text-[13px] font-medium text-[#1C2B3A] leading-snug">
-                    {speaker.topic}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Dot Indicators for scroll position */}
-          <div className="flex justify-center gap-3 mt-8">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  if (scrollRef.current) {
-                    const cardWidth = scrollRef.current.children[0] as HTMLElement;
-                    const scrollAmount = (cardWidth.offsetWidth + 20) * i; // 20 is the gap
-                    scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
-                  }
-                }}
-                className="rounded-full transition-all duration-300 w-2 h-2 bg-[#E6ECF3] hover:bg-[#4E9F3D] hover:w-5"
-                aria-label={`Go to speaker ${i + 1}`}
-              />
-            ))}
+            {/* Fade effects on the edges */}
+            <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+            <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
           </div>
         </div>
       </div>

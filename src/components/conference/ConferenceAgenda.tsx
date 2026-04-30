@@ -117,7 +117,7 @@ const ConferenceAgenda: React.FC = () => {
 
           <div className="flex-1">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+              <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
                 CONFERENCE <span className="text-[#1E88E5]">AGENDA</span>
               </h2>
               <a href="#" className="flex items-center gap-1 text-[11px] font-extrabold text-[#4E9F3D] uppercase tracking-wider hover:opacity-80 transition-opacity">
@@ -129,23 +129,25 @@ const ConferenceAgenda: React.FC = () => {
 
 
             {/* Day tabs */}
-            <div className="flex gap-2 mb-5 overflow-x-auto">
+            <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
               {agendaData.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveDay(index)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-[8px] border text-left transition-all duration-200 ${activeDay === index
-                    ? "bg-[#1C2B3A] border-[#1C2B3A] text-white"
-                    : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D]"
-                    }`}
+                  className={`flex-shrink-0 px-5 py-3 rounded-[12px] border text-left transition-all duration-300 ${
+                    activeDay === index
+                      ? "bg-[#0B2C66] border-[#1E88E5] text-white shadow-lg scale-[1.02] ring-1 ring-[#1E88E5]/50"
+                      : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D] hover:shadow-sm"
+                  }`}
                 >
                   <p
-                    className={`text-[8px] font-black uppercase tracking-widest mb-0.5 ${activeDay === index ? "text-[#4E9F3D]" : "text-[#4E9F3D]"
-                      }`}
+                    className={`text-[11px] font-[900] uppercase tracking-[0.2em] mb-1.5 ${
+                      activeDay === index ? "text-[#4E9F3D]" : "text-[#1E88E5]"
+                    }`}
                   >
                     {item.day}
                   </p>
-                  <p className="text-[11px] font-bold leading-tight">
+                  <p className={`text-[14px] font-bold leading-tight ${activeDay === index ? "text-white" : "text-[#1C2B3A]"}`}>
                     {item.shortTitle}
                   </p>
                 </button>

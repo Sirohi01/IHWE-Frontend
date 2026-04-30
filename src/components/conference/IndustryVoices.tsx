@@ -37,10 +37,10 @@ const IndustryVoices: React.FC = () => {
   };
 
   return (
-    <section className="py-12 bg-[#F8FCF9]">
+    <section className="py-6 bg-[#F8FCF9]">
       <div className="container mx-auto px-6 max-w-[1320px]">
-        {/* Header */}
-        <div className="relative mb-12 text-center">
+
+        <div className="relative mb-6 text-center">
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-px w-6 bg-[#4E9F3D]" />
@@ -49,7 +49,7 @@ const IndustryVoices: React.FC = () => {
               </span>
               <div className="h-px w-6 bg-[#4E9F3D]" />
             </div>
-            <h2 className="text-[32px] md:text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+            <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
               INDUSTRY <span className="text-[#1E88E5]">LEADERS</span>
             </h2>
           </div>
@@ -62,7 +62,7 @@ const IndustryVoices: React.FC = () => {
           </div>
         </div>
 
-        {/* Slider Container with Arrows */}
+
         <div className="relative px-8 md:px-12">
           {/* Left Arrow */}
           <button
@@ -73,7 +73,7 @@ const IndustryVoices: React.FC = () => {
             <ChevronLeft className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
           </button>
 
-          {/* Right Arrow */}
+
           <button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-[#E6ECF3] flex items-center justify-center hover:bg-[#4E9F3D] hover:border-[#4E9F3D] transition-all shadow-md group"
@@ -82,7 +82,7 @@ const IndustryVoices: React.FC = () => {
             <ChevronRight className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
           </button>
 
-          {/* Scrollable Testimonials Row - All 3 visible at once */}
+
           <div
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 scroll-smooth"
@@ -95,9 +95,9 @@ const IndustryVoices: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="min-w-[280px] md:min-w-[320px] lg:min-w-[380px] flex-1 snap-start bg-white p-6 md:p-8 rounded-[24px] shadow-md border border-[#E6ECF3] relative group hover:-translate-y-2 transition-all duration-300"
+                className="min-w-[280px] md:min-w-[320px] lg:min-w-[380px] flex-1 snap-start bg-white p-5 md:p-6 rounded-[24px] shadow-md border border-[#E6ECF3] relative group hover:-translate-y-2 transition-all duration-300"
               >
-                {/* Large decorative quote mark */}
+
                 <div className="absolute top-5 left-5 text-[52px] leading-none text-[#E8F5E9] font-serif group-hover:text-[#c8e6c9] transition-colors select-none">
                   "
                 </div>
@@ -130,21 +130,20 @@ const IndustryVoices: React.FC = () => {
           </div>
 
           {/* Dot Indicators for scroll position */}
-          <div className="flex justify-center gap-3 mt-8">
-            {[0, 1, 2].map((i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  if (scrollRef.current) {
-                    const cardWidth = scrollRef.current.children[0] as HTMLElement;
-                    const scrollAmount = (cardWidth.offsetWidth + 24) * i; // 24 is the gap
-                    scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
-                  }
-                }}
-                className="rounded-full transition-all duration-300 w-2 h-2 bg-[#E6ECF3] hover:bg-[#4E9F3D] hover:w-5"
-                aria-label={`Go to testimonial ${i + 1}`}
-              />
-            ))}
+          <div className="flex justify-center gap-3 mt-4">            {[0, 1, 2].map((i) => (
+            <button
+              key={i}
+              onClick={() => {
+                if (scrollRef.current) {
+                  const cardWidth = scrollRef.current.children[0] as HTMLElement;
+                  const scrollAmount = (cardWidth.offsetWidth + 24) * i; // 24 is the gap
+                  scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
+                }
+              }}
+              className="rounded-full transition-all duration-300 w-2 h-2 bg-[#E6ECF3] hover:bg-[#4E9F3D] hover:w-5"
+              aria-label={`Go to testimonial ${i + 1}`}
+            />
+          ))}
           </div>
         </div>
       </div>

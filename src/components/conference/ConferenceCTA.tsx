@@ -6,7 +6,7 @@ import ramBg from "../../assets/ram.png";
 
 const ConferenceCTA: React.FC = () => {
   return (
-    <section className="py-6 relative overflow-hidden bg-black">
+    <section className="py-6 relative overflow-hidden bg-black mb-2 z-10">
       {/* Background Image with Neutral Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
