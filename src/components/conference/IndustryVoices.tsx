@@ -39,23 +39,26 @@ const IndustryVoices: React.FC = () => {
   return (
     <section className="py-12 bg-[#F8FCF9]">
       <div className="container mx-auto px-6 max-w-[1320px]">
-        {/* Header - Centered */}
-        <div className="flex flex-col items-center justify-center text-center mb-10">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="h-px w-8 bg-[#4E9F3D]" />
-            <span className="text-[10px] font-black text-[#4E9F3D] uppercase tracking-[0.2em]">
-              VOICES FROM
-            </span>
+        {/* Header */}
+        <div className="relative mb-12 text-center">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-px w-6 bg-[#4E9F3D]" />
+              <span className="text-[11px] font-bold text-[#4E9F3D] uppercase tracking-[0.2em]">
+                VOICES FROM
+              </span>
+              <div className="h-px w-6 bg-[#4E9F3D]" />
+            </div>
+            <h2 className="text-[32px] md:text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+              INDUSTRY <span className="text-[#1E88E5]">LEADERS</span>
+            </h2>
           </div>
-          <h2 className="text-[36px] font-black text-[#1a3a32]">
-            Industry <span className="text-[#4E9F3D]">Leaders</span>
-          </h2>
 
-          {/* VIEW ALL TESTIMONIALS - Centered below heading */}
-          <div className="mt-3">
-            <span className="text-[11px] font-semibold text-[#4E9F3D] cursor-pointer hover:underline">
-              VIEW ALL TESTIMONIALS →
-            </span>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:block">
+            <a href="#" className="flex items-center gap-1 text-[11px] font-extrabold text-[#4E9F3D] uppercase tracking-wider hover:opacity-80 transition-opacity">
+              VIEW ALL TESTIMONIALS
+              <ChevronRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 

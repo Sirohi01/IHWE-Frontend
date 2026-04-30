@@ -57,7 +57,7 @@ const WhyAttend: React.FC = () => {
                 WHY ATTEND CONFERENCE?
               </span>
               <h2 className="text-[26px] font-bold text-[#1C2B3A] leading-[1.2]">
-                Where <span className="text-[#4E9F3D]">Ideas</span> Meet{" "}
+                Where <span className="text-[#4E9F3D]">Ideas</span><br /> Meet{" "}
                 <span className="text-[#1E88E5]">Industry</span>
               </h2>
               <div className="w-6 h-[2px] bg-[#4E9F3D] rounded-full" />

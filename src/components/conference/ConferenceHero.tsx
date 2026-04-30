@@ -39,7 +39,7 @@ const ConferenceHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-[36px] md:text-[54px] font-[900] text-[#0B2C66] mb-4 leading-[1.1] tracking-tight"
           >
-            Learn. <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#1E88E5] to-[#4E9F3D]">Connect. Lead.</span>
+            Learn. <span className="text-[#4E9F3D]">Connect.</span> <span className="text-[#1E88E5]">Lead.</span>
           </motion.h1>
 
           {/* Description */}
