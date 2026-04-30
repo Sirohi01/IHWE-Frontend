@@ -34,11 +34,11 @@ const AwardsHero = () => {
             className="lg:col-span-8 flex flex-col items-start"
           >
             {/* Awards Logo */}
-            <div className="mb-1 w-full">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-40 w-[440px] object-fill" />
+            <div className="flex justify-start overflow-hidden mb-0 -mb-4">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="w-[500px] h-auto object-contain -ml-4 -mb-6" />
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-3">
               <span className="text-[12px] font-bold uppercase tracking-[0.4em]" style={{ color: darkYellow }}>3rd Edition Of</span>
               <div className="flex items-center gap-0">
                 <div className="h-[1px] w-14" style={{ backgroundColor: darkYellow }}></div>
