@@ -20,7 +20,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
         companyName: ctxData?.companyName || '',
         applicationNo: '',
         additionalCopies: 'No',
-        date: new Date().toISOString().split('T')[0],
+        date: '',
         checks: {} as Record<number, boolean>,
         pages: {} as Record<number, string>
     });
@@ -113,8 +113,8 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
         >
-            <div className="text-center mb-3 mt-0">
-                <h1 className="text-lg font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-1.5">ANNEXURE – C</h1>
+            <div className="text-center mb-2 mt-0">
+                <h1 className="text-[16px] font-extrabold uppercase tracking-tight underline decoration-2 underline-offset-4 mb-1">ANNEXURE – C</h1>
                 <h2 className="text-[14px] font-bold underline decoration-1 underline-offset-4 max-w-2xl mx-auto">
                     Check-list for reimbursement of claims under Component 5(A) : PMS Scheme
                 </h2>
@@ -147,7 +147,7 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         </div>
                     </div>
 
-                    <div className="text-right italic font-bold text-[10px] print:text-black pr-4">
+                    <div className="text-right italic font-bold text-[10px] print:text-black pr-2">
                         (Two additional copies submitted : {formData.additionalCopies})
                         <div className="no-print mt-1">
                             {['Yes', 'No'].map(opt => (
@@ -168,8 +168,8 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                         <tr className="font-bold border-b border-black/80 bg-slate-100/50">
                             <th className="py-1.5 px-1 w-12 text-center text-[10px]">S. No.</th>
                             <th className="py-1.5 px-3 text-left text-[10px]">Particulars</th>
-                            <th className="py-1.5 px-1 text-center w-20 text-[8px] leading-tight flex-col items-center">
-                                <div className="uppercase">(PUT '✓' OR 'x' IN BOX)</div>
+                            <th className="py-1.5 px-1 text-center w-36 text-[8px] leading-tight">
+                                <div className="uppercase whitespace-nowrap">(PUT '✓' OR 'x' IN BOX)</div>
                             </th>
                             <th className="py-1.5 px-1 text-center w-14 text-[9px] leading-tight font-bold">
                                 Pg No.
@@ -234,12 +234,12 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                     </tbody>
                 </table>
 
-                <div className="pt-2 space-y-4">
+                <div className="pt-4 space-y-8">
                     <p className="text-[10.5px] print:text-[10px] leading-snug">
                         Documents/ information checked and verified the claim of the aforementioned unit / enterprise is found in order and eligible for reimbursement as per PMS Scheme guidelines.
                     </p>
 
-                    <div className="flex justify-between items-end pr-10">
+                    <div className="flex justify-between items-end pr-4">
                         <div className="w-48 text-left">
                             <div className="no-print">
                                 <input
@@ -249,13 +249,13 @@ const AnnexureC: React.FC<AnnexureCProps> = ({ reportId }) => {
                                     className="border-b border-black mb-0.5 w-40 bg-transparent outline-none text-[10.5px]"
                                 />
                             </div>
-                            <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black mb-0.5 w-32 min-h-[1.5em] text-[10.5px]`}>
+                            <div className={`${isExporting ? 'block font-bold' : 'hidden print:block'} border-b border-black mb-0.5 w-32 min-h-[3em] text-[10.5px] flex items-end pb-1`}>
                                 {formData.date ? new Date(formData.date).toLocaleDateString('en-GB') : ''}
                             </div>
                             <span className="block text-[9px] font-bold uppercase">Date</span>
                         </div>
                         <div className="text-center flex flex-col items-center">
-                            <div className="w-48 border-b border-black mb-0.5 h-6"></div>
+                            <div className="w-48 border-b border-black mb-0.5 h-12"></div>
                             <span className="font-bold uppercase text-[10px]">Signature of the Authorized Signatory</span>
                         </div>
                     </div>

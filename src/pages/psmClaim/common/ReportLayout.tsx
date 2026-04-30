@@ -37,7 +37,7 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
                 <div
                     ref={componentRef}
                     id="printable-form"
-                    className="bg-white pt-[10mm] pb-[15mm] px-[15mm] shadow-2xl w-full text-[#000] text-[12px] leading-tight relative overflow-hidden"
+                    className="bg-white pt-[10mm] pb-[8mm] px-[8mm] shadow-2xl w-full text-[#000] text-[12px] leading-tight relative overflow-hidden"
                     style={{
                         fontFamily: "'Inter', sans-serif",
                         maxWidth: maxWidth,
@@ -83,21 +83,22 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
                 @media print {
                     @page { 
                         size: A4; 
-                        margin: 10mm 15mm; 
+                        margin: 8mm 8mm 5mm 8mm; 
                     }
                     .no-print { display: none !important; }
                     body { background: white !important; }
                     #printable-form {
                         width: 100% !important;
-                        padding: 10mm 5mm !important;
+                        padding: 5mm 5mm 2mm 5mm !important;
                         box-shadow: none !important;
-                        zoom: 1 !important;
+                        zoom: 0.98 !important;
                         display: block !important;
                         min-height: auto !important;
+                        overflow: visible !important;
                     }
                     table, th, td { 
                         border-color: black !important; 
-                        padding: 8px 12px !important;
+                        padding: 6px 8px !important;
                     }
                     input::placeholder, textarea::placeholder { 
                         color: transparent !important; 
