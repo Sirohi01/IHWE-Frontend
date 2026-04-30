@@ -1,6 +1,7 @@
 import React from 'react';
 import { Leaf, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import learnImg from '@/assets/learn.webp';
 
@@ -52,10 +53,12 @@ const ConferenceSeminars = () => {
             Join expert-led sessions, panel discussions & thought leadership talks on the latest trends shaping the future of healthcare.
           </p>
 
-          <Button className="bg-white hover:bg-gray-50 text-[#0b4d17] px-8 h-10 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center gap-3 shadow-xl transition-all group border-none">
-            Register For Seminar
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <Link to="/conference">
+            <Button className="bg-white hover:bg-gray-50 text-[#0b4d17] px-8 h-10 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center gap-3 shadow-xl transition-all group border-none">
+              Register For Seminar
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </motion.div>
 
       </div>
