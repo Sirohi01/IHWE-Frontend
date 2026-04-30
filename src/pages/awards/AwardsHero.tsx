@@ -38,7 +38,7 @@ const AwardsHero = () => {
               <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-32 w-auto object-contain" />
             </div>
 
-            <div className="flex items-center gap-4 mb-3">
+            <div className="flex items-center gap-4 mb-2">
               <span className="text-[12px] font-bold uppercase tracking-[0.4em]" style={{ color: darkYellow }}>3rd Edition Of</span>
               <div className="flex items-center gap-0">
                 <div className="h-[1px] w-14" style={{ backgroundColor: darkYellow }}></div>
@@ -48,9 +48,9 @@ const AwardsHero = () => {
             </div>
 
             <div className="flex flex-col gap-0 leading-[1.0] tracking-tighter">
-              <h1 className="font-[900] text-[40px] md:text-[58px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1>
-              <h1 className="font-[900] text-[40px] md:text-[58px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1>
-              <h1 className="font-[900] text-[30px] md:text-[42px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1>
+              <h1 className="font-[900] text-[40px] md:text-[54px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1>
+              <h1 className="font-[900] text-[40px] md:text-[54px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1>
+              <h1 className="font-[900] text-[30px] md:text-[38px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1>
             </div>
 
             <p className="text-[#555] text-[16px] md:text-[19px] font-semibold mt-4 mb-4 tracking-tight">
@@ -89,7 +89,7 @@ const AwardsHero = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-4 mt-4">
               <Link 
                 to="/visitor-registration"
                 className="text-white px-7 py-3 rounded-md text-[12px] font-black uppercase tracking-[0.1em] flex items-center gap-2.5 shadow-lg transition-all hover:scale-[1.02]"
