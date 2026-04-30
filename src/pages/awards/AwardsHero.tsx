@@ -34,23 +34,23 @@ const AwardsHero = () => {
             className="lg:col-span-8 flex flex-col items-start"
           >
             {/* Awards Logo */}
-            <div className="mb-1 w-full">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-40 w-[440px] object-fill" />
+            <div className="flex justify-start mb-1 w-full">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <span className="text-[12px] font-bold uppercase tracking-[0.4em]" style={{ color: darkYellow }}>3rd Edition Of</span>
               <div className="flex items-center gap-0">
                 <div className="h-[1px] w-14" style={{ backgroundColor: darkYellow }}></div>
                 <div className="w-2.5 h-2.5 rotate-45 border border-[#a67c00] bg-white -ml-1 relative z-10 shadow-sm"></div>
                 <div className="h-[1px] w-14 -ml-1" style={{ backgroundColor: darkYellow }}></div>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-0 leading-[1.0] tracking-tighter">
-              <h1 className="font-[800] text-[35px] md:text-[54px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1>
-              <h1 className="font-[800] text-[35px] md:text-[54px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1>
-              <h1 className="font-[800] text-[25px] md:text-[38px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1>
+              {/* <h1 className="font-[800] text-[35px] md:text-[54px] uppercase" style={{ color: navyColor }}>NAMO GANGE</h1> */}
+              {/* <h1 className="font-[800] text-[35px] md:text-[54px] uppercase" style={{ color: greenColor }}>GLOBAL HEALTH</h1> */}
+              {/* <h1 className="font-[800] text-[25px] md:text-[38px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1> */}
             </div>
 
             <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight">
