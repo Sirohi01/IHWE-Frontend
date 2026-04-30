@@ -25,15 +25,14 @@ const tracks = [
 
 const ConferenceTracks: React.FC = () => {
   return (
-    <section className="py-14 bg-white">
+    <section className="py-8 bg-white">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Section header */}
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <div className="h-px w-8 bg-[#4E9F3D]" />
-          <span className="text-[12px] font-bold text-[#4E9F3D] uppercase tracking-widest">
-            EXPLORE CONFERENCE TRACKS
-          </span>
-          <div className="h-px w-8 bg-[#4E9F3D]" />
+        <div className="flex flex-col items-center mb-10">
+          <h2 className="text-[18px] md:text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+            EXPLORE CONFERENCE <span className="text-[#1E88E5]">TRACKS</span>
+          </h2>
+          <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
         </div>
 
         {/* Tracks grid */}

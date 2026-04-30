@@ -5,7 +5,7 @@ import { Users, Mic, Calendar, Trophy, Globe2 } from "lucide-react";
 
 // Custom Infinity icon since lucide doesn't have one
 const InfinityIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4E9F3D" strokeWidth="2.5">
     <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8C.344 8 .344 16 5.44 16c5.095 0 7.133-8 12.738-8z" />
   </svg>
 );
@@ -21,31 +21,45 @@ const statsData = [
 
 const ConferenceStats: React.FC = () => {
   return (
-    <section className="relative z-[60] mx-auto max-w-[1320px] -mt-6 px-6">
-      <div className="bg-[#0B2C66] rounded-[18px] shadow-xl border border-[#1E4B8A] px-12 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+    <section className="relative z-[60] mx-auto max-w-[1320px] -mt-10 px-6">
+      <div className="bg-[#0B2C66] rounded-[20px] shadow-[0_15px_40px_rgba(11,44,102,0.25)] border border-white/10 px-6 py-0 relative overflow-hidden">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" strokeWidth="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 relative z-10 divide-x divide-white/10">
           {statsData.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="flex flex-col items-center text-center group"
+              transition={{ delay: index * 0.05 }}
+              className="flex items-center justify-center gap-3 py-1 group px-4"
             >
-              <div className="w-11 h-11 rounded-[10px] bg-white/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+              <div className="transition-transform duration-500 group-hover:scale-110">
                 {stat.custom ? (
                   <InfinityIcon />
                 ) : (
-                  <stat.icon className="w-5 h-5 text-white" />
+                  <stat.icon className="w-6 h-6 text-[#4E9F3D]" strokeWidth={2.5} />
                 )}
               </div>
-              <h3 className="text-[30px] font-bold text-white mb-1 leading-tight">
-                {stat.value}
-              </h3>
-              <p className="text-[10px] font-semibold text-white/70 uppercase tracking-widest leading-tight">
-                {stat.label}
-              </p>
+              <div className="flex flex-col">
+                <h3 className="text-[20px] font-black text-white leading-none tracking-tight">
+                  {stat.value}
+                </h3>
+                <p className="text-[9px] font-black text-white/50 uppercase tracking-[0.12em] leading-tight mt-1">
+                  {stat.label}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>

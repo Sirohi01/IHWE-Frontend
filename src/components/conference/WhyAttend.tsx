@@ -42,7 +42,7 @@ const benefits = [
 
 const WhyAttend: React.FC = () => {
   return (
-    <section className="py-20 bg-[#F7F9FC]">
+    <section className="py-8 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 max-w-[1320px]">
         <div className="flex flex-col lg:flex-row gap-16 items-start">
           {/* Left */}
@@ -56,12 +56,12 @@ const WhyAttend: React.FC = () => {
               <span className="text-[12px] font-semibold text-[#4E9F3D] uppercase tracking-widest">
                 WHY ATTEND CONFERENCE?
               </span>
-              <h2 className="text-[42px] font-bold text-[#1C2B3A] leading-[1.2]">
+              <h2 className="text-[26px] font-bold text-[#1C2B3A] leading-[1.2]">
                 Where <span className="text-[#4E9F3D]">Ideas</span> Meet{" "}
                 <span className="text-[#1E88E5]">Industry</span>
               </h2>
-              <div className="w-8 h-[3px] bg-[#4E9F3D] rounded-full" />
-              <p className="text-[14px] text-[#5F6B7A] leading-[1.7] font-normal">
+              <div className="w-6 h-[2px] bg-[#4E9F3D] rounded-full" />
+              <p className="text-[12px] text-[#5F6B7A] leading-[1.5] font-normal">
                 Be part of high-impact conversations, future-focused knowledge
                 sessions, and meaningful connections that drive real change in
                 healthcare & wellness.
@@ -70,20 +70,20 @@ const WhyAttend: React.FC = () => {
           </div>
 
           {/* Right benefits grid */}
-          <div className="lg:w-[62%] grid md:grid-cols-2 gap-4">
+          <div className="lg:w-[62%] grid md:grid-cols-2 gap-x-12 gap-y-6">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="flex items-start gap-4 p-5 rounded-[14px] bg-white shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 border border-[#E6ECF3]"
+                transition={{ delay: index * 0.05 }}
+                className="flex items-center gap-5 group"
               >
-                <div className="shrink-0 w-11 h-11 rounded-[10px] bg-[#EEF4FF] flex items-center justify-center">
-                  <benefit.icon className="w-5 h-5 text-[#1E88E5]" />
+                <div className="shrink-0 w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center group-hover:bg-[#4E9F3D] transition-colors duration-300">
+                  <benefit.icon className="w-5 h-5 text-[#4E9F3D] group-hover:text-white transition-colors duration-300" />
                 </div>
-                <p className="text-[13px] font-semibold text-[#1C2B3A] leading-[1.5] pt-0.5">
+                <p className="text-[13px] font-bold text-[#1C2B3A] leading-[1.4]">
                   {benefit.title}
                 </p>
               </motion.div>

@@ -1,7 +1,8 @@
 // components/conference/ConferenceAgenda.tsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, User } from "lucide-react";
+import { Clock, User, ChevronRight } from "lucide-react";
+import amconImage from "../../assets/amanconfre.png";
 
 const agendaData = [
   {
@@ -91,39 +92,41 @@ const agendaData = [
 ];
 
 const typeColors: Record<string, string> = {
-  Keynote: "bg-[#4E9F3D] text-white",
-  Panel: "bg-[#1E88E5] text-white",
-  "Expert Talk": "bg-[#6A3DF0] text-white",
-  Networking: "bg-[#E88C1E] text-white",
+  Keynote: "bg-[#F7F9FC] text-[#1C2B3A] border border-[#E6ECF3]",
+  Panel: "bg-[#F7F9FC] text-[#1C2B3A] border border-[#E6ECF3]",
+  "Expert Talk": "bg-[#F7F9FC] text-[#1C2B3A] border border-[#E6ECF3]",
+  Networking: "bg-[#F7F9FC] text-[#1C2B3A] border border-[#E6ECF3]",
 };
 
 const ConferenceAgenda: React.FC = () => {
   const [activeDay, setActiveDay] = useState(0);
 
   return (
-    <section className="py-16 bg-[#F7F9FC]">
+    <section className="py-6 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 max-w-[1320px]">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Left image */}
-          <div className="hidden lg:block w-[200px] flex-shrink-0 rounded-[16px] overflow-hidden h-[420px]">
-            <img
-              src="https://images.unsplash.com/photo-1559523161-0fc0d8b38a7a?auto=format&fit=crop&q=80"
-              alt="Agenda visual"
-              className="w-full h-full object-cover"
-            />
+          <div className="hidden lg:block w-[340px] flex-shrink-0 mt-4">
+            <div className="w-full h-[480px] overflow-hidden  ">
+              <img
+                src={amconImage}
+                alt="Agenda visual"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
 
-          {/* Right agenda content */}
           <div className="flex-1">
-            {/* Header */}
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-[20px] font-black text-[#1C2B3A] uppercase tracking-wide">
-                CONFERENCE AGENDA
+              <h2 className="text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+                CONFERENCE <span className="text-[#1E88E5]">AGENDA</span>
               </h2>
-              <span className="text-[11px] font-semibold text-[#4E9F3D] cursor-pointer hover:underline">
-                VIEW FULL AGENDA →
-              </span>
+              <a href="#" className="flex items-center gap-1 text-[11px] font-extrabold text-[#4E9F3D] uppercase tracking-wider hover:opacity-80 transition-opacity">
+                VIEW FULL AGENDA
+                <ChevronRight className="w-4 h-4" />
+              </a>
             </div>
+
+
 
             {/* Day tabs */}
             <div className="flex gap-2 mb-5 overflow-x-auto">
@@ -132,8 +135,8 @@ const ConferenceAgenda: React.FC = () => {
                   key={index}
                   onClick={() => setActiveDay(index)}
                   className={`flex-shrink-0 px-4 py-2 rounded-[8px] border text-left transition-all duration-200 ${activeDay === index
-                      ? "bg-[#1C2B3A] border-[#1C2B3A] text-white"
-                      : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D]"
+                    ? "bg-[#1C2B3A] border-[#1C2B3A] text-white"
+                    : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D]"
                     }`}
                 >
                   <p
@@ -163,13 +166,13 @@ const ConferenceAgenda: React.FC = () => {
                   {agendaData[activeDay].sessions.map((session, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-4 px-5 py-3.5 hover:bg-[#F7F9FC] transition-colors"
+                      className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#F7F9FC] transition-colors"
                     >
                       {/* Time */}
-                      <div className="w-[130px] flex-shrink-0">
-                        <div className="flex items-center gap-1.5 text-[#4E9F3D]">
-                          <Clock className="w-3.5 h-3.5" />
-                          <span className="text-[11px] font-bold">
+                      <div className="w-[160px] flex-shrink-0">
+                        <div className="flex items-center gap-2 text-[#4E9F3D]">
+                          <Clock className="w-4 h-4" />
+                          <span className="text-[13px] font-bold">
                             {session.time}
                           </span>
                         </div>
@@ -177,24 +180,26 @@ const ConferenceAgenda: React.FC = () => {
 
                       {/* Session topic */}
                       <div className="flex-1">
-                        <p className="text-[13px] font-semibold text-[#1C2B3A]">
+                        <p className="text-[15px] font-bold text-[#1C2B3A]">
                           {session.topic}
                         </p>
                       </div>
 
                       {/* Speaker */}
-                      <div className="hidden md:flex items-center gap-1.5 text-[#5F6B7A] w-[140px] flex-shrink-0 justify-end">
-                        <User className="w-3 h-3" />
-                        <span className="text-[11px]">{session.speakers}</span>
+                      <div className="hidden md:flex items-center gap-2 text-[#5F6B7A] w-[180px] flex-shrink-0 justify-start">
+                        <User className="w-3.5 h-3.5" />
+                        <span className="text-[13px] font-medium">{session.speakers}</span>
                       </div>
 
                       {/* Type badge */}
-                      <span
-                        className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wide flex-shrink-0 ${typeColors[session.type] || "bg-gray-200 text-gray-700"
-                          }`}
-                      >
-                        {session.type}
-                      </span>
+                      <div className="w-[120px] flex justify-end">
+                        <span
+                          className={`text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest flex-shrink-0 ${typeColors[session.type] || "bg-gray-200 text-gray-700"
+                            }`}
+                        >
+                          {session.type}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </motion.div>

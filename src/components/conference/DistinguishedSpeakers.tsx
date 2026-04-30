@@ -58,122 +58,134 @@ const DistinguishedSpeakers: React.FC = () => {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollAmount = clientWidth * 0.8;
       const scrollTo =
         direction === "left"
-          ? scrollLeft - clientWidth / 2
-          : scrollLeft + clientWidth / 2;
+          ? scrollLeft - scrollAmount
+          : scrollLeft + scrollAmount;
       scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
     }
   };
 
   return (
-    <section className="py-16 bg-white overflow-hidden">
+    <section className="py-8 bg-white overflow-hidden">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Header */}
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-px w-8 bg-[#4E9F3D]" />
-              <span className="text-[12px] font-semibold text-[#4E9F3D] uppercase tracking-widest">
-                MEET OUR DISTINGUISHED
-              </span>
-            </div>
-            <h2 className="text-[38px] font-bold text-[#0B2C66]">
-              Global <span className="text-[#4E9F3D]">Speakers</span>
+        <div className="relative mb-12 text-center">
+          <div className="flex flex-col items-center">
+            <h2 className="text-[18px] md:text-[19px] font-bold text-[#0B2C66] uppercase tracking-tight">
+              MEET OUR DISTINGUISHED <span className="text-[#1E88E5]">SPEAKERS</span>
             </h2>
+            <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-[12px] font-semibold text-[#4E9F3D] cursor-pointer hover:underline">
-              VIEW ALL SPEAKERS →
-            </span>
-            <button
-              onClick={() => scroll("left")}
-              className="w-10 h-10 rounded-full border border-[#E6ECF3] flex items-center justify-center hover:bg-[#F7F9FC] transition-all"
-            >
-              <ChevronLeft className="w-5 h-5 text-[#5F6B7A]" />
-            </button>
-            <button
-              onClick={() => scroll("right")}
-              className="w-10 h-10 rounded-full bg-[#0B2C66] flex items-center justify-center hover:bg-[#081F4D] transition-all"
-            >
-              <ChevronRight className="w-5 h-5 text-white" />
-            </button>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:block">
+            <a href="#" className="flex items-center gap-1 text-[11px] font-extrabold text-[#4E9F3D] uppercase tracking-wider hover:opacity-80 transition-opacity">
+              VIEW ALL SPEAKERS
+              <ChevronRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
-        {/* Scrollable speaker cards */}
-        <div
-          ref={scrollRef}
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {speakers.map((speaker, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="min-w-[220px] snap-start bg-[#f8fcf9] rounded-[24px] p-6 border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
-            >
-              {/* Photo */}
-              <div className="relative w-[120px] h-[120px] mb-4">
-                <div className="w-full h-full rounded-[18px] overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-500">
-                  <img
-                    src={speaker.image}
-                    alt={speaker.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                {/* Flag */}
-                <div className="absolute top-1.5 left-1.5 w-8 h-8 rounded-[8px] bg-white shadow-md flex items-center justify-center text-lg">
-                  {speaker.flag}
-                </div>
-                {/* Mic icon */}
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-[8px] bg-[#4E9F3D] text-white flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                  <Mic2 className="w-4 h-4" />
-                </div>
-              </div>
+        {/* Slider Container with Arrows */}
+        <div className="relative px-8 md:px-12">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll("left")}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-[#E6ECF3] flex items-center justify-center hover:bg-[#4E9F3D] hover:border-[#4E9F3D] transition-all shadow-md group"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
+          </button>
 
-              {/* Info */}
-              <h3 className="text-[15px] font-black text-[#1C2B3A] mb-1 leading-tight">
-                {speaker.name}
-              </h3>
-              <p className="text-[10px] font-black text-[#4E9F3D] uppercase tracking-wide mb-0.5">
-                {speaker.role}
-              </p>
-              <p className="text-[11px] text-[#5F6B7A] font-semibold uppercase tracking-tight opacity-70 mb-3">
-                {speaker.org}
-              </p>
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll("right")}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white border border-[#E6ECF3] flex items-center justify-center hover:bg-[#4E9F3D] hover:border-[#4E9F3D] transition-all shadow-md group"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-5 h-5 text-[#5F6B7A] group-hover:text-white transition-colors" />
+          </button>
 
-              {/* Topic */}
-              <div className="w-full border-t border-[#E6ECF3] pt-3 mt-1">
-                <p className="text-[9px] font-black text-[#aaa] uppercase tracking-widest mb-1">
-                  TOPIC:
-                </p>
-                <p
-                  className={`text-[12px] font-semibold italic leading-snug ${speaker.topicColor ? "text-[#4E9F3D]" : "text-[#1C2B3A]"
-                    }`}
-                >
-                  {speaker.topic}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+          {/* Scrollable speaker cards */}
+          <div
+            ref={scrollRef}
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scroll-smooth"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {speakers.map((speaker, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className="min-w-[220px] md:min-w-[240px] snap-start bg-white rounded-[24px] p-6 shadow-sm border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
+              >
+                {/* Photo */}
+                <div className="relative w-[110px] h-[110px] mb-5">
+                  {/* Mic icon - Top Left */}
+                  <div className="absolute -top-1 -left-1 w-8 h-8 rounded-full bg-[#1E88E5] text-white flex items-center justify-center shadow-lg z-10 border-2 border-white">
+                    <Mic2 className="w-4 h-4" />
+                  </div>
 
-        {/* Dot indicators */}
-        <div className="flex justify-center gap-2 mt-5">
-          {[0, 1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className={`rounded-full transition-all ${i === 0
-                  ? "w-6 h-2 bg-[#4E9F3D]"
-                  : "w-2 h-2 bg-[#E6ECF3]"
-                }`}
-            />
-          ))}
+                  <div className="w-full h-full rounded-full overflow-hidden shadow-xl group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
+                    <img
+                      src={speaker.image}
+                      alt={speaker.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Flag - Top Right */}
+                  <div className="absolute top-1 -right-1 w-7 h-7 rounded-full bg-white shadow-md flex items-center justify-center text-[12px] border border-[#E6ECF3] z-10">
+                    {speaker.flag}
+                  </div>
+                </div>
+
+                {/* Info */}
+                <h3 className="text-[16px] font-bold text-[#1C2B3A] mb-1.5 leading-tight">
+                  {speaker.name}
+                </h3>
+                <div className="flex flex-col gap-0.5 mb-4">
+                  <p className="text-[11px] font-medium text-[#5F6B7A] leading-tight">
+                    {speaker.role}
+                  </p>
+                  <p className="text-[11px] font-bold text-[#1C2B3A]">
+                    {speaker.org}
+                  </p>
+                </div>
+
+                {/* Topic */}
+                <div className="w-full border-t border-[#F1F5F9] pt-4 text-left">
+                  <p className="text-[10px] font-bold text-[#8FB569] uppercase tracking-wider mb-1">
+                    TOPIC:
+                  </p>
+                  <p className="text-[13px] font-medium text-[#1C2B3A] leading-snug">
+                    {speaker.topic}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Dot Indicators for scroll position */}
+          <div className="flex justify-center gap-3 mt-8">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  if (scrollRef.current) {
+                    const cardWidth = scrollRef.current.children[0] as HTMLElement;
+                    const scrollAmount = (cardWidth.offsetWidth + 20) * i; // 20 is the gap
+                    scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
+                  }
+                }}
+                className="rounded-full transition-all duration-300 w-2 h-2 bg-[#E6ECF3] hover:bg-[#4E9F3D] hover:w-5"
+                aria-label={`Go to speaker ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
