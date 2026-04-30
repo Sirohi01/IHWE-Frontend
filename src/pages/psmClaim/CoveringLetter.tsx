@@ -73,6 +73,7 @@ const CoveringLetter: React.FC<Props> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
             showUnderlines={false}
+            isLetterhead={true}
         >
             <div className="flex justify-end mb-8 mt-16 print:mt-12">
                 <div className="flex items-center gap-2">

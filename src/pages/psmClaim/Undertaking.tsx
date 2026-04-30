@@ -76,6 +76,7 @@ const Undertaking: React.FC<Props> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            isLetterhead={true}
         >
             <div className="text-center mb-12">
                 <h1 className="text-[18px] font-bold uppercase underline">UNDERTAKING</h1>

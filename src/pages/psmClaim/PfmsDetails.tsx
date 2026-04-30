@@ -103,6 +103,7 @@ const PfmsDetails: React.FC<PfmsDetailsProps> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
             showUnderlines={false}
+            isLetterhead={true}
         >
             <div className="text-center mb-8 mt-10">
                 <h1 className="text-[15px] font-bold uppercase underline">
