@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
 import heroBg from "../../assets/hero.png";
+import awardsLogo from "../../assets/new.png";
 
 const AwardsHero = () => {
   const navyColor = "#0a2e5c";
@@ -32,6 +33,11 @@ const AwardsHero = () => {
             transition={{ duration: 0.8 }}
             className="lg:col-span-8 flex flex-col items-start"
           >
+            {/* Awards Logo */}
+            <div className="mb-4">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-32 w-auto object-contain" />
+            </div>
+
             <div className="flex items-center gap-4 mb-3">
               <span className="text-[12px] font-bold uppercase tracking-[0.4em]" style={{ color: darkYellow }}>3rd Edition Of</span>
               <div className="flex items-center gap-0">

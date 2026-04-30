@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
-import awardsLogo from "@/assets/new.png";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -172,13 +171,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
         <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
 
           <Link to="/" className="relative z-[150] h-full flex items-center min-w-[200px]">
-            {location.pathname.startsWith("/awards") ? (
-              <img
-                src={awardsLogo}
-                alt="Awards Logo"
-                className="absolute top-1/2 -translate-y-1/3 left-4 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
-              />
-            ) : settings?.logo ? (
+            {settings?.logo ? (
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
@@ -416,13 +409,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
 
         <div className="flex xl:hidden items-center justify-between h-[64px] relative">
           <Link to="/" className="relative z-[150] h-full flex items-center min-w-[140px] ml-2">
-            {location.pathname.startsWith("/awards") ? (
-              <img
-                src={awardsLogo}
-                alt="Awards Logo"
-                className="absolute top-1/2 -translate-y-1/2 left-0 h-32 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-              />
-            ) : settings?.logo ? (
+            {settings?.logo ? (
               <img
                 src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
