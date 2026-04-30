@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 import ctaImg from "../../assets/cta.png";
 
 const AwardsCTA = () => {
@@ -11,7 +12,7 @@ const AwardsCTA = () => {
           background: "linear-gradient(90deg, #002b5c 0%, #002b5c 40%, #008d48 100%)"
         }}
       >
-        {/* Reduced Max-Width to 1280px to push alignment inward */}
+        {/* Standardized to Inward Alignment (1280px) */}
         <div className="container mx-auto px-6 max-w-[1280px] flex flex-col md:flex-row items-center justify-between gap-6">
           
           <div className="flex items-center gap-6">
@@ -34,15 +35,22 @@ const AwardsCTA = () => {
             </div>
           </div>
 
+          {/* Linked Buttons */}
           <div className="flex flex-wrap items-center gap-4">
-            <button className="bg-[#008d48] text-white px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-[#007a3e] border border-white/10 shadow-lg">
+            <Link 
+              to="/visitor-registration"
+              className="bg-[#008d48] text-white px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-[#007a3e] border border-white/10 shadow-lg"
+            >
               NOMINATE NOW
               <ArrowRight className="w-4 h-4" />
-            </button>
-            <button className="bg-white text-[#002b5c] px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-slate-50 shadow-lg">
+            </Link>
+            <Link 
+              to="/contact"
+              className="bg-white text-[#002b5c] px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-slate-50 shadow-lg"
+            >
               CONTACT US
               <Phone className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
         </div>
