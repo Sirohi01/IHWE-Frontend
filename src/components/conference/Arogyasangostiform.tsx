@@ -1,24 +1,15 @@
 import React, { useState } from "react";
 
-// ─── Color Tokens (exact from form) ───────────────────────────────────────────
-// Teal/Dark-green header: #1A5C5A  (section headers)
-// Gold/Olive label:        #B8962E  (section 03,07 headers)
-// Dark navy text:          #1C2B3A
-// Light teal bg:           #E8F4F4
-// Border lines:            #C8DCDC
-// Button teal:             #1A5C5A
-// Gold accent:             #D4A017
-// ──────────────────────────────────────────────────────────────────────────────
 
-const TEAL = "#1A5C5A";
+const TEAL = "#0B3C49";
 const GOLD = "#B8962E";
-const LIGHT_TEAL_BG = "#EAF4F3";
+const LIGHT_TEAL_BG = "#F4F7F7";
 const BORDER_COLOR = "#C5DCDB";
 const TEXT_DARK = "#1C2B3A";
 const TRACK_BG = "#F0F8F7";
-const SECTION_ICON_BG = "#1A5C5A";
+const SECTION_ICON_BG = "#0B3C49";
 
-// ─── Icon Components (SVG inline, matching form icons) ────────────────────────
+
 const IconPerson = ({ size = 16, color = "white" }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
         <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
@@ -108,49 +99,33 @@ const SectionHeader: React.FC<{
     icon: React.ReactNode;
     gold?: boolean;
 }> = ({ number, title, icon, gold = false }) => (
-    <div
-        style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            background: gold ? GOLD : TEAL,
-            borderRadius: 6,
-            padding: "8px 14px",
-            marginBottom: 18,
-        }}
-    >
-        <span
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
+        <div
             style={{
-                color: "white",
-                fontWeight: 800,
-                fontSize: 16,
-                fontFamily: "'Segoe UI', sans-serif",
-                minWidth: 22,
-            }}
-        >
-            {number}
-        </span>
-        <span
-            style={{
-                color: "white",
+                background: gold ? GOLD : TEAL,
                 display: "flex",
                 alignItems: "center",
+                padding: "8px 36px 8px 16px",
+                clipPath: "polygon(0 0, 100% 0, 92% 100%, 0 100%)",
+                minWidth: 280
             }}
         >
-            {icon}
-        </span>
-        <span
-            style={{
-                color: "white",
-                fontWeight: 700,
-                fontSize: 14,
-                letterSpacing: 0.5,
-                fontFamily: "'Segoe UI', sans-serif",
-                textTransform: "uppercase",
-            }}
-        >
-            {title}
-        </span>
+            <span style={{ color: "white", fontSize: 20, fontWeight: 800, marginRight: 12 }}>{number}</span>
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.3)", marginRight: 12 }}></div>
+            <div style={{
+                border: "1.5px solid rgba(255,255,255,0.6)",
+                borderRadius: "50%",
+                width: 28, height: 28,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                marginRight: 12
+            }}>
+                {icon}
+            </div>
+            <span style={{ color: "white", fontSize: 16, fontWeight: 700, letterSpacing: 1.5, fontFamily: "'Segoe UI', sans-serif" }}>
+                {title.toUpperCase()}
+            </span>
+        </div>
+        <div style={{ flex: 1, borderBottom: `2px solid ${gold ? GOLD : TEAL}`, opacity: 0.1, marginLeft: -20, zIndex: -1 }}></div>
     </div>
 );
 
@@ -163,7 +138,7 @@ const FormField: React.FC<{
     onChange?: (v: string) => void;
     placeholder?: string;
 }> = ({ label, icon, children, type = "text", value, onChange, placeholder }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 12, gap: 8 }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 14, gap: 12 }}>
         {icon && <span style={{ minWidth: 20, display: "flex", alignItems: "center" }}>{icon}</span>}
         <label
             style={{
@@ -171,12 +146,12 @@ const FormField: React.FC<{
                 fontSize: 13,
                 color: TEXT_DARK,
                 fontFamily: "'Segoe UI', sans-serif",
-                fontWeight: 500,
+                fontWeight: 600,
             }}
         >
             {label}
         </label>
-        <span style={{ color: TEAL, marginRight: 4, fontWeight: 700 }}>:</span>
+        <span style={{ color: TEXT_DARK, fontWeight: 600 }}>:</span>
         {children ?? (
             <input
                 type={type}
@@ -185,14 +160,14 @@ const FormField: React.FC<{
                 onChange={(e) => onChange?.(e.target.value)}
                 style={{
                     flex: 1,
-                    border: "none",
-                    borderBottom: `1.5px solid ${BORDER_COLOR}`,
+                    border: `1px solid ${BORDER_COLOR}`,
+                    borderRadius: 4,
                     outline: "none",
                     fontSize: 13,
-                    padding: "4px 2px",
+                    padding: "8px 12px",
                     fontFamily: "'Segoe UI', sans-serif",
                     color: TEXT_DARK,
-                    background: "transparent",
+                    background: "#FAFAFA",
                 }}
             />
         )}
@@ -323,7 +298,7 @@ const ExpertiseChip: React.FC<{
     </button>
 );
 
-// ─── Icon SVGs for categories ──────────────────────────────────────────────────
+
 const DoctorIcon = () => (
     <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
         <circle cx="24" cy="16" r="8" fill={TEAL} opacity="0.15" />
@@ -506,138 +481,63 @@ export default function ArogyaSanghostiForm() {
             {/* ── HEADER ─────────────────────────────────────────────────────────── */}
             <div
                 style={{
-                    background: `linear-gradient(135deg, ${TEAL} 0%, #0F3D3C 100%)`,
-                    padding: "24px 36px 20px",
-                    position: "relative",
-                    overflow: "hidden",
+                    background: "white",
+                    padding: "30px 40px",
+                    borderBottom: `2px solid ${TEAL}`,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
                 }}
             >
-                {/* Decorative circles */}
-                <div
-                    style={{
-                        position: "absolute",
-                        top: -40,
-                        right: -40,
-                        width: 180,
-                        height: 180,
-                        borderRadius: "50%",
-                        background: "rgba(255,255,255,0.04)",
-                    }}
-                />
-                <div
-                    style={{
-                        position: "absolute",
-                        bottom: -30,
-                        left: "38%",
-                        width: 120,
-                        height: 120,
-                        borderRadius: "50%",
-                        background: "rgba(255,255,255,0.03)",
-                    }}
-                />
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 28 }}>
-                    {/* Logo area */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                            {/* Leaf logo */}
-                            <div
-                                style={{
-                                    width: 52,
-                                    height: 52,
-                                    borderRadius: "50%",
-                                    background: "rgba(255,255,255,0.12)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            >
-                                <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                                    <circle cx="24" cy="24" r="20" fill="rgba(255,255,255,0.1)" />
-                                    <path d="M24 8C24 8 12 18 12 28a12 12 0 0 0 24 0C36 18 24 8 24 8z" fill="white" opacity="0.8" />
-                                    <path d="M24 14C24 14 18 22 18 28a6 6 0 0 0 12 0C30 22 24 14 24 14z" fill={GOLD} opacity="0.6" />
-                                    <line x1="24" y1="28" x2="24" y2="40" stroke="white" strokeWidth="2" opacity="0.5" />
-                                    <path d="M16 20 Q24 24 32 20" stroke="white" strokeWidth="1.5" fill="none" opacity="0.4" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div style={{ color: "white", fontWeight: 800, fontSize: 26, lineHeight: 1.1, letterSpacing: 1 }}>
-                                    AROGYA
-                                </div>
-                                <div style={{ color: GOLD, fontWeight: 800, fontSize: 26, lineHeight: 1.1, letterSpacing: 1 }}>
-                                    SANGHOSTHI
-                                </div>
-                                <div
-                                    style={{
-                                        background: GOLD,
-                                        color: "white",
-                                        fontSize: 11,
-                                        fontWeight: 700,
-                                        padding: "2px 14px",
-                                        borderRadius: 20,
-                                        display: "inline-block",
-                                        marginTop: 4,
-                                        letterSpacing: 1,
-                                    }}
-                                >
-                                    — 18<sup>TH</sup> EDITION —
-                                </div>
-                            </div>
-                        </div>
-                        <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, letterSpacing: 1.5, marginTop: 8, fontWeight: 500 }}>
-                            INDIA'S PREMIER HEALTHCARE & AYUSH CONFERENCE
-                        </div>
-                    </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                    <img src="/assets/arogyasangosti.png" alt="Arogya Sanghosthi" style={{ height: 90, objectFit: 'contain' }} />
+                </div>
 
-                    {/* Center: SPEAKER NOMINATION */}
-                    <div style={{ flex: 1, paddingLeft: 20, borderLeft: "2px solid rgba(255,255,255,0.15)" }}>
-                        <div style={{ color: "white", fontWeight: 900, fontSize: 32, lineHeight: 1, letterSpacing: 1 }}>
-                            SPEAKER
-                        </div>
-                        <div style={{ color: "white", fontWeight: 900, fontSize: 32, lineHeight: 1, letterSpacing: 1 }}>
-                            NOMINATION FORM
-                        </div>
-                        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-                            {["Share Your Knowledge.", "Inspire Change. Shape the Future."].map((t) => (
-                                <div key={t} style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.85)", fontSize: 13 }}>
-                                    <span style={{ color: GOLD, fontSize: 16 }}>✦</span>
-                                    {t}
-                                </div>
-                            ))}
-                        </div>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", borderLeft: `3px solid ${TEAL}`, paddingLeft: 24 }}>
+                    <div style={{ color: TEAL, fontWeight: 900, fontSize: 36, lineHeight: 1, letterSpacing: 1 }}>
+                        SPEAKER
                     </div>
-
-                    {/* Right badge */}
-                    <div
-                        style={{
-                            minWidth: 120,
-                            background: GOLD,
-                            borderRadius: 8,
-                            padding: "14px 10px",
-                            textAlign: "center",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 6,
-                        }}
-                    >
-                        <svg width="30" height="30" viewBox="0 0 48 48" fill="none">
-                            <path d="M24 4 L40 18 L32 18 L32 40 L16 40 L16 18 L8 18 Z" fill="white" opacity="0.9" />
-                            <circle cx="24" cy="12" r="4" fill={GOLD} />
-                        </svg>
-                        <div style={{ color: "white", fontWeight: 800, fontSize: 12, lineHeight: 1.3, textAlign: "center" }}>
-                            BUILDING A<br />HEALTHIER<br />FUTURE<br />TOGETHER
+                    <div style={{ color: TEAL, fontWeight: 900, fontSize: 36, lineHeight: 1, letterSpacing: 1 }}>
+                        NOMINATION FORM
+                    </div>
+                    <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: TEXT_DARK, fontSize: 14, fontWeight: 500 }}>
+                            <span style={{ color: TEAL }}>❖</span> Share Your Knowledge.
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: TEXT_DARK, fontSize: 14, fontWeight: 500 }}>
+                            <span style={{ color: TEAL }}>❖</span> Inspire Change. Shape the Future.
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div
+                    style={{
+                        background: TEAL,
+                        borderRadius: 8,
+                        padding: "20px 16px",
+                        textAlign: "center",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 10,
+                        border: `2px solid ${GOLD}`
+                    }}
+                >
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 4 L40 18 L32 18 L32 40 L16 40 L16 18 L8 18 Z" fill={GOLD} />
+                    </svg>
+                    <div style={{ color: "white", fontWeight: 700, fontSize: 12, lineHeight: 1.4, textAlign: "center", letterSpacing: 1 }}>
+                        BUILDING A<br />HEALTHIER<br />FUTURE<br />TOGETHER
+                    </div>
+                </div>
+            </div>
             {/* ── FORM BODY ──────────────────────────────────────────────────────── */}
             <div style={{ padding: "28px 36px", background: "#FAFEFE" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
                     {/* ── LEFT COLUMN ── */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 28, borderRight: "1px solid #E2E8F0", paddingRight: 32 }}>
                         {/* 01 BASIC DETAILS */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="01" title="Basic Details" icon={<IconPerson />} />
                             <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} />
                             <FormField label="Designation" value={form.designation} onChange={set("designation")} />
@@ -662,7 +562,7 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 02 CONTACT DETAILS */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="02" title="Contact Details" icon={<IconPhone />} />
                             <FormField label="Mobile Number" icon={<IconMobile />} value={form.mobile} onChange={set("mobile")} type="tel" />
                             <FormField label="Email Address" icon={<IconEmail />} value={form.email} onChange={set("email")} type="email" />
@@ -671,7 +571,7 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 03 SPEAKER PROFILE */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="03" title="Speaker Profile" icon={<IconPerson />} gold />
                             <div style={{ marginBottom: 12 }}>
                                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 500, marginBottom: 6 }}>
@@ -743,7 +643,7 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 07 EXPECTATIONS */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="07" title="Expectations" icon={<IconStar />} gold />
                             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 500, marginBottom: 10 }}>
                                 Are you open for:
@@ -779,9 +679,9 @@ export default function ArogyaSanghostiForm() {
                     </div>
 
                     {/* ── RIGHT COLUMN ── */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 28, paddingLeft: 32 }}>
                         {/* 04 SESSION DETAILS */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="04" title="Session Details" icon={<IconCalendar />} />
 
                             {/* Preferred Track */}
@@ -890,7 +790,7 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 05 SPEAKING EXPERIENCE */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="05" title="Speaking Experience" icon={<IconPerson />} />
                             <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 12 }}>
                                 <span style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 500 }}>Have you spoken at conferences before?</span>
@@ -963,7 +863,7 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 06 SUPPORTING DETAILS */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="06" title="Supporting Details" icon={<IconDoc />} />
                             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 500, marginBottom: 14 }}>
                                 Please upload / provide the following:
@@ -1018,33 +918,52 @@ export default function ArogyaSanghostiForm() {
                         </section>
 
                         {/* 08 CONSENT */}
-                        <section style={{ background: "white", borderRadius: 10, padding: "20px 22px", boxShadow: "0 1px 8px rgba(26,92,90,0.07)", border: `1px solid ${BORDER_COLOR}` }}>
+                        <section style={{ marginBottom: 40 }}>
                             <SectionHeader number="08" title="Consent" icon={<IconShield />} />
-                            {[
-                                { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
-                                { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
-                            ].map((c) => (
-                                <label
-                                    key={c.label}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 8,
-                                        marginBottom: 10,
-                                        fontSize: 13,
-                                        color: TEXT_DARK,
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        checked={c.state}
-                                        onChange={(e) => c.set(e.target.checked)}
-                                        style={{ accentColor: TEAL, width: 15, height: 15 }}
-                                    />
-                                    {c.label}
-                                </label>
-                            ))}
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <div>
+                                    {[
+                                        { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
+                                        { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
+                                    ].map((c) => (
+                                        <label
+                                            key={c.label}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 8,
+                                                marginBottom: 10,
+                                                fontSize: 13,
+                                                color: TEXT_DARK,
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={c.state}
+                                                onChange={(e) => c.set(e.target.checked)}
+                                                style={{ accentColor: TEAL, width: 15, height: 15 }}
+                                            />
+                                            {c.label}
+                                        </label>
+                                    ))}
+                                </div>
+                                {/* Shield & Stethoscope Graphic */}
+                                <div style={{ position: "relative", width: 100, height: 100, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z" fill={TEAL} />
+                                        <path d="M12 6v14.9c3.27-1.11 6.23-5.26 6.23-9.9V6.6l-6.23-2.34V6z" fill="#135265" />
+                                        <path d="M11 9h2v3h3v2h-3v3h-2v-3H8v-2h3V9z" fill="white" />
+                                    </svg>
+                                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" strokeWidth="1" style={{ position: "absolute", bottom: -10, right: -10 }}>
+                                        <path d="M12 2C8.13 2 5 5.13 5 9v3c0 2.21 1.79 4 4 4h2c.55 0 1 .45 1 1v2c0 1.66-1.34 3-3 3H8c-1.1 0-2-.9-2-2v-2" strokeWidth="1.5" strokeLinecap="round" />
+                                        <circle cx="20" cy="9" r="2" fill="none" strokeWidth="1.5" />
+                                        <circle cx="5" cy="9" r="1.5" fill="none" strokeWidth="1.5" />
+                                        <circle cx="12" cy="18" r="1.5" fill="none" strokeWidth="1.5" />
+                                        <path d="M20 11v1c0 3.87-3.13 7-7 7" strokeWidth="1.5" strokeLinecap="round" />
+                                    </svg>
+                                </div>
+                            </div>
                         </section>
                     </div>
                 </div>
