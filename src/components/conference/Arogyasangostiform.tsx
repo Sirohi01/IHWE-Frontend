@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 import heroImg from "../../assets/arogyasangostiimageform/hero.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
@@ -9,6 +10,7 @@ import {
     ExpectationsSection, ConsentSection
 } from "./ArogyaSanghosti/Sections";
 import { BottomTagline, Footer } from "./ArogyaSanghosti/Footer";
+import { API_URL } from "@/lib/api";
 
 export default function ArogyaSanghostiForm() {
     // ─── STATE MANAGEMENT ─────────────────────────────────────────────────────
@@ -35,78 +37,142 @@ export default function ArogyaSanghostiForm() {
         consent2: false,
     });
 
-    // ─── CONSOLE LOG FOR BACKEND DEVELOPER ────────────────────────────────────
-    useEffect(() => {
-        console.log("\n" + "=".repeat(80));
-        console.log("🚀 BACKEND DEVELOPER - API PAYLOAD REQUIRED");
-        console.log("=".repeat(80));
-        console.log("\n📋 FORM FIELDS NEEDED:\n");
-        console.log(JSON.stringify({
-            // Basic Details
-            fullName: form.fullName || "string (required)",
-            designation: form.designation || "string (required)",
-            organization: form.organization || "string (required)",
-            industryCategory: form.industryCategory || "string (required) - Doctor/Nurse/etc",
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-            // Contact Details
-            mobile: form.mobile || "string (required)",
-            email: form.email || "string (required)",
-            city: form.city || "string (required)",
-            linkedin: form.linkedin || "string (optional)",
+    // ─── FORM VALIDATION ──────────────────────────────────────────────────────
+    const validateForm = () => {
+        if (!form.fullName.trim()) {
+            toast.error("Please enter your full name");
+            return false;
+        }
+        if (!form.designation.trim()) {
+            toast.error("Please enter your designation");
+            return false;
+        }
+        if (!form.organization.trim()) {
+            toast.error("Please enter your organization");
+            return false;
+        }
+        if (!form.mobile.trim()) {
+            toast.error("Please enter your mobile number");
+            return false;
+        }
+        if (!form.email.trim()) {
+            toast.error("Please enter your email");
+            return false;
+        }
+        if (!form.city.trim()) {
+            toast.error("Please enter your city");
+            return false;
+        }
+        if (!form.briefProfile.trim()) {
+            toast.error("Please enter your brief profile");
+            return false;
+        }
+        if (!form.totalExperience.trim()) {
+            toast.error("Please enter your total experience");
+            return false;
+        }
+        if (form.expertise.length === 0) {
+            toast.error("Please select at least one area of expertise");
+            return false;
+        }
+        if (!form.preferredTopic.trim()) {
+            toast.error("Please enter your preferred topic");
+            return false;
+        }
+        if (!form.topicDescription.trim()) {
+            toast.error("Please enter topic description");
+            return false;
+        }
+        if (form.expectations.length === 0) {
+            toast.error("Please select at least one expectation");
+            return false;
+        }
+        if (!form.consent1) {
+            toast.error("Please accept the terms and conditions");
+            return false;
+        }
+        if (!form.consent2) {
+            toast.error("Please accept the privacy policy");
+            return false;
+        }
+        return true;
+    };
 
-            // Speaker Profile
-            briefProfile: form.briefProfile || "string (required)",
-            totalExperience: form.totalExperience || "string (required)",
-            expertise: form.expertise.length > 0 ? form.expertise : ["array of strings (required)"],
+    // ─── FORM SUBMISSION ──────────────────────────────────────────────────────
+    const handleSubmit = async () => {
+        if (!validateForm()) return;
 
-            // Session Details
-            preferredTopic: form.preferredTopic || "string (required)",
-            topicDescription: form.topicDescription || "string (required)",
-            preferredTrack: form.preferredTrack || "string (required) - ayush/allopathy/etc",
-            sessionType: form.sessionType || "string (required) - keynote/panel/workshop",
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(`${API_URL}/speaker`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form)
+            });
 
-            // Speaking Experience
-            spokenBefore: form.spokenBefore || "string (required) - Yes/No",
-            eventDetails: form.eventDetails || "string (optional)",
+            const data = await response.json();
 
-            // Expectations & Consent
-            expectations: form.expectations.length > 0 ? form.expectations : ["array of strings (required)"],
-            consent1: form.consent1 || "boolean (required)",
-            consent2: form.consent2 || "boolean (required)",
-        }, null, 2));
-        console.log("\n" + "=".repeat(80) + "\n");
-    }, [form]);
+            if (data.success) {
+                toast.success(data.message || "Speaker application submitted successfully!");
+                
+                // Reset form
+                setForm({
+                    fullName: "",
+                    designation: "",
+                    organization: "",
+                    mobile: "",
+                    email: "",
+                    city: "",
+                    linkedin: "",
+                    briefProfile: "",
+                    totalExperience: "",
+                    preferredTopic: "",
+                    topicDescription: "",
+                    eventDetails: "",
+                    industryCategory: "Doctor",
+                    expertise: [],
+                    preferredTrack: "ayush",
+                    sessionType: "keynote",
+                    spokenBefore: "No",
+                    expectations: [],
+                    consent1: false,
+                    consent2: false,
+                });
+            } else {
+                toast.error(data.message || "Failed to submit application");
+            }
+        } catch (error: any) {
+            toast.error("Network error. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // ─── HANDLERS ─────────────────────────────────────────────────────────────
     const set = (key: string) => (val: string | boolean) => {
-        const updatedForm = { ...form, [key]: val };
-        setForm(updatedForm);
-        console.log("📝 Form Updated:", { field: key, value: val });
-        console.log("🔍 Complete Form Data:", updatedForm);
+        setForm({ ...form, [key]: val });
     };
 
     const toggleExpertise = (area: string) => {
-        setForm(prev => {
-            const updatedExpertise = prev.expertise.includes(area)
+        setForm(prev => ({
+            ...prev,
+            expertise: prev.expertise.includes(area)
                 ? prev.expertise.filter(a => a !== area)
-                : [...prev.expertise, area];
-            const updatedForm = { ...prev, expertise: updatedExpertise };
-            console.log("✅ Expertise Updated:", updatedExpertise);
-            console.log("🔍 Complete Form Data:", updatedForm);
-            return updatedForm;
-        });
+                : [...prev.expertise, area]
+        }));
     };
 
     const toggleExpectation = (opt: string) => {
-        setForm(prev => {
-            const updatedExpectations = prev.expectations.includes(opt)
+        setForm(prev => ({
+            ...prev,
+            expectations: prev.expectations.includes(opt)
                 ? prev.expectations.filter(o => o !== opt)
-                : [...prev.expectations, opt];
-            const updatedForm = { ...prev, expectations: updatedExpectations };
-            console.log("🎯 Expectations Updated:", updatedExpectations);
-            console.log("🔍 Complete Form Data:", updatedForm);
-            return updatedForm;
-        });
+                : [...prev.expectations, opt]
+        }));
     };
 
     return (
@@ -134,12 +200,12 @@ export default function ArogyaSanghostiForm() {
                         {/* LEFT COLUMN - Adjusted down by 10px */}
                         <div style={{ display: "flex", flexDirection: "column", marginTop: "-37px" }}>
                             <div style={{ maxWidth: "98%" }}>
-                                {/* <BasicDetailsSection
+                                <BasicDetailsSection
                                     form={form}
                                     set={set}
-                                    industryCategory={industryCategory}
-                                    setIndustryCategory={setIndustryCategory}
-                                /> */}
+                                    industryCategory={form.industryCategory}
+                                    setIndustryCategory={(val: string) => set("industryCategory")(val)}
+                                />
                             </div>
                             <ContactDetailsSection
                                 form={form}
@@ -163,23 +229,78 @@ export default function ArogyaSanghostiForm() {
                                 form={form}
                                 set={set}
                                 preferredTrack={form.preferredTrack}
-                                setPreferredTrack={(val) => set("preferredTrack")(val)}
+                                setPreferredTrack={(val: string) => set("preferredTrack")(val)}
                                 sessionType={form.sessionType}
-                                setSessionType={(val) => set("sessionType")(val)}
+                                setSessionType={(val: string) => set("sessionType")(val)}
                             />
                             <SpeakingExperienceSection
                                 form={form}
                                 set={set}
                                 spokenBefore={form.spokenBefore}
-                                setSpokenBefore={(val) => set("spokenBefore")(val)}
+                                setSpokenBefore={(val: string) => set("spokenBefore")(val)}
                             />
                             <SupportingDetailsSection />
                             <ConsentSection
                                 consent1={form.consent1}
-                                setConsent1={(val) => set("consent1")(val)}
+                                setConsent1={(val: boolean) => set("consent1")(val)}
                                 consent2={form.consent2}
-                                setConsent2={(val) => set("consent2")(val)}
+                                setConsent2={(val: boolean) => set("consent2")(val)}
                             />
+                            
+                            {/* ── SUBMIT BUTTON ── */}
+                            <div style={{ marginTop: "30px", marginBottom: "30px" }}>
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={isSubmitting}
+                                    style={{
+                                        width: "100%",
+                                        padding: "16px 32px",
+                                        background: isSubmitting 
+                                            ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
+                                            : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "12px",
+                                        fontSize: "18px",
+                                        fontWeight: "600",
+                                        cursor: isSubmitting ? "not-allowed" : "pointer",
+                                        boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
+                                        transition: "all 0.3s ease",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "10px"
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (!isSubmitting) {
+                                            e.currentTarget.style.transform = "translateY(-2px)";
+                                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = "translateY(0)";
+                                        e.currentTarget.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
+                                    }}
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <span style={{
+                                                width: "20px",
+                                                height: "20px",
+                                                border: "3px solid white",
+                                                borderTopColor: "transparent",
+                                                borderRadius: "50%",
+                                                animation: "spin 1s linear infinite"
+                                            }} />
+                                            Submitting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            📝 Submit Application
+                                        </>
+                                    )}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -190,6 +311,14 @@ export default function ArogyaSanghostiForm() {
                 {/* ── FOOTER ── */}
                 <Footer />
             </div>
+            
+            {/* ── SPINNER ANIMATION ── */}
+            <style>{`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     );
 }
