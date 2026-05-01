@@ -118,7 +118,7 @@ export default function ArogyaSanghostiForm() {
 
             if (data.success) {
                 toast.success(data.message || "Speaker application submitted successfully!");
-                
+
                 // Reset form
                 setForm({
                     fullName: "",
@@ -246,7 +246,7 @@ export default function ArogyaSanghostiForm() {
                                 consent2={form.consent2}
                                 setConsent2={(val: boolean) => set("consent2")(val)}
                             />
-                            
+
                             {/* ── SUBMIT BUTTON ── */}
                             <div style={{ marginTop: "30px", marginBottom: "30px" }}>
                                 <button
@@ -255,7 +255,7 @@ export default function ArogyaSanghostiForm() {
                                     style={{
                                         width: "100%",
                                         padding: "16px 32px",
-                                        background: isSubmitting 
+                                        background: isSubmitting
                                             ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
                                             : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                                         color: "white",
@@ -311,7 +311,7 @@ export default function ArogyaSanghostiForm() {
                 {/* ── FOOTER ── */}
                 <Footer />
             </div>
-            
+
             {/* ── SPINNER ANIMATION ── */}
             <style>{`
                 @keyframes spin {

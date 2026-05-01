@@ -84,7 +84,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                             fontSize: "4vw"
                         }}>
                             Speaker<br />
-                            <span style={{ opacity: 0.8, fontSize: "3vw", fontWeight: 700 }}>Nomination Form</span>
+                            <span style={{ opacity: 0.8, fontSize: "2.8vw", fontWeight: 700 }}>Nomination Form</span>
                         </h1>
                         <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 6, color: TEXT_DARK, fontSize: "0.9vw", fontWeight: 600 }}>

@@ -105,19 +105,19 @@ export const ContactDetailsSection = ({ form, set }: any) => (
 // ─── Section 03: Speaker Profile ──────────────────────────────────────────────
 export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }: any) => {
     const expertiseAreas = [
-        { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Modern Medicine", icon: <img src={modernMedImg} alt="Modern Medicine" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Digital Health / AI", icon: <img src={digitalHealthImg} alt="Digital Health" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Wellness & Lifestyle", icon: <img src={wellnessImg} alt="Wellness" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Hospital Management", icon: <img src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Research & Education", icon: <img src={researchImg} alt="Research" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Policy / Government", icon: <img src={policyImg} alt="Policy" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Modern Medicine", icon: <img src={modernMedImg} alt="Modern Medicine" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Digital Health / AI", icon: <img src={digitalHealthImg} alt="Digital Health" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Wellness & Lifestyle", icon: <img src={wellnessImg} alt="Wellness" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Hospital Management", icon: <img src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Research & Education", icon: <img src={researchImg} alt="Research" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Policy / Government", icon: <img src={policyImg} alt="Policy" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
         { label: "Other", icon: <OtherDotsIcon /> },
     ];
 
     return (
         <SectionBox>
-            <SectionHeader number="03" title="Speaker Profile" icon={<img src={headerSpeakerImg} alt="Speaker" style={{ width: 30, height: 30 }} />} gold />
+            <SectionHeader number="03" title="Speaker Profile" icon={<IconMic size={20} color="white" />} gold />
             <div style={{ marginBottom: 18 }}>
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Brief Profile <span style={{ color: "#94A3B8", fontWeight: 400 }}>(100–150 words)</span>
@@ -165,16 +165,16 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
 // ─── Section 04: Session Details ──────────────────────────────────────────────
 export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredTrack, sessionType, setSessionType }: any) => (
     <SectionBox>
-        <SectionHeader number="04" title="Session Details" icon={<img src={headerSessionImg} alt="Session" style={{ width: 30, height: 30 }} />} />
+        <SectionHeader number="04" title="Session Details" icon={<IconChat size={20} color="white" />} />
         <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>
                 Preferred Track <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span>
             </div>
             <div style={{ display: "flex", gap: 10 }}>
                 {[
-                    { label: "AYUSH &\nWellness", key: "ayush", icon: <img src={ayushWellnessImg} alt="AYUSH" style={{ width: 54, height: 54, objectFit: "contain" }} /> },
-                    { label: "Medical &\nHealthcare", key: "medical", icon: <img src={medicalHealthcareImg} alt="Medical" style={{ width: 54, height: 54, objectFit: "contain" }} /> },
-                    { label: "Both", key: "both", icon: <img src={bothImg} alt="Both" style={{ width: 54, height: 54, objectFit: "contain" }} /> },
+                    { label: "AYUSH &\nWellness", key: "ayush", icon: <img src={ayushWellnessImg} alt="AYUSH" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Medical &\nHealthcare", key: "medical", icon: <img src={medicalHealthcareImg} alt="Medical" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Both", key: "both", icon: <img src={bothImg} alt="Both" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                 ].map((t) => (
                     <TrackChip
                         key={t.key}
@@ -197,9 +197,9 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Session Type <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span></div>
             <div style={{ display: "flex", gap: 10 }}>
                 {[
-                    { label: "Keynote", key: "keynote", icon: <img src={keynoteImg} alt="Keynote" style={{ width: 50, height: 50, objectFit: "contain" }} /> },
-                    { label: "Panel Discussion", key: "panel", icon: <img src={panelImg} alt="Panel" style={{ width: 50, height: 50, objectFit: "contain" }} /> },
-                    { label: "Expert Talk", key: "expert", icon: <img src={expertImg} alt="Expert" style={{ width: 50, height: 50, objectFit: "contain" }} /> },
+                    { label: "Keynote", key: "keynote", icon: <img src={keynoteImg} alt="Keynote" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Panel Discussion", key: "panel", icon: <img src={panelImg} alt="Panel" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Expert Talk", key: "expert", icon: <img src={expertImg} alt="Expert" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                 ].map((s) => (
                     <SessionChip key={s.key} label={s.label} icon={s.icon} selected={sessionType === s.key} onClick={() => setSessionType(s.key)} />
                 ))}
@@ -218,7 +218,7 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
 // ─── Section 05: Speaking Experience ──────────────────────────────────────────
 export const SpeakingExperienceSection = ({ form, set, spokenBefore, setSpokenBefore }: any) => (
     <SectionBox>
-        <SectionHeader number="05" title="Speaking Experience" icon={<img src={headerSpeakingExpImg} alt="Experience" style={{ width: 30, height: 30 }} />} />
+        <SectionHeader number="05" title="Speaking Experience" icon={<IconStar size={20} color="white" />} />
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 15 }}>
             <span style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700 }}>Have you spoken at conferences before?</span>
             <div style={{ display: "flex", gap: 15 }}>
@@ -250,7 +250,7 @@ export const SpeakingExperienceSection = ({ form, set, spokenBefore, setSpokenBe
 // ─── Section 06: Supporting Details ───────────────────────────────────────────
 export const SupportingDetailsSection = () => (
     <SectionBox>
-        <SectionHeader number="06" title="Supporting Details" icon={<img src={headerSupportingImg} alt="Supporting" style={{ width: 30, height: 30 }} />} />
+        <SectionHeader number="06" title="Supporting Details" icon={<IconUpload size={20} color="white" />} />
         <div style={{ fontSize: 11, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Please upload / provide the following:</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
             {[
@@ -263,7 +263,10 @@ export const SupportingDetailsSection = () => (
                     <div style={{ textAlign: "center", fontSize: 9, color: TEXT_DARK, fontWeight: 700, lineHeight: 1.2 }}>
                         {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
                     </div>
-                    <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 9, fontWeight: 700, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif" }}>Upload</button>
+                    <label style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 9, fontWeight: 700, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif" }}>
+                        Upload
+                        <input type="file" style={{ display: "none" }} accept={item.sub?.includes("PPT") ? ".ppt,.pptx,.pdf" : ".jpg,.jpeg,.png"} />
+                    </label>
                     <div style={{ fontSize: 8, color: "#94A3B8", textAlign: "center" }}>{item.sub || "JPG, PNG"}</div>
                 </div>
             ))}
@@ -275,7 +278,7 @@ export const SupportingDetailsSection = () => (
 // ─── Section 07: Expectations ─────────────────────────────────────────────────
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
     <SectionBox>
-        <SectionHeader number="07" title="Expectations" icon={<img src={headerExpectationImg} alt="Expectations" style={{ width: 30, height: 30 }} />} gold />
+        <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
         <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
@@ -295,7 +298,7 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
 // ─── Section 08: Consent ──────────────────────────────────────────────────────
 export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }: any) => (
     <SectionBox>
-        <SectionHeader number="08" title="Consent" icon={<img src={headerConsentImg} alt="Consent" style={{ width: 30, height: 30 }} />} />
+        <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
         <div style={{ display: "flex", flexDirection: "column", gap: 18, padding: "10px 0" }}>
             {[
                 { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
