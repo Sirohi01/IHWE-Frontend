@@ -42,9 +42,9 @@ const benefits = [
 
 const WhyAttend: React.FC = () => {
   return (
-    <section className="py-8 bg-[#F7F9FC]">
+    <section className="py-4 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 max-w-[1320px]">
-        <div className="flex flex-col lg:flex-row gap-16 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left */}
           <div className="lg:w-[38%] sticky top-24">
             <motion.div

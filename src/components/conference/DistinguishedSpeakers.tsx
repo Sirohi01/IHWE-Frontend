@@ -64,10 +64,10 @@ const DistinguishedSpeakers: React.FC = () => {
   };
 
   return (
-    <section className="py-12 bg-white overflow-hidden relative">
+    <section className="py-4 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Header */}
-        <div className="relative mb-12 text-center">
+        <div className="relative mb-4 text-center">
           <div className="flex flex-col items-center">
             <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
               MEET OUR DISTINGUISHED <span className="text-[#1E88E5]">SPEAKERS</span>

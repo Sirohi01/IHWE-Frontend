@@ -1,6 +1,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight, Mic } from "lucide-react";
 import amanImage from "../../assets/aman2.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
@@ -88,10 +89,12 @@ const ConferenceHero: React.FC = () => {
               REGISTER FOR CONFERENCE
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-6 py-2.5 rounded-full bg-white text-[#0B2C66] font-bold text-[11px] uppercase tracking-widest border border-[#E6ECF3] flex items-center gap-2 hover:bg-[#F7F9FC] transition-all shadow-sm whitespace-nowrap">
-              <Mic className="w-4 h-4 text-[#4E9F3D]" />
-              BECOME A SPEAKER
-            </button>
+            <Link to="/speaker-registration">
+              <button className="px-6 py-2.5 rounded-full bg-white text-[#0B2C66] font-bold text-[11px] uppercase tracking-widest border border-[#E6ECF3] flex items-center gap-2 hover:bg-[#F7F9FC] transition-all shadow-sm whitespace-nowrap w-full">
+                <Mic className="w-4 h-4 text-[#4E9F3D]" />
+                BECOME A SPEAKER
+              </button>
+            </Link>
           </motion.div>
         </div>
       </div>

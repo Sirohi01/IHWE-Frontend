@@ -6,15 +6,13 @@ import ramBg from "../../assets/ram.png";
 
 const ConferenceCTA: React.FC = () => {
   return (
-    <section className="py-6 relative overflow-hidden bg-black mb-2 z-10">
+    <section className="py-4 relative overflow-hidden bg-black  z-10">
       {/* Background Image with Neutral Overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${ramBg})` }}
       />
-      {/* Removed overlay to show image clearly */}
 
-      {/* Green leaf graphic bottom-left - RESTORED */}
       <div className="absolute bottom-0 left-0 opacity-40 pointer-events-none">
         <svg viewBox="0 0 200 200" className="w-[180px] h-[180px]">
           <path

@@ -37,10 +37,10 @@ const IndustryVoices: React.FC = () => {
   };
 
   return (
-    <section className="py-6 bg-[#F8FCF9]">
+    <section className="py-4 bg-[#F8FCF9]">
       <div className="container mx-auto px-6 max-w-[1320px]">
 
-        <div className="relative mb-6 text-center">
+        <div className="relative mb-4 text-center">
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-px w-6 bg-[#4E9F3D]" />

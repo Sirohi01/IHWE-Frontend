@@ -15,9 +15,9 @@ const sponsorBenefits = [
 
 const SponsorSection: React.FC = () => {
   return (
-    <section className="py-8 bg-white">
+    <section className="py-4 bg-white">
       <div className="container mx-auto px-6 max-w-[1320px]">
-        <div className="flex flex-col lg:flex-row items-start gap-10">
+        <div className="flex flex-col lg:flex-row items-start gap-6">
           {/* Left text */}
           <div className="lg:w-[38%]">
             <motion.div
