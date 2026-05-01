@@ -7,11 +7,6 @@ const NominationHero = () => {
 
   return (
     <section className="relative w-full overflow-hidden bg-white" style={jakartaFont}>
-      {/* 
-        Background Layer: 
-        We use the nomination1.png as the base. 
-        Since it already has the trophy and the blue curve, we'll keep it as the background.
-      */}
       <div 
         className="absolute inset-0 z-0 hidden lg:block"
         style={{
@@ -25,7 +20,7 @@ const NominationHero = () => {
       {/* Mobile Background (Simple Gradient) */}
       <div className="absolute inset-0 z-0 lg:hidden bg-gradient-to-br from-white to-slate-50"></div>
 
-      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 py-12 lg:py-24">
+      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 py-16 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Column: Recreating the Text Design from the Image */}
@@ -61,18 +56,10 @@ const NominationHero = () => {
               </div>
             </div>
           </motion.div>
-
-          {/* Right Column: Empty on desktop (showing the trophy from the bg image) */}
           <div className="hidden lg:block h-[400px]"></div>
 
         </div>
       </div>
-
-      {/* Decorative Wreath Overlay (Optional, if not in the image) */}
-      {/* 
-        In the image provided, there's a wreath on the right. 
-        If it's already in nomination1.png, we don't need to add it again.
-      */}
     </section>
   );
 };
