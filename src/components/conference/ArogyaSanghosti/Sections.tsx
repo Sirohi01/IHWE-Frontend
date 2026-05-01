@@ -279,18 +279,23 @@ export const SupportingDetailsSection = () => (
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
     <SectionBox>
         <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
-        <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {[
-                "Sponsored Speaking Slot",
-                "Panel Participation",
-                "Knowledge Session Only",
-            ].map((opt) => (
-                <label key={opt} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: TEXT_DARK, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif", fontWeight: 500 }}>
-                    <input type="checkbox" checked={expectations.includes(opt)} onChange={() => toggleExpectation(opt)} style={{ accentColor: TEAL, width: 18, height: 18 }} />
-                    {opt}
-                </label>
-            ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div style={{ flex: 1, paddingBottom: 10 }}>
+                <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 20px" }}>
+                    {[
+                        "Sponsored Speaking Slot",
+                        "Panel Participation",
+                        "Knowledge Session Only",
+                    ].map((opt) => (
+                        <label key={opt} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: TEXT_DARK, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif", fontWeight: 500 }}>
+                            <input type="checkbox" checked={expectations.includes(opt)} onChange={() => toggleExpectation(opt)} style={{ accentColor: TEAL, width: 16, height: 16 }} />
+                            {opt}
+                        </label>
+                    ))}
+                </div>
+            </div>
+            <img src={expectationImg} alt="Expectations" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", opacity: 0.9 }} />
         </div>
     </SectionBox>
 );
@@ -299,16 +304,19 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
 export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }: any) => (
     <SectionBox>
         <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
-        <div style={{ display: "flex", flexDirection: "column", gap: 18, padding: "10px 0" }}>
-            {[
-                { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
-                { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
-            ].map((c) => (
-                <label key={c.label} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 16, color: TEXT_DARK, cursor: "pointer", fontWeight: 600 }}>
-                    <input type="checkbox" checked={c.state} onChange={(e) => c.set(e.target.checked)} style={{ accentColor: TEAL, width: 22, height: 22 }} />
-                    {c.label}
-                </label>
-            ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18, padding: "10px 0", flex: 1 }}>
+                {[
+                    { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
+                    { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
+                ].map((c) => (
+                    <label key={c.label} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 14, color: TEXT_DARK, cursor: "pointer", fontWeight: 600 }}>
+                        <input type="checkbox" checked={c.state} onChange={(e) => c.set(e.target.checked)} style={{ accentColor: TEAL, width: 18, height: 18 }} />
+                        {c.label}
+                    </label>
+                ))}
+            </div>
+            <img src={consentImg} alt="Consent" style={{ width: 140, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px" }} />
         </div>
     </SectionBox>
 );
