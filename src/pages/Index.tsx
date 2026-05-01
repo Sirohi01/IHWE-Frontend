@@ -1,6 +1,10 @@
 import HeroSection from "@/components/home/HeroSection";
 import AboutSection from "@/components/home/AboutSection";
+import AttendanceInfo from "@/components/home/AttendanceInfo";
+import EventInfoBanner from "@/components/home/EventInfoBanner";
+import HealthcareSectors from "@/components/home/HealthcareSectors";
 import MarqueeStrip from "@/components/home/MarqueeStrip";
+import Testimonials from "@/components/home/Testimonials";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import StatsCounter from "@/components/home/StatsCounter";
 import CountersSection from "@/components/home/CountersSection";
@@ -8,7 +12,6 @@ import KeyHighlights from "@/components/home/KeyHighlights";
 import PastParticipants from "@/components/home/PastParticipants";
 import ParallaxSection from "@/components/home/ParallaxSection";
 import GlobalPartners from "@/components/home/GlobalPartners";
-import Testimonials from "@/components/home/Testimonials";
 import BlogPreview from "@/components/home/BlogPreview";
 import PreFooterCTA from "@/components/home/PreFooterCTA";
 import ExhibitionGrid from "@/components/home/ExhibitionGrid";
@@ -23,6 +26,7 @@ import IntroductionSection from "@/components/home/IntroductionSection";
 import GlobalPlatformSection from "@/components/home/GlobalPlatformSection";
 import PowerfulPillars from "@/components/home/PowerfulPillars";
 import CoreValues from "@/components/home/CoreValues";
+import EventGlimpses from "@/components/home/EventGlimpses";
 import WhyParticipate from "@/components/home/WhyParticipate";
 import ConferenceSeminars from "@/components/home/ConferenceSeminars";
 import ExhibitionCategories from "@/components/home/ExhibitionCategories";
@@ -45,25 +49,30 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <ConferenceSeminars />
       <ExhibitionCategories />
       <BeyondExhibition />
-      {/* <EventHighlights /> */}
-      <AboutSection />
-      <DownloadsSection />
+      <AttendanceInfo />
+      <EventInfoBanner />
+      <HealthcareSectors />
       <MarqueeStrip />
-      <WhoWeAre />
+      <EventGlimpses />
+      {/* <AboutSection /> */}
+      {/* <DownloadsSection /> */}
+    
+      {/* <WhoWeAre /> */}
 
-      <IndustryZones />
+      {/* <IndustryZones /> */}
+      <Testimonials />
       <GallerySection />
 
-      <ExhibitorLogos />
+      {/* <ExhibitorLogos /> */}
       {/* <ExhibitionGrid /> */}
       {/* <CountersSection /> */}
       {/* <KeyHighlights /> */}
       {/* <PastParticipants /> */}
 
-      <ParallaxSection />
+      {/* <ParallaxSection /> */}
       {/* <GlobalPartners /> */}
-      <Testimonials />
-      <FAQSection />
+      {/* <Testimonials />
+       <FAQSection /> */}
       <BlogPreview />
 
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}

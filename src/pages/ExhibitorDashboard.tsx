@@ -40,6 +40,7 @@ const TAB_ROUTES: Record<string, string> = {
     feedback_report: '/exhibitor-dashboard/psm-claim/reports/feedback-report',
     undertaking: '/exhibitor-dashboard/psm-claim/reports/undertaking',
     pre_receipt: '/exhibitor-dashboard/psm-claim/reports/pre-receipt',
+    mandate_form: '/exhibitor-dashboard/psm-claim/reports/mandate-form',
     pfms_details: '/exhibitor-dashboard/psm-claim/reports/pfms-details',
     covering_letter: '/exhibitor-dashboard/psm-claim/reports/covering-letter',
     narrative_feedback: '/exhibitor-dashboard/psm-claim/reports/narrative-feedback',

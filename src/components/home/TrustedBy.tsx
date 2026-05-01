@@ -44,17 +44,19 @@ const TrustedBy = () => {
     <div className="relative z-40 w-full bg-[#23471d] py-2 border-y border-white/5 shadow-xl">
       <div className="container mx-auto px-6">
         
-        {/* Row 1: Centered Heading */}
-        <div className="flex items-center justify-center gap-4 mb-2 w-full max-w-xl mx-auto">
-          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-white/20" />
-          <div className="flex items-center px-3">
-             <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-white/90 whitespace-nowrap">Supported By</p>
+        {/* Row 1: Centered Heading - Glassmorphism Blur Effect */}
+        <div className="relative -top-12 flex items-center justify-center gap-4 mb-0 w-full max-w-2xl mx-auto z-50">
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-orange-500/40 to-orange-500" />
+          <div className="flex items-center px-6 py-1.5 bg-[#23471d]/60 backdrop-blur-md rounded-full border border-white/10 shadow-lg">
+             <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.35em] text-white whitespace-nowrap">
+               Supported By
+             </p>
           </div>
-          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-white/20" />
+          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-orange-500/40 to-orange-500" />
         </div>
 
-        {/* Row 2: All Items in One Line */}
-        <div className="flex items-center justify-center w-full">
+        {/* Row 2: All Items in One Line - Pulled up closer to heading */}
+        <div className="flex items-center justify-center w-full -mt-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 xl:flex xl:flex-nowrap items-center justify-center gap-x-8 gap-y-2 w-full">
             {trustedItems.map((item, i) => (
               <div key={i} className="flex items-center justify-center xl:justify-start">
