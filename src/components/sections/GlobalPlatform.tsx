@@ -51,7 +51,7 @@ const GlobalPlatform: React.FC = () => {
   };
 
   return (
-    <section className="pt-12 pb-8 lg:pt-16 lg:pb-10 bg-white relative overflow-hidden">
+    <section className="pt-12 pb-0 lg:pt-16 lg:pb-0 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid lg:grid-cols-[1fr_1.3fr] gap-16 items-center">
 
@@ -133,7 +133,7 @@ const GlobalPlatform: React.FC = () => {
           </div>
 
           {/* ── RIGHT: CONTENT ── */}
-          <div data-aos="fade-left" className="order-1 lg:order-2 lg:pt-8">
+          <div data-aos="fade-left" className="order-1 lg:order-2">
 
             {/* Eyebrow */}
             <div className="flex items-center gap-3 mb-4">

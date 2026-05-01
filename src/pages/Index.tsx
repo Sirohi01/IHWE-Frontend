@@ -61,7 +61,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
 
       {/* <IndustryZones /> */}
       <Testimonials />
-      <GallerySection />
+      {/* <GallerySection /> */}
 
       {/* <ExhibitorLogos /> */}
       {/* <ExhibitionGrid /> */}
