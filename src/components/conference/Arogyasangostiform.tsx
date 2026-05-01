@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import heroImg from "../../assets/arogyasangostiimageform/hero.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
@@ -25,26 +25,88 @@ export default function ArogyaSanghostiForm() {
         preferredTopic: "",
         topicDescription: "",
         eventDetails: "",
+        industryCategory: "Doctor",
+        expertise: [] as string[],
+        preferredTrack: "ayush",
+        sessionType: "keynote",
+        spokenBefore: "No",
+        expectations: [] as string[],
+        consent1: false,
+        consent2: false,
     });
 
-    const [industryCategory, setIndustryCategory] = useState("Doctor");
-    const [expertise, setExpertise] = useState<string[]>([]);
-    const [preferredTrack, setPreferredTrack] = useState("ayush");
-    const [sessionType, setSessionType] = useState("keynote");
-    const [spokenBefore, setSpokenBefore] = useState("No");
-    const [expectations, setExpectations] = useState<string[]>([]);
-    const [consent1, setConsent1] = useState(false);
-    const [consent2, setConsent2] = useState(false);
+    // ─── CONSOLE LOG FOR BACKEND DEVELOPER ────────────────────────────────────
+    useEffect(() => {
+        console.log("\n" + "=".repeat(80));
+        console.log("🚀 BACKEND DEVELOPER - API PAYLOAD REQUIRED");
+        console.log("=".repeat(80));
+        console.log("\n📋 FORM FIELDS NEEDED:\n");
+        console.log(JSON.stringify({
+            // Basic Details
+            fullName: form.fullName || "string (required)",
+            designation: form.designation || "string (required)",
+            organization: form.organization || "string (required)",
+            industryCategory: form.industryCategory || "string (required) - Doctor/Nurse/etc",
+
+            // Contact Details
+            mobile: form.mobile || "string (required)",
+            email: form.email || "string (required)",
+            city: form.city || "string (required)",
+            linkedin: form.linkedin || "string (optional)",
+
+            // Speaker Profile
+            briefProfile: form.briefProfile || "string (required)",
+            totalExperience: form.totalExperience || "string (required)",
+            expertise: form.expertise.length > 0 ? form.expertise : ["array of strings (required)"],
+
+            // Session Details
+            preferredTopic: form.preferredTopic || "string (required)",
+            topicDescription: form.topicDescription || "string (required)",
+            preferredTrack: form.preferredTrack || "string (required) - ayush/allopathy/etc",
+            sessionType: form.sessionType || "string (required) - keynote/panel/workshop",
+
+            // Speaking Experience
+            spokenBefore: form.spokenBefore || "string (required) - Yes/No",
+            eventDetails: form.eventDetails || "string (optional)",
+
+            // Expectations & Consent
+            expectations: form.expectations.length > 0 ? form.expectations : ["array of strings (required)"],
+            consent1: form.consent1 || "boolean (required)",
+            consent2: form.consent2 || "boolean (required)",
+        }, null, 2));
+        console.log("\n" + "=".repeat(80) + "\n");
+    }, [form]);
 
     // ─── HANDLERS ─────────────────────────────────────────────────────────────
-    const set = (key: string) => (val: string) => setForm({ ...form, [key]: val });
+    const set = (key: string) => (val: string | boolean) => {
+        const updatedForm = { ...form, [key]: val };
+        setForm(updatedForm);
+        console.log("📝 Form Updated:", { field: key, value: val });
+        console.log("🔍 Complete Form Data:", updatedForm);
+    };
 
     const toggleExpertise = (area: string) => {
-        setExpertise(prev => prev.includes(area) ? prev.filter(a => a !== area) : [...prev, area]);
+        setForm(prev => {
+            const updatedExpertise = prev.expertise.includes(area)
+                ? prev.expertise.filter(a => a !== area)
+                : [...prev.expertise, area];
+            const updatedForm = { ...prev, expertise: updatedExpertise };
+            console.log("✅ Expertise Updated:", updatedExpertise);
+            console.log("🔍 Complete Form Data:", updatedForm);
+            return updatedForm;
+        });
     };
 
     const toggleExpectation = (opt: string) => {
-        setExpectations(prev => prev.includes(opt) ? prev.filter(o => o !== opt) : [...prev, opt]);
+        setForm(prev => {
+            const updatedExpectations = prev.expectations.includes(opt)
+                ? prev.expectations.filter(o => o !== opt)
+                : [...prev.expectations, opt];
+            const updatedForm = { ...prev, expectations: updatedExpectations };
+            console.log("🎯 Expectations Updated:", updatedExpectations);
+            console.log("🔍 Complete Form Data:", updatedForm);
+            return updatedForm;
+        });
     };
 
     return (
@@ -72,12 +134,12 @@ export default function ArogyaSanghostiForm() {
                         {/* LEFT COLUMN - Adjusted down by 10px */}
                         <div style={{ display: "flex", flexDirection: "column", marginTop: "-37px" }}>
                             <div style={{ maxWidth: "98%" }}>
-                                <BasicDetailsSection
+                                {/* <BasicDetailsSection
                                     form={form}
                                     set={set}
                                     industryCategory={industryCategory}
                                     setIndustryCategory={setIndustryCategory}
-                                />
+                                /> */}
                             </div>
                             <ContactDetailsSection
                                 form={form}
@@ -86,11 +148,11 @@ export default function ArogyaSanghostiForm() {
                             <SpeakerProfileSection
                                 form={form}
                                 set={set}
-                                expertise={expertise}
+                                expertise={form.expertise}
                                 toggleExpertise={toggleExpertise}
                             />
                             <ExpectationsSection
-                                expectations={expectations}
+                                expectations={form.expectations}
                                 toggleExpectation={toggleExpectation}
                             />
                         </div>
@@ -100,23 +162,23 @@ export default function ArogyaSanghostiForm() {
                             <SessionDetailsSection
                                 form={form}
                                 set={set}
-                                preferredTrack={preferredTrack}
-                                setPreferredTrack={setPreferredTrack}
-                                sessionType={sessionType}
-                                setSessionType={setSessionType}
+                                preferredTrack={form.preferredTrack}
+                                setPreferredTrack={(val) => set("preferredTrack")(val)}
+                                sessionType={form.sessionType}
+                                setSessionType={(val) => set("sessionType")(val)}
                             />
                             <SpeakingExperienceSection
                                 form={form}
                                 set={set}
-                                spokenBefore={spokenBefore}
-                                setSpokenBefore={setSpokenBefore}
+                                spokenBefore={form.spokenBefore}
+                                setSpokenBefore={(val) => set("spokenBefore")(val)}
                             />
                             <SupportingDetailsSection />
                             <ConsentSection
-                                consent1={consent1}
-                                setConsent1={setConsent1}
-                                consent2={consent2}
-                                setConsent2={setConsent2}
+                                consent1={form.consent1}
+                                setConsent1={(val) => set("consent1")(val)}
+                                consent2={form.consent2}
+                                setConsent2={(val) => set("consent2")(val)}
                             />
                         </div>
                     </div>
