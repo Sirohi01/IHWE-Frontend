@@ -38,7 +38,7 @@ const AwardsCTA = () => {
           {/* Linked Buttons */}
           <div className="flex flex-wrap items-center gap-4">
             <Link 
-              to="/visitor-registration"
+              to="/awards/nomination"
               className="bg-[#008d48] text-white px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-[#007a3e] border border-white/10 shadow-lg"
             >
               NOMINATE NOW
