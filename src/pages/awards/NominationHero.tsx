@@ -36,21 +36,21 @@ const NominationHero = () => {
             className="flex flex-col items-start"
           >
             {/* IHWE Logo */}
-            <div className="mb-10">
-              <img src={awardsLogo} alt="IHWE Logo" className="h-16 w-auto" />
+            <div className="mb-1">
+              <img src={awardsLogo} alt="IHWE Logo" className="h-auto w-[300px] object-contain" />
             </div>
 
             <div className="space-y-1">
-              <p className="text-[#008d48] font-black text-[15px] tracking-[0.2em] uppercase">
+              {/* <p className="text-[#008d48] font-black text-[15px] tracking-[0.2em] uppercase">
                 3rd Edition Of
-              </p>
+              </p> */}
               <h1 className="text-[35px] md:text-[50px] font-black leading-[1.05] tracking-tight flex flex-col">
                 <span className="text-[#0a2e5c]">NAMO GANGE</span>
                 <span className="text-[#008d48]">GLOBAL HEALTH</span>
                 <span className="text-[#0a2e5c]">EXCELLENCE AWARDS 2026</span>
               </h1>
               <p className="text-[#0a2e5c] text-[15px] md:text-[18px] font-bold mt-4 opacity-90">
-                Honouring Excellence in Healthcare, Wellness & Innovation
+                Honouring Excellence in Healthcare, Wellness &amp; Innovation
               </p>
             </div>
 
