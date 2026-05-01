@@ -6,7 +6,7 @@ import amconImage from "../../assets/amanconfre.png";
 
 const agendaData = [
   {
-    day: "DAY 1 | 20 AUG",
+    day: "DAY 1 | 21 AUG",
     shortTitle: "Healthcare Innovation Summit",
     sessions: [
       {
@@ -48,7 +48,7 @@ const agendaData = [
     ],
   },
   {
-    day: "DAY 2 | 21 AUG",
+    day: "DAY 2 | 22 AUG",
     shortTitle: "Global Wellness Leadership Forum",
     sessions: [
       {
@@ -72,7 +72,7 @@ const agendaData = [
     ],
   },
   {
-    day: "DAY 3 | 22 AUG",
+    day: "DAY 3 | 23 AUG",
     shortTitle: "Future of Preventive Healthcare",
     sessions: [
       {
@@ -102,7 +102,7 @@ const ConferenceAgenda: React.FC = () => {
   const [activeDay, setActiveDay] = useState(0);
 
   return (
-    <section className="py-6 bg-[#F7F9FC]">
+    <section className="py-4 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 max-w-[1320px]">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           <div className="hidden lg:block w-[340px] flex-shrink-0 mt-4">
@@ -116,7 +116,7 @@ const ConferenceAgenda: React.FC = () => {
           </div>
 
           <div className="flex-1">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-3">
               <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
                 CONFERENCE <span className="text-[#1E88E5]">AGENDA</span>
               </h2>
@@ -134,16 +134,14 @@ const ConferenceAgenda: React.FC = () => {
                 <button
                   key={index}
                   onClick={() => setActiveDay(index)}
-                  className={`flex-shrink-0 px-5 py-3 rounded-[12px] border text-left transition-all duration-300 ${
-                    activeDay === index
+                  className={`flex-shrink-0 px-5 py-3 rounded-[12px] border text-left transition-all duration-300 ${activeDay === index
                       ? "bg-[#0B2C66] border-[#1E88E5] text-white shadow-lg scale-[1.02] ring-1 ring-[#1E88E5]/50"
                       : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D] hover:shadow-sm"
-                  }`}
+                    }`}
                 >
                   <p
-                    className={`text-[11px] font-[900] uppercase tracking-[0.2em] mb-1.5 ${
-                      activeDay === index ? "text-[#4E9F3D]" : "text-[#1E88E5]"
-                    }`}
+                    className={`text-[11px] font-[900] uppercase tracking-[0.2em] mb-1.5 ${activeDay === index ? "text-[#4E9F3D]" : "text-[#1E88E5]"
+                      }`}
                   >
                     {item.day}
                   </p>

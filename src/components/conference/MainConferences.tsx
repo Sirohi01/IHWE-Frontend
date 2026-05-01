@@ -52,10 +52,10 @@ const mainConferences = [
 
 const MainConferences: React.FC = () => {
   return (
-    <section className="py-8 bg-[#F7F9FC]">
+    <section className="py-4 bg-[#F7F9FC]">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Section label */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-4">
           <h2 className="text-[24px] font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2">
             3 DAYS. 3 POWERFUL <span className="text-[#1E88E5]">CONFERENCES</span>.{" "}
             <span className="text-[#0B2C66]">18 GAME-CHANGING SESSIONS.</span>

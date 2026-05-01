@@ -24,7 +24,7 @@ const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
-const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
+const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasangostiform"));
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
