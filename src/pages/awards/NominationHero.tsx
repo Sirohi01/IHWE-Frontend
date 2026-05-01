@@ -50,8 +50,8 @@ const NominationHero = () => {
             </div>
 
             {/* Nomination Form Button - Styled exactly like the image */}
-            <div className="mt-12">
-              <div className="bg-[#0a2e5c] text-white px-10 py-4 rounded-xl font-black text-[15px] uppercase tracking-widest shadow-xl hover:bg-[#08244a] transition-all cursor-pointer transform hover:scale-105 active:scale-95">
+            <div className="mt-5">
+              <div className="bg-[#0a2e5c] text-white px-10 py-2 rounded-sm font-black text-[15px] uppercase tracking-widest shadow-xl hover:bg-[#08244a] transition-all cursor-pointer transform hover:scale-105 active:scale-95">
                 NOMINATION FORM
               </div>
             </div>
