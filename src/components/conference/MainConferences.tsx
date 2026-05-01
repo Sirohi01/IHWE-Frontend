@@ -1,6 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Calendar, Layers, Search, ArrowRight, Network, User, Plus } from "lucide-react";
+import { Calendar, Layers, Search, ArrowRight } from "lucide-react";
+import imgDay1 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.47.53 AM.png";
+import imgDay2 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.11 AM.png";
+import imgDay3 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.21 AM.png";
 
 const mainConferences = [
   {
@@ -14,9 +17,7 @@ const mainConferences = [
     badgeBg: "bg-[#4E9F3D]",
     btnBg: "bg-[#4E9F3D]",
     btnHover: "hover:bg-[#3D8B2D]",
-    icon: Network,
-    iconBg: "bg-[#F1F8EE]",
-    iconColor: "text-[#4E9F3D]",
+    image: imgDay1,
   },
   {
     day: "DAY 2",
@@ -29,9 +30,7 @@ const mainConferences = [
     badgeBg: "bg-[#1E88E5]",
     btnBg: "bg-[#1E88E5]",
     btnHover: "hover:bg-[#1565C0]",
-    icon: User,
-    iconBg: "bg-[#EEF4FF]",
-    iconColor: "text-[#1E88E5]",
+    image: imgDay2,
   },
   {
     day: "DAY 3",
@@ -44,9 +43,7 @@ const mainConferences = [
     badgeBg: "bg-[#6A3DF0]",
     btnBg: "bg-[#6A3DF0]",
     btnHover: "hover:bg-[#5229C7]",
-    icon: Plus,
-    iconBg: "bg-[#F3E9FF]",
-    iconColor: "text-[#6A3DF0]",
+    image: imgDay3,
   },
 ];
 
@@ -84,9 +81,9 @@ const MainConferences: React.FC = () => {
               {/* Icon and Content row */}
               <div className="flex items-start gap-6 mb-6 w-full">
                 <div
-                  className={`w-24 h-24 rounded-full ${conf.iconBg} flex items-center justify-center flex-shrink-0 border-4 border-white shadow-sm`}
+                  className="w-24 h-24 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden"
                 >
-                  <conf.icon className={`w-12 h-12 ${conf.iconColor}`} />
+                  <img src={conf.image} alt={conf.title} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex flex-col gap-2 pt-2">
                   <h3 className="text-[14px] font-black text-[#1C2B3A] leading-snug uppercase tracking-tight">

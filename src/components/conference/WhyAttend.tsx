@@ -1,48 +1,46 @@
-// components/conference/WhyAttend.tsx
+
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Target,
-  TrendingUp,
-  Users2,
-  Network,
-  MessageSquare,
-  Lightbulb,
-} from "lucide-react";
+import imgInsights from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.53.19 AM.png";
+import imgGrowth from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.54.09 AM.png";
+import imgTrends from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.53.33 AM.png";
+import imgPanel from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.54.19 AM.png";
+import imgConnect from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.53.42 AM.png";
+import imgFuture from "../../assets/mettingindustery/Screenshot 2026-05-01 at 11.54.29 AM.png";
 
 const benefits = [
   {
-    icon: Target,
+    icon: imgInsights,
     title: "Gain insights from top healthcare leaders and industry pioneers",
   },
   {
-    icon: Network,
+    icon: imgGrowth,
     title: "Discover growth opportunities through strategic networking",
   },
   {
-    icon: TrendingUp,
+    icon: imgTrends,
     title:
       "Learn emerging trends in wellness, medical technology, and preventive healthcare",
   },
   {
-    icon: MessageSquare,
+    icon: imgPanel,
     title:
       "Join live panel discussions, case studies, and expert masterclasses",
   },
   {
-    icon: Users2,
+    icon: imgConnect,
     title:
       "Connect with investors, hospital buyers, doctors, and policy influencers",
   },
   {
-    icon: Lightbulb,
+    icon: imgFuture,
     title: "Stay ahead with future-ready healthcare solutions",
   },
 ];
 
 const WhyAttend: React.FC = () => {
   return (
-    <section className="py-4 bg-[#F7F9FC]">
+    <section className="py-8 bg-white">
       <div className="container mx-auto px-6 max-w-[1320px]">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left */}
@@ -78,12 +76,16 @@ const WhyAttend: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-5 group"
+                className="flex items-center gap-1.5 group"
               >
-                <div className="shrink-0 w-12 h-12 rounded-full bg-[#E8F5E9] flex items-center justify-center group-hover:bg-[#4E9F3D] transition-colors duration-300">
-                  <benefit.icon className="w-5 h-5 text-[#4E9F3D] group-hover:text-white transition-colors duration-300" />
+                <div className="shrink-0 w-16 h-16 rounded-full overflow-hidden flex items-center justify-center">
+                  <img
+                    src={benefit.icon}
+                    alt=""
+                    className="w-full h-full object-contain object-center mix-blend-multiply contrast-125 brightness-110 group-hover:scale-105 transition-transform duration-300 rounded-full"
+                  />
                 </div>
-                <p className="text-[13px] font-bold text-[#1C2B3A] leading-[1.4]">
+                <p className="text-[14px] font-medium text-[#5F6B7A] leading-[1.5] flex-1">
                   {benefit.title}
                 </p>
               </motion.div>

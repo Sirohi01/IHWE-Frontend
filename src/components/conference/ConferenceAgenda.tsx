@@ -1,4 +1,4 @@
-// components/conference/ConferenceAgenda.tsx
+
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, User, ChevronRight } from "lucide-react";
@@ -135,8 +135,8 @@ const ConferenceAgenda: React.FC = () => {
                   key={index}
                   onClick={() => setActiveDay(index)}
                   className={`flex-shrink-0 px-5 py-3 rounded-[12px] border text-left transition-all duration-300 ${activeDay === index
-                      ? "bg-[#0B2C66] border-[#1E88E5] text-white shadow-lg scale-[1.02] ring-1 ring-[#1E88E5]/50"
-                      : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D] hover:shadow-sm"
+                    ? "bg-[#0B2C66] border-[#1E88E5] text-white shadow-lg scale-[1.02] ring-1 ring-[#1E88E5]/50"
+                    : "bg-white border-[#E6ECF3] text-[#5F6B7A] hover:border-[#4E9F3D] hover:shadow-sm"
                     }`}
                 >
                   <p
