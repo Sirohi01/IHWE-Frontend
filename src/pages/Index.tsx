@@ -74,7 +74,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       {/* <Testimonials />
        <FAQSection /> */}
       <BlogPreview />
-     
+
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
     </>
   );

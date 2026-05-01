@@ -25,7 +25,7 @@ export default function ExhibitorInvoicesPage() {
     const balance = data.balanceAmount || 0;
     const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
     const regDate = data.createdAt
-        ? new Date(data.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })
+        ? new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
         : '';
 
     return (
