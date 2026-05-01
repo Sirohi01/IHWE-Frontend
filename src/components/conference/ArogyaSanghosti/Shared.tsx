@@ -122,7 +122,7 @@ export const CategoryChip: React.FC<{
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            border: `1.5px solid ${BORDER_COLOR}`,
+            border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 10,
             padding: "22px 12px",
             background: "white",
@@ -156,7 +156,7 @@ export const TrackChip: React.FC<{
             display: "flex",
             alignItems: "center",
             gap: 12,
-            border: `1.5px solid ${BORDER_COLOR}`,
+            border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 12,
             padding: "12px 24px",
             background: "white",
@@ -188,7 +188,7 @@ export const SessionChip: React.FC<{
             display: "flex",
             alignItems: "center",
             gap: 10,
-            border: `1.5px solid ${BORDER_COLOR}`,
+            border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 10,
             padding: "12px 20px",
             background: "white",
@@ -232,7 +232,7 @@ export const ExpertiseChip: React.FC<{
             minHeight: 70,
             boxSizing: "border-box",
             boxShadow: "none",
-            border: `1.5px solid ${BORDER_COLOR}`,
+            border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
         }}
     >
         <div style={{ flexShrink: 0 }}>{icon}</div>
