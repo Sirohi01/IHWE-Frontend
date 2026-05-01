@@ -6,24 +6,26 @@ interface HeroProps {
     arogyaLogo: string;
 }
 
-export const HeroSection: React.FC<HeroProps> = ({ heroImg }) => {
+export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
     return (
         <div
             style={{
-
                 background: "#FFFFFF",
                 overflow: "hidden",
+                margin: 0,
+                padding: 0,
+                lineHeight: 0
             }}
         >
             <img
                 src={heroImg}
                 alt="Hero Banner"
                 style={{
-                    height: "100%",
                     width: "100%",
-                    objectFit: "contain",
-                    objectPosition: "right center",
-                    display: "block"
+                    height: "auto",
+                    display: "block",
+                    margin: 0,
+                    padding: 0
                 }}
             />
         </div>

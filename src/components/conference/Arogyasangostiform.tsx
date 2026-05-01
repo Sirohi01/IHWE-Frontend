@@ -48,7 +48,7 @@ export default function ArogyaSanghostiForm() {
     };
 
     return (
-        <div style={{ background: "#F0F2F5", minHeight: "100vh" }}>
+        <div style={{ background: "#F1F5F9", minHeight: "100vh" }}>
             <div
                 style={{
                     fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
@@ -61,10 +61,16 @@ export default function ArogyaSanghostiForm() {
                 <HeroSection heroImg={heroImg} arogyaLogo={arogyaLogo} />
 
                 {/* ── MAIN CONTENT (FORM SECTIONS) ── */}
-                <div style={{ padding: "60px 100px", background: "white" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 100 }}>
-                        {/* LEFT COLUMN */}
-                        <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ 
+                    marginTop: "-120px",
+                    padding: "0 40px 80px 40px", 
+                    position: "relative",
+                    zIndex: 20
+                }}>
+                    
+                    <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
+                        {/* LEFT COLUMN - Adjusted to not go too far UP */}
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-47px" }}>
                             <BasicDetailsSection 
                                 form={form} 
                                 set={set} 
@@ -84,7 +90,7 @@ export default function ArogyaSanghostiForm() {
                         </div>
 
                         {/* RIGHT COLUMN */}
-                        <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "120px" }}>
                             <SessionDetailsSection 
                                 form={form} 
                                 set={set} 

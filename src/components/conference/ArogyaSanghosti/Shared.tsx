@@ -3,9 +3,9 @@ import React from "react";
 export const TEAL = "#0B3C49";
 export const GOLD = "#B8962E";
 export const LIGHT_TEAL_BG = "#F4F7F7";
-export const BORDER_COLOR = "#C5DCDB";
+export const BORDER_COLOR = "#E2E8F0"; // Lighter border like Figma
 export const TEXT_DARK = "#1C2B3A";
-export const TRACK_BG = "#F0F8F7";
+export const TRACK_BG = "#F8FAFC";
 
 export const SectionHeader: React.FC<{
     number: string;
@@ -13,33 +13,53 @@ export const SectionHeader: React.FC<{
     icon: React.ReactNode;
     gold?: boolean;
 }> = ({ number, title, icon, gold = false }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 20 }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 18, position: "relative" }}>
         <div
             style={{
                 background: gold ? GOLD : TEAL,
                 display: "flex",
                 alignItems: "center",
-                padding: "8px 36px 8px 16px",
-                clipPath: "polygon(0 0, 100% 0, 92% 100%, 0 100%)",
-                minWidth: 280
+                padding: "8px 25px 8px 10px",
+                clipPath: "polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%)",
+                minWidth: 220,
+                borderRadius: "4px 0 0 4px"
             }}
         >
-            <span style={{ color: "white", fontSize: 20, fontWeight: 800, marginRight: 12 }}>{number}</span>
-            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.3)", marginRight: 12 }}></div>
             <div style={{
-                border: "1.5px solid rgba(255,255,255,0.6)",
+                background: "rgba(255,255,255,0.15)",
                 borderRadius: "50%",
                 width: 28, height: 28,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginRight: 12
+                marginRight: 10,
+                color: "white",
+                fontWeight: 800,
+                fontSize: 15
             }}>
+                {number}
+            </div>
+            <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.2)", marginRight: 10 }}></div>
+            <div style={{ marginRight: 8, display: "flex", alignItems: "center", scale: "0.9" }}>
                 {icon}
             </div>
-            <span style={{ color: "white", fontSize: 16, fontWeight: 700, letterSpacing: 1.5, fontFamily: "'Segoe UI', sans-serif" }}>
+            <span style={{ color: "white", fontSize: 13, fontWeight: 700, letterSpacing: 1, fontFamily: "'Segoe UI', sans-serif" }}>
                 {title.toUpperCase()}
             </span>
         </div>
-        <div style={{ flex: 1, borderBottom: `2px solid ${gold ? GOLD : TEAL}`, opacity: 0.1, marginLeft: -20, zIndex: -1 }}></div>
+    </div>
+);
+
+// New component for Section Boxes
+export const SectionBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div style={{
+        background: "white",
+        border: `1px solid ${BORDER_COLOR}`,
+        borderRadius: 12,
+        padding: "18px 24px",
+        marginBottom: 30,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+        position: "relative",
+    }}>
+        {children}
     </div>
 );
 
@@ -52,12 +72,12 @@ export const FormField: React.FC<{
     onChange?: (v: string) => void;
     placeholder?: string;
 }> = ({ label, icon, children, type = "text", value, onChange, placeholder }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 14, gap: 12 }}>
-        {icon && <span style={{ minWidth: 20, display: "flex", alignItems: "center" }}>{icon}</span>}
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 14, gap: 10 }}>
+        {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
         <label
             style={{
-                minWidth: 160,
-                fontSize: 13,
+                minWidth: 180,
+                fontSize: 12,
                 color: TEXT_DARK,
                 fontFamily: "'Segoe UI', sans-serif",
                 fontWeight: 600,
@@ -65,7 +85,7 @@ export const FormField: React.FC<{
         >
             {label}
         </label>
-        <span style={{ color: TEXT_DARK, fontWeight: 600 }}>:</span>
+        <span style={{ color: "#94A3B8", fontWeight: 400, marginRight: 8 }}>:</span>
         {children ?? (
             <input
                 type={type}
@@ -74,14 +94,14 @@ export const FormField: React.FC<{
                 onChange={(e) => onChange?.(e.target.value)}
                 style={{
                     flex: 1,
-                    border: `1px solid ${BORDER_COLOR}`,
-                    borderRadius: 4,
+                    border: "none",
+                    borderBottom: `1.2px solid ${BORDER_COLOR}`,
                     outline: "none",
                     fontSize: 13,
-                    padding: "8px 12px",
+                    padding: "4px 0",
                     fontFamily: "'Segoe UI', sans-serif",
                     color: TEXT_DARK,
-                    background: "#FAFAFA",
+                    background: "transparent",
                 }}
             />
         )}
@@ -101,22 +121,23 @@ export const CategoryChip: React.FC<{
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: 5,
+            gap: 8,
             border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
-            borderRadius: 8,
-            padding: "10px 14px",
-            background: selected ? LIGHT_TEAL_BG : "white",
+            borderRadius: 10,
+            padding: "15px 12px",
+            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
             cursor: "pointer",
-            minWidth: 80,
-            fontSize: 12,
+            minWidth: 100,
+            fontSize: 11,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 500,
+            fontWeight: 600,
             transition: "all 0.2s",
+            boxShadow: selected ? "0 4px 10px rgba(11, 60, 73, 0.1)" : "none"
         }}
     >
         {icon}
-        <span style={{ textAlign: "center", lineHeight: 1.3 }}>{label}</span>
+        <span style={{ textAlign: "center", lineHeight: 1.2 }}>{label}</span>
     </button>
 );
 
@@ -131,23 +152,23 @@ export const TrackChip: React.FC<{
         style={{
             display: "flex",
             alignItems: "center",
-            gap: 8,
+            gap: 12,
             border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
-            borderRadius: 8,
-            padding: "10px 18px",
-            background: selected ? LIGHT_TEAL_BG : "white",
+            borderRadius: 12,
+            padding: "12px 24px",
+            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
             cursor: "pointer",
-            fontSize: 13,
+            fontSize: 14,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 500,
+            fontWeight: 600,
             flex: 1,
             justifyContent: "center",
             transition: "all 0.2s",
         }}
     >
         {icon}
-        <span>{label}</span>
+        <span style={{ whiteSpace: "pre-line" }}>{label}</span>
     </button>
 );
 
@@ -162,16 +183,16 @@ export const SessionChip: React.FC<{
         style={{
             display: "flex",
             alignItems: "center",
-            gap: 6,
+            gap: 10,
             border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
-            borderRadius: 8,
-            padding: "9px 14px",
-            background: selected ? LIGHT_TEAL_BG : "white",
+            borderRadius: 10,
+            padding: "12px 20px",
+            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
             cursor: "pointer",
             fontSize: 13,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 500,
+            fontWeight: 600,
             flex: 1,
             justifyContent: "center",
             transition: "all 0.2s",
@@ -193,16 +214,16 @@ export const ExpertiseChip: React.FC<{
         style={{
             display: "flex",
             alignItems: "center",
-            gap: 5,
+            gap: 8,
             border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
-            borderRadius: 6,
-            padding: "7px 12px",
-            background: selected ? LIGHT_TEAL_BG : "white",
+            borderRadius: 8,
+            padding: "8px 16px",
+            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
             cursor: "pointer",
             fontSize: 12,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 500,
+            fontWeight: 600,
             whiteSpace: "nowrap",
             transition: "all 0.2s",
         }}
