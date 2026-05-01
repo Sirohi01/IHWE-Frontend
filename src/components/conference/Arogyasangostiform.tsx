@@ -248,20 +248,21 @@ export default function ArogyaSanghostiForm() {
                             />
 
                             {/* ── SUBMIT BUTTON ── */}
-                            <div style={{ marginTop: "30px", marginBottom: "30px" }}>
+                            <div style={{ marginTop: "30px", marginBottom: "30px", display: "flex", justifyContent: "center" }}>
                                 <button
                                     onClick={handleSubmit}
                                     disabled={isSubmitting}
                                     style={{
-                                        width: "100%",
-                                        padding: "16px 32px",
+                                        width: "auto",
+                                        minWidth: "250px",
+                                        padding: "12px 24px",
                                         background: isSubmitting
                                             ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
                                             : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                                         color: "white",
                                         border: "none",
-                                        borderRadius: "12px",
-                                        fontSize: "18px",
+                                        borderRadius: "10px",
+                                        fontSize: "16px",
                                         fontWeight: "600",
                                         cursor: isSubmitting ? "not-allowed" : "pointer",
                                         boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
