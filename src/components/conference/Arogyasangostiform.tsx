@@ -94,7 +94,7 @@ export default function ArogyaSanghostiForm() {
                         </div>
 
                         {/* RIGHT COLUMN */}
-                        <div style={{ display: "flex", flexDirection: "column", marginTop: "120px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "126px" }}>
                             <SessionDetailsSection
                                 form={form}
                                 set={set}
