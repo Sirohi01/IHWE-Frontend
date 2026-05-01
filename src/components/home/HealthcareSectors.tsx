@@ -1,84 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Activity, 
-  Pill, 
-  Building2, 
-  Microscope, 
-  Cpu, 
-  Heart, 
-  Leaf, 
-  FlaskConical, 
-  ShoppingBasket, 
-  Dumbbell,
-  Award,
-  Users,
-  Lightbulb,
-  Handshake
+  Activity, Pill, Building2, Microscope, Cpu, Heart, Leaf, FlaskConical, 
+  ShoppingBasket, Dumbbell, Award, Users, Lightbulb, Handshake,
+  Stethoscope, Thermometer, Syringe, HeartPulse, Building, Dna,
+  ShieldCheck, Box, Monitor, Globe, Zap, Package, MapPin
 } from 'lucide-react';
 
-const sectors = [
-  {
-    title: "MEDICAL DEVICES",
-    desc: "Advanced equipment and technology for better outcomes.",
-    icon: <Activity className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "PHARMA & NUTRACEUTICALS",
-    desc: "Innovative medicines, supplements and nutritional solutions.",
-    icon: <Pill className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "HOSPITAL & INFRASTRUCTURE",
-    desc: "Smart infrastructure and solutions for modern healthcare facilities.",
-    icon: <Building2 className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "DIAGNOSTICS",
-    desc: "Cutting-edge diagnostic technologies for accurate and early detection.",
-    icon: <Microscope className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1579152276503-31649983949b?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "HEALTHTECH & DIGITAL HEALTH",
-    desc: "Digital solutions transforming care delivery and patient experience.",
-    icon: <Cpu className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1576091160550-2173dad99901?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "WELLNESS & REHABILITATION",
-    desc: "Products and programs for holistic well-being and faster recovery.",
-    icon: <Heart className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "AYURVEDA & HERBAL",
-    desc: "Time-tested natural therapies for a healthier tomorrow.",
-    icon: <Leaf className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "BEAUTY & PERSONAL CARE",
-    desc: "Innovative beauty and personal care solutions for all.",
-    icon: <FlaskConical className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "ORGANIC & NATURAL PRODUCTS",
-    desc: "Pure, organic and sustainable products for a better lifestyle.",
-    icon: <ShoppingBasket className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=400"
-  },
-  {
-    title: "FITNESS & LIFESTYLE",
-    desc: "Fitness equipment, supplements and lifestyle solutions for an active life.",
-    icon: <Dumbbell className="w-6 h-6" />,
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=400"
-  }
-];
+const ICONS_MAP = {
+  Activity, Pill, Building2, Microscope, Cpu, Heart, Leaf, FlaskConical, 
+  ShoppingBasket, Dumbbell, Award, Users, Lightbulb, Handshake,
+  Stethoscope, Thermometer, Syringe, HeartPulse, Building, Dna,
+  ShieldCheck, Box, Monitor, Globe, Zap, Package, MapPin
+};
+
+const IconComponent = ({ name, ...props }) => {
+  const Icon = ICONS_MAP[name] || Leaf;
+  return <Icon {...props} />;
+};
 
 const bottomStats = [
   {
@@ -104,6 +43,23 @@ const bottomStats = [
 ];
 
 const HealthcareSectors = () => {
+  const [content, setContent] = React.useState({
+    heading: 'EXPLORE DIVERSE HEALTHCARE SECTORs',
+    subtitle: 'One Platform. Every Healthcare Solution.',
+    cards: []
+  });
+
+  React.useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/healthcare-sectors`)
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) setContent(res.data);
+      })
+      .catch(err => console.error('Error fetching healthcare sectors:', err));
+  }, []);
+
+  const sectors = content.cards.length > 0 ? content.cards : [];
+  const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
   return (
     <section
       style={{
@@ -148,29 +104,29 @@ const HealthcareSectors = () => {
         <div style={{textAlign: 'center', marginBottom: 20}}>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 8}}>
             {/* Left leaf */}
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="#2e7d32" style={{opacity:0.85}}>
-              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-5 8Z"/>
-            </svg>
+            <Leaf size={30} className="text-[#2e7d32]" />
             
             {/* Title */}
             <h2 style={{
-              fontSize: 'clamp(22px, 3vw, 38px)',
+              fontSize: 'clamp(20px, 2.8vw, 34px)',
               fontWeight: 900,
               letterSpacing: '-0.5px',
               margin: 0,
               lineHeight: 1.1,
               color: '#1a1a1a',
             }}>
-              EXPLORE{' '}
-              <span style={{ color: '#1b5e20' }}>DIVERSE</span>{' '}
-              <span style={{ color: '#4caf50' }}>HEALTHCARE</span>{' '}
-              <span style={{ color: '#1b5e20' }}>SECTORS</span>
+              {content.heading.split(' ').map((word, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && ' '}
+                  <span style={{ color: (word === 'DIVERSE' || word === 'SECTORs') ? '#1b5e20' : word === 'HEALTHCARE' ? '#4caf50' : 'inherit' }}>
+                    {word}
+                  </span>
+                </React.Fragment>
+              ))}
             </h2>
             
             {/* Right leaf */}
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="#2e7d32" style={{opacity:0.85, transform:'scaleX(-1)'}}>
-              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-5 8Z"/>
-            </svg>
+            <Leaf size={30} className="text-[#2e7d32] scale-x-[-1]" />
           </div>
 
           {/* Subtitle row */}
@@ -183,7 +139,7 @@ const HealthcareSectors = () => {
               letterSpacing: '0.03em',
               margin: 0,
             }}>
-              One Platform. Every Healthcare Solution.
+              {content.subtitle}
             </p>
             <div style={{height: 1.5, width: 30, background: '#1b5e20', opacity: 0.6}}/>
           </div>
@@ -254,7 +210,7 @@ const HealthcareSectors = () => {
                   }}
                     className="card-icon-circle"
                   >
-                    {React.cloneElement(sector.icon as React.ReactElement, { className: 'w-8 h-8' })}
+                    <IconComponent name={sector.icon} size={32} />
                   </div>
                 </div>
 
@@ -274,8 +230,8 @@ const HealthcareSectors = () => {
                     background: '#f0f4f0',
                   }}>
                     <img
-                      src={sector.image}
-                      alt={sector.title}
+                      src={sector.image?.startsWith('http') ? sector.image : `${SERVER_URL}${sector.image}`}
+                      alt={sector.imageAlt || sector.title}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -309,7 +265,7 @@ const HealthcareSectors = () => {
                   lineHeight: 1.6,
                   margin: 0,
                 }}>
-                  {sector.desc}
+                  {sector.description}
                 </p>
                 {/* Short Accent Line */}
                 <div style={{
