@@ -111,6 +111,7 @@ const navLinks = [
   },
   { label: "Exhibitor List", path: "/exhibitors" },
   { label: "Conference", path: "/conference" },
+  { label: "Awards", path: "/awards" },
   { label: "Blogs", path: "/blog" },
   { label: "Gallery", path: "/gallery" },
   { label: "Contact", path: "/contact" },

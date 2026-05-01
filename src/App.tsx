@@ -105,6 +105,8 @@ import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
+const Awards = lazy(() => import("./pages/awards/Awards"));
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -128,6 +130,7 @@ const App = () => {
                   <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
                     <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/awards" element={<Awards />} />
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
