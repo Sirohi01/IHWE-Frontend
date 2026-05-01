@@ -1,38 +1,49 @@
 import { motion } from "framer-motion";
-import { Building2, Users, Trophy, Handshake, Leaf } from "lucide-react";
+import { Building2, Users, Trophy, Handshake, Leaf, Globe, Activity, Stethoscope, Landmark, GraduationCap, Package, Camera, ShieldCheck, UserCheck, Briefcase, Sparkles, Award } from "lucide-react";
+import { useState, useEffect } from "react";
+import { integratedFormatApi } from "../../lib/api";
 
-const cards = [
-  {
-    id: "01",
-    title: "DYNAMIC\nEXHIBITION",
-    color: "#2f8f3a",
-    description: "Showcasing cutting-edge innovations, products, and services from global leaders and emerging startups in health and wellness sectors. A vibrant marketplace for direct engagement and unparalleled business showcasing.",
-    icon: <Building2 className="w-5 h-5" />,
-  },
-  {
-    id: "02",
-    title: "INSIGHTFUL\nCONFERENCE & AROGYA\nSANGOSHTHI",
-    color: "#0d47a1",
-    description: "A platform for critical policy dialogue, knowledge dissemination, and expert discussions. Featuring keynote speakers and panel sessions on global health trends, traditional medicine, and future challenges.",
-    icon: <Users className="w-5 h-5" />,
-  },
-  {
-    id: "03",
-    title: "PRESTIGIOUS\nAWARDS CEREMONY",
-    color: "#d89a00",
-    description: "Recognizing excellence and innovation across the health and wellness spectrum. Categories honor trailblazers, ground-breaking research, and significant contributions to the industry, fostering aspiration and leadership.",
-    icon: <Trophy className="w-5 h-5" />,
-  },
-  {
-    id: "04",
-    title: "EXCLUSIVE\nBUYER-SELLER MEETS",
-    color: "#0f8b8d",
-    description: "Facilitating strategically curated B2B interactions and fostering powerful partnerships. Pre-scheduled 1-on-1 meetings connect international buyers with exhibitors, driving global commerce and collaboration.",
-    icon: <Handshake className="w-5 h-5" />,
-  },
-];
+const ICON_MAP: Record<string, React.ReactNode> = {
+  Building2: <Building2 className="w-5 h-5" />,
+  Users: <Users className="w-5 h-5" />,
+  Trophy: <Trophy className="w-5 h-5" />,
+  Handshake: <Handshake className="w-5 h-5" />,
+  Leaf: <Leaf className="w-8 h-8" />,
+  Globe: <Globe className="w-5 h-5" />,
+  Activity: <Activity className="w-5 h-5" />,
+  Stethoscope: <Stethoscope className="w-5 h-5" />,
+  Landmark: <Landmark className="w-5 h-5" />,
+  GraduationCap: <GraduationCap className="w-5 h-5" />,
+  Package: <Package className="w-5 h-5" />,
+  Camera: <Camera className="w-5 h-5" />,
+  ShieldCheck: <ShieldCheck className="w-5 h-5" />,
+  UserCheck: <UserCheck className="w-5 h-5" />,
+  Briefcase: <Briefcase className="w-5 h-5" />,
+  Sparkles: <Sparkles className="w-5 h-5" />,
+  Award: <Award className="w-5 h-5" />,
+};
+
+const CARD_COLORS = ["#2f8f3a", "#0d47a1", "#d89a00", "#0f8b8d"];
 
 const IntegratedFormatSection = () => {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await integratedFormatApi.get();
+        if (result) setData(result);
+      } catch (err) {
+        console.error("Error fetching integrated format:", err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (!data) return null;
+
+  const cards = data.cards?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)) || [];
+
   return (
     <section className="bg-white pt-16 pb-8 px-6 md:px-14 font-['Inter',sans-serif] overflow-hidden">
       <div className="max-w-[1500px] mx-auto flex flex-col lg:flex-row items-center gap-8">
@@ -41,25 +52,21 @@ const IntegratedFormatSection = () => {
         <div className="w-full lg:w-[22%] flex flex-col items-start text-left shrink-0">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-[1.5px] w-10 bg-[#2f8f3a]" />
-            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2f8f3a]">Our Comprehensive</span>
-          </div>
-
-          <h2 className="text-[30px] font-black mb-5 leading-[1.1] tracking-tight">
-            <span className="text-[#0d47a1]">INTEGRATED</span><br />
-            <span className="flex items-center gap-3">
-              <span className="text-[#2f8f3a]">FORMAT</span>
-              <Leaf className="w-8 h-8 text-[#2f8f3a]" fill="#2f8f3a" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2f8f3a]">
+              {data.subtitle}
             </span>
-          </h2>
-
-          <div className="flex flex-col gap-5 max-w-[380px]">
-            <p className="text-[13.5px] leading-[1.6] text-gray-500 font-medium text-justify">
-              The 9th International Health & Wellness Expo brings together innovation, business, and global opportunities on one powerful platform. Designed to maximize engagement and meaningful connections, it creates a dynamic space for exhibitors, buyers, and healthcare leaders.
-            </p>
-            <p className="text-[13.5px] leading-[1.6] text-gray-500 font-medium text-justify">
-              From exhibitions and conferences to awards and buyer-seller meets, every element is curated to promote knowledge exchange, inspire innovation, and recognize excellence in the health and wellness industry.
-            </p>
           </div>
+
+          <div className="flex items-end gap-1 mb-5">
+            <h2 className="text-[30px] font-black leading-[1.1] tracking-tight strip-editor-bg prose prose-xl max-w-none [&_*]:!bg-transparent inline-block"
+                style={{ color: data.leafColor }}>
+              <div dangerouslySetInnerHTML={{ __html: data.title }} className="inline" />
+              <Leaf className="w-8 h-8 ml-1 inline-block align-baseline flex-shrink-0 transform translate-y-[3px]" style={{ color: data.leafColor, fill: data.leafColor }} />
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-5 max-w-[380px] text-[13.5px] leading-[1.6] text-gray-500 font-medium text-justify strip-editor-bg prose prose-sm max-w-none [&_*]:!bg-transparent"
+               dangerouslySetInnerHTML={{ __html: data.description }} />
         </div>
 
         {/* RIGHT COLUMN - CARDS GRID */}
@@ -79,16 +86,16 @@ const IntegratedFormatSection = () => {
             >
               {/* Icon Circle */}
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-full border-[4px] border-white shadow-md flex items-center justify-center z-10 overflow-hidden transition-transform duration-300 group-hover:scale-110"
-                style={{ backgroundColor: card.color }}>
+                style={{ backgroundColor: CARD_COLORS[i % 4] }}>
                 <div className="absolute inset-0 border-[2px] border-white/20 rounded-full m-1" />
                 <div className="relative text-white">
-                  {card.icon}
+                  {ICON_MAP[card.icon] || <Building2 className="w-5 h-5" />}
                 </div>
               </div>
 
               {/* Card Title */}
               <h3 className="text-[12.5px] font-black uppercase tracking-tight leading-tight mb-1 h-10 flex items-center text-left"
-                style={{ color: card.color }}>
+                style={{ color: CARD_COLORS[i % 4] }}>
                 {card.title}
               </h3>
 
@@ -102,8 +109,8 @@ const IntegratedFormatSection = () => {
 
               {/* Bottom Tab */}
               <div className="absolute -bottom-[2px] left-1/2 -translate-x-1/2 w-20 h-5 flex items-center justify-center z-30">
-                <div className="absolute inset-0 rounded-b-[0.6rem]" style={{ backgroundColor: card.color }} />
-                <span className="relative text-white font-black text-[10px] tracking-widest">{card.id}</span>
+                <div className="absolute inset-0 rounded-b-[0.6rem]" style={{ backgroundColor: CARD_COLORS[i % 4] }} />
+                <span className="relative text-white font-black text-[10px] tracking-widest">{card.cardNumber}</span>
               </div>
             </motion.div>
           ))}

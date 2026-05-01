@@ -15,6 +15,8 @@ import InternationalImg from "@/assets/international.png";
 import ConferenceImg from "@/assets/conference.png";
 import B2BImg from "@/assets/b2b.png";
 import AwardImg from "@/assets/global.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const CounterItem = ({ icon, number, sup, label, sub, prefix }: any) => {
   const [count, setCount] = useState(0);
@@ -237,6 +239,7 @@ const About = () => {
         const data = await heroBackgroundApi.getByPage("Overview / About IHWE");
         if (data) {
           setHeroData(data);
+          setTimeout(() => AOS.refresh(), 100);
         }
       } catch (error) {
         console.error("Error fetching hero background:", error);
@@ -257,6 +260,8 @@ const About = () => {
 
         const jData = await ourJourneyApi.get();
         if (jData) setJourneyData(jData);
+        
+        setTimeout(() => AOS.refresh(), 500);
       } catch (error) {
         console.error("Error fetching event overview:", error);
       }
@@ -264,6 +269,11 @@ const About = () => {
 
     fetchHero();
     fetchEventOverview();
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: 'ease-in-out',
+    });
   }, []);
 
   // Use dynamic data if available
@@ -300,12 +310,12 @@ const About = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
 
-        <div className="container mx-auto px-8 text-left text-white relative z-10 flex flex-col justify-end h-full py-8" data-aos="fade-up">
+        <div className="container mx-auto px-8 text-left text-white relative z-10 flex flex-col justify-center h-full pt-16 pb-6" data-aos="fade-up">
           <div>
             {heroSubtitle && (
               <div className="mb-2">
-                <span
-                  className="subtitle-underline uppercase tracking-tight opacity-90 font-medium [&_a]:text-white [&_a]:no-underline [&_a]:pointer-events-none [&_*]:!bg-transparent [&_p]:!bg-transparent inline-block"
+                <div
+                  className="subtitle-underline uppercase tracking-tight opacity-90 font-medium [&_a]:text-white [&_a]:no-underline [&_a]:pointer-events-none [&_*]:!bg-transparent [&_p]:!bg-transparent [&_*]:!text-white inline-block"
                   style={{ fontSize: `${subtitleFontSize}px`, fontFamily: "'Poppins', sans-serif", color: 'white' }}
                   dangerouslySetInnerHTML={{ __html: heroSubtitle.replace(/<a[^>]*>/gi, '<span>').replace(/<\/a>/gi, '</span>') }}
                 />
@@ -432,12 +442,12 @@ const About = () => {
       <GlobalPlatform />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
-<section className="pt-0 pb-4 bg-white">
+<section className="pt-10 pb-4 bg-white relative z-10">
   <div className="container mx-auto px-11">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
       {/* LEFT - Event Overview */}
-      {eventOverviewData ? (
+      {eventOverviewData && eventOverviewData.title ? (
         <div data-aos="fade-right">
           <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
             {eventOverviewData.subtitle}

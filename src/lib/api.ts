@@ -165,6 +165,38 @@ export const glimpseApi = {
     }
 };
 
+export const supportedByApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/supported-by`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const introductionApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/introduction`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const nationalExpoApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/national-expo`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const integratedFormatApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/integrated-format`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const clientApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/client`);
@@ -786,3 +818,21 @@ export const brochureLeadApi = {
         return await response.json();
     }
 };
+
+export const whyParticipateApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/why-participate`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const newTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/new-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+

@@ -1,69 +1,87 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Users, Globe2, Store, Mic2, Handshake, Package, Camera, ChevronLeft, ChevronRight, Leaf
+  Users, Globe2, Store, Mic2, Handshake, Package, Camera, ChevronLeft, ChevronRight, Leaf, 
+  Building2, Mic, Sparkles, Globe
 } from 'lucide-react';
+import { glimpseApi, SERVER_URL } from '../../lib/api';
+
+const ICON_MAP: Record<string, React.ReactNode> = {
+  Users: <Users className="w-5 h-5" />,
+  Globe: <Globe className="w-5 h-5" />,
+  Globe2: <Globe2 className="w-5 h-5" />,
+  Building2: <Building2 className="w-5 h-5" />,
+  Store: <Store className="w-5 h-5" />,
+  Mic: <Mic className="w-5 h-5" />,
+  Mic2: <Mic2 className="w-5 h-5" />,
+  Handshake: <Handshake className="w-5 h-5" />,
+  Package: <Package className="w-5 h-5" />,
+  Sparkles: <Sparkles className="w-5 h-5" />,
+  Camera: <Camera className="w-5 h-5" />,
+};
 
 const EventGlimpses = () => {
+  const [glimpseData, setGlimpseData] = useState<any>(null);
   const [current, setCurrent] = useState(0);
   const visible = 5;
 
-  const images = [
-    {
-      url: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=2070&auto=format&fit=crop",
-      icon: <Leaf className="w-4 h-4" />, title: "Exhibition Floor"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
-      icon: <Mic2 className="w-4 h-4" />, title: "Knowledge Sessions"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2070&auto=format&fit=crop",
-      icon: <Handshake className="w-4 h-4" />, title: "Networking"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1582192730841-2a682d7375f9?q=80&w=2070&auto=format&fit=crop",
-      icon: <Users className="w-4 h-4" />, title: "Visitor Footfall"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2070&auto=format&fit=crop",
-      icon: <Leaf className="w-4 h-4" />, title: "Organic Innovation"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=2070&auto=format&fit=crop",
-      icon: <Leaf className="w-4 h-4" />, title: "Exhibition Floor 2"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop",
-      icon: <Mic2 className="w-4 h-4" />, title: "Sessions 2"
-    },
-  ];
-
-  const stats = [
-    { label: "Trade Visitors", value: "10,000+", icon: <Users className="w-5 h-5" /> },
-    { label: "Countries", value: "30+", icon: <Globe2 className="w-5 h-5" /> },
-    { label: "Exhibitors", value: "250+", icon: <Store className="w-5 h-5" /> },
-    { label: "Expert Speakers", value: "40+", icon: <Mic2 className="w-5 h-5" /> },
-    { label: "B2B Meetings", value: "B2B", icon: <Handshake className="w-5 h-5" /> },
-    { label: "Organic Products", value: "500+", icon: <Package className="w-5 h-5" /> },
-  ];
-
-  const maxIndex = images.length - visible;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await glimpseApi.get();
+        if (data) {
+          setGlimpseData(data);
+        }
+      } catch (err) {
+        console.error("Error fetching glimpse data:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const nextSlide = useCallback(() => {
+    if (!glimpseData?.images?.length) return;
+    const maxIndex = Math.max(0, glimpseData.images.length - visible);
     setCurrent(prev => (prev >= maxIndex ? 0 : prev + 1));
-  }, [maxIndex]);
+  }, [glimpseData]);
 
   const prevSlide = () => {
+    if (!glimpseData?.images?.length) return;
+    const maxIndex = Math.max(0, glimpseData.images.length - visible);
     setCurrent(prev => (prev <= 0 ? maxIndex : prev - 1));
   };
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
+    if (glimpseData?.images?.length > visible) {
+      const timer = setInterval(nextSlide, 5000);
+      return () => clearInterval(timer);
+    }
+  }, [nextSlide, glimpseData]);
 
+  if (!glimpseData) return null;
+
+  const images = glimpseData.images || [];
+  const stats = glimpseData.counters || [];
+  const maxIndex = Math.max(0, images.length - visible);
   const GAP = 2;
+
+  // Split heading into parts for highlighting
+  const renderHeading = () => {
+    const { heading, highlightText } = glimpseData;
+    if (!highlightText || !heading.includes(highlightText)) {
+      return heading;
+    }
+    const parts = heading.split(highlightText);
+    return (
+      <>
+        {parts[0]}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2f8f3a] to-[#0b4d17]">
+          {highlightText}
+        </span>
+        {parts[1]}
+      </>
+    );
+  };
 
   return (
     <section
@@ -120,23 +138,18 @@ const EventGlimpses = () => {
         <div className="text-center mb-8 px-4">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Leaf size={20} className="text-[#2f8f3a]" />
-            <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[11px]">Event Glimpses</span>
+            <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[11px]">{glimpseData.subheading || 'Event Glimpses'}</span>
             <Leaf size={20} className="text-[#2f8f3a] scale-x-[-1]" />
           </div>
           <h2 className="text-2xl md:text-4xl font-black text-[#0b2912] mb-3 uppercase tracking-tight">
-            BEST MOMENTS –{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2f8f3a] to-[#0b4d17]">
-              IHWE 2026
-            </span>
+            {renderHeading()}
           </h2>
           <div className="flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-[#b6d9bb]" />
-            <p className="text-slate-700 text-xs md:text-sm tracking-wide">
-              A glimpse into the{' '}
-              <span className="text-[#0b4d17] font-bold">energy</span>,{' '}
-              <span className="text-[#0b4d17] font-bold">innovation</span>, and{' '}
-              <span className="text-[#0b4d17] font-bold">success</span> of IHWE 2026.
-            </p>
+            <div 
+              className="text-slate-700 text-xs md:text-sm tracking-wide prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: glimpseData.description }}
+            />
             <div className="h-[1px] w-12 bg-[#b6d9bb]" />
           </div>
         </div>
@@ -144,18 +157,22 @@ const EventGlimpses = () => {
         {/* Carousel Area */}
         <div className="relative mb-4 px-2 max-w-[1200px] mx-auto">
           {/* Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
-          >
-            <ChevronRight size={20} />
-          </button>
+          {images.length > visible && (
+            <>
+              <button
+                onClick={prevSlide}
+                className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
 
           {/* Slider */}
           <div className="overflow-hidden rounded-2xl shadow-2xl">
@@ -165,7 +182,7 @@ const EventGlimpses = () => {
               animate={{ x: `${-(current * (100 / visible))}%` }}
               transition={{ type: 'spring', stiffness: 120, damping: 20 }}
             >
-              {images.map((img, idx) => {
+              {images.map((img: any, idx: number) => {
                 // Dynamic window logic: check if the image is currently at the start or end of the 5 visible items
                 const isFirstVisible = idx === current;
                 const isLastVisible = idx === current + visible - 1;
@@ -192,13 +209,18 @@ const EventGlimpses = () => {
                     }}
                   >
                     <img
-                      src={img.url}
-                      alt={img.title}
+                      src={img.url.startsWith('http') ? img.url : `${SERVER_URL}${img.url}`}
+                      alt={img.title || 'Event Glimpse'}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
                     />
                     
                     {/* Bottom Green Overlay - Shorter & Subtle */}
                     <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#0b4d17]/80 via-[#0b4d17]/30 to-transparent opacity-80" />
+
+                    {/* Image Title on Hover */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center p-4">
+                        <span className="text-white font-bold text-center text-sm">{img.title}</span>
+                    </div>
 
                     {/* Decorative Dots - On Every Image */}
                     <div className="absolute bottom-6 right-4 opacity-40">
@@ -219,13 +241,13 @@ const EventGlimpses = () => {
         <div className="px-2 mt-0">
           <div className="max-w-[1200px] mx-auto bg-[#041a0a] rounded-full p-1.5 flex items-center border border-white/10 shadow-2xl overflow-hidden">
             <div className="flex-1 flex items-center justify-around px-2">
-              {stats.map((stat, idx) => (
+              {stats.map((stat: any, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 px-3 border-r border-white/10 last:border-r-0">
                   <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#0b4d17] flex-shrink-0">
-                    {React.cloneElement(stat.icon as React.ReactElement, { size: 18 })}
+                    {ICON_MAP[stat.icon] || <Users size={18} />}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[#2f8f3a] font-bold text-sm leading-none mb-0.5">{stat.value}</span>
+                    <span className="text-[#2f8f3a] font-bold text-sm leading-none mb-0.5">{stat.number}</span>
                     <span className="text-white/60 text-[9px] uppercase tracking-wider font-semibold">{stat.label}</span>
                   </div>
                 </div>
@@ -243,9 +265,7 @@ const EventGlimpses = () => {
                   <span className="text-[#0b4d17]/60 text-[9px] font-bold uppercase tracking-widest leading-none">Opportunities</span>
                 </div>
                 <p className="text-[#0b2912] text-[10px] leading-[1.3] font-medium tracking-wide mt-0.5">
-                  Relive the moments that{' '}
-                  <span className="text-[#2f8f3a] font-bold">inspired connections</span>
-                  {' '}and created <span className="text-[#2f8f3a] font-bold">impact</span>.
+                  {glimpseData.counterText}
                 </p>
               </div>
             </div>
