@@ -52,7 +52,7 @@ export default function ArogyaSanghostiForm() {
             <div
                 style={{
                     fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
-                    padding: "0 100px",
+                    width: "100%",
                     background: "white",
                     overflow: "hidden",
                 }}

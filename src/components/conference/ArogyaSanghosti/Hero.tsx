@@ -20,7 +20,6 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg }) => {
                 alt="Hero Banner"
                 style={{
                     height: "100%",
-                    padding: "0 100px",
                     width: "100%",
                     objectFit: "contain",
                     objectPosition: "right center",
