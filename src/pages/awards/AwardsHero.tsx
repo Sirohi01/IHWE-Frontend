@@ -91,7 +91,7 @@ const AwardsHero = () => {
 
             <div className="flex flex-wrap gap-4 mt-4">
               <Link
-                to="/visitor-registration"
+                to="/awards/nomination"
                 className="text-white px-7 py-2 rounded-md text-[12px] font-black uppercase tracking-[0.1em] flex items-center gap-2.5 shadow-lg transition-all hover:scale-[1.02]"
                 style={{ ...jakartaFont, backgroundColor: greenColor }}
               >
