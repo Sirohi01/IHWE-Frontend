@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import heroImg from "../../assets/arogyasangostiimageform/hero.png";
+import arogyaLogo from "../../assets/arogyasangosti.png";
 
 
 const TEAL = "#0B3C49";
@@ -481,53 +483,41 @@ export default function ArogyaSanghostiForm() {
             {/* ── HEADER ─────────────────────────────────────────────────────────── */}
             <div
                 style={{
-                    background: "white",
-                    padding: "30px 40px",
-                    borderBottom: `2px solid ${TEAL}`,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
+                    position: "relative",
+                    width: "100%",
+                    height: 500,
+                    overflow: "hidden",
+                    background: "white"
                 }}
             >
-                <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                    <img src="/assets/arogyasangosti.png" alt="Arogya Sanghosthi" style={{ height: 90, objectFit: 'contain' }} />
-                </div>
+                {/* ── FULL WIDTH BANNER IMAGE ── */}
+                <img 
+                    src={heroImg} 
+                    alt="Speaker Nomination Banner" 
+                    style={{ 
+                        width: "100%", 
+                        height: "100%", 
+                        objectFit: "cover",
+                        objectPosition: "right center",
+                        display: "block"
+                    }} 
+                />
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", borderLeft: `3px solid ${TEAL}`, paddingLeft: 24 }}>
-                    <div style={{ color: TEAL, fontWeight: 900, fontSize: 36, lineHeight: 1, letterSpacing: 1 }}>
-                        SPEAKER
-                    </div>
-                    <div style={{ color: TEAL, fontWeight: 900, fontSize: 36, lineHeight: 1, letterSpacing: 1 }}>
-                        NOMINATION FORM
-                    </div>
-                    <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: TEXT_DARK, fontSize: 14, fontWeight: 500 }}>
-                            <span style={{ color: TEAL }}>❖</span> Share Your Knowledge.
+                {/* ── FLOATING LOGO ── */}
+                <div style={{ position: "absolute", top: 40, left: 40, zIndex: 10, background: "rgba(255,255,255,0.9)", padding: "15px 25px", borderRadius: 10, boxShadow: "0 10px 30px rgba(0,0,0,0.15)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+                        <div style={{ width: 60, height: 60 }}>
+                            <svg viewBox="0 0 100 100" fill="none">
+                                <path d="M50 5 C50 5 20 35 20 55 a30 30 0 0 0 60 0 C80 35 50 5 50 5z" fill={TEAL} />
+                                <path d="M50 20 C50 20 35 35 35 55 a15 15 0 0 0 30 0 C65 35 50 20 50 20z" fill={GOLD} />
+                                <rect x="45" y="45" width="10" height="20" fill="white" />
+                                <rect x="40" y="50" width="20" height="10" fill="white" />
+                            </svg>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, color: TEXT_DARK, fontSize: 14, fontWeight: 500 }}>
-                            <span style={{ color: TEAL }}>❖</span> Inspire Change. Shape the Future.
+                        <div>
+                            <div style={{ color: TEAL, fontSize: 24, fontWeight: 900, lineHeight: 0.9 }}>AROGYA</div>
+                            <div style={{ color: TEAL, fontSize: 24, fontWeight: 900, lineHeight: 0.9 }}>SANGHOSTHI</div>
                         </div>
-                    </div>
-                </div>
-
-                <div
-                    style={{
-                        background: TEAL,
-                        borderRadius: 8,
-                        padding: "20px 16px",
-                        textAlign: "center",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: 10,
-                        border: `2px solid ${GOLD}`
-                    }}
-                >
-                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
-                        <path d="M24 4 L40 18 L32 18 L32 40 L16 40 L16 18 L8 18 Z" fill={GOLD} />
-                    </svg>
-                    <div style={{ color: "white", fontWeight: 700, fontSize: 12, lineHeight: 1.4, textAlign: "center", letterSpacing: 1 }}>
-                        BUILDING A<br />HEALTHIER<br />FUTURE<br />TOGETHER
                     </div>
                 </div>
             </div>
