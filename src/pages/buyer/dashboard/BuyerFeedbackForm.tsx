@@ -21,7 +21,9 @@ import {
     X,
     Check,
     Upload,
-    PenTool
+    PenTool,
+    MapPin,
+    Award
 } from "lucide-react";
 import Swal from 'sweetalert2';
 import { cn } from "@/lib/utils";
@@ -30,9 +32,9 @@ import { cn } from "@/lib/utils";
 
 const StarRating = ({ value, onChange, label }: { value: number, onChange: (v: number) => void, label: string }) => {
     return (
-        <div className="flex flex-col gap-0.5 min-w-[120px] print:min-w-0 text-left print:flex-row print:items-start print:gap-2 print:py-0.5">
-            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tight print:text-[9pt] print:text-black print:normal-case print:font-bold leading-tight mb-0.5 print:mb-0 print:w-36">{label}:</span>
-            <div className="flex gap-1 star-row print:gap-0.5 items-center">
+        <div className="flex flex-col gap-0.5 min-w-[120px] print:min-w-0 text-left print:flex-row print:items-center print:gap-1 print:py-0.5">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tight print:text-[8pt] print:text-black print:normal-case print:font-bold leading-tight mb-0.5 print:mb-0 print:w-32 shrink-0">{label}:</span>
+            <div className="flex gap-1 star-row print:gap-1 items-center">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <button
                         key={star}
@@ -52,7 +54,7 @@ const StarRating = ({ value, onChange, label }: { value: number, onChange: (v: n
                                 star <= value ? "text-[#d26019]" : "text-slate-200"
                             )}
                         />
-                        <span className="hidden print:inline text-[13pt] leading-none" style={{ color: star <= value ? "#000" : "#ddd" }}>
+                        <span className="hidden print:inline text-[13pt] leading-none text-black">
                             {star <= value ? '★' : '☆'}
                         </span>
                     </button>
@@ -63,16 +65,18 @@ const StarRating = ({ value, onChange, label }: { value: number, onChange: (v: n
 };
 
 const FeedbackSection = ({ title, icon: Icon, children, id }: { title: string, icon: any, children: React.ReactNode, id: string }) => (
-    <div id={id} className="bg-white rounded-xl border border-slate-200 shadow-sm mb-5 scroll-mt-24 print:border-none print:shadow-none print:mb-2 text-left relative overflow-visible print:bg-transparent">
-        <div className="bg-slate-50/80 px-4 py-2 border-b border-slate-200 flex items-center gap-2.5 print:bg-transparent print:border-b-[0.5pt] print:border-slate-300 print:py-1 print:px-0 rounded-t-xl print:rounded-none mb-1.5 print:mb-1">
+    <div id={id} className="bg-white rounded-xl border border-slate-200 shadow-sm mb-5 scroll-mt-24 print:border-none print:shadow-none print:mb-0.5 text-left relative overflow-visible print:bg-[#f8f9fa] print:rounded-lg">
+        <div className="bg-slate-50/80 px-4 py-2 border-b border-slate-200 flex items-center gap-2.5 print:bg-transparent print:border-none print:pt-1 print:pb-0 print:px-4">
             <div className="bg-white p-1 rounded-md shadow-sm border border-slate-100 print:hidden text-[#23471d]">
                 <Icon size={14} />
             </div>
-            <h3 className="text-[12px] font-black text-[#23471d] uppercase tracking-wide print:text-[10pt] print:text-black print:font-bold">
-                {title}
-            </h3>
+            <div className="w-full print:pb-0.5">
+                <h3 className="text-[12px] font-black text-[#23471d] uppercase tracking-wide print:text-[9pt] print:text-black print:font-black print:uppercase m-0 p-0 border-none w-full">
+                    {title}
+                </h3>
+            </div>
         </div>
-        <div className="p-4 print:p-0 print:pt-0">
+        <div className="p-4 print:pt-0.5 print:px-4 print:pb-0.5">
             {children}
         </div>
     </div>
@@ -100,11 +104,11 @@ const RadioOption = ({ label, value, current, onChange, name }: { label: string,
 
 const PrintField = ({ label, value, fullWidth = false }: { label: string, value: string, fullWidth?: boolean }) => (
     <div className={cn(
-        "hidden print:flex items-start gap-2 py-0.5 border-none",
+        "hidden print:flex items-start gap-1 py-0.5 border-none",
         fullWidth ? "col-span-2" : ""
     )}>
-        <span className="text-[8.5pt] text-slate-500 min-w-[130px] shrink-0 font-bold leading-relaxed">{label}:</span>
-        <span className="text-[9.5pt] text-slate-900 font-medium flex-1 break-words whitespace-normal leading-snug">{value || '-'}</span>
+        <span className="text-[8pt] text-[#555] font-bold min-w-[130px] shrink-0 leading-tight whitespace-nowrap">{label}:</span>
+        <span className="text-[9pt] text-black font-bold flex-1 break-words whitespace-normal leading-tight pb-0">{value || '-'}</span>
     </div>
 );
 
@@ -357,6 +361,12 @@ export default function BuyerFeedbackForm() {
         }));
     };
 
+    const formatDate = (dateStr: string) => {
+        if (!dateStr) return '';
+        const [y, m, d] = dateStr.split('-');
+        return `${d}-${m}-${y}`;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!form.isDeclared) {
@@ -380,8 +390,139 @@ export default function BuyerFeedbackForm() {
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full space-y-4 print:space-y-0 text-left">
 
+            {/* Print-Only Professional Header (Brochure Style) - Commented out to use image instead
+            <div className="hidden print:block w-full print:mb-0 mb-3 relative overflow-hidden">
+                <div className="flex relative print:h-auto print:min-h-[130px]">
+                    <div className="flex-1 flex px-6 py-4 items-center z-10 bg-white">
+                        <div className="flex flex-col justify-center pr-6 border-r border-slate-300">
+                            <div className="flex items-center gap-2 mb-1">
+                                <div className="w-[50px] h-[50px]">
+                                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                                        <path d="M50 90 C75 75 85 50 85 35 C85 20 70 10 50 25 C30 10 15 20 15 35 C15 50 25 75 50 90" fill="#0072bc" />
+                                        <path d="M50 80 C65 65 75 45 75 35 C75 25 65 15 50 30 C35 15 25 25 25 35 C25 45 35 65 50 80" fill="#8bc34a" />
+                                        <circle cx="50" cy="40" r="10" fill="white" />
+                                        <path d="M38 55 Q50 70 62 55" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
+                                    </svg>
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className="text-[26pt] font-black text-[#002b49] leading-[0.8] tracking-tighter">IHWE</h1>
+                                    <p className="text-[8pt] font-bold text-slate-800 leading-tight">International<br />Health & Wellness Expo</p>
+                                </div>
+                            </div>
+                            <div className="mt-1 flex items-center gap-2">
+                                <div className="flex items-baseline gap-0.5">
+                                    <span className="text-[22pt] font-black text-[#002b49] leading-none">9</span>
+                                    <sup className="text-[10pt] font-black text-[#002b49] -top-[10px]">th</sup>
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[10pt] font-black text-[#b48a3c] leading-none uppercase tracking-wide">GLOBAL EDITION</span>
+                                    <p className="text-[6.5pt] font-bold text-black leading-tight mt-0.5">India's Leading Global Platform for<br />Healthcare, AYUSH & Wellness</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="pl-6 flex flex-col justify-center">
+                            <div className="text-[28pt] font-black text-[#002b49] leading-[0.9] tracking-tight">BUYER</div>
+                            <div className="text-[20pt] font-black text-[#b48a3c] leading-[0.9] tracking-tight mb-2">FEEDBACK FORM</div>
+
+                            <div className="flex items-center gap-1 mb-2">
+                                <div className="h-[0.5pt] w-12 bg-[#b48a3c]" />
+                                <div className="w-1.5 h-1.5 rotate-45 border-[0.5pt] border-[#b48a3c]" />
+                                <div className="h-[0.5pt] w-12 bg-[#b48a3c]" />
+                            </div>
+
+                            <p className="text-[8.5pt] font-bold text-slate-800 leading-tight">Your Feedback. Our Strength.<br />Building Stronger Global Partnerships.</p>
+                        </div>
+                    </div>
+
+                    <div className="w-[40%] relative print:h-[140px] h-[180px] print:mt-0 print:mr-0 overflow-hidden">
+                        <div
+                            className="absolute inset-0 bg-[#002b49] overflow-hidden print:rounded-none"
+                            style={{ borderBottomLeftRadius: '200px', borderTopLeftRadius: '200px' }}
+                        >                            <img src="https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover opacity-90 print:object-fill print:h-full0" alt="Expo Venue" />
+                        </div>
+                        <div className="absolute top-[20px] right-4 print:top-[10px] print:right-2 bg-[#002b49] text-white py-2 pl-4 pr-6 rounded-l-2xl shadow-lg border-l-[4px] border-[#002b49] flex flex-col gap-2">
+                            <div className="flex items-start gap-2">
+                                <Calendar className="text-[#b48a3c] mt-0.5" size={16} />
+                                <div>
+                                    <p className="text-[11pt] font-black leading-none mb-0.5">21 – 23</p>
+                                    <p className="text-[6pt] uppercase tracking-widest text-white/90">AUGUST 2026</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                                <MapPin className="text-[#b48a3c] mt-0.5" size={16} />
+                                <div>
+                                    <p className="text-[7pt] font-black leading-tight uppercase tracking-wider mb-0.5">PRAGATI MAIDAN</p>
+                                    <p className="text-[6pt] uppercase tracking-widest text-white/90">NEW DELHI, INDIA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="w-full h-[15px] relative z-20 print:mb-0 -mb-[8px] pointer-events-none print:hidden">
+                    <svg viewBox="0 0 1000 15" preserveAspectRatio="none" className="w-full h-full">
+                        <path d="M0,15 Q200,-5 500,8 T1000,15 L1000,15 L0,15 Z" fill="#002b49" />
+                        <path d="M0,14 Q200,-6 500,7 T1000,14" fill="none" stroke="#b48a3c" strokeWidth="2" />
+                    </svg>
+                </div>
+
+                <div className="bg-[#002b49] py-2 px-6 grid grid-cols-4 gap-2 text-white relative z-20">
+                    <div className="flex flex-col justify-center border-r border-white/20 px-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                            <Globe className="text-[#b48a3c]" size={20} strokeWidth={1.5} />
+                            <div>
+                                <p className="text-[12pt] font-black leading-none">1500+</p>
+                                <p className="text-[6pt] font-bold uppercase tracking-wider">EXHIBITORS</p>
+                            </div>
+                        </div>
+                        <p className="text-[5pt] text-white/70 pl-8 leading-tight">Across Successful Editions</p>
+                    </div>
+                    <div className="flex flex-col justify-center border-r border-white/20 px-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                            <Users className="text-[#b48a3c]" size={20} strokeWidth={1.5} />
+                            <div>
+                                <p className="text-[12pt] font-black leading-none">15000+</p>
+                                <p className="text-[6pt] font-bold uppercase tracking-wider">TRADE VISITORS</p>
+                            </div>
+                        </div>
+                        <p className="text-[5pt] text-white/70 pl-8 leading-tight">From 30+ Countries</p>
+                    </div>
+                    <div className="flex flex-col justify-center border-r border-white/20 px-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                            <Award className="text-[#b48a3c]" size={20} strokeWidth={1.5} />
+                            <div>
+                                <p className="text-[12pt] font-black leading-none">10+</p>
+                                <p className="text-[6pt] font-bold uppercase tracking-wider">YEARS</p>
+                            </div>
+                        </div>
+                        <p className="text-[5pt] text-white/70 pl-8 leading-tight">Legacy of Trust & Growth</p>
+                    </div>
+                    <div className="flex flex-col justify-center px-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                            <TrendingUp className="text-[#b48a3c]" size={20} strokeWidth={1.5} />
+                            <div>
+                                <p className="text-[12pt] font-black leading-none">₹500Cr+</p>
+                                <p className="text-[6pt] font-bold uppercase tracking-wider">BUSINESS OPPS</p>
+                            </div>
+                        </div>
+                        <p className="text-[5pt] text-white/70 pl-8 leading-tight">Generated Over the Years</p>
+                    </div>
+                </div>
+            </div> */}
+
+            {/* New Image Header for Print */}
+            <div className="hidden print:block w-full">
+                <img
+                    src="/feedbackform_header.jpeg"
+                    className="w-full h-[120px] object-cover block"
+                    alt="IHWE Header"
+                />
+            </div>
+
+
             {/* Top Bar / Print Header */}
-            <div className="bg-white rounded-sm border border-slate-200 p-5 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm print:shadow-none print:border-none print:p-0 print:mb-6 print:text-center print:border-b-2 print:border-black print:pb-4">
+            <div className="bg-white rounded-sm border border-slate-200 p-5 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm print:hidden">
                 <div className="print:w-full">
                     <h2 className="text-[22px] font-black text-slate-900 uppercase tracking-tight mb-1 print:text-[22pt] print:mb-1 print:font-bold">BUYER FEEDBACK REPORT</h2>
                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest print:text-[11pt] print:text-slate-700 print:tracking-normal print:font-semibold">International Health & Wellness Expo 2026</p>
@@ -612,47 +753,154 @@ export default function BuyerFeedbackForm() {
                     </div>
                 </FeedbackSection>
 
-                <div className="bg-white border-2 border-[#23471d]/5 rounded-2xl p-6 flex flex-col gap-6 mb-12 shadow-lg print:shadow-none print:border-none print:p-0 print:mb-0 print:mt-4">
-                    <div className="flex items-start gap-4"><input type="checkbox" id="f-dec" checked={form.isDeclared} onChange={e => setForm(f => ({ ...f, isDeclared: e.target.checked }))} className="mt-1 w-5.5 h-5.5 border-[#23471d] accent-[#23471d] print:hidden focus:ring-0 cursor-pointer" /><label htmlFor="f-dec" className="text-[13px] font-bold text-slate-700 cursor-pointer flex-1 italic leading-relaxed print:text-[11pt] print:text-black">"I confirm that the feedback provided above is true and based on my business experience."</label></div>
-                    <div className="flex flex-wrap items-center justify-between gap-8 border-t border-slate-50 pt-8 print:border-none print:pt-4">
+                <div className="bg-white border-2 border-[#23471d]/5 rounded-2xl p-6 flex flex-col gap-6 mb-12 shadow-lg">
+                    <div className="flex items-center gap-4">
+                        <input type="checkbox" id="f-dec" checked={form.isDeclared} onChange={e => setForm(f => ({ ...f, isDeclared: e.target.checked }))} className="mt-1 w-5.5 h-5.5 border-[#23471d] accent-[#23471d] focus:ring-0 cursor-pointer" />
+                        <label htmlFor="f-dec" className="text-[13px] font-bold text-slate-700 cursor-pointer flex-1 italic leading-relaxed">
+                            "I confirm that the feedback provided above is true and based on my business experience."
+                        </label>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-50 pt-8 print:border-none print:pt-2 print:hidden">
                         <div className="flex-1 min-w-[250px] flex items-center gap-5">
                             <div className="flex-1">
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[9.5pt] print:text-slate-600 print:mb-1">Authorized Digital Signature</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[8pt] print:font-bold print:text-slate-600 print:mb-0.5">AUTHORIZED DIGITAL SIGNATURE</p>
                                 <div className="flex flex-col gap-2">
                                     <input className="bg-transparent border-b-2 border-slate-100 w-full text-[20px] font-signature italic outline-none focus:border-[#23471d] h-11 print:hidden" placeholder="Type Digital Signature" value={form.digitalSignature} onChange={e => handleValue('digitalSignature', e.target.value)} />
                                     <FileInputButton id="up-signature" label="Upload Digital Signature" icon={PenTool} />
                                 </div>
-                                <div className="hidden print:block text-[18pt] font-signature border-b-2 border-black min-w-[300px] py-1"> {form.digitalSignature || '________________'}</div>
+                                <div className="hidden print:block text-[14pt] font-signature border-b-[1pt] border-black min-w-[250px] max-w-[300px] py-0.5"> {form.digitalSignature || ''}</div>
                             </div>
                         </div>
-                        <div className="flex flex-col gap-1 min-w-[120px] text-right print:text-left"><p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[9.5pt] print:text-slate-600">Document Date</p><span className="text-[14px] font-bold text-slate-700 print:text-[12pt] print:text-black">{form.date}</span></div>
+                        <div className="flex flex-col gap-0.5 min-w-[120px] text-right print:text-left print:items-end">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[8pt] print:font-bold print:text-slate-600">DOCUMENT DATE</p>
+                            <span className="text-[14px] font-bold text-slate-700 print:text-[10pt] print:text-black">{form.date}</span>
+                        </div>
                         <div className="print:hidden"><button type="submit" className="h-12 px-14 bg-[#23471d] hover:bg-[#1a3516] text-white text-[12px] font-black uppercase tracking-widest rounded shadow-xl flex items-center gap-2.5 transition-all active:scale-95">Submit Official Feedback <ArrowRight size={20} /></button></div>
+                    </div>
+                    {/* Mandatory Signature & Date - Reordered for Visibility */}
+                    <div className="hidden print:flex px-6 justify-between items-start mb-2 print:mt-0 print:mb-0">
+                        <div className="flex flex-col">
+                            <div className="text-[18pt] font-signature border-b-[1pt] border-black min-w-[250px] max-w-[300px]"> {form.digitalSignature || ''}</div>
+                            <p className="text-[8pt] font-bold text-slate-600 uppercase tracking-widest mt-2">AUTHORIZED DIGITAL SIGNATURE</p>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="text-[11pt] font-bold text-black border-b-[1pt] border-black min-w-[120px] text-right">{formatDate(form.date)}</span>
+                            <p className="text-[8pt] font-bold text-slate-600 uppercase tracking-widest mt-2">DOCUMENT DATE</p>
+                        </div>
                     </div>
                 </div>
             </form>
+
+            {/* Print Footer Template */}
+            <div className="hidden print:block print-footer relative print:mt-1 mt-3 pt-2 print:pb-0 pb-1 overflow-hidden">
+                <div className="px-6 flex justify-between items-start relative z-10">
+                    <div className="flex-1">
+                        <h4 className="text-[15pt] font-signature text-[#b48a3c] mb-2 leading-none">Thank You!</h4>
+                        <p className="text-[8pt] font-bold text-[#555] mb-9 max-w-[450px]">Your valuable feedback will help us improve and create better experiences for you in the future.</p>
+                    </div>
+
+                    <div className="opacity-10 absolute -bottom-4 right-6 pointer-events-none">
+                        <svg viewBox="0 0 100 100" className="w-[120px] h-[120px]">
+                            <path d="M50 90 C75 75 85 50 85 35 C85 20 70 10 50 25 C30 10 15 20 15 35 C15 50 25 75 50 90" fill="#0072bc" />
+                            <path d="M50 80 C65 65 75 45 75 35 C75 25 65 15 50 30 C35 15 25 25 25 35 C25 45 35 65 50 80" fill="#8bc34a" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-0 left-0 w-full">
+                    <svg viewBox="0 0 1000 20" preserveAspectRatio="none" className="w-full h-[15px] block">
+                        <path d="M0,20 L0,10 Q200,-5 500,5 T1000,10 L1000,20 Z" fill="#002b49" />
+                        <path d="M0,9 Q200,-6 500,4 T1000,9" fill="none" stroke="#b48a3c" strokeWidth="2" />
+                    </svg>
+                    <div className="h-[25px] bg-[#002b49] text-white flex items-center justify-center gap-3 w-full">
+                        <div className="w-1 h-1 bg-[#b48a3c] rounded-full" />
+                        <p className="text-[7pt] font-black uppercase tracking-[0.2em]">One Platform. Endless <span className="text-[#b48a3c]">Global Opportunities.</span></p>
+                        <div className="w-1 h-1 bg-[#b48a3c] rounded-full" />
+                    </div>
+                </div>
+            </div>
+
+            {/* New Image Footer for Print */}
+            {/* <div className="hidden print:block w-full print-footer h-[5px]">
+                <img
+                    src="/feedbackform_fooder.jpeg"
+                    className="w-full h-auto block"
+                    alt="IHWE Footer"
+                />
+            </div> */}
+
 
             <style dangerouslySetInnerHTML={{
                 __html: `
                 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
                 .font-signature { font-family: 'Dancing+Script', cursive !important; }
                 @media print {
-                    @page { size: A4; margin: 8mm; }
+                    @page { size: A4; margin: 0; }
+                    body { margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                     html, body { 
-                        background: white !important; 
-                        font-family: Arial, sans-serif !important;
-                        -webkit-print-color-adjust: exact !important; 
+                        background: white !important;
+                    font-family: Arial, sans-serif !important;
+                        width: 210mm !important;
+                        height: 297mm !important;
+                        margin: 0 !important; 
+                        padding: 0 !important; 
+                        overflow: hidden !important;
+                        background: white !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
                     }
+                    main, #root, #root > div { 
+                        padding: 0 !important; 
+                        margin: 0 !important; 
+                        width: 100% !important; 
+                    }
+                    .flex { display: flex !important; }
+                    img { width: 100% !important; height: auto !important; display: block !important; }
                     * { border-color: transparent !important; }
-                    .max-w-6xl, #root, .w-full, form, div { background: transparent !important; }
-                    .max-w-6xl { max-width: 100% !important; padding: 0 !important; }
-                    h2 { color: black !important; font-weight: bold !important; text-align: center !important; }
-                    h3 { border-bottom: 0.5pt solid #ccc !important; width: 100% !important; padding-bottom: 2pt !important; margin-bottom: 4pt !important; color: black !important; }
+                    form { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+                    
+                    /* Custom Print Layout Adjustments */
+                    .bg-white { background-color: white !important; }
+                    .print\\:hidden { display: none !important; }
+                    h2 { font-weight: bold !important; text-align: left !important; }
+                    h3 { border: none !important; color: black !important; margin: 0 !important; padding: 0 !important; font-size: 10pt !important; }
                     .grid { display: grid !important; }
                     .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
-                    .print\\:hidden, .icons { display: none !important; }
-                    .star-row span { font-size: 16pt !important; color: #000 !important; line-height: 1 !important; }
-                    .grid { display: grid !important; }
-                    .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+                    .icons { display: none !important; }
+                    .star-row span { color: #000 !important; font-size: 12pt !important; }
+                    
+                    /* Tighten spacing to fit on one page without scale */
+                    .space-y-4 { margin-top: 0 !important; }
+                    .mb-5 { margin-bottom: 0.2mm !important; }
+                    .p-4 { padding: 0.2mm 5mm !important; }
+                    .rounded-xl, .rounded-lg { border-radius: 0 !important; }
+                    
+                    /* Shrink font sizes to fit data */
+                    h2 { font-size: 16pt !important; }
+                    h3 { font-size: 8.5pt !important; margin: 0 !important; }
+                    .text-\[9pt\] { font-size: 8pt !important; }
+                    .text-\[8pt\] { font-size: 7.5pt !important; }
+                    .text-black { color: black !important; }
+                    span, p, label { font-size: 8pt !important; line-height: 1.1 !important; }
+                    .star-row span { font-size: 10pt !important; }
+                    
+                    /* Background Colors in Print */
+                    .bg-\\[\\#002b49\\] { background-color: #002b49 !important; }
+                    .text-white { color: white !important; }
+                    .text-\\[\\#b48a3c\\] { color: #b48a3c !important; }
+                    
+                    /* Pinned Footer */
+                    .print-footer {
+                        position: absolute !important;
+                        bottom: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        width: 100% !important;
+                        margin: 0 !important;
+                        padding-bottom: 0 !important;
+                        background-color: #f1f7fd !important;
+                        min-height: 80px !important;
+                    }
                 }
             `}} />
         </motion.div>

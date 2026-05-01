@@ -46,6 +46,22 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
     const history = data.paymentHistory || [];
     const [selectedInvoiceIdx, setSelectedInvoiceIdx] = useState<number>(history.length > 0 ? 0 : -1);
+    const [config, setConfig] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchConfig = async () => {
+            try {
+                const isIntl = data.isInternational || cur === 'USD' || data.country?.toLowerCase() !== 'india';
+                const endpoint = isIntl ? '/api/international-buyer/config' : '/api/buyer-registration/config';
+                const res = await fetch(`${SERVER_URL}${endpoint}`);
+                const json = await res.json();
+                if (json.success) setConfig(json.data);
+            } catch (err) {
+                console.error("Error fetching config:", err);
+            }
+        };
+        fetchConfig();
+    }, [data, cur]);
 
     useEffect(() => {
         const token = localStorage.getItem('buyerToken');
@@ -77,10 +93,26 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         return 0;
     })();
 
-    const taxableVal = actualTotal > 0 ? Math.round(actualTotal / 1.18) : 0;
+    const exhibitorCategory = (() => {
+        if (data.registrationCategory) return data.registrationCategory;
+        if (data.category) return data.category;
+        if (data.passType) return data.passType;
+        return 'Buyer Registration';
+    })();
+
+    const pkg = config?.packages?.find((p: any) => p.name === exhibitorCategory);
+    const hsnCode = pkg?.hsnSacCode || '998596';
+    const gstPct = pkg?.gstPercentage || 18;
+
+    const buyerState = (data.state || data.stateProvince || '').toLowerCase();
+    const isUP = buyerState.includes('uttar pradesh') || buyerState === 'up';
+
+    const taxableVal = actualTotal > 0 ? Math.round(actualTotal / (1 + gstPct / 100)) : 0;
     const gstAmt = actualTotal - taxableVal;
-    const cgst = Math.round(gstAmt / 2);
-    const sgst = Math.round(gstAmt / 2);
+    const cgst = isUP ? Math.round(gstAmt / 2) : 0;
+    const sgst = isUP ? Math.round(gstAmt / 2) : 0;
+    const igst = isUP ? 0 : gstAmt;
+
     const fmtNum = (n: number) => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
 
     const selectedPayment = history.length > 0 && selectedInvoiceIdx >= 0 ? history[selectedInvoiceIdx] : null;
@@ -145,7 +177,18 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     const invoiceYear = new Date().getFullYear();
     const paymentSuffix = selectedInvoiceIdx >= 0 ? `/P${selectedInvoiceIdx + 1}` : '';
     const invoiceNo = `9IHWE/EX/INV/${invoiceYear}/${seqNum}${paymentSuffix}`;
-    const invoiceDate = latestPayment?.paidAt ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : regDate;
+    const formatDate = (dateInput: any) => {
+        if (!dateInput) return '—';
+        let d = new Date(dateInput);
+        if (isNaN(d.getTime()) && typeof dateInput === 'string' && dateInput.includes('/')) {
+            const parts = dateInput.split('/');
+            if (parts.length === 3) d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        }
+        if (isNaN(d.getTime())) return String(dateInput);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+    };
+
+    const invoiceDate = formatDate(latestPayment?.paidAt || regDate);
 
     const handlePrint = () => {
         const content = printRef.current;
@@ -154,7 +197,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
         if (!win) return;
         win.document.write(`<!DOCTYPE html><html><head><title>Invoice ${invoiceNo} - ${data.registrationId}</title>
         <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
+            * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             body { font-family: Arial, sans-serif; font-size: 11px; color: #000; background: #fff; }
             table { width: 100%; border-collapse: collapse; }
             td, th { border: 1px solid #000; padding: 4px 6px; vertical-align: top; }
@@ -173,27 +216,29 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
     };
 
 
-    const exhibitorInfo = {
-        name: data.fullName || data.exhibitorName || data.companyName || data.businessName || '—',
-        address: data.address || data.registeredAddress || data.businessAddress || '',
-        city: data.city || '',
-        state: data.state || data.stateProvince || '',
-        country: data.country || '',
-        pincode: data.pincode || data.pinCode || '',
-        contactPerson: data.contactPersonName || data.fullName || data.representativeName || '—',
-        email: data.email || data.emailAddress || data.contactEmail || '—',
-        phone: exhibitorPhone,
-        gstNo: data.gstNo || data.gstNumber || '',
-        panNo: data.panNo || data.panNumber || ''
+    const toTitleCase = (str: any) => {
+        if (typeof str !== 'string' || !str) return str;
+        return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
     };
 
+    const buyerStateName = (data.state || data.stateProvince || '').trim();
+    const buyerStateCode = config?.stateCodes?.find((s: any) => s.name.trim().toLowerCase() === buyerStateName.toLowerCase())?.code || '';
 
-    const exhibitorCategory = (() => {
-        if (data.registrationCategory) return data.registrationCategory;
-        if (data.category) return data.category;
-        if (data.passType) return data.passType;
-        return 'Buyer Registration';
-    })();
+    const exhibitorInfo = {
+        name: (data.fullName || data.exhibitorName || data.companyName || data.businessName || '—').toUpperCase(),
+        address: toTitleCase(data.address || data.registeredAddress || data.businessAddress || ''),
+        city: toTitleCase(data.city || ''),
+        state: toTitleCase(buyerStateName),
+        country: toTitleCase(data.country || ''),
+        pincode: data.pincode || data.pinCode || '',
+        contactPerson: toTitleCase(data.contactPersonName || data.fullName || data.representativeName || '—'),
+        email: (data.email || data.emailAddress || data.contactEmail || '—').toLowerCase(),
+        phone: exhibitorPhone,
+        gstNo: data.gstNo || data.gstNumber || '',
+        panNo: data.panNo || data.panNumber || '',
+        stateCode: buyerStateCode
+    };
+
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
@@ -234,7 +279,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
-                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px' }}  >Tax Invoice</div>
+                <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px', padding: '10px 0' }}>Tax Invoice</div>
 
 
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
@@ -242,7 +287,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <tr>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Buyer's Name &amp; Address</th>
                             <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '34%', textAlign: 'center' }}>Shipment Details</th>
-                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}>Seller Invoice Details</th>
+                            <th style={{ background: '#1a3a6b', color: '#fff', border: '1px solid #1a3a6b', padding: '4px 8px', width: '33%', textAlign: 'center' }}> Invoice Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -250,17 +295,25 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
                                 <div style={{ fontWeight: 700 }}>{exhibitorInfo.name}</div>
                                 <div style={{ marginTop: 4 }}>{exhibitorInfo.address}</div>
-                                <div>{exhibitorInfo.city}{exhibitorInfo.state ? `, ${exhibitorInfo.state}` : ''}{exhibitorInfo.country ? `, ${exhibitorInfo.country}` : ''}{exhibitorInfo.pincode ? ` - ${exhibitorInfo.pincode}` : ''}</div>
+                                <div>{exhibitorInfo.city}{exhibitorInfo.city ? ', ' : ''}{exhibitorInfo.state}{exhibitorInfo.country ? `, ${exhibitorInfo.country}` : ''}{exhibitorInfo.pincode ? ` - ${exhibitorInfo.pincode}` : ''}</div>
                                 <div style={{ marginTop: 4 }}>Contact Person: {exhibitorInfo.contactPerson}</div>
                                 <div>Email: {exhibitorInfo.email}</div>
                                 <div>Phone: {exhibitorInfo.phone}</div>
-                                <div style={{ marginTop: 4 }}><b>GSTIN:</b> {exhibitorInfo.gstNo || '—'} / <b>PAN:</b> {exhibitorInfo.panNo || '—'}</div>
+                                <div style={{ marginTop: 4 }}>
+                                    {exhibitorInfo.gstNo ? (
+                                        <><b>GSTIN/PAN</b> {exhibitorInfo.gstNo}</>
+                                    ) : (
+                                        <><b>PAN:</b> {exhibitorInfo.panNo || '—'}</>
+                                    )}
+                                </div>
+                                <div style={{ marginTop: 4 }}>State: {exhibitorInfo.state}{exhibitorInfo.stateCode ? `, Code-${exhibitorInfo.stateCode}` : ''}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700 }}>{data.eventId?.name || '9th IHWE 2026'}</div>
-                                <div style={{ marginTop: 4 }}>Category: {exhibitorCategory}</div>
-                                <div>Registration Type: {data.registrationCategory || data.category || data.passType || 'Buyer Pass'}</div>
-                                <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
+                                <div style={{ fontWeight: 700 }}>9TH INTERNATIONAL HEALTH & WELLNESS EXPO 2026</div>
+
+                                <div style={{ marginTop: 4 }}>Place of Supply: Hall No. 8, 9, 10, Pragati Maidan, New Delhi - 110001, Bharat</div>
+                                <div style={{ marginTop: 4 }}>GSTIN: {exhibitorInfo.gstNo || '—'}</div>
+                                <div style={{ marginTop: 4 }}>State: {exhibitorInfo.state}{exhibitorInfo.stateCode ? `, Code-${exhibitorInfo.stateCode}` : ''}</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: 0, verticalAlign: 'top', fontSize: 11 }}>
                                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -268,9 +321,13 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                         {[
                                             ['Invoice No.', invoiceNo],
                                             ['Invoice Date', invoiceDate],
-                                            ['Reverse Charge', 'No'],
+                                            ['e-Way Bill No.', data.ewayBillNo || 'NA'],
+                                            ['Buyer Order No.', data.buyerOrderNo || 'NA'],
+                                            ['Dispatch No.', data.dispatchNo || 'NA'],
+                                            ['Created By', data.adminName || data.addedByName || data.createdByAdminName || (data.addedByAdmin || data.createdByAdmin ? 'Admin' : 'Self')],
+                                            ['Created Date & Time', data.createdAt ? `${new Date(data.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })} | ${new Date(data.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}` : 'NA'],
                                         ].map(([label, value]) => (
-                                            <tr key={label}>
+                                            <tr key={label as string}>
                                                 <td style={{ border: '1px solid #eee', padding: '3px 6px', fontWeight: 700, background: '#f8fafc', width: '45%', fontSize: 10 }}>{label}</td>
                                                 <td style={{ border: '1px solid #eee', padding: '3px 6px', fontSize: 10 }}>{value}</td>
                                             </tr>
@@ -285,7 +342,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                 <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
                     <thead>
                         <tr style={{ background: '#1a3a6b', color: '#fff' }}>
-                            {['S.No.', 'Item Description', 'HSN Code', 'Qty.', 'Size', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
+                            {['S.No.', 'Item Description', 'SAC Code', 'Qty.', 'Rate', 'Amount', 'Discount', 'Total'].map(h => (
                                 <th key={h} style={{ border: '1px solid #1a3a6b', padding: '4px 6px', textAlign: 'center', fontSize: 10 }}>{h}</th>
                             ))}
                         </tr>
@@ -297,21 +354,20 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                                 <div style={{ fontWeight: 700 }}>Buyer Registration Fee</div>
                                 <div style={{ fontSize: 10, color: '#555' }}>{data.eventId?.name || '9th International Health & Wellness Expo 2026'} | {exhibitorCategory}</div>
                             </td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>998596</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{hsnCode}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>—</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>0.00</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>0.00 %</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxableVal)}</td>
                         </tr>
                         {[1, 2, 3].map(i => (
                             <tr key={i} style={{ height: 24 }}>
-                                {Array(9).fill(0).map((_, j) => <td key={j} style={{ border: '1px solid #ccc' }}> </td>)}
+                                {Array(8).fill(0).map((_, j) => <td key={j} style={{ border: '1px solid #ccc' }}> </td>)}
                             </tr>
                         ))}
                         <tr>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}> </td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}> </td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
                         </tr>
@@ -345,22 +401,21 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     <tbody>
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>1</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>998596</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{hsnCode}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{fmtNum(taxableVal)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>1</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>9%</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(cgst)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>9%</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(sgst)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>—</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>—</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isUP ? `${gstPct / 2}%` : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isUP ? fmtNum(cgst) : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isUP ? `${gstPct / 2}%` : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isUP ? fmtNum(sgst) : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isUP ? `${gstPct}%` : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isUP ? fmtNum(igst) : '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
                         </tr>
                         <tr style={{ background: '#f8fafc' }}>
-                            <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                            <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{gstAmt === 0 ? 'Zero' : toWords(gstAmt)}</td>
+                            <td colSpan={9} style={{ border: '1px solid #ccc', padding: '4px 6px' }}></td>
                             <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'center' }}>{fmtNum(gstAmt)}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -371,18 +426,21 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                         <tr style={{ background: '#f8fafc' }}>
                             <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
                             <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{thisPaymentAmt === 0 ? 'Zero' : toWords(Math.round(thisPaymentAmt))}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Invoice Value</td>
-                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(thisPaymentAmt)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'center' }}>{fmtNum(thisPaymentAmt)}</td>
                         </tr>
                     </tbody>
                 </table>
 
 
                 <div style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa' }}>
-                    <div style={{ fontWeight: 700, marginBottom: 4 }}>Terms and Conditions:</div>
-                    <div>1. Payments should be made through crossed cheque/D.D./RTGS/NEFT payable at Delhi, favouring {companyName}.</div>
-                    <div>2. Interest @24% p.a will be charged if the payment is not made within 7 days from the date of issue of bill.</div>
-                    <div>3. All Disputes are subject to Delhi Jurisdiction.</div>
+                    <div style={{ fontWeight: 700, marginBottom: 4, textTransform: 'uppercase' }}>PAYMENT TERMS & CONDITIONS:</div>
+                    <div>1. Payment must be made in favor of Namo Gange Wellness Pvt. Ltd. via Cheque / DD / RTGS / NEFT / UPI only.</div>
+                    <div>2. Full payment is due within the stipulated invoice period.</div>
+                    <div>3. Delay in payment shall attract interest @24% per annum.</div>
+                    <div>4. Booking / services shall be confirmed only after receipt of payment.</div>
+                    <div>5. Cancellation or amendments shall be subject to company policy and management approval.</div>
+                    <div>6. All disputes are subject to Delhi Jurisdiction only.</div>
                 </div>
 
 
@@ -397,29 +455,52 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                     <tbody>
                         <tr>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10 }}>
-                                <div><b>Bank Name:</b> Kotak Mahindra Bank</div>
-                                <div><b>Account No.:</b> 6812013962</div>
-                                <div><b>IFSC Code:</b> KKBK0004584</div>
-                                <div><b>Branch Name:</b> Jagriti Enclave, Anand Vihar, Delhi</div>
+                                <table style={{ borderCollapse: 'collapse' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>Bank Name</td>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                            <td style={{ border: 'none', padding: '0 0 4px 0' }}>Kotak Mahindra Bank</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>Account No.</td>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                            <td style={{ border: 'none', padding: '0 0 4px 0' }}>6812013962</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 0 4px 0', whiteSpace: 'nowrap' }}>IFSC Code</td>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 4px 4px 4px' }}>:</td>
+                                            <td style={{ border: 'none', padding: '0 0 4px 0' }}>KKBK0004584</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0', whiteSpace: 'nowrap', verticalAlign: 'top' }}>Branch Name</td>
+                                            <td style={{ fontWeight: 700, border: 'none', padding: '0 4px', verticalAlign: 'top' }}>:</td>
+                                            <td style={{ border: 'none', padding: '0', verticalAlign: 'top' }}>Jagriti Enclave, Anand Vihar, Delhi</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                                 <div style={{ height: 60 }}></div>
-                                <div style={{ borderTop: '1px solid #000', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
+                                <div style={{ borderTop: '1px solid #e5e7eb', width: '120px', margin: '0 auto', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                                 <div style={{ height: 60, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
                                     {sigUrl && <img src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
                                     {stampUrl && <img src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
                                 </div>
-                                <div style={{ borderTop: '1px solid #000', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
+                                <div style={{ borderTop: '1px solid #e5e7eb', width: '120px', margin: '0 auto', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
 
-                <div style={{ fontSize: 9, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
-                    <b>9th International Health & Wellness Expo 2026</b>
+                <div style={{ fontSize: 13, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6, borderTop: '1px solid #ddd' }}>
+                    <b>Register Address:</b> First Floor, E-1, Opposite KFC, Kalkaji Main Market, South Delhi-110019, Delhi, India
+                </div>
+                <div style={{ fontSize: 13, textAlign: 'center', color: '#999', marginTop: 4, }}>
+                    This is a computer generated document and does not require a physical signature.
                 </div>
             </div>
         </motion.div>

@@ -72,50 +72,65 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            isLetterhead={true}
         >
             <div className="text-right mb-4 mt-5">
-                <span className="font-bold underline text-[18px]">Annexure</span>
+                <span className="font-bold text-[16px]">Annexure</span>
             </div>
 
             <div className="text-center mb-6">
                 <h1 className="text-[20px] font-bold underline">PRE- RECEIPT</h1>
-                <p className="font-bold text-[15px] mt-2 uppercase">(TO BE SUBMITTED ON THE LETTER HEAD OF THE COMPANY)</p>
             </div>
 
             <div className="space-y-4 text-justify mt-10 text-[16px] leading-[1.8]">
-                <div className="flex items-end gap-x-2">
-                    <span>Received a sum of Rs.</span>
-                    <input
-                        type="text"
-                        value={formData.amount}
-                        onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                        className="flex-1 border-b border-black outline-none px-1 bg-transparent font-bold"
-                        placeholder="Enter Amount (e.g. 10000)"
-                    />
+                <div className="flex items-end gap-x-2 leading-[2]">
+                    <span className="shrink-0">Received a sum of Rs.</span>
+                    <span className={`${isExporting ? 'hidden' : 'no-print'} flex-1`}>
+                        <input
+                            type="text"
+                            value={formData.amount}
+                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                            className="w-full border-b border-black outline-none px-1 bg-transparent font-bold"
+                            placeholder="Enter Amount (e.g. 10000)"
+                        />
+                    </span>
+                    <span className={`${isExporting ? 'inline' : 'hidden print:inline'} border-b border-black font-bold px-1 print-bold min-w-[100px]`}>
+                        {formData.amount || ''}
+                    </span>
                 </div>
 
-                <div className="flex items-end gap-x-2">
-                    <span>(Rupees</span>
-                    <input
-                        type="text"
-                        value={formData.amountInWords}
-                        onChange={(e) => setFormData({ ...formData, amountInWords: e.target.value })}
-                        className="flex-1 border-b border-black outline-none px-1 bg-transparent font-bold"
-                        placeholder="Enter Amount in Words"
-                    />
-                    <span>Only)</span>
+                <div className="flex items-end flex-wrap gap-x-2 leading-[2]">
+                    <span className="shrink-0">(Rupees</span>
+                    <span className={`${isExporting ? 'hidden' : 'no-print'} flex-1 min-w-[200px]`}>
+                        <input
+                            type="text"
+                            value={formData.amountInWords}
+                            onChange={(e) => setFormData({ ...formData, amountInWords: e.target.value })}
+                            className="w-full border-b border-black outline-none px-1 bg-transparent font-bold"
+                            placeholder="Enter Amount in Words"
+                        />
+                    </span>
+                    <span className={`${isExporting ? 'inline' : 'hidden print:inline'} border-b border-black font-bold px-1 print-bold flex-1`}>
+                        {formData.amountInWords || ''}
+                    </span>
+                    <span className="shrink-0">Only)</span>
                 </div>
 
-                <div className="inline">
+                <div className="leading-[2] text-justify">
                     From the office of Development Commissioner (MSME), Govt. of India, Ministry of Micro, Small & Medium Enterprise (MSME) on account of financial assistance under component 5(I)(A): Participation of Individual MSE in Domestic Trade Fair/Exhibition:
-                    <input
-                        type="text"
-                        value={formData.fairName}
-                        onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
-                        className="border-b border-black outline-none px-1 inline-block min-w-[300px] bg-transparent font-bold mx-1"
-                        placeholder="Enter Fair Name"
-                    />
-                    (Name of Fair) from
+                    <span className={`${isExporting ? 'hidden' : 'no-print'}`}>
+                        <input
+                            type="text"
+                            value={formData.fairName}
+                            onChange={(e) => setFormData({ ...formData, fairName: e.target.value })}
+                            className="border-b border-black outline-none px-1 inline-block min-w-[300px] bg-transparent font-bold mx-1"
+                            placeholder="Enter Fair Name"
+                        />
+                    </span>
+                    <span className={`${isExporting ? 'inline' : 'hidden print:inline'} border-b border-black font-bold px-1 print-bold`}>
+                        {formData.fairName || ''}
+                    </span>
+                    from
                     <div className={`${isExporting ? 'hidden' : 'no-print'} inline-block mx-1`}>
                         <input
                             type="date"
@@ -140,18 +155,55 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         {formData.toDate ? new Date(formData.toDate).toLocaleDateString('en-GB') : ''}
                     </div>
                     held at
-                    <input
-                        type="text"
-                        value={formData.venue}
-                        onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                        className="border-b border-black outline-none px-1 inline-block min-w-[150px] bg-transparent font-bold mx-1"
-                        placeholder="Enter Venue"
-                    />
-                    (Venue) under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
+                    <span className={`${isExporting ? 'hidden' : 'no-print'}`}>
+                        <input
+                            type="text"
+                            value={formData.venue}
+                            onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
+                            className="border-b border-black outline-none px-1 inline-block min-w-[150px] bg-transparent font-bold mx-1"
+                            placeholder="Enter Venue"
+                        />
+                    </span>
+                    <span className={`${isExporting ? 'inline' : 'hidden print:inline'} border-b border-black font-bold px-1 print-bold`}>
+                        {formData.venue || ''}
+                    </span>
+                    under Procurement and Marketing Support (PMS) Scheme of the Office of Development Commissioner (MSME).
                 </div>
 
-                <div className="mt-12 flex flex-col items-end pt-10">
-                    <div className="flex gap-2 items-center mb-6 mr-10 font-bold">
+                <div className="mt-12 flex flex-col items-start pt-10">
+
+
+                    {/* <div className="border border-black w-28 h-36 flex items-center justify-center p-2 text-center text-[11px] leading-tight mb-6">
+                        Affix the Revenue stamp
+                    </div> */}
+                    <div className="mt-8 text-[14px] h-36"></div>
+
+                    <div className="text-center w-80">
+                        <p className="font-bold uppercase text-[14px]">Signature of Authorized Signatory</p>
+                        <div className="flex flex-col gap-1 mt-4">
+                            <div className="flex gap-1 items-center justify-center italic text-[14px] font-bold">
+                                <span>(</span>
+                                <input
+                                    type="text"
+                                    value={formData.signatoryName}
+                                    onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })}
+                                    className="border-b border-black outline-none px-1 w-32 bg-transparent text-center font-bold"
+                                    placeholder="Signatory Name"
+                                />
+                                <span>-</span>
+                                <input
+                                    type="text"
+                                    value={formData.designation}
+                                    onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                                    className="border-b border-black outline-none px-1 w-24 bg-transparent text-center font-bold"
+                                    placeholder="Designation"
+                                />
+                                <span>)</span>
+                            </div>
+                            {/* <p className="font-bold text-[11px] mt-1">(Name - Designation)</p> */}
+                        </div>
+                    </div>
+                    <div className="flex gap-2 items-center ml-4 mt-2 mr-10 font-bold">
                         <span>Date:</span>
                         <div className={`${isExporting ? 'hidden' : 'no-print'}`}>
                             <input
@@ -166,40 +218,11 @@ const PreReceipt: React.FC<PreReceiptProps> = ({ reportId }) => {
                         </div>
                     </div>
 
-                    <div className="border border-black w-28 h-36 flex items-center justify-center p-2 text-center text-[11px] leading-tight mb-6">
-                        Affix the Revenue stamp
-                    </div>
-
-                    <div className="text-center w-80">
-                        <p className="font-bold uppercase text-[14px]">Signature of Authorized Signatory</p>
-                        <div className="flex flex-col gap-1 mt-4">
-                            <div className="flex gap-1 items-center justify-center italic text-[14px] font-bold">
-                                <span>(</span>
-                                <input
-                                    type="text"
-                                    value={formData.signatoryName}
-                                    onChange={(e) => setFormData({ ...formData, signatoryName: e.target.value })}
-                                    className="border-b border-black outline-none px-1 w-32 bg-transparent text-center font-bold"
-                                    placeholder="Signatory Name"
-                                />
-                                <span>&</span>
-                                <input
-                                    type="text"
-                                    value={formData.designation}
-                                    onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                                    className="border-b border-black outline-none px-1 w-24 bg-transparent text-center font-bold"
-                                    placeholder="Designation"
-                                />
-                                <span>)</span>
-                            </div>
-                            <p className="font-bold text-[11px] mt-1">(Name & Designation)</p>
-                        </div>
-                    </div>
                 </div>
 
-                <div className="mt-16">
+                {/* <div className="mt-16">
                     <p className="font-bold text-[14px]">(<span className="underline">Note</span>: To be submitted in Triplicate)</p>
-                </div>
+                </div> */}
             </div>
         </ReportLayout>
     );

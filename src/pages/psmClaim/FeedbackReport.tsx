@@ -104,6 +104,7 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
             saving={saving}
             reportId={reportId}
             isExporting={isExporting}
+            isLetterhead={true}
         >
             <div className="text-center mb-8 mt-4">
                 <h1 className="text-[16px] font-bold uppercase underline">PARTICIPANTS FEEDBACK REPORT</h1>
@@ -201,8 +202,8 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                     </tr>
 
                     <tr>
-                        <td className="text-center font-bold p-2 border-b border-black align-top">15</td>
-                        <td className="font-bold border-b border-black p-2 text-[11px]">Remarks/Suggestions, if any</td>
+                        <td className="text-center font-bold p-2 border-r border-black align-top">15</td>
+                        <td className="font-bold border-r border-black p-2 text-[11px]">Remarks/Suggestions, if any</td>
                         <td className="p-2 border-b border-black overflow-hidden">
                             <textarea
                                 value={formData.remarks}
@@ -218,8 +219,8 @@ const FeedbackReport: React.FC<Props> = ({ reportId }) => {
                 </tbody>
             </table>
 
-            <div className="mt-8 space-y-8">
-                <p className="font-bold italic text-[11px]">Enclosed: Photograph of allotted booth at the event venue.</p>
+            <div className="mt-2 space-y-8">
+                <p className="font-bold text-[11px]">Enclosed: Photograph of allotted booth at the event venue.</p>
 
                 <div className="flex justify-between items-end mt-12 px-2 pb-10">
                     <div className="flex gap-2 items-end">
