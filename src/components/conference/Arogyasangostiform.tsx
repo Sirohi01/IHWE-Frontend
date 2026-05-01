@@ -70,13 +70,15 @@ export default function ArogyaSanghostiForm() {
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
                         {/* LEFT COLUMN - Adjusted down by 10px */}
-                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-35px" }}>
-                            <BasicDetailsSection
-                                form={form}
-                                set={set}
-                                industryCategory={industryCategory}
-                                setIndustryCategory={setIndustryCategory}
-                            />
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-37px" }}>
+                            <div style={{ maxWidth: "98%" }}>
+                                <BasicDetailsSection
+                                    form={form}
+                                    set={set}
+                                    industryCategory={industryCategory}
+                                    setIndustryCategory={setIndustryCategory}
+                                />
+                            </div>
                             <ContactDetailsSection
                                 form={form}
                                 set={set}

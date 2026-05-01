@@ -5,10 +5,17 @@ import {
     IconEmail, IconMobile, IconLocation 
 } from "./Icons";
 
+// ─── IMAGE IMPORTS ────────────────────────────────────────────────────────
+import networkImg from "../../../assets/arogyasangostiimageform/Network with industry leaders.png";
+import shareExpertiseImg from "../../../assets/arogyasangostiimageform/SHARE YOUR EXPERTISE.png";
+import influenceImg from "../../../assets/arogyasangostiimageform/nfluence heathcare conversation.png";
+import driveInnovationImg from "../../../assets/arogyasangostiimageform/Drive Innovation & Positive.png";
+import promoteHealthImg from "../../../assets/arogyasangostiimageform/wellness & lifestyle.png";
+
 export const BottomTagline = () => (
     <div
         style={{
-            background: LIGHT_TEAL_BG,
+            background: "#FFFFFF",
             borderRadius: 8,
             padding: "10px 20px",
             display: "flex",
@@ -23,11 +30,11 @@ export const BottomTagline = () => (
         </div>
         <div style={{ flex: 1, display: "flex", justifyContent: "space-around" }}>
             {[
-                { icon: <IconGroup size={22} />, label: "Network with\nIndustry Leaders" },
-                { icon: <IconStar size={22} color={TEAL} />, label: "Share Your\nExpertise" },
-                { icon: <IconChat size={22} />, label: "Influence Healthcare\nConversations" },
-                { icon: <IconBuild size={22} />, label: "Drive Innovation &\nPositive Change" },
-                { icon: <LeafIcon size={22} />, label: "Promote Health,\nWellness & AYUSH" },
+                { img: networkImg, label: "Network with\nIndustry Leaders" },
+                { img: shareExpertiseImg, label: "Share Your\nExpertise" },
+                { img: influenceImg, label: "Influence Healthcare\nConversations" },
+                { img: driveInnovationImg, label: "Drive Innovation &\nPositive Change" },
+                { img: promoteHealthImg, label: "Promote Health,\nWellness & AYUSH" },
             ].map((item) => (
                 <div
                     key={item.label}
@@ -35,14 +42,25 @@ export const BottomTagline = () => (
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        gap: 4,
-                        fontSize: 11,
+                        gap: 8,
+                        fontSize: 10,
                         color: TEXT_DARK,
                         textAlign: "center",
-                        lineHeight: 1.4,
+                        lineHeight: 1.2,
+                        fontWeight: 700,
+                        flex: 1
                     }}
                 >
-                    {item.icon}
+                    <div style={{
+                        width: 70,
+                        height: 70,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginBottom: 4
+                    }}>
+                        <img src={item.img} alt={item.label} style={{ width: 64, height: 64, objectFit: "contain" }} />
+                    </div>
                     {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
                 </div>
             ))}
@@ -110,16 +128,16 @@ export const Footer = () => (
             </div>
 
             {/* Contact */}
-            <div style={{ flex: 1, fontSize: 12, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
-                <div style={{ fontWeight: 700, fontSize: 12, color: "white", marginBottom: 4 }}>FOR QUERIES, CONTACT US</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <IconEmail size={12} color="rgba(255,255,255,0.7)" /> info@arogyasanghosthi.com
+            <div style={{ flex: 1, fontSize: 12, color: "rgba(255,255,255,0.85)", lineHeight: 1.6 }}>
+                <div style={{ fontWeight: 800, fontSize: 12, color: "white", marginBottom: 6, letterSpacing: "0.5px" }}>FOR QUERIES, CONTACT US</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
+                    <IconEmail size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>info@arogyasanghosthi.com</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <IconMobile size={12} color="rgba(255,255,255,0.7)" /> +91 98765 43210
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
+                    <IconMobile size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>+91 98765 43210</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <IconLocation size={12} color="rgba(255,255,255,0.7)" /> www.ihwe.in
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <IconLocation size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>www.ihwe.in</span>
                 </div>
             </div>
 

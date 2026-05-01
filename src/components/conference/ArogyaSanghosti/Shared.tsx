@@ -122,22 +122,25 @@ export const CategoryChip: React.FC<{
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
-            border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
+            border: `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 10,
-            padding: "15px 12px",
-            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
+            padding: "22px 12px",
+            background: "white",
             cursor: "pointer",
             minWidth: 100,
             fontSize: 11,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 600,
+            fontWeight: 700,
             transition: "all 0.2s",
-            boxShadow: selected ? "0 4px 10px rgba(11, 60, 73, 0.1)" : "none"
+            textAlign: "center",
+            minHeight: 110,
+            boxSizing: "border-box",
+            boxShadow: "none"
         }}
     >
-        {icon}
-        <span style={{ textAlign: "center", lineHeight: 1.2 }}>{label}</span>
+        <div style={{ marginBottom: 8, display: "flex", justifyContent: "center" }}>{icon}</div>
+        <div style={{ lineHeight: 1.2 }}>{label}</div>
     </button>
 );
 
@@ -153,18 +156,19 @@ export const TrackChip: React.FC<{
             display: "flex",
             alignItems: "center",
             gap: 12,
-            border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
+            border: `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 12,
             padding: "12px 24px",
-            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
+            background: "white",
             cursor: "pointer",
-            fontSize: 14,
+            fontSize: 13,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 600,
+            fontWeight: 700,
             flex: 1,
             justifyContent: "center",
             transition: "all 0.2s",
+            boxShadow: "none",
         }}
     >
         {icon}
@@ -184,18 +188,19 @@ export const SessionChip: React.FC<{
             display: "flex",
             alignItems: "center",
             gap: 10,
-            border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
+            border: `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 10,
             padding: "12px 20px",
-            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
+            background: "white",
             cursor: "pointer",
-            fontSize: 13,
+            fontSize: 12,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 600,
+            fontWeight: 700,
             flex: 1,
             justifyContent: "center",
             transition: "all 0.2s",
+            boxShadow: "none",
         }}
     >
         {icon}
@@ -215,20 +220,22 @@ export const ExpertiseChip: React.FC<{
             display: "flex",
             alignItems: "center",
             gap: 8,
-            border: `1.5px solid ${selected ? TEAL : BORDER_COLOR}`,
-            borderRadius: 8,
-            padding: "8px 16px",
-            background: selected ? "rgba(11, 60, 73, 0.05)" : "white",
+            background: "white",
             cursor: "pointer",
-            fontSize: 12,
+            fontSize: 11,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
-            fontWeight: 600,
-            whiteSpace: "nowrap",
+            fontWeight: 700,
             transition: "all 0.2s",
+            textAlign: "left",
+            lineHeight: 1.2,
+            minHeight: 70,
+            boxSizing: "border-box",
+            boxShadow: "none",
+            border: `1.5px solid ${BORDER_COLOR}`,
         }}
     >
-        {icon}
+        <div style={{ flexShrink: 0 }}>{icon}</div>
         <span>{label}</span>
     </button>
 );

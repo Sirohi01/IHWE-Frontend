@@ -49,15 +49,15 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "10vw", minHeight: "100px", width: "auto", alignSelf: "flex-start" }} />
+                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "12vw", minHeight: "120px", width: "auto", alignSelf: "flex-start" }} />
 
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                             <div style={{
                                 background: TEAL,
                                 color: "white",
-                                padding: "4px 22px",
-                                borderRadius: "20px",
-                                fontSize: "1.1vw",
+                                padding: "6px 28px",
+                                borderRadius: "24px",
+                                fontSize: "1.3vw",
                                 fontWeight: 800,
                                 clipPath: "polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%)",
                             }}>
