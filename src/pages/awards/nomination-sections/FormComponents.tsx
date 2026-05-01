@@ -104,10 +104,15 @@ export const UploadCard = ({
         <div>{icon ?? <Globe className="w-5 h-5 text-[#008d48]" />}</div>
         <span className="text-[13px] font-semibold text-[#0a2e5c] leading-tight">{label}</span>
         <input
-          type="url" placeholder="https://"
+          type="text"
+          placeholder="https://www.example.com"
           value={value ?? ""}
-          onChange={e => onChange?.(e.target.value)}
-          className="w-full text-[11px] border border-slate-200 rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-[#008d48] text-center"
+          onChange={e => {
+            e.stopPropagation();
+            onChange?.(e.target.value);
+          }}
+          onClick={e => e.stopPropagation()}
+          className="w-full text-[11px] border border-slate-200 rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-[#008d48] text-center"
         />
       </div>
     );
@@ -121,7 +126,7 @@ export const UploadCard = ({
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4"
+        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.mov,.avi,.webm"
         className="hidden"
         onChange={handleFileChange}
       />

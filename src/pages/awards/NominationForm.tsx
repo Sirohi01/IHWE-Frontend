@@ -31,18 +31,21 @@ export type FormData = {
   innovationUsed: string;
   whyDeserve: string;
   // Section 5
+  profileDeckUrl: string;
+  certificationsUrl: string;
+  imagesUrl: string;
   socialLinks: string;
   // Section 6
   declaration: boolean;
 };
 
 const INITIAL: FormData = {
-  applicantType: "", fullName: "", contactPersonName: "", designation: "",
+  applicantType: "Individual", fullName: "", contactPersonName: "", designation: "",
   mobile: "", email: "", website: "", city: "",
   awardCategory: "",
   briefProfile: "", yearsOfExperience: "", teamSize: "", keyServices: "",
   keyAchievements: "", uniqueContribution: "", impactCreated: "", innovationUsed: "", whyDeserve: "",
-  socialLinks: "",
+  profileDeckUrl: "", certificationsUrl: "", imagesUrl: "", socialLinks: "",
   declaration: false,
 };
 
