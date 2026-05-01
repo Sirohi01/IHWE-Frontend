@@ -1,9 +1,9 @@
 import React from "react";
-import { 
+import {
     SectionHeader, SectionBox, FormField, CategoryChip, TrackChip, SessionChip, ExpertiseChip,
     TEAL, GOLD, TEXT_DARK, BORDER_COLOR, TRACK_BG
 } from "./Shared";
-import { 
+import {
     IconPerson, IconPhone, IconMobile, IconEmail, IconLocation, IconLinkedIn,
     IconCalendar, IconMic, IconGroup, IconChat, IconDoc, IconBuild, IconUpload,
     IconStar, IconShield, LeafIcon, PillIcon, ChipIcon, WellnessIcon, HospMgmtIcon,
@@ -11,7 +11,7 @@ import {
     DoctorIcon, AyushIcon, HospitalIcon, UnivIcon, PharmaIcon, StartupIcon, OtherDotsIcon
 } from "./Icons";
 
-// ─── Section 01: Basic Details ────────────────────────────────────────────────
+
 export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCategory }: any) => {
     const categories = [
         { label: "Doctor", icon: <DoctorIcon /> },
@@ -81,13 +81,13 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Brief Profile <span style={{ color: "#94A3B8", fontWeight: 400 }}>(100–150 words)</span>
                 </div>
-                <div style={{ border: `1.5px solid ${BORDER_COLOR}`, borderRadius: 8, padding: 12, minHeight: 100, display: "flex", flexDirection: "column", gap: 8 }}>
-                    <IconPerson size={20} color={TEAL} />
+                <div style={{ border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 8, padding: 8, minHeight: 70, display: "flex", flexDirection: "column", gap: 6 }}>
+                    <IconPerson size={18} color={TEAL} />
                     <textarea
                         value={form.briefProfile}
                         onChange={(e) => set("briefProfile")(e.target.value)}
-                        rows={4}
-                        style={{ border: "none", outline: "none", resize: "none", width: "100%", fontSize: 13, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK, background: "transparent" }}
+                        rows={3}
+                        style={{ border: "none", outline: "none", resize: "none", width: "100%", fontSize: 12, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK, background: "transparent" }}
                         placeholder="Write your brief profile..."
                     />
                 </div>
@@ -98,14 +98,14 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
                     type="number"
                     value={form.totalExperience}
                     onChange={(e) => set("totalExperience")(e.target.value)}
-                    style={{ width: 100, border: `1.5px solid ${BORDER_COLOR}`, borderRadius: 6, padding: "8px 12px", fontSize: 14, outline: "none", fontFamily: "'Segoe UI', sans-serif" }}
+                    style={{ width: 80, border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, outline: "none", fontFamily: "'Segoe UI', sans-serif" }}
                 />
             </div>
             <div>
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>
                     Areas of Expertise <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select all that apply)</span>
                 </div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
                     {expertiseAreas.map((area) => (
                         <ExpertiseChip
                             key={area.label}
@@ -147,9 +147,9 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
         </div>
         <div style={{ marginBottom: 18 }}>
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>Preferred Topic / Title of Talk</div>
-            <div style={{ border: `1.5px solid ${BORDER_COLOR}`, borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 8, padding: "8px 12px", display: "flex", alignItems: "center", gap: 10 }}>
                 <IconDoc size={18} color={TEAL} />
-                <input value={form.preferredTopic} onChange={(e) => set("preferredTopic")(e.target.value)} placeholder="Enter your talk title..." style={{ flex: 1, border: "none", outline: "none", fontSize: 14, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK }} />
+                <input value={form.preferredTopic} onChange={(e) => set("preferredTopic")(e.target.value)} placeholder="Enter your talk title..." style={{ flex: 1, border: "none", outline: "none", fontSize: 13, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK }} />
             </div>
         </div>
         <div style={{ marginBottom: 18 }}>
@@ -165,10 +165,10 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
             </div>
         </div>
         <div>
-            <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>Brief Description of Topic <span style={{ color: "#94A3B8", fontWeight: 400 }}>(100–200 words)</span></div>
-            <div style={{ border: `1.5px solid ${BORDER_COLOR}`, borderRadius: 8, padding: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Brief Description of Topic <span style={{ color: "#94A3B8", fontWeight: 400 }}>(100–200 words)</span></div>
+            <div style={{ border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 8, padding: 8, display: "flex", flexDirection: "column", gap: 6 }}>
                 <IconDoc size={18} color={TEAL} />
-                <textarea value={form.topicDescription} onChange={(e) => set("topicDescription")(e.target.value)} rows={5} style={{ border: "none", outline: "none", resize: "none", width: "100%", fontSize: 13, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK, background: "transparent" }} placeholder="Describe your topic briefly..." />
+                <textarea value={form.topicDescription} onChange={(e) => set("topicDescription")(e.target.value)} rows={3} style={{ border: "none", outline: "none", resize: "none", width: "100%", fontSize: 12, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK, background: "transparent" }} placeholder="Describe your topic briefly..." />
             </div>
         </div>
     </SectionBox>

@@ -10,11 +10,11 @@ export const BottomTagline = () => (
         style={{
             background: LIGHT_TEAL_BG,
             borderRadius: 8,
-            padding: "14px 24px",
+            padding: "10px 20px",
             display: "flex",
             alignItems: "center",
             gap: 16,
-            marginTop: 24,
+            marginTop: 0,
             border: `1px solid ${BORDER_COLOR}`,
         }}
     >
@@ -158,25 +158,36 @@ export const Footer = () => (
             </div>
         </div>
 
-        {/* Disclaimer */}
+        {/* Disclaimer & Organised By */}
         <div
             style={{
                 background: LIGHT_TEAL_BG,
-                padding: "10px 36px",
-                textAlign: "center",
+                padding: "15px 36px",
                 fontSize: 12,
                 color: TEAL,
-                fontStyle: "italic",
                 borderTop: `1px solid ${BORDER_COLOR}`,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
+                justifyContent: "space-between",
             }}
         >
-            <LeafIcon size={14} />
-            Shortlisted speakers will be contacted by the organizing committee.
-            <LeafIcon size={14} />
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontStyle: "italic" }}>
+                <LeafIcon size={14} />
+                Shortlisted speakers will be contacted by the organizing committee.
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: TEAL }}>Organised By</div>
+                    <div style={{ height: 25, width: 1, background: BORDER_COLOR }}></div>
+                    <div style={{ fontSize: 12, fontWeight: 900, color: TEAL, letterSpacing: 0.5 }}>NAMO GANGE WELLNESS PVT. LTD.</div>
+                </div>
+                
+                <div style={{ display: "flex", gap: 10 }}>
+                    <button style={{ background: "white", color: TEAL, border: `1px solid ${TEAL}`, borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>BOOK YOUR STALL</button>
+                    <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>REGISTER AS BUYER</button>
+                </div>
+            </div>
         </div>
     </>
 );

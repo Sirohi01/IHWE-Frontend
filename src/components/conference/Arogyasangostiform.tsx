@@ -3,7 +3,7 @@ import heroImg from "../../assets/arogyasangostiimageform/hero.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
 import { HeroSection } from "./ArogyaSanghosti/Hero";
-import { 
+import {
     BasicDetailsSection, ContactDetailsSection, SpeakerProfileSection,
     SessionDetailsSection, SpeakingExperienceSection, SupportingDetailsSection,
     ExpectationsSection, ConsentSection
@@ -61,60 +61,60 @@ export default function ArogyaSanghostiForm() {
                 <HeroSection heroImg={heroImg} arogyaLogo={arogyaLogo} />
 
                 {/* ── MAIN CONTENT (FORM SECTIONS) ── */}
-                <div style={{ 
-                    marginTop: "-120px",
-                    padding: "0 40px 80px 40px", 
+                <div style={{
+                    marginTop: "-128px",
+                    padding: "0 10px 0 10px",
                     position: "relative",
                     zIndex: 20
                 }}>
-                    
-                    <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
-                        {/* LEFT COLUMN - Adjusted to not go too far UP */}
-                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-47px" }}>
-                            <BasicDetailsSection 
-                                form={form} 
-                                set={set} 
-                                industryCategory={industryCategory} 
-                                setIndustryCategory={setIndustryCategory} 
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
+                        {/* LEFT COLUMN - Adjusted down by 10px */}
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-35px" }}>
+                            <BasicDetailsSection
+                                form={form}
+                                set={set}
+                                industryCategory={industryCategory}
+                                setIndustryCategory={setIndustryCategory}
                             />
-                            <ContactDetailsSection 
-                                form={form} 
-                                set={set} 
+                            <ContactDetailsSection
+                                form={form}
+                                set={set}
                             />
-                            <SpeakerProfileSection 
-                                form={form} 
-                                set={set} 
-                                expertise={expertise} 
-                                toggleExpertise={toggleExpertise} 
+                            <SpeakerProfileSection
+                                form={form}
+                                set={set}
+                                expertise={expertise}
+                                toggleExpertise={toggleExpertise}
+                            />
+                            <ExpectationsSection
+                                expectations={expectations}
+                                toggleExpectation={toggleExpectation}
                             />
                         </div>
 
                         {/* RIGHT COLUMN */}
                         <div style={{ display: "flex", flexDirection: "column", marginTop: "120px" }}>
-                            <SessionDetailsSection 
-                                form={form} 
-                                set={set} 
-                                preferredTrack={preferredTrack} 
+                            <SessionDetailsSection
+                                form={form}
+                                set={set}
+                                preferredTrack={preferredTrack}
                                 setPreferredTrack={setPreferredTrack}
                                 sessionType={sessionType}
                                 setSessionType={setSessionType}
                             />
-                            <SpeakingExperienceSection 
-                                form={form} 
-                                set={set} 
-                                spokenBefore={spokenBefore} 
-                                setSpokenBefore={setSpokenBefore} 
+                            <SpeakingExperienceSection
+                                form={form}
+                                set={set}
+                                spokenBefore={spokenBefore}
+                                setSpokenBefore={setSpokenBefore}
                             />
                             <SupportingDetailsSection />
-                            <ExpectationsSection 
-                                expectations={expectations} 
-                                toggleExpectation={toggleExpectation} 
-                            />
-                            <ConsentSection 
-                                consent1={consent1} 
-                                setConsent1={setConsent1} 
-                                consent2={consent2} 
-                                setConsent2={setConsent2} 
+                            <ConsentSection
+                                consent1={consent1}
+                                setConsent1={setConsent1}
+                                consent2={consent2}
+                                setConsent2={setConsent2}
                             />
                         </div>
                     </div>

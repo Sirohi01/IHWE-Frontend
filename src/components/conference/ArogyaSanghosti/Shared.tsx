@@ -13,15 +13,15 @@ export const SectionHeader: React.FC<{
     icon: React.ReactNode;
     gold?: boolean;
 }> = ({ number, title, icon, gold = false }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 18, position: "relative" }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 10, position: "relative" }}>
         <div
             style={{
                 background: gold ? GOLD : TEAL,
                 display: "flex",
                 alignItems: "center",
-                padding: "8px 25px 8px 10px",
+                padding: "4px 18px 4px 8px",
                 clipPath: "polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%)",
-                minWidth: 220,
+                minWidth: 180,
                 borderRadius: "4px 0 0 4px"
             }}
         >
@@ -54,8 +54,8 @@ export const SectionBox: React.FC<{ children: React.ReactNode }> = ({ children }
         background: "white",
         border: `1px solid ${BORDER_COLOR}`,
         borderRadius: 12,
-        padding: "18px 24px",
-        marginBottom: 30,
+        padding: "10px 18px",
+        marginBottom: 12,
         boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
         position: "relative",
     }}>
@@ -72,7 +72,7 @@ export const FormField: React.FC<{
     onChange?: (v: string) => void;
     placeholder?: string;
 }> = ({ label, icon, children, type = "text", value, onChange, placeholder }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 14, gap: 10 }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 8, gap: 10 }}>
         {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
         <label
             style={{
