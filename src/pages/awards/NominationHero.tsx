@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import awardsLogo from "../../assets/new.png";
 import nominationHeroImg from "../../assets/nomination7.png";
+import { MapPin, Calendar, Star } from "lucide-react";
 
 const NominationHero = () => {
   const jakartaFont = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
   const darkYellow = "#a67c00";
+  const navyColor = "#0a2e5c";
+  const greenColor = "#008d48";
 
   return (
     <section className="relative w-full overflow-hidden bg-white" style={jakartaFont}>
@@ -58,6 +61,27 @@ const NominationHero = () => {
                 className="absolute left-[20%] top-1/2 -translate-y-1/2 w-3 h-3 bg-white border rotate-45"
                 style={{ borderColor: darkYellow }}
               ></div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-5 h-5" style={{ color: greenColor }} />
+                <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>21-23 AUGUST 2026</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5" style={{ color: greenColor }} />
+                <div className="flex flex-col">
+                  <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>PRAGATI MAIDAN</span>
+                  <span className="text-[#888] font-bold text-[9px] uppercase">NEW DELHI, INDIA</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5" style={{ color: greenColor }} />
+                <div className="flex flex-col">
+                  <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>HOSTED AT</span>
+                  <span className="text-[#888] font-bold text-[9px] uppercase">IHWE 2026</span>
+                </div>
+              </div>
             </div>
             
 
