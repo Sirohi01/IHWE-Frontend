@@ -18,7 +18,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 position: "relative"
             }}
         >
-            {/* BASE IMAGE */}
+
             <img
                 src={heroImg}
                 alt="Hero Banner"
@@ -31,7 +31,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 }}
             />
 
-            {/* OVERLAY CONTENT */}
+
             <div style={{
                 position: "absolute",
                 top: 0,
@@ -49,7 +49,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "12vw", minHeight: "120px", width: "auto", alignSelf: "flex-start" }} />
+                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "11vw", minHeight: "80px", width: "auto", alignSelf: "flex-start" }} />
 
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                             <div style={{
@@ -70,21 +70,21 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         </div>
                     </div>
 
-                    {/* VERTICAL DIVIDER */}
-                    <div style={{ width: "1.5px", height: "10vw", background: "#E2E8F0", margin: "0 40px", opacity: 0.8 }}></div>
 
-                    {/* RIGHT: Form Title & Subtext */}
+                    <div style={{ width: "1.5px", height: "13vw", background: "#E2E8F0", margin: "0 20px", opacity: 0.8 }}></div>
+
+
                     <div style={{ textAlign: "left", flex: 1 }}>
                         <h1 style={{
                             color: TEAL,
-                            margin: 0,
+                            margin: "10px 10px 10px 10px",
                             fontWeight: 900,
                             lineHeight: 1,
                             textTransform: "uppercase",
                             fontSize: "4vw"
                         }}>
                             Speaker<br />
-                            <span style={{ opacity: 0.8, fontSize: "2.8vw", fontWeight: 700 }}>Nomination Form</span>
+                            <span style={{ opacity: 0.8, fontSize: "1.9vw", fontWeight: 700 }}>Nomination Form</span>
                         </h1>
                         <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 6, color: TEXT_DARK, fontSize: "0.9vw", fontWeight: 600 }}>
@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
 
 
             </div>
-        </div>
+        </div >
 
     );
 };

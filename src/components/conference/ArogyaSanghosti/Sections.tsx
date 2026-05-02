@@ -11,7 +11,7 @@ import {
     DoctorIcon, AyushIcon, HospitalIcon, UnivIcon, PharmaIcon, StartupIcon, OtherDotsIcon
 } from "./Icons";
 
-// ─── IMAGE IMPORTS ────────────────────────────────────────────────────────
+
 import doctorImg from "../../../assets/arogyasangostiimageform/Doctor (1).png";
 import ayushIconImg from "../../../assets/arogyasangostiimageform/Ayush (1).png";
 import hospitalImg from "../../../assets/arogyasangostiimageform/Hospital.png";
@@ -39,10 +39,10 @@ import speakerPhotoImg from "../../../assets/arogyasangostiimageform/speaker pho
 import companyLogoImg from "../../../assets/arogyasangostiimageform/company logo.png";
 import presentationImg from "../../../assets/arogyasangostiimageform/presentation.png";
 
-import expectationImg from "../../../assets/arogyasangostiimageform/Expectation.png";
-import consentImg from "../../../assets/arogyasangostiimageform/Consent.png";
+import expectationImg from "../../../assets/arogyasangostiimageform/leaf-removebg-preview.png";
+import consentImg from "../../../assets/arogyasangostiimageform/ChatGPT Image May 1, 2026, 05_33_52 PM (1).png";
 
-// Header Icon Imports
+
 import headerBasicImg from "../../../assets/arogyasangostiimageform/Basic Details (1).png";
 import headerContactImg from "../../../assets/arogyasangostiimageform/Contact Deatils.png";
 import headerSpeakerImg from "../../../assets/arogyasangostiimageform/Speacker Profile.png";
@@ -55,24 +55,24 @@ import headerConsentImg from "../../../assets/arogyasangostiimageform/Consent.pn
 
 export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCategory }: any) => {
     const categories = [
-        { label: "Doctor", icon: <img src={doctorImg} alt="Doctor" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
-        { label: "AYUSH Practitioner", icon: <img src={ayushIconImg} alt="AYUSH" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
-        { label: "Hospital", icon: <img src={hospitalImg} alt="Hospital" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
-        { label: "University / Academic", icon: <img src={universityImg} alt="University" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
-        { label: "Pharma / Healthcare Company", icon: <img src={pharmaImg} alt="Pharma" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
-        { label: "Startup / Innovator", icon: <img src={startupImg} alt="Startup" style={{ width: 64, height: 64, objectFit: "contain" }} /> },
+        { label: "Doctor", icon: <img src={doctorImg} alt="Doctor" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "AYUSH Practitioner", icon: <img src={ayushIconImg} alt="AYUSH" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Hospital", icon: <img src={hospitalImg} alt="Hospital" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "University / Academic", icon: <img src={universityImg} alt="University" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Pharma / Healthcare Company", icon: <img src={pharmaImg} alt="Pharma" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Startup / Innovator", icon: <img src={startupImg} alt="Startup" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
         { label: "Other", icon: <OtherDotsIcon /> },
     ];
 
     return (
         <SectionBox>
-            <SectionHeader number="01" title="Basic Details" icon={<img src={headerBasicImg} alt="Basic" style={{ width: 30, height: 30 }} />} />
+            <SectionHeader number="01" title="Basic Details" icon={<IconPerson size={24} color="white" />} />
             <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} />
             <FormField label="Designation" value={form.designation} onChange={set("designation")} />
             <FormField label="Organization / Institution" value={form.organization} onChange={set("organization")} />
 
-            <div style={{ marginTop: 15 }}>
-                <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 16 }}>
+            <div style={{ marginTop: 10 }}>
+                <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Industry Category <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -86,55 +86,60 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
                         />
                     ))}
                 </div>
+                {industryCategory === "Other" && (
+                    <div style={{ marginTop: 16 }}>
+                        <FormField label="Please specify your industry" value={form.otherIndustryCategory || ""} onChange={set("otherIndustryCategory")} />
+                    </div>
+                )}
             </div>
         </SectionBox>
     );
 };
 
-// ─── Section 02: Contact Details ──────────────────────────────────────────────
+
 export const ContactDetailsSection = ({ form, set }: any) => (
     <SectionBox>
-        <SectionHeader number="02" title="Contact Details" icon={<img src={headerContactImg} alt="Contact" style={{ width: 30, height: 30 }} />} />
-        <FormField label="Mobile Number" icon={<IconMobile size={18} />} value={form.mobile} onChange={set("mobile")} type="tel" />
-        <FormField label="Email Address" icon={<IconEmail size={18} />} value={form.email} onChange={set("email")} type="email" />
-        <FormField label="City / Country" icon={<IconLocation size={18} />} value={form.city} onChange={set("city")} />
-        <FormField label="LinkedIn Profile (if any)" icon={<IconLinkedIn size={18} />} value={form.linkedin} onChange={set("linkedin")} />
+        <SectionHeader number="02" title="Contact Details" icon={<IconPhone size={24} color="white" />} />
+        <FormField label="Mobile Number" icon={<IconMobile size={22} />} value={form.mobile} onChange={set("mobile")} type="tel" />
+        <FormField label="Email Address" icon={<IconEmail size={22} />} value={form.email} onChange={set("email")} type="email" />
+        <FormField label="City / Country" icon={<IconLocation size={22} />} value={form.city} onChange={set("city")} />
+        <FormField label="LinkedIn Profile (if any)" icon={<IconLinkedIn size={22} />} value={form.linkedin} onChange={set("linkedin")} />
     </SectionBox>
 );
 
-// ─── Section 03: Speaker Profile ──────────────────────────────────────────────
+
 export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }: any) => {
     const expertiseAreas = [
-        { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Modern Medicine", icon: <img src={modernMedImg} alt="Modern Medicine" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Digital Health / AI", icon: <img src={digitalHealthImg} alt="Digital Health" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Wellness & Lifestyle", icon: <img src={wellnessImg} alt="Wellness" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Hospital Management", icon: <img src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Research & Education", icon: <img src={researchImg} alt="Research" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-        { label: "Policy / Government", icon: <img src={policyImg} alt="Policy" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+        { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Modern Medicine", icon: <img src={modernMedImg} alt="Modern Medicine" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Digital Health / AI", icon: <img src={digitalHealthImg} alt="Digital Health" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Wellness & Lifestyle", icon: <img src={wellnessImg} alt="Wellness" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Hospital Management", icon: <img src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Research & Education", icon: <img src={researchImg} alt="Research" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Policy / Government", icon: <img src={policyImg} alt="Policy" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
         { label: "Other", icon: <OtherDotsIcon /> },
     ];
 
     return (
         <SectionBox>
             <SectionHeader number="03" title="Speaker Profile" icon={<IconMic size={20} color="white" />} gold />
-            <div style={{ marginBottom: 18 }}>
-                <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
+            <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 4 }}>
                     Brief Profile <span style={{ color: "#94A3B8", fontWeight: 400 }}>(100–150 words)</span>
                 </div>
-                <div style={{ border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 8, padding: 8, minHeight: 70, display: "flex", flexDirection: "column", gap: 6 }}>
-                    <IconPerson size={18} color={TEAL} />
+                <div style={{ border: `1.2px solid ${BORDER_COLOR}`, borderRadius: 8, padding: "6px 8px", minHeight: 45, display: "flex", flexDirection: "column", gap: 4 }}>
+                    <IconPerson size={16} color={TEAL} />
                     <textarea
                         value={form.briefProfile}
                         onChange={(e) => set("briefProfile")(e.target.value)}
-                        rows={3}
+                        rows={2}
                         style={{ border: "none", outline: "none", resize: "none", width: "100%", fontSize: 12, fontFamily: "'Segoe UI', sans-serif", color: TEXT_DARK, background: "transparent" }}
                         placeholder="Write your brief profile..."
                     />
                 </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-                <span style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700 }}>Total Experience (Years)</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <span style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700 }}>Total Experience (Years)</span>
                 <input
                     type="number"
                     value={form.totalExperience}
@@ -143,7 +148,7 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
                 />
             </div>
             <div>
-                <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 16 }}>
+                <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Areas of Expertise <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select all that apply)</span>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -248,39 +253,72 @@ export const SpeakingExperienceSection = ({ form, set, spokenBefore, setSpokenBe
 );
 
 // ─── Section 06: Supporting Details ───────────────────────────────────────────
-export const SupportingDetailsSection = () => (
-    <SectionBox>
-        <SectionHeader number="06" title="Supporting Details" icon={<IconUpload size={20} color="white" />} />
-        <div style={{ fontSize: 11, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Please upload / provide the following:</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-            {[
-                { label: "Speaker Photo\n(HD)", sub: "JPG, PNG", icon: <img src={speakerPhotoImg} alt="Speaker" style={{ width: 40, height: 40, objectFit: "contain" }} /> },
-                { label: "Company Logo\n(if applicable)", icon: <img src={companyLogoImg} alt="Company" style={{ width: 40, height: 40, objectFit: "contain" }} /> },
-                { label: "Presentation\n(optional)", sub: "PPT, PDF (10MB)", icon: <img src={presentationImg} alt="Presentation" style={{ width: 40, height: 40, objectFit: "contain" }} /> },
-            ].map((item) => (
-                <div key={item.label} style={{ border: `1px solid ${BORDER_COLOR}`, borderRadius: 10, padding: "6px 4px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, background: TRACK_BG }}>
-                    {item.icon}
-                    <div style={{ textAlign: "center", fontSize: 9, color: TEXT_DARK, fontWeight: 700, lineHeight: 1.2 }}>
-                        {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
-                    </div>
-                    <label style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 9, fontWeight: 700, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif" }}>
-                        Upload
-                        <input type="file" style={{ display: "none" }} accept={item.sub?.includes("PPT") ? ".ppt,.pptx,.pdf" : ".jpg,.jpeg,.png"} />
-                    </label>
-                    <div style={{ fontSize: 8, color: "#94A3B8", textAlign: "center" }}>{item.sub || "JPG, PNG"}</div>
-                </div>
-            ))}
-        </div>
-        <div style={{ fontSize: 9, color: "#94A3B8", marginTop: 4, fontStyle: "italic" }}>Formats: JPG, PNG, PDF, PPT (Max 10MB)</div>
-    </SectionBox>
-);
+export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setFiles: any }) => {
+    const items = [
+        {
+            key: "speakerPhoto",
+            label: "Speaker Photo\n(HD)",
+            sub: "JPG, PNG",
+            icon: <img src={speakerPhotoImg} alt="Speaker" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            accept: ".jpg,.jpeg,.png",
+        },
+        {
+            key: "companyLogo",
+            label: "Company Logo\n(if applicable)",
+            sub: "JPG, PNG",
+            icon: <img src={companyLogoImg} alt="Company" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            accept: ".jpg,.jpeg,.png",
+        },
+        {
+            key: "presentation",
+            label: "Presentation\n(optional)",
+            sub: "PPT, PDF (10MB)",
+            icon: <img src={presentationImg} alt="Presentation" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            accept: ".ppt,.pptx,.pdf",
+        },
+    ];
+
+    return (
+        <SectionBox>
+            <SectionHeader number="06" title="Supporting Details" icon={<IconUpload size={20} color="white" />} />
+            <div style={{ fontSize: 11, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Please upload / provide the following:</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                {items.map((item) => {
+                    const selectedFile: File | null = files[item.key];
+                    return (
+                        <div key={item.key} style={{ border: `1px solid ${BORDER_COLOR}`, borderRadius: 10, padding: "6px 4px", display: "flex", flexDirection: "column", alignItems: "center", gap: 4, background: TRACK_BG }}>
+                            {item.icon}
+                            <div style={{ textAlign: "center", fontSize: 9, color: TEXT_DARK, fontWeight: 700, lineHeight: 1.2 }}>
+                                {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
+                            </div>
+                            <label style={{ background: selectedFile ? "#059669" : TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 9, fontWeight: 700, cursor: "pointer", fontFamily: "'Segoe UI', sans-serif", maxWidth: "90%", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {selectedFile ? selectedFile.name : "Upload"}
+                                <input
+                                    type="file"
+                                    style={{ display: "none" }}
+                                    accept={item.accept}
+                                    onChange={(e) => {
+                                        const f = e.target.files?.[0] || null;
+                                        setFiles((prev: any) => ({ ...prev, [item.key]: f }));
+                                    }}
+                                />
+                            </label>
+                            <div style={{ fontSize: 8, color: "#94A3B8", textAlign: "center" }}>{item.sub}</div>
+                        </div>
+                    );
+                })}
+            </div>
+            <div style={{ fontSize: 9, color: "#94A3B8", marginTop: 4, fontStyle: "italic" }}>Formats: JPG, PNG, PDF, PPT (Max 10MB)</div>
+        </SectionBox>
+    );
+};
 
 // ─── Section 07: Expectations ─────────────────────────────────────────────────
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
-    <SectionBox>
+    <SectionBox style={{ height: "220px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ flex: 1, paddingBottom: 10 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
+            <div style={{ flex: 1, paddingBottom: 10, alignSelf: "flex-start" }}>
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 20px" }}>
                     {[
@@ -295,17 +333,17 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
                     ))}
                 </div>
             </div>
-            <img src={expectationImg} alt="Expectations" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", opacity: 0.9 }} />
+            <img src={expectationImg} alt="Expectations" style={{ width: 180, objectFit: "contain", marginRight: "-15px", marginBottom: "-15px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
         </div>
     </SectionBox>
 );
 
 // ─── Section 08: Consent ──────────────────────────────────────────────────────
 export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }: any) => (
-    <SectionBox>
+    <SectionBox style={{ height: "220px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 18, padding: "10px 0", flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18, paddingBottom: 10, flex: 1, alignSelf: "flex-start" }}>
                 {[
                     { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
                     { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
@@ -316,7 +354,7 @@ export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }:
                     </label>
                 ))}
             </div>
-            <img src={consentImg} alt="Consent" style={{ width: 140, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px" }} />
+            <img src={consentImg} alt="Consent" style={{ width: 250, objectFit: "contain", marginRight: "-20px", marginBottom: "-20px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
         </div>
     </SectionBox>
 );

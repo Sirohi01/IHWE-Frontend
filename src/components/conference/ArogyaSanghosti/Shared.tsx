@@ -49,15 +49,16 @@ export const SectionHeader: React.FC<{
 );
 
 // New component for Section Boxes
-export const SectionBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const SectionBox: React.FC<{ children: React.ReactNode, style?: React.CSSProperties }> = ({ children, style }) => (
     <div style={{
         background: "white",
         border: `1px solid ${BORDER_COLOR}`,
         borderRadius: 12,
-        padding: "10px 18px",
-        marginBottom: 12,
+        padding: "8px 14px",
+        marginBottom: 10,
         boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
         position: "relative",
+        ...style,
     }}>
         {children}
     </div>
@@ -72,7 +73,7 @@ export const FormField: React.FC<{
     onChange?: (v: string) => void;
     placeholder?: string;
 }> = ({ label, icon, children, type = "text", value, onChange, placeholder }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 8, gap: 10 }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: 6, gap: 10 }}>
         {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
         <label
             style={{
@@ -124,22 +125,22 @@ export const CategoryChip: React.FC<{
             gap: 8,
             border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
             borderRadius: 10,
-            padding: "22px 12px",
+            padding: "8px 8px",
             background: "white",
             cursor: "pointer",
             minWidth: 100,
-            fontSize: 11,
+            fontSize: 10,
             fontFamily: "'Segoe UI', sans-serif",
             color: TEXT_DARK,
             fontWeight: 700,
             transition: "all 0.2s",
             textAlign: "center",
-            minHeight: 110,
+            minHeight: 70,
             boxSizing: "border-box",
             boxShadow: "none"
         }}
     >
-        <div style={{ marginBottom: 8, display: "flex", justifyContent: "center" }}>{icon}</div>
+        <div style={{ marginBottom: 4, display: "flex", justifyContent: "center" }}>{icon}</div>
         <div style={{ lineHeight: 1.2 }}>{label}</div>
     </button>
 );
@@ -229,13 +230,15 @@ export const ExpertiseChip: React.FC<{
             transition: "all 0.2s",
             textAlign: "left",
             lineHeight: 1.2,
-            minHeight: 70,
+            minHeight: 46,
             boxSizing: "border-box",
             boxShadow: "none",
             border: selected ? "1.5px solid #10b981" : `1.5px solid ${BORDER_COLOR}`,
+            padding: "4px 8px",
+            wordBreak: "break-word",
         }}
     >
         <div style={{ flexShrink: 0 }}>{icon}</div>
-        <span>{label}</span>
+        <span style={{ whiteSpace: "normal" }}>{label}</span>
     </button>
 );
