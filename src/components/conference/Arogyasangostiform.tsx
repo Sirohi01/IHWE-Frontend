@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import heroImg from "../../assets/arogyasangostiimageform/hero.png";
+import heroImg from "../../assets/arogyasangostiimageform/name.jpg.jpeg";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
 import { HeroSection } from "./ArogyaSanghosti/Hero";
@@ -13,7 +13,7 @@ import { BottomTagline, Footer } from "./ArogyaSanghosti/Footer";
 import { API_URL } from "@/lib/api";
 
 export default function ArogyaSanghostiForm() {
-    // ─── STATE MANAGEMENT ─────────────────────────────────────────────────────
+
     const [form, setForm] = useState({
         fullName: "",
         designation: "",
@@ -28,6 +28,7 @@ export default function ArogyaSanghostiForm() {
         topicDescription: "",
         eventDetails: "",
         industryCategory: "Doctor",
+        otherIndustryCategory: "",
         expertise: [] as string[],
         preferredTrack: "ayush",
         sessionType: "keynote",
@@ -38,8 +39,13 @@ export default function ArogyaSanghostiForm() {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [files, setFiles] = useState<{ speakerPhoto: File | null; companyLogo: File | null; presentation: File | null }>({
+        speakerPhoto: null,
+        companyLogo: null,
+        presentation: null,
+    });
 
-    // ─── FORM VALIDATION ──────────────────────────────────────────────────────
+
     const validateForm = () => {
         if (!form.fullName.trim()) {
             toast.error("Please enter your full name");
@@ -100,18 +106,29 @@ export default function ArogyaSanghostiForm() {
         return true;
     };
 
-    // ─── FORM SUBMISSION ──────────────────────────────────────────────────────
+
     const handleSubmit = async () => {
         if (!validateForm()) return;
 
         setIsSubmitting(true);
         try {
+            const formData = new FormData();
+            // Append all text fields
+            Object.entries(form).forEach(([key, val]) => {
+                if (Array.isArray(val)) {
+                    formData.append(key, JSON.stringify(val));
+                } else {
+                    formData.append(key, String(val));
+                }
+            });
+            // Append files if selected
+            if (files.speakerPhoto) formData.append('speakerPhoto', files.speakerPhoto);
+            if (files.companyLogo) formData.append('companyLogo', files.companyLogo);
+            if (files.presentation) formData.append('presentation', files.presentation);
+
             const response = await fetch(`${API_URL}/speaker`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(form)
+                body: formData,
             });
 
             const data = await response.json();
@@ -119,7 +136,6 @@ export default function ArogyaSanghostiForm() {
             if (data.success) {
                 toast.success(data.message || "Speaker application submitted successfully!");
 
-                // Reset form
                 setForm({
                     fullName: "",
                     designation: "",
@@ -134,6 +150,7 @@ export default function ArogyaSanghostiForm() {
                     topicDescription: "",
                     eventDetails: "",
                     industryCategory: "Doctor",
+                    otherIndustryCategory: "",
                     expertise: [],
                     preferredTrack: "ayush",
                     sessionType: "keynote",
@@ -142,6 +159,7 @@ export default function ArogyaSanghostiForm() {
                     consent1: false,
                     consent2: false,
                 });
+                setFiles({ speakerPhoto: null, companyLogo: null, presentation: null });
             } else {
                 toast.error(data.message || "Failed to submit application");
             }
@@ -152,7 +170,7 @@ export default function ArogyaSanghostiForm() {
         }
     };
 
-    // ─── HANDLERS ─────────────────────────────────────────────────────────────
+
     const set = (key: string) => (val: string | boolean) => {
         setForm({ ...form, [key]: val });
     };
@@ -185,28 +203,26 @@ export default function ArogyaSanghostiForm() {
                     overflow: "hidden",
                 }}
             >
-                {/* ── HEADER (HERO) ── */}
+
                 <HeroSection heroImg={heroImg} arogyaLogo={arogyaLogo} />
 
-                {/* ── MAIN CONTENT (FORM SECTIONS) ── */}
+
                 <div style={{
-                    marginTop: "-128px",
+                    marginTop: "-131px",
                     padding: "0 10px 0 10px",
                     position: "relative",
                     zIndex: 20
                 }}>
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
-                        {/* LEFT COLUMN - Adjusted down by 10px */}
+
                         <div style={{ display: "flex", flexDirection: "column", marginTop: "-37px" }}>
-                            <div style={{ maxWidth: "98%" }}>
-                                <BasicDetailsSection
-                                    form={form}
-                                    set={set}
-                                    industryCategory={form.industryCategory}
-                                    setIndustryCategory={(val: string) => set("industryCategory")(val)}
-                                />
-                            </div>
+                            <BasicDetailsSection
+                                form={form}
+                                set={set}
+                                industryCategory={form.industryCategory}
+                                setIndustryCategory={(val: string) => set("industryCategory")(val)}
+                            />
                             <ContactDetailsSection
                                 form={form}
                                 set={set}
@@ -239,7 +255,7 @@ export default function ArogyaSanghostiForm() {
                                 spokenBefore={form.spokenBefore}
                                 setSpokenBefore={(val: string) => set("spokenBefore")(val)}
                             />
-                            <SupportingDetailsSection />
+                            <SupportingDetailsSection files={files} setFiles={setFiles} />
                             <ConsentSection
                                 consent1={form.consent1}
                                 setConsent1={(val: boolean) => set("consent1")(val)}

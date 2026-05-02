@@ -18,7 +18,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 position: "relative"
             }}
         >
-            {/* BASE IMAGE */}
+
             <img
                 src={heroImg}
                 alt="Hero Banner"
@@ -31,7 +31,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 }}
             />
 
-            {/* OVERLAY CONTENT */}
+
             <div style={{
                 position: "absolute",
                 top: 0,
@@ -70,10 +70,10 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         </div>
                     </div>
 
-                    {/* VERTICAL DIVIDER */}
+
                     <div style={{ width: "1.5px", height: "10vw", background: "#E2E8F0", margin: "0 40px", opacity: 0.8 }}></div>
 
-                    {/* RIGHT: Form Title & Subtext */}
+
                     <div style={{ textAlign: "left", flex: 1 }}>
                         <h1 style={{
                             color: TEAL,
@@ -84,7 +84,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                             fontSize: "4vw"
                         }}>
                             Speaker<br />
-                            <span style={{ opacity: 0.8, fontSize: "2.8vw", fontWeight: 700 }}>Nomination Form</span>
+                            <span style={{ opacity: 0.8, fontSize: "1.9vw", fontWeight: 700 }}>Nomination Form</span>
                         </h1>
                         <div style={{ marginTop: 12, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 6, color: TEXT_DARK, fontSize: "0.9vw", fontWeight: 600 }}>
