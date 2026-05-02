@@ -4,6 +4,7 @@ import nominationHeroImg from "../../assets/nomination1.png";
 
 const NominationHero = () => {
   const jakartaFont = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
+  const darkYellow = "#a67c00";
 
   return (
     <section className="relative w-full overflow-hidden bg-white" style={jakartaFont}>
@@ -31,29 +32,48 @@ const NominationHero = () => {
             className="flex flex-col items-start"
           >
             {/* IHWE Logo */}
-            <div className="mb-1">
-              <img src={awardsLogo} alt="IHWE Logo" className="h-auto w-[300px] object-contain" />
+             <div className="flex justify-start w-full -mt-8 mb-1">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
             </div>
 
             <div className="space-y-1">
               {/* <p className="text-[#008d48] font-black text-[15px] tracking-[0.2em] uppercase">
                 3rd Edition Of
               </p> */}
-              <h1 className="text-[35px] md:text-[50px] font-black leading-[1.05] tracking-tight flex flex-col">
+              {/* <h1 className="text-[35px] md:text-[50px] font-black leading-[1.05] tracking-tight flex flex-col">
                 <span className="text-[#0a2e5c]">NAMO GANGE</span>
                 <span className="text-[#008d48]">GLOBAL HEALTH</span>
                 <span className="text-[#0a2e5c]">EXCELLENCE AWARDS 2026</span>
-              </h1>
-              <p className="text-[#0a2e5c] text-[15px] md:text-[18px] font-bold mt-4 opacity-90">
-                Honouring Excellence in Healthcare, Wellness &amp; Innovation
-              </p>
+              </h1> */}
+              <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight mt-4">
+              Honouring Excellence in Healthcare, Wellness & Innovation
+            </p>
             </div>
+            <div className="w-full max-w-xl h-[1.5px] my-3 relative opacity-100" style={{ backgroundColor: '#f0f0f0' }}>
+              <div
+                className="absolute left-[0%] top-1/2 -translate-y-1/2 h-[1.5px] w-[60%]"
+                style={{ backgroundColor: darkYellow }}
+              ></div>
+              <div
+                className="absolute left-[20%] top-1/2 -translate-y-1/2 w-3 h-3 bg-white border rotate-45"
+                style={{ borderColor: darkYellow }}
+              ></div>
+            </div>
+            
 
             {/* Nomination Form Button - Styled exactly like the image */}
-            <div className="mt-5">
-              <div className="bg-[#0a2e5c] text-white px-10 py-2 rounded-sm font-black text-[15px] uppercase tracking-widest shadow-xl hover:bg-[#08244a] transition-all cursor-pointer transform hover:scale-105 active:scale-95">
+            <div className="mt-2">
+              <button 
+                onClick={() => {
+                  const formSection = document.getElementById('nomination-form');
+                  if (formSection) {
+                    formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="bg-[#0a2e5c] text-white px-10 py-2 rounded-sm font-black text-[15px] uppercase tracking-widest shadow-xl hover:bg-[#08244a] transition-all cursor-pointer transform hover:scale-105 active:scale-95"
+              >
                 NOMINATION FORM
-              </div>
+              </button>
             </div>
           </motion.div>
           <div className="hidden lg:block h-[400px]"></div>

@@ -9,7 +9,7 @@ const NominationFormPage = () => (
     <NominationHero />
 
     {/* Main Content */}
-    <section className="py-6">
+    <section id="nomination-form" className="py-6">
       <div className="container mx-auto px-6 max-w-[1280px]">
         <div className="flex flex-col lg:flex-row gap-5 items-start">
 
