@@ -99,7 +99,6 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                     </div>
                 </div>
 
-                {/* FAR RIGHT BADGE (Building Healthier Future) */}
 
 
 

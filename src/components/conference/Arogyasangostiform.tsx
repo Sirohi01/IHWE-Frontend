@@ -47,60 +47,136 @@ export default function ArogyaSanghostiForm() {
 
 
     const validateForm = () => {
+        const nameRegex = /^[a-zA-Z\s.''-]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const mobileRegex = /^[+]?[\d\s\-()]{7,15}$/;
+        const urlRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/.+/i;
+
+        // ── Full Name ──
         if (!form.fullName.trim()) {
-            toast.error("Please enter your full name");
+            toast.error("Full Name is required.");
             return false;
         }
+        if (!nameRegex.test(form.fullName.trim())) {
+            toast.error("Full Name must contain only letters — no numbers or special characters.");
+            return false;
+        }
+        if (form.fullName.trim().length < 3) {
+            toast.error("Full Name must be at least 3 characters.");
+            return false;
+        }
+
+        // ── Designation ──
         if (!form.designation.trim()) {
-            toast.error("Please enter your designation");
+            toast.error("Designation is required.");
             return false;
         }
+        if (/^\d+$/.test(form.designation.trim())) {
+            toast.error("Designation cannot be only numbers.");
+            return false;
+        }
+
+        // ── Organization ──
         if (!form.organization.trim()) {
-            toast.error("Please enter your organization");
+            toast.error("Organization / Institution is required.");
             return false;
         }
+        if (/^\d+$/.test(form.organization.trim())) {
+            toast.error("Organization name cannot be only numbers.");
+            return false;
+        }
+
+        // ── Industry Category ──
+        if (form.industryCategory === "Other" && !form.otherIndustryCategory.trim()) {
+            toast.error("Please specify your industry category.");
+            return false;
+        }
+
+        // ── Mobile ──
         if (!form.mobile.trim()) {
-            toast.error("Please enter your mobile number");
+            toast.error("Mobile Number is required.");
             return false;
         }
+        if (!mobileRegex.test(form.mobile.trim())) {
+            toast.error("Please enter a valid mobile number (7–15 digits).");
+            return false;
+        }
+
+        // ── Email ──
         if (!form.email.trim()) {
-            toast.error("Please enter your email");
+            toast.error("Email Address is required.");
             return false;
         }
+        if (!emailRegex.test(form.email.trim())) {
+            toast.error("Please enter a valid email address (e.g. name@domain.com).");
+            return false;
+        }
+
+        // ── City ──
         if (!form.city.trim()) {
-            toast.error("Please enter your city");
+            toast.error("City / Country is required.");
             return false;
         }
+        if (!nameRegex.test(form.city.trim())) {
+            toast.error("City / Country must contain only letters.");
+            return false;
+        }
+
+        // ── LinkedIn (optional but must be valid if provided) ──
+        if (form.linkedin.trim() && !urlRegex.test(form.linkedin.trim())) {
+            toast.error("LinkedIn URL must be a valid linkedin.com link.");
+            return false;
+        }
+
+        // ── Brief Profile ──
         if (!form.briefProfile.trim()) {
-            toast.error("Please enter your brief profile");
+            toast.error("Brief Profile is required.");
             return false;
         }
+
+        // ── Total Experience ──
         if (!form.totalExperience.trim()) {
-            toast.error("Please enter your total experience");
+            toast.error("Total Experience is required.");
             return false;
         }
+        const exp = Number(form.totalExperience.trim());
+        if (isNaN(exp) || exp < 0 || exp > 60) {
+            toast.error("Total Experience must be a number between 0 and 60.");
+            return false;
+        }
+
+        // ── Expertise ──
         if (form.expertise.length === 0) {
-            toast.error("Please select at least one area of expertise");
+            toast.error("Please select at least one area of expertise.");
             return false;
         }
+
+        // ── Preferred Topic ──
         if (!form.preferredTopic.trim()) {
-            toast.error("Please enter your preferred topic");
+            toast.error("Preferred Topic / Title of Talk is required.");
             return false;
         }
+
+        // ── Topic Description ──
         if (!form.topicDescription.trim()) {
-            toast.error("Please enter topic description");
+            toast.error("Brief Description of Topic is required.");
             return false;
         }
+
+
+        // ── Expectations ──
         if (form.expectations.length === 0) {
-            toast.error("Please select at least one expectation");
+            toast.error("Please select at least one expectation.");
             return false;
         }
+
+        // ── Consent ──
         if (!form.consent1) {
-            toast.error("Please accept the terms and conditions");
+            toast.error("Please confirm that the information provided is correct.");
             return false;
         }
         if (!form.consent2) {
-            toast.error("Please accept the privacy policy");
+            toast.error("Please agree to be contacted by the organizing team.");
             return false;
         }
         return true;

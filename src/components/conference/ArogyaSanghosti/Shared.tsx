@@ -72,7 +72,8 @@ export const FormField: React.FC<{
     value?: string | number;
     onChange?: (v: string) => void;
     placeholder?: string;
-}> = ({ label, icon, children, type = "text", value, onChange, placeholder }) => (
+    lettersOnly?: boolean;
+}> = ({ label, icon, children, type = "text", value, onChange, placeholder, lettersOnly }) => (
     <div style={{ display: "flex", alignItems: "center", marginBottom: 6, gap: 10 }}>
         {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
         <label
@@ -92,7 +93,11 @@ export const FormField: React.FC<{
                 type={type}
                 value={value}
                 placeholder={placeholder}
-                onChange={(e) => onChange?.(e.target.value)}
+                onChange={(e) => {
+                    let val = e.target.value;
+                    if (lettersOnly) val = val.replace(/[^a-zA-Z\s.''-]/g, "");
+                    onChange?.(val);
+                }}
                 style={{
                     flex: 1,
                     border: "none",
