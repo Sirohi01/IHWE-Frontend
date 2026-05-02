@@ -232,49 +232,72 @@ const BookAStand = () => {
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
     const [isComingSoon, setIsComingSoon] = useState(true);
-    // Initial Data Fetch
+    
+    // Optimized Data Fetch - Priority Loading (Removed Promise.all for better performance)
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const [hData, eData, employeesRes, staffRes, termsRes, countryRes, stateRes, cityRes, highlightRes, settingsRes, counterRes] = await Promise.all([
-                    heroBackgroundApi.getByPage("Registration / Book A Stand"),
-                    eventApi.getActive(),
-                    publicApi.getEmployees(),
-                    publicApi.getStaff(),
-                    termsApi.getByPage("exhibitor-registration"),
-                    crmApi.getCountries(),
-                    crmApi.getStates(),
-                    crmApi.getCities(),
-                    eventHighlightsApi.get(),
-                    settingsApi.get(),
-                    countersApi.get()
-                ]);
-
+                // Priority 1: Critical data for page render
+                const hData = await heroBackgroundApi.getByPage("Registration / Book A Stand");
                 if (hData) setHeroData((hData as any).data || hData);
+
+                const eData = await eventApi.getActive();
                 const actualEvents = Array.isArray(eData) ? eData : ((eData as any).data || []);
                 if (actualEvents.length > 0) {
                     setEvents(actualEvents);
                     const urlEventId = searchParams.get('eventId');
                     const initialEventId = urlEventId && actualEvents.find((e: any) => e._id === urlEventId) ? urlEventId : actualEvents[0]._id;
                     setSelectedEventId(initialEventId);
-                    const selEvent = actualEvents.find((e: any) => e._id === initialEventId) || actualEvents[0];
                     setFormData(prev => ({ ...prev, eventId: initialEventId }));
                 }
-                if (employeesRes) setMarketingStaff(Array.isArray(employeesRes) ? employeesRes : ((employeesRes as any).data || []));
-                if (staffRes) setStaff(Array.isArray(staffRes) ? staffRes : ((staffRes as any).data || []));
-                if (termsRes) setTermsContent(termsRes);
-                if (countryRes) setCountries(countryRes);
-                if (stateRes) setStates(stateRes);
-                if (cityRes) setCities(cityRes);
-                if (highlightRes) setEventHighlights(highlightRes);
-                if (settingsRes) setSettings(settingsRes);
-                if (counterRes) setCounters(counterRes);
+                Promise.all([
+                    publicApi.getEmployees(),
+                    publicApi.getStaff(),
+                    termsApi.getByPage("exhibitor-registration"),
+                    crmApi.getCountries(),
+                    eventHighlightsApi.get(),
+                    settingsApi.get(),
+                    countersApi.get()
+                ]).then(([employeesRes, staffRes, termsRes, countryRes, highlightRes, settingsRes, counterRes]) => {
+                    if (employeesRes) setMarketingStaff(Array.isArray(employeesRes) ? employeesRes : ((employeesRes as any).data || []));
+                    if (staffRes) setStaff(Array.isArray(staffRes) ? staffRes : ((staffRes as any).data || []));
+                    if (termsRes) setTermsContent(termsRes);
+                    if (countryRes) setCountries(countryRes);
+                    if (highlightRes) setEventHighlights(highlightRes);
+                    if (settingsRes) setSettings(settingsRes);
+                    if (counterRes) setCounters(counterRes);
+                });
             } catch (error) {
                 console.error("Error fetching initial data:", error);
             }
         };
         fetchInitialData();
     }, []);
+    useEffect(() => {
+        if (formData.country) {
+            const selectedCountry = countries.find(c => c.name === formData.country);
+            if (selectedCountry && selectedCountry.countryCode) {
+                crmApi.getStates(selectedCountry.countryCode).then(stateRes => {
+                    setStates(stateRes);
+                }).catch(err => console.error("Error fetching states:", err));
+            }
+        } else {
+            setStates([]);
+            setCities([]);
+        }
+    }, [formData.country, countries]);
+    useEffect(() => {
+        if (formData.state) {
+            const selectedState = states.find(s => s.name === formData.state);
+            if (selectedState && selectedState.stateCode) {
+                crmApi.getCities(selectedState.stateCode).then(cityRes => {
+                    setCities(cityRes);
+                }).catch(err => console.error("Error fetching cities:", err));
+            }
+        } else {
+            setCities([]);
+        }
+    }, [formData.state, states]);
 
     // Fetch Stalls when Event changes
     useEffect(() => {
