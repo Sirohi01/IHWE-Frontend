@@ -11,11 +11,7 @@ export default function ExhibitorInvoicesPage() {
 
     useEffect(() => {
         settingsApi.get().then((s: any) => { if (s) setSettings(s); });
-        // Fetch header image from public settings or template
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/settings`)
-            .then(r => r.json())
-            .then(res => { if (res.success) setSettings(res.data); })
-            .catch(() => {});
+
     }, []);
 
     const isUSD = data.participation?.currency === 'USD';

@@ -6,6 +6,8 @@ import {
   Stethoscope, Thermometer, Syringe, HeartPulse, Building, Dna,
   ShieldCheck, Box, Monitor, Globe, Zap, Package, MapPin
 } from 'lucide-react';
+import { API_URL, SERVER_URL } from '@/lib/api';
+
 
 const ICONS_MAP = {
   Activity, Pill, Building2, Microscope, Cpu, Heart, Leaf, FlaskConical, 
@@ -50,7 +52,7 @@ const HealthcareSectors = () => {
   });
 
   React.useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/healthcare-sectors`)
+    fetch(`${API_URL}/healthcare-sectors`)
       .then(res => res.json())
       .then(res => {
         if (res.success) setContent(res.data);
@@ -59,7 +61,7 @@ const HealthcareSectors = () => {
   }, []);
 
   const sectors = content.cards.length > 0 ? content.cards : [];
-  const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+
   return (
     <section
       style={{
