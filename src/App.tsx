@@ -24,7 +24,7 @@ const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
-const SpeakerRegistration = lazy(() => import("./pages/SpeakerRegistration"));
+const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasangostiform"));
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
@@ -105,6 +105,10 @@ import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
+const Awards = lazy(() => import("./pages/awards/Awards"));
+const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
+
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -128,6 +132,9 @@ const App = () => {
                   <Route element={<Layout onRegisterVisit={openVisitorDrawer}><Outlet /></Layout>}>
                     <Route path="/" element={<Index onRegisterVisit={openVisitorDrawer} />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/awards" element={<Awards />} />
+                    <Route path="/awards/nomination" element={<NominationFormPage />} />
+
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />

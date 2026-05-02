@@ -76,6 +76,7 @@ const MandateForm: React.FC<Props> = ({ reportId }) => {
             reportId={reportId}
             isExporting={isExporting}
             showUnderlines={false}
+            isLetterhead={true}
         >
             <div className="text-center mb-6 print:mb-2 mt-4 print:mt-0">
                 <h1 className="text-xl print:text-lg font-bold uppercase mb-2 border-b border-black inline-block px-10">MANDATE FORM</h1>
