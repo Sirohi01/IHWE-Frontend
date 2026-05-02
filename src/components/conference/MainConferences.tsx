@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Calendar, Layers, Search, ArrowRight } from "lucide-react";
-import imgDay1 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.47.53 AM.png";
-import imgDay2 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.11 AM.png";
-import imgDay3 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.21 AM.png";
+import imgDay1 from "../../assets/ram1.png";
+import imgDay2 from "../../assets/ram2.png";
+import imgDay3 from "../../assets/ram3.png";
 
 const mainConferences = [
   {
@@ -61,7 +61,7 @@ const MainConferences: React.FC = () => {
         </div>
 
         {/* Cards grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-8">
           {mainConferences.map((conf, index) => (
             <motion.div
               key={index}
@@ -69,71 +69,77 @@ const MainConferences: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.7 }}
-              className="bg-white rounded-[16px] p-4 shadow-md border border-[#E6ECF3] flex flex-col items-start text-left group hover:border-[#4E9F3D] transition-all duration-500 relative"
+              className="relative min-h-[480px] rounded-[24px] overflow-hidden group shadow-xl border border-[#E6ECF3]/20 flex flex-col items-start text-left transition-all duration-500"
             >
-              {/* Day badge */}
-              <div
-                className={`px-6 py-2 rounded-full ${conf.badgeBg} text-white text-[16px] font-bold tracking-widest shadow mb-4`}
-              >
-                {conf.day}
+              {/* Background Image */}
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src={conf.image} 
+                  alt={conf.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C66]/95 via-[#0B2C66]/60 to-transparent z-10" />
               </div>
 
-              {/* Icon and Content row */}
-              <div className="flex items-start gap-6 mb-6 w-full">
+              {/* Content Container */}
+              <div className="relative z-20 p-8 flex flex-col h-full w-full">
+                {/* Day badge */}
                 <div
-                  className="w-24 h-24 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden"
+                  className={`inline-block self-start px-6 py-2 rounded-full ${conf.badgeBg} text-white text-[14px] font-bold tracking-widest shadow-lg mb-auto`}
                 >
-                  <img src={conf.image} alt={conf.title} className="w-full h-full object-contain" />
+                  {conf.day}
                 </div>
-                <div className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-[18px] font-black text-[#1C2B3A] leading-snug uppercase tracking-tight">
+
+                <div className="mt-8">
+                  <h3 className="text-[24px] font-black text-white leading-tight uppercase tracking-tight mb-3">
                     {conf.title}
                   </h3>
-                  <p className="text-[13px] text-[#5F6B7A] leading-[1.5]">
+                  <p className="text-[14px] text-white/80 leading-[1.6] mb-6 font-medium">
                     {conf.description}
                   </p>
-                </div>
-              </div>
 
-              {/* Meta row */}
-              <div className="w-full grid grid-cols-3 gap-0 border border-[#E6ECF3] rounded-[10px] py-2.5 mb-4 bg-[#F8FAFC]">
-                <div className="flex flex-col items-center gap-1 px-1 text-center">
-                  <Calendar className="w-3.5 h-3.5 text-[#C1C8D5]" />
-                  <span className="text-[7px] font-black text-[#5F6B7A] uppercase tracking-widest">
-                    DATE
-                  </span>
-                  <span className="text-[9px] font-bold text-[#1C2B3A]">
-                    {conf.date}
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-1 px-1 border-x border-[#E6ECF3] text-center">
-                  <Layers className="w-3.5 h-3.5 text-[#C1C8D5]" />
-                  <span className="text-[7px] font-black text-[#5F6B7A] uppercase tracking-widest">
-                    SESSIONS
-                  </span>
-                  <span className="text-[9px] font-bold text-[#1C2B3A]">
-                    {conf.sessions}
-                  </span>
-                </div>
-                <div className="flex flex-col items-center gap-1 px-1 text-center">
-                  <Search className="w-3.5 h-3.5 text-[#C1C8D5]" />
-                  <span className="text-[7px] font-black text-[#5F6B7A] uppercase tracking-widest">
-                    KEY FOCUS
-                  </span>
-                  <span className="text-[8px] font-bold text-[#1C2B3A] leading-tight uppercase">
-                    {conf.focus}
-                  </span>
-                </div>
-              </div>
+                  {/* Meta row */}
+                  <div className="w-full grid grid-cols-3 gap-2 border border-white/10 rounded-[16px] py-4 px-2 mb-8 bg-white/5 backdrop-blur-md">
+                    <div className="flex flex-col items-center gap-1.5 text-center">
+                      <Calendar className="w-4 h-4 text-white/60" />
+                      <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
+                        DATE
+                      </span>
+                      <span className="text-[10px] font-bold text-white">
+                        {conf.date}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1.5 border-x border-white/10 text-center">
+                      <Layers className="w-4 h-4 text-white/60" />
+                      <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
+                        SESSIONS
+                      </span>
+                      <span className="text-[10px] font-bold text-white">
+                        {conf.sessions}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1.5 text-center">
+                      <Search className="w-4 h-4 text-white/60" />
+                      <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
+                        KEY FOCUS
+                      </span>
+                      <span className="text-[9px] font-bold text-white leading-tight uppercase">
+                        {conf.focus}
+                      </span>
+                    </div>
+                  </div>
 
-              {/* CTA button */}
-              <div className="w-full mt-auto flex justify-center">
-                <button
-                  className={`px-8 py-2.5 rounded-full ${conf.btnBg} ${conf.btnHover} text-white font-bold text-[12px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] inline-flex`}
-                >
-                  VIEW SESSIONS
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                  {/* CTA button */}
+                  <div className="w-full flex justify-start">
+                    <button
+                      className={`px-10 py-3.5 rounded-full ${conf.btnBg} ${conf.btnHover} text-white font-bold text-[13px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.95] group/btn`}
+                    >
+                      VIEW SESSIONS
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}
