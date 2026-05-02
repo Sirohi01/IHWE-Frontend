@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
+import { useState, useEffect } from "react";
+import { settingsApi, SERVER_URL } from "@/lib/api";
 import s1Image from "@/assets/s1.png";
 import s2Image from "@/assets/s2.png";
 import s4Image from "@/assets/s4.png";
@@ -20,6 +22,32 @@ const sponsorTypes = [
 ];
 
 const AwardsSponsorship = () => {
+  const [sponsorshipDeckUrl, setSponsorshipDeckUrl] = useState("");
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const data = await settingsApi.get();
+        
+        if (data?.sponsorshipDeckPdf) {
+          const fullUrl = `${SERVER_URL}${data.sponsorshipDeckPdf}`;
+          setSponsorshipDeckUrl(fullUrl);
+        } else {
+          // console.log("No sponsorship deck found in data");
+        }
+      } catch (error) {
+        // console.error("Error fetching sponsorship deck:", error);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  const handleDownload = () => {
+    if (sponsorshipDeckUrl) {
+      window.open(sponsorshipDeckUrl, '_blank');
+    }
+  };
+
   return (
     <section className="py-4 md:py-6 bg-[#f4faff] overflow-hidden">
       {/* Reduced Max-Width to 1280px to push alignment inward */}
@@ -43,8 +71,15 @@ const AwardsSponsorship = () => {
               Showcase your brand to a highly targeted audience of healthcare leaders, innovators and decision makers.
             </p>
 
-            <button className="flex items-center bg-[#008d48] text-white  rounded-lg text-[13px] font-black uppercase tracking-widest self-start transition-all hover:bg-[#007a3e] overflow-hidden shadow-lg group">
-              <span className="px-6 py-3.5">DOWNLOAD SPONSORSHIP DECK</span>
+            <button 
+              onClick={handleDownload}
+              disabled={!sponsorshipDeckUrl}
+              className="flex items-center bg-[#008d48] text-white rounded-lg text-[13px] font-black uppercase tracking-widest self-start transition-all hover:bg-[#007a3e] overflow-hidden shadow-lg group disabled:opacity-50 disabled:cursor-not-allowed"
+              title={sponsorshipDeckUrl ? "Click to download" : "PDF not available"}
+            >
+              <span className="px-6 py-3.5">
+                {sponsorshipDeckUrl ? "DOWNLOAD SPONSORSHIP DECK" : "DECK NOT AVAILABLE"}
+              </span>
               <div className="bg-black/10 px-4 py-4 border-l border-white/20">
                 <Download className="w-4 h-4" />
               </div>
