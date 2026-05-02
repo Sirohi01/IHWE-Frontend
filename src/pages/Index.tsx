@@ -31,6 +31,7 @@ import WhyParticipate from "@/components/home/WhyParticipate";
 import ConferenceSeminars from "@/components/home/ConferenceSeminars";
 import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
+import FloatingVideo from "@/components/home/FloatingVideo";
 
 interface IndexProps {
   onRegisterVisit: () => void;
@@ -74,6 +75,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       {/* <Testimonials />
        <FAQSection /> */}
       <BlogPreview />
+      <FloatingVideo />
 
       {/* <PreFooterCTA onBookStand={onBookStand} /> */}
     </>

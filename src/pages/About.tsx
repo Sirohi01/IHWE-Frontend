@@ -425,15 +425,7 @@ const About = () => {
       </section>
 
       {/* STATS COUNTER BAR - overlapping hero */}
-      {/* <div className="relative z-20 -mt-10 px-6">
-        <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
-            {STATS.map((item, i) => (
-              <CounterItem key={i} {...item} />
-            ))}
-          </div>
-        </div>
-      </div> */}
+      <StatsCounter variant="hero" />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
 
@@ -448,7 +440,7 @@ const About = () => {
 
       {/* LEFT - Event Overview */}
       {eventOverviewData && eventOverviewData.title ? (
-        <div data-aos="fade-right">
+        <div>
           <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
             {eventOverviewData.subtitle}
           </p>
@@ -482,7 +474,7 @@ const About = () => {
       )}
 
       {/* RIGHT - Key Sectors */}
-      <div data-aos="fade-left">
+      <div>
         <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-6" style={{ fontFamily: "'Inter', sans-serif" }}>
           {eventOverviewData?.keySectorsTitle || "Key Sectors"}
         </p>

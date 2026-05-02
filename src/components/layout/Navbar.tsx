@@ -8,7 +8,7 @@ import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
 const navLinks = [
   { label: "Home", path: "/" },
   {
-    label: "Overview",
+    label: "About Us",
   
     dropdown: [
       {
@@ -35,6 +35,12 @@ const navLinks = [
         icon: Camera,
         description: "Latest updates, press releases and event coverage"
       },
+      {
+        label: "Blogs",
+        path: "/blog",
+        icon: Sparkles,
+        description: "Latest news and insights from the wellness industry"
+      },
     ],
   },
   {
@@ -60,6 +66,12 @@ const navLinks = [
         description: "Target audience and industry segments"
       },
       {
+        label: "Exhibitor List",
+        path: "/exhibitors",
+        icon: FileCheck,
+        description: "View the list of confirmed participating brands"
+      },
+      {
         label: "E-Promotion Opportunities",
         path: "/e-promotion",
         icon: Rocket,
@@ -74,8 +86,8 @@ const navLinks = [
       {
         label: "Stall Designing Vendors",
         path: "/stall-designing-vendors",
-        icon: Layout, // Assuming a relevant icon, e.g., Layout for design
-        description: "Connect with trusted stall designers" // Assuming a relevant description
+        icon: Layout, 
+        description: "Connect with trusted stall designers" 
       },
     ],
   },
@@ -109,10 +121,8 @@ const navLinks = [
       },
     ],
   },
-  { label: "Exhibitor List", path: "/exhibitors" },
   { label: "Conference", path: "/conference" },
   { label: "Awards", path: "/awards" },
-  { label: "Blogs", path: "/blog" },
   { label: "Gallery", path: "/gallery" },
   { label: "Contact", path: "/contact" },
 ];
@@ -269,21 +279,22 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               </div>
             ))}
 
-            {/* Combined Register Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveDropdown("registration")}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button
-                className={cn(
-                  "group relative overflow-hidden border-2 px-6 py-2 rounded-full font-bold text-[10.5px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
-                )}
-                onClick={() => analyticsApi.logClick("Register Now Button (Navbar)")}
+            {/* Combined Register Dropdown and MSME Logo */}
+            <div className="flex items-center gap-3">
+              <div
+                className="relative"
+                onMouseEnter={() => setActiveDropdown("registration")}
+                onMouseLeave={() => setActiveDropdown(null)}
               >
-                <span className="relative z-10">Register Now</span>
-                <ChevronDown className={cn("w-3 h-3 transition-transform duration-500", activeDropdown === "registration" ? "rotate-180" : "")} />
-              </button>
+                <button
+                  className={cn(
+                    "group relative overflow-hidden border-2 px-6 py-2 rounded-full font-bold text-[10.5px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
+                  )}
+                  onClick={() => analyticsApi.logClick("Register Now Button (Navbar)")}
+                >
+                  <span className="relative z-10">Register Now</span>
+                  <ChevronDown className={cn("w-3 h-3 transition-transform duration-500", activeDropdown === "registration" ? "rotate-180" : "")} />
+                </button>
 
               <AnimatePresence>
                 {activeDropdown === "registration" && (
@@ -404,6 +415,12 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 )}
               </AnimatePresence>
             </div>
+            <img 
+              src="/MSME.png" 
+              alt="MSME Logo" 
+              className="h-14 w-auto object-contain hidden sm:block ml-4" 
+            />
+          </div>
           </div>
         </div>
 

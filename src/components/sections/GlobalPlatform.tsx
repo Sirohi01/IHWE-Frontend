@@ -56,7 +56,7 @@ const GlobalPlatform: React.FC = () => {
         <div className="grid lg:grid-cols-[1fr_1.3fr] gap-16 items-center">
 
           {/* ── LEFT: SINGLE IMAGE ── */}
-          <div className="relative order-2 lg:order-1" data-aos="fade-right">
+          <div className="relative order-2 lg:order-1">
 
             {/* Dot pattern top-right */}
             <div
@@ -133,7 +133,7 @@ const GlobalPlatform: React.FC = () => {
           </div>
 
           {/* ── RIGHT: CONTENT ── */}
-          <div data-aos="fade-left" className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2">
 
             {/* Eyebrow */}
             <div className="flex items-center gap-3 mb-4">
