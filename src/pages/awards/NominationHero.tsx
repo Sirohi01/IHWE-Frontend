@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import awardsLogo from "../../assets/new.png";
-import nominationHeroImg from "../../assets/nomination1.png";
+import nominationHeroImg from "../../assets/nomination6.png";
 
 const NominationHero = () => {
   const jakartaFont = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
