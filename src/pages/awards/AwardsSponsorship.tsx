@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
+import s1Image from "@/assets/s1.png";
+import s2Image from "@/assets/s2.png";
+import s4Image from "@/assets/s4.png";
 
 const CategoryStarIcon = () => (
   <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -10,10 +13,10 @@ const CategoryStarIcon = () => (
 );
 
 const sponsorTypes = [
-  { id: "s1", title: "TITLE", subtitle: "SPONSOR", desc: "Maximum Brand Visibility", useIcon: false },
-  { id: "s2", title: "POWERED BY", subtitle: "SPONSOR", desc: "High Impact Branding", useIcon: false },
+  { id: "s1", title: "TITLE", subtitle: "SPONSOR", desc: "Maximum Brand Visibility", useIcon: false, image: s1Image },
+  { id: "s2", title: "POWERED BY", subtitle: "SPONSOR", desc: "High Impact Branding", useIcon: false, image: s2Image },
   { id: "s3", title: "CATEGORY", subtitle: "SPONSOR", desc: "Exclusive Category Association", useIcon: true, icon: CategoryStarIcon },
-  { id: "s4", title: "ASSOCIATE", subtitle: "SPONSOR", desc: "Strong Brand Presence", useIcon: false }
+  { id: "s4", title: "ASSOCIATE", subtitle: "SPONSOR", desc: "Strong Brand Presence", useIcon: false, image: s4Image }
 ];
 
 const AwardsSponsorship = () => {
@@ -66,7 +69,7 @@ const AwardsSponsorship = () => {
                     </div>
                   ) : (
                     <img
-                      src={`/src/assets/${type.id}.png`}
+                      src={type.image}
                       alt={type.title}
                       className="w-full h-full object-cover scale-[1.2]"
                       style={{ objectPosition: 'center' }}
