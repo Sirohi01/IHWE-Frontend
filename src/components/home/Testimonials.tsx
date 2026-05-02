@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { MapPin, Globe, Users, Activity, Sparkles, Quote } from 'lucide-react';
 import { newTestimonialsApi, SERVER_URL } from '../../lib/api';
 import pattern from '../../assets/pattern.png';
-import pattern1 from '../../assets/pattern1.png';
+import pattern1 from '../../assets/test1.png';
+import test23 from '../../assets/test23.png';
+import test24 from '../../assets/test24.png';
+import test25 from '../../assets/test25.png';
+import test26 from '../../assets/test26.png';
+
+const TOP_IMAGES_MAP: Record<string, any> = {
+  test23, test24, test25, test26
+};
 
 const ICON_CONFIG: Record<string, any> = {
   Quote: { 
@@ -68,14 +76,17 @@ const Testimonials = () => {
     .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
     .slice(currentPage * perPage, currentPage * perPage + perPage);
 
+  const leftImg = data?.leftBgImage ? `${SERVER_URL}${data.leftBgImage}` : pattern1;
+  const rightImg = data?.rightBgImage ? `${SERVER_URL}${data.rightBgImage}` : pattern;
+
   return (
     <section style={{
       background: 'white',
-      padding: '0 0 50px 0',
+      padding: '0 0 10px 0',
       fontFamily: "'Montserrat', sans-serif",
       position: 'relative',
       overflow: 'hidden',
-      minHeight: 700,
+      minHeight: 'auto',
     }}>
 
       {/* Dot background - top right */}
@@ -105,7 +116,7 @@ const Testimonials = () => {
         transformOrigin: 'top left',
       }}>
         <img 
-          src={pattern1} 
+          src={leftImg} 
           alt="decorative pattern" 
           style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left top' }} 
         />
@@ -145,17 +156,32 @@ const Testimonials = () => {
             </div>
 
             {/* Heading */}
-            <div 
-              style={{
-                fontSize: 'clamp(34px, 3.8vw, 48px)',
-                fontWeight: 900,
-                lineHeight: 1.05,
-                margin: '0 0 16px',
-                color: 'black',
-              }}
-              className="prose-headings:m-0 testimonials-heading-dynamic"
-              dangerouslySetInnerHTML={{ __html: data.heading || 'Real Voices.<br/>Real Impact.' }}
-            />
+            <div style={{
+              fontSize: 'clamp(34px, 3.8vw, 48px)',
+              fontWeight: 900,
+              lineHeight: 1.05,
+              margin: '0 0 16px',
+            }}>
+              {/* First Line - black */}
+              <div style={{ color: 'black' }}>
+                {(data.heading || 'Real Voices.<br/>Real Impact.')
+                  .split(/<br\s*\/?>/i)[0]
+                  .replace(/Real Impact\.?/gi, '') // Remove from black line to avoid duplication
+                  .replace(/<[^>]+>/g, '')}
+              </div>
+
+              {/* Second Line - gradient */}
+              <div style={{
+                background: 'linear-gradient(90deg, #2f8f3a 0%, #2f8f3a 25%, #1a7a8a 50%, #1a56b0 75%, #0d3270 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>
+                {(data.heading || 'Real Voices.<br/>Real Impact.')
+                  .split(/<br\s*\/?>/i)[1]
+                  ?.replace(/<[^>]+>/g, '') || 'Real Impact.'}
+              </div>
+            </div>
 
             <div style={{ height: 4, width: 58, background: '#2f8f3a', borderRadius: 10, marginBottom: 20 }} />
 
@@ -179,7 +205,7 @@ const Testimonials = () => {
               pointerEvents: 'none',
               opacity: 0.6,
             }}>
-              <img src={pattern} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <img src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
 
             {/* Faint Heartbeat Line to the right of card */}
@@ -221,25 +247,23 @@ const Testimonials = () => {
                 zIndex: 0,
                 pointerEvents: 'none',
               }}>
-                <img src={pattern} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} />
+                <img src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} />
               </div>
 
               {/* LEFT border: big green opening quote ON the border */}
             <div style={{
-              position: 'absolute',
-              top: -60,
-              left: -35,
-              zIndex: 5,
-              fontSize: 130,
-              color: '#2f8f3a',
-              fontFamily: 'Georgia, serif',
-              lineHeight: 1,
-              fontWeight: 400,
-              transform: 'rotate(180deg) scaleX(-1)',
-              userSelect: 'none'
-            }}>
-              “
-            </div>
+  position: 'absolute',
+  top: -10,
+  left: -20,
+  zIndex: 5,
+  fontSize: 120,
+  color: '#069b17ff',
+  fontFamily: 'Georgia, serif',
+  lineHeight: 1,
+  userSelect: 'none'
+}}>
+  &#x201C;
+</div>
               {/* BOTTOM-RIGHT corner: big blue closing quote ON the border */}
            <div style={{
               position: 'absolute',
@@ -317,7 +341,7 @@ const Testimonials = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 18,
-            marginBottom: 36,
+            marginBottom: 20,
             animation: 'fadeSlide 0.5s ease both',
           }}
         >
@@ -342,32 +366,33 @@ const Testimonials = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   {/* Circular Icon with White Border */}
                   <div style={{
-                    width: 72, height: 72, borderRadius: '50%',
-                    background: 'white',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
-                    border: '2px solid #f1f5f9',
+                    width: 86, height: 86, borderRadius: '50%',
                     flexShrink: 0,
-                    marginLeft: -15,
-                    marginTop: -15,
+                    marginLeft: -20,
+                    marginTop: -20,
+                    overflow: 'hidden',
                   }}>
-                    <div style={{
-                      width: 60, height: 60, borderRadius: '50%',
-                      background: config.bg,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: '0 4px 10px rgba(0,0,0,0.15)',
-                    }}>
-                      <Icon size={34} color="white" />
-                    </div>
+                    <img 
+                      src={card.cardTopImage ? `${SERVER_URL}${card.cardTopImage}` : (TOP_IMAGES_MAP[card.icon] || test23)} 
+                      alt="testimonial icon" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover',
+                        imageRendering: 'auto',
+                        transform: 'translateZ(0)',
+                        backfaceVisibility: 'hidden'
+                      }} 
+                    />
                   </div>
-                  <div style={{ 
-                    fontSize: 84, 
-                    color: config.color, 
-                    fontFamily: 'Georgia, serif', 
-                    lineHeight: 0.8, 
-                    opacity: 1,
-                    marginTop: -15
-                  }}>"</div>
+                <div style={{ 
+                  fontSize: 84, 
+                  color: config.color, 
+                  fontFamily: 'Georgia, serif', 
+                  lineHeight: 0.8, 
+                  opacity: 0.4,
+                  marginTop: -15
+                }}>&ldquo;</div>
                 </div>
 
                 {/* Quote */}
@@ -410,27 +435,44 @@ const Testimonials = () => {
                   </div>
                 </div>
 
-                {/* Bottom-Right Organic Corner Sweep */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0,
-                  width: 65,
-                  height: 65,
-                  background: config.bg,
-                  borderRadius: '100% 0 12px 0',
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  justifyContent: 'flex-end',
-                  padding: '0 8px 8px 0',
-                  zIndex: 1,
-                  boxShadow: '-4px -4px 15px rgba(0,0,0,0.05)',
-                  opacity: 0.95
-                }}>
-                  <div style={{ color: 'white', display: 'flex', opacity: 1 }}>
-                     <Icon size={32} />
+                {/* Bottom-Right Organic Corner Sweep / Custom Image */}
+                {card.cardBottomImage ? (
+                  <img 
+                    src={`${SERVER_URL}${card.cardBottomImage}`} 
+                    alt="corner" 
+                    style={{ 
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      width: 240,
+                      height: 240,
+                      objectFit: 'contain',
+                      zIndex: 1,
+                      pointerEvents: 'none'
+                    }} 
+                  />
+                ) : (
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: 65,
+                    height: 65,
+                    background: config.bg,
+                    borderRadius: '100% 0 12px 0',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                    padding: '0 8px 8px 0',
+                    zIndex: 1,
+                    boxShadow: '-4px -4px 15px rgba(0,0,0,0.05)',
+                    opacity: 0.95
+                  }}>
+                    <div style={{ color: 'white', display: 'flex', opacity: 1 }}>
+                       <Icon size={32} />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
              );
           })}
@@ -438,7 +480,7 @@ const Testimonials = () => {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 0 }}>
             {[...Array(totalPages)].map((_, i) => (
               <button
                 key={i}
