@@ -30,7 +30,7 @@ const BlogPreview = () => {
 
   if (loading) {
     return (
-      <section className="py-16 lg:py-22" style={{ backgroundColor: "#F7F8F0" }}>
+      <section className="pt-8 pb-16 lg:pt-12 lg:pb-22" style={{ backgroundColor: "#F7F8F0" }}>
         <div className="container mx-auto px-4 text-center">
           <p className="text-slate-500">Loading insights...</p>
         </div>
@@ -41,10 +41,10 @@ const BlogPreview = () => {
   if (blogs.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
+    <section className="pt-8 pb-16 lg:pt-12 lg:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
       <div className="container mx-auto px-4">
         {/* BRANDED HEADING */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div data-aos="fade-right">
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px w-8 bg-[#23471d]" />
