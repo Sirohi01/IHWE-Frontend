@@ -11,7 +11,7 @@ import {
     DoctorIcon, AyushIcon, HospitalIcon, UnivIcon, PharmaIcon, StartupIcon, OtherDotsIcon
 } from "./Icons";
 
-// ─── IMAGE IMPORTS ────────────────────────────────────────────────────────
+
 import doctorImg from "../../../assets/arogyasangostiimageform/Doctor (1).png";
 import ayushIconImg from "../../../assets/arogyasangostiimageform/Ayush (1).png";
 import hospitalImg from "../../../assets/arogyasangostiimageform/Hospital.png";
@@ -42,7 +42,7 @@ import presentationImg from "../../../assets/arogyasangostiimageform/presentatio
 import expectationImg from "../../../assets/arogyasangostiimageform/leaf-removebg-preview.png";
 import consentImg from "../../../assets/arogyasangostiimageform/ChatGPT Image May 1, 2026, 05_33_52 PM (1).png";
 
-// Header Icon Imports
+
 import headerBasicImg from "../../../assets/arogyasangostiimageform/Basic Details (1).png";
 import headerContactImg from "../../../assets/arogyasangostiimageform/Contact Deatils.png";
 import headerSpeakerImg from "../../../assets/arogyasangostiimageform/Speacker Profile.png";
@@ -96,7 +96,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
     );
 };
 
-// ─── Section 02: Contact Details ──────────────────────────────────────────────
+
 export const ContactDetailsSection = ({ form, set }: any) => (
     <SectionBox>
         <SectionHeader number="02" title="Contact Details" icon={<IconPhone size={24} color="white" />} />
@@ -107,7 +107,7 @@ export const ContactDetailsSection = ({ form, set }: any) => (
     </SectionBox>
 );
 
-// ─── Section 03: Speaker Profile ──────────────────────────────────────────────
+
 export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }: any) => {
     const expertiseAreas = [
         { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 20, height: 20, objectFit: "contain" }} /> },

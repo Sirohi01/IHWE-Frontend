@@ -49,7 +49,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start" }}>
 
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "12vw", minHeight: "120px", width: "auto", alignSelf: "flex-start" }} />
+                        <img src={arogyaLogo} alt="Arogya Logo" style={{ height: "11vw", minHeight: "80px", width: "auto", alignSelf: "flex-start" }} />
 
                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                             <div style={{
@@ -71,13 +71,13 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                     </div>
 
 
-                    <div style={{ width: "1.5px", height: "10vw", background: "#E2E8F0", margin: "0 40px", opacity: 0.8 }}></div>
+                    <div style={{ width: "1.5px", height: "13vw", background: "#E2E8F0", margin: "0 20px", opacity: 0.8 }}></div>
 
 
                     <div style={{ textAlign: "left", flex: 1 }}>
                         <h1 style={{
                             color: TEAL,
-                            margin: 0,
+                            margin: "10px 10px 10px 10px",
                             fontWeight: 900,
                             lineHeight: 1,
                             textTransform: "uppercase",
@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
 
 
             </div>
-        </div>
+        </div >
 
     );
 };
