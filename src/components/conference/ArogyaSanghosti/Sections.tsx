@@ -67,7 +67,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
     return (
         <SectionBox>
             <SectionHeader number="01" title="Basic Details" icon={<IconPerson size={24} color="white" />} />
-            <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} />
+            <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} lettersOnly />
             <FormField label="Designation" value={form.designation} onChange={set("designation")} />
             <FormField label="Organization / Institution" value={form.organization} onChange={set("organization")} />
 
@@ -102,7 +102,7 @@ export const ContactDetailsSection = ({ form, set }: any) => (
         <SectionHeader number="02" title="Contact Details" icon={<IconPhone size={24} color="white" />} />
         <FormField label="Mobile Number" icon={<IconMobile size={22} />} value={form.mobile} onChange={set("mobile")} type="tel" />
         <FormField label="Email Address" icon={<IconEmail size={22} />} value={form.email} onChange={set("email")} type="email" />
-        <FormField label="City / Country" icon={<IconLocation size={22} />} value={form.city} onChange={set("city")} />
+        <FormField label="City / Country" icon={<IconLocation size={22} />} value={form.city} onChange={set("city")} lettersOnly />
         <FormField label="LinkedIn Profile (if any)" icon={<IconLinkedIn size={22} />} value={form.linkedin} onChange={set("linkedin")} />
     </SectionBox>
 );

@@ -73,7 +73,7 @@ const MainConferences: React.FC = () => {
             >
               {/* Day badge */}
               <div
-                className={`px-3 py-1 rounded-full ${conf.badgeBg} text-white text-[8px] font-bold tracking-widest shadow mb-4`}
+                className={`px-6 py-2 rounded-full ${conf.badgeBg} text-white text-[16px] font-bold tracking-widest shadow mb-4`}
               >
                 {conf.day}
               </div>
@@ -86,10 +86,10 @@ const MainConferences: React.FC = () => {
                   <img src={conf.image} alt={conf.title} className="w-full h-full object-contain" />
                 </div>
                 <div className="flex flex-col gap-2 pt-2">
-                  <h3 className="text-[14px] font-black text-[#1C2B3A] leading-snug uppercase tracking-tight">
+                  <h3 className="text-[18px] font-black text-[#1C2B3A] leading-snug uppercase tracking-tight">
                     {conf.title}
                   </h3>
-                  <p className="text-[11px] text-[#5F6B7A] leading-[1.5]">
+                  <p className="text-[13px] text-[#5F6B7A] leading-[1.5]">
                     {conf.description}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ const MainConferences: React.FC = () => {
               {/* CTA button */}
               <div className="w-full mt-auto flex justify-center">
                 <button
-                  className={`px-6 py-2 rounded-full ${conf.btnBg} ${conf.btnHover} text-white font-bold text-[10px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] inline-flex`}
+                  className={`px-8 py-2.5 rounded-full ${conf.btnBg} ${conf.btnHover} text-white font-bold text-[12px] uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] inline-flex`}
                 >
                   VIEW SESSIONS
                   <ArrowRight className="w-3.5 h-3.5" />
