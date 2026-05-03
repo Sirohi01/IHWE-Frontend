@@ -85,23 +85,23 @@ const STATS = [
 
 const VENUE_STATS = [
   {
-    end: 220, prefix: "180–", suffix: "", label: "EXHIBITORS", iconColor: "#d26019",
+    end: 0, prefix: "150", suffix: "+", label: "EXHIBITORS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
   },
   {
-    end: 11000, prefix: "9,000–", suffix: "", label: "VISITORS", iconColor: "#23471d",
+    end: 0, prefix: "8000", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
   },
   {
-    end: 650, prefix: "500–", suffix: "", label: "B2B BUYERS", iconColor: "#d26019",
+    end: 0, prefix: "B2B", suffix: "", label: "B2B MEETINGS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
   },
   {
-    end: 100, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
+    end: 150, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
   },
   {
-    end: 7, prefix: "5–", suffix: "", label: "COUNTRIES PARTICIPATION", iconColor: "#d26019",
+    end: 0, prefix: "1000", suffix: "+", label: "GLOBAL BUYERS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
   },
   {

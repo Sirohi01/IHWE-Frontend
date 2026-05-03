@@ -236,7 +236,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
             </div>
 
             {/* RIGHT: Nav Links + Button */}
-            <div className="flex-1 flex items-center justify-end gap-0.5 px-4">
+            <div className="flex-1 flex items-center justify-end gap-0 px-2">
               {navLinks.map((link) => (
                 <div
                   key={link.label}
@@ -244,26 +244,41 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
                   onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
                 >
-                  <Link
-                    to={link.path}
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                    className={`px-2 py-2 text-[12px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group ${location.pathname === link.path ? "text-[#d26019]" : textColor
-                      }`}
-                  >
-                    {link.label}
-                    {link.dropdown && (
-                      <ChevronDown
-                        className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
+                  {link.path ? (
+                    <Link
+                      to={link.path}
+                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                      className={`px-1.5 py-2 text-[10px] xl:text-[11px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                        }`}
+                    >
+                      {link.label}
+                      {link.dropdown && (
+                        <ChevronDown
+                          className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
+                            }`}
+                        />
+                      )}
+                      <span
+                        className={`absolute -bottom-1 left-1.5 right-1.5 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
                           }`}
                       />
-                    )}
-                    <span
-                      className={`absolute -bottom-1 left-2 right-2 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-100"
-                        }`}
-                    />
-                  </Link>
+                    </Link>
+                  ) : (
+                    <button
+                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                      className={`px-1.5 py-2 text-[10px] xl:text-[11px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${textColor}`}
+                    >
+                      {link.label}
+                      {link.dropdown && (
+                        <ChevronDown
+                          className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
+                            }`}
+                        />
+                      )}
+                    </button>
+                  )}
 
                   {/* Dropdown */}
                   {link.dropdown && (
@@ -320,7 +335,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               ))}
 
               {/* Combined Register Dropdown and MSME Logo */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div
                   className="relative"
                   onMouseEnter={() => setActiveDropdown("registration")}
@@ -328,11 +343,11 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 >
                   <button
                     className={cn(
-                      "group relative overflow-hidden border-2 px-6 py-2 rounded-full font-bold text-[10.5px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
+                      "group relative overflow-hidden border-2 px-4 xl:px-5 py-1.5 xl:py-2 rounded-full font-bold text-[9px] xl:text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1 shadow-md hover:shadow-lg"
                     )}
                     onClick={() => analyticsApi.logClick("Register Now Button (Navbar)")}
                   >
-                    <span className="relative z-10">Register Now</span>
+                    <span className="relative z-10">Register</span>
                     <ChevronDown className={cn("w-3 h-3 transition-transform duration-500", activeDropdown === "registration" ? "rotate-180" : "")} />
                   </button>
 
@@ -456,21 +471,21 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   </AnimatePresence>
                 </div>
                 {settings?.isMsmeLogoActive && settings?.msmeLogo && (
-                  <div className="relative ml-4 w-16 md:w-28 h-full">
+                  <div className="relative ml-2 w-14 xl:w-24 h-full">
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute top-[-8px] md:top-[-18px] right-[-20px] md:right-[-35px] z-[150] group flex flex-col items-center"
+                      className="absolute top-[-8px] xl:top-[-15px] right-[-15px] xl:right-[-25px] z-[150] group flex flex-col items-center"
                     >
                       {settings?.msmeLogoTitle && (
-                        <span className="text-[14px] md:text-[12px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
+                        <span className="text-[6px] xl:text-[8px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
                           {settings.msmeLogoTitle}
                         </span>
                       )}
                       <img
                         src={`${SERVER_URL}${settings.msmeLogo}`}
                         alt="MSME Logo"
-                        className="h-16 md:h-28 w-auto object-contain 
+                        className="h-14 xl:h-24 w-auto object-contain 
                                    drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)] 
                                    transition-all duration-500 
                                    group-hover:scale-105
