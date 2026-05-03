@@ -61,9 +61,9 @@ const navLinks = [
       },
       {
         label: "Buyer-Seller Meet",
-        path: "/exhibitor-profile",
+        path: "/buyer-seller-meet",
         icon: Users,
-        description: "Target audience and industry segments"
+        description: "Connect with buyers and sellers at IHWE"
       },
       // {
       //   label: "Conference",

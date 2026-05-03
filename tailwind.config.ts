@@ -4,10 +4,10 @@ import tailwindcssAnimate from "tailwindcss-animate";
 export default {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -38,6 +38,8 @@ export default {
           DEFAULT: "#4E9F3D",
           dark: "#2E7D32",
           light: "#6BBD51",
+          800: "#166534",
+          900: "#14532d",
           tint: "#F1F8EE",
         },
         // Accent Colors
