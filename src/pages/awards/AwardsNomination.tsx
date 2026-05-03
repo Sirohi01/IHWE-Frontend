@@ -14,8 +14,8 @@ const AwardsNomination = () => {
 
   return (
     <section className="py-4 md:py-6 bg-white overflow-hidden">
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px]">
+      {/* Wider alignment matching home page */}
+      <div className="mx-auto px-6 md:px-14">
         
         <motion.div 
           initial={{ opacity: 0, y: 10 }}

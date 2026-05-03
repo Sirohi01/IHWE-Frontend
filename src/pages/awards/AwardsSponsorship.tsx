@@ -50,8 +50,8 @@ const AwardsSponsorship = () => {
 
   return (
     <section className="py-4 md:py-6 bg-[#f4faff] overflow-hidden">
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px]">
+      {/* Wider alignment matching home page */}
+      <div className="mx-auto px-6 md:px-14">
         <div className="flex flex-col lg:flex-row gap-3 items-stretch">
 
           {/* LEFT — Branding Card */}

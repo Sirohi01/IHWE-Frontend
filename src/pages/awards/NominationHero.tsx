@@ -24,7 +24,7 @@ const NominationHero = () => {
       {/* Mobile Background (Simple Gradient) */}
       <div className="absolute inset-0 z-0 lg:hidden bg-gradient-to-br from-white to-slate-50"></div>
 
-      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 py-12 lg:py-24">
+      <div className="mx-auto px-6 md:px-14 relative z-10 py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Column: Recreating the Text Design from the Image */}

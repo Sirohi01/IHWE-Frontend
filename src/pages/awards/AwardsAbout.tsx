@@ -8,8 +8,8 @@ const AwardsAbout = () => {
 
   return (
     <section className="py-6 md:py-10 bg-white overflow-hidden" style={jakartaFont}>
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px]">
+      {/* Wider alignment matching home page */}
+      <div className="mx-auto px-6 md:px-14">
         <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-center">
 
           {/* LEFT — Award Plaque Composite Image */}

@@ -12,8 +12,8 @@ const AwardsCTA = () => {
           background: "linear-gradient(90deg, #002b5c 0%, #002b5c 40%, #008d48 100%)"
         }}
       >
-        {/* Standardized to Inward Alignment (1280px) */}
-        <div className="container mx-auto px-6 max-w-[1280px] flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Full width CTA content */}
+        <div className="w-full px-6 md:px-14 flex flex-col md:flex-row items-center justify-between gap-6">
           
           <div className="flex items-center gap-6">
             <div className="shrink-0 w-24 h-24 md:w-30 md:h-30 overflow-hidden flex items-center justify-center -my-4">

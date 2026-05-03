@@ -888,3 +888,10 @@ export const awardCategoryApi = {
     return data.success ? data.data : [];
   }
 };
+export const agendaApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/agenda`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
