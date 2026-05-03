@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { heroApi, SERVER_URL } from "@/lib/api";
 
@@ -33,6 +33,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
   const [slides, setSlides] = useState<any[]>([]);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -72,13 +73,25 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
   }, []);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1 || !isPlaying) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, isPlaying]);
+
+  const nextSlide = () => {
+    setDirection(1);
+    setCurrent((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setDirection(-1);
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const togglePlay = () => setIsPlaying(!isPlaying);
 
   const handleSlideChange = (index: number) => {
     setDirection(index > current ? 1 : -1);
@@ -213,7 +226,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-4xl mt-0 -translate-y-4 md:-translate-y-8"
+              className="max-w-4xl mt-0 translate-y-0 md:translate-y-4"
             >
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -222,7 +235,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 className="flex items-center gap-3 mb-6"
               >
                 <span className="w-10 h-[1px] bg-white/40" />
-                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"
+                <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                   style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
                 >
                   <Sparkles size={12} className="text-[#FF4400] filter drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
@@ -394,7 +407,32 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         </AnimatePresence>
       </div>
 
+        {/* Navigation Controls */}
+        <div className="absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-4 md:px-8 pointer-events-none">
+          <button
+            onClick={prevSlide}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 pointer-events-auto hover:scale-110 active:scale-95 group"
+          >
+            <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 pointer-events-auto hover:scale-110 active:scale-95 group"
+          >
+            <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </div>
+
         <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
+          <button
+            onClick={togglePlay}
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 mb-2 self-end group"
+            title={isPlaying ? "Pause Carousel" : "Play Carousel"}
+          >
+            {isPlaying ? <Pause size={18} fill="white" /> : <Play size={18} fill="white" className="ml-0.5" />}
+          </button>
+
           {slides.map((_, i) => (
             <button
               key={i}
@@ -410,9 +448,9 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               <div className="relative w-16 h-[2px] bg-white/20 overflow-hidden">
                 <motion.span
                   className={cn("absolute left-0 top-0 h-full bg-white")}
-                  initial={{ width: "0%" }}
+                  initial={false}
                   animate={{ width: i === current ? "100%" : "0%" }}
-                  transition={{ duration: i === current ? 8 : 0.5, ease: "linear" }}
+                  transition={{ duration: i === current && isPlaying ? 5 : 0.5, ease: isPlaying ? "linear" : "easeOut" }}
                 />
               </div>
               <span
