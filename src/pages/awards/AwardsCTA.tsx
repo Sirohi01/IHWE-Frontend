@@ -13,7 +13,7 @@ const AwardsCTA = () => {
         }}
       >
         {/* Full width CTA content */}
-        <div className="container mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="px-6 md:px-14 flex flex-col md:flex-row items-center justify-between gap-6">
           
           <div className="flex items-center gap-6">
             <div className="shrink-0 w-24 h-24 md:w-30 md:h-30 overflow-hidden flex items-center justify-center -my-4">

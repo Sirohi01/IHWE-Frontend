@@ -27,7 +27,7 @@ const AwardsHero = () => {
 
       {/* Full width hero content */}
       <div className="relative z-10 pt-1 pb-2">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center container mx-auto px-6 md:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-6 md:px-14">
 
           <motion.div
             initial={{ opacity: 0, x: -60 }}
