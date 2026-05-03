@@ -84,12 +84,12 @@ const Contact = () => {
   const officeCards = settings?.addresses?.length > 0 ?
     settings.addresses.map((addr: any) => ({
       city: addr.title || "Office Location",
-      address: `${addr.street}, ${addr.city}, ${addr.state} ${addr.zipCode}, ${addr.country}`,
+      addressHtml: addr.street, // This now contains rich text/HTML
       icon: MapPin,
     })) : [
       {
         city: "Dubai (Headquarters)",
-        address: "Dubai World Trade Centre, Sheikh Zayed Road, Dubai, UAE",
+        addressHtml: "Dubai World Trade Centre, Sheikh Zayed Road, Dubai, UAE",
         icon: MapPin,
       },
     ];
@@ -311,7 +311,10 @@ const Contact = () => {
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-widest text-[#23471d] mb-1">Office Location</div>
                         <h3 className="text-sm font-bold text-slate-800 mb-1">{office.city}</h3>
-                        <p className="text-xs text-slate-500 leading-relaxed">{office.address}</p>
+                        <div 
+                          className="text-xs text-slate-500 leading-relaxed rich-address-content"
+                          dangerouslySetInnerHTML={{ __html: office.addressHtml }}
+                        />
                       </div>
                     </div>
                   </div>

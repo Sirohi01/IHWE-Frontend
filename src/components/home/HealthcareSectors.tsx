@@ -64,13 +64,7 @@ const HealthcareSectors = () => {
 
   return (
     <section
-      style={{
-        background: '#f5f7f5',
-        position: 'relative',
-        overflow: 'hidden',
-        padding: '45px 24px 0',
-        fontFamily: "'Segoe UI', sans-serif",
-      }}
+      className="relative overflow-hidden pt-[45px] pb-8 px-6 md:px-14 font-sans bg-[#f5f7f5]"
     >
       {/* Background decorative effects */}
       {/* Top-left dot grid */}
@@ -100,7 +94,7 @@ const HealthcareSectors = () => {
         ))}
       </svg>
 
-      <div style={{maxWidth: 1700, margin: '0 auto', position: 'relative', zIndex: 1}}>
+      <div className="max-w-[1500px] mx-auto relative z-10">
         
         {/* ===== HEADER ===== */}
         <div style={{textAlign: 'center', marginBottom: 20}}>
@@ -171,7 +165,6 @@ const HealthcareSectors = () => {
           display: 'grid',
           gridTemplateColumns: 'repeat(5, 1fr)',
           gap: '16px',
-          padding: '0 40px',
         }}>
           {sectors.map((sector, index) => (
             <motion.div
@@ -288,7 +281,6 @@ const HealthcareSectors = () => {
         {/* ===== BOTTOM STATS BAR ===== */}
         <div style={{
           marginTop: 24,
-          marginInline: 40,
           background: '#fff',
           borderRadius: 20,
           boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset',

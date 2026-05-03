@@ -8,7 +8,7 @@ import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
 const navLinks = [
   { label: "Home", path: "/" },
   {
-    label: "About Us",
+    label: "About IHWE",
   
     dropdown: [
       {
@@ -44,87 +44,126 @@ const navLinks = [
     ],
   },
   {
-    label: "Exhibit",
+    label: "PARTICIPATE",
    
     dropdown: [
       {
-        label: "Why Exhibit?",
+        label: "Exhibit at IHWE?",
         path: "/why-exhibit",
         icon: HelpCircle,
         description: "Maximize your brand visibility and growth"
       },
       {
-        label: "Book a Stall",
+        label: "Visit the Expo",
         path: "/book-a-stand",
         icon: Layout,
         description: "Secure your premium space at IHWE 2026",
       },
       {
-        label: "Exhibitor Profile",
+        label: "Buyer-Seller Meet",
         path: "/exhibitor-profile",
         icon: Users,
         description: "Target audience and industry segments"
       },
       {
-        label: "Exhibitor List",
+        label: "Conference",
         path: "/exhibitors",
         icon: FileCheck,
         description: "View the list of confirmed participating brands"
       },
       {
-        label: "E-Promotion Opportunities",
+        label: "Awards",
         path: "/e-promotion",
         icon: Rocket,
         description: "Digital exposure for your brand"
       },
-      {
-        label: "Travel & Accommodation",
-        path: "/travel-accommodation",
-        icon: MapPin,
-        description: "Easy travel planning for exhibitors"
-      },
-      {
-        label: "Stall Designing Vendors",
-        path: "/stall-designing-vendors",
-        icon: Layout, 
-        description: "Connect with trusted stall designers" 
-      },
+      // {
+      //   label: "Travel & Accommodation",
+      //   path: "/travel-accommodation",
+      //   icon: MapPin,
+      //   description: "Easy travel planning for exhibitors"
+      // },
+      // {
+      //   label: "Stall Designing Vendors",
+      //   path: "/stall-designing-vendors",
+      //   icon: Layout, 
+      //   description: "Connect with trusted stall designers" 
+      // },
     ],
   },
   {
-    label: "Visit",
+    label: "EXPLORE",
     
     dropdown: [
       {
-        label: "Register for FREE",
+        label: "Event Highlights",
         path: "/visitor-registration",
         icon: FileCheck,
         description: "Get your complimentary visitor pass today"
       },
       {
-        label: "Buyer Registration",
+        label: "Media / Gallery",
         path: "/buyer-registration",
         icon: ShoppingBag,
         description: "Explore opportunities as a domestic or international buyer"
       },
       {
-        label: "Why Visit",
+        label: "Industry Segments",
         path: "/why-visit",
         icon: Sparkles,
         description: "Experience the latest in health & wellness"
       },
-      {
-        label: "Download Badge",
-        path: "/download-badge",
-        icon: IdCard,
-        description: "Fast-track your entry to the expo"
-      },
+      // {
+      //   label: "Download Badge",
+      //   path: "/download-badge",
+      //   icon: IdCard,
+      //   description: "Fast-track your entry to the expo"
+      // },
     ],
   },
-  { label: "Conference", path: "/conference" },
-  { label: "Awards", path: "/awards" },
-  { label: "Gallery", path: "/gallery" },
+
+
+    {
+    label: "OPPORTUNITIES",
+    
+    dropdown: [
+      {
+        label: "Sponsorship",
+        path: "/visitor-registration",
+        icon: FileCheck,
+        description: "Get your complimentary visitor pass today"
+      },
+      {
+        label: "Branding Oppurtunities",
+        path: "/buyer-registration",
+        icon: ShoppingBag,
+        description: "Explore opportunities as a domestic or international buyer"
+      },
+      {
+        label: "Partnership / Collaboration",
+        path: "/why-visit",
+        icon: Sparkles,
+        description: "Experience the latest in health & wellness"
+      },
+      // {
+      //   label: "Download Badge",
+      //   path: "/download-badge",
+      //   icon: IdCard,
+      //   description: "Fast-track your entry to the expo"
+      // },
+    ],
+  },
+
+
+  // { label: "Conference", path: "/conference" },
+  // { label: "Awards", path: "/awards" },
+  // { label: "Gallery", path: "/gallery" },
   { label: "Contact", path: "/contact" },
+
+   { label: "Book Your Space", path: "/conference" },
+  { label: "Get Visitor Pass", path: "/awards" },
+  // { label: "Gallery", path: "/gallery" },
+  // { label: "Contact", path: "/contact" },
 ];
 
 interface NavbarProps {

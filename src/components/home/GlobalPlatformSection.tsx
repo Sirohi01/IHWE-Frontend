@@ -71,7 +71,7 @@ const GlobalPlatformSection = () => {
   const bgUrl = data.bgImage ? `${SERVER_URL}${data.bgImage}` : defaultWorldMap;
 
   return (
-    <section className="relative pt-3 pb-4 px-6 md:px-10 overflow-hidden" style={{ background: "#08172a" }}>
+    <section className="relative pt-3 pb-4 px-6 md:px-14 overflow-hidden" style={{ background: "#08172a" }}>
 
       {/* World Map BG */}
       <div
