@@ -48,19 +48,19 @@ const TrustedBy = () => {
 
   return (
     <div 
-      className="relative z-40 w-full py-4 md:py-2 border-y border-white/5 shadow-xl transition-colors duration-500"
+      className="relative z-40 w-full py-2 md:py-1 border-y border-white/5 shadow-xl transition-colors duration-500"
       style={{ backgroundColor: data.bgColor || '#23471d' }}
     >
       <div className="w-full px-6 md:px-14">
         
         {/* Row 1: Centered Heading - Glassmorphism Blur Effect */}
-        <div className="relative -top-8 md:-top-12 flex items-center justify-center gap-2 md:gap-4 mb-2 md:mb-0 w-full max-w-2xl mx-auto z-50">
+        <div className="relative -top-7 md:-top-10 flex items-center justify-center gap-2 md:gap-4 mb-2 md:mb-0 w-full max-w-2xl mx-auto z-50">
           <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-orange-500/40 to-orange-500" />
           <div 
-            className="flex items-center px-4 md:px-6 py-1 md:py-1.5 backdrop-blur-md rounded-full border border-white/10 shadow-lg"
+            className="flex items-center px-4 md:px-6 py-0.5 md:py-1 backdrop-blur-md rounded-full border border-white/10 shadow-lg"
             style={{ backgroundColor: `${data.bgColor}ee` || '#23471dee' }}
           >
-             <p className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.35em] text-white whitespace-nowrap">
+             <p className="text-[8px] md:text-[11px] font-bold uppercase tracking-[0.2em] md:tracking-[0.35em] text-white whitespace-nowrap">
                {data.title || 'Supported By'}
              </p>
           </div>

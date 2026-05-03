@@ -145,7 +145,7 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
                 icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" strokeLinecap="round" strokeLinejoin="round" /></svg>
             },
             {
-                number: 150, sup: "+", label: "EXHIBITORS", sub: "Across 8 Successful Editions",
+                number: 1500, sup: "+", label: "EXHIBITORS", sub: "Across 8 Successful Editions",
                 icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" /><path d="M21 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" /></svg>
             },
             {
@@ -164,8 +164,8 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
                     <div ref={sectionRef} className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
                         {heroStats.map((s, index) => {
                             return (
-                                <div key={index} className="flex items-center gap-4 px-6 py-6 group hover:bg-slate-50 transition-colors duration-300">
-                                    <div className="w-12 h-12 rounded-xl bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white shadow-sm transition-all duration-300">
+                                <div key={index} className="flex items-center gap-4 px-6 py-3 group hover:bg-slate-50 transition-colors duration-300">
+                                    <div className="w-10 h-10 rounded-xl bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white shadow-sm transition-all duration-300">
                                         {s.icon}
                                     </div>
                                     <div className="flex flex-col">

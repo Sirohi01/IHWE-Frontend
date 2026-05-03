@@ -85,11 +85,11 @@ const STATS = [
 
 const VENUE_STATS = [
   {
-    end: 0, prefix: "150", suffix: "+", label: "EXHIBITORS", iconColor: "#d26019",
+    end: 1500, prefix: "", suffix: "+", label: "EXHIBITORS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
   },
   {
-    end: 0, prefix: "8000", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
+    end: 80000, prefix: "", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
   },
   {
@@ -101,12 +101,12 @@ const VENUE_STATS = [
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
   },
   {
-    end: 0, prefix: "1000", suffix: "+", label: "GLOBAL BUYERS", iconColor: "#d26019",
+    end: 10000, prefix: "", suffix: "+", label: "GLOBAL BUYERS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
   },
   {
     end: 700, prefix: "₹500–", suffix: " Cr+", label: "BUSINESS OPPORTUNITIES", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M6 3h12M6 8h12M14.5 21L6 13h3c3.5 0 4.5-5 0-5H6" /></svg>
   },
 ];
 
@@ -134,7 +134,7 @@ const VenueStatItem = ({ stat, visible, delay }: { stat: typeof VENUE_STATS[0], 
         {stat.icon(stat.iconColor)}
       </div>
       <p className="font-black text-[15px] leading-tight" style={{ color: stat.iconColor, fontFamily: "'Inter', sans-serif" }}>
-        {stat.prefix}{count.toLocaleString()}{stat.suffix}
+        {stat.prefix}{stat.end > 0 ? count.toLocaleString() : ""}{stat.suffix}
       </p>
       <p className="text-black text-[9px] uppercase tracking-[0.15em] font-bold mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</p>
     </div>
@@ -436,7 +436,7 @@ const About = () => {
       <GlobalPlatform />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
-<section className="pt-10 pb-4 bg-white relative z-10">
+<section className="pt-4 pb-0 bg-white relative z-10">
   <div className="container mx-auto px-11">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
@@ -510,7 +510,7 @@ const About = () => {
 
 
       {/* ABOUT THE ORGANIZER */}
-      <section className="pt-6 pb-4 bg-[#FFFDF1] border-t border-gray-100">
+      <section className="pt-0 pb-4 bg-[#FFFDF1] border-t border-gray-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
 

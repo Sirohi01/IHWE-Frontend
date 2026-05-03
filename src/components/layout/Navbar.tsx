@@ -65,29 +65,17 @@ const navLinks = [
         icon: Users,
         description: "Target audience and industry segments"
       },
-      {
-        label: "Conference",
-        path: "/exhibitors",
-        icon: FileCheck,
-        description: "View the list of confirmed participating brands"
-      },
-      {
-        label: "Awards",
-        path: "/e-promotion",
-        icon: Rocket,
-        description: "Digital exposure for your brand"
-      },
       // {
-      //   label: "Travel & Accommodation",
-      //   path: "/travel-accommodation",
-      //   icon: MapPin,
-      //   description: "Easy travel planning for exhibitors"
+      //   label: "Conference",
+      //   path: "/exhibitors",
+      //   icon: FileCheck,
+      //   description: "View the list of confirmed participating brands"
       // },
       // {
-      //   label: "Stall Designing Vendors",
-      //   path: "/stall-designing-vendors",
-      //   icon: Layout, 
-      //   description: "Connect with trusted stall designers" 
+      //   label: "Awards",
+      //   path: "/e-promotion",
+      //   icon: Rocket,
+      //   description: "Digital exposure for your brand"
       // },
     ],
   },
@@ -113,16 +101,8 @@ const navLinks = [
         icon: Sparkles,
         description: "Experience the latest in health & wellness"
       },
-      // {
-      //   label: "Download Badge",
-      //   path: "/download-badge",
-      //   icon: IdCard,
-      //   description: "Fast-track your entry to the expo"
-      // },
     ],
   },
-
-
     {
     label: "OPPORTUNITIES",
     
@@ -145,25 +125,13 @@ const navLinks = [
         icon: Sparkles,
         description: "Experience the latest in health & wellness"
       },
-      // {
-      //   label: "Download Badge",
-      //   path: "/download-badge",
-      //   icon: IdCard,
-      //   description: "Fast-track your entry to the expo"
-      // },
     ],
   },
 
+  { label: "Conference", path: "/conference" },
+  { label: "Awards", path: "/awards" },
 
-  // { label: "Conference", path: "/conference" },
-  // { label: "Awards", path: "/awards" },
-  // { label: "Gallery", path: "/gallery" },
-  { label: "Contact", path: "/contact" },
-
-   { label: "Book Your Space", path: "/conference" },
-  { label: "Get Visitor Pass", path: "/awards" },
-  // { label: "Gallery", path: "/gallery" },
-  // { label: "Contact", path: "/contact" },
+    { label: "Contact", path: "/contact" },
 ];
 
 interface NavbarProps {
@@ -244,41 +212,26 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
                   onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
                 >
-                  {link.path ? (
-                    <Link
-                      to={link.path}
-                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                      className={`px-1.5 py-2 text-[10px] xl:text-[11px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                <Link
+                  to={link.path || "#"}
+                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                  className={`px-2 py-2 text-[11px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                    }`}
+                >
+                  {link.label}
+                  {link.dropdown && (
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
                         }`}
-                    >
-                      {link.label}
-                      {link.dropdown && (
-                        <ChevronDown
-                          className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
-                            }`}
-                        />
-                      )}
-                      <span
-                        className={`absolute -bottom-1 left-1.5 right-1.5 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
-                          ? "scale-x-100"
-                          : "scale-x-0 group-hover:scale-x-100"
-                          }`}
-                      />
-                    </Link>
-                  ) : (
-                    <button
-                      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                      className={`px-1.5 py-2 text-[10px] xl:text-[11px] font-semibold tracking-[0.08em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${textColor}`}
-                    >
-                      {link.label}
-                      {link.dropdown && (
-                        <ChevronDown
-                          className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
-                            }`}
-                        />
-                      )}
-                    </button>
+                    />
                   )}
+                  <span
+                    className={`absolute -bottom-1 left-2 right-2 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                  />
+                </Link>
 
                   {/* Dropdown */}
                   {link.dropdown && (
@@ -343,11 +296,11 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 >
                   <button
                     className={cn(
-                      "group relative overflow-hidden border-2 px-4 xl:px-5 py-1.5 xl:py-2 rounded-full font-bold text-[9px] xl:text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1 shadow-md hover:shadow-lg"
+                      "group relative overflow-hidden border-2 px-5 py-1.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
                     )}
                     onClick={() => analyticsApi.logClick("Register Now Button (Navbar)")}
                   >
-                    <span className="relative z-10">Register</span>
+                    <span className="relative z-10">Register Now</span>
                     <ChevronDown className={cn("w-3 h-3 transition-transform duration-500", activeDropdown === "registration" ? "rotate-180" : "")} />
                   </button>
 
@@ -471,26 +424,33 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   </AnimatePresence>
                 </div>
                 {settings?.isMsmeLogoActive && settings?.msmeLogo && (
-                  <div className="relative ml-2 w-14 xl:w-24 h-full">
+                  <div className="relative ml-4 flex items-center h-full pt-11">
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute top-[-8px] xl:top-[-15px] right-[-15px] xl:right-[-25px] z-[150] group flex flex-col items-center"
                     >
-                      {settings?.msmeLogoTitle && (
-                        <span className="text-[6px] xl:text-[8px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
-                          {settings.msmeLogoTitle}
-                        </span>
-                      )}
-                      <img
-                        src={`${SERVER_URL}${settings.msmeLogo}`}
-                        alt="MSME Logo"
-                        className="h-14 xl:h-24 w-auto object-contain 
-                                   drop-shadow-[0_4px_12px_rgba(0,0,0,0.1)] 
-                                   transition-all duration-500 
-                                   group-hover:scale-105
-                                   rounded-2xl"
-                      />
+                      <div className="relative flex flex-col items-center">
+                        {/* Powerful Glow Base - Positioned behind logo only */}
+                        <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[20px] rounded-full scale-[1.3] opacity-100 z-0" />
+                        <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[10px] rounded-full scale-[1.1] opacity-100 z-0" />
+                        
+                        {settings?.msmeLogoTitle && (
+                          <span className="relative z-20 text-[9px] xl:text-[8px] font-bold text-slate-700 uppercase tracking-[0.15em] mb-1.5 whitespace-nowrap drop-shadow-[0_0_1px_rgba(255,255,255,1)]">
+                            {settings.msmeLogoTitle}
+                          </span>
+                        )}
+
+                        <img
+                          src={`${SERVER_URL}${settings.msmeLogo}`}
+                          alt="MSME Logo"
+                          className="relative z-10 h-12 xl:h-16 w-auto object-contain 
+                                     drop-shadow-[0_0_15px_rgba(255,255,255,1)] 
+                                     drop-shadow-[0_0_25px_rgba(255,255,255,1)]
+                                     transition-all duration-500 
+                                     group-hover:scale-105
+                                     grayscale opacity-100 group-hover:grayscale-0"
+                        />
+                      </div>
                     </motion.div>
                   </div>
                 )}

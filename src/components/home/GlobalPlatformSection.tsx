@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Globe, UserCheck, BookOpen, TrendingUp, Map } from "lucide-react";
+import { CheckCircle2, Map } from "lucide-react";
 import { useState, useEffect } from "react";
 import { nationalExpoApi, SERVER_URL } from "../../lib/api";
 import defaultWorldMap from "@/assets/wordmap.png";
@@ -47,6 +47,27 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Map: <Map className="w-12 h-12 text-[#d4a742]" />,
 };
 
+// ✅ whileInView directly use — useInView/ref ka chakkar nahi
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+    y: 65,
+    scale: 0.72,
+    rotate: -5,
+  },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    rotate: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.65,
+      ease: [0.34, 1.56, 0.64, 1],
+    },
+  }),
+};
+
 const GlobalPlatformSection = () => {
   const [data, setData] = useState<any>(null);
 
@@ -54,9 +75,7 @@ const GlobalPlatformSection = () => {
     const fetchData = async () => {
       try {
         const platformData = await nationalExpoApi.get();
-        if (platformData) {
-          setData(platformData);
-        }
+        if (platformData) setData(platformData);
       } catch (err) {
         console.error("Error fetching global platform data:", err);
       }
@@ -150,50 +169,63 @@ const GlobalPlatformSection = () => {
           />
 
           <div className="space-y-[10px] pb-4">
-            {points.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)).map((point: any, i: number) => (
-              <motion.div key={point._id || i}
-                initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                className="flex items-center gap-2"
-              >
-                <CheckCircle2 className="w-5 h-5 text-[#d4a742] flex-shrink-0" />
-                <span className="text-[#d0dde8] text-[13px] font-medium">{point.text}</span>
-              </motion.div>
-            ))}
+            {points
+              .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+              .map((point: any, i: number) => (
+                <motion.div
+                  key={point._id || i}
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="flex items-center gap-2"
+                >
+                  <CheckCircle2 className="w-5 h-5 text-[#d4a742] flex-shrink-0" />
+                  <span className="text-[#d0dde8] text-[13px] font-medium">{point.text}</span>
+                </motion.div>
+              ))}
           </div>
         </motion.div>
 
-        {/* RIGHT — 4 cards */}
+        {/* ✅ RIGHT — Cards with whileInView directly (reliable fix) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-[12px] max-w-[780px] ml-auto pb-4">
-          {cards.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)).map((card: any, i: number) => (
-            <motion.div key={card._id || i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.12 }}
-              whileHover={{ y: -5 }}
-              className="border border-white/[0.1] px-3 pt-5 pb-5 rounded-xl flex flex-col items-center text-center transition-all duration-300"
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                backdropFilter: "blur(10px)",
-                boxShadow: `
-                  0 0 0 1px rgba(255,255,255,0.06),
-                  0 0 18px rgba(255,255,255,0.07),
-                  0 0 10px rgba(212,167,66,0.06),
-                  inset 0 0 14px rgba(255,255,255,0.03)
-                `,
-              }}
-            >
-              <div className="mb-3 flex items-center justify-center">
-                {ICON_MAP[card.icon] || ICON_MAP.Globe}
-              </div>
-              <h3 className="font-bold text-[12px] tracking-wider uppercase leading-snug mb-2">
-                <span className="text-[#d4a742]">{card.goldTitle}</span><br />
-                <span className="text-white">{card.whiteTitle}</span>
-              </h3>
-              <p className="text-[#c5d6e8] text-[11.5px] leading-relaxed">{card.description}</p>
-            </motion.div>
-          ))}
+          {cards
+            .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+            .map((card: any, i: number) => (
+              <motion.div
+                key={card._id || i}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.04,
+                  transition: { duration: 0.22, ease: "easeOut" },
+                }}
+                className="border border-white/[0.1] px-3 pt-5 pb-5 rounded-xl flex flex-col items-center text-center"
+                style={{
+                  background: "rgba(255,255,255,0.12)",
+                  backdropFilter: "blur(10px)",
+                  boxShadow: `
+                    0 0 0 1px rgba(255,255,255,0.06),
+                    0 0 18px rgba(255,255,255,0.07),
+                    0 0 10px rgba(212,167,66,0.06),
+                    inset 0 0 14px rgba(255,255,255,0.03)
+                  `,
+                }}
+              >
+                <div className="mb-3 flex items-center justify-center">
+                  {ICON_MAP[card.icon] || ICON_MAP.Globe}
+                </div>
+                <h3 className="font-bold text-[12px] tracking-wider uppercase leading-snug mb-2">
+                  <span className="text-[#d4a742]">{card.goldTitle}</span><br />
+                  <span className="text-white">{card.whiteTitle}</span>
+                </h3>
+                <p className="text-[#c5d6e8] text-[11.5px] leading-relaxed">{card.description}</p>
+              </motion.div>
+            ))}
         </div>
 
       </div>

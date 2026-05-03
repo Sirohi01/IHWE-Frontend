@@ -21,6 +21,26 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { settingsApi } from "@/lib/api";
+import { motion } from "framer-motion";
+
+// Sparkle component
+const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#fff176',
+      textShadow: '0 0 6px gold, 0 0 12px gold',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 
 const FooterCounter = ({
   end,
@@ -138,16 +158,16 @@ const Footer = () => {
   const stats = [
     {
       icon: <Users className="w-9 h-9 text-[#F3B71B]" />,
-      end: 250,
+      end: 150,
       suffix: "+",
       label: "EXHIBITORS",
       sub: "ACROSS SUCCESSFUL EDITIONS",
     },
     {
       icon: <Globe className="w-9 h-9 text-[#F3B71B]" />,
-      end: 10000,
+      end: 8000,
       suffix: "+",
-      label: "TRADE VISITORS",
+      label: "VISITORS / DELEGATES",
       // sub: "From 30+ Countries",
     },
     {
@@ -203,6 +223,42 @@ const Footer = () => {
       className="bg-[#050A1A] text-white overflow-hidden"
       style={{ fontFamily: "'Barlow', sans-serif" }}
     >
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-footer {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(255,200,0,0.3), 0 4px 15px rgba(255,165,0,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        .golden-btn-footer::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
       {/* ── TOP HEADER BAR: Logo + CTA Buttons ── */}
       <div style={{ borderBottom: "1px solid #1E2A45" }}>
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4">
@@ -229,40 +285,50 @@ const Footer = () => {
           {/* Right: 4 CTA Buttons */}
           <div className="flex items-center gap-2.5">
             {ctaButtons.map((btn) => (
-              <Link
-                key={btn.line2}
-                to={btn.href}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${btn.primary
-                  ? "bg-[#F3B71B] hover:bg-[#e0a818]"
-                  : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10"
-                  }`}
-                style={{ minWidth: "120px" }}
-              >
-                <span
-                  className={`shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+              <div key={btn.line2} className="relative group/btn">
+                {btn.primary && (
+                  <>
+                    <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
+                    <Sparkle style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
+                    <Sparkle style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
+                    <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
+                    <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
+                  </>
+                )}
+                <Link
+                  to={btn.href}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all relative z-10 ${btn.primary
+                    ? "golden-btn-footer hover:scale-[1.02]"
+                    : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10 hover:scale-[1.02]"
                     }`}
+                  style={{ minWidth: "120px" }}
                 >
-                  {btn.icon}
-                </span>
-                <div className="flex-1 min-w-0 text-left">
-                  <p
-                    className={`font-semibold leading-none text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                  <span
+                    className={`shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
                       }`}
                   >
-                    {btn.line1}
-                  </p>
-                  <p
-                    className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
+                    {btn.icon}
+                  </span>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p
+                      className={`font-semibold leading-none text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                        }`}
+                    >
+                      {btn.line1}
+                    </p>
+                    <p
+                      className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
+                        }`}
+                    >
+                      {btn.line2}
+                    </p>
+                  </div>
+                  <ArrowRight
+                    className={`w-3.5 h-3.5 shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
                       }`}
-                  >
-                    {btn.line2}
-                  </p>
-                </div>
-                <ArrowRight
-                  className={`w-3.5 h-3.5 shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                    }`}
-                />
-              </Link>
+                  />
+                </Link>
+              </div>
             ))}
           </div>
         </div>

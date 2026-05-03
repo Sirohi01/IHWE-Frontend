@@ -65,23 +65,7 @@ const EventGlimpses = () => {
   const maxIndex = Math.max(0, images.length - visible);
   const GAP = 2;
 
-  // Split heading into parts for highlighting
-  const renderHeading = () => {
-    const { heading, highlightText } = glimpseData;
-    if (!highlightText || !heading.includes(highlightText)) {
-      return heading;
-    }
-    const parts = heading.split(highlightText);
-    return (
-      <>
-        {parts[0]}
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2f8f3a] to-[#0b4d17]">
-          {highlightText}
-        </span>
-        {parts[1]}
-      </>
-    );
-  };
+
 
   return (
     <section
@@ -141,9 +125,10 @@ const EventGlimpses = () => {
             <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[11px]">{glimpseData.subheading || 'Event Glimpses'}</span>
             <Leaf size={20} className="text-[#2f8f3a] scale-x-[-1]" />
           </div>
-          <h2 className="text-2xl md:text-4xl font-black text-[#0b2912] mb-3 uppercase tracking-tight">
-            {renderHeading()}
-          </h2>
+          <div 
+            className="text-2xl md:text-4xl font-black text-[#0b2912] mb-3 uppercase tracking-tight flex justify-center items-center"
+            dangerouslySetInnerHTML={{ __html: glimpseData.heading }}
+          />
           <div className="flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-[#b6d9bb]" />
             <div 
