@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
+import MsmeHeroLogo from "./MsmeHeroLogo";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -423,37 +424,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     )}
                   </AnimatePresence>
                 </div>
-                {settings?.isMsmeLogoActive && settings?.msmeLogo && (
-                  <div className="relative ml-4 flex items-center h-full pt-11">
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <div className="relative flex flex-col items-center">
-                        {/* Powerful Glow Base - Positioned behind logo only */}
-                        <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[20px] rounded-full scale-[1.3] opacity-100 z-0" />
-                        <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[10px] rounded-full scale-[1.1] opacity-100 z-0" />
-                        
-                        {settings?.msmeLogoTitle && (
-                          <span className="relative z-20 text-[9px] xl:text-[8px] font-bold text-slate-700 uppercase tracking-[0.15em] mb-1.5 whitespace-nowrap drop-shadow-[0_0_1px_rgba(255,255,255,1)]">
-                            {settings.msmeLogoTitle}
-                          </span>
-                        )}
-
-                        <img
-                          src={`${SERVER_URL}${settings.msmeLogo}`}
-                          alt="MSME Logo"
-                          className="relative z-10 h-12 xl:h-16 w-auto object-contain 
-                                     drop-shadow-[0_0_15px_rgba(255,255,255,1)] 
-                                     drop-shadow-[0_0_25px_rgba(255,255,255,1)]
-                                     transition-all duration-500 
-                                     group-hover:scale-105
-                                     grayscale opacity-100 group-hover:grayscale-0"
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
-                )}
+                
+                {/* MSME Logo Component */}
+                <MsmeHeroLogo />
               </div>
             </div>
           </div>
