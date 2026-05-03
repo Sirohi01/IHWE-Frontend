@@ -59,7 +59,7 @@ const VisitorRegistrationDrawer = ({ open, onClose }: VisitorRegistrationDrawerP
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                        transition={{ type: "spring" as const, damping: 30, stiffness: 300 }}
                         className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[#F7F8F0] z-[101] shadow-2xl flex flex-col font-inter"
                     >
                         {/* Header */}

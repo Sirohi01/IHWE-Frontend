@@ -27,6 +27,7 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import gallHero from "../assets/gall.jpg";
+
 import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Gallery = () => {
@@ -232,6 +233,7 @@ const Gallery = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
@@ -273,7 +275,7 @@ const Gallery = () => {
                                         <motion.div
                                             layoutId="activeFilter"
                                             className="absolute inset-0 bg-[#23471d]"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            transition={{ type: "spring" as const, bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}
                                     <span className="relative z-10 flex items-center gap-2">

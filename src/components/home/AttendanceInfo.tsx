@@ -77,8 +77,8 @@ const WhoShouldAttendItems = [
 
 const AttendanceInfo = () => {
   return (
-    <section className="bg-white pt-0 pb-0 px-4 w-full relative z-10">
-      <div className="max-w-[1500px] mx-auto pt-0 pb-4 px-8">
+    <section className="bg-white pt-0 pb-0 px-6 md:px-14 w-full relative z-10">
+      <div className="max-w-[1500px] mx-auto pt-0 pb-4">
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
 

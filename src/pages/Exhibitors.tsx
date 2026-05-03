@@ -4,6 +4,7 @@ import { Search, Filter, Globe, MapPin, ExternalLink } from "lucide-react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import exhiHero from "../assets/exhi.jpg";
+
 import { exhibitorApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Exhibitors = () => {
@@ -44,6 +45,7 @@ const Exhibitors = () => {
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : exhiHero})`
         }}
       >
+
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#fcfcfc]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

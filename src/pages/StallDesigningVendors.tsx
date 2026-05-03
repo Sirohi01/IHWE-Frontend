@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import * as LucideIcons from "lucide-react";
 import { Mail, Phone, MapPin, User, Building2, Loader2 } from "lucide-react";
 import { stallVendorApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
+
 import heroImg from "../assets/stall.jpg";
 
 const DynamicIcon = ({ name, className }: { name: string; className?: string }) => {
@@ -53,6 +54,7 @@ const StallDesigningVendors = () => {
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImg})`
         }}
       >
+
         <div className="absolute inset-0 bg-black/40" />
         <div
           className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white"

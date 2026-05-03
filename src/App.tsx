@@ -19,6 +19,7 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
+const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -153,6 +154,7 @@ const App = () => {
                     <Route path="/blog/:id" element={<BlogDetail />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/buyer-seller-meet" element={<BuyerSellerMeet />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />
@@ -227,25 +229,25 @@ const App = () => {
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
 
-                <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
-                  <Route index element={<BuyerDashboardHome />} />
-                  <Route path="profile" element={<BuyerProfilePage />} />
-                  <Route path="chat" element={<BuyerChatPage />} />
-                  <Route path="bsm" element={<BuyerBSMPage />} />
-                  <Route path="calendar" element={<BuyerCalendarPage />} />
-                  <Route path="invoices" element={<BuyerInvoicesPage />} />
-                  <Route path="notifications" element={<BuyerNotificationsPage />} />
-                  <Route path="documentation" element={<BuyerDocumentationPage />} />
-                  <Route path="feedback" element={<BuyerFeedbackForm />} />
-                </Route>
-              </Routes>
-            </Suspense>
-            <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
-          </BuyerAuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+                  <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
+                    <Route index element={<BuyerDashboardHome />} />
+                    <Route path="profile" element={<BuyerProfilePage />} />
+                    <Route path="chat" element={<BuyerChatPage />} />
+                    <Route path="bsm" element={<BuyerBSMPage />} />
+                    <Route path="calendar" element={<BuyerCalendarPage />} />
+                    <Route path="invoices" element={<BuyerInvoicesPage />} />
+                    <Route path="notifications" element={<BuyerNotificationsPage />} />
+                    <Route path="documentation" element={<BuyerDocumentationPage />} />
+                    <Route path="feedback" element={<BuyerFeedbackForm />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+              <VisitorRegistrationDrawer open={visitorDrawerOpen} onClose={closeVisitorDrawer} />
+            </BuyerAuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { ePromotionApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
+
 // ── Sub-components defined OUTSIDE to prevent remount on re-render ──────────
 const InputField = ({
   type = "text",
@@ -143,6 +144,7 @@ const EPromotion = () => {
           backgroundColor: "#1a3516"
         }}
       >
+
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
         <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
@@ -229,7 +231,7 @@ const EPromotion = () => {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                    transition={{ delay: 0.2, type: "spring" as const, stiffness: 200 }}
                   >
                     <CheckCircle className="w-24 h-24 text-green-500 mb-6" />
                   </motion.div>

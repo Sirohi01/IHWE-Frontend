@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
+
 import heroBg from "../../assets/hero.png";
 import awardsLogo from "../../assets/new.png";
 
@@ -13,6 +14,7 @@ const AwardsHero = () => {
   return (
     <section className="relative w-full min-h-[450px] lg:min-h-[600px] xl:min-h-[80vh] flex flex-col justify-center overflow-hidden bg-white" style={jakartaFont}>
 
+
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -23,9 +25,9 @@ const AwardsHero = () => {
         }}
       ></div>
 
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 pt-1 pb-2">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      {/* Full width hero content */}
+      <div className="relative z-10 pt-1 pb-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-6 md:px-14">
 
           <motion.div
             initial={{ opacity: 0, x: -60 }}

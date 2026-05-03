@@ -247,6 +247,7 @@ export const blogApi = {
     }
 };
 
+
 export const seoApi = {
     getByPath: async (path: string) => {
         const response = await fetch(`${API_URL}/seo/page?path=${encodeURIComponent(path)}`);
@@ -887,4 +888,19 @@ export const awardCategoryApi = {
     const data = await response.json();
     return data.success ? data.data : [];
   }
+};
+export const agendaApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/agenda`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const conferenceTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/conference-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
 };

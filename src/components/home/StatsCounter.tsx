@@ -164,8 +164,8 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
                     <div ref={sectionRef} className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
                         {heroStats.map((s, index) => {
                             return (
-                                <div key={index} className="flex items-center gap-4 px-6 py-6 group hover:bg-slate-50 transition-colors duration-300">
-                                    <div className="w-12 h-12 rounded-xl bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white shadow-sm transition-all duration-300">
+                                <div key={index} className="flex items-center gap-4 px-6 py-3 group hover:bg-slate-50 transition-colors duration-300">
+                                    <div className="w-10 h-10 rounded-xl bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white shadow-sm transition-all duration-300">
                                         {s.icon}
                                     </div>
                                     <div className="flex flex-col">

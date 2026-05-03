@@ -198,7 +198,7 @@ const categories = [
   },
 ];
 
-const CategoryCard = ({ item, width = '148px' }) => (
+const CategoryCard = ({ item, width = '140px' }) => (
   <div
     style={{
       width: width,
@@ -260,8 +260,8 @@ const ExhibitionCategories = () => {
   const row2 = categories.slice(8);
 
   return (
-    <section style={{ background: '#fff', padding: '30px 0 20px', overflow: 'hidden' }}>
-      <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 20px' }}>
+    <section className="bg-white pt-8 md:pt-10 pb-4 md:pb-4 overflow-hidden">
+      <div className="w-full px-6 md:px-14 mx-auto max-w-[1500px]">
 
         {/* ── Heading ── */}
         <div style={{
@@ -315,28 +315,17 @@ const ExhibitionCategories = () => {
           </div>
         </div>
 
-        {/* Row 1: 8 cards */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '12px',
-          padding: '0 60px',
-          marginBottom: '14px',
-        }}>
+        {/* Row 1: 8 cards - Single Row */}
+        <div className="flex flex-nowrap md:justify-start gap-3 mb-4 overflow-x-auto no-scrollbar pb-2">
           {row1.map((item, i) => (
-            <CategoryCard key={i} item={item} width="148px" />
+            <CategoryCard key={i} item={item} width="140px" />
           ))}
         </div>
 
-        {/* Row 2: 7 cards */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '12px',
-          padding: '0 60px',
-        }}>
+        {/* Row 2: 7 cards - Single Row */}
+        <div className="flex flex-nowrap md:justify-start gap-3 overflow-x-auto no-scrollbar pb-2">
           {row2.map((item, i) => (
-            <CategoryCard key={i} item={item} width="170px" />
+            <CategoryCard key={i} item={item} width="160px" />
           ))}
         </div>
 

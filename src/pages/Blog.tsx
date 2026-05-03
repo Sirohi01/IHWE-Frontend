@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Calendar, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { blogApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
+
 import blogHero from "../assets/blogs.jpg";
 
 const Blog = () => {
@@ -42,6 +43,7 @@ const Blog = () => {
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : blogHero})`
         }}
       >
+
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f5f0e8]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

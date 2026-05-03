@@ -9,11 +9,11 @@ const pathVariants = {
     pathLength: 1,
     opacity: 1,
     transition: {
-      pathLength: { duration: 1.5, ease: "easeInOut", delay: 0.5 },
+      pathLength: { duration: 1.5, ease: "easeInOut" as const, delay: 0.5 },
       opacity: { duration: 0.3, delay: 0.5 },
     },
   },
-} as any;
+};
 
 const AboutSection = () => {
   const [data, setData] = useState<any>(null);

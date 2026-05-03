@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Mic } from "lucide-react";
+
 import amanImage from "../../assets/bhiya.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
@@ -10,6 +11,7 @@ const ConferenceHero: React.FC = () => {
   const darkYellow = "#C9A227";
   return (
     <section className="relative min-h-[750px] lg:min-h-[690px] flex items-center overflow-hidden ">
+
 
 
       <div
