@@ -6,6 +6,7 @@ import {
     MapPinned, Clock, Globe, Sparkles, Info
 } from "lucide-react";
 import { heroBackgroundApi, travelAccommodationApi, SERVER_URL } from "@/lib/api";
+
 import heroImgFallback from "../assets/travel.jpg";
 
 const ICONS_MAP: Record<string, any> = {
@@ -57,6 +58,7 @@ const TravelAccommodation = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImgFallback})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

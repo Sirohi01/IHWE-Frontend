@@ -9,6 +9,7 @@ import WhyAttend from "@/components/sections/WhyAttend";
 import WhoShouldAttend from "@/components/sections/WhoShouldAttend";
 import OrganizedBy from "@/components/sections/OrganizedBy";
 import { heroBackgroundApi, eventOverviewApi, SERVER_URL, visionMissionApi, aboutOrganizerApi, ourJourneyApi } from "@/lib/api";
+
 import * as LucideIcons from "lucide-react";
 import PragatiMaidanImg from "@/assets/Pragati-Maidan.jpg";
 import InternationalImg from "@/assets/international.png";
@@ -308,6 +309,7 @@ const About = () => {
         className="hero-background-about"
         style={heroStyles}
       >
+
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
 
         <div className="container mx-auto px-8 text-left text-white relative z-10 flex flex-col justify-center h-full pt-16 pb-6" data-aos="fade-up">

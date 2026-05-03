@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Users, Mail, Linkedin, Globe } from "lucide-react";
 import { advisoryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
+
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import heroImgFallback from "../assets/members.jpg";
@@ -40,6 +41,7 @@ const AdvisoryBoard = () => {
                     backgroundPosition: "center"
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

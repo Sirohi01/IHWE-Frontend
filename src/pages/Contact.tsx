@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
 
+
 const Contact = () => {
   const [settings, setSettings] = useState<any>(null);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "", message: "" });
@@ -260,6 +261,7 @@ const Contact = () => {
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`
         }}
       >
+
         <div className="absolute inset-0 bg-black/40" />
         <div
           className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"

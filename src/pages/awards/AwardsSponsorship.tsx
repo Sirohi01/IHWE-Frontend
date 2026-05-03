@@ -51,7 +51,7 @@ const AwardsSponsorship = () => {
   return (
     <section className="py-4 md:py-6 bg-[#f4faff] overflow-hidden">
       {/* Wider alignment matching home page */}
-      <div className="mx-auto px-6 md:px-14">
+      <div className="container mx-auto px-6 md:px-10">
         <div className="flex flex-col lg:flex-row gap-3 items-stretch">
 
           {/* LEFT — Branding Card */}

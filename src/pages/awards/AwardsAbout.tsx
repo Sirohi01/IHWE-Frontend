@@ -9,7 +9,7 @@ const AwardsAbout = () => {
   return (
     <section className="py-6 md:py-10 bg-white overflow-hidden" style={jakartaFont}>
       {/* Wider alignment matching home page */}
-      <div className="mx-auto px-6 md:px-14">
+      <div className="container mx-auto px-6 md:px-10">
         <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-center">
 
           {/* LEFT — Award Plaque Composite Image */}

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { heroApi, SERVER_URL } from "@/lib/api";
 
+
 interface HeroSectionProps {
   onRegisterVisit: () => void;
   forceNewTab?: boolean;
@@ -117,7 +118,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 200, damping: 30 },
+              x: { type: "spring" as const, stiffness: 200, damping: 30 },
               opacity: { duration: 0.8 },
               scale: { duration: 1.2 },
             }}
@@ -143,6 +144,8 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
             </motion.div>
           </motion.div>
         </AnimatePresence>
+
+
 
         <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />

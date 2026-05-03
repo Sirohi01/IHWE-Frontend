@@ -5,6 +5,7 @@ import * as LucideIcons from "lucide-react";
 import { ArrowRight } from "lucide-react";
 import { heroBackgroundApi, whyVisitApi, SERVER_URL } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+
 import visitImg from "@/assets/visit.jpg";
 
 const WhyVisit = () => {
@@ -51,6 +52,7 @@ const WhyVisit = () => {
                     backgroundImage: heroData?.backgroundImage ? `url(${SERVER_URL}${heroData.backgroundImage})` : `url(${visitImg})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div
                     className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"

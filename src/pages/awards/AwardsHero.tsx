@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
+
 import heroBg from "../../assets/hero.png";
 import awardsLogo from "../../assets/new.png";
 
@@ -12,6 +13,7 @@ const AwardsHero = () => {
 
   return (
     <section className="relative w-full min-h-[450px] lg:min-h-[600px] xl:min-h-[80vh] flex flex-col justify-center overflow-hidden bg-white" style={jakartaFont}>
+
 
       <div
         className="absolute inset-0 z-0"
@@ -25,7 +27,7 @@ const AwardsHero = () => {
 
       {/* Full width hero content */}
       <div className="relative z-10 pt-1 pb-2">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center px-6 md:px-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center container mx-auto px-6 md:px-10">
 
           <motion.div
             initial={{ opacity: 0, x: -60 }}

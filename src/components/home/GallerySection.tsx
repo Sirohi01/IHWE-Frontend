@@ -167,7 +167,7 @@ const GallerySection = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                            transition={{ type: "spring" as const, damping: 30, stiffness: 300 }}
                             className="relative max-w-5xl w-full flex items-center justify-center"
                             onClick={(e) => e.stopPropagation()}
                         >

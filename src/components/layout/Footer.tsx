@@ -42,7 +42,7 @@ const FooterCounter = ({
       ([entry]) => {
         if (entry.isIntersecting && !animated.current) {
           animated.current = true;
-          
+
           setTimeout(() => {
             let start = 0;
             const duration = 2000; // 2 seconds
@@ -60,7 +60,7 @@ const FooterCounter = ({
               }
             }, interval);
           }, delay * 1000);
-          
+
           observer.disconnect();
         }
       },
@@ -138,7 +138,7 @@ const Footer = () => {
   const stats = [
     {
       icon: <Users className="w-9 h-9 text-[#F3B71B]" />,
-      end: 1500,
+      end: 250,
       suffix: "+",
       label: "EXHIBITORS",
       sub: "ACROSS SUCCESSFUL EDITIONS",
@@ -232,40 +232,35 @@ const Footer = () => {
               <Link
                 key={btn.line2}
                 to={btn.href}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
-                  btn.primary
-                    ? "bg-[#F3B71B] hover:bg-[#e0a818]"
-                    : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10"
-                }`}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${btn.primary
+                  ? "bg-[#F3B71B] hover:bg-[#e0a818]"
+                  : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10"
+                  }`}
                 style={{ minWidth: "120px" }}
               >
                 <span
-                  className={`shrink-0 ${
-                    btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                  }`}
+                  className={`shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                    }`}
                 >
                   {btn.icon}
                 </span>
                 <div className="flex-1 min-w-0 text-left">
                   <p
-                    className={`font-semibold leading-none text-[9.5px] tracking-wide ${
-                      btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                    }`}
+                    className={`font-semibold leading-none text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                      }`}
                   >
                     {btn.line1}
                   </p>
                   <p
-                    className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${
-                      btn.primary ? "text-[#050A1A]" : "text-white"
-                    }`}
+                    className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
+                      }`}
                   >
                     {btn.line2}
                   </p>
                 </div>
                 <ArrowRight
-                  className={`w-3.5 h-3.5 shrink-0 ${
-                    btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                  }`}
+                  className={`w-3.5 h-3.5 shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                    }`}
                 />
               </Link>
             ))}
@@ -282,178 +277,177 @@ const Footer = () => {
             borderBottom: "1px solid #1E2A45",
           }}
         >
-        {/* COL 1: Event Info */}
-        <div
-          className="flex flex-col gap-3 py-5 pr-2"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <div>
-            <p className="text-white font-bold text-[15px] leading-none mb-1.5">IHWE</p>
-            <p className="text-[#F3B71B] text-[13px] leading-tight uppercase">
-              International Health &amp; Wellness Expo
-            </p>
-            <p className="text-[#cbd5e1] font-bold italic text-[11px] mt-1">
-              <sup className="text-[8px] "></sup> The International Health & Wellness Expo brings together global healthcare leaders, innovators, and decision-makers for three days of transformative experiences.
-            </p>
-          </div>
-          <div className="w-full h-[1px] bg-[#1E2A45]" />
-          <div className="flex flex-col gap-2.5">
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <Calendar className="w-3.5 h-3.5 text-[#F3B71B]" />
-              </div>
-              <p className="text-[12px] font-semibold text-white pt-0.5">
-                21 – 23 AUGUST 2026
+          {/* COL 1: Event Info */}
+          <div
+            className="flex flex-col gap-3 py-5 pr-2"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <div>
+              <p className="text-white font-bold text-[15px] leading-none mb-1.5">IHWE</p>
+              <p className="text-[#F3B71B] text-[13px] leading-tight uppercase">
+                International Health &amp; Wellness Expo
+              </p>
+              <p className="text-[#cbd5e1] font-bold italic text-[11px] mt-1">
+                <sup className="text-[8px] "></sup> The International Health & Wellness Expo brings together global healthcare leaders, innovators, and decision-makers for three days of transformative experiences.
               </p>
             </div>
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <MapPin className="w-3.5 h-3.5 text-[#F3B71B]" />
-              </div>
-              <div>
-                <p className="text-[12px] font-semibold text-white">
-                  PRAGATI MAIDAN
-                </p>
-                <p className="text-[10px] text-[#cbd5e1]">
-                  HALL 8, 9 & 10, NEW DELHI, INDIA
+            <div className="w-full h-[1px] bg-[#1E2A45]" />
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <Calendar className="w-3.5 h-3.5 text-[#F3B71B]" />
+                </div>
+                <p className="text-[12px] font-semibold text-white pt-0.5">
+                  21 – 23 AUGUST 2026
                 </p>
               </div>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <Globe className="w-3.5 h-3.5 text-[#F3B71B]" />
-              </div>
-              <p className="text-[10.5px] text-slate-300 leading-tight pt-0.5">
-                India's Leading Global Platform for Healthcare, AYUSH & Wellness
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* COL 2: Quick Links */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            QUICK LINKS
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-1.5">
-            {quickLinks.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
-              >
-                <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 3: Exhibitor Resources */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            EXHIBITOR RESOURCES
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-1.5">
-            {exhibitorLinks.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
-              >
-                <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 4: Contact Information */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            CONTACT INFORMATION
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-3">
-            {[
-              {
-                Icon: Phone,
-                label: "Call for Stall Booking",
-                value: contactPhone,
-                large: true,
-                gold: false,
-              },
-              {
-                Icon: Mail,
-                label: "Email",
-                value: contactEmail,
-                large: false,
-                gold: false,
-              },
-              {
-                Icon: Globe,
-                label: "Official Website",
-                value: "www.ihwe.in",
-                gold: true,
-                large: false,
-              },
-              {
-                Icon: Building2,
-                label: "Organised By",
-                value: "Namo Gange Wellness Pvt. Ltd.",
-                large: false,
-                gold: false,
-              },
-            ].map(({ Icon, label, value, gold, large }) => (
-              <div key={label} className="flex items-start gap-2.5">
-                <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
-                  <Icon className="w-3 h-3 text-[#F3B71B]" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <MapPin className="w-3.5 h-3.5 text-[#F3B71B]" />
                 </div>
                 <div>
-                  <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
-                  <p
-                    className={`font-semibold leading-tight ${
-                      gold ? "text-[#cbd5e1]" : "text-[#CBD5E1]"
-                    } ${large ? "text-[13px]" : "text-[11px]"}`}
-                  >
-                    {value}
+                  <p className="text-[12px] font-semibold text-white">
+                    PRAGATI MAIDAN
+                  </p>
+                  <p className="text-[10px] text-[#cbd5e1]">
+                    HALL 8, 9 & 10, NEW DELHI, INDIA
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 5: Event Highlights */}
-        <div className="py-5 px-4">
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            EVENT HIGHLIGHTS
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-2">
-            {highlights.map((h) => (
-              <div key={h} className="flex items-start gap-2">
-                <div className="w-4 h-4 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-2.5 h-2.5 text-[#F3B71B]" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <Globe className="w-3.5 h-3.5 text-[#F3B71B]" />
                 </div>
-                <p className="text-[11px] text-slate-300 leading-tight">{h}</p>
+                <p className="text-[10.5px] text-slate-300 leading-tight pt-0.5">
+                  India's Leading Global Platform for Healthcare, AYUSH & Wellness
+                </p>
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* COL 2: Quick Links */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              QUICK LINKS
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-1.5">
+              {quickLinks.map((l) => (
+                <Link
+                  key={l.label}
+                  to={l.href}
+                  className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
+                >
+                  <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 3: Exhibitor Resources */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              EXHIBITOR RESOURCES
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-1.5">
+              {exhibitorLinks.map((l) => (
+                <Link
+                  key={l.label}
+                  to={l.href}
+                  className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
+                >
+                  <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 4: Contact Information */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              CONTACT INFORMATION
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-3">
+              {[
+                {
+                  Icon: Phone,
+                  label: "Call for Stall Booking",
+                  value: contactPhone,
+                  large: true,
+                  gold: false,
+                },
+                {
+                  Icon: Mail,
+                  label: "Email",
+                  value: contactEmail,
+                  large: false,
+                  gold: false,
+                },
+                {
+                  Icon: Globe,
+                  label: "Official Website",
+                  value: "www.ihwe.in",
+                  gold: true,
+                  large: false,
+                },
+                {
+                  Icon: Building2,
+                  label: "Organised By",
+                  value: "Namo Gange Wellness Pvt. Ltd.",
+                  large: false,
+                  gold: false,
+                },
+              ].map(({ Icon, label, value, gold, large }) => (
+                <div key={label} className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
+                    <Icon className="w-3 h-3 text-[#F3B71B]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
+                    <p
+                      className={`font-semibold leading-tight ${gold ? "text-[#cbd5e1]" : "text-[#CBD5E1]"
+                        } ${large ? "text-[13px]" : "text-[11px]"}`}
+                    >
+                      {value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 5: Event Highlights */}
+          <div className="py-5 px-4">
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              EVENT HIGHLIGHTS
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-2">
+              {highlights.map((h) => (
+                <div key={h} className="flex items-start gap-2">
+                  <div className="w-4 h-4 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-2.5 h-2.5 text-[#F3B71B]" />
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-tight">{h}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
       {/* ── STATS BAR ── */}
       <div className="max-w-[1400px] mx-auto px-6">
@@ -461,46 +455,46 @@ const Footer = () => {
           className="grid grid-cols-4"
           style={{ borderBottom: "1px solid #1E2A45" }}
         >
-        {stats.map((s, i) => (
-          <div
-            key={s.label}
-            className="flex items-center gap-3.5 py-4 px-5"
-            style={{
-              borderRight:
-                i < stats.length - 1 ? "1px solid #1E2A45" : "none",
-            }}
-          >
-            {s.icon}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <p
-                  className="text-[#F3B71B] font-bold leading-none"
-                  style={{
-                    fontSize: "22px",
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                  }}
-                >
-                  <FooterCounter
-                    end={s.end || 0}
-                    prefix={s.prefix}
-                    suffix={s.suffix}
-                    delay={i * 0.1}
-                  />
-                </p>
-                <p className="text-[#cbd5e1] font-bold text-[10.5px] uppercase tracking-wide">
-                  {s.label}
-                </p>
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="flex items-center gap-3.5 py-4 px-5"
+              style={{
+                borderRight:
+                  i < stats.length - 1 ? "1px solid #1E2A45" : "none",
+              }}
+            >
+              {s.icon}
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <p
+                    className="text-[#F3B71B] font-bold leading-none"
+                    style={{
+                      fontSize: "22px",
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                    }}
+                  >
+                    <FooterCounter
+                      end={s.end || 0}
+                      prefix={s.prefix}
+                      suffix={s.suffix}
+                      delay={i * 0.1}
+                    />
+                  </p>
+                  <p className="text-[#cbd5e1] font-bold text-[10.5px] uppercase tracking-wide">
+                    {s.label}
+                  </p>
+                </div>
+                {s.sub && (
+                  <p className="text-[#cbd5e1] text-[9.5px] mt-1 opacity-80 leading-tight uppercase">
+                    {s.sub}
+                  </p>
+                )}
               </div>
-              {s.sub && (
-                <p className="text-[#cbd5e1] text-[9.5px] mt-1 opacity-80 leading-tight uppercase">
-                  {s.sub}
-                </p>
-              )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
 
       {/* ── BOTTOM BAR ── */}
       <div

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import awardsLogo from "../../assets/new.png";
 import nominationHeroImg from "../../assets/nomination7.png";
+
 import { MapPin, Calendar, Star } from "lucide-react";
 
 const NominationHero = () => {
@@ -11,6 +12,7 @@ const NominationHero = () => {
 
   return (
     <section className="relative w-full overflow-hidden bg-white" style={jakartaFont}>
+
       <div 
         className="absolute inset-0 z-0 hidden lg:block"
         style={{
@@ -24,7 +26,7 @@ const NominationHero = () => {
       {/* Mobile Background (Simple Gradient) */}
       <div className="absolute inset-0 z-0 lg:hidden bg-gradient-to-br from-white to-slate-50"></div>
 
-      <div className="mx-auto px-6 md:px-14 relative z-10 py-12 lg:py-24">
+      <div className="container mx-auto px-6 md:px-10 relative z-10 py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Column: Recreating the Text Design from the Image */}

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { heroBackgroundApi, whyExhibitApi, SERVER_URL } from "@/lib/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+
 import whyHeroFallback from "../assets/exhi1.jpg";
 import ctaFallback from "../assets/confe.jpg";
 
@@ -74,6 +75,7 @@ const WhyExhibit = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : whyHeroFallback})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

@@ -37,7 +37,7 @@ const stats = [
 const AwardsCategories = () => {
   return (
     <section className="py-6 md:py-8 bg-[#edf7f2]">
-      <div className="mx-auto px-6 md:px-14">
+      <div className="container mx-auto px-6 md:px-10">
 
         {/* Header */}
         <motion.div
