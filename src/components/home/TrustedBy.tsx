@@ -48,41 +48,41 @@ const TrustedBy = () => {
 
   return (
     <div 
-      className="relative z-40 w-full py-2 border-y border-white/5 shadow-xl transition-colors duration-500"
+      className="relative z-40 w-full py-4 md:py-2 border-y border-white/5 shadow-xl transition-colors duration-500"
       style={{ backgroundColor: data.bgColor || '#23471d' }}
     >
-      <div className="container mx-auto px-6">
+      <div className="w-full px-6 md:px-14">
         
         {/* Row 1: Centered Heading - Glassmorphism Blur Effect */}
-        <div className="relative -top-12 flex items-center justify-center gap-4 mb-0 w-full max-w-2xl mx-auto z-50">
+        <div className="relative -top-8 md:-top-12 flex items-center justify-center gap-2 md:gap-4 mb-2 md:mb-0 w-full max-w-2xl mx-auto z-50">
           <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-orange-500/40 to-orange-500" />
           <div 
-            className="flex items-center px-6 py-1.5 backdrop-blur-md rounded-full border border-white/10 shadow-lg"
-            style={{ backgroundColor: `${data.bgColor}99` || '#23471d99' }}
+            className="flex items-center px-4 md:px-6 py-1 md:py-1.5 backdrop-blur-md rounded-full border border-white/10 shadow-lg"
+            style={{ backgroundColor: `${data.bgColor}ee` || '#23471dee' }}
           >
-             <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.35em] text-white whitespace-nowrap">
+             <p className="text-[8px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.35em] text-white whitespace-nowrap">
                {data.title || 'Supported By'}
              </p>
           </div>
           <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-orange-500/40 to-orange-500" />
         </div>
 
-        {/* Row 2: All Items in One Line - Pulled up closer to heading */}
-        <div className="flex items-center justify-center w-full -mt-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:flex xl:flex-nowrap items-center justify-center gap-x-8 gap-y-2 w-full overflow-x-auto no-scrollbar">
+        {/* Row 2: Grid Items */}
+        <div className="flex items-center justify-center w-full mt-2 md:-mt-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:flex xl:flex-nowrap items-center justify-center gap-x-4 md:gap-x-8 gap-y-4 md:gap-y-2 w-full">
             {sortedItems.map((item, i) => (
-              <div key={item._id || i} className="flex items-center justify-center xl:justify-start">
-                <div className="flex items-center gap-2.5 group transition-all duration-300">
-                  <div className={`w-8 h-8 rounded-full border border-white/10 flex items-center justify-center flex-shrink-0 shadow-md bg-white transition-all duration-500`}>
-                    <div className="scale-[0.5] group-hover:scale-[0.6] transition-transform duration-500">
+              <div key={item._id || i} className="flex items-center justify-start sm:justify-center xl:justify-start">
+                <div className="flex items-center gap-2 md:gap-2.5 group transition-all duration-300">
+                  <div className={`w-7 h-7 md:w-8 md:h-8 rounded-full border border-white/10 flex items-center justify-center flex-shrink-0 shadow-md bg-white transition-all duration-500`}>
+                    <div className="scale-[0.4] md:scale-[0.5] group-hover:scale-[0.6] transition-transform duration-500">
                         {ICON_MAP[item.icon] || <Globe size={28} className="text-gray-400" />}
                     </div>
                   </div>
-                  <div className="flex flex-col">
-                    <p className="text-[9px] lg:text-[10px] font-bold uppercase tracking-tight text-white leading-tight whitespace-nowrap">
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-tight text-white leading-tight break-words">
                       {item.label}
                     </p>
-                    <p className="text-[9px] lg:text-[10px] font-bold uppercase tracking-tight text-white/70 leading-tight whitespace-nowrap">
+                    <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-tight text-white/70 leading-tight break-words">
                       {item.label2}
                     </p>
                   </div>

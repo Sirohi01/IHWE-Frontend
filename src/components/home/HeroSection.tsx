@@ -1,10 +1,27 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { heroApi, SERVER_URL } from "@/lib/api";
 
+// Sparkle component for the golden button
+const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#fff176',
+      textShadow: '0 0 6px gold, 0 0 12px gold',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 
 interface HeroSectionProps {
   onRegisterVisit: () => void;
@@ -108,7 +125,45 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
   return (
     <>
-      <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/5.62' }}>
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-hero {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 20px 5px rgba(255,200,0,0.3), 0 4px 25px rgba(255,165,0,0.2);
+          position: relative;
+          overflow: hidden;
+          border: 2px solid white !important;
+        }
+        .golden-btn-hero::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
+
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/5.62]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
@@ -150,7 +205,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
 
-        <div className="hidden md:flex relative z-20 container mx-auto px-6 h-full flex-col justify-center items-start text-left text-white">
+        <div className="relative z-20 px-6 md:px-14 h-full flex flex-col justify-center items-start text-left text-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -227,56 +282,61 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               className="flex flex-wrap flex-col sm:flex-row gap-3 items-center"
             >
               {slides[current].button1Name && (
-                slides[current].button1Url ? (
-                  slides[current].button1Url.startsWith('http') ? (
-                    <a
-                      href={slides[current].button1Url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                    >
-                      <span className="relative z-10 flex items-center gap-2">
-                        {slides[current].button1Name}
-                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                      </span>
-                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                    </a>
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                  {/* Sparkles around button */}
+                  <Sparkle style={{ top: '-12px', left: '10%', animationDelay: '0s' }} />
+                  <Sparkle style={{ top: '-10px', left: '45%', animationDelay: '0.4s' }} />
+                  <Sparkle style={{ top: '-14px', right: '15%', animationDelay: '0.8s' }} />
+                  <Sparkle style={{ bottom: '-12px', left: '20%', animationDelay: '0.2s' }} />
+                  <Sparkle style={{ bottom: '-10px', right: '25%', animationDelay: '0.6s' }} />
+
+                  {slides[current].button1Url ? (
+                    slides[current].button1Url.startsWith('http') ? (
+                      <a
+                        href={slides[current].button1Url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {slides[current].button1Name}
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                      </a>
+                    ) : (
+                      <Link
+                        to={slides[current].button1Url}
+                        target={forceNewTab ? "_blank" : undefined}
+                        rel={forceNewTab ? "noopener noreferrer" : undefined}
+                        className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {slides[current].button1Name}
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                      </Link>
+                    )
                   ) : (
-                    <Link
-                      to={slides[current].button1Url}
-                      target={forceNewTab ? "_blank" : undefined}
-                      rel={forceNewTab ? "noopener noreferrer" : undefined}
-                      className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    <button
+                      onClick={onRegisterVisit}
+                      className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         {slides[current].button1Name}
-                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
                       </span>
-                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                    </Link>
-                  )
-                ) : (
-                  <button
-                    onClick={onRegisterVisit}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button1Name}
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                    <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </button>
-                )
+                    </button>
+                  )}
+                </div>
               )}
 
-              {/* Blue Button (Moved to Center) */}
               {slides[current].button3Name && (
                 slides[current].button3Url?.startsWith('http') ? (
                   <a
                     href={slides[current].button3Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -289,7 +349,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button3Url || "/conference"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -306,7 +366,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button2Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -319,7 +379,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button2Url || "/book-a-stand"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
