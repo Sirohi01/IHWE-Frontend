@@ -222,10 +222,10 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 className="flex items-center gap-3 mb-6"
               >
                 <span className="w-10 h-[1px] bg-white/40" />
-                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2"
+                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                   style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
                 >
-                  <Sparkles size={12} className="text-white/70" />
+                  <Sparkles size={12} className="text-[#FF4400] filter drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
                   {slides[current].subtitle}
                 </span>
               </motion.div>
