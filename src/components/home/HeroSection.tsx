@@ -232,13 +232,16 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="flex items-center gap-3 mb-6"
+                className="flex items-center gap-3 mb-2"
               >
                 <span className="w-10 h-[1px] bg-white/40" />
-                <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]"
-                  style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
+                <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] filter"
+                  style={{ 
+                    fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined,
+                    textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
+                  }}
                 >
-                  <Sparkles size={12} className="text-[#FF4400] filter drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
+                  <Sparkles size={12} className="text-[#FF4400] filter drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]" />
                   {slides[current].subtitle}
                 </span>
               </motion.div>
@@ -248,13 +251,14 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.9 }}
                 className={cn(
-                  "font-bold leading-[1.05] tracking-tight text-white uppercase [&_p]:m-0 [&_p]:p-0",
-                  slides[current].title2 ? "mb-1" : "mb-6",
+                  "font-bold leading-[1.1] tracking-tight text-white uppercase [&_p]:mb-0 [&_div]:mb-0 last:[&_p]:mb-0 last:[&_div]:mb-0",
+                  slides[current].title2 ? "mb-[0px]" : "mb-5",
                   !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
                 )}
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined
+                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined,
+                  textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].title }}
               />
@@ -265,12 +269,13 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.9 }}
                   className={cn(
-                    "font-bold mb-6 leading-[1.05] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_p]:p-0",
+                    "font-bold mb-5 leading-[1.1] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_div]:m-0 [&_p]:p-0 [&_div]:p-0",
                     !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
                   )}
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined
+                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined,
+                    textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                   }}
                   dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
                 />
@@ -280,10 +285,11 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.9 }}
-                className="font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
+                className="font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined
+                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined,
+                  textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].description }}
               />
@@ -309,7 +315,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                         href={slides[current].button1Url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                       >
                         <span className="relative z-10 flex items-center gap-2">
                           {slides[current].button1Name}
@@ -321,7 +327,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                         to={slides[current].button1Url}
                         target={forceNewTab ? "_blank" : undefined}
                         rel={forceNewTab ? "noopener noreferrer" : undefined}
-                        className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                       >
                         <span className="relative z-10 flex items-center gap-2">
                           {slides[current].button1Name}
@@ -349,7 +355,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button3Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -362,7 +368,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button3Url || "/conference"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -379,7 +385,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button2Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -392,7 +398,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button2Url || "/book-a-stand"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-5 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9.5px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -407,32 +413,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         </AnimatePresence>
       </div>
 
-        {/* Navigation Controls */}
-        <div className="absolute inset-y-0 left-0 right-0 z-30 flex items-center justify-between px-4 md:px-8 pointer-events-none">
-          <button
-            onClick={prevSlide}
-            className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 pointer-events-auto hover:scale-110 active:scale-95 group"
-          >
-            <ChevronLeft size={24} className="group-hover:-translate-x-0.5 transition-transform" />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/20 hover:bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 pointer-events-auto hover:scale-110 active:scale-95 group"
-          >
-            <ChevronRight size={24} className="group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </div>
-
         <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
-          <button
-            onClick={togglePlay}
-            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-300 mb-2 self-end group"
-            title={isPlaying ? "Pause Carousel" : "Play Carousel"}
-          >
-            {isPlaying ? <Pause size={18} fill="white" /> : <Play size={18} fill="white" className="ml-0.5" />}
-          </button>
-
           {slides.map((_, i) => (
             <button
               key={i}
