@@ -919,3 +919,11 @@ export const conferenceTestimonialsApi = {
         return data.success ? data.data : null;
     }
 };
+export const speakerApi = {
+    get: async (status?: string) => {
+        const url = status ? `${API_URL}/speaker?status=${status}` : `${API_URL}/speaker`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
