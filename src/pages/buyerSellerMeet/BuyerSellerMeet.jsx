@@ -4,6 +4,7 @@ import WhatIsBuyer from '@/components/buyerSellerMeet/WhatIsBuyer'
 import WhoShould from '../../components/buyerSellerMeet/WhoShould'
 import HowIT from '../../components/buyerSellerMeet/HowIT'
 import WhatPar from '../../components/buyerSellerMeet/WhatPar'
+import Dont from '../../components/buyerSellerMeet/Dont'
 
 const BuyerSellerMeet = () => {
     return (
@@ -13,6 +14,7 @@ const BuyerSellerMeet = () => {
             <WhoShould />
             <HowIT />
             <WhatPar />
+            <Dont />
         </div>
     )
 }
