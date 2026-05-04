@@ -10,7 +10,7 @@ const NominationFormPage = () => (
 
     {/* Main Content */}
     <section id="nomination-form" className="py-6">
-      <div className="px-6 md:px-14">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         <div className="flex flex-col lg:flex-row gap-5 items-start">
 
           {/* Left — Form */}

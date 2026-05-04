@@ -19,9 +19,6 @@ const MsmeHeroLogo = () => {
         const fetchSettings = async () => {
             try {
                 const data = await settingsApi.get();
-                console.log("🔍 MsmeHeroLogo - Fetched settings:", data);
-                console.log("🔍 MsmeHeroLogo - msmeLogos:", data?.msmeLogos);
-                console.log("🔍 MsmeHeroLogo - isMsmeLogoActive:", data?.isMsmeLogoActive);
                 if (data) setSettings(data);
             } catch (error) {
                 console.error("Error fetching settings for MSME logo:", error);
@@ -33,10 +30,6 @@ const MsmeHeroLogo = () => {
     // Get active logos sorted by display order
     const activeLogos = settings?.msmeLogos?.filter((logo: MsmeLogo) => logo.isActive)
         .sort((a: MsmeLogo, b: MsmeLogo) => a.displayOrder - b.displayOrder) || [];
-
-    console.log("🔍 MsmeHeroLogo - Active logos count:", activeLogos.length);
-    console.log("🔍 MsmeHeroLogo - Active logos:", activeLogos);
-
     // Auto-rotate logos if multiple
     useEffect(() => {
         if (activeLogos.length > 1) {
@@ -63,7 +56,7 @@ const MsmeHeroLogo = () => {
                     {/* Powerful Glow Base - Positioned behind logo only */}
                     <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[20px] rounded-full scale-[1.3] opacity-100 z-0" />
                     <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white blur-[10px] rounded-full scale-[1.1] opacity-100 z-0" />
-                    
+
                     {/* Category Label */}
                     {currentLogo.category && (
                         <span className="relative z-20 text-[9px] xl:text-[8px] font-bold text-slate-700 uppercase tracking-[0.15em] mb-1.5 whitespace-nowrap drop-shadow-[0_0_1px_rgba(255,255,255,1)]">

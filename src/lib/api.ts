@@ -382,9 +382,24 @@ export const stallVendorApi = {
 };
 
 export const exhibitorApi = {
-    get: async () => {
-        const response = await fetch(`${API_URL}/exhibitor`);
+    get: async (params?: { category?: string; search?: string; page?: number; limit?: number }) => {
+        let url = `${API_URL}/exhibitor`;
+        const query = new URLSearchParams();
+        if (params) {
+            if (params.category && params.category !== 'ALL') query.append('category', params.category);
+            if (params.search) query.append('search', params.search);
+            if (params.page) query.append('page', params.page.toString());
+            if (params.limit) query.append('limit', params.limit.toString());
+            const queryString = query.toString();
+            if (queryString) url += `?${queryString}`;
+        }
+        const response = await fetch(url, { cache: 'no-store' });
         const data = await response.json();
+        
+        // Return full object if pagination metadata is present
+        if (data.success && data.pagination) {
+            return { data: data.data, pagination: data.pagination };
+        }
         return data.success ? data.data : [];
     }
 };
