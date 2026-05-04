@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Lightbulb, Sprout, ShieldPlus, ArrowRight } from "lucide-react";
 
 // Import assets
@@ -23,7 +24,8 @@ const MainConferences: React.FC = () => {
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
-      shadowColor: "hover:shadow-[#4E9F3D]/20"
+      shadowColor: "hover:shadow-[#4E9F3D]/20",
+      link: "/conference/day-1"
     },
     {
       day: "DAY 2",
@@ -140,13 +142,15 @@ const MainConferences: React.FC = () => {
                 </div>
 
                 {/* View Sessions Button */}
-                <button
-                  className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white shadow-lg active:scale-[0.98]"
-                  style={{ backgroundColor: conf.accentColor }}
-                >
-                  VIEW SESSIONS
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </button>
+                <Link to={conf.link || "#"} className="mt-4">
+                  <button
+                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white shadow-lg active:scale-[0.98]"
+                    style={{ backgroundColor: conf.accentColor }}
+                  >
+                    VIEW SESSIONS
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </Link>
               </div>
             </motion.div>
           ))}
