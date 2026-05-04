@@ -9,7 +9,7 @@ import MsmeHeroLogo from "./MsmeHeroLogo";
 const navLinks = [
   { label: "Home", path: "/" },
   {
-    label: "About IHWE",
+    label: "About Us",
   
     dropdown: [
       {
@@ -182,6 +182,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
           <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
 
             <div className="relative z-[150] h-full flex items-center gap-4">
+              {/* Logo */}
               <Link to="/" className="h-full flex items-center min-w-[140px] md:min-w-[180px]">
                 {settings?.logo ? (
                   <img
@@ -196,6 +197,21 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   </div>
                 )}
               </Link>
+
+              {/* ─── Divider + Venue & Date ─── */}
+              <div className="flex items-center gap-2 ml-1 pl-3 border-l border-slate-200">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Venue & Date</span>
+                  <div className="flex items-center gap-1">
+                    <CalendarDays className="w-2.5 h-2.5 text-[#23471d] flex-shrink-0" />
+                    <span className="text-[9px] font-bold text-slate-800 whitespace-nowrap">21 – 23 August</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
+                    <span className="text-[8px] font-semibold text-slate-600 whitespace-nowrap">Pragati Maidan, New Delhi</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* RIGHT: Nav Links + Button */}
@@ -210,7 +226,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 <Link
                   to={link.path || "#"}
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                  className={`px-2 py-2 text-[11px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                  className={`px-2 py-2 text-[10.8px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
                     }`}
                 >
                   {link.label}
@@ -314,18 +330,48 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                         >
                           <div className="grid grid-cols-2 relative h-full">
                             <Link
+                              to="/book-a-stand"
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                analyticsApi.logClick("Registration: Book A Stand");
+                              }}
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                            >
+                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
+                                <Briefcase className="w-3 h-3" />
+                              </div>
+                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Book A<br />Stand</span>
+                            </Link>
+
+                            <Link
                               to="/visitor-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Visitor Pass");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Users className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#23471d] transition-colors leading-tight">Visitor<br />Pass</span>
                             </Link>
+
+                            <a
+                              href="https://namogange.org/arogya-sangoshthi.php"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                analyticsApi.logClick("Registration: Delegates Register");
+                              }}
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                            >
+                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
+                                <Handshake className="w-3 h-3" />
+                              </div>
+                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegates<br />Register</span>
+                            </a>
 
                             <Link
                               to="/buyer-registration"
@@ -342,26 +388,12 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                             </Link>
 
                             <Link
-                              to="/book-a-stand"
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                analyticsApi.logClick("Registration: Book A Stand");
-                              }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
-                            >
-                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
-                                <Briefcase className="w-3 h-3" />
-                              </div>
-                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Book A<br />Stand</span>
-                            </Link>
-
-                            <Link
                               to="/media-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Media & Partners");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Camera className="w-3 h-3" />
@@ -375,7 +407,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Speaker Register");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Sparkles className="w-3 h-3" />
@@ -389,29 +421,13 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Seller Register");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-r border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Briefcase className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Seller<br />Register</span>
                             </Link>
-
-                            <a
-                              href="https://namogange.org/arogya-sangoshthi.php"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                analyticsApi.logClick("Registration: Delegated Register");
-                              }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 col-span-2 border-r-0"
-                            >
-                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
-                                <Handshake className="w-3 h-3" />
-                              </div>
-                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegated<br />Register</span>
-                            </a>
                           </div>
                         </motion.div>
                       </div>
