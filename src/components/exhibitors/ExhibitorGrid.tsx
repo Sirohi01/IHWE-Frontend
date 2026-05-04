@@ -55,7 +55,7 @@ const ExhibitorGrid: React.FC<Props> = ({ exhibitors, onLoadMore, hasMore, isLoa
                         <button
                             onClick={onLoadMore}
                             disabled={isLoadingMore}
-                            className="flex items-center gap-6 px-10 py-3 bg-white border border-gray-200 rounded-xl text-[12px] font-bold uppercase tracking-[0.05em] text-[#1a4a2a] hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm group disabled:opacity-50"
+                            className="flex items-center gap-6 px-7 py-2 bg-white border border-gray-200 rounded-xl text-[12px] font-bold uppercase tracking-[0.05em] text-[#1a4a2a] hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm group disabled:opacity-50"
                         >
                             {isLoadingMore ? (
                                 <>
