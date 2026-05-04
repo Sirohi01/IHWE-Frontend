@@ -192,31 +192,18 @@ const BuyerIcon = () => (
 const WhoShould = () => {
     return (
 
-        <div className=" relative w-full overflow-hidden py-10 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className=" relative w-full overflow-hidden py-8 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
             <div className='flex justify-between flex-row'>
                 {/* ── LEFT: WHO SHOULD + BUYERS ── */}
                 <div>
-                    <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '24px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '14px' }}>
+                    <h2 className='text-lg font-normal uppercase ' style={{ color: '#fff', letterSpacing: '0.5px', marginBottom: '14px' }}>
                         WHO SHOULD PARTICIPATE?
                     </h2>
 
                     <div style={{ fontFamily: "'Barlow', sans-serif", position: 'relative' }}>
 
                         {/* ── HEADER with diagonal right-side cut ── */}
-                        <div style={{
-                            background: '#6a8c3a',
-                            padding: '10px 16px',
-                            paddingRight: '44px',         // extra right padding for diagonal space
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontSize: '16px',
-                            fontWeight: 800,
-                            color: '#fff',
-                            textTransform: 'uppercase',
-                            letterSpacing: '2px',
-                            textAlign: 'center',
-                            clipPath: 'polygon(0 0, 82% 0, 100% 100%, 0 100%)',  // diagonal cut right side
-                            borderRadius: '10px 0 0 0',
-                        }}>
+                        <div className="py-2 text-center text-sm font-medium rounded-t-md bg-[#6a8c3a] text-white uppercase tracking-[1px] [clip-path:polygon(0_0,82%_0,100%_100%,0_100%)]">
                             BUYERS
                         </div>
 
@@ -253,18 +240,18 @@ const WhoShould = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
                         {/* Sellers Card */}
-                        <div style={{ background: '#fff', borderRadius: '10px 30px 10px 10px', overflow: 'hidden' }}>
-                            <div style={{ background: '#b8861a', padding: '10px 16px', textAlign: 'center', fontFamily: "'Barlow Condensed', sans-serif", fontSize: '15px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                        <div className="bg-white rounded-[10px_30px_10px_10px] overflow-hidden">
+                            <div className="bg-[#b8861a] py-2.5 px-4 text-center font-['Barlow_Condensed',sans-serif] text-sm font-medium text-white uppercase tracking-[1px]">
                                 SELLERS
                             </div>
-                            <div style={{ padding: '10px 14px' }}>
+                            <div className="py-2.5 px-3.5">
                                 {sellers.map((s, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '5px 0', fontSize: '14px', color: '#1a3d20', fontWeight: 500 }}>
+                                    <div key={i} className="flex items-center gap-2 py-[5px] text-sm text-[#1a3d20] font-medium">
                                         <StarIcon />
                                         {s}
                                     </div>
                                 ))}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '3.5px 0', fontSize: '11px', color: '#888', fontStyle: 'italic' }}>
+                                <div className="flex items-center gap-2 py-[3.5px] text-[11px] text-[#888] italic">
                                     <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#aaa" strokeWidth="1.1" /><path d="M4 6.5h5M6.5 4v5" stroke="#aaa" strokeWidth="1.1" strokeLinecap="round" /></svg>
                                     ...and many more
                                 </div>
@@ -272,43 +259,29 @@ const WhoShould = () => {
                         </div>
                     </div>
 
-                    <div style={{ fontFamily: "'Barlow', sans-serif" }}>
+                    <div className="font-['Barlow',sans-serif]">
 
                         {/* Heading with side lines */}
-                        <div className='mb-4' style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{ flex: 1, height: '1.5px', background: 'rgba(255,255,255,0.4)' }} />
-                            <h3 style={{
-                                fontFamily: "'Barlow Condensed', sans-serif",
-                                fontSize: '18px', fontWeight: 800, color: '#fff',
-                                textTransform: 'uppercase', letterSpacing: '2px',
-                                whiteSpace: 'nowrap', margin: 0,
-                            }}>
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="flex-1 h-[1.5px] bg-white/40" />
+                            <h3 className="font-['Barlow_Condensed',sans-serif] text-lg font-medium text-white uppercase tracking-[2px] whitespace-nowrap m-0">
                                 KEY BENEFITS
                             </h3>
-                            <div style={{ flex: 1, height: '1.5px', background: 'rgba(255,255,255,0.4)' }} />
+                            <div className="flex-1 h-[1.5px] bg-white/40" />
                         </div>
 
                         {/* Benefit rows */}
                         {benefits.map((b, i) => (
-                            <div key={i} className='py-1.5' style={{
-                                display: 'flex', alignItems: 'flex-start', gap: '12px',
-                                marginBottom: i < benefits.length - 1 ? '18px' : 0,
-                            }}>
+                            <div key={i} className={`flex items-start gap-3 py-1.5 ${i < benefits.length - 1 ? 'mb-[18px]' : 'mb-0'}`}>
                                 {/* Golden icon circle */}
-                                <div style={{
-                                    width: '50px', height: '50px', borderRadius: '50%',
-                                    border: '2.5px solid #c8941a',
-                                    background: 'rgba(180,130,20,0.2)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    flexShrink: 0,
-                                }}>
+                                <div className="w-[50px] h-[50px] rounded-full border-[2.5px] border-[#c8941a] bg-[rgba(180,130,20,0.2)] flex items-center justify-center shrink-0">
                                     {b.icon}
                                 </div>
-                                <div style={{ paddingTop: '4px' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', lineHeight: 1.3, marginBottom: '4px' }}>
+                                <div className="pt-1">
+                                    <div className="text-sm font-medium text-white leading-[1.3] mb-1">
                                         {b.title}
                                     </div>
-                                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.55 }}>
+                                    <div className="text-[11px] text-white/60 leading-[1.55]">
                                         {b.desc}
                                     </div>
                                 </div>
