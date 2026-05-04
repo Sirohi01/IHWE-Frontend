@@ -60,15 +60,15 @@ const MsmePmsScheme = () => {
 
   return (
     <div className="bg-white">
-      {/* Breadcrumb */}
-      {/* <div className="bg-slate-50 py-2 border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Link to="/" className="hover:text-[#23471d]">Home</Link>
-            <ChevronRight size={14} />
-            <span>Participate</span>
-            <ChevronRight size={14} />
-            <span className="font-medium text-[#23471d]">MSME PMS Scheme</span>
+      {/* Breadcrumb - Exactly as per image */}
+      {/* <div className="py-4">
+        <div className="container mx-auto px-4 lg:pl-48">
+          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em]">
+            <Link to="/" className="hover:text-[#1a3615]">Home</Link>
+            <ChevronRight size={10} className="mt-0.5" />
+            <Link to="/participate" className="hover:text-[#1a3615]">Participate</Link>
+            <ChevronRight size={10} className="mt-0.5" />
+            <span className="text-[#1a3615]">MSME PMS Scheme</span>
           </div>
         </div>
       </div> */}
@@ -76,79 +76,83 @@ const MsmePmsScheme = () => {
       {/* Hero Section */}
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         {/* Main Banner Container */}
-        <div className="flex flex-col lg:flex-row min-h-[600px]">
+        <div className="flex flex-col lg:flex-row min-h-[550px]">
           {/* Left Side: Content */}
-          <div className="lg:w-[55%] pt-3 pb-20 px-4 lg:pl-16 lg:pr-8 relative z-20 bg-white">
+          <div className="lg:w-[50%] pt-4 pb-12 px-4 lg:pl-48 lg:pr-8 relative z-20 bg-white">
 
-            {/* Gold Ribbon - Fixed position on the far left */}
-            <div className="absolute top-0 left-4 lg:left-8 z-30">
-              <div className="relative w-22 h-32 flex flex-col items-center justify-center text-center p-3 bg-gradient-to-b from-[#f3b71b] via-[#f7d54a] to-[#d26019] shadow-2xl">
-                <span className="text-[11px] font-black leading-tight text-slate-900 uppercase tracking-tighter">LIMITED<br />MSME SLOTS<br />AVAILABLE!</span>
-                <div className="absolute bottom-[-12px] left-0 right-0 h-0 w-0 border-l-[44px] border-l-transparent border-r-[44px] border-r-transparent border-t-[12px] border-t-[#d26019]"></div>
+            {/* Gold Ribbon - Fixed position with refined spacing */}
+            <div className="absolute top-8 left-4 lg:left-12 z-30">
+              <div className="relative w-28 h-36 lg:w-32 lg:h-44 flex items-center justify-center">
+                <img src="/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
+                {/* <div className="relative z-10 flex flex-col items-center text-center px-4 pt-1">
+                  <span className="text-[#3c2a0c] text-[13px] lg:text-[15px] font-extrabold leading-[0.95] uppercase tracking-tighter">
+                    LIMITED <br /> MSME <br /> SLOTS <br /> AVAILABLE!
+                  </span>
+                </div> */}
               </div>
             </div>
 
-            <div className="mt-6 lg:ml-40 lg:mt-6 flex flex-col items-start">
-              <div className="text-[#1a3615] text-[13px] font-black uppercase tracking-[0.2em] mb-3 opacity-60">
+            <div className="mt-4 flex flex-col items-start">
+              <div className="text-[#1a3615] text-[13px] font-black uppercase tracking-[0.25em] mb-2 opacity-70">
                 GOVERNMENT SUPPORT TO GROW YOUR BUSINESS
               </div>
-              <h1 className="text-[34px] md:text-[44px] lg:text-[54px] font-black text-[#1a3615] leading-[0.85] mb-4 tracking-tighter uppercase">
+              <h1 className="text-[30px] md:text-[38px] lg:text-[48px] font-extrabold text-[#1a3615] leading-[1.1] mb-4 tracking-[-0.03em] uppercase">
                 MSME PMS SCHEME <br />
-                <span className="text-slate-900 font-extrabold tracking-[-0.05em]">BENEFITS & REGISTRATION</span>
+                <span className="text-slate-900 font-extrabold tracking-[-0.04em]">BENEFITS & REGISTRATION</span>
               </h1>
-              <p className="text-[16px] text-slate-600 mb-6 max-w-2xl font-bold leading-tight">
+              <p className="text-[15px] md:text-[16px] text-slate-600 mb-6 max-w-2xl font-bold leading-tight">
                 Exhibit at International Health & Wellness Expo 2026 with <br className="hidden md:block" />
                 Financial Assistance from Ministry of MSME, Government of India.
               </p>
 
-              {/* Subsidy Box - Rebuilt for exact parity & Expanded */}
-              <div className="max-w-[720px] mb-3 shadow-[0_25px_60px_rgba(0,0,0,0.18)] rounded-[35px] overflow-hidden border border-slate-100">
-                <div className="bg-[#1a3615] px-6 md:px-10 pt-4 pb-3 flex flex-col lg:flex-row items-center gap-10 lg:gap-14 relative overflow-hidden">
+              {/* Subsidy Box - Final Refinement for Parity */}
+              <div className="max-w-[800px] mb-3 shadow-[0_25px_60px_rgba(0,0,0,0.18)] rounded-[30px] overflow-hidden border border-slate-100">
+                <div className="bg-[#1a3615] px-6 md:px-10 pt-4 pb-4 flex flex-col lg:flex-row items-center gap-6 lg:gap-12 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-black/30 to-transparent pointer-events-none"></div>
 
-                  {/* Left: Icon & Amount */}
+                  {/* Left: Icon & Amount Container */}
                   <div className="relative flex items-center gap-6 shrink-0">
-                    <div className="relative w-24 h-14 md:w-32 md:h-32 shrink-0">
+                    <div className="relative w-16 h-16 md:w-22 md:h-22 shrink-0">
                       <img
-                        src="/msme_application_checklist_graphi2.png"
+                        src="/msme_application_checklist_graphic2.png"
                         alt="Subsidy Bag"
-                        className="w-full h-full object-contain relative z-10 scale-110 translate-y-1"
+                        className="w-full h-full object-contain relative z-10 scale-110"
                       />
                     </div>
 
                     <div className="flex flex-col">
-                      <div className="text-white/80 text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase mb-0.5">GET UP TO</div>
+                      <div className="text-white/90 text-[10px] md:text-[11px] font-bold tracking-[0.1em] mb-[-2px]">Get Up To</div>
                       <div className="flex items-start">
-                        <span className="text-[#f3b71b] text-[48px] md:text-[48px] font-black leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
-                        <span className="text-[#f3b71b] text-3xl md:text-4xl font-black mt-1 ml-0.5">*</span>
+                        <span className="text-[#f3b71b] text-[38px] md:text-[54px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
+                        <span className="text-[#f3b71b] text-2xl md:text-4xl font-black mt-1 ml-0.5">*</span>
                       </div>
-                      <div className="text-white text-[20px] md:text-[20px] font-black uppercase tracking-[0.25em] mt-1 leading-none">SUBSIDY</div>
-                      <div className="text-white/40 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.1em] mt-1">Under MSME PMS Scheme</div>
+                      <div className="text-white text-[18px] md:text-[24px] font-black uppercase tracking-[0.2em] mt-1 leading-none">SUBSIDY</div>
+                      <div className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.08em] mt-1">UNDER MSME PMS SCHEME</div>
                     </div>
                   </div>
 
-                  {/* Right: Checklist */}
-                  <div className="flex flex-col gap-4 flex-1 relative z-10 w-full lg:w-auto">
+                  {/* Right: Checklist Column */}
+                  <div className="flex flex-col gap-3.5 flex-1 relative z-10 w-full lg:w-auto lg:border-l lg:border-white/10 lg:pl-10">
                     {[
                       "Government Financial Support",
                       "Increase Market Reach",
                       "Grow Your Business Globally"
                     ].map((text, i) => (
-                      <div key={i} className="flex items-center gap-3.5 text-white text-[11px] md:text-[12px] font-bold">
-                        <div className="w-5 h-5 rounded-full border-2 border-[#f3b71b] flex items-center justify-center shrink-0">
-                          <CheckCircle2 size={11} className="text-[#f3b71b]" strokeWidth={4} />
+                      <div key={i} className="flex items-center gap-4 text-white text-[11px] md:text-[13px] font-bold whitespace-nowrap">
+                        <div className="w-6 h-6 rounded-full border-2 border-[#f3b71b] flex items-center justify-center shrink-0">
+                          <CheckCircle2 size={12} className="text-[#f3b71b]" strokeWidth={4} />
                         </div>
-                        <span className="opacity-95 tracking-tight leading-tight">{text}</span>
+                        <span className="opacity-95 tracking-tight">{text}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Yellow Footer Strip */}
-                <div className="bg-[#f3b71b] py-4 px-6 flex flex-col items-center justify-center text-center">
-                  <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-[12px] md:text-[14px] font-black text-[#1a3615] uppercase tracking-[0.1em]">
+                {/* Yellow Strip Footer */}
+                <div className="bg-[#f3b71b] py-2.5 px-6 flex flex-col items-center justify-center text-center">
+                  <div className="flex flex-col md:flex-row items-center gap-1 md:gap-6 text-[10px] md:text-[13px] font-black text-[#1a3615] uppercase tracking-[0.05em]">
                     <span>TYPICALLY ₹50,000 – ₹1,00,000</span>
-                    <span className="w-[1px] h-4 bg-[#1a3615]/30 hidden md:block"></span>
+                    <span className="w-[1px] h-3.5 bg-[#1a3615]/30 hidden md:block"></span>
                     <span>HIGHER SUPPORT FOR ELIGIBLE CASES</span>
                   </div>
                 </div>
@@ -160,15 +164,15 @@ const MsmePmsScheme = () => {
             </div>
           </div>
 
-          {/* Right Side: Image Banner */}
-          <div className="lg:w-[45%] relative min-h-[450px] lg:min-h-full flex flex-col overflow-hidden">
+          {/* Right Side: Image Banner - 50/50 Balance */}
+          <div className="lg:w-[50%] relative min-h-[450px] lg:min-h-full flex flex-col overflow-hidden">
             <div className="flex-1 relative">
               <img
                 src="/msme_pms_header_banner_bg_1777877814391.png"
                 alt="MSME Exhibition"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
               />
-              {/* Supported By Badge */}
+              {/* Supported By Badge - Re-implemented for parity */}
               {/* <div className="absolute top-8 right-8 bg-white/95 backdrop-blur shadow-2xl p-4 rounded-xl flex items-center gap-4 border border-slate-100 z-20">
                 <div className="flex flex-col items-center">
                   <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mb-1">SUPPORTED BY</span>
@@ -182,15 +186,16 @@ const MsmePmsScheme = () => {
                   <span className="text-[#1a3615]">GOVERNMENT OF INDIA</span>
                 </div>
               </div> */}
-              {/* Gradient Overlay */}
-              <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-white via-white/60 to-transparent hidden lg:block z-10"></div>
+
+              {/* Wide Soft Gradient Overlay */}
+              <div className="absolute inset-y-0 left-0 w-96 bg-gradient-to-r from-white via-white/95 to-transparent hidden lg:block z-10"></div>
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Integrated Action Buttons Bar - Positioned immediately after Hero */}
-      <div className="bg-white py-2 px-4 lg:px-16 z-30">
+      < div className="bg-white py-2 px-4 lg:px-16 z-30" >
         <div className="container mx-auto">
           <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
             <Button className="h-12 px-8 bg-[#064420] hover:bg-[#0a5a2a] text-white font-black text-[12px] uppercase tracking-[0.1em] rounded transition-all flex items-center gap-4 group">
@@ -201,10 +206,10 @@ const MsmePmsScheme = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Stats Bar (Rounded Card Style) */}
-      <div className="container mx-auto px-4 relative z-40 mt-4">
+      < div className="container mx-auto px-4 relative z-40 mt-4" >
         <div className="bg-white rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-slate-100 py-6 px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center">
             {[
@@ -227,10 +232,10 @@ const MsmePmsScheme = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Content Sections: About & Benefits Grid */}
-      <section className="py-2 bg-white">
+      < section className="py-2 bg-white" >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* About Section */}
@@ -295,10 +300,10 @@ const MsmePmsScheme = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Detailed Guidelines Grid */}
-      <section className="py-2 bg-white">
+      < section className="py-2 bg-white" >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left: Imagery Collage */}
@@ -476,10 +481,10 @@ const MsmePmsScheme = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Application Form Section - High Density Compact UI */}
-      <section id="apply-form">
+      < section id="apply-form" >
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100 p-5 lg:p-7">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -627,10 +632,10 @@ const MsmePmsScheme = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Footer CTA - Rebuilt for exact parity with brochure design */}
-      <section className="py-2 bg-white">
+      < section className="py-2 bg-white" >
         <div className="container mx-auto px-4">
           <div className="bg-[#1a3615] rounded-[20px] p-8 lg:p-4 shadow-2xl relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent pointer-events-none"></div>
@@ -666,10 +671,10 @@ const MsmePmsScheme = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Final Footer Strip (Repeating stats for impact) */}
-      <div className="bg-[#1a3615] py-2 border-t border-white/5">
+      < div className="bg-[#1a3615] py-2 border-t border-white/5" >
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 lg:gap-12 w-full lg:w-auto">
@@ -702,8 +707,8 @@ const MsmePmsScheme = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
