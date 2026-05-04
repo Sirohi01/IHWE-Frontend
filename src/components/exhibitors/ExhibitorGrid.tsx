@@ -26,7 +26,7 @@ const ExhibitorGrid: React.FC<Props> = ({ exhibitors, onLoadMore, hasMore, isLoa
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.3, delay: (index % 12) * 0.03 }}
-                            className="group relative bg-white border border-gray-100 rounded-xl p-2 flex items-center justify-center aspect-square shadow-sm hover:shadow-xl hover:border-green-100 transition-all duration-300"
+                            className="group relative bg-white border border-gray-100 rounded-xl p-1 flex items-center justify-center aspect-square shadow-sm hover:shadow-xl hover:border-green-100 transition-all duration-300"
                         >
                             <div className="w-full h-full flex items-center justify-center overflow-hidden">
                                 <img
