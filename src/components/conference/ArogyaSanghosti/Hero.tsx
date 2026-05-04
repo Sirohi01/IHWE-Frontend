@@ -62,7 +62,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         alignSelf: "flex-start"
                     }} />
 
-                    {/* Badge - Gap reduced */}
+                    {/* Badge - Normal font weight */}
                     <div style={{ marginTop: 6 }}>
                         <div style={{
                             background: TEAL,
@@ -70,7 +70,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                             padding: "6px 24px",
                             borderRadius: "24px",
                             fontSize: "1.4vw",
-                            fontWeight: 800,
+                            fontWeight: 400,
                             clipPath: "polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%)",
                             display: "inline-block"
                         }}>
@@ -78,11 +78,11 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         </div>
                     </div>
 
-
+                    {/* Subtitle - Normal font weight */}
                     <div style={{
                         color: TEAL,
                         fontSize: "1.1vw",
-                        fontWeight: 800,
+                        fontWeight: 400,
                         letterSpacing: "0.5px",
                         textTransform: "uppercase",
                         marginTop: 4
@@ -90,24 +90,22 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         India's Premier Healthcare & AYUSH Conference
                     </div>
 
-
+                    {/* Main Heading - Normal font weight */}
                     <h1 style={{
                         color: TEAL,
                         margin: "8px 0 2px 0",
-                        fontWeight: 900,
+                        fontWeight: 400,
                         lineHeight: 1.1,
                         textTransform: "uppercase",
                         fontSize: "4.5vw",
-                        textAlign: "left"
+                        textAlign: "left",
+                        fontFamily: "'Helvetica Neue', Arial, sans-serif"
                     }}>
                         Speaker
-                        <div style={{ fontSize: "2vw", fontWeight: 700, opacity: 0.8, marginTop: "2px" }}>
+                        <div style={{ fontSize: "2vw", fontWeight: 400, opacity: 0.8, marginTop: "2px" }}>
                             Nomination Form
                         </div>
                     </h1>
-
-
-
 
                 </div>
             </div>

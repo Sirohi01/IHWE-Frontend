@@ -1,73 +1,76 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Calendar, Layers, Search, ArrowRight } from "lucide-react";
-import imgDay1 from "../../assets/ram1.png";
-import imgDay2 from "../../assets/ram2.png";
-import imgDay3 from "../../assets/ram3.png";
-import icon1 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.47.53 AM.png";
-import icon2 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.11 AM.png";
-import icon3 from "../../assets/powerfullconfrencce/Screenshot 2026-05-01 at 11.48.21 AM.png";
+import { Lightbulb, Sprout, ShieldPlus, ArrowRight } from "lucide-react";
 
-const mainConferences = [
-  {
-    day: "DAY 1",
-    title: "HEALTHCARE INNOVATION SUMMIT",
-    description:
-      "Advancing technology, infrastructure & innovation for future-ready healthcare systems.",
-    date: "20 AUG 2026",
-    sessions: "6 SESSIONS",
-    focus: "Innovation & Technology",
-    badgeBg: "bg-[#4E9F3D]",
-    btnBg: "bg-[#4E9F3D]",
-    btnHover: "hover:bg-[#3D8B2D]",
-    image: imgDay1,
-    icon: icon1,
-  },
-  {
-    day: "DAY 2",
-    title: "GLOBAL WELLNESS LEADERSHIP FORUM",
-    description:
-      "Empowering wellness, holistic healing & lifestyle solutions for a healthier tomorrow.",
-    date: "21 AUG 2026",
-    sessions: "6 SESSIONS",
-    focus: "Wellness & Lifestyle",
-    badgeBg: "bg-[#1E88E5]",
-    btnBg: "bg-[#1E88E5]",
-    btnHover: "hover:bg-[#1565C0]",
-    image: imgDay2,
-    icon: icon2,
-  },
-  {
-    day: "DAY 3",
-    title: "FUTURE OF PREVENTIVE HEALTHCARE CONFERENCE",
-    description:
-      "Strengthening prevention, public health & sustainability for a healthier planet.",
-    date: "22 AUG 2026",
-    sessions: "6 SESSIONS",
-    focus: "Prevention & Sustainability",
-    badgeBg: "bg-[#6A3DF0]",
-    btnBg: "bg-[#6A3DF0]",
-    btnHover: "hover:bg-[#5229C7]",
-    image: imgDay3,
-    icon: icon3,
-  },
-];
+// Import assets
+import ram1 from "../../assets/ram1.png";
+import ram2 from "../../assets/ram2.png";
+import ram3 from "../../assets/ram3.png";
 
 const MainConferences: React.FC = () => {
+  const mainConferences = [
+    {
+      day: "DAY 1",
+      date: "21 AUGUST 2026",
+      title: "HEALTHCARE INNOVATION SUMMIT",
+      sessions: [
+        "Smart Hospitals & Digital Transformation",
+        "Medical Devices & Innovation",
+        "Diagnostics & Precision Medicine",
+        "Infrastructure & Investment"
+      ],
+      image: ram1,
+      icon: <Lightbulb className="w-10 h-10 text-white" />,
+      accentColor: "#4E9F3D",
+      badgeColor: "bg-[#1A4D2E]",
+      shadowColor: "hover:shadow-[#4E9F3D]/20"
+    },
+    {
+      day: "DAY 2",
+      date: "22 AUGUST 2026",
+      title: "WELLNESS & AYUSH LEADERSHIP FORUM",
+      sessions: [
+        "Ayurveda & Traditional Wisdom",
+        "Nutrition, Diet & Lifestyle",
+        "Yoga, Mental Health & Wellness",
+        "Herbal Industry & Natural Products"
+      ],
+      image: ram2,
+      icon: <Sprout className="w-10 h-10 text-white" />,
+      accentColor: "#E67E22",
+      badgeColor: "bg-[#92400E]",
+      shadowColor: "hover:shadow-[#E67E22]/20"
+    },
+    {
+      day: "DAY 3",
+      date: "23 AUGUST 2026",
+      title: "FUTURE OF PREVENTIVE HEALTHCARE CONFERENCE",
+      sessions: [
+        "Preventive Medicine & Early Detection",
+        "Public Health & Community Wellness",
+        "Research, Innovation & Evidence-based Care",
+        "Policy, Advocacy & Global Partnerships"
+      ],
+      image: ram3,
+      icon: <ShieldPlus className="w-10 h-10 text-white" />,
+      accentColor: "#7C3AED",
+      badgeColor: "bg-[#581C87]",
+      shadowColor: "hover:shadow-[#7C3AED]/20"
+    }
+  ];
+
   return (
-    <section className="py-4 bg-[#F7F9FC]">
+    <section className="py-6 bg-white">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Section label */}
         <div className="text-center mb-4">
-          <h2 className="text-[24px] font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2">
-            3 DAYS. 3 POWERFUL <span className="text-[#1E88E5]">CONFERENCES</span>.{" "}
-            <span className="text-[#0B2C66]">18 GAME-CHANGING SESSIONS.</span>
+          <h2 className="text-[20px] md:text-[24px] font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2 flex items-center justify-center flex-wrap">
+            3 DAYS <span className="mx-3 text-[#4E9F3D] text-[0.7em] opacity-80">|</span> 3 POWERFUL <span className="text-[#1E88E5] ml-1">CONFERENCES</span> <span className="mx-3 text-[#4E9F3D] text-[0.7em] opacity-80">|</span> <span className="text-[#0B2C66] ml-1">18 GAME-CHANGING SESSIONS.</span>
           </h2>
           <div className="h-1 w-20 bg-[#4E9F3D] mx-auto mt-2 rounded-full" />
         </div>
-
         {/* Cards grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6">
           {mainConferences.map((conf, index) => (
             <motion.div
               key={index}
@@ -75,84 +78,75 @@ const MainConferences: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.7 }}
-              className="relative min-h-[480px] rounded-[24px] overflow-hidden group shadow-xl border border-[#E6ECF3]/20 flex flex-col items-start text-left transition-all duration-500"
+              className={`group relative rounded-[32px] overflow-hidden bg-white shadow-xl transition-all duration-500 ${conf.shadowColor} hover:-translate-y-2 min-h-[400px] flex flex-col`}
             >
               {/* Background Image */}
-              <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0">
                 <img
                   src={conf.image}
                   alt={conf.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Gradient Overlay - reduced opacity for better visibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B2C66]/90 via-[#0B2C66]/30 to-[#0B2C66]/10 z-10" />
+                {/* Subtle gradient overlay to ensure text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-90" />
               </div>
 
-              {/* Content Container */}
-              <div className="relative z-20 p-8 flex flex-col h-full w-full">
-                {/* Day badge */}
-                <div
-                  className={`inline-block self-start px-6 py-2 rounded-full ${conf.badgeBg} text-white text-[14px] font-bold tracking-widest shadow-lg mb-6`}
-                >
-                  {conf.day}
-                </div>
-
-                {/* Logo and Title row */}
-                <div className="flex items-start gap-6 mb-6 w-full">
-                  <div className="w-28 h-28 rounded-full bg-white flex items-center justify-center flex-shrink-0 shadow-xl overflow-hidden border-4 border-white/20">
-                    <img src={conf.icon} alt={conf.title} className="w-full h-full object-contain p-1" />
+              {/* Card Content */}
+              <div className="relative z-10 p-6 flex flex-col h-full">
+                {/* Header: Day and Date */}
+                <div className="flex justify-between items-start mb-4">
+                  {/* Day Badge */}
+                  <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-8 py-3 rounded-br-[24px] font-black text-[18px] tracking-wider shadow-lg`}>
+                    {conf.day}
                   </div>
-                  <div className="flex flex-col gap-2 pt-2">
-                    <h3 className="text-[20px] font-black text-white leading-tight uppercase tracking-tight">
-                      {conf.title}
-                    </h3>
+
+                  {/* Date */}
+                  <div className="ml-auto text-[14px] font-bold text-gray-700 bg-white/50 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
+                    {conf.date}
                   </div>
                 </div>
 
-                <p className="text-[14px] text-white/80 leading-[1.6] mb-6 font-medium">
-                  {conf.description}
-                </p>
-
-                {/* Meta row */}
-                <div className="w-full grid grid-cols-3 gap-2 border border-white/10 rounded-[16px] py-4 px-2 mb-8 bg-white/5 backdrop-blur-md">
-                  <div className="flex flex-col items-center gap-1.5 text-center">
-                    <Calendar className="w-4 h-4 text-white/60" />
-                    <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
-                      DATE
-                    </span>
-                    <span className="text-[10px] font-bold text-white">
-                      {conf.date}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1.5 border-x border-white/10 text-center">
-                    <Layers className="w-4 h-4 text-white/60" />
-                    <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
-                      SESSIONS
-                    </span>
-                    <span className="text-[10px] font-bold text-white">
-                      {conf.sessions}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-1.5 text-center">
-                    <Search className="w-4 h-4 text-white/60" />
-                    <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">
-                      KEY FOCUS
-                    </span>
-                    <span className="text-[9px] font-bold text-white leading-tight uppercase">
-                      {conf.focus}
-                    </span>
-                  </div>
-                </div>
-
-                {/* CTA button */}
-                <div className="w-full mt-auto flex justify-start">
-                  <button
-                    className={`px-10 py-3.5 rounded-full ${conf.btnBg} ${conf.btnHover} text-white font-bold text-[13px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all shadow-xl active:scale-[0.95] group/btn`}
+                {/* Top Right Icon */}
+                <div className="absolute top-6 right-6">
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white shadow-2xl backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
+                    style={{ backgroundColor: `${conf.accentColor}dd` }}
                   >
-                    VIEW SESSIONS
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                    {React.cloneElement(conf.icon as React.ReactElement, { className: "w-8 h-8 text-white" })}
+                  </div>
                 </div>
+
+                {/* Title */}
+                <h3
+                  className="text-[22px] font-[900] leading-[1.2] mb-3 mt-10 uppercase"
+                  style={{ color: "#0B2C66" }}
+                >
+                  {conf.title}
+                </h3>
+
+                {/* Sessions List */}
+                <div className="space-y-2 mb-auto">
+                  {conf.sessions.map((session, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div
+                        className="w-2 rounded-full mt-1.5 flex-shrink-0"
+                        style={{ backgroundColor: conf.accentColor, height: "8px", width: "8px" }}
+                      />
+                      <span className="text-[13px] font-bold text-gray-800 leading-snug">
+                        {session}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* View Sessions Button */}
+                <button
+                  className="mt-4 flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white shadow-lg active:scale-[0.98]"
+                  style={{ backgroundColor: conf.accentColor }}
+                >
+                  VIEW SESSIONS
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </button>
               </div>
             </motion.div>
           ))}
