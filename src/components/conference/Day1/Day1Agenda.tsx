@@ -90,9 +90,9 @@ const agendaData = [
 
 const Day1Agenda: React.FC = () => {
   return (
-    <section className="py-2 bg-white">
+    <section className="py-0 bg-[#F0FDF4]/50">
       <div className="container mx-auto px-6 max-w-[1320px]">
-        
+
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-[24px] font-black text-[#4E9F3D] uppercase tracking-tight">
@@ -103,7 +103,7 @@ const Day1Agenda: React.FC = () => {
           </p>
         </div>
 
-        {/* Table Container */}
+
         <div className="bg-white rounded-xl overflow-hidden border border-[#E2E8F0]">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -118,15 +118,15 @@ const Day1Agenda: React.FC = () => {
               <tbody className="divide-y divide-[#F1F5F9]">
                 {agendaData.map((item, index) => (
                   <tr key={index} className="transition-colors group">
-                    {/* Time Column with Green Border */}
+
                     <td className="px-6 py-4 align-top relative">
                       <div className="absolute left-0 top-3 bottom-3 w-[2px] bg-[#4E9F3D] opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="pl-1">
-                         <span className="text-[13px] font-black text-[#4A5568]">{item.time}</span>
+                        <span className="text-[13px] font-black text-[#4A5568]">{item.time}</span>
                       </div>
                     </td>
 
-                    {/* Session Column */}
+
                     <td className="px-6 py-4 align-top">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[11px] font-black text-[#0B2C66] uppercase tracking-tight">{item.session}</span>
@@ -152,9 +152,9 @@ const Day1Agenda: React.FC = () => {
                     <td className="px-6 py-4 align-top min-w-[250px]">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <img 
-                            src={item.speaker.image} 
-                            alt={item.speaker.name} 
+                          <img
+                            src={item.speaker.image}
+                            alt={item.speaker.name}
                             className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm"
                           />
                           <div className="flex flex-col">

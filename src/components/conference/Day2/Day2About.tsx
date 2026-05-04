@@ -1,18 +1,24 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Activity, ShieldCheck, Cpu, FlaskConical, Building2, Globe } from "lucide-react";
-import amanImage from "../../../assets/bhiya.png";
+import { 
+  Globe, 
+  Leaf, 
+  Dumbbell, 
+  Sparkles, 
+  Apple, 
+  Users 
+} from "lucide-react";
 
 const focusAreas = [
-  { icon: Activity, title: "Smart Hospitals & Digital Transformation" },
-  { icon: ShieldCheck, title: "Medical Devices & Innovation" },
-  { icon: Cpu, title: "AI, HealthTech & Digital Health" },
-  { icon: FlaskConical, title: "Diagnostics, Labs & Precision Medicine" },
-  { icon: Building2, title: "Healthcare Infrastructure & Investment" },
-  { icon: Globe, title: "Leadership, Policy & Global Collaboration" },
+  { icon: Globe, title: "Wellness Economy & Global Opportunities" },
+  { icon: Leaf, title: "Ayurveda, AYUSH & Holistic Healing" },
+  { icon: Dumbbell, title: "Fitness, Preventive Health & Lifestyle Medicine" },
+  { icon: Sparkles, title: "Beauty, Personal Care & Wellness Innovation" },
+  { icon: Apple, title: "Organic Living, Nutrition & Sustainable Wellness" },
+  { icon: Users, title: "Wellness Leaders Networking" },
 ];
 
-const Day1About: React.FC = () => {
+const Day2About: React.FC = () => {
   return (
     <section className="py-10 bg-[#F8FAFC]">
       <div className="container mx-auto px-6 max-w-[1320px] relative z-10">
@@ -21,7 +27,7 @@ const Day1About: React.FC = () => {
           {/* About Text */}
           <div className="lg:w-[40%]">
             <h2 className="text-[16px] font-black text-[#4E9F3D] uppercase tracking-[0.1em] mb-4">
-              About Day 1
+              About Day 2
             </h2>
 
             <div className="relative pl-6">
@@ -30,10 +36,10 @@ const Day1About: React.FC = () => {
 
               <div className="space-y-4">
                 <p className="text-[13px] md:text-[14px] text-[#4A5568] leading-[1.6] font-medium">
-                  The Healthcare Innovation Summit brings together visionaries, technologists, clinicians, and industry leaders to explore the latest advancements shaping the future of healthcare.
+                  The Global Wellness Leadership Forum brings together wellness leaders, healers, nutritionists, fitness experts, policymakers, and innovators to explore holistic well-being, lifestyle medicine, natural healing, and sustainable wellness solutions.
                 </p>
                 <p className="text-[15px] md:text-[16px] text-[#4A5568] leading-[1.7] font-medium">
-                  From smart hospitals to AI-powered diagnostics, this summit focuses on building resilient, efficient, and patient-centric healthcare systems.
+                  This summit focuses on building a healthier society through prevention, lifestyle, and holistic approaches to well-being.
                 </p>
               </div>
             </div>
@@ -53,7 +59,7 @@ const Day1About: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  className="flex items-center gap-3 p-2 rounded-[16px] border border-transparent hover:bg-[#FBFDFB] transition-all group"
+                  className="flex items-center gap-3 p-2 rounded-[16px] border border-transparent hover:bg-white hover:shadow-sm transition-all group"
                 >
                   <div className="w-10 h-10 rounded-full bg-[#F0FDF4] flex items-center justify-center text-[#4E9F3D] shrink-0 border border-[#DCFCE7]/50 shadow-sm">
                     <area.icon className="w-5 h-5" />
@@ -72,4 +78,4 @@ const Day1About: React.FC = () => {
   );
 };
 
-export default Day1About;
+export default Day2About;

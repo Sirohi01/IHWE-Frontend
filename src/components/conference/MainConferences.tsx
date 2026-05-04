@@ -12,7 +12,7 @@ const MainConferences: React.FC = () => {
   const mainConferences = [
     {
       day: "DAY 1",
-      date: "21 AUGUST 2026",
+      date: "20 AUGUST 2026",
       title: "HEALTHCARE INNOVATION SUMMIT",
       sessions: [
         "Smart Hospitals & Digital Transformation",
@@ -29,6 +29,23 @@ const MainConferences: React.FC = () => {
     },
     {
       day: "DAY 2",
+      date: "21 AUGUST 2026",
+      title: "GLOBAL WELLNESS LEADERSHIP FORUM",
+      sessions: [
+        "Wellness Economy & Global Opportunities",
+        "Ayurveda, AYUSH & Holistic Healing",
+        "Fitness, Preventive Health & Lifestyle Medicine",
+        "Beauty, Personal Care & Wellness Innovation"
+      ],
+      image: ram2,
+      icon: <Sprout className="w-10 h-10 text-white" />,
+      accentColor: "#E67E22",
+      badgeColor: "bg-[#92400E]",
+      shadowColor: "hover:shadow-[#E67E22]/20",
+      link: "/conference/day-2"
+    },
+    {
+      day: "DAY 3",
       date: "22 AUGUST 2026",
       title: "WELLNESS & AYUSH LEADERSHIP FORUM",
       sessions: [
@@ -37,27 +54,12 @@ const MainConferences: React.FC = () => {
         "Yoga, Mental Health & Wellness",
         "Herbal Industry & Natural Products"
       ],
-      image: ram2,
-      icon: <Sprout className="w-10 h-10 text-white" />,
-      accentColor: "#E67E22",
-      badgeColor: "bg-[#92400E]",
-      shadowColor: "hover:shadow-[#E67E22]/20"
-    },
-    {
-      day: "DAY 3",
-      date: "23 AUGUST 2026",
-      title: "FUTURE OF PREVENTIVE HEALTHCARE CONFERENCE",
-      sessions: [
-        "Preventive Medicine & Early Detection",
-        "Public Health & Community Wellness",
-        "Research, Innovation & Evidence-based Care",
-        "Policy, Advocacy & Global Partnerships"
-      ],
       image: ram3,
       icon: <ShieldPlus className="w-10 h-10 text-white" />,
       accentColor: "#7C3AED",
       badgeColor: "bg-[#581C87]",
-      shadowColor: "hover:shadow-[#7C3AED]/20"
+      shadowColor: "hover:shadow-[#7C3AED]/20",
+      link: "/conference/day-3"
     }
   ];
 
