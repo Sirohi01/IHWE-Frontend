@@ -20,7 +20,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
-const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
+// const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -33,6 +33,7 @@ const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
 const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
 const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
 const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
+const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -150,6 +151,7 @@ const App = () => {
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
                     <Route path="/international-visitor-registration" element={<AddInternationalVistor />} />
                     <Route path="/exhibition" element={<Exhibition />} />
+                    {/* <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} /> */}
                     <Route path="/media-registration" element={<MediaRegistration />} />
                     <Route path="/speaker-registration" element={<SpeakerRegistration />} />
                     <Route path="/seller-registration" element={<SellerRegistration />} />

@@ -140,6 +140,7 @@ const Footer = () => {
     { label: "Brochure Download", href: "/brochure" },
     { label: "Exhibitor List", href: "/exhibitors" },
     { label: "Sponsorship Opportunities", href: "/sponsorship" },
+    { label: "MSME PMS Scheme", href: "/msme-pms-scheme" },
     { label: "Hosted Buyer Program", href: "/hosted-buyer" },
     { label: "Travel & Stay", href: "/travel" },
     { label: "FAQs", href: "/faq" },

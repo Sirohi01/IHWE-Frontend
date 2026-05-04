@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays } from "lucide-react";
+import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
 import MsmeHeroLogo from "./MsmeHeroLogo";
@@ -46,7 +46,7 @@ const navLinks = [
   },
   {
     label: "PARTICIPATE",
-   
+
     dropdown: [
       {
         label: "Exhibit at IHWE?",
@@ -72,11 +72,29 @@ const navLinks = [
         icon: Users,
         description: "Connect with buyers and sellers at IHWE"
       },
+      {
+        label: "MSME PMS Scheme",
+        path: "/msme-pms-scheme",
+        icon: ShieldCheck,
+        description: "Government subsidy for MSME exhibitors"
+      },
+      // {
+      //   label: "Conference",
+      //   path: "/exhibitors",
+      //   icon: FileCheck,
+      //   description: "View the list of confirmed participating brands"
+      // },
+      // {
+      //   label: "Awards",
+      //   path: "/e-promotion",
+      //   icon: Rocket,
+      //   description: "Digital exposure for your brand"
+      // },
     ],
   },
   {
     label: "EXPLORE",
-    
+
     dropdown: [
       {
         label: "Event Highlights",
@@ -98,9 +116,9 @@ const navLinks = [
       },
     ],
   },
-    {
+  {
     label: "OPPORTUNITIES",
-    
+
     dropdown: [
       {
         label: "Sponsorship",
@@ -126,7 +144,7 @@ const navLinks = [
   { label: "Conference", path: "/conference" },
   { label: "Awards", path: "/awards" },
 
-    { label: "Contact", path: "/contact" },
+  { label: "Contact", path: "/contact" },
 ];
 
 interface NavbarProps {
@@ -223,6 +241,23 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
                   onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
                 >
+                  <Link
+                    to={link.path || "#"}
+                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    className={`px-2 py-2 text-[11px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                      }`}
+                  >
+                    {link.label}
+                    {link.dropdown && (
+                      <ChevronDown
+                        className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
+                          }`}
+                      />
+                    )}
+                    <span
+                      className={`absolute -bottom-1 left-2 right-2 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
+                        ? "scale-x-100"
+                        : "scale-x-0 group-hover:scale-x-100"
                 <Link
                   to={link.path || "#"}
                   style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
@@ -235,14 +270,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                       className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
                         }`}
                     />
-                  )}
-                  <span
-                    className={`absolute -bottom-1 left-2 right-2 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
-                      ? "scale-x-100"
-                      : "scale-x-0 group-hover:scale-x-100"
-                      }`}
-                  />
-                </Link>
+                  </Link>
 
                   {/* Dropdown */}
                   {link.dropdown && (
@@ -434,7 +462,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     )}
                   </AnimatePresence>
                 </div>
-                
+
                 {/* MSME Logo Component */}
                 <MsmeHeroLogo />
               </div>
