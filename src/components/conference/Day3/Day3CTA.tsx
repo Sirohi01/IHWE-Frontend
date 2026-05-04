@@ -21,7 +21,7 @@ const Day3CTA: React.FC = () => {
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
       </div>
 
-      <div className="container mx-auto px-6 max-w-[1320px] relative z-10">
+      <div className="container mx-auto px-6 max-w-[1400px] relative z-10">
         <div className="grid md:grid-cols-3 gap-6">
 
           {/* Card 1: BE PART OF DAY 3 */}

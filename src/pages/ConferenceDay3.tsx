@@ -25,11 +25,13 @@ const ConferenceDay3: React.FC = () => {
         <ConferenceStats />
 
         {/* 3. About Day 3 */}
-        <Day3About />
+        <div className="relative left-[20px]">
+          <Day3About />
+        </div>
 
         {/* 4. Agenda & Featured Speakers (Side-by-Side, no gap) */}
-        <section className="bg-white py-10">
-          <div className="container mx-auto px-6 max-w-[1320px]">
+        <section className="bg-white py-10 relative left-[20px]">
+          <div className="container mx-auto px-6 max-w-[1400px]">
             <div className="flex flex-col xl:flex-row gap-6 items-stretch">
               {/* Agenda — 62% */}
               <div className="w-full xl:w-[62%]">
@@ -45,19 +47,29 @@ const ConferenceDay3: React.FC = () => {
         </section>
 
         {/* 5. Attendee Details (Who, Why, Exhibition, Sponsor) */}
-        <Day3Details />
+        <div className="relative left-[20px]">
+          <Day3Details />
+        </div>
 
         {/* 6. Partner/Sponsor Pricing Table */}
-        <Day3Sponsors />
+        <div className="relative left-[20px]">
+          <Day3Sponsors />
+        </div>
 
         {/* 7. Collaboration Banner */}
-        <Day3BottomCTA />
+        <div className="relative left-[20px]">
+          <Day3BottomCTA />
+        </div>
 
         {/* 8. Final Call-to-Action Cards */}
-        <Day3CTA />
+        <div className="relative left-[20px]">
+          <Day3CTA />
+        </div>
 
         {/* 9. Production Footer Bar */}
-        <Day3Footer />
+        <div className="relative left-[20px]">
+          <Day3Footer />
+        </div>
       </div>
     </div>
   );

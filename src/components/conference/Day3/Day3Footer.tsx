@@ -14,7 +14,7 @@ import {
 const Day3Footer: React.FC = () => {
   return (
     <footer className="bg-white border-t border-gray-100 pt-6 pb-10">
-      <div className="container mx-auto px-6 max-w-[1320px]">
+      <div className="container mx-auto px-6 max-w-[1400px]">
         <div className="flex flex-wrap items-center justify-between gap-y-10 gap-x-6">
           
           {/* Info Blocks */}

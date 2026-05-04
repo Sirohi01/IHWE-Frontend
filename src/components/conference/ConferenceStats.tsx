@@ -21,7 +21,7 @@ const statsData = [
 
 const ConferenceStats: React.FC = () => {
   return (
-    <section className="relative z-[60] mx-auto max-w-[1320px] -mt-10 px-6">
+    <section className="relative z-0 mx-auto max-w-[1400px] -mt-10 px-6 left-[20px]">
       <div className="bg-[#0B2C66] rounded-[20px] shadow-[0_15px_40px_rgba(11,44,102,0.25)] border border-white/10 px-8 py-1.5 relative overflow-hidden">
 
         <div className="absolute inset-0 opacity-5 pointer-events-none">

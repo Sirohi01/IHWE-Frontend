@@ -21,7 +21,7 @@ const focusAreas = [
 const Day3About: React.FC = () => {
   return (
     <section className="py-10 bg-[#F8FAFC]">
-      <div className="container mx-auto px-6 max-w-[1320px] relative z-10">
+      <div className="container mx-auto px-6 max-w-[1400px] relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
           {/* About Text */}

@@ -17,7 +17,7 @@ const Day2Hero: React.FC = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="absolute inset-0 bg-black/10" />
+
       </div>
 
       {/* Content Container */}

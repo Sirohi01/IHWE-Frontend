@@ -17,13 +17,12 @@ const Day3Hero: React.FC = () => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Attractive Visibility Overlay */}
 
       </div>
 
       {/* Content Container */}
-      <div className="container mx-auto px-8 lg:px-10 relative z-20">
-        <div className="max-w-[750px] lg:ml-8">
+      <div className="container mx-auto px-6 max-w-[1400px] relative z-20">
+        <div className="max-w-[850px] relative left-[20px]">
 
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-[14px] text-[#5F6B7A] font-black mb-6">
