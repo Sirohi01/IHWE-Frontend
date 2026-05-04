@@ -5,6 +5,7 @@ import EventInfoBanner from "@/components/home/EventInfoBanner";
 import HealthcareSectors from "@/components/home/HealthcareSectors";
 import MarqueeStrip from "@/components/home/MarqueeStrip";
 import Testimonials from "@/components/home/Testimonials";
+import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import StatsCounter from "@/components/home/StatsCounter";
 import CountersSection from "@/components/home/CountersSection";
@@ -32,6 +33,7 @@ import ConferenceSeminars from "@/components/home/ConferenceSeminars";
 import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
 import FloatingVideo from "@/components/home/FloatingVideo";
+import SponsorshipSection from "@/components/home/SponsorshipSection";
 
 interface IndexProps {
   onRegisterVisit: () => void;
@@ -52,6 +54,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <BeyondExhibition />
       <AttendanceInfo />
       <EventInfoBanner />
+      {/* <SponsorshipSection /> */}
       <HealthcareSectors />
       <MarqueeStrip />
       <EventGlimpses />
@@ -61,7 +64,8 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       {/* <WhoWeAre /> */}
 
       {/* <IndustryZones /> */}
-      <Testimonials />
+      {/* <Testimonials /> */}
+      <TestimonialsCarousel />
       {/* <GallerySection /> */}
 
       {/* <ExhibitorLogos /> */}
