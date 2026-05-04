@@ -2,6 +2,8 @@ import React from 'react'
 import BSMeetHero from '@/components/buyerSellerMeet/BSMeetHero'
 import WhatIsBuyer from '@/components/buyerSellerMeet/WhatIsBuyer'
 import WhoShould from '../../components/buyerSellerMeet/WhoShould'
+import HowIT from '../../components/buyerSellerMeet/HowIT'
+import WhatPar from '../../components/buyerSellerMeet/WhatPar'
 
 const BuyerSellerMeet = () => {
     return (
@@ -9,6 +11,8 @@ const BuyerSellerMeet = () => {
             <BSMeetHero />
             <WhatIsBuyer />
             <WhoShould />
+            <HowIT />
+            <WhatPar />
         </div>
     )
 }
