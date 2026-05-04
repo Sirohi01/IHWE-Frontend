@@ -60,7 +60,7 @@ const ExhibitorCTA = () => {
                     <div className="flex flex-wrap items-center gap-4">
                         <Link
                             to="/book-a-stand"
-                            className="px-6 py-3 bg-[#1a4a2a] hover:bg-[#153a21] text-white rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
+                            className="px-5 py-2 bg-[#1a4a2a] hover:bg-[#153a21] text-white rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
                         >
                             BOOK YOUR STALL <ArrowRight className="w-4 h-4" />
                         </Link>
@@ -69,7 +69,7 @@ const ExhibitorCTA = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             download
-                            className="px-6 py-3 bg-white hover:bg-gray-50 text-[#1a4a2a] border border-[#1a4a2a] rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
+                            className="px-5 py-2 bg-white hover:bg-gray-50 text-[#1a4a2a] border border-[#1a4a2a] rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
                         >
                             DOWNLOAD BROCHURE <Download className="w-4 h-4" />
                         </a>
