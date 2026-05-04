@@ -13,7 +13,7 @@ const AwardsCTA = () => {
         }}
       >
         {/* Full width CTA content */}
-        <div className="px-6 md:px-14 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 w-full flex flex-col md:flex-row items-center justify-between gap-6">
           
           <div className="flex items-center gap-6">
             <div className="shrink-0 w-24 h-24 md:w-30 md:h-30 overflow-hidden flex items-center justify-center -my-4">
@@ -36,20 +36,20 @@ const AwardsCTA = () => {
           </div>
 
           {/* Linked Buttons */}
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:ml-auto shrink-0">
             <Link 
               to="/awards/nomination"
-              className="bg-[#008d48] text-white px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-[#007a3e] border border-white/10 shadow-lg"
+              className="bg-[#008d48] text-white px-7 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-[#007a3e] shadow-lg active:scale-95"
             >
               NOMINATE NOW
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link 
               to="/contact"
-              className="bg-white text-[#002b5c] px-7 py-3 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center gap-2.5 transition-all hover:bg-slate-50 shadow-lg"
+              className="bg-white text-[#002b5c] px-7 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-slate-50 shadow-lg active:scale-95 border border-slate-100"
             >
               CONTACT US
-              <Phone className="w-4 h-4" />
+              <Phone className="w-3.5 h-3.5" />
             </Link>
           </div>
 

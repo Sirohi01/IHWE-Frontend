@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import { ChevronLeft, ChevronRight, Mic2 } from "lucide-react";
+import { speakerApi, SERVER_URL } from "@/lib/api";
 
-const speakers = [
-  // ... (same speakers array)
+const FALLBACK_SPEAKERS = [
   {
     name: "Dr. Randal Pinkett",
     role: "Former Chief Health Officer",
@@ -63,6 +63,29 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
 }) => {
   const controls = useAnimationControls();
   const [isPaused, setIsPaused] = useState(false);
+  const [displaySpeakers, setDisplaySpeakers] = useState(FALLBACK_SPEAKERS);
+
+  useEffect(() => {
+    const fetchApprovedSpeakers = async () => {
+      try {
+        const approved = await speakerApi.get('Approved');
+        if (approved && approved.length > 0) {
+          const mapped = approved.map((s: any) => ({
+            name: s.fullName,
+            role: s.designation,
+            org: s.organization,
+            topic: s.preferredTopic,
+            image: s.speakerPhotoUrl && (s.speakerPhotoUrl.startsWith('http') ? s.speakerPhotoUrl : `${SERVER_URL}${s.speakerPhotoUrl}`),
+            flag: "🇮🇳", // Defaulting as country info isn't in model, can be updated later
+          }));
+          setDisplaySpeakers(mapped);
+        }
+      } catch (error) {
+        console.error("Error fetching approved speakers:", error);
+      }
+    };
+    fetchApprovedSpeakers();
+  }, []);
 
   // Function to nudge the marquee
   const nudgeMarquee = (direction: "left" | "right") => {
@@ -126,15 +149,15 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
               }}
             >
               {/* Double the speakers for seamless looping */}
-              {[...speakers, ...speakers].map((speaker, index) => (
+              {[...displaySpeakers, ...displaySpeakers].map((speaker, index) => (
                 <div
                   key={index}
-                  className="w-[280px] flex-shrink-0 bg-white rounded-[24px] p-6 shadow-md border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
+                  className="w-[240px] flex-shrink-0 bg-white rounded-[20px] p-5 shadow-sm border border-[#E6ECF3] hover:border-[#4E9F3D] transition-all duration-400 group flex flex-col items-center text-center"
                 >
                   {/* Photo */}
-                  <div className="relative w-[110px] h-[110px] mb-5">
-                    <div className="absolute -top-1 -left-1 w-8 h-8 rounded-full bg-[#1E88E5] text-white flex items-center justify-center shadow-lg z-10 border-2 border-white">
-                      <Mic2 className="w-4 h-4" />
+                  <div className="relative w-[90px] h-[90px] mb-3">
+                    <div className="absolute -top-1 -left-1 w-7 h-7 rounded-full bg-[#1E88E5] text-white flex items-center justify-center shadow-lg z-10 border-2 border-white">
+                      <Mic2 className="w-3.5 h-3.5" />
                     </div>
 
                     <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
@@ -145,30 +168,30 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
                       />
                     </div>
 
-                    <div className="absolute top-1 -right-1 w-7 h-7 rounded-full bg-white shadow-md flex items-center justify-center text-[12px] border border-[#E6ECF3] z-10">
+                    <div className="absolute top-1 -right-1 w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center text-[10px] border border-[#E6ECF3] z-10">
                       {speaker.flag}
                     </div>
                   </div>
 
                   {/* Info */}
-                  <h3 className="text-[16px] font-bold text-[#1C2B3A] mb-1.5 leading-tight">
+                  <h3 className="text-[14px] font-bold text-[#1C2B3A] mb-1 leading-tight">
                     {speaker.name}
                   </h3>
-                  <div className="flex flex-col gap-0.5 mb-4">
-                    <p className="text-[11px] font-medium text-[#5F6B7A] leading-tight">
+                  <div className="flex flex-col gap-0.5 mb-3">
+                    <p className="text-[10px] font-medium text-[#5F6B7A] leading-tight">
                       {speaker.role}
                     </p>
-                    <p className="text-[11px] font-bold text-[#1C2B3A]">
+                    <p className="text-[10px] font-bold text-[#1C2B3A]">
                       {speaker.org}
                     </p>
                   </div>
 
                   {/* Topic */}
-                  <div className="w-full border-t border-[#F1F5F9] pt-4 text-left">
-                    <p className="text-[10px] font-bold text-[#8FB569] uppercase tracking-wider mb-1">
+                  <div className="w-full border-t border-[#F1F5F9] pt-3 text-left">
+                    <p className="text-[9px] font-bold text-[#8FB569] uppercase tracking-wider mb-1">
                       TOPIC:
                     </p>
-                    <p className="text-[13px] font-medium text-[#1C2B3A] leading-snug line-clamp-2">
+                    <p className="text-[12px] font-medium text-[#1C2B3A] leading-snug line-clamp-2">
                       {speaker.topic}
                     </p>
                   </div>

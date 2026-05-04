@@ -40,10 +40,10 @@ const features = [
 
 const WhatIsBuyer = () => {
     return (
-        <div className="relative overflow-hidden py-10 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className="relative overflow-hidden py-4 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
 
             {/* Heading */}
-            <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '26px', fontWeight: 800, color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', margin: '0 0 8px' }}>
+            <h2 className='text-xl font-medium' style={{ fontFamily: "'Barlow Condensed', sans-serif", color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', }}>
                 WHAT IS BUYER<span style={{ color: '#3a8c2f' }}>–</span>SELLER MEET?
             </h2>
 
@@ -55,7 +55,7 @@ const WhatIsBuyer = () => {
             </div>
 
             {/* Tagline */}
-            <p className='text-sm' style={{ textAlign: 'center', color: '#4a5a40', lineHeight: 1.65, maxWidth: '650px', margin: '0 auto 28px' }}>
+            <p className='text-sm text-center mx-auto mb-4' style={{ color: '#4a5a40', lineHeight: 1.65, maxWidth: '650px', }}>
                 Buyer–Seller Meet is a curated B2B networking initiative of International Health &amp; Wellness Expo 2026,
                 designed to bridge the gap between quality exhibitors (sellers) and genuine, pre-verified buyers.
             </p>

@@ -20,6 +20,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
+const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -99,6 +100,7 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import ScrollToTopOnNavigation from "@/components/layout/ScrollToTopOnNavigation";
 import AnnexureD from "@/pages/psmClaim/AnnexureD";
 import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
 import MandateForm from "@/pages/psmClaim/MandateForm";
@@ -126,6 +128,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
               <Sonner />
@@ -161,6 +164,7 @@ const App = () => {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/gallery" element={<Gallery />} />
                     <Route path="/buyer-seller-meet" element={<BuyerSellerMeet />} />
+                    <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />
