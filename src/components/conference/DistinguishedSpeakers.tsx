@@ -52,7 +52,15 @@ const FALLBACK_SPEAKERS = [
   },
 ];
 
-const DistinguishedSpeakers: React.FC = () => {
+interface DistinguishedSpeakersProps {
+  title?: string;
+  highlight?: string;
+}
+
+const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
+  title = "MEET OUR DISTINGUISHED",
+  highlight = "SPEAKERS"
+}) => {
   const controls = useAnimationControls();
   const [isPaused, setIsPaused] = useState(false);
   const [displaySpeakers, setDisplaySpeakers] = useState(FALLBACK_SPEAKERS);
@@ -87,13 +95,13 @@ const DistinguishedSpeakers: React.FC = () => {
   };
 
   return (
-    <section className="py-4 bg-white overflow-hidden relative">
+    <section className="py-2 bg-white overflow-hidden relative">
       <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Header */}
         <div className="relative mb-4 text-center">
           <div className="flex flex-col items-center">
             <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
-              MEET OUR DISTINGUISHED <span className="text-[#1E88E5]">SPEAKERS</span>
+              {title} <span className="text-[#1E88E5]">{highlight}</span>
             </h2>
             <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
           </div>
@@ -107,7 +115,7 @@ const DistinguishedSpeakers: React.FC = () => {
         </div>
 
         {/* Marquee with Arrows */}
-        <div 
+        <div
           className="relative group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -119,7 +127,7 @@ const DistinguishedSpeakers: React.FC = () => {
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          
+
           <button
             className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-xl border border-[#E6ECF3] flex items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
             aria-label="Next"
@@ -191,7 +199,7 @@ const DistinguishedSpeakers: React.FC = () => {
               ))}
             </motion.div>
 
-            {/* Fade effects on the edges */}
+
             <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
             <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
           </div>

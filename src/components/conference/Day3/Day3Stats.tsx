@@ -1,41 +1,38 @@
-
 import React from "react";
 import { motion } from "framer-motion";
-import { Users, Mic, Calendar, Trophy, Globe2 } from "lucide-react";
-
+import { Users, Mic, Calendar, Trophy, Infinity } from "lucide-react";
 
 const InfinityIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4E9F3D" strokeWidth="2">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4E9F3D" strokeWidth="2">
     <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8C.344 8 .344 16 5.44 16c5.095 0 7.133-8 12.738-8z" />
   </svg>
 );
 
 const statsData = [
-  { icon: Users, value: "50+", label: "Expert Speakers" },
-  { icon: Mic, value: "18", label: "Premium Sessions" },
-  { icon: Calendar, value: "3", label: "Days Major Conferences" },
-  { icon: Trophy, value: "1000+", label: "Delegates" },
-  { icon: Globe2, value: "20+", label: "Countries" },
+  { icon: Users, value: "40+", label: "Expert Speakers" },
+  { icon: Mic, value: "6", label: "Sessions" },
+  { icon: Calendar, value: "200+", label: "Delegates" },
+  { icon: Trophy, value: "15+", label: "Sponsors" },
   { icon: InfinityIcon, value: "", label: "Endless Opportunities", custom: true },
 ];
 
-const ConferenceStats: React.FC = () => {
+const Day3Stats: React.FC = () => {
   return (
-    <section className="relative z-0 mx-auto max-w-[1400px] -mt-10 px-6 left-[20px]">
+    <section className="relative z-[60] mx-auto max-w-[1320px] -mt-10 px-6">
       <div className="bg-[#0B2C66] rounded-[20px] shadow-[0_15px_40px_rgba(11,44,102,0.25)] border border-white/10 px-8 py-1.5 relative overflow-hidden">
-
+        {/* Grid texture */}
         <div className="absolute inset-0 opacity-5 pointer-events-none">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+              <pattern id="grid3" width="30" height="30" patternUnits="userSpaceOnUse">
                 <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" strokeWidth="0.5" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
+            <rect width="100%" height="100%" fill="url(#grid3)" />
           </svg>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 relative z-10 divide-x divide-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 relative z-10 divide-x divide-white/10">
           {statsData.map((stat, index) => (
             <motion.div
               key={index}
@@ -47,9 +44,7 @@ const ConferenceStats: React.FC = () => {
             >
               <div className="transition-transform duration-500 group-hover:scale-110">
                 {stat.custom ? (
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4E9F3D" strokeWidth="2">
-                    <path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8C.344 8 .344 16 5.44 16c5.095 0 7.133-8 12.738-8z" />
-                  </svg>
+                  <InfinityIcon />
                 ) : (
                   <stat.icon className="w-8 h-8 text-[#4E9F3D]" strokeWidth={2} />
                 )}
@@ -70,4 +65,4 @@ const ConferenceStats: React.FC = () => {
   );
 };
 
-export default ConferenceStats;
+export default Day3Stats;

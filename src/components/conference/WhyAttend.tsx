@@ -51,10 +51,10 @@ const WhyAttend: React.FC = () => {
               viewport={{ once: true }}
               className="space-y-5"
             >
-              <span className="text-[12px] font-semibold text-[#4E9F3D] uppercase tracking-widest">
+              <span className="text-[18px] font-semibold text-[#4E9F3D] uppercase tracking-widest">
                 WHY ATTEND CONFERENCE?
               </span>
-              <h2 className="text-[34px] font-[900] text-[#1C2B3A] leading-[1.1]">
+              <h2 className="text-[45px] font-[900] text-[#1C2B3A] leading-[1.1]">
                 Where <span className="text-[#4E9F3D]">Ideas</span><br /> Meet{" "}
                 <span className="text-[#1E88E5]">Industry</span>
               </h2>

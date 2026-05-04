@@ -30,6 +30,9 @@ const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasan
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
+const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
+const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
+const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -152,6 +155,9 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/conference" element={<Conference />} />
+                    <Route path="/conference/day-1" element={<ConferenceDay1 />} />
+                    <Route path="/conference/day-2" element={<ConferenceDay2 />} />
+                    <Route path="/conference/day-3" element={<ConferenceDay3 />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />

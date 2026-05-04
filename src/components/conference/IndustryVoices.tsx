@@ -55,7 +55,7 @@ const IndustryVoices: React.FC = () => {
 
   return (
     <section className="py-12 bg-[#FBFDFB] overflow-hidden">
-      <div className="container mx-auto px-4 max-w-[1400px]">
+      <div className="container mx-auto px-6 max-w-[1320px]">
         {/* Header Section */}
         <div className="relative mb-10 flex flex-col items-center">
           <div className="flex items-center gap-4 mb-2">
