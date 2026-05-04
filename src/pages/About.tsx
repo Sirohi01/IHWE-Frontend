@@ -89,7 +89,7 @@ const VENUE_STATS = [
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
   },
   {
-    end: 80000, prefix: "", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
+    end: 8000, prefix: "", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
   },
   {
