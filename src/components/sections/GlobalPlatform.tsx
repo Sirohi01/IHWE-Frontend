@@ -51,7 +51,7 @@ const GlobalPlatform: React.FC = () => {
   };
 
   return (
-    <section className="pt-12 pb-0 lg:pt-16 lg:pb-0 bg-white relative overflow-hidden">
+    <section className="pt-6 pb-0 lg:pt-6 lg:pb-0 bg-white relative overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid lg:grid-cols-[1fr_1.3fr] gap-16 items-center">
 

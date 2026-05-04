@@ -41,6 +41,8 @@ const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const PaymentPolicy = lazy(() => import("./pages/PaymentPolicy"));
+const CancellationPolicy = lazy(() => import("./pages/CancellationPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
@@ -174,6 +176,8 @@ const App = () => {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/payment-policy" element={<PaymentPolicy />} />
+                    <Route path="/cancellation-policy" element={<CancellationPolicy />} />
                     <Route path="/buyer-registration" element={<BuyerLanding />} />
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />

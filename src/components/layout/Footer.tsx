@@ -159,17 +159,17 @@ const Footer = () => {
   const stats = [
     {
       icon: <Users className="w-9 h-9 text-[#F3B71B]" />,
-      end: 150,
+      end: 1500,
       suffix: "+",
       label: "EXHIBITORS",
       sub: "ACROSS SUCCESSFUL EDITIONS",
     },
     {
       icon: <Globe className="w-9 h-9 text-[#F3B71B]" />,
-      end: 8000,
+      end: 80000,
       suffix: "+",
       label: "VISITORS / DELEGATES",
-      // sub: "From 30+ Countries",
+      sub: "ACROSS SUCCESSFUL EDITIONS",
     },
     {
       icon: <Trophy className="w-9 h-9 text-[#F3B71B]" />,
@@ -180,10 +180,10 @@ const Footer = () => {
     },
     {
       icon: <TrendingUp className="w-9 h-9 text-[#F3B71B]" />,
-      end: 500,
+      end: 1500,
       prefix: "₹",
       suffix: "CR+",
-      label: "BUSINESS OPPORTUNITIES",
+      label: "BUSINESS",
       sub: "GENERATED OVER THE YEARS",
     },
   ];
@@ -196,13 +196,8 @@ const Footer = () => {
       href: "/book-a-stand",
       primary: true,
     },
-    {
-      icon: <Users className="w-5 h-5" />,
-      line1: "REGISTER",
-      line2: "AS BUYER",
-      href: "/buyer-registration",
-      primary: false,
-    },
+
+       
     {
       icon: <User className="w-5 h-5" />,
       line1: "REGISTER",
@@ -210,13 +205,26 @@ const Footer = () => {
       href: "/visitor-registration",
       primary: false,
     },
-    {
+
+      {
       icon: <Plane className="w-5 h-5" />,
       line1: "REGISTER ",
       line2: "AS DELEGATE",
       href: "/hosted-buyer",
       primary: false,
     },
+
+
+    {
+      icon: <Users className="w-5 h-5" />,
+      line1: "REGISTER",
+      line2: "AS BUYER",
+      href: "/buyer-registration",
+      primary: false,
+    },
+    
+ 
+  
   ];
 
   return (
@@ -258,6 +266,14 @@ const Footer = () => {
           background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
           transform: skewX(-20deg);
           animation: shimmer 2s infinite;
+        }
+        .golden-text {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          display: inline-block;
         }
       `}</style>
       {/* ── TOP HEADER BAR: Logo + CTA Buttons ── */}
@@ -350,7 +366,17 @@ const Footer = () => {
             style={{ borderRight: "1px solid #1E2A45" }}
           >
             <div>
-              <p className="text-white font-bold text-[15px] leading-none mb-1.5">IHWE</p>
+              <div className="mb-1.5 flex items-center gap-1.5">
+                <span className="text-white font-bold text-[15px] leading-none">9th IHWE</span>
+                <span className="relative inline-block">
+                  <Sparkle style={{ top: '-10px', left: '-2px', animationDelay: '0s', fontSize: '10px' }} />
+                  <Sparkle style={{ top: '-6px', right: '-4px', animationDelay: '0.4s', fontSize: '10px' }} />
+                  <Sparkle style={{ bottom: '-10px', left: '40%', animationDelay: '0.8s', fontSize: '10px' }} />
+                  <span className="golden-text font-bold text-[15px] leading-none">
+                    (Global Edition)
+                  </span>
+                </span>
+              </div>
               <p className="text-[#F3B71B] text-[13px] leading-tight uppercase">
                 International Health &amp; Wellness Expo
               </p>
@@ -574,21 +600,22 @@ const Footer = () => {
 
         <div className="flex items-center flex-wrap">
           {[
-            "Privacy Policy",
-            "Terms & Conditions",
-            "Refund Policy",
-            "Payment Policy",
-            "Cancellation Policy",
+            { label: "Privacy Policy", href: "/privacy-policy" },
+            { label: "Terms & Conditions", href: "/terms-of-service" },
+            { label: "Refund Policy", href: "/refund-policy" },
+            { label: "Payment Policy", href: "/payment-policy" },
+            { label: "Cancellation Policy", href: "/cancellation-policy" },
           ].map((p, i) => (
-            <span
-              key={p}
+            <Link
+              key={p.label}
+              to={p.href}
               className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-2.5"
               style={{
                 borderRight: i < 4 ? "1px solid #1E2A45" : "none",
               }}
             >
-              {p}
-            </span>
+              {p.label}
+            </Link>
           ))}
         </div>
 

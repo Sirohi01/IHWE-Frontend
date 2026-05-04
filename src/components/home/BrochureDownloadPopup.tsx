@@ -21,17 +21,8 @@ const participationCards = [
     arrowBg: "bg-emerald-600",
     link: "/book-a-stand"
   },
-  {
-    id: "buyer",
-    title: "REGISTER AS BUYER",
-    desc: "Connect with top suppliers & close better deals",
-    icon: <Users size={20} />,
-    color: "border-blue-200 bg-white",
-    iconBg: "bg-blue-50 text-blue-600",
-    arrowBg: "bg-blue-600",
-    link: "/buyer-registration"
-  },
-  {
+
+    {
     id: "visitor",
     title: "REGISTER AS VISITOR",
     desc: "Explore innovations & industry trends",
@@ -41,6 +32,7 @@ const participationCards = [
     arrowBg: "bg-purple-600",
     link: "/visitor-registration"
   },
+
   {
     id: "delegate",
     title: "DELEGATE REGISTRATION",
@@ -51,6 +43,20 @@ const participationCards = [
     arrowBg: "bg-orange-500",
     link: "coming-soon"
   },
+  
+
+  {
+    id: "buyer",
+    title: "REGISTER AS BUYER",
+    desc: "Connect with top suppliers & close better deals",
+    icon: <Users size={20} />,
+    color: "border-blue-200 bg-white",
+    iconBg: "bg-blue-50 text-blue-600",
+    arrowBg: "bg-blue-600",
+    link: "/buyer-registration"
+  },
+
+
   {
     id: "sponsor",
     title: "SPONSORSHIP OPPORTUNITIES",
