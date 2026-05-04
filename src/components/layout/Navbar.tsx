@@ -258,16 +258,6 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                       className={`absolute -bottom-1 left-2 right-2 h-[2px] bg-[#d26019] transition-transform duration-300 origin-left ${location.pathname === link.path
                         ? "scale-x-100"
                         : "scale-x-0 group-hover:scale-x-100"
-                <Link
-                  to={link.path || "#"}
-                  style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                  className={`px-2 py-2 text-[10.8px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
-                    }`}
-                >
-                  {link.label}
-                  {link.dropdown && (
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform duration-300 ${activeDropdown === link.label ? "rotate-180" : ""
                         }`}
                     />
                   </Link>
