@@ -20,6 +20,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
+const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -29,6 +30,9 @@ const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasan
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
+const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
+const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
+const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
 const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
@@ -97,6 +101,7 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import ScrollToTopOnNavigation from "@/components/layout/ScrollToTopOnNavigation";
 import AnnexureD from "@/pages/psmClaim/AnnexureD";
 import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
 import MandateForm from "@/pages/psmClaim/MandateForm";
@@ -124,6 +129,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
               <Sonner />
@@ -151,12 +157,16 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/conference" element={<Conference />} />
+                    <Route path="/conference/day-1" element={<ConferenceDay1 />} />
+                    <Route path="/conference/day-2" element={<ConferenceDay2 />} />
+                    <Route path="/conference/day-3" element={<ConferenceDay3 />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/gallery" element={<Gallery />} />
                     <Route path="/buyer-seller-meet" element={<BuyerSellerMeet />} />
+                    <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />

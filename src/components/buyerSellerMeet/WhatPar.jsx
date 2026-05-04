@@ -1,58 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+const testimonials = [
+    { text: 'We connected with 15+ serious buyers in one day – highly effective platform.', author: '– Director,\nHerbal Wellness Pvt. Ltd.', img: '/bsmeet/slider1.png' },
+    { text: 'The pre-scheduled meetings saved time and gave us quality business opportunities.', author: '– Business Head,\nOrganic India', img: '/bsmeet/slider2.png' },
+    { text: 'A well-organized event that helped us expand our reach globally and meet the right partners.', author: '– CEO,\nGlobal Wellness', img: '/bsmeet/slider1.png' },
+    { text: 'Excellent matchmaking! We closed several deals during the expo itself.', author: '– VP Sales,\nNutriLife', img: '/bsmeet/slider2.png' },
+]
 
 const WhatPar = () => {
-    return (
-        <div className='pb-10 px-14' style={{ fontFamily: "'Barlow', sans-serif" }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', alignItems: 'stretch' }}>
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const totalPages = Math.ceil(testimonials.length / 2);
 
-                {/* ── LEFT: IMPACT ── */}
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % totalPages);
+        }, 3000); // 3 seconds per slide
+        return () => clearInterval(timer);
+    }, [totalPages]);
+
+    return (
+        <div className="bg-[#FAF9F2] py-8 px-14 font-['Barlow',sans-serif]">
+            <div className='flex justify-between w-full gap-4'>
+
                 {/* ── LEFT: IMPACT BOX ── */}
-                <div style={{
-                    background: '#1e4020',
-                    borderRadius: '14px',
-                    padding: '24px 28px 28px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                }}>
+                <div className="w-[40%] bg-[#1e4020] rounded-[14px] pt-6 px-7 pb-7 relative overflow-hidden flex-1">
 
                     {/* World Map Background */}
                     <img
                         src="/bsmeet/world-map.png"
                         alt=""
-                        style={{
-                            position: 'absolute',
-                            inset: 0,
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            opacity: 0.12,
-                            pointerEvents: 'none',
-                        }}
+                        className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
                     />
 
                     {/* Title */}
-                    <div style={{
-                        fontSize: '15px',
-                        fontWeight: 800,
-                        color: '#d4a832',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.8px',
-                        textAlign: 'center',
-                        marginBottom: '22px',
-                        position: 'relative',
-                        zIndex: 1,
-                    }}>
+                    <div className="text-[15px] font-extrabold text-[#d4a832] uppercase tracking-[0.8px] text-center mb-[22px] relative z-10">
                         Buyer–Seller Meet 2026 Impact
                     </div>
 
                     {/* Stats Row — 4 columns with dashed dividers */}
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1px 1fr 1px 1fr 1px 1fr',
-                        alignItems: 'start',
-                        position: 'relative',
-                        zIndex: 1,
-                    }}>
+                    <div className="grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
                         {[
                             { icon: '/bsmeet/bsm1.png', num: '1200+', label: 'Pre-scheduled\nMeetings' },
                             { icon: '/bsmeet/bsm2.png', num: '600+', label: 'Verified\nBuyers' },
@@ -62,24 +48,14 @@ const WhatPar = () => {
                             <React.Fragment key={i}>
                                 {/* Dashed divider before every item except first */}
                                 {i > 0 && (
-                                    <div style={{
-                                        borderLeft: '1.5px dashed rgba(255,255,255,0.3)',
-                                        alignSelf: 'stretch',
-                                        margin: '0 4px',
-                                    }} />
+                                    <div className="border-l-[1.5px] border-dashed border-white/30 self-stretch mx-1" />
                                 )}
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '0 6px',
-                                }}>
-                                    <img src={item.icon} alt="" style={{ width: '42px', height: '42px', objectFit: 'contain' }} />
-                                    <div style={{ fontSize: '28px', fontWeight: 800, color: '#d4a832', lineHeight: 1 }}>
+                                <div className="flex flex-col items-center gap-2 px-1.5">
+                                    <img src={item.icon} alt="" className="w-[70px] h-[70px] object-contain" />
+                                    <div className="text-[28px] font-extrabold text-[#d4a832] leading-none">
                                         {item.num}
                                     </div>
-                                    <div style={{ fontSize: '11px', color: '#cde0c5', textAlign: 'center', lineHeight: 1.45, whiteSpace: 'pre-line' }}>
+                                    <div className="text-[12px] text-[#cde0c5] text-center leading-[1.45] whitespace-pre-line">
                                         {item.label}
                                     </div>
                                 </div>
@@ -89,36 +65,41 @@ const WhatPar = () => {
                 </div>
 
                 {/* ── MIDDLE: TESTIMONIALS ── */}
-                <div style={{ background: '#fff', borderRadius: '14px', padding: '22px 18px 20px', display: 'flex', flexDirection: 'column', gap: '14px', border: '1px solid #e8e8e8' }}>
-                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center' }}>
+                <div className="w-[60%] bg-white rounded-[14px] p-3 pb-5 flex flex-col gap-3.5 border border-[#e8e8e8] min-w-0">
+                    <div className="text-lg font-medium text-[#1a3d20] uppercase tracking-[0.5px] text-center">
                         What Participants Say
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', flex: 1 }}>
-                        {[
-                            { text: 'We connected with 15+ serious buyers in one day – highly effective platform.', author: '– Director,\nHerbal Wellness Pvt. Ltd.', img: '/bsmeet/person1.png' },
-                            { text: 'The pre-scheduled meetings saved time and gave us quality business opportunities.', author: '– Business Head,\nOrganic India', img: '/bsmeet/person2.png' },
-                        ].map((t, i) => (
-                            <div key={i} style={{ border: '1px solid #e4e4e4', borderRadius: '10px', padding: '14px 12px 12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '10px' }}>
-                                <div>
-                                    <div style={{ fontSize: '28px', color: '#3a7a30', lineHeight: 0.8, fontFamily: 'Georgia, serif', fontWeight: 700 }}>"</div>
-                                    <div style={{ fontSize: '11.5px', color: '#333', lineHeight: 1.55, marginTop: '6px' }}>{t.text}</div>
+                    <div className="flex-1 overflow-hidden flex items-center">
+                        <div className="flex transition-transform duration-500 ease-in-out w-full" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                            {testimonials.map((t, i) => (
+                                <div key={i} className="min-w-[33%] px-[5px] box-border">
+                                    <div className="border border-[#e4e4e4] rounded-[10px] pt-3.5 px-3 pb-3 flex flex-col justify-between gap-2.5 h-full">
+                                        <div>
+                                            <div className="text-[28px] text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-bold">"</div>
+                                            <div className="text-sm text-[#333] leading-[1.55] mt-1.5">{t.text}</div>
+                                        </div>
+                                        <div className="flex items-end justify-between gap-2">
+                                            <div className="text-sm font-medium text-[#555] leading-[1.5] italic whitespace-pre-line">{t.author}</div>
+                                            {/* <img src={t.img} alt="" style={{ width: '55px', height: '55px', borderRadius: '50%', objectFit: 'fit', border: '2px solid #f0e8d0', flexShrink: 0 }} /> */}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px' }}>
-                                    <div style={{ fontSize: '10px', color: '#555', lineHeight: 1.5, fontStyle: 'italic', whiteSpace: 'pre-line' }}>{t.author}</div>
-                                    <img src={t.img} alt="" style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #f0e8d0', flexShrink: 0 }} />
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3a7a30' }} />
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3a7a30' }} />
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ccc' }} />
+                    <div className="flex justify-center gap-1.5">
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                            <div
+                                key={i}
+                                onClick={() => setCurrentIndex(i)}
+                                className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-colors duration-300 ${currentIndex === i ? 'bg-[#3a7a30]' : 'bg-[#ccc]'}`}
+                            />
+                        ))}
                     </div>
                 </div>
 
                 {/* ── RIGHT: FORM ── */}
-                <div style={{ background: '#1e4020', borderRadius: '14px', padding: '22px 18px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {/* <div style={{ flex: 1, background: '#1e4020', borderRadius: '14px', padding: '22px 18px 20px', display: 'flex', flexDirection: 'column', gap: '14px', minWidth: 0 }}>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center', lineHeight: 1.3 }}>
                         Join the Buyer–Seller Meet
                     </div>
@@ -139,7 +120,7 @@ const WhatPar = () => {
                     <div style={{ fontSize: '10px', color: '#aacca5', textAlign: 'center', lineHeight: 1.4 }}>
                         🔒 Your information is safe with us and will never be shared.
                     </div>
-                </div>
+                </div> */}
 
             </div>
         </div>

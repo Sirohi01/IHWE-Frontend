@@ -5,37 +5,37 @@ const steps = [
         num: 1,
         title: "REGISTER\nONLINE",
         desc: "Sign up as Buyer or Seller",
-        icon: <img src="/bsmeet/howit1.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
+        icon: <img src="/bsmeet/howit1.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 2,
         title: "PROFILE SCREENING\n& APPROVAL",
         desc: "Our team verifies your profile",
-        icon: <img src="/bsmeet/howit2.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
+        icon: <img src="/bsmeet/howit2.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 3,
         title: "MEETING\nMATCHMAKING",
         desc: "We match you with relevant partners",
-        icon: <img src="/bsmeet/howit3.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
+        icon: <img src="/bsmeet/howit3.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 4,
         title: "SCHEDULE\nCONFIRMATION",
         desc: "Get your meeting calendar",
-        icon: <img src="/bsmeet/howit4.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
+        icon: <img src="/bsmeet/howit4.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 5,
         title: "FACE-TO-FACE\nMEETINGS AT EXPO",
         desc: "Meet, discuss & grow your business",
-        icon: <img src="/bsmeet/howit5.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />,
+        icon: <img src="/bsmeet/howit5.png" alt="" className="w-full h-full object-contain" />,
     },
 ]
 
 const ArrowIcon = () => (
-    <div style={{ display: 'flex', alignItems: 'center', paddingTop: '30px', flexShrink: 0 }}>
-        <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
+    <div className="flex items-center mt-10 shrink-0">
+        <svg width="20" height="18" viewBox="0 0 28 18" fill="none">
             <path d="M2 9h22M20 3l6 6-6 6" stroke="#3a7a30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     </div>
@@ -60,105 +60,53 @@ const industries = [
 
 const HowIT = () => {
     return (
-        <div className='py-10 px-14' style={{ fontFamily: "'Barlow', sans-serif" }}>
-            <div className='flex flex-row items-stretch gap-10'>
+        <div className="py-4 px-14 font-['Barlow',sans-serif]">
+            <div className='flex flex-row items-stretch gap-4'>
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
-                <div className='w-1/2 flex flex-col'>
+                <div className='w-[60%] flex flex-col'>
 
                     {/* Section Title */}
                     {/* HOW IT WORKS? heading with side lines */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+                    <div className="flex items-center gap-1 mb-2">
 
                         {/* Left line */}
-                        <div style={{ flex: 1, height: '1.5px', background: '#3a7a30', opacity: 0.4 }} />
+                        <div className="flex-1 h-[1.5px] bg-[#3a7a30] opacity-40" />
 
                         {/* Heading */}
-                        <h2 style={{
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontSize: '26px',
-                            fontWeight: 800,
-                            color: '#1a3d20',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            textAlign: 'center',
-                            whiteSpace: 'nowrap',
-                            margin: 0,
-                        }}>
+                        <h2 className="font-['Barlow_Condensed',sans-serif] text-lg font-medium text-[#1a3d20] uppercase tracking-[1px] text-center whitespace-nowrap m-0">
                             HOW IT WORKS?
                         </h2>
 
                         {/* Right line */}
-                        <div style={{ flex: 1, height: '1.5px', background: '#3a7a30', opacity: 0.4 }} />
+                        <div className="flex-1 h-[1.5px] bg-[#3a7a30] opacity-40" />
 
                     </div>
 
                     {/* Steps Row */}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <div className="flex items-start justify-center">
                         {steps.map((step, i) => (
                             <React.Fragment key={i}>
                                 {/* Step */}
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+                                <div className="flex flex-col items-center flex-1">
 
                                     {/* ✅ FIXED: Circle with proper border, overflow hidden, padding */}
-                                    <div className='mt-5' style={{
-                                        width: '80px',
-                                        height: '80px',
-                                        borderRadius: '50%',
-                                        border: '2.5px solid #3a7a30',   // ← proper border thickness
-                                        background: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        overflow: 'hidden',               // ← image stays inside circle
-                                        flexShrink: 0,
-                                        padding: '12px',                  // ← icon andar rahe, border clearly dikhe
-                                        boxSizing: 'border-box',
-
-                                    }}>
+                                    <div className="mt-5 w-[60px] h-[60px] rounded-full border-[2.5px] border-[#3a7a30] bg-white flex items-center justify-center overflow-hidden shrink-0 p-3 box-border">
                                         {step.icon}
                                     </div>
 
                                     {/* Number Badge */}
-                                    <div className='mt-6' style={{
-                                        width: '26px', height: '26px',
-                                        borderRadius: '50%',
-                                        background: '#3a7a30',
-                                        color: '#fff',
-                                        fontFamily: "'Barlow Condensed', sans-serif",
-                                        fontSize: '14px',
-                                        fontWeight: 800,
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-
-                                    }}>
+                                    <div className="mt-6 w-[26px] h-[26px] rounded-full bg-[#3a7a30] text-white font-['Barlow_Condensed',sans-serif] text-[14px] font-extrabold flex items-center justify-center">
                                         {step.num}
                                     </div>
 
                                     {/* Title */}
-                                    <div className='mt-6' style={{
-                                        fontFamily: "'Barlow Condensed', sans-serif",
-                                        fontSize: '13px',
-                                        fontWeight: 800,
-                                        color: '#1a3d20',
-                                        textTransform: 'uppercase',
-                                        textAlign: 'center',
-                                        letterSpacing: '0.3px',
-
-                                        lineHeight: 1.4,
-                                        whiteSpace: 'pre-line',
-                                    }}>
+                                    <div className="mt-6 text-sm font-medium text-[#1a3d20] uppercase text-center whitespace-pre-line">
                                         {step.title}
                                     </div>
 
                                     {/* Description */}
-                                    <div style={{
-                                        fontSize: '13px',
-                                        color: '#4a6040',
-                                        textAlign: 'center',
-                                        lineHeight: 1.5,
-                                        marginTop: '4px',
-                                        maxWidth: '120px',
-                                    }}>
+                                    <div className="text-[13px] text-[#4a6040] text-center mt-1">
                                         {step.desc}
                                     </div>
                                 </div>
@@ -171,87 +119,37 @@ const HowIT = () => {
                 </div>
 
                 {/* ── RIGHT SIDE: INDUSTRIES COVERED ── */}
-                <div className='w-1/2 flex flex-col'>
+                <div className='w-[40%] flex flex-col'>
 
                     {/* Section Title */}
-                    {/* <h2 style={{
-                        fontFamily: "'Barlow Condensed', sans-serif",
-                        fontSize: '26px',
-                        fontWeight: 800,
-                        color: '#1a3d20',
-                        textTransform: 'uppercase',
-                        letterSpacing: '1.5px',
-                        textAlign: 'center',
-                        marginBottom: '16px',
-                    }}>
-                        Industries Covered
-                    </h2> */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '28px' }}>
+
+                    <div className="flex items-center gap-3 mb-2">
 
                         {/* Left line */}
-                        <div style={{ flex: 1, height: '1.5px', background: '#3a7a30', opacity: 0.4 }} />
+                        <div className="flex-1 h-[1.5px] bg-[#3a7a30] opacity-40" />
 
                         {/* Heading */}
-                        <h2 style={{
-                            fontFamily: "'Barlow Condensed', sans-serif",
-                            fontSize: '26px',
-                            fontWeight: 800,
-                            color: '#1a3d20',
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            textAlign: 'center',
-                            whiteSpace: 'nowrap',
-                            margin: 0,
-                        }}>
+                        <h2 className="font-['Barlow_Condensed',sans-serif] text-lg font-medium text-[#1a3d20] uppercase tracking-[1px] text-center whitespace-nowrap m-0">
                             Industries Covered
                         </h2>
 
                         {/* Right line */}
-                        <div style={{ flex: 1, height: '1.5px', background: '#3a7a30', opacity: 0.4 }} />
+                        <div className="flex-1 h-[1.5px] bg-[#3a7a30] opacity-40" />
 
                     </div>
 
                     {/* Outer Box with Unified Border */}
-                    <div style={{
-                        border: '1.5px solid #c5d9c0',
-                        borderRadius: '12px',
-                        background: '#fff',
-                        overflow: 'hidden',
-                        flex: 1, // Ensures it takes equal height
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}>
+                    <div className="border-[1.5px] border-[#c5d9c0] rounded-xl bg-white overflow-hidden flex-1 flex flex-col">
                         {/* Grid */}
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(5, 1fr)',
-                            flex: 1
-                        }}>
+                        <div className="grid grid-cols-5 flex-1">
                             {industries.map((item, i) => {
                                 const isRightEdge = (i + 1) % 5 === 0;
                                 const isBottomEdge = i >= industries.length - 5;
 
                                 return (
-                                    <div key={i} style={{
-                                        padding: '12px 8px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '8px',
-                                        borderRight: isRightEdge ? 'none' : '1.5px solid #c5d9c0',
-                                        borderBottom: isBottomEdge ? 'none' : '1.5px solid #c5d9c0',
-                                    }}>
-                                        <img src={item.icon} alt={item.label} style={{ width: '42px', height: '42px', objectFit: 'contain' }} />
-                                        <div style={{
-                                            fontFamily: "'Barlow', sans-serif",
-                                            fontSize: '12px',
-                                            fontWeight: 500,
-                                            color: '#1a3d20',
-                                            textAlign: 'center',
-                                            lineHeight: 1.2,
-                                            whiteSpace: 'pre-line',
-                                        }}>
+                                    <div key={i} className={`py-0.5 px-1 flex flex-col items-center justify-center gap-2 border-[#c5d9c0] ${!isRightEdge ? 'border-r-[1.5px]' : ''} ${!isBottomEdge ? 'border-b-[1.5px]' : ''}`}>
+                                        <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
+                                        <div className="font-['Barlow',sans-serif] text-[12px] font-medium text-[#1a3d20] text-center leading-[1.2] whitespace-pre-line">
                                             {item.label}
                                         </div>
                                     </div>
@@ -261,7 +159,7 @@ const HowIT = () => {
                     </div>
 
                     {/* And more */}
-                    <div style={{ textAlign: 'right', fontSize: '11px', color: '#4a6040', marginTop: '1px', fontStyle: 'italic', fontWeight: 500 }}>
+                    <div className="text-right text-[11px] text-[#4a6040] mt-[1px] italic font-medium">
                         ...and more
                     </div>
                 </div>

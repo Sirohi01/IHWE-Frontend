@@ -13,15 +13,15 @@ const InfinityIcon = () => (
 const statsData = [
   { icon: Users, value: "50+", label: "Expert Speakers" },
   { icon: Mic, value: "18", label: "Premium Sessions" },
-  { icon: Calendar, value: "3", label: "Major Conferences" },
+  { icon: Calendar, value: "3", label: "Days Major Conferences" },
   { icon: Trophy, value: "1000+", label: "Delegates" },
   { icon: Globe2, value: "20+", label: "Countries" },
-  { icon: InfinityIcon, value: "∞", label: "Endless Opportunities", custom: true },
+  { icon: InfinityIcon, value: "", label: "Endless Opportunities", custom: true },
 ];
 
 const ConferenceStats: React.FC = () => {
   return (
-    <section className="relative z-[60] mx-auto max-w-[1320px] -mt-2 px-6">
+    <section className="relative z-0 mx-auto max-w-[1400px] -mt-10 px-6 left-[20px]">
       <div className="bg-[#0B2C66] rounded-[20px] shadow-[0_15px_40px_rgba(11,44,102,0.25)] border border-white/10 px-8 py-1.5 relative overflow-hidden">
 
         <div className="absolute inset-0 opacity-5 pointer-events-none">

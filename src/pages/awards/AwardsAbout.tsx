@@ -7,10 +7,10 @@ const AwardsAbout = () => {
   const jakartaFont = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
 
   return (
-    <section className="py-6 md:py-10 bg-white overflow-hidden" style={jakartaFont}>
+    <section className="pt-4 md:pt-8 pb-1 md:pb-4 bg-white overflow-hidden" style={jakartaFont}>
       {/* Wider alignment matching home page */}
-      <div className="px-6 md:px-14">
-        <div className="flex flex-col lg:flex-row gap-10 xl:gap-16 items-center">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        <div className="flex flex-col lg:flex-row gap-6 xl:gap-8 items-center">
 
           {/* LEFT — Award Plaque Composite Image */}
           <motion.div
@@ -37,7 +37,7 @@ const AwardsAbout = () => {
             transition={{ duration: 0.8 }}
             className="flex-1 flex flex-col justify-center gap-1.5"
           >
-            <span className="text-[#008d48] text-[11px] font-black uppercase tracking-[0.2em]">
+            <span className="text-[#008d48] text-[14px] font-black uppercase tracking-[0.2em]">
               About The Awards
             </span>
 

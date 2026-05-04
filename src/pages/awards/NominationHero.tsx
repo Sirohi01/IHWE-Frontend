@@ -13,7 +13,7 @@ const NominationHero = () => {
   return (
     <section className="relative w-full overflow-hidden bg-white" style={jakartaFont}>
 
-      <div 
+      <div
         className="absolute inset-0 z-0 hidden lg:block"
         style={{
           backgroundImage: `url(${nominationHeroImg})`,
@@ -26,18 +26,18 @@ const NominationHero = () => {
       {/* Mobile Background (Simple Gradient) */}
       <div className="absolute inset-0 z-0 lg:hidden bg-gradient-to-br from-white to-slate-50"></div>
 
-      <div className="px-6 md:px-14 relative z-10 py-12 lg:py-24">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10 py-12 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
           {/* Left Column: Recreating the Text Design from the Image */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             className="flex flex-col items-start"
           >
             {/* IHWE Logo */}
-             <div className="flex justify-start w-full -mt-8 mb-1">
+            <div className="flex justify-start w-full -mt-8 mb-1">
               <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
             </div>
 
@@ -51,8 +51,8 @@ const NominationHero = () => {
                 <span className="text-[#0a2e5c]">EXCELLENCE AWARDS 2026</span>
               </h1> */}
               <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight mt-4">
-              Honouring Excellence in Healthcare, Wellness & Innovation
-            </p>
+                Honouring Excellence in Healthcare, Wellness & Innovation
+              </p>
             </div>
             <div className="w-full max-w-xl h-[1.5px] my-3 relative opacity-100" style={{ backgroundColor: '#f0f0f0' }}>
               <div
@@ -74,22 +74,22 @@ const NominationHero = () => {
                 <MapPin className="w-5 h-5" style={{ color: greenColor }} />
                 <div className="flex flex-col">
                   <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>PRAGATI MAIDAN</span>
-                  <span className="text-[#888] font-bold text-[9px] uppercase">NEW DELHI, INDIA</span>
+                  <span className="text-gray-800 font-bold text-[10px] uppercase">NEW DELHI, INDIA</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5" style={{ color: greenColor }} />
                 <div className="flex flex-col">
                   <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>HOSTED AT</span>
-                  <span className="text-[#888] font-bold text-[9px] uppercase">IHWE 2026</span>
+                  <span className="text-gray-800 font-bold text-[10px] uppercase">IHWE 2026</span>
                 </div>
               </div>
             </div>
-            
+
 
             {/* Nomination Form Button - Styled exactly like the image */}
             <div className="mt-2">
-              <button 
+              <button
                 onClick={() => {
                   const formSection = document.getElementById('nomination-form');
                   if (formSection) {

@@ -55,6 +55,12 @@ const navLinks = [
         description: "Maximize your brand visibility and growth"
       },
       {
+        label: "Exhibitor List",
+        path: "/exhibitors",
+        icon: FileCheck,
+        description: "View the list of confirmed participating brands"
+      },
+      {
         label: "Visit the Expo",
         path: "/book-a-stand",
         icon: Layout,
