@@ -799,12 +799,12 @@ export default function BuyerFeedbackForm() {
                         <p className="text-[8pt] font-bold text-[#555] mb-9 max-w-[450px]">Your valuable feedback will help us improve and create better experiences for you in the future.</p>
                     </div>
 
-                    <div className="opacity-10 absolute -bottom-4 right-6 pointer-events-none">
+                    {/* <div className="opacity-10 absolute -bottom-4 right-6 pointer-events-none">
                         <svg viewBox="0 0 100 100" className="w-[120px] h-[120px]">
                             <path d="M50 90 C75 75 85 50 85 35 C85 20 70 10 50 25 C30 10 15 20 15 35 C15 50 25 75 50 90" fill="#0072bc" />
                             <path d="M50 80 C65 65 75 45 75 35 C75 25 65 15 50 30 C35 15 25 25 25 35 C25 45 35 65 50 80" fill="#8bc34a" />
                         </svg>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="absolute bottom-0 left-0 w-full">
