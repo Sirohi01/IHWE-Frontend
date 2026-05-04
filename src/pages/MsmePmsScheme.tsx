@@ -26,7 +26,9 @@ import {
   IdCard,
   Store,
   Package,
-  Landmark
+  Landmark,
+  Clock,
+  Share2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -214,11 +216,11 @@ const MsmePmsScheme = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center">
             {[
               { icon: Globe, val: "25+", label: "COUNTRIES" },
-              { icon: Building2, val: "500+", label: "EXHIBITORS" },
+              { icon: Landmark, val: "500+", label: "EXHIBITORS" },
               { icon: Users, val: "20,000+", label: "TRADE VISITORS" },
               { icon: Mic, val: "50+", label: "CONFERENCE SESSIONS" },
-              { icon: Calendar, val: "3 DAYS", label: "BUSINESS OPPORTUNITIES" },
-              { icon: Briefcase, val: "MULTIPLE", label: "NETWORKING EVENTS" },
+              { icon: Clock, val: "3 DAYS", label: "BUSINESS OPPORTUNITIES" },
+              { icon: Share2, val: "MULTIPLE", label: "NETWORKING EVENTS" },
             ].map((stat, i) => (
               <div key={i} className={`flex items-center gap-4 px-6 ${i !== 5 ? "lg:border-r border-slate-100" : ""} group`}>
                 <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center shrink-0 group-hover:bg-[#23471d]/5 transition-colors">
@@ -249,7 +251,7 @@ const MsmePmsScheme = () => {
               <div className="flex flex-row gap-6 items-start">
                 <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center shrink-0 border border-slate-100">
                   <div className="w-16 h-16 rounded-full border-2 border-dashed border-[#23471d]/20 flex items-center justify-center p-2">
-                    <Building2 className="text-[#23471d] w-8 h-8" />
+                    <Landmark className="text-[#23471d] w-8 h-8" />
                   </div>
                 </div>
                 <div className="space-y-4 flex-1">
@@ -272,8 +274,8 @@ const MsmePmsScheme = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-slate-100 rounded-2xl overflow-hidden">
                 {[
-                  { icon: Award, title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
-                  { icon: TrendingUp, title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
+                  { icon: Landmark, title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
+                  { icon: Briefcase, title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
                   { icon: Globe, title: "Market Exposure", desc: "Showcase your products to national & international buyers" },
                   { icon: TrendingUp, title: "Business Growth", desc: "Generate leads & expand your network" },
                   { icon: ShieldCheck, title: "Government Support", desc: "Exhibit with the backing of Ministry of MSME" },
