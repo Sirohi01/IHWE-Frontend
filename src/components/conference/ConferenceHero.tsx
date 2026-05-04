@@ -3,15 +3,13 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Mic } from "lucide-react";
-
 import amanImage from "../../assets/bhiya.png";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
 const ConferenceHero: React.FC = () => {
   const darkYellow = "#C9A227";
   return (
-    <section className="relative min-h-[750px] lg:min-h-[690px] flex items-center overflow-hidden ">
-
+    <section className="relative min-h-[750px] lg:min-h-[650px] flex items-center overflow-hidden ">
 
 
       <div
@@ -89,7 +87,7 @@ const ConferenceHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="flex flex-row gap-4"
           >
-            <button className="px-8 py-3 rounded-full bg-[#4E9F3D] text-white font-bold text-[11px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#3D8B2D] transition-all shadow-md hover:shadow-lg group whitespace-nowrap">
+            <button className="px-4 py-3 rounded-full bg-[#4E9F3D] text-white font-bold text-[11px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#3D8B2D] transition-all shadow-md hover:shadow-lg group whitespace-nowrap">
               REGISTER FOR CONFERENCE
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
