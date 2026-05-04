@@ -47,7 +47,7 @@ const ExhibitorHero = () => {
                         className="text-2xl md:text-2xl lg:text-5xl font-bold leading-[1.05] tracking-tight uppercase mb-1"
                     >
                         150+ <span className="text-green-500">Leading</span><br />
-                        Health &Wellness Brands
+                        Health & Wellness Brands
                     </motion.h1>
 
                     <motion.p
