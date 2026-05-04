@@ -55,6 +55,12 @@ const navLinks = [
         description: "Maximize your brand visibility and growth"
       },
       {
+        label: "Exhibitor List",
+        path: "/exhibitors",
+        icon: FileCheck,
+        description: "View the list of confirmed participating brands"
+      },
+      {
         label: "Visit the Expo",
         path: "/book-a-stand",
         icon: Layout,
@@ -66,18 +72,6 @@ const navLinks = [
         icon: Users,
         description: "Connect with buyers and sellers at IHWE"
       },
-      // {
-      //   label: "Conference",
-      //   path: "/exhibitors",
-      //   icon: FileCheck,
-      //   description: "View the list of confirmed participating brands"
-      // },
-      // {
-      //   label: "Awards",
-      //   path: "/e-promotion",
-      //   icon: Rocket,
-      //   description: "Digital exposure for your brand"
-      // },
     ],
   },
   {
