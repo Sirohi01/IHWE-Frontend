@@ -36,7 +36,7 @@ const stats = [
 
 const AwardsCategories = () => {
   return (
-    <section className="pt-1 md:pt-3 pb-4 md:pb-6 bg-[#edf7f2]">
+    <section className="pt-0.5 md:pt-0.5 pb-1 md:pb-1 bg-[#edf7f2]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
 
         {/* Header */}
@@ -85,11 +85,11 @@ const AwardsCategories = () => {
             >
               <div className="w-24 h-24 flex items-center justify-center">
                 {cat.icon ? (
-                    <img
-                      src={cat.icon}
-                      alt={cat.title}
-                      className="w-full h-full object-contain scale-[0.95]"
-                    />
+                  <img
+                    src={cat.icon}
+                    alt={cat.title}
+                    className="w-full h-full object-contain scale-[0.95]"
+                  />
                 ) : (
                   <div className="w-24 h-24" />
                 )}
@@ -106,24 +106,24 @@ const AwardsCategories = () => {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#002b5c] rounded-2xl px-8 md:px-12 py-4 grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="bg-[#002b5c] rounded-2xl px-8 md:px-12 py-1.5 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           {stats.map((stat, idx) => (
             <div key={idx} className="flex items-center gap-4 relative">
               {idx !== 0 && (
-                <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 h-12 w-px bg-white/20" />
+                <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-px bg-white/20" />
               )}
               {/* Removed overflow-hidden to prevent icon clipping during scale */}
-              <div className="w-14 h-14 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 flex items-center justify-center shrink-0">
                 {stat.icon ? (
-                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.5]" />
+                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.3]" />
                 ) : null}
               </div>
               <div>
-                <div className="text-white text-[20px] md:text-[28px] font-black leading-none">
+                <div className="text-white text-[18px] md:text-[24px] font-black leading-none">
                   {stat.number}
                 </div>
-                <div className="text-white/60 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] mt-1">
+                <div className="text-white/60 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.15em] mt-0.5">
                   {stat.label}
                 </div>
               </div>

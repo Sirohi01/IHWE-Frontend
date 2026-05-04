@@ -36,7 +36,7 @@ const ExhibitorCTA = () => {
     return (
         <section className="bg-white">
             {/* CTA Main Card - Matching the thin, wide style of the screenshot */}
-            <div className="w-full bg-[#f8f9f8] border-y border-gray-100 relative overflow-hidden py-8">
+            <div className="w-full bg-[#f8f9f8] border-y border-gray-100 relative overflow-hidden py-4">
                 {/* Left Leaf branch */}
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-48 h-full opacity-60 pointer-events-none">
                     <img
@@ -48,8 +48,8 @@ const ExhibitorCTA = () => {
 
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
                     <div className="max-w-2xl text-left">
-                        <p className="text-gray-800 text-md font-medium mb-[0.5px]">These brands trust IHWE.</p>
-                        <h2 className="text-3xl md:text-[2.6rem] font-bold text-black mb-3 leading-tight tracking-tight">
+                        <p className="text-gray-800 text-md font-medium">These brands trust IHWE.</p>
+                        <h2 className="text-3xl md:text-[2.6rem] font-bold text-black leading-tight tracking-tight">
                             Be the next success story.
                         </h2>
                         <p className="text-gray-800 text-[15px] leading-relaxed max-w-2xl">
@@ -87,7 +87,7 @@ const ExhibitorCTA = () => {
             </div>
 
             {/* Dark Green Bottom Bar - Exact match with dividers and icon positions */}
-            <div className="bg-[#0a3622] py-2">
+            <div className="bg-[#0a3622]">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                     <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-6">
                         {BOTTOM_STATS.map((stat, idx) => (
