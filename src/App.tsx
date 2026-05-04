@@ -96,6 +96,7 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import ScrollToTopOnNavigation from "@/components/layout/ScrollToTopOnNavigation";
 import AnnexureD from "@/pages/psmClaim/AnnexureD";
 import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
 import MandateForm from "@/pages/psmClaim/MandateForm";
@@ -123,6 +124,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
               <Sonner />
