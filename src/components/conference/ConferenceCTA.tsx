@@ -33,34 +33,34 @@ const ConferenceCTA: React.FC = () => {
           </div>
 
           <div className="text-left">
-            <h2 className="text-[24px] md:text-[32px] font-[900] text-white leading-[1.1] tracking-tight uppercase">
+            <h2 className="text-[18px] md:text-[20px] font-[900] text-white leading-[1.1] tracking-tight uppercase">
               Be Part of the <span className="text-[#A3E635]">Conversation</span><br />
               That Shapes <span className="text-[#1E88E5]">Tomorrow</span>
             </h2>
-            <p className="text-white/60 text-[13px] md:text-[14px] mt-2 font-medium max-w-[500px] leading-snug">
+            <p className="text-white/60 text-[12px] md:text-[13px] mt-2 font-medium max-w-[500px] leading-snug">
               Join India's most influential healthcare and wellness conference platform.
             </p>
           </div>
         </div>
 
         {/* Right Side: Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-5">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group px-10 py-4 bg-gradient-to-r from-[#4E9F3D] to-[#2E7D32] text-white rounded-full font-black text-[13px] uppercase tracking-wider flex items-center gap-3 shadow-[0_10px_20px_rgba(78,159,61,0.3)] border border-white/10"
+            className="group px-6 py-2.5 bg-gradient-to-r from-[#4E9F3D] to-[#2E7D32] text-white rounded-full font-black text-[11px] uppercase tracking-wider flex items-center gap-2 shadow-[0_10px_20px_rgba(78,159,61,0.3)] border border-white/10"
           >
             BOOK YOUR DELEGATE PASS
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
             whileTap={{ scale: 0.95 }}
-            className="px-10 py-4 border-2 border-white/20 text-white rounded-full font-black text-[13px] uppercase tracking-wider flex items-center gap-3 backdrop-blur-md"
+            className="px-6 py-2.5 border-2 border-white/20 text-white rounded-full font-black text-[11px] uppercase tracking-wider flex items-center gap-2 backdrop-blur-md"
           >
             PARTNER WITH US
-            <Users className="w-5 h-5 opacity-70" />
+            <Users className="w-4 h-4 opacity-70" />
           </motion.button>
         </div>
       </div>

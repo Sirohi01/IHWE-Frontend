@@ -57,11 +57,13 @@ const FALLBACK_SPEAKERS = [
 interface DistinguishedSpeakersProps {
   title?: string;
   highlight?: string;
+  compact?: boolean;
 }
 
 const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
   title = "MEET OUR DISTINGUISHED",
-  highlight = "SPEAKERS"
+  highlight = "SPEAKERS",
+  compact = false
 }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [displaySpeakers, setDisplaySpeakers] = useState(FALLBACK_SPEAKERS);
@@ -89,7 +91,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
   }, []);
 
   return (
-    <section className="pt-0 pb-10 bg-white overflow-hidden relative">
+    <section className={`${compact ? "py-4" : "pt-0 pb-10"} bg-white overflow-hidden relative`}>
       <div className="mx-auto max-w-[1380px] relative left-[20px]  rounded-[30px] px-8 py-4 border border-[#E2E8F0]">
         {/* Header */}
         <div className="flex justify-center items-center mb-4 px-4">

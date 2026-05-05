@@ -37,7 +37,7 @@ const IndustryVoices: React.FC = () => {
   const scroll = useCallback((direction: "left" | "right") => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
-      const itemWidth = clientWidth / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
+      const itemWidth = clientWidth / (window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : window.innerWidth >= 640 ? 2 : 1);
       const scrollTo = direction === "left" ? scrollLeft - itemWidth : scrollLeft + itemWidth;
 
       if (direction === "right" && scrollLeft + clientWidth >= scrollRef.current.scrollWidth - 50) {
@@ -108,23 +108,23 @@ const IndustryVoices: React.FC = () => {
             {FALLBACK_TESTIMONIALS.map((item, index) => (
               <div
                 key={index}
-                className="w-[100%] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 snap-start"
+                className="w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start"
               >
-                <div className="h-full bg-white p-8 rounded-[32px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between">
-                  <div className="space-y-4">
+                <div className="h-full bg-white p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between">
+                  <div className="space-y-3">
                     {/* Green Quote Icon */}
                     <div className="text-[#4E9F3D]">
-                      <Quote className="w-8 h-8 fill-current rotate-180" />
+                      <Quote className="w-6 h-6 fill-current rotate-180" />
                     </div>
-                    <p className="text-[15px] text-[#4A5568] leading-relaxed italic font-medium">
+                    <p className="text-[12px] text-[#4A5568] leading-relaxed italic font-medium">
                       "{item.feedback}"
                     </p>
                   </div>
-                  <div className="mt-8 pt-6 border-t border-gray-50">
-                    <h4 className="font-bold text-[#0B2C66] text-[16px] mb-0.5">
+                  <div className="mt-5 pt-4 border-t border-gray-50">
+                    <h4 className="font-bold text-[#0B2C66] text-[13px] mb-0.5">
                       — {item.name}
                     </h4>
-                    <p className="text-[12px] font-semibold text-[#5F6B7A]">
+                    <p className="text-[10px] font-semibold text-[#5F6B7A]">
                       {item.role}{item.company ? `, ${item.company}` : ''}
                     </p>
                   </div>

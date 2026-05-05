@@ -93,7 +93,7 @@ const Day3Agenda: React.FC = () => {
     <div className="bg-white h-full flex flex-col">
       {/* Section Header */}
       <div className="text-center mb-5">
-        <h2 className="text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight leading-none">
+        <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight leading-none font-sans">
           DAY 3 AGENDA — 23 AUGUST 2026
         </h2>
         <p className="text-[11px] font-bold text-[#5F6B7A] mt-1.5">
@@ -116,7 +116,7 @@ const Day3Agenda: React.FC = () => {
             {agendaData.map((item, index) => (
               <tr key={index} className="group hover:bg-[#F8FFF8] transition-colors">
                 {/* Time */}
-                <td className="px-4 py-4 align-middle min-w-[150px]">
+                <td className="px-4 py-2 align-middle min-w-[150px]">
                   <div className="flex items-center gap-2">
                     <Clock className="w-3.5 h-3.5 text-[#A0AEC0] shrink-0" />
                     <span className="text-[11px] font-black text-[#4A5568] leading-tight whitespace-nowrap">{item.time}</span>
@@ -124,7 +124,7 @@ const Day3Agenda: React.FC = () => {
                 </td>
 
                 {/* Session */}
-                <td className="px-4 py-4 align-middle min-w-[90px]">
+                <td className="px-4 py-2 align-middle min-w-[90px]">
                   <div className="flex flex-col gap-0">
                     <span className="text-[10px] font-black text-[#0B2C66] uppercase leading-tight">{item.session}</span>
                     <span className="text-[9px] font-black text-[#4E9F3D] uppercase tracking-wide">{item.type}</span>
@@ -132,7 +132,7 @@ const Day3Agenda: React.FC = () => {
                 </td>
 
                 {/* Topic */}
-                <td className="px-4 py-4 align-middle">
+                <td className="px-4 py-2 align-middle">
                   <div className="space-y-0.5">
                     <p className="text-[12px] font-black text-[#0B2C66] leading-snug">{item.topic}</p>
                     <p className="text-[11px] text-[#718096] font-medium leading-snug">{item.description}</p>
@@ -140,7 +140,7 @@ const Day3Agenda: React.FC = () => {
                 </td>
 
                 {/* Speaker */}
-                <td className="px-4 py-4 align-middle min-w-[180px]">
+                <td className="px-4 py-2 align-middle min-w-[180px]">
                   <div className="flex items-center gap-3">
                     <img
                       src={item.speaker.image}
