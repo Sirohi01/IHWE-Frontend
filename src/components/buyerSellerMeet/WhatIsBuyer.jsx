@@ -61,7 +61,7 @@ const WhatIsBuyer = () => {
             </p>
 
             {/* Feature Cards */}
-            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
+            <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
                 {features.map((feat, i) => (
                     <div key={i} className="flex flex-col items-center text-center gap-3 p-4 rounded-xl"
                         style={{ background: '#fff', border: '1px solid #d4e4bc' }}>
