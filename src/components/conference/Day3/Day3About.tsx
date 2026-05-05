@@ -20,7 +20,7 @@ const focusAreas = [
 
 const Day3About: React.FC = () => {
   return (
-    <section className="py-10 bg-[#F8FAFC]">
+    <section className="py-4 bg-[#F8FAFC]">
       <div className="container mx-auto px-6 max-w-[1400px] relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
@@ -51,7 +51,7 @@ const Day3About: React.FC = () => {
               Key Focus Areas
             </h2>
 
-            <div className="grid sm:grid-cols-2 gap-x-4 gap-y-2">
+            <div className="grid sm:grid-cols-2 gap-x-4 gap-y-0.5">
               {focusAreas.map((area, index) => (
                 <motion.div
                   key={index}
@@ -59,7 +59,7 @@ const Day3About: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  className="flex items-center gap-3 p-2 rounded-[16px] border border-transparent hover:bg-white hover:shadow-sm transition-all group"
+                  className="flex items-center gap-2.5 p-1 rounded-[16px] border border-transparent hover:bg-white hover:shadow-sm transition-all group"
                 >
                   <div className="w-10 h-10 rounded-full bg-[#F0FDF4] flex items-center justify-center text-[#4E9F3D] shrink-0 border border-[#DCFCE7]/50 shadow-sm">
                     <area.icon className="w-5 h-5" />

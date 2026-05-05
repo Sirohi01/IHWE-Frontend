@@ -13,16 +13,6 @@ import imgOrganic from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.
 import imgBeauty from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.18 AM.png";
 
 const tracks = [
-  // Original Image-based Tracks
-  { icon: imgMedical, line1: "Medical Devices &", line2: "Healthcare Innovation", color: "#f0fdf4", iconColor: "#15803d" },
-  { icon: imgHospital, line1: "Hospital Infrastructure", line2: "& Smart Healthcare", color: "#eff6ff", iconColor: "#1d4ed8" },
-  { icon: imgAyurveda, line1: "Ayurveda, AYUSH &", line2: "Alternative Medicine", color: "#f7fee7", iconColor: "#4d7c0f" },
-  { icon: imgWellness, line1: "Wellness, Fitness &", line2: "Preventive Healthcare", color: "#faf5ff", iconColor: "#7e22ce" },
-  { icon: imgPharma, line1: "Pharma, Nutraceuticals", line2: "& Diagnostics", color: "#fffbeb", iconColor: "#b45309" },
-  { icon: imgDigital, line1: "Digital Health, AI", line2: "& HealthTech", color: "#eef2ff", iconColor: "#3730a3" },
-  { icon: imgOrganic, line1: "Organic Living &", line2: "Sustainable Wellness", color: "#f0fdf4", iconColor: "#15803d" },
-  { icon: imgBeauty, line1: "Beauty, Personal Care", line2: "& Lifestyle Wellness", color: "#fff1f2", iconColor: "#be123c" },
-
   // New SVG-based Categories
   {
     line1: "Medical &",
@@ -37,6 +27,17 @@ const tracks = [
       </svg>
     ),
   },
+
+  // Original Image-based Tracks
+  { icon: imgMedical, line1: "Medical Devices &", line2: "Healthcare Innovation", color: "#f0fdf4", iconColor: "#15803d" },
+  { icon: imgHospital, line1: "Hospital Infrastructure", line2: "& Smart Healthcare", color: "#eff6ff", iconColor: "#1d4ed8" },
+  { icon: imgAyurveda, line1: "Ayurveda, AYUSH &", line2: "Alternative Medicine", color: "#f7fee7", iconColor: "#4d7c0f" },
+  { icon: imgWellness, line1: "Wellness, Fitness &", line2: "Preventive Healthcare", color: "#faf5ff", iconColor: "#7e22ce" },
+  { icon: imgPharma, line1: "Pharma, Nutraceuticals", line2: "& Diagnostics", color: "#fffbeb", iconColor: "#b45309" },
+  { icon: imgDigital, line1: "Digital Health, AI", line2: "& HealthTech", color: "#eef2ff", iconColor: "#3730a3" },
+  { icon: imgOrganic, line1: "Organic Living &", line2: "Sustainable Wellness", color: "#f0fdf4", iconColor: "#15803d" },
+  { icon: imgBeauty, line1: "Beauty, Personal Care", line2: "& Lifestyle Wellness", color: "#fff1f2", iconColor: "#be123c" },
+
   {
     line1: "Hospitals &",
     line2: "Clinical Services",
@@ -226,8 +227,8 @@ const marqueeTracks = [...tracks];
 
 const ConferenceTracks: React.FC = () => {
   return (
-    <section className="py-4 bg-[#F7F9FC] overflow-hidden">
-      <div className="container mx-auto px-6 max-w-[1320px]">
+    <section className="pt-4 pb-0 bg-[#F7F9FC] overflow-hidden">
+      <div className="mx-auto px-6 max-w-[1380px] relative left-[20px]">
         {/* Section header */}
         <div className="flex flex-col items-center mb-0">
           <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
@@ -235,40 +236,40 @@ const ConferenceTracks: React.FC = () => {
           </h2>
           <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
         </div>
-      </div>
 
-      {/* Marquee Container */}
-      <Marquee
-        speed={40}
-        pauseOnHover={true}
-        pauseOnClick={false}
-        direction="left"
-        loop={0}
-        autoFill={false}
-        className="py-6"
-      >
-        {marqueeTracks.map((track, index) => (
-          <div
-            key={index}
-            className="group w-[150px] md:w-[180px] h-[190px] mx-2 p-4 rounded-[24px] bg-white border border-[#E6ECF3] flex flex-col items-center justify-center text-center hover:shadow-xl hover:border-[#4E9F3D] transition-all duration-300 cursor-pointer shadow-sm"
-          >
-            <div 
-              className="w-20 h-20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 rounded-full"
-              style={{ backgroundColor: track.color, color: track.iconColor }}
+        {/* Marquee Container */}
+        <Marquee
+          speed={40}
+          pauseOnHover={true}
+          pauseOnClick={false}
+          direction="left"
+          loop={0}
+          autoFill={false}
+          className="py-6"
+        >
+          {marqueeTracks.map((track, index) => (
+            <div
+              key={index}
+              className="group w-[150px] md:w-[180px] h-[190px] mx-2 p-4 rounded-[24px] bg-white border border-[#E6ECF3] flex flex-col items-center justify-center text-center hover:shadow-xl hover:border-[#4E9F3D] transition-all duration-300 cursor-pointer shadow-sm"
             >
-              {typeof track.icon === "string" ? (
-                <img src={track.icon} alt="" className="w-12 h-12 object-contain mix-blend-multiply" />
-              ) : (
-                track.icon
-              )}
+              <div 
+                className="w-20 h-20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 rounded-full"
+                style={{ backgroundColor: track.color, color: track.iconColor }}
+              >
+                {typeof track.icon === "string" ? (
+                  <img src={track.icon} alt="" className="w-12 h-12 object-contain mix-blend-multiply" />
+                ) : (
+                  track.icon
+                )}
+              </div>
+              <div className="text-[11px] md:text-[12px] font-bold text-[#1C2B3A] group-hover:text-[#4E9F3D] transition-colors leading-snug">
+                <div>{track.line1}</div>
+                <div>{track.line2}</div>
+              </div>
             </div>
-            <div className="text-[11px] md:text-[12px] font-bold text-[#1C2B3A] group-hover:text-[#4E9F3D] transition-colors leading-snug">
-              <div>{track.line1}</div>
-              <div>{track.line2}</div>
-            </div>
-          </div>
-        ))}
-      </Marquee>
+          ))}
+        </Marquee>
+      </div>
     </section>
   );
 };

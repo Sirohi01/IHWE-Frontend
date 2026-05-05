@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Download, Mic, ChevronRight, Home, Users, Share2 } from "lucide-react";
 import arogyaLogo from "../../../assets/arogyasangosti.png";
-import amanImage from "../../../assets/bhiya.png";
+import amanImage from "../../../assets/dayimagesarogyasangosti/design1.png";
 
 const Day1Hero: React.FC = () => {
   const darkYellow = "#C9A227";
@@ -53,7 +53,7 @@ const Day1Hero: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="mb-3"
           >
-            <h1 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[54px] font-[900] leading-[0.95] tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] font-semibold font-sans leading-tight tracking-tight">
               <span className="text-[#0B2C66] block">HEALTHCARE</span>
               <span className="text-[#4E9F3D] block">INNOVATION SUMMIT</span>
             </h1>

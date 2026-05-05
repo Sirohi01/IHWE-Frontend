@@ -60,13 +60,11 @@ const Day3FeaturedSpeakers: React.FC = () => {
           FEATURED SPEAKERS —{" "}
           <span className="text-[#4E9F3D]">DAY 3</span>
         </h2>
-        <span className="text-[#4E9F3D] text-[9px] font-black tracking-widest cursor-pointer hover:underline whitespace-nowrap mt-0.5">
-          VIEW ALL SPEAKERS &gt;
-        </span>
+
       </div>
 
-      {/* 2×3 Grid */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 flex-1">
+      {/* 2×3 Grid with vertical scroll */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-6 flex-1 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
         {speakers.map((speaker, idx) => (
           <div
             key={idx}

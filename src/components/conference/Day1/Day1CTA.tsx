@@ -12,7 +12,7 @@ const bgTextures = [
 
 const Day1CTA: React.FC = () => {
   return (
-    <section className="relative py-10 overflow-hidden">
+    <section className="relative py-4 overflow-hidden">
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img

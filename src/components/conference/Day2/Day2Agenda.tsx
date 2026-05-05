@@ -110,7 +110,7 @@ const Day2Agenda: React.FC = () => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-[24px] font-black text-[#4E9F3D] uppercase tracking-tight">
+          <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight font-sans">
             DAY 2 AGENDA — 21 AUGUST 2026
           </h2>
           <p className="text-[11px] font-bold text-[#5F6B7A] uppercase tracking-[0.2em] mt-1 flex items-center justify-center gap-2">
@@ -120,21 +120,21 @@ const Day2Agenda: React.FC = () => {
 
         {/* Table Container */}
         <div className="bg-white rounded-xl overflow-hidden border border-[#E2E8F0] shadow-sm">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[400px] overflow-y-scroll custom-scrollbar">
             <table className="w-full text-left border-collapse">
-              <thead>
+              <thead className="sticky top-0 z-20">
                 <tr className="bg-[#0B2C66] text-white">
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Time</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Session</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Topic</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Speaker</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Time</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Session</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Topic</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Speaker</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F1F5F9]">
                 {agendaData.map((item, index) => (
                   <tr key={index} className="transition-colors group hover:bg-gray-50/50">
                     {/* Time Column */}
-                    <td className="px-6 py-6 align-top min-w-[180px]">
+                    <td className="px-4 py-3 align-top min-w-[180px]">
                       <div className="flex items-center gap-3">
                         <Clock className="w-4 h-4 text-[#A0AEC0]" />
                         <span className="text-[13px] font-black text-[#4A5568]">{item.time}</span>
@@ -142,7 +142,7 @@ const Day2Agenda: React.FC = () => {
                     </td>
 
                     {/* Session Column with Icon */}
-                    <td className="px-6 py-6 align-top min-w-[160px]">
+                    <td className="px-4 py-3 align-top min-w-[160px]">
                       <div className="flex items-start gap-4">
                         <div className="w-12 h-12 rounded-xl bg-[#F0FDF4] flex items-center justify-center text-[#4E9F3D] border border-[#DCFCE7] group-hover:bg-[#4E9F3D] group-hover:text-white transition-colors">
                           <item.icon className="w-6 h-6" />
@@ -157,7 +157,7 @@ const Day2Agenda: React.FC = () => {
                     </td>
 
                     {/* Topic Column */}
-                    <td className="px-6 py-6 align-top max-w-[400px]">
+                    <td className="px-4 py-3 align-top max-w-[400px]">
                       <div className="space-y-1">
                         <h3 className="text-[15px] font-black text-[#0B2C66] leading-snug">
                           {item.topic}
@@ -169,7 +169,7 @@ const Day2Agenda: React.FC = () => {
                     </td>
 
                     {/* Speaker Column */}
-                    <td className="px-6 py-6 align-top min-w-[280px]">
+                    <td className="px-4 py-3 align-top min-w-[280px]">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <img

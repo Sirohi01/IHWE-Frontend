@@ -87,7 +87,7 @@ const StatCounter = ({ value }: { value: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  
+
   const numericValue = parseInt(value.replace(/,/g, '')) || 0;
   const suffix = value.replace(/[0-9,]/g, '');
 
@@ -95,9 +95,9 @@ const StatCounter = ({ value }: { value: string }) => {
     if (isInView) {
       let start = 0;
       const end = numericValue;
-      const duration = 2000; 
+      const duration = 2000;
       const increment = end / (duration / 16);
-      
+
       const timer = setInterval(() => {
         start += increment;
         if (start >= end) {
@@ -177,7 +177,7 @@ const IntroductionSection = () => {
             style={{ textShadow: 'none' }}
             dangerouslySetInnerHTML={{ __html: data.title }}
           />
-          
+
           <div className="w-11 h-[3px] bg-[#1a6b3a] rounded mt-4 mb-4" />
           
           <div 
