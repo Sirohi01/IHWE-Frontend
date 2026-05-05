@@ -24,7 +24,7 @@ const MainConferences: React.FC = () => {
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
-      shadowColor: "hover:shadow-[#4E9F3D]/20",
+
       link: "/conference/day-1"
     },
     {
@@ -41,7 +41,7 @@ const MainConferences: React.FC = () => {
       icon: <Sprout className="w-10 h-10 text-white" />,
       accentColor: "#E67E22",
       badgeColor: "bg-[#92400E]",
-      shadowColor: "hover:shadow-[#E67E22]/20",
+
       link: "/conference/day-2"
     },
     {
@@ -58,7 +58,7 @@ const MainConferences: React.FC = () => {
       icon: <ShieldPlus className="w-10 h-10 text-white" />,
       accentColor: "#7C3AED",
       badgeColor: "bg-[#581C87]",
-      shadowColor: "hover:shadow-[#7C3AED]/20",
+      shadowColor: "",
       link: "/conference/day-3"
     }
   ];
@@ -82,30 +82,33 @@ const MainConferences: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.7 }}
-              className={`group relative rounded-[32px] overflow-hidden bg-white shadow-xl transition-all duration-500 ${conf.shadowColor} hover:-translate-y-2 min-h-[400px] flex flex-col`}
+              className={`group relative rounded-[32px] overflow-hidden bg-white  transition-all duration-500 ${conf.shadowColor} hover:-translate-y-2 min-h-[330px] flex flex-col`}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0">
+              {/* Background Image (Full Coverage) */}
+              <div className="absolute inset-0 w-full h-full overflow-hidden">
                 <img
                   src={conf.image}
                   alt={conf.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Subtle gradient overlay to ensure text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-90" />
+                {/* Gradient: Top is white for text, Bottom is clear for image visibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-white/90" />
               </div>
 
               {/* Card Content */}
               <div className="relative z-10 p-6 flex flex-col h-full">
                 {/* Header: Day and Date */}
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-center items-start mb-4 w-full">
                   {/* Day Badge */}
-                  <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-8 py-3 rounded-br-[24px] font-black text-[18px] tracking-wider shadow-lg`}>
+                  <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 py-2 rounded-br-[20px] font-black text-[15px] tracking-wider `}>
                     {conf.day}
                   </div>
 
-                  {/* Date */}
-                  <div className="ml-auto text-[14px] font-bold text-gray-700 bg-white/50 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
+                  {/* Date (Centered & Dynamic Color) */}
+                  <div
+                    className="text-[12px] font-[900] px-6 py-2 -mt-4"
+                    style={{ color: conf.accentColor }}
+                  >
                     {conf.date}
                   </div>
                 </div>
@@ -113,7 +116,7 @@ const MainConferences: React.FC = () => {
                 {/* Top Right Icon */}
                 <div className="absolute top-6 right-6">
                   <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white shadow-2xl backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
+                    className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white  backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
                     style={{ backgroundColor: `${conf.accentColor}dd` }}
                   >
                     {React.cloneElement(conf.icon as React.ReactElement, { className: "w-8 h-8 text-white" })}
@@ -122,7 +125,7 @@ const MainConferences: React.FC = () => {
 
                 {/* Title */}
                 <h3
-                  className="text-[22px] font-[900] leading-[1.2] mb-3 mt-10 uppercase"
+                  className="text-[19px] font-[900] leading-[1.2] mb-3 mt-8 uppercase"
                   style={{ color: "#0B2C66" }}
                 >
                   {conf.title}
@@ -136,7 +139,7 @@ const MainConferences: React.FC = () => {
                         className="w-2 rounded-full mt-1.5 flex-shrink-0"
                         style={{ backgroundColor: conf.accentColor, height: "8px", width: "8px" }}
                       />
-                      <span className="text-[13px] font-bold text-gray-800 leading-snug">
+                      <span className="text-[12px] font-bold text-gray-800 leading-snug">
                         {session}
                       </span>
                     </div>
@@ -146,7 +149,7 @@ const MainConferences: React.FC = () => {
                 {/* View Sessions Button */}
                 <Link to={conf.link || "#"} className="mt-4">
                   <button
-                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white shadow-lg active:scale-[0.98]"
+                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white  active:scale-[0.98]"
                     style={{ backgroundColor: conf.accentColor }}
                   >
                     VIEW SESSIONS

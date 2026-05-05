@@ -125,13 +125,13 @@ const ConferenceAgenda: React.FC = () => {
                     {agendaData[activeDay]?.sessions?.map((session, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-4 px-6 py-4 hover:bg-[#F8FAFC] transition-colors"
+                        className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 px-6 py-4 hover:bg-[#F8FAFC] transition-colors"
                       >
                         {/* Time */}
                         <div className="w-[140px] flex-shrink-0">
-                          <div className="flex items-center gap-2 text-[#5F6B7A]">
+                          <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-[#4E9F3D]" />
-                            <span className="text-[13px] font-bold text-[#1C2B3A]">
+                            <span className="text-[13px] font-medium text-[#1C2B3A]">
                               {session.time}
                             </span>
                           </div>
@@ -139,19 +139,19 @@ const ConferenceAgenda: React.FC = () => {
 
                         {/* Session Topic */}
                         <div className="flex-1">
-                          <p className="text-[14px] font-bold text-[#0B2C66] leading-snug">
+                          <p className="text-[13px] font-medium text-[#0B2C66] leading-snug">
                             {session.topic}
                           </p>
                         </div>
 
                         {/* Speaker & Type */}
-                        <div className="hidden md:flex items-center gap-3 text-[#5F6B7A] w-[240px] flex-shrink-0">
-                          <div className="flex items-center gap-1.5 min-w-[120px]">
+                        <div className="flex items-center gap-3 text-[#5F6B7A] md:w-[280px] flex-shrink-0">
+                          <div className="flex items-center gap-1.5">
                             <User className="w-3.5 h-3.5" />
-                            <span className="text-[12px] font-medium truncate">{session.speakers}</span>
+                            <span className="text-[13px] font-medium truncate">{session.speakers}</span>
                           </div>
-                          <span className="text-[#E2E8F0]">|</span>
-                          <span className="text-[11px] font-bold text-[#5F6B7A] uppercase tracking-wider">
+                          <span className="text-[#E2E8F0] font-light">|</span>
+                          <span className="text-[13px] font-medium text-[#5F6B7A]">
                             {session.type}
                           </span>
                         </div>
