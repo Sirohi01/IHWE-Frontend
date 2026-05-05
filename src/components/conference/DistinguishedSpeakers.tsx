@@ -5,43 +5,51 @@ import { speakerApi, SERVER_URL } from "@/lib/api";
 
 const FALLBACK_SPEAKERS = [
   {
-    name: "Manish Kumar Sirohi",
-    role: "CTO",
-    org: "Pramod Kirana Store",
-    topic: "Health Benefits of Ayurveda",
-    image: "https://images.unsplash.com/photo-1556157382-97dee2dcb721?auto=format&fit=crop&q=80",
+    name: "Dr. Rajesh Sharma",
+    role: "Director, AIIMS",
+    org: "All India Institute of Medical Sciences",
+    topic: "Future of Digital Healthcare in India",
+    image: "https://randomuser.me/api/portraits/men/11.jpg",
     flag: "🇮🇳",
   },
   {
-    name: "AMAN CHAUDHARY",
-    role: "sds",
-    org: "jkdjksd",
-    topic: "sdsdsdsd",
-    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&q=80",
+    name: "Dr. Priya Menon",
+    role: "Chief Wellness Officer",
+    org: "Apollo Hospitals Group",
+    topic: "Integrative Medicine & Holistic Healing",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
     flag: "🇮🇳",
   },
   {
-    name: "AMAN aman",
-    role: "Speaker",
-    org: "aman",
-    topic: "sdsd",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80",
+    name: "Dr. Anil Kapoor",
+    role: "Healthcare Innovation Lead",
+    org: "WHO South-East Asia Region",
+    topic: "AI in Diagnostics & Precision Medicine",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
     flag: "🇮🇳",
   },
   {
-    name: "AMAN CHAUDHARY",
-    role: "Speaker",
-    org: "aman",
-    topic: "sdsdsd",
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80",
+    name: "Ms. Sunita Rao",
+    role: "CEO & Founder",
+    org: "NutriWell India",
+    topic: "Nutrition, Diet & Lifestyle Medicine",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
     flag: "🇮🇳",
   },
   {
-    name: "AMAN CHAUDHARY",
-    role: "ashdsd",
-    org: "sdcsc",
-    topic: "csdcsc",
-    image: "https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&q=80",
+    name: "Dr. Vikram Nair",
+    role: "AYUSH Policy Advisor",
+    org: "Ministry of AYUSH, Govt. of India",
+    topic: "Ayurveda & Traditional Indian Medicine",
+    image: "https://randomuser.me/api/portraits/men/46.jpg",
+    flag: "🇮🇳",
+  },
+  {
+    name: "Dr. Meera Iyer",
+    role: "Professor of Public Health",
+    org: "TISS Mumbai",
+    topic: "Universal Healthcare Access & Policy",
+    image: "https://randomuser.me/api/portraits/women/23.jpg",
     flag: "🇮🇳",
   },
 ];
@@ -144,9 +152,12 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
                   {/* Profile Image */}
                   <div className="w-[70px] h-[70px] rounded-full overflow-hidden border-[3px] border-[#F1F8EE] mb-2 shadow-sm mt-2">
                     <img
-                      src={speaker.image || "https://via.placeholder.com/70"}
+                      src={speaker.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(speaker.name)}&background=random`}
                       alt={speaker.name}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(speaker.name)}&background=0B2C66&color=fff`;
+                      }}
                     />
                   </div>
 
