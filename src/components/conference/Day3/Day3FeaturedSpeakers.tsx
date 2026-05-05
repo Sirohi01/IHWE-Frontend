@@ -63,8 +63,8 @@ const Day3FeaturedSpeakers: React.FC = () => {
 
       </div>
 
-      {/* 2×3 Grid */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 flex-1">
+      {/* 2×3 Grid with vertical scroll */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-6 flex-1 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar">
         {speakers.map((speaker, idx) => (
           <div
             key={idx}

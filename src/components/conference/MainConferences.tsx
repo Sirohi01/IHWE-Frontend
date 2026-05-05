@@ -88,7 +88,7 @@ const MainConferences: React.FC = () => {
                   <img
                     src={conf.image}
                     alt={conf.title}
-                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 scale-110 group-hover:scale-125"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-white/90" />

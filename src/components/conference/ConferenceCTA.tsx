@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Users } from "lucide-react";
 import lastBg from "../../assets/confrencetrack/last.png";
+import leafImg from "../../assets/dayimagesarogyasangosti/leaf.png";
 
 const ConferenceCTA: React.FC = () => {
   return (
@@ -21,15 +22,12 @@ const ConferenceCTA: React.FC = () => {
         {/* Left Side: Leaf + Text */}
         <div className="flex items-center gap-6 lg:gap-12 flex-1">
           {/* Skeleton Leaf Icon */}
-          <div className="hidden md:block flex-shrink-0">
-            <svg width="70" height="90" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90">
-              <path d="M50 110C50 110 90 70 90 40C90 10 70 10 50 10C30 10 10 10 10 40C10 70 50 110 50 110Z" stroke="#A3E635" strokeWidth="2" strokeDasharray="5 5" />
-              <path d="M50 10V110" stroke="#A3E635" strokeWidth="1.5" />
-              <path d="M20 35C20 35 35 45 50 45" stroke="#A3E635" strokeWidth="1" />
-              <path d="M80 35C80 35 65 45 50 45" stroke="#A3E635" strokeWidth="1" />
-              <path d="M25 65C25 65 40 75 50 75" stroke="#A3E635" strokeWidth="1" />
-              <path d="M75 65C75 65 60 75 50 75" stroke="#A3E635" strokeWidth="1" />
-            </svg>
+          <div className="hidden md:block flex-shrink-0 w-[140px] relative h-10">
+            <img 
+              src={leafImg} 
+              alt="Leaf Icon" 
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[180px] max-w-none w-auto object-contain opacity-100 drop-shadow-[0_0_20px_rgba(163,230,53,0.4)]" 
+            />
           </div>
 
           <div className="text-left">

@@ -120,9 +120,9 @@ const Day2Agenda: React.FC = () => {
 
         {/* Table Container */}
         <div className="bg-white rounded-xl overflow-hidden border border-[#E2E8F0] shadow-sm">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[400px] overflow-y-scroll custom-scrollbar">
             <table className="w-full text-left border-collapse">
-              <thead>
+              <thead className="sticky top-0 z-20">
                 <tr className="bg-[#0B2C66] text-white">
                   <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Time</th>
                   <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Session</th>
