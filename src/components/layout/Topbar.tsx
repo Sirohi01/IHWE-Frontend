@@ -67,9 +67,9 @@ const Topbar = () => {
       <motion.div
         className="bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-[150] py-1"
       >
-      <div className="container mx-auto flex flex-wrap items-center justify-center md:justify-between px-2 md:px-6 py-2 md:py-1 gap-y-2 gap-x-4 text-center md:text-left">
-
-        <div className="flex items-center gap-4 flex-1">
+      <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-4 xl:px-6 py-1.5 flex-nowrap gap-x-4">
+ 
+        <div className="flex items-center gap-3 md:gap-4 flex-shrink-0 pl-1">
           {/* Left Section - Contact Info (Compact on mobile) */}
           <div className="flex items-center justify-center md:justify-start gap-3 md:gap-3 w-full md:w-auto overflow-hidden">
             {topbarEmails.slice(0, 1).map((item: any, idx: number) => (
@@ -126,7 +126,7 @@ const Topbar = () => {
           </div>
 
           {/* Center Section - Scrolling Marquee - Hidden on small screens */}
-          <div className="hidden xl:flex w-[600px] overflow-hidden relative h-full items-center px-4">
+          <div className="hidden md:flex flex-1 min-w-0 max-w-[150px] lg:max-w-[300px] xl:max-w-[550px] 2xl:max-w-[800px] overflow-hidden relative h-full items-center justify-center px-6 ml-10">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
               transition={{
@@ -145,21 +145,21 @@ const Topbar = () => {
           </div>
           </div>
 
-        <div className="hidden lg:flex flex-shrink-0 items-center gap-2">
-          <Link to="/exhibitor-login" className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
+        <div className="hidden md:flex flex-shrink-0 items-center gap-1.5">
+          <Link to="/exhibitor-login" className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
             Exhibitor Login
           </Link>
-          <Link to="/buyer-login" className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
+          <Link to="/buyer-login" className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
             Buyer Login
           </Link>
-          <button className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105">
+          <button className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105">
             Delegates Login
           </button>
           <a
             href="https://admin.ihwe.in/login"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 rounded-md bg-[#d26019] hover:bg-[#b05015] text-white transition-all duration-300 font-bold border border-white/40 text-[9px] uppercase tracking-wider whitespace-nowrap shadow-md hover:scale-105 inline-block text-center"
+            className="px-2.5 py-1.5 rounded-md bg-[#d26019] hover:bg-[#b05015] text-white transition-all duration-300 font-bold border border-white/40 text-[9px] uppercase tracking-wider whitespace-nowrap shadow-md hover:scale-105 inline-block text-center"
           >
             User Login
           </a>
