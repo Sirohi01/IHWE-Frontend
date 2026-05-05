@@ -206,7 +206,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   <img
                     src={`${SERVER_URL}${settings.logo}`}
                     alt="IHWE Logo"
-                    className="absolute top-[62%] -translate-y-1/2 left-0 h-44 md:h-52 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)] group-hover:scale-105"
+                    className="absolute top-[62%] -translate-y-1/2 left-0 h-40 md:h-48 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)] group-hover:scale-105"
                   />
                 ) : (
                   <div className="flex flex-col">

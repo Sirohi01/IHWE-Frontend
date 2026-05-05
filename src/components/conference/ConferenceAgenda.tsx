@@ -112,7 +112,7 @@ const ConferenceAgenda: React.FC = () => {
 
             {/* Agenda table with vertical scroll for long lists */}
             <div className="bg-white rounded-[16px] border border-[#E6ECF3] overflow-hidden">
-              <style>{`
+              <style dangerouslySetInnerHTML={{ __html: `
                 .agenda-scroll::-webkit-scrollbar {
                   display: none;
                 }
@@ -120,7 +120,7 @@ const ConferenceAgenda: React.FC = () => {
                   -ms-overflow-style: none;  /* IE and Edge */
                   scrollbar-width: none;  /* Firefox */
                 }
-              `}</style>
+              `}} />
 
               <div className="max-h-[380px] overflow-y-auto agenda-scroll">
                 <AnimatePresence mode="wait">

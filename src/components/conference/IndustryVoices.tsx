@@ -51,7 +51,7 @@ const IndustryVoices: React.FC = () => {
   if (!data || !data.cards || data.cards.length === 0) return null;
 
   const { subheading, heading, highlightText, cards } = data;
-  const headingParts = heading.split(highlightText);
+  const headingParts = (heading && highlightText) ? heading.split(highlightText) : [heading || "", ""];
 
   return (
     <section className="py-12 bg-[#FBFDFB] overflow-hidden">

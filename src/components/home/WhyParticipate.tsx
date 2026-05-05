@@ -1,5 +1,6 @@
 import { CheckCircle2, FileDown, ArrowRight, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
+import SectionContainer from '../layout/SectionContainer';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
@@ -32,8 +33,8 @@ const WhyParticipate = () => {
   const brochurePath = data.button2File ? `${SERVER_URL}${data.button2File}` : "/pdf.pdf";
 
   return (
-    <section className="bg-[#F9FCF9] pt-4 pb-12 px-6 md:px-14 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+    <section className="bg-[#F9FCF9] pt-4 pb-12 overflow-hidden">
+      <SectionContainer className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
         
         {/* LEFT CONTENT */}
         <motion.div
@@ -68,7 +69,7 @@ const WhyParticipate = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-6">
-            <Link to={data.button1Path || "/book-a-stand"}>
+            <Link to={data.button1Path || "/book-a-stand"} target="_blank">
               <Button className="bg-[#0b4d17] hover:bg-[#073610] text-white px-8 h-11 rounded-xl font-bold uppercase tracking-wider text-[11px] flex items-center gap-3 shadow-lg transition-all group">
                 {data.button1Text || "Exhibit With Us"}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -77,7 +78,8 @@ const WhyParticipate = () => {
 
             <a 
               href={brochurePath} 
-              download 
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-2 text-[#2f8f3a] font-bold uppercase tracking-wider text-[11px] hover:underline transition-all"
             >
               <FileDown className="w-5 h-5" /> {data.button2Text || "Download Brochure"}
@@ -125,7 +127,7 @@ const WhyParticipate = () => {
           </div>
         </motion.div>
 
-      </div>
+      </SectionContainer>
     </section>
   );
 };

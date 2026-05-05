@@ -67,7 +67,7 @@ const Topbar = () => {
       <motion.div
         className="bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-[150] py-1"
       >
-      <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-4 xl:px-6 py-1.5 flex-nowrap gap-x-4">
+      <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
  
         <div className="flex items-center gap-3 md:gap-4 flex-shrink-0 pl-1">
           {/* Left Section - Contact Info (Compact on mobile) */}

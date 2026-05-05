@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SectionContainer from "../layout/SectionContainer";
 import { CheckCircle2, Map } from "lucide-react";
 import { useState, useEffect } from "react";
 import { nationalExpoApi, SERVER_URL } from "../../lib/api";
@@ -90,7 +91,7 @@ const GlobalPlatformSection = () => {
   const bgUrl = data.bgImage ? `${SERVER_URL}${data.bgImage}` : defaultWorldMap;
 
   return (
-    <section className="relative pt-3 pb-4 px-6 md:px-14 overflow-hidden" style={{ background: "#08172a" }}>
+    <section className="relative pt-3 pb-4 overflow-hidden" style={{ background: "#08172a" }}>
 
       {/* World Map BG */}
       <div
@@ -146,7 +147,7 @@ const GlobalPlatformSection = () => {
         }}
       />
 
-      <div className="relative z-10 grid lg:grid-cols-[1fr_1.5fr] gap-12 items-end">
+      <SectionContainer className="relative z-10 grid lg:grid-cols-[1fr_1.5fr] gap-12 items-end">
 
         {/* LEFT */}
         <motion.div
@@ -228,7 +229,8 @@ const GlobalPlatformSection = () => {
             ))}
         </div>
 
-      </div>
+
+      </SectionContainer>
     </section>
   );
 };

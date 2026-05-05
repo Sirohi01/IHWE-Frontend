@@ -162,7 +162,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
 
                     <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
                       <img
-                        src={speaker.image}
+                        src={speaker.image?.startsWith('http') ? speaker.image : `${SERVER_URL}${speaker.image}`}
                         alt={speaker.name}
                         className="w-full h-full object-cover"
                       />

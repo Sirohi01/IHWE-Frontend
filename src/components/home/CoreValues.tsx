@@ -1,6 +1,7 @@
 import React from 'react';
 import { Globe, Users, HeartPulse, Leaf, Building2, Trophy, Handshake, Activity, Stethoscope, Landmark, GraduationCap, Package, Camera, ShieldCheck, UserCheck, Briefcase, Sparkles, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
+import SectionContainer from '../layout/SectionContainer';
 import { useState, useEffect } from "react";
 import { integratedFormatApi } from "../../lib/api";
 
@@ -48,7 +49,7 @@ const CoreValues = () => {
 
   return (
     <section className="bg-white pb-2 overflow-hidden">
-      <div className="max-w-[1500px] mx-auto px-6 md:px-14">
+      <SectionContainer>
         <div className="flex flex-col lg:flex-row gap-0">
           {/* RIGHT CONTENT - Full width row */}
           <div className="w-full border-t border-b border-gray-200 py-3">
@@ -94,7 +95,7 @@ const CoreValues = () => {
             </div>
           </div>
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };
