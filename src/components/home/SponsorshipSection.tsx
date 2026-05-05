@@ -8,7 +8,7 @@ import {
   TrendingUp, Award, Megaphone
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import bgImage from '../../assets/1234.jpg.jpeg';
+import bgImage from '../../assets/1234.png';
 
 const SPONSORSHIP_OPPORTUNITIES = [
   {
@@ -121,118 +121,84 @@ const SponsorshipSection = () => {
     <section className="bg-white overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* ══════════════════════════════════════════
-          TOP HERO: 3-COLUMN LAYOUT
-          Left: Text | Center: Image | Right: Why Sponsor
+          TOP HERO: FULL WIDTH BACKGROUND
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-10 pb-6 px-8 lg:px-16">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-[1fr_auto_1fr] gap-6 items-start">
+      {/* ══════════════════════════════════════════
+          TOP HERO: TEXT LEFT | IMAGE RIGHT
+      ══════════════════════════════════════════ */}
+      <div className="bg-white pt-8 pb-6 px-8 lg:px-16 border-b border-slate-100">
+        <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-10 items-center">
 
           {/* ── LEFT: Heading block ── */}
-          <div className="flex flex-col justify-start pt-2">
+          <div className="flex flex-col justify-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 border border-[#23471d]/30 rounded-full px-3 py-1.5 mb-5 w-fit bg-white shadow-sm">
-              <Leaf className="w-3 h-3 text-[#23471d]" />
-              <span className="text-[#23471d] font-bold text-[10px] tracking-[0.18em] uppercase">
+            <div 
+              className="inline-flex items-center gap-2.5 border border-[#12321d]/10 rounded-full px-5 py-2 mb-5 w-fit shadow-sm -mt-7"
+              style={{ background: "#e9ece3" }}
+            >
+              <Leaf className="w-3.5 h-3.5 text-[#12321d]" />
+              <span className="text-[#12321d] font-extrabold text-[11px] tracking-[0.15em] uppercase">
                 Sponsorship Opportunities Open
               </span>
             </div>
 
-            <h2 className="font-black leading-[0.92] mb-4" style={{ fontSize: "clamp(52px, 6vw, 80px)" }}>
-              <span style={{ color: "#1a1a1a" }}>BECOME A</span><br />
-              <span style={{ color: "#23471d" }}>SPONSOR</span>
+            <h2 className="font-black leading-[1.1] mb-3" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
+              <span style={{ color: "#023316" }}>BECOME A</span><br />
+              <span style={{ color: "#78903a" }}>SPONSOR</span>
             </h2>
 
-            <p className="text-slate-800 font-semibold text-[15px] mb-3 leading-snug">
+            <p className="text-[#3a493e] font-extrabold text-[14px] mb-3 leading-snug uppercase tracking-wide">
               Position Your Brand at the Forefront<br />of the Wellness Industry
             </p>
 
-            <p className="text-slate-500 text-[12.5px] leading-relaxed max-w-[360px]">
+            <p className="text-slate-600 text-[12.5px] font-medium leading-relaxed max-w-[420px]">
               Partner with International Health & Wellness Expo 2026 and
               unlock premium visibility, strategic connections and unmatched
               business opportunities with industry leaders and decision-makers.
             </p>
           </div>
 
-          {/* ── CENTER: Expo image in rounded frame ── */}
-          <div className="relative flex items-center justify-center" style={{ width: 380 }}>
-            {/* Decorative leaf top-left */}
-            <div className="absolute -top-4 -left-6 z-10 pointer-events-none">
-              <svg width="70" height="90" viewBox="0 0 70 90" fill="none">
-                <path d="M35 85 C10 70 5 45 15 20 C25 0 50 -5 60 15 C70 35 65 65 35 85Z" fill="#23471d" opacity="0.85" />
-                <path d="M35 85 C35 60 30 40 20 20" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
-              </svg>
-            </div>
-            {/* Decorative leaf bottom-right */}
-            <div className="absolute -bottom-4 -right-4 z-10 pointer-events-none">
-              <svg width="55" height="70" viewBox="0 0 55 70" fill="none">
-                <path d="M27 65 C5 50 3 28 12 10 C20 -3 44 -4 50 14 C56 32 50 55 27 65Z" fill="#4a8c1c" opacity="0.75" />
-              </svg>
-            </div>
+          {/* ── RIGHT: Full Clear Image ── */}
+          <img 
+            src={bgImage} 
+            alt="IHWE Expo" 
+            className="w-full h-[320px] object-cover object-center transition-transform duration-500 hover:scale-105 -ml-6" 
+          />
+        </div>
 
-            <div
-              className="overflow-hidden shadow-2xl"
-              style={{
-                borderRadius: "50% 50% 48% 48% / 40% 40% 60% 60%",
-                width: 340,
-                height: 380,
-                border: "4px solid #23471d",
-              }}
-            >
-              <img
-                src={bgImage}
-                alt="IHWE Expo"
-                className="w-full h-full object-cover object-center"
-              />
-              {/* Overlay text on image */}
-              <div
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center pointer-events-none"
-                style={{ width: 200 }}
-              >
-                <p className="text-white font-bold text-[11px] tracking-widest uppercase drop-shadow-lg">
-                  Stronger Together<br />For a Healthier Tomorrow
+        {/* ── WHY SPONSOR BAR (Moved below for better structure) ── */}
+        <div className="max-w-[1360px] mx-auto mt-12 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="h-px flex-1 bg-slate-200" />
+            <span className="text-[#23471d] font-black text-[12px] tracking-[0.2em] uppercase">
+              WHY SPONSOR IHWE?
+            </span>
+            <div className="h-px flex-1 bg-slate-200" />
+          </div>
+          
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-6">
+            {WHY_SPONSOR.map((item, idx) => (
+              <div key={idx} className="flex items-start gap-3">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                  style={{ background: "#f0f7e8", border: "1.5px solid #c5dfa0" }}
+                >
+                  <item.icon className="w-4 h-4" style={{ color: "#23471d" }} />
+                </div>
+                <p className="text-slate-700 text-[12px] font-medium leading-tight pt-1">
+                  {item.title.split(item.bold).map((part, i, arr) =>
+                    i < arr.length - 1 ? (
+                      <React.Fragment key={i}>
+                        {part}<strong className="text-[#d26019]">{item.bold}</strong>
+                      </React.Fragment>
+                    ) : part
+                  )}
                 </p>
               </div>
-            </div>
-          </div>
-
-          {/* ── RIGHT: Why Sponsor IHWE ── */}
-          <div className="flex flex-col">
-            {/* Header bar */}
-            <div
-              className="flex items-center justify-center py-3 px-5 mb-5 rounded-lg"
-              style={{ background: "#1a3a10" }}
-            >
-              <span className="text-white font-black text-[13.5px] tracking-[0.08em] uppercase">
-                WHY SPONSOR IHWE?
-              </span>
-            </div>
-
-            {/* 2-col grid of why items */}
-            <div className="grid grid-cols-2 gap-x-5 gap-y-5">
-              {WHY_SPONSOR.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-2.5">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                    style={{ background: "#f0f7e8", border: "1.5px solid #c5dfa0" }}
-                  >
-                    <item.icon className="w-4 h-4" style={{ color: "#23471d" }} />
-                  </div>
-                  <p className="text-slate-700 text-[11.5px] leading-snug pt-0.5">
-                    {item.title.split(item.bold).map((part, i, arr) =>
-                      i < arr.length - 1 ? (
-                        <React.Fragment key={i}>
-                          {part}<strong className="text-slate-900">{item.bold}</strong>
-                        </React.Fragment>
-                      ) : part
-                    )}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
+            ))}
         </div>
       </div>
+    </div>
 
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
