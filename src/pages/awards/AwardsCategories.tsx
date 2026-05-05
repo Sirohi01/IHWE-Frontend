@@ -15,29 +15,29 @@ import icon13 from "../../assets/icon13.png";
 import icon14 from "../../assets/icon14.png";
 
 const awardCategories = [
-  { title: "Best Hospital / Healthcare Institution", color: "#008d48", icon: icon1  },
-  { title: "Excellence in Medical Practice",         color: "#008d48", icon: icon2  },
-  { title: "Ayurveda & Natural Healing Leader",      color: "#008d48", icon: icon3  },
-  { title: "Wellness & Spa Brand of the Year",       color: "#008d48", icon: icon4  },
-  { title: "Fitness Innovation Award",               color: "#0a2e5c", icon: icon5  },
-  { title: "Nutrition & Organic Excellence",         color: "#008d48", icon: icon6  },
-  { title: "Medical Tourism Excellence",             color: "#0a2e5c", icon: icon7  },
-  { title: "Healthcare Startup of the Year",         color: "#0a2e5c", icon: icon8  },
-  { title: "Women Leadership in Healthcare",         color: "#0a2e5c", icon: icon9  },
-  { title: "Lifetime Achievement Award",             color: "#008d48", icon: icon10 },
+  { title: "Best Hospital / Healthcare Institution", color: "#008d48", icon: icon1 },
+  { title: "Excellence in Medical Practice", color: "#008d48", icon: icon2 },
+  { title: "Ayurveda & Natural Healing Leader", color: "#008d48", icon: icon3 },
+  { title: "Wellness & Spa Brand of the Year", color: "#008d48", icon: icon4 },
+  { title: "Fitness Innovation Award", color: "#0a2e5c", icon: icon5 },
+  { title: "Nutrition & Organic Excellence", color: "#008d48", icon: icon6 },
+  { title: "Medical Tourism Excellence", color: "#0a2e5c", icon: icon7 },
+  { title: "Healthcare Startup of the Year", color: "#0a2e5c", icon: icon8 },
+  { title: "Women Leadership in Healthcare", color: "#0a2e5c", icon: icon9 },
+  { title: "Lifetime Achievement Award", color: "#008d48", icon: icon10 },
 ];
 
 const stats = [
-  { number: "200+",  label: "Award Winners",     icon: icon11 },
-  { number: "100+",  label: "Healthcare Brands", icon: icon12   },
-  { number: "5000+", label: "Industry Visitors", icon: icon13  },
-  { number: "25+",   label: "Media Partners",    icon: icon14   },
+  { number: "10+", label: "Years of Legacy", icon: icon11 },
+  { number: "150+", label: "Exhibitors", icon: icon12 },
+  { number: "8000+", label: "Visitors/Delegates", icon: icon13 },
+  { number: "150+", label: "Speakers & Experts", icon: icon14 },
 ];
 
 const AwardsCategories = () => {
   return (
-    <section className="py-6 md:py-8 bg-[#edf7f2]">
-      <div className="container mx-auto px-6 max-w-[1280px]">
+    <section className="pt-0.5 md:pt-0.5 pb-1 md:pb-1 bg-[#edf7f2]">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
 
         {/* Header */}
         <motion.div
@@ -56,15 +56,15 @@ const AwardsCategories = () => {
           <div className="flex items-center justify-center gap-2 mb-0">
             <div className="h-[1.5px] flex-1 max-w-[200px] bg-[#b6ddc8] opacity-60" />
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="rotate-[15deg]">
-              <path 
-                d="M21 3C21 3 14 3.5 9 8.5C4 13.5 3 21 3 21C3 21 10.5 20 15.5 15C20.5 10 21 3 21 3Z" 
-                fill="#008d48" 
+              <path
+                d="M21 3C21 3 14 3.5 9 8.5C4 13.5 3 21 3 21C3 21 10.5 20 15.5 15C20.5 10 21 3 21 3Z"
+                fill="#008d48"
               />
-              <path 
-                d="M3 21L12 12" 
-                stroke="white" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
+              <path
+                d="M3 21L12 12"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
                 opacity="0.3"
               />
             </svg>
@@ -83,12 +83,12 @@ const AwardsCategories = () => {
               transition={{ delay: idx * 0.05 }}
               className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-between p-4 gap-2"
             >
-              <div className="w-24 h-24 overflow-hidden flex items-center justify-center">
+              <div className="w-24 h-24 flex items-center justify-center">
                 {cat.icon ? (
                   <img
                     src={cat.icon}
                     alt={cat.title}
-                    className={`w-full h-full object-contain ${idx === 8 ? 'scale-[1.1]' : 'scale-[1.3]'}`}
+                    className="w-full h-full object-contain scale-[0.95]"
                   />
                 ) : (
                   <div className="w-24 h-24" />
@@ -106,24 +106,24 @@ const AwardsCategories = () => {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#002b5c] rounded-2xl px-8 md:px-12 py-8 grid grid-cols-2 md:grid-cols-4 gap-6"
+          className="bg-[#002b5c] rounded-2xl px-8 md:px-12 py-1.5 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           {stats.map((stat, idx) => (
             <div key={idx} className="flex items-center gap-4 relative">
               {idx !== 0 && (
-                <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 h-12 w-px bg-white/20" />
+                <div className="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-px bg-white/20" />
               )}
               {/* Removed overflow-hidden to prevent icon clipping during scale */}
-              <div className="w-14 h-14 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 flex items-center justify-center shrink-0">
                 {stat.icon ? (
-                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.5]" />
+                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.3]" />
                 ) : null}
               </div>
               <div>
-                <div className="text-white text-[28px] md:text-[34px] font-black leading-none">
+                <div className="text-white text-[18px] md:text-[24px] font-black leading-none">
                   {stat.number}
                 </div>
-                <div className="text-white/60 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] mt-1">
+                <div className="text-white/60 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.15em] mt-0.5">
                   {stat.label}
                 </div>
               </div>

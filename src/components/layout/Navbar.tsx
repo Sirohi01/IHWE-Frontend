@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays } from "lucide-react";
+import { Menu, X, ChevronDown, Award, Briefcase, Users, Layout, MapPin, Handshake, Camera, Sparkles, Rocket, FileCheck, Search, IdCard, Image, Info, ShoppingBag, HelpCircle, Lock, CalendarDays, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
+import MsmeHeroLogo from "./MsmeHeroLogo";
 
 const navLinks = [
   { label: "Home", path: "/" },
   {
     label: "About Us",
-
+  
     dropdown: [
       {
         label: "About IHWE",
@@ -44,26 +45,14 @@ const navLinks = [
     ],
   },
   {
-    label: "Exhibit",
+    label: "PARTICIPATE",
 
     dropdown: [
       {
-        label: "Why Exhibit?",
+        label: "Exhibit at IHWE?",
         path: "/why-exhibit",
         icon: HelpCircle,
         description: "Maximize your brand visibility and growth"
-      },
-      {
-        label: "Book a Stall",
-        path: "/book-a-stand",
-        icon: Layout,
-        description: "Secure your premium space at IHWE 2026",
-      },
-      {
-        label: "Exhibitor Profile",
-        path: "/exhibitor-profile",
-        icon: Users,
-        description: "Target audience and industry segments"
       },
       {
         label: "Exhibitor List",
@@ -72,58 +61,89 @@ const navLinks = [
         description: "View the list of confirmed participating brands"
       },
       {
-        label: "E-Promotion Opportunities",
-        path: "/e-promotion",
-        icon: Rocket,
-        description: "Digital exposure for your brand"
-      },
-      {
-        label: "Travel & Accommodation",
-        path: "/travel-accommodation",
-        icon: MapPin,
-        description: "Easy travel planning for exhibitors"
-      },
-      {
-        label: "Stall Designing Vendors",
-        path: "/stall-designing-vendors",
+        label: "Visit the Expo",
+        path: "/book-a-stand",
         icon: Layout,
-        description: "Connect with trusted stall designers"
+        description: "Secure your premium space at IHWE 2026",
       },
+      {
+        label: "Buyer-Seller Meet",
+        path: "/buyer-seller-meet",
+        icon: Users,
+        description: "Connect with buyers and sellers at IHWE"
+      },
+      {
+        label: "MSME PMS Scheme",
+        path: "/msme-pms-scheme",
+        icon: ShieldCheck,
+        description: "Government subsidy for MSME exhibitors"
+      },
+      // {
+      //   label: "Conference",
+      //   path: "/exhibitors",
+      //   icon: FileCheck,
+      //   description: "View the list of confirmed participating brands"
+      // },
+      // {
+      //   label: "Awards",
+      //   path: "/e-promotion",
+      //   icon: Rocket,
+      //   description: "Digital exposure for your brand"
+      // },
     ],
   },
   {
-    label: "Visit",
+    label: "EXPLORE",
 
     dropdown: [
       {
-        label: "Register for FREE",
+        label: "Event Highlights",
         path: "/visitor-registration",
         icon: FileCheck,
         description: "Get your complimentary visitor pass today"
       },
       {
-        label: "Buyer Registration",
+        label: "Media / Gallery",
         path: "/buyer-registration",
         icon: ShoppingBag,
         description: "Explore opportunities as a domestic or international buyer"
       },
       {
-        label: "Why Visit",
+        label: "Industry Segments",
         path: "/why-visit",
         icon: Sparkles,
         description: "Experience the latest in health & wellness"
       },
+    ],
+  },
+  {
+    label: "OPPORTUNITIES",
+
+    dropdown: [
       {
-        label: "Download Badge",
-        path: "/download-badge",
-        icon: IdCard,
-        description: "Fast-track your entry to the expo"
+        label: "Sponsorship",
+        path: "/visitor-registration",
+        icon: FileCheck,
+        description: "Get your complimentary visitor pass today"
+      },
+      {
+        label: "Branding Oppurtunities",
+        path: "/buyer-registration",
+        icon: ShoppingBag,
+        description: "Explore opportunities as a domestic or international buyer"
+      },
+      {
+        label: "Partnership / Collaboration",
+        path: "/why-visit",
+        icon: Sparkles,
+        description: "Experience the latest in health & wellness"
       },
     ],
   },
+
   { label: "Conference", path: "/conference" },
   { label: "Awards", path: "/awards" },
-  { label: "Gallery", path: "/gallery" },
+
   { label: "Contact", path: "/contact" },
 ];
 
@@ -171,31 +191,49 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
       {scrolled && <div className="h-[72px] xl:h-[80px] w-full" />}
       <motion.nav
         className={`${scrolled
-            ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60"
-            : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
+          ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60"
+          : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
           } transition-all duration-500`}
       >
         <div className="container mx-auto px-6 max-w-[1400px]">
           {/* ─── Desktop Nav ─── */}
           <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
 
-            <Link to="/" className="relative z-[150] h-full flex items-center min-w-[200px]">
-              {settings?.logo ? (
-                <img
-                  src={`${SERVER_URL}${settings.logo}`}
-                  alt="IHWE Logo"
-                  className="absolute top-1/2 -translate-y-1/2 left-0 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)] group-hover:scale-105"
-                />
-              ) : (
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-[#23471d] leading-none">IHWE</span>
-                  <span className="text-[10px] font-bold text-[#d26019] tracking-widest uppercase">EXPO 2026</span>
+            <div className="relative z-[150] h-full flex items-center gap-4">
+              {/* Logo */}
+              <Link to="/" className="h-full flex items-center min-w-[140px] md:min-w-[180px]">
+                {settings?.logo ? (
+                  <img
+                    src={`${SERVER_URL}${settings.logo}`}
+                    alt="IHWE Logo"
+                    className="absolute top-1/2 -translate-y-1/2 left-0 h-48 md:h-56 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)] group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex flex-col">
+                    <span className="text-xl font-black text-[#23471d] leading-none">IHWE</span>
+                    <span className="text-[10px] font-bold text-[#d26019] tracking-widest uppercase">EXPO 2026</span>
+                  </div>
+                )}
+              </Link>
+
+              {/* ─── Divider + Venue & Date ─── */}
+              <div className="flex items-center gap-2 ml-1 pl-3 border-l border-slate-200">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Venue & Date</span>
+                  <div className="flex items-center gap-1">
+                    <CalendarDays className="w-2.5 h-2.5 text-[#23471d] flex-shrink-0" />
+                    <span className="text-[9px] font-bold text-slate-800 whitespace-nowrap">21 – 23 August</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
+                    <span className="text-[8px] font-semibold text-slate-600 whitespace-nowrap">Pragati Maidan, New Delhi</span>
+                  </div>
                 </div>
-              )}
-            </Link>
+              </div>
+            </div>
 
             {/* RIGHT: Nav Links + Button */}
-            <div className="flex-1 flex items-center justify-end gap-0.5 px-4">
+            <div className="flex-1 flex items-center justify-end gap-0 px-2">
               {navLinks.map((link) => (
                 <div
                   key={link.label}
@@ -204,9 +242,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
                 >
                   <Link
-                    to={link.path}
+                    to={link.path || "#"}
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                    className={`px-2 py-2 text-[12px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group ${location.pathname === link.path ? "text-[#d26019]" : textColor
+                    className={`px-2 py-2 text-[11px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : textColor
                       }`}
                   >
                     {link.label}
@@ -279,7 +317,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               ))}
 
               {/* Combined Register Dropdown and MSME Logo */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <div
                   className="relative"
                   onMouseEnter={() => setActiveDropdown("registration")}
@@ -287,7 +325,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 >
                   <button
                     className={cn(
-                      "group relative overflow-hidden border-2 px-6 py-2 rounded-full font-bold text-[10.5px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
+                      "group relative overflow-hidden border-2 px-5 py-1.5 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all duration-500 whitespace-nowrap flex-shrink-0 bg-[#23471d] border-[#d26019] text-white hover:bg-[#1a3a14] flex items-center gap-1.5 shadow-md hover:shadow-lg"
                     )}
                     onClick={() => analyticsApi.logClick("Register Now Button (Navbar)")}
                   >
@@ -305,23 +343,53 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                           initial={{ opacity: 0, scale: 0.9, y: 15, transformOrigin: "top right" }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                          transition={{ type: "spring" as const, damping: 25, stiffness: 300 }}
                           className="relative bg-white rounded-2xl shadow-[0_15px_45px_rgba(0,0,0,0.15)] border border-slate-100 p-1 overflow-hidden z-20"
                         >
                           <div className="grid grid-cols-2 relative h-full">
+                            <Link
+                              to="/book-a-stand"
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                analyticsApi.logClick("Registration: Book A Stand");
+                              }}
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                            >
+                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
+                                <Briefcase className="w-3 h-3" />
+                              </div>
+                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Book A<br />Stand</span>
+                            </Link>
+
                             <Link
                               to="/visitor-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Visitor Pass");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Users className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#23471d] transition-colors leading-tight">Visitor<br />Pass</span>
                             </Link>
+
+                            <a
+                              href="https://namogange.org/arogya-sangoshthi.php"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => {
+                                setActiveDropdown(null);
+                                analyticsApi.logClick("Registration: Delegates Register");
+                              }}
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                            >
+                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
+                                <Handshake className="w-3 h-3" />
+                              </div>
+                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegates<br />Register</span>
+                            </a>
 
                             <Link
                               to="/buyer-registration"
@@ -338,26 +406,12 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                             </Link>
 
                             <Link
-                              to="/book-a-stand"
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                analyticsApi.logClick("Registration: Book A Stand");
-                              }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
-                            >
-                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
-                                <Briefcase className="w-3 h-3" />
-                              </div>
-                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Book A<br />Stand</span>
-                            </Link>
-
-                            <Link
                               to="/media-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Media & Partners");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Camera className="w-3 h-3" />
@@ -371,7 +425,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Speaker Register");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-r border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#23471d]/5 flex items-center justify-center text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Sparkles className="w-3 h-3" />
@@ -385,67 +439,76 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Seller Register");
                               }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100"
+                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-r border-slate-100"
                             >
                               <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
                                 <Briefcase className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Seller<br />Register</span>
                             </Link>
-
-                            <a
-                              href="https://namogange.org/arogya-sangoshthi.php"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => {
-                                setActiveDropdown(null);
-                                analyticsApi.logClick("Registration: Delegated Register");
-                              }}
-                              className="flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 col-span-2 border-r-0"
-                            >
-                              <div className="w-6 h-6 flex-shrink-0 rounded-lg bg-[#d26019]/5 flex items-center justify-center text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white transition-all duration-300 shadow-sm">
-                                <Handshake className="w-3 h-3" />
-                              </div>
-                              <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegated<br />Register</span>
-                            </a>
                           </div>
                         </motion.div>
                       </div>
                     )}
                   </AnimatePresence>
                 </div>
-                <img
-                  src="/MSME.png"
-                  alt="MSME Logo"
-                  className="h-14 w-auto object-contain hidden sm:block ml-4"
-                />
+
+                {/* MSME Logo Component */}
+                <MsmeHeroLogo />
               </div>
             </div>
           </div>
 
-          <div className="flex xl:hidden items-center justify-between h-[64px] relative">
-            <Link to="/" className="relative z-[150] h-full flex items-center min-w-[140px] ml-2">
-              {settings?.logo ? (
-                <img
-                  src={`${SERVER_URL}${settings.logo}`}
-                  alt="IHWE Logo"
-                  className="absolute top-1/2 -translate-y-1/2 left-0 h-32 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
-                />
-              ) : (
-                <span className="text-xl font-black text-[#23471d] tracking-tighter">IHWE</span>
-              )}
-            </Link>
+          <div className="flex xl:hidden items-center justify-between h-[64px] relative px-4">
+            <div className="flex items-center gap-3">
+              <Link to="/" className="relative z-[150] h-full flex items-center min-w-[120px]">
+                {settings?.logo ? (
+                  <img
+                    src={`${SERVER_URL}${settings.logo}`}
+                    alt="IHWE Logo"
+                    className="absolute top-1/2 -translate-y-1/2 left-0 h-32 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
+                  />
+                ) : (
+                  <span className="text-xl font-black text-[#23471d] tracking-tighter">IHWE</span>
+                )}
+              </Link>
+            </div>
 
-            <button
-              className="p-2 rounded-full hover:bg-slate-100 transition-colors relative z-[110]"
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              {mobileOpen ? (
-                <X className={`w-7 h-7 ${textColor}`} />
-              ) : (
-                <Menu className={`w-7 h-7 ${textColor}`} />
+            <div className="flex items-center gap-2">
+              {settings?.isMsmeLogoActive && settings?.msmeLogo && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="relative z-[110] top-[0px] right-[-10px] flex flex-col items-center"
+                >
+                  {settings?.msmeLogoTitle && (
+                    <span className="text-[6px] font-bold text-slate-600 uppercase tracking-wider mb-0.5">
+                      {settings.msmeLogoTitle}
+                    </span>
+                  )}
+                  <img
+                    src={`${SERVER_URL}${settings.msmeLogo}`}
+                    alt="MSME"
+                    className="h-10 w-auto object-contain 
+                               drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)]
+                               rounded-xl
+                               transition-all duration-300
+                               active:scale-105"
+                  />
+                </motion.div>
               )}
-            </button>
+
+              <button
+                className="p-2 rounded-full hover:bg-slate-100 transition-colors relative z-[110]"
+                onClick={() => setMobileOpen(!mobileOpen)}
+              >
+                {mobileOpen ? (
+                  <X className={`w-7 h-7 ${textColor}`} />
+                ) : (
+                  <Menu className={`w-7 h-7 ${textColor}`} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -456,7 +519,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               initial={{ opacity: 0, x: "100%" }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              transition={{ type: "spring" as const, damping: 25, stiffness: 200 }}
               className="fixed inset-0 top-[64px] xl:hidden bg-white z-50 flex flex-col"
             >
               <div className="flex-1 overflow-y-auto px-8 py-10">

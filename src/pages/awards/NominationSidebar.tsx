@@ -30,7 +30,7 @@ const NominationSidebar = () => {
   const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
 
   useEffect(() => {
-    awardCategoryApi.getAll().then(setCategories).catch(() => {});
+    awardCategoryApi.getAll().then(setCategories).catch(() => { });
   }, []);
 
   return (
@@ -111,7 +111,7 @@ const NominationSidebar = () => {
         <h3 className="text-[#0a2e5c] font-black text-[14px] uppercase tracking-widest mb-1">Need Help?</h3>
         <p className="text-slate-400 text-[11.5px] font-medium mb-3">Our team is here to assist you.</p>
         <div className="space-y-2.5">
-          <ContactLink icon={<Phone className="w-3.5 h-3.5" />} text="+91 93104 68663" href="tel:+919310468663" />
+          <ContactLink icon={<Phone className="w-3.5 h-3.5" />} text="+91 964590052" href="tel:+91-964590052" />
           <ContactLink icon={<Mail className="w-3.5 h-3.5" />} text="info@ihwe.in" href="mailto:info@ihwe.in" />
           <ContactLink icon={<Globe className="w-3.5 h-3.5" />} text="www.ihwe.in" href="https://www.ihwe.in" />
         </div>

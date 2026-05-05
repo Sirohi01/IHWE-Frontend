@@ -6,6 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { heroBackgroundApi, SERVER_URL, partnersApi, clientApi } from "@/lib/api";
+
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import partnersHeroFallback from "../assets/cara14.jpg";
@@ -46,7 +47,7 @@ const Partners = () => {
             })),
             isMarquee: true // Flag to identify it uses the marquee layout
           };
-          
+
           // Remove any existing Media Partners group from backend if we want to replace it
           finalGroups = finalGroups.filter(g => g.subheading !== "Media Partners");
           finalGroups.push(mediaPartnersGroup);
@@ -67,7 +68,7 @@ const Partners = () => {
       {/* HERO SECTION - Standardized 16:4 Sleek Style */}
       <section
         className="hero-background-standard"
-        style={{ 
+        style={{
           backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : partnersHeroFallback})`
         }}
       >
@@ -89,7 +90,7 @@ const Partners = () => {
 
       {partnerGroups.map((group) => {
         const isMarquee = group.isMarquee || group.subheading === "Media Partners";
-        
+
         const renderTitle = () => (
           <div className="text-center mb-10" data-aos="fade-up">
             <div className="flex items-center justify-center gap-3 mb-3">
@@ -141,7 +142,7 @@ const Partners = () => {
                       ))}
                     </CarouselContent>
                   </Carousel>
-                  
+
                   {/* Fading Gradients - Matching Home Page */}
                   <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#F7F8F0] to-transparent z-10 pointer-events-none"></div>
                   <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#F7F8F0] to-transparent z-10 pointer-events-none"></div>

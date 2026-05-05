@@ -9,6 +9,7 @@ import WhyAttend from "@/components/sections/WhyAttend";
 import WhoShouldAttend from "@/components/sections/WhoShouldAttend";
 import OrganizedBy from "@/components/sections/OrganizedBy";
 import { heroBackgroundApi, eventOverviewApi, SERVER_URL, visionMissionApi, aboutOrganizerApi, ourJourneyApi } from "@/lib/api";
+
 import * as LucideIcons from "lucide-react";
 import PragatiMaidanImg from "@/assets/Pragati-Maidan.jpg";
 import InternationalImg from "@/assets/international.png";
@@ -84,28 +85,28 @@ const STATS = [
 
 const VENUE_STATS = [
   {
-    end: 220, prefix: "180–", suffix: "", label: "EXHIBITORS", iconColor: "#d26019",
+    end: 1500, prefix: "", suffix: "+", label: "EXHIBITORS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
   },
   {
-    end: 11000, prefix: "9,000–", suffix: "", label: "VISITORS", iconColor: "#23471d",
+    end: 8000, prefix: "", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
   },
   {
-    end: 650, prefix: "500–", suffix: "", label: "B2B BUYERS", iconColor: "#d26019",
+    end: 0, prefix: "B2B", suffix: "", label: "B2B MEETINGS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
   },
   {
-    end: 100, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
+    end: 150, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
   },
   {
-    end: 7, prefix: "5–", suffix: "", label: "COUNTRIES PARTICIPATION", iconColor: "#d26019",
+    end: 10000, prefix: "", suffix: "+", label: "GLOBAL BUYERS", iconColor: "#d26019",
     icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
   },
   {
     end: 700, prefix: "₹500–", suffix: " Cr+", label: "BUSINESS OPPORTUNITIES", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M6 3h12M6 8h12M14.5 21L6 13h3c3.5 0 4.5-5 0-5H6" /></svg>
   },
 ];
 
@@ -133,7 +134,7 @@ const VenueStatItem = ({ stat, visible, delay }: { stat: typeof VENUE_STATS[0], 
         {stat.icon(stat.iconColor)}
       </div>
       <p className="font-black text-[15px] leading-tight" style={{ color: stat.iconColor, fontFamily: "'Inter', sans-serif" }}>
-        {stat.prefix}{count.toLocaleString()}{stat.suffix}
+        {stat.prefix}{stat.end > 0 ? count.toLocaleString() : ""}{stat.suffix}
       </p>
       <p className="text-black text-[9px] uppercase tracking-[0.15em] font-bold mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</p>
     </div>
@@ -302,12 +303,13 @@ const About = () => {
   const heroHeading = heroData?.heading || "";
 
   return (
-    <div className="bg-[#FFFDF1] font-inter">
+    <div className="bg-white font-inter">
       {/* PROFESSIONAL HERO SECTION */}
       <section
         className="hero-background-about"
         style={heroStyles}
       >
+
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
 
         <div className="container mx-auto px-8 text-left text-white relative z-10 flex flex-col justify-center h-full pt-16 pb-6" data-aos="fade-up">
@@ -434,7 +436,7 @@ const About = () => {
       <GlobalPlatform />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
-<section className="pt-10 pb-4 bg-white relative z-10">
+<section className="pt-4 pb-0 bg-white relative z-10">
   <div className="container mx-auto px-11">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
@@ -508,7 +510,7 @@ const About = () => {
 
 
       {/* ABOUT THE ORGANIZER */}
-      <section className="pt-6 pb-4 bg-[#FFFDF1] border-t border-gray-100">
+      <section className="pt-10 pb-4 bg-[#FFFDF1] border-t border-gray-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
 
@@ -543,7 +545,7 @@ const About = () => {
               <p className="text-[#23471d] font-bold text-[10px] uppercase tracking-[0.2em] mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {organizerData?.capabilitiesTitle || "Core Capabilities"}
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 mb-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 mb-1">
                 {(organizerData?.capabilities || [
                   "International exhibitions & trade shows",
                   "Healthcare conferences & seminars",
@@ -552,13 +554,13 @@ const About = () => {
                   "International collaborations & delegations",
                   "Focused on delivering measurable ROI and business growth for participants."
                 ]).map((item: string, i: number) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <div className="w-[15px] h-[15px] rounded-full bg-[#fef0e6] flex items-center justify-center shrink-0 mt-[2px]">
-                      <svg viewBox="0 0 12 12" fill="none" className="w-[8px] h-[8px]">
-                        <path d="M2 6l3 3 5-5" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  <div key={i} className="flex items-start gap-2.5">
+                    <div className="w-[17px] h-[17px] rounded-full bg-[#fef0e6] flex items-center justify-center shrink-0 mt-[2px]">
+                      <svg viewBox="0 0 12 12" fill="none" className="w-[9px] h-[9px]">
+                        <path d="M2 6l3 3 5-5" stroke="#d26019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
-                    <span className="text-gray-900 text-[12px] leading-[1.5] font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>{item}</span>
+                    <span className="text-gray-900 text-[13px] leading-[1.5] font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -854,7 +856,7 @@ const About = () => {
 </section> */}
 
       {/* ONE PLATFORM. FOUR POWERFUL PILLARS. */}
-      <section className="pt-4 pb-16 bg-white border-t border-gray-100">
+      <section className="pt-4 pb-8 bg-white border-t border-gray-100">
         <div className="container mx-auto px-8 lg:px-12 max-w-7xl">
           
           <div className="text-center mb-2">
@@ -913,7 +915,7 @@ const About = () => {
                 </div>
 
                 {/* Content Area */}
-                <div className="pt-6 pb-5 px-5 text-center flex flex-col flex-1">
+                <div className="pt-6 pb-3 px-5 text-center flex flex-col flex-1">
                   <h3 className="font-extrabold text-[13px] leading-[1.3] uppercase tracking-wide mb-4 flex flex-col items-center justify-center"
                     style={{ color: pillar.themeColor, fontFamily: "'Inter', sans-serif" }}>
                     <span>{pillar.title[0]}</span>
@@ -968,10 +970,9 @@ const About = () => {
               <h2 className="font-black text-[32px] text-[#23471d] leading-[1.25] mb-0" style={{ fontFamily: "'Inter', sans-serif" }}>
                 Why Pragati Maidan, New Delhi?
               </h2>
-              <div className="w-9 h-[2px] bg-[#d26019] my-5" />
 
               {/* Bullet Points - Circle style like image 2 */}
-              <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-5 mt-6">
                 {[
                   {
                     color: "#d26019", bg: "#fff3eb",
@@ -1033,66 +1034,112 @@ const About = () => {
               </div>
             </div>
           </div>
-
-         
         </div>
       </section>
 
-      <section className="py-6 bg-[#23471d] relative overflow-hidden border-t border-white/5">
-  {/* Particle Canvas */}
-  <canvas
-    ref={canvasRef}
-    className="pointer-events-none absolute inset-0 opacity-50"
-  />
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-footer {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(255,200,0,0.3), 0 4px 15px rgba(255,165,0,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        .golden-btn-footer::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
 
-  <div className="container mx-auto px-6 relative z-10">
-    <div className="flex flex-col lg:flex-row items-center justify-start gap-10 lg:gap-40">
-      {/* Text Side */}
-      <div className="text-center lg:text-left max-w-2xl" data-aos="fade-right">
-        <div className="flex items-center justify-center lg:justify-start gap-2.5 mb-1.5">
-          <div className="h-[1.5px] w-6 bg-[#F3B71B]" />
-          <span className="text-[#F3B71B] font-bold text-[10px] uppercase tracking-[0.25em]">
-            Ignite Your Growth
-          </span>
+      <section className="py-3 bg-[#23471d] relative overflow-hidden border-t border-white/5">
+        {/* Particle Canvas */}
+        <canvas
+          ref={canvasRef}
+          className="pointer-events-none absolute inset-0 opacity-50"
+        />
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-start gap-10 lg:gap-40">
+            {/* Text Side */}
+            <div className="text-center lg:text-left max-w-2xl" data-aos="fade-right">
+              <div className="flex items-center justify-center lg:justify-start gap-2.5 mb-1.5">
+                <div className="h-[1.5px] w-6 bg-[#F3B71B]" />
+                <span className="text-[#F3B71B] font-bold text-[10px] uppercase tracking-[0.25em]">
+                  Ignite Your Growth
+                </span>
+              </div>
+              <h3
+                className="text-white font-extrabold text-2xl md:text-3xl mb-1 leading-tight"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                Be Part of India's Global Wellness Movement
+              </h3>
+              <p className="text-white/70 font-medium text-[12px] max-w-xl">
+                Exhibit. Connect. Collaborate. Grow. Join healthcare leaders in building the future of wellness.
+              </p>
+            </div>
+
+            {/* Buttons Side: 2x2 Grid */}
+            <div
+              className="grid grid-cols-2 gap-4 w-full lg:w-auto"
+              data-aos="fade-left"
+            >
+              {[
+                { label: "BOOK YOUR STALL", link: "/book-a-stand", style: "gold" },
+                  { label: "REGISTER AS VISITOR", link: "/visitor-registration", style: "white" },
+                   { label: "REGISTER AS DELEGATE", link: "/contact", style: "white" },
+                { label: "REGISTER AS BUYER", link: "/buyer-registration", style: "white" },
+    
+              
+              ].map((btn, i) => (
+                <div key={i} className="relative group/btn">
+                  {btn.style === "gold" && (
+                    <>
+                      <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '10px', color: '#fff176', textShadow: '0 0 6px gold', animation: 'sparkleAnim 1.6s ease-in-out infinite', opacity: 0, zIndex: 20, top: '-6px', left: '10%', animationDelay: '0s' }} className="group-hover/btn:opacity-100 transition-opacity">✦</span>
+                      <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '10px', color: '#fff176', textShadow: '0 0 6px gold', animation: 'sparkleAnim 1.6s ease-in-out infinite', opacity: 0, zIndex: 20, top: '-8px', left: '40%', animationDelay: '0.4s' }} className="group-hover/btn:opacity-100 transition-opacity">✦</span>
+                      <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '10px', color: '#fff176', textShadow: '0 0 6px gold', animation: 'sparkleAnim 1.6s ease-in-out infinite', opacity: 0, zIndex: 20, top: '-5px', right: '15%', animationDelay: '0.8s' }} className="group-hover/btn:opacity-100 transition-opacity">✦</span>
+                      <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '10px', color: '#fff176', textShadow: '0 0 6px gold', animation: 'sparkleAnim 1.6s ease-in-out infinite', opacity: 0, zIndex: 20, bottom: '-6px', left: '25%', animationDelay: '0.2s' }} className="group-hover/btn:opacity-100 transition-opacity">✦</span>
+                    </>
+                  )}
+                  <Link
+                    to={btn.link}
+                    className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[150px] relative z-10
+                      ${btn.style === "gold" ? "golden-btn-footer text-[#1a3516]" : ""}
+                      ${btn.style === "white" ? "bg-white text-[#23471d] hover:bg-[#F3B71B]" : ""}
+                    `}
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
+                    {btn.label}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <h3
-          className="text-white font-extrabold text-2xl md:text-3xl mb-1 leading-tight"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          Be Part of India's Global Wellness Movement
-        </h3>
-        <p className="text-white/70 font-medium text-[12px] max-w-xl">
-          Exhibit. Connect. Collaborate. Grow. Join healthcare leaders in building the future of wellness.
-        </p>
-      </div>
-
-      {/* Buttons Side: 2x2 Grid */}
-      <div
-        className="grid grid-cols-2 gap-4 w-full lg:w-auto"
-        data-aos="fade-left"
-      >
-        {[
-          { label: "BOOK YOUR STALL", link: "/book-a-stand", style: "gold" },
-          { label: "REGISTER AS BUYER", link: "/buyer-registration", style: "white" },
-          { label: "REGISTER AS DELEGATE", link: "/contact", style: "white" },
-          { label: "REGISTER AS VISITOR", link: "/contact", style: "white" },
-        ].map((btn, i) => (
-          <Link
-            key={i}
-            to={btn.link}
-            className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[150px]
-              ${btn.style === "gold" ? "bg-[#F3B71B] text-[#1a3516] hover:bg-white" : ""}
-              ${btn.style === "white" ? "bg-white text-[#23471d] hover:bg-[#F3B71B]" : ""}
-            `}
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            {btn.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
 
  {/* THE SCALE. THE IMPACT. */}

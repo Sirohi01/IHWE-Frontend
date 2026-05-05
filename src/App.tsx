@@ -20,7 +20,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
-const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
+// const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -30,6 +30,10 @@ const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasan
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
+const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
+const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
+const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
+const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -37,6 +41,8 @@ const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const PaymentPolicy = lazy(() => import("./pages/PaymentPolicy"));
+const CancellationPolicy = lazy(() => import("./pages/CancellationPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
@@ -97,6 +103,7 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+import ScrollToTopOnNavigation from "@/components/layout/ScrollToTopOnNavigation";
 import AnnexureD from "@/pages/psmClaim/AnnexureD";
 import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
 import MandateForm from "@/pages/psmClaim/MandateForm";
@@ -124,6 +131,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <BrowserRouter>
+            <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
               <Sonner />
@@ -143,6 +151,7 @@ const App = () => {
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
                     <Route path="/international-visitor-registration" element={<AddInternationalVistor />} />
                     <Route path="/exhibition" element={<Exhibition />} />
+                    {/* <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} /> */}
                     <Route path="/media-registration" element={<MediaRegistration />} />
                     <Route path="/speaker-registration" element={<SpeakerRegistration />} />
                     <Route path="/seller-registration" element={<SellerRegistration />} />
@@ -150,6 +159,9 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/conference" element={<Conference />} />
+                    <Route path="/conference/day-1" element={<ConferenceDay1 />} />
+                    <Route path="/conference/day-2" element={<ConferenceDay2 />} />
+                    <Route path="/conference/day-3" element={<ConferenceDay3 />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />
@@ -164,6 +176,8 @@ const App = () => {
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/payment-policy" element={<PaymentPolicy />} />
+                    <Route path="/cancellation-policy" element={<CancellationPolicy />} />
                     <Route path="/buyer-registration" element={<BuyerLanding />} />
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />

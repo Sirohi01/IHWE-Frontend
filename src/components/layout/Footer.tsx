@@ -21,6 +21,26 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { settingsApi } from "@/lib/api";
+import { motion } from "framer-motion";
+
+// Sparkle component
+const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#fff176',
+      textShadow: '0 0 6px gold, 0 0 12px gold',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 
 const FooterCounter = ({
   end,
@@ -42,7 +62,7 @@ const FooterCounter = ({
       ([entry]) => {
         if (entry.isIntersecting && !animated.current) {
           animated.current = true;
-          
+
           setTimeout(() => {
             let start = 0;
             const duration = 2000; // 2 seconds
@@ -60,7 +80,7 @@ const FooterCounter = ({
               }
             }, interval);
           }, delay * 1000);
-          
+
           observer.disconnect();
         }
       },
@@ -120,6 +140,7 @@ const Footer = () => {
     { label: "Brochure Download", href: "/brochure" },
     { label: "Exhibitor List", href: "/exhibitors" },
     { label: "Sponsorship Opportunities", href: "/sponsorship" },
+    { label: "MSME PMS Scheme", href: "/msme-pms-scheme" },
     { label: "Hosted Buyer Program", href: "/hosted-buyer" },
     { label: "Travel & Stay", href: "/travel" },
     { label: "FAQs", href: "/faq" },
@@ -145,10 +166,10 @@ const Footer = () => {
     },
     {
       icon: <Globe className="w-9 h-9 text-[#F3B71B]" />,
-      end: 10000,
+      end: 80000,
       suffix: "+",
-      label: "TRADE VISITORS",
-      // sub: "From 30+ Countries",
+      label: "VISITORS / DELEGATES",
+      sub: "ACROSS SUCCESSFUL EDITIONS",
     },
     {
       icon: <Trophy className="w-9 h-9 text-[#F3B71B]" />,
@@ -159,10 +180,10 @@ const Footer = () => {
     },
     {
       icon: <TrendingUp className="w-9 h-9 text-[#F3B71B]" />,
-      end: 500,
+      end: 1500,
       prefix: "₹",
       suffix: "CR+",
-      label: "BUSINESS OPPORTUNITIES",
+      label: "BUSINESS",
       sub: "GENERATED OVER THE YEARS",
     },
   ];
@@ -175,13 +196,8 @@ const Footer = () => {
       href: "/book-a-stand",
       primary: true,
     },
-    {
-      icon: <Users className="w-5 h-5" />,
-      line1: "REGISTER",
-      line2: "AS BUYER",
-      href: "/buyer-registration",
-      primary: false,
-    },
+
+       
     {
       icon: <User className="w-5 h-5" />,
       line1: "REGISTER",
@@ -189,13 +205,26 @@ const Footer = () => {
       href: "/visitor-registration",
       primary: false,
     },
-    {
+
+      {
       icon: <Plane className="w-5 h-5" />,
       line1: "REGISTER ",
       line2: "AS DELEGATE",
       href: "/hosted-buyer",
       primary: false,
     },
+
+
+    {
+      icon: <Users className="w-5 h-5" />,
+      line1: "REGISTER",
+      line2: "AS BUYER",
+      href: "/buyer-registration",
+      primary: false,
+    },
+    
+ 
+  
   ];
 
   return (
@@ -203,6 +232,50 @@ const Footer = () => {
       className="bg-[#050A1A] text-white overflow-hidden"
       style={{ fontFamily: "'Barlow', sans-serif" }}
     >
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-footer {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(255,200,0,0.3), 0 4px 15px rgba(255,165,0,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        .golden-btn-footer::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+        .golden-text {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          display: inline-block;
+        }
+      `}</style>
       {/* ── TOP HEADER BAR: Logo + CTA Buttons ── */}
       <div style={{ borderBottom: "1px solid #1E2A45" }}>
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4">
@@ -229,45 +302,50 @@ const Footer = () => {
           {/* Right: 4 CTA Buttons */}
           <div className="flex items-center gap-2.5">
             {ctaButtons.map((btn) => (
-              <Link
-                key={btn.line2}
-                to={btn.href}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
-                  btn.primary
-                    ? "bg-[#F3B71B] hover:bg-[#e0a818]"
-                    : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10"
-                }`}
-                style={{ minWidth: "120px" }}
-              >
-                <span
-                  className={`shrink-0 ${
-                    btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                  }`}
+              <div key={btn.line2} className="relative group/btn">
+                {btn.primary && (
+                  <>
+                    <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
+                    <Sparkle style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
+                    <Sparkle style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
+                    <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
+                    <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
+                  </>
+                )}
+                <Link
+                  to={btn.href}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all relative z-10 ${btn.primary
+                    ? "golden-btn-footer hover:scale-[1.02]"
+                    : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10 hover:scale-[1.02]"
+                    }`}
+                  style={{ minWidth: "120px" }}
                 >
-                  {btn.icon}
-                </span>
-                <div className="flex-1 min-w-0 text-left">
-                  <p
-                    className={`font-semibold leading-none text-[9.5px] tracking-wide ${
-                      btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                    }`}
+                  <span
+                    className={`shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                      }`}
                   >
-                    {btn.line1}
-                  </p>
-                  <p
-                    className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${
-                      btn.primary ? "text-[#050A1A]" : "text-white"
-                    }`}
-                  >
-                    {btn.line2}
-                  </p>
-                </div>
-                <ArrowRight
-                  className={`w-3.5 h-3.5 shrink-0 ${
-                    btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
-                  }`}
-                />
-              </Link>
+                    {btn.icon}
+                  </span>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p
+                      className={`font-semibold leading-none text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                        }`}
+                    >
+                      {btn.line1}
+                    </p>
+                    <p
+                      className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
+                        }`}
+                    >
+                      {btn.line2}
+                    </p>
+                  </div>
+                  <ArrowRight
+                    className={`w-3.5 h-3.5 shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                      }`}
+                  />
+                </Link>
+              </div>
             ))}
           </div>
         </div>
@@ -282,178 +360,187 @@ const Footer = () => {
             borderBottom: "1px solid #1E2A45",
           }}
         >
-        {/* COL 1: Event Info */}
-        <div
-          className="flex flex-col gap-3 py-5 pr-2"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <div>
-            <p className="text-white font-bold text-[15px] leading-none mb-1.5">IHWE</p>
-            <p className="text-[#F3B71B] text-[13px] leading-tight uppercase">
-              International Health &amp; Wellness Expo
-            </p>
-            <p className="text-[#cbd5e1] font-bold italic text-[11px] mt-1">
-              <sup className="text-[8px] "></sup> The International Health & Wellness Expo brings together global healthcare leaders, innovators, and decision-makers for three days of transformative experiences.
-            </p>
-          </div>
-          <div className="w-full h-[1px] bg-[#1E2A45]" />
-          <div className="flex flex-col gap-2.5">
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <Calendar className="w-3.5 h-3.5 text-[#F3B71B]" />
+          {/* COL 1: Event Info */}
+          <div
+            className="flex flex-col gap-3 py-5 pr-2"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <div>
+              <div className="mb-1.5 flex items-center gap-1.5">
+                <span className="text-white font-bold text-[15px] leading-none">9th IHWE</span>
+                <span className="relative inline-block">
+                  <Sparkle style={{ top: '-10px', left: '-2px', animationDelay: '0s', fontSize: '10px' }} />
+                  <Sparkle style={{ top: '-6px', right: '-4px', animationDelay: '0.4s', fontSize: '10px' }} />
+                  <Sparkle style={{ bottom: '-10px', left: '40%', animationDelay: '0.8s', fontSize: '10px' }} />
+                  <span className="golden-text font-bold text-[15px] leading-none">
+                    (Global Edition)
+                  </span>
+                </span>
               </div>
-              <p className="text-[12px] font-semibold text-white pt-0.5">
-                21 – 23 AUGUST 2026
+              <p className="text-[#F3B71B] text-[13px] leading-tight uppercase">
+                International Health &amp; Wellness Expo
+              </p>
+              <p className="text-[#cbd5e1] font-bold italic text-[11px] mt-1">
+                <sup className="text-[8px] "></sup> The International Health & Wellness Expo brings together global healthcare leaders, innovators, and decision-makers for three days of transformative experiences.
               </p>
             </div>
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <MapPin className="w-3.5 h-3.5 text-[#F3B71B]" />
-              </div>
-              <div>
-                <p className="text-[12px] font-semibold text-white">
-                  PRAGATI MAIDAN
-                </p>
-                <p className="text-[10px] text-[#cbd5e1]">
-                  HALL 8, 9 & 10, NEW DELHI, INDIA
+            <div className="w-full h-[1px] bg-[#1E2A45]" />
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <Calendar className="w-3.5 h-3.5 text-[#F3B71B]" />
+                </div>
+                <p className="text-[12px] font-semibold text-white pt-0.5">
+                  21 – 23 AUGUST 2026
                 </p>
               </div>
-            </div>
-            <div className="flex items-start gap-2.5">
-              <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
-                <Globe className="w-3.5 h-3.5 text-[#F3B71B]" />
-              </div>
-              <p className="text-[10.5px] text-slate-300 leading-tight pt-0.5">
-                India's Leading Global Platform for Healthcare, AYUSH & Wellness
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* COL 2: Quick Links */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            QUICK LINKS
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-1.5">
-            {quickLinks.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
-              >
-                <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 3: Exhibitor Resources */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            EXHIBITOR RESOURCES
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-1.5">
-            {exhibitorLinks.map((l) => (
-              <Link
-                key={l.label}
-                to={l.href}
-                className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
-              >
-                <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 4: Contact Information */}
-        <div
-          className="py-5 px-4"
-          style={{ borderRight: "1px solid #1E2A45" }}
-        >
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            CONTACT INFORMATION
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-3">
-            {[
-              {
-                Icon: Phone,
-                label: "Call for Stall Booking",
-                value: contactPhone,
-                large: true,
-                gold: false,
-              },
-              {
-                Icon: Mail,
-                label: "Email",
-                value: contactEmail,
-                large: false,
-                gold: false,
-              },
-              {
-                Icon: Globe,
-                label: "Official Website",
-                value: "www.ihwe.in",
-                gold: true,
-                large: false,
-              },
-              {
-                Icon: Building2,
-                label: "Organised By",
-                value: "Namo Gange Wellness Pvt. Ltd.",
-                large: false,
-                gold: false,
-              },
-            ].map(({ Icon, label, value, gold, large }) => (
-              <div key={label} className="flex items-start gap-2.5">
-                <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
-                  <Icon className="w-3 h-3 text-[#F3B71B]" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <MapPin className="w-3.5 h-3.5 text-[#F3B71B]" />
                 </div>
                 <div>
-                  <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
-                  <p
-                    className={`font-semibold leading-tight ${
-                      gold ? "text-[#cbd5e1]" : "text-[#CBD5E1]"
-                    } ${large ? "text-[13px]" : "text-[11px]"}`}
-                  >
-                    {value}
+                  <p className="text-[12px] font-semibold text-white">
+                    PRAGATI MAIDAN
+                  </p>
+                  <p className="text-[10px] text-[#cbd5e1]">
+                    HALL 8, 9 & 10, NEW DELHI, INDIA
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* COL 5: Event Highlights */}
-        <div className="py-5 px-4">
-          <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
-            EVENT HIGHLIGHTS
-          </p>
-          <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
-          <div className="flex flex-col gap-2">
-            {highlights.map((h) => (
-              <div key={h} className="flex items-start gap-2">
-                <div className="w-4 h-4 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-2.5 h-2.5 text-[#F3B71B]" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-7 h-7 border border-[#F3B71B] rounded-md flex items-center justify-center shrink-0">
+                  <Globe className="w-3.5 h-3.5 text-[#F3B71B]" />
                 </div>
-                <p className="text-[11px] text-slate-300 leading-tight">{h}</p>
+                <p className="text-[10.5px] text-slate-300 leading-tight pt-0.5">
+                  India's Leading Global Platform for Healthcare, AYUSH & Wellness
+                </p>
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* COL 2: Quick Links */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              QUICK LINKS
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-1.5">
+              {quickLinks.map((l) => (
+                <Link
+                  key={l.label}
+                  to={l.href}
+                  className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
+                >
+                  <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 3: Exhibitor Resources */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              EXHIBITOR RESOURCES
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-1.5">
+              {exhibitorLinks.map((l) => (
+                <Link
+                  key={l.label}
+                  to={l.href}
+                  className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
+                >
+                  <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 4: Contact Information */}
+          <div
+            className="py-5 px-4"
+            style={{ borderRight: "1px solid #1E2A45" }}
+          >
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              CONTACT INFORMATION
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-3">
+              {[
+                {
+                  Icon: Phone,
+                  label: "Call for Stall Booking",
+                  value: contactPhone,
+                  large: true,
+                  gold: false,
+                },
+                {
+                  Icon: Mail,
+                  label: "Email",
+                  value: contactEmail,
+                  large: false,
+                  gold: false,
+                },
+                {
+                  Icon: Globe,
+                  label: "Official Website",
+                  value: "www.ihwe.in",
+                  gold: true,
+                  large: false,
+                },
+                {
+                  Icon: Building2,
+                  label: "Organised By",
+                  value: "Namo Gange Wellness Pvt. Ltd.",
+                  large: false,
+                  gold: false,
+                },
+              ].map(({ Icon, label, value, gold, large }) => (
+                <div key={label} className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
+                    <Icon className="w-3 h-3 text-[#F3B71B]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
+                    <p
+                      className={`font-semibold leading-tight ${gold ? "text-[#cbd5e1]" : "text-[#CBD5E1]"
+                        } ${large ? "text-[13px]" : "text-[11px]"}`}
+                    >
+                      {value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* COL 5: Event Highlights */}
+          <div className="py-5 px-4">
+            <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
+              EVENT HIGHLIGHTS
+            </p>
+            <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
+            <div className="flex flex-col gap-2">
+              {highlights.map((h) => (
+                <div key={h} className="flex items-start gap-2">
+                  <div className="w-4 h-4 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-2.5 h-2.5 text-[#F3B71B]" />
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-tight">{h}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
       {/* ── STATS BAR ── */}
       <div className="max-w-[1400px] mx-auto px-6">
@@ -461,46 +548,46 @@ const Footer = () => {
           className="grid grid-cols-4"
           style={{ borderBottom: "1px solid #1E2A45" }}
         >
-        {stats.map((s, i) => (
-          <div
-            key={s.label}
-            className="flex items-center gap-3.5 py-4 px-5"
-            style={{
-              borderRight:
-                i < stats.length - 1 ? "1px solid #1E2A45" : "none",
-            }}
-          >
-            {s.icon}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <p
-                  className="text-[#F3B71B] font-bold leading-none"
-                  style={{
-                    fontSize: "22px",
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                  }}
-                >
-                  <FooterCounter
-                    end={s.end || 0}
-                    prefix={s.prefix}
-                    suffix={s.suffix}
-                    delay={i * 0.1}
-                  />
-                </p>
-                <p className="text-[#cbd5e1] font-bold text-[10.5px] uppercase tracking-wide">
-                  {s.label}
-                </p>
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className="flex items-center gap-3.5 py-4 px-5"
+              style={{
+                borderRight:
+                  i < stats.length - 1 ? "1px solid #1E2A45" : "none",
+              }}
+            >
+              {s.icon}
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <p
+                    className="text-[#F3B71B] font-bold leading-none"
+                    style={{
+                      fontSize: "22px",
+                      fontFamily: "'Barlow Condensed', sans-serif",
+                    }}
+                  >
+                    <FooterCounter
+                      end={s.end || 0}
+                      prefix={s.prefix}
+                      suffix={s.suffix}
+                      delay={i * 0.1}
+                    />
+                  </p>
+                  <p className="text-[#cbd5e1] font-bold text-[10.5px] uppercase tracking-wide">
+                    {s.label}
+                  </p>
+                </div>
+                {s.sub && (
+                  <p className="text-[#cbd5e1] text-[9.5px] mt-1 opacity-80 leading-tight uppercase">
+                    {s.sub}
+                  </p>
+                )}
               </div>
-              {s.sub && (
-                <p className="text-[#cbd5e1] text-[9.5px] mt-1 opacity-80 leading-tight uppercase">
-                  {s.sub}
-                </p>
-              )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
 
       {/* ── BOTTOM BAR ── */}
       <div
@@ -513,21 +600,22 @@ const Footer = () => {
 
         <div className="flex items-center flex-wrap">
           {[
-            "Privacy Policy",
-            "Terms & Conditions",
-            "Refund Policy",
-            "Payment Policy",
-            "Cancellation Policy",
+            { label: "Privacy Policy", href: "/privacy-policy" },
+            { label: "Terms & Conditions", href: "/terms-of-service" },
+            { label: "Refund Policy", href: "/refund-policy" },
+            { label: "Payment Policy", href: "/payment-policy" },
+            { label: "Cancellation Policy", href: "/cancellation-policy" },
           ].map((p, i) => (
-            <span
-              key={p}
+            <Link
+              key={p.label}
+              to={p.href}
               className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-2.5"
               style={{
                 borderRight: i < 4 ? "1px solid #1E2A45" : "none",
               }}
             >
-              {p}
-            </span>
+              {p.label}
+            </Link>
           ))}
         </div>
 

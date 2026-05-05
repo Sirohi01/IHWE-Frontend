@@ -13,9 +13,9 @@ const AwardsNomination = () => {
   const navyColor = "#003366";
 
   return (
-    <section className="py-4 md:py-6 bg-white overflow-hidden">
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px]">
+    <section className="pt-1 md:pt-2 pb-4 md:pb-6 bg-white overflow-hidden">
+      {/* Wider alignment matching home page */}
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
         
         <motion.div 
           initial={{ opacity: 0, y: 10 }}

@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import QRCode from "react-qr-code";
 import { toPng } from "html-to-image";
 
+
 const DownloadBadge = () => {
   const [settings, setSettings] = useState<any>(null);
   const [heroData, setHeroData] = useState<any>(null);
@@ -309,6 +310,7 @@ const DownloadBadge = () => {
             backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.jpg"})`
           }}
         >
+
           <div className="absolute inset-0 bg-black/40" />
           <div
             className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"

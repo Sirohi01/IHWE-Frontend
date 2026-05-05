@@ -1,9 +1,27 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Sparkles, ArrowRight } from "lucide-react";
 import { heroApi, SERVER_URL } from "@/lib/api";
+
+// Sparkle component for the golden button
+const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#fff176',
+      textShadow: '0 0 6px gold, 0 0 12px gold',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 
 interface HeroSectionProps {
   onRegisterVisit: () => void;
@@ -15,6 +33,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
   const [slides, setSlides] = useState<any[]>([]);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -54,13 +73,25 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
   }, []);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (slides.length <= 1 || !isPlaying) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, isPlaying]);
+
+  const nextSlide = () => {
+    setDirection(1);
+    setCurrent((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setDirection(-1);
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const togglePlay = () => setIsPlaying(!isPlaying);
 
   const handleSlideChange = (index: number) => {
     setDirection(index > current ? 1 : -1);
@@ -107,7 +138,45 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
   return (
     <>
-      <section className="relative w-full overflow-hidden bg-black font-inter text-white" style={{ aspectRatio: '16/5.62' }}>
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-hero {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 20px 5px rgba(255,200,0,0.3), 0 4px 25px rgba(255,165,0,0.2);
+          position: relative;
+          overflow: hidden;
+          border: 2px solid white !important;
+        }
+        .golden-btn-hero::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
+
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/5.62]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
@@ -117,7 +186,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 200, damping: 30 },
+              x: { type: "spring" as const, stiffness: 200, damping: 30 },
               opacity: { duration: 0.8 },
               scale: { duration: 1.2 },
             }}
@@ -144,10 +213,12 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
           </motion.div>
         </AnimatePresence>
 
+
+
         <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
 
-        <div className="hidden md:flex relative z-20 container mx-auto px-6 h-full flex-col justify-center items-start text-left text-white">
+        <div className="relative z-20 px-6 md:px-14 h-full flex flex-col justify-center items-start text-left text-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -155,19 +226,22 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-4xl mt-6"
+              className="max-w-4xl mt-0 translate-y-0 md:translate-y-4"
             >
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="flex items-center gap-3 mb-6"
+                className="flex items-center gap-3 mb-2"
               >
                 <span className="w-10 h-[1px] bg-white/40" />
-                <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/90 flex items-center gap-2"
-                  style={{ fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined }}
+                <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] filter"
+                  style={{ 
+                    fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined,
+                    textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
+                  }}
                 >
-                  <Sparkles size={12} className="text-white/70" />
+                  <Sparkles size={12} className="text-[#FF4400] filter drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]" />
                   {slides[current].subtitle}
                 </span>
               </motion.div>
@@ -177,13 +251,14 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.9 }}
                 className={cn(
-                  "font-bold leading-[1.05] tracking-tight text-white uppercase [&_p]:m-0 [&_p]:p-0",
-                  slides[current].title2 ? "mb-1" : "mb-6",
+                  "font-bold leading-[1.1] tracking-tight text-white uppercase [&_p]:mb-0 [&_div]:mb-0 last:[&_p]:mb-0 last:[&_div]:mb-0",
+                  slides[current].title2 ? "mb-[0px]" : "mb-5",
                   !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
                 )}
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined
+                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined,
+                  textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].title }}
               />
@@ -194,12 +269,13 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.9 }}
                   className={cn(
-                    "font-bold mb-6 leading-[1.05] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_p]:p-0",
+                    "font-bold mb-5 leading-[1.1] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_div]:m-0 [&_p]:p-0 [&_div]:p-0",
                     !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
                   )}
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined
+                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined,
+                    textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                   }}
                   dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
                 />
@@ -209,10 +285,11 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.9 }}
-                className="font-light mb-10 max-w-2xl text-white/85 leading-relaxed tracking-wide"
+                className="font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined
+                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined,
+                  textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].description }}
               />
@@ -224,56 +301,61 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               className="flex flex-wrap flex-col sm:flex-row gap-3 items-center"
             >
               {slides[current].button1Name && (
-                slides[current].button1Url ? (
-                  slides[current].button1Url.startsWith('http') ? (
-                    <a
-                      href={slides[current].button1Url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                    >
-                      <span className="relative z-10 flex items-center gap-2">
-                        {slides[current].button1Name}
-                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                      </span>
-                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                    </a>
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                  {/* Sparkles around button */}
+                  <Sparkle style={{ top: '-12px', left: '10%', animationDelay: '0s' }} />
+                  <Sparkle style={{ top: '-10px', left: '45%', animationDelay: '0.4s' }} />
+                  <Sparkle style={{ top: '-14px', right: '15%', animationDelay: '0.8s' }} />
+                  <Sparkle style={{ bottom: '-12px', left: '20%', animationDelay: '0.2s' }} />
+                  <Sparkle style={{ bottom: '-10px', right: '25%', animationDelay: '0.6s' }} />
+
+                  {slides[current].button1Url ? (
+                    slides[current].button1Url.startsWith('http') ? (
+                      <a
+                        href={slides[current].button1Url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {slides[current].button1Name}
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                      </a>
+                    ) : (
+                      <Link
+                        to={slides[current].button1Url}
+                        target={forceNewTab ? "_blank" : undefined}
+                        rel={forceNewTab ? "noopener noreferrer" : undefined}
+                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                      >
+                        <span className="relative z-10 flex items-center gap-2">
+                          {slides[current].button1Name}
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                      </Link>
+                    )
                   ) : (
-                    <Link
-                      to={slides[current].button1Url}
-                      target={forceNewTab ? "_blank" : undefined}
-                      rel={forceNewTab ? "noopener noreferrer" : undefined}
-                      className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    <button
+                      onClick={onRegisterVisit}
+                      className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         {slides[current].button1Name}
-                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
                       </span>
-                      <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                    </Link>
-                  )
-                ) : (
-                  <button
-                    onClick={onRegisterVisit}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#d26019] text-white hover:bg-[#23471d] hover:text-white transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(210,96,25,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button1Name}
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                    <span className="absolute inset-0 bg-black/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </button>
-                )
+                    </button>
+                  )}
+                </div>
               )}
 
-              {/* Blue Button (Moved to Center) */}
               {slides[current].button3Name && (
                 slides[current].button3Url?.startsWith('http') ? (
                   <a
                     href={slides[current].button3Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -286,7 +368,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button3Url || "/conference"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -303,7 +385,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button2Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -316,7 +398,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button2Url || "/book-a-stand"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-6 py-2.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -347,9 +429,9 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               <div className="relative w-16 h-[2px] bg-white/20 overflow-hidden">
                 <motion.span
                   className={cn("absolute left-0 top-0 h-full bg-white")}
-                  initial={{ width: "0%" }}
+                  initial={false}
                   animate={{ width: i === current ? "100%" : "0%" }}
-                  transition={{ duration: i === current ? 8 : 0.5, ease: "linear" }}
+                  transition={{ duration: i === current && isPlaying ? 5 : 0.5, ease: isPlaying ? "linear" : "easeOut" }}
                 />
               </div>
               <span

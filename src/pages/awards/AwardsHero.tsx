@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
+
 import heroBg from "../../assets/hero.png";
 import awardsLogo from "../../assets/new.png";
 
@@ -13,6 +14,7 @@ const AwardsHero = () => {
   return (
     <section className="relative w-full min-h-[450px] lg:min-h-[600px] xl:min-h-[80vh] flex flex-col justify-center overflow-hidden bg-white" style={jakartaFont}>
 
+
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -23,9 +25,9 @@ const AwardsHero = () => {
         }}
       ></div>
 
-      {/* Reduced Max-Width to 1280px to push alignment inward */}
-      <div className="container mx-auto px-6 max-w-[1280px] relative z-10 pt-1 pb-2">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      {/* Full width hero content */}
+      <div className="relative z-10 pt-1 pb-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-[1400px] mx-auto px-6 md:px-12">
 
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -77,14 +79,14 @@ const AwardsHero = () => {
                 <MapPin className="w-5 h-5" style={{ color: greenColor }} />
                 <div className="flex flex-col">
                   <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>PRAGATI MAIDAN</span>
-                  <span className="text-[#888] font-bold text-[9px] uppercase">NEW DELHI, INDIA</span>
+                  <span className="text-gray-800 font-bold text-[10px] uppercase">NEW DELHI, INDIA</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5" style={{ color: greenColor }} />
                 <div className="flex flex-col">
                   <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>HOSTED AT</span>
-                  <span className="text-[#888] font-bold text-[9px] uppercase">IHWE 2026</span>
+                  <span className="text-gray-800 font-bold text-[10px] uppercase">IHWE 2026</span>
                 </div>
               </div>
             </div>

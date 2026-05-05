@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  X, Calendar, MapPin, Store, Users, 
-  UserPlus, Globe, Award, MessageCircle, Phone, 
-  ShieldCheck, Clock, Stethoscope, Landmark, Leaf, 
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+  X, Calendar, MapPin, Store, Users,
+  UserPlus, Globe, Award, MessageCircle, Phone,
+  ShieldCheck, Clock, Stethoscope, Landmark, Leaf,
   Building2, ChevronRight, Star, BadgeCheck, ArrowLeft, Send, CheckCircle2
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
@@ -21,17 +21,8 @@ const participationCards = [
     arrowBg: "bg-emerald-600",
     link: "/book-a-stand"
   },
-  {
-    id: "buyer",
-    title: "REGISTER AS BUYER",
-    desc: "Connect with top suppliers & close better deals",
-    icon: <Users size={20} />,
-    color: "border-blue-200 bg-white",
-    iconBg: "bg-blue-50 text-blue-600",
-    arrowBg: "bg-blue-600",
-    link: "/buyer-registration"
-  },
-  {
+
+    {
     id: "visitor",
     title: "REGISTER AS VISITOR",
     desc: "Explore innovations & industry trends",
@@ -41,6 +32,7 @@ const participationCards = [
     arrowBg: "bg-purple-600",
     link: "/visitor-registration"
   },
+
   {
     id: "delegate",
     title: "DELEGATE REGISTRATION",
@@ -51,6 +43,20 @@ const participationCards = [
     arrowBg: "bg-orange-500",
     link: "coming-soon"
   },
+  
+
+  {
+    id: "buyer",
+    title: "REGISTER AS BUYER",
+    desc: "Connect with top suppliers & close better deals",
+    icon: <Users size={20} />,
+    color: "border-blue-200 bg-white",
+    iconBg: "bg-blue-50 text-blue-600",
+    arrowBg: "bg-blue-600",
+    link: "/buyer-registration"
+  },
+
+
   {
     id: "sponsor",
     title: "SPONSORSHIP OPPORTUNITIES",
@@ -82,27 +88,27 @@ const trustedItems = [
   { icon: <Globe size={14} />, label: "UNIVERSITY/", label2: "ACADEMIC PARTNERS", color: "bg-amber-50 text-amber-600" },
 ];
 
-const overlayVariants = {
+const overlayVariants: Variants = {
   hidden: { opacity: 0, backdropFilter: "blur(0px)" },
   visible: { opacity: 1, backdropFilter: "blur(4px)" },
   exit: { opacity: 0, backdropFilter: "blur(0px)" }
 };
 
-const modalVariants = {
+const modalVariants: Variants = {
   hidden: { scale: 0.4, opacity: 0, rotateY: 25, y: 100, filter: "blur(20px)" },
-  visible: { 
+  visible: {
     scale: 1, opacity: 1, rotateY: 0, y: 0, filter: "blur(0px)",
-    transition: { type: "spring", damping: 25, stiffness: 200, mass: 1, delayChildren: 0.3, staggerChildren: 0.1 }
+    transition: { type: "spring" as const, damping: 25, stiffness: 200, mass: 1, delayChildren: 0.3, staggerChildren: 0.1 }
   },
-  exit: { 
+  exit: {
     scale: 0.8, opacity: 0, rotateY: -15, y: 50, filter: "blur(10px)",
     transition: { duration: 0.3, ease: "easeInOut" }
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", damping: 20, stiffness: 300 } }
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, damping: 20, stiffness: 300 } }
 };
 
 const BrochureDownloadPopup: React.FC = () => {
@@ -121,13 +127,13 @@ const BrochureDownloadPopup: React.FC = () => {
       try {
         const settings = await settingsApi.get();
         if (settings?.logo) setLogoUrl(`${SERVER_URL}${settings.logo}`);
-        
+
         const social = await socialMediaApi.get();
         if (social?.whatsappNumber) {
           const msg = encodeURIComponent(social.whatsappMessage || "Hello! I would like to know more about IHWE 2026.");
           setWhatsappUrl(`https://wa.me/${social.whatsappNumber}?text=${msg}`);
         }
-      } catch (error) {}
+      } catch (error) { }
     };
     fetchSettings();
   }, []);
@@ -191,7 +197,7 @@ const BrochureDownloadPopup: React.FC = () => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
+        <motion.div
           variants={overlayVariants}
           initial="hidden"
           animate="visible"
@@ -245,8 +251,8 @@ const BrochureDownloadPopup: React.FC = () => {
                 </div>
 
                 <div className="flex-1 p-4 md:p-5 flex flex-col justify-center text-left">
-                  <motion.div variants={itemVariants} className="mb-4">
-                    <img src={logoUrl || "/logo.png"} alt="Logo" className="h-12 md:h-14 object-contain" />
+                  <motion.div variants={itemVariants}>
+                    <img src={logoUrl || "/logo.png"} alt="Logo" className="object-contain" />
                   </motion.div>
 
                   <div className="space-y-0.5 mb-4">
@@ -337,7 +343,7 @@ const BrochureDownloadPopup: React.FC = () => {
                       transition={{ duration: 0.3 }}
                       className="h-full flex flex-col"
                     >
-                      <button 
+                      <button
                         onClick={() => { setShowForm(false); setIsSubmitted(false); }}
                         className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 hover:text-slate-800 transition-colors mb-4 w-fit"
                       >
@@ -411,7 +417,7 @@ const BrochureDownloadPopup: React.FC = () => {
                           </form>
                         </>
                       ) : (
-                        <motion.div 
+                        <motion.div
                           initial={{ scale: 0.9, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           className="flex-1 flex flex-col items-center justify-center text-center p-6 bg-emerald-50/50 rounded-2xl border border-emerald-100"
@@ -423,7 +429,7 @@ const BrochureDownloadPopup: React.FC = () => {
                           <p className="text-[11px] text-slate-600 font-bold max-w-[200px]">
                             Our team will contact you shortly regarding your <span className="text-emerald-600">{formType}</span> inquiry.
                           </p>
-                          <button 
+                          <button
                             onClick={() => { setShowForm(false); setIsSubmitted(false); }}
                             className="mt-6 text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest hover:underline"
                           >
@@ -437,12 +443,12 @@ const BrochureDownloadPopup: React.FC = () => {
               </div>
             </div>
 
-            <motion.div 
+            <motion.div
               initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.8 }}
               className="bg-[#cd1c24] text-white py-2 px-6 flex flex-wrap items-center justify-between gap-3 border-y border-white/10"
             >
               <div className="flex items-center gap-3">
-                <motion.div 
+                <motion.div
                   animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}
                   className="p-1.5 bg-white/10 rounded-full"
                 >
@@ -466,7 +472,7 @@ const BrochureDownloadPopup: React.FC = () => {
             <div className="bg-white py-2 px-4 border-b border-slate-100 overflow-hidden">
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-nowrap items-center justify-center gap-x-2 gap-y-2 lg:gap-x-4">
                 {trustedItems.map((item, i) => (
-                  <motion.div 
+                  <motion.div
                     key={i} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1 + (i * 0.1) }}
                     className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity"
                   >
@@ -505,7 +511,7 @@ const BrochureDownloadPopup: React.FC = () => {
                     <p className="text-[8px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5">INFO@NAMOGANGEWELLNESS.COM</p>
                   </div>
                 </motion.div>
-                <motion.button 
+                <motion.button
                   initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 1.8 }}
                   whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                   onClick={() => handleAction({ link: whatsappUrl })}
