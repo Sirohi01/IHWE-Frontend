@@ -20,7 +20,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
-// const MsmePmsScheme = lazy(() => import("./pages/msme_pms_scheme/MsmePmsScheme"));
+const GovernmentMsmePmsSchemes = lazy(() => import("./pages/governmentMsmePmsSchemes/GovernmentMsmePmsSchemes"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
@@ -151,7 +151,7 @@ const App = () => {
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
                     <Route path="/international-visitor-registration" element={<AddInternationalVistor />} />
                     <Route path="/exhibition" element={<Exhibition />} />
-                    {/* <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} /> */}
+                    <Route path="/government-msme-pms-schemes" element={<GovernmentMsmePmsSchemes />} />
                     <Route path="/media-registration" element={<MediaRegistration />} />
                     <Route path="/speaker-registration" element={<SpeakerRegistration />} />
                     <Route path="/seller-registration" element={<SellerRegistration />} />
