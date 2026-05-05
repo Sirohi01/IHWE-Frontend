@@ -1,6 +1,9 @@
 import { FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const BSMeetHero = () => {
+    const navigate = useNavigate();
+
     return (
         <div
             className="w-full bg-cover relative bg-no-repeat bg-center"
@@ -33,10 +36,15 @@ const BSMeetHero = () => {
 
                         {/* BUTTONS */}
                         <div className="flex gap-6 mt-10">
-                            <button className="bg-green-800 text-white px-5 py-2 rounded-lg font-normal shadow hover:bg-green-900 transition">
+                            <button
+                                onClick={() => navigate('/buyer-registration')}
+                                className="bg-green-800 text-white px-5 py-2 rounded-lg font-normal shadow hover:bg-green-900 transition"
+                            >
                                 REGISTER AS BUYER
                             </button>
-                            <button className="bg-yellow-500 text-white px-5 py-2 rounded-lg font-normal shadow hover:bg-yellow-600 transition">
+                            <button
+                                onClick={() => navigate('/seller-registration')}
+                                className="bg-yellow-500 text-white px-5 py-2 rounded-lg font-normal shadow hover:bg-yellow-600 transition">
                                 REGISTER AS SELLER
                             </button>
                         </div>
