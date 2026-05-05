@@ -237,7 +237,7 @@ const MsmePmsScheme = () => {
       </div >
 
       {/* Stats Bar (Rounded Card Style) */}
-      < div className="relative z-40 mt-4" >
+      < div className="relative z-40" >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
           <div className="bg-white rounded-[12px] shadow-[0_8px_28px_rgba(0,0,0,0.035)] border border-slate-100 py-4 px-3">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
@@ -420,7 +420,7 @@ const MsmePmsScheme = () => {
             </div>
 
             {/* Bottom Grid: Documents & How to Apply */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
               {/* Documents Required */}
               <div className="lg:col-span-4 bg-[#f9fafb] rounded-[20px] p-8 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
                 <h3 className="text-[18px] font-black text-[#1a3615] mb-6 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
