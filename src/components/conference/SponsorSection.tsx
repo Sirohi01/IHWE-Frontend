@@ -15,11 +15,11 @@ const SponsorSection: React.FC = () => {
   return (
     <section className="py-2 bg-white">
       <div className="mx-auto max-w-[1380px] relative left-[20px] px-4">
-        <div className="bg-[#F8FAFC] rounded-[24px] border border-[#E2E8F0] p-8">
-          <div className="flex flex-col lg:flex-row items-center gap-10">
+        <div className="bg-[#F8FAFC] rounded-[24px] border border-[#E2E8F0] p-5">
+          <div className="flex flex-col lg:flex-row items-center gap-6">
             {/* Left text */}
             <div className="lg:w-[35%] flex-shrink-0">
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <div className="space-y-1">
                   <p className="text-[14px] font-black text-[#0B2C66] uppercase tracking-tight">
                     SPONSOR THE

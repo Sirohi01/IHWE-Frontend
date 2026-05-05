@@ -99,13 +99,13 @@ const MainConferences: React.FC = () => {
 
                   <div className="flex justify-center items-start mb-4 w-full">
 
-                    <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 py-2 rounded-br-[20px] font-black text-[15px] tracking-wider `}>
+                    <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 py-2 rounded-br-[20px] font-black text-[18px] tracking-wider `}>
                       {conf.day}
                     </div>
 
 
                     <div
-                      className="text-[12px] font-[900] px-6 py-2 -mt-4"
+                      className="text-[16px] font-[900] px-6 py-2 -mt-4"
                       style={{ color: conf.accentColor }}
                     >
                       {conf.date}
