@@ -11,7 +11,7 @@ const FloatingVideo: React.FC = () => {
   return (
     <>
       {/* Floating Preview Card */}
-      <div className="fixed bottom-1 right-1 z-[9999] w-[140px] md:w-[180px] aspect-[9/16] bg-black shadow-2xl border-2 border-white/20 overflow-hidden group rounded-lg">
+      <div className="fixed bottom-1 right-1 z-[9999] w-[100px] md:w-[130px] aspect-[9/16] bg-black shadow-2xl border-2 border-white/20 overflow-hidden group rounded-lg">
         {/* Video Thumbnail (Paused Video) */}
         <div className="relative w-full h-full cursor-pointer" onClick={() => setIsModalOpen(true)}>
           <video
@@ -23,8 +23,8 @@ const FloatingVideo: React.FC = () => {
           
           {/* Centered Play Button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-12 h-12 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
-              <Play size={24} fill="currentColor" className="ml-1" />
+            <div className="w-10 h-10 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
+              <Play size={20} fill="currentColor" className="ml-1" />
             </div>
           </div>
 

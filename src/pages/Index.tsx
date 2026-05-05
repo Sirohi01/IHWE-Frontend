@@ -54,7 +54,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <BeyondExhibition />
       <AttendanceInfo />
       <EventInfoBanner />
-      {/* <SponsorshipSection /> */}
+      <SponsorshipSection />
       <HealthcareSectors />
       <MarqueeStrip />
       <EventGlimpses />

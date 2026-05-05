@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef, cloneElement } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import SectionContainer from "@/components/layout/SectionContainer";
+import { cloneElement } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp } from "lucide-react";
 import StatsCounter from "@/components/home/StatsCounter";
@@ -82,6 +84,7 @@ const STATS = [
     icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#23471d" strokeWidth="1.8"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
 ];
+
 
 const VENUE_STATS = [
   {
@@ -437,7 +440,7 @@ const About = () => {
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
 <section className="pt-4 pb-0 bg-white relative z-10">
-  <div className="container mx-auto px-11">
+  <SectionContainer>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
       {/* LEFT - Event Overview */}
@@ -505,13 +508,13 @@ const About = () => {
       </div>
 
     </div>
-  </div>
+  </SectionContainer>
 </section>
 
 
       {/* ABOUT THE ORGANIZER */}
       <section className="pt-10 pb-4 bg-[#FFFDF1] border-t border-gray-100">
-        <div className="container mx-auto px-6">
+        <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
 
             {/* LEFT - About the Organizer */}
@@ -605,12 +608,12 @@ const About = () => {
               </div>
             </div>
           </div>
-        </div>
+        </SectionContainer>
       </section>
 
       {/* OUR JOURNEY & FLAGSHIP EVENTS */}
       <section className="pt-2 pb-6 bg-[#FFFDF1] border-t border-gray-100">
-        <div className="container mx-auto px-6">
+        <SectionContainer>
 
           {/* Header */}
           <div className="mb-5">
@@ -719,7 +722,7 @@ const About = () => {
             </div>
 
           </div>
-        </div>
+        </SectionContainer>
       </section>
 
       {/* DYNAMIC MISSION & VISION SECTION */}

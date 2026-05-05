@@ -105,14 +105,19 @@ const ConferenceAgenda: React.FC = () => {
               ))}
             </div>
 
-            {/* Agenda List Container - Scrollable */}
-            <div className="flex-1 bg-white rounded-[24px] border border-[#E2E8F0] overflow-hidden flex flex-col">
-              <div className="flex-1 overflow-y-auto agenda-scroll">
-                <style>{`
-                  .agenda-scroll::-webkit-scrollbar { width: 4px; }
-                  .agenda-scroll::-webkit-scrollbar-track { background: transparent; }
-                  .agenda-scroll::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
-                `}</style>
+            {/* Agenda table with vertical scroll for long lists */}
+            <div className="bg-white rounded-[16px] border border-[#E6ECF3] overflow-hidden">
+              <style dangerouslySetInnerHTML={{ __html: `
+                .agenda-scroll::-webkit-scrollbar {
+                  display: none;
+                }
+                .agenda-scroll {
+                  -ms-overflow-style: none;  /* IE and Edge */
+                  scrollbar-width: none;  /* Firefox */
+                }
+              `}} />
+
+              <div className="max-h-[380px] overflow-y-auto agenda-scroll">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeDay}

@@ -4,6 +4,7 @@ import { ArrowRight, Calendar, User } from "lucide-react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { blogApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "../layout/SectionContainer";
 
 const BlogPreview = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -31,9 +32,9 @@ const BlogPreview = () => {
   if (loading) {
     return (
       <section className="pt-8 pb-16 lg:pt-12 lg:pb-22" style={{ backgroundColor: "#F7F8F0" }}>
-        <div className="container mx-auto px-4 text-center">
+        <SectionContainer className="text-center">
           <p className="text-slate-500">Loading insights...</p>
-        </div>
+        </SectionContainer>
       </section>
     );
   }
@@ -42,7 +43,7 @@ const BlogPreview = () => {
 
   return (
     <section className="pt-8 pb-16 lg:pt-12 lg:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
-      <div className="container mx-auto px-4">
+      <SectionContainer>
         {/* BRANDED HEADING */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div data-aos="fade-right">
@@ -126,7 +127,7 @@ const BlogPreview = () => {
             </Link>
           ))}
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };

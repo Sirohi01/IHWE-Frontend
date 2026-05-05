@@ -11,7 +11,7 @@ const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
-const Conference = lazy(() => import("./pages/Conference"));
+import Conference from "./pages/Conference";
 const Exhibitors = lazy(() => import("./pages/Exhibitors"));
 const WhyExhibit = lazy(() => import("./pages/WhyExhibit"));
 const BookAStand = lazy(() => import("./pages/BookAStand"));

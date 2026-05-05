@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Calendar, MapPin, Globe, Trophy, ArrowRight, Leaf } from 'lucide-react';
+import SectionContainer from '../layout/SectionContainer';
 
 // Sparkle component
 const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
@@ -80,7 +81,7 @@ const EventInfoBanner = () => {
             <Leaf className="w-24 h-24 text-white fill-white" />
           </div>
 
-          <div className="relative z-10 flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 py-3 px-6 md:px-14">
+          <SectionContainer className="relative z-10 flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 py-3">
 
             {/* Date */}
             <div className="flex items-center gap-3 border-r border-white/10 pr-6">
@@ -150,7 +151,7 @@ const EventInfoBanner = () => {
               </div>
             </Link>
 
-          </div>
+          </SectionContainer>
         </div>
       </section>
     </>

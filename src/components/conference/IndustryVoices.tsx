@@ -55,7 +55,13 @@ const IndustryVoices: React.FC = () => {
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [isPaused, scroll]);
+  }, [loading, data?.cards?.length, isPaused, scroll]);
+
+  if (loading) return null;
+  if (!data || !data.cards || data.cards.length === 0) return null;
+
+  const { subheading, heading, highlightText, cards } = data;
+  const headingParts = (heading && highlightText) ? heading.split(highlightText) : [heading || "", ""];
 
   return (
     <section className="py-4 bg-white overflow-hidden">

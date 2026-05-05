@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SectionContainer from '../layout/SectionContainer';
 import {
   Lightbulb,
   Handshake,
@@ -77,8 +78,8 @@ const WhoShouldAttendItems = [
 
 const AttendanceInfo = () => {
   return (
-    <section className="bg-white pt-0 pb-0 px-6 md:px-14 w-full relative z-10">
-      <div className="max-w-[1500px] mx-auto pt-0 pb-4">
+    <section className="bg-white pt-0 pb-0 w-full relative z-10">
+      <SectionContainer className="pt-0 pb-4">
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
 
@@ -233,7 +234,7 @@ const AttendanceInfo = () => {
             </div>
 
             {/* Bottom Floating Info Box */}
-            <div className="absolute bottom-[-20px] left-0 right-0 flex justify-center">
+            <div className="absolute bottom-[10px] left-0 right-0 flex justify-center">
               <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-lg flex items-center gap-4 max-w-[380px]">
                 <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                   <Target className="w-6 h-6 text-[#2e7d32]" />
@@ -285,7 +286,7 @@ const AttendanceInfo = () => {
           </div>
 
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };

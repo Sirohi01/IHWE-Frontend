@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import {
-  Stethoscope, Landmark, Leaf, Globe, Building2, GraduationCap,
+import SectionContainer from "../layout/SectionContainer";
+import { 
+  Stethoscope, Landmark, Leaf, Globe, Building2, GraduationCap, 
   Users, Handshake, Package, Sparkles, Camera, ShieldCheck, UserCheck, Activity, Award, Briefcase
 } from "lucide-react";
 import { introductionApi, SERVER_URL } from "../../lib/api";
@@ -140,11 +141,24 @@ const IntroductionSection = () => {
   const sortedFeatures = [...features].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
-    <section
-      className="px-6 md:px-14 pt-2 pb-8 overflow-hidden relative transition-colors duration-500"
+    <section 
+      className="pt-2 pb-8 overflow-hidden relative transition-colors duration-500 introduction-section-no-shadow"
       style={{ backgroundColor: data.bgColor || '#f5fcfd' }}
     >
-      <div className="grid lg:grid-cols-2 gap-8 items-start mb-2">
+      <style dangerouslySetInnerHTML={{ __html: `
+        .introduction-section-no-shadow,
+        .introduction-section-no-shadow *,
+        .introduction-section-no-shadow .prose,
+        .introduction-section-no-shadow .prose * {
+          text-shadow: none !important;
+          box-shadow: none !important;
+          filter: none !important;
+          -webkit-filter: none !important;
+          backdrop-filter: none !important;
+        }
+      ` }} />
+      <SectionContainer>
+        <div className="grid lg:grid-cols-2 gap-8 items-start mb-2">
         {/* LEFT */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
@@ -153,27 +167,23 @@ const IntroductionSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="pt-10"
         >
-          <div
-            className="text-[11px] font-bold uppercase tracking-[.22em] text-[#1a6b3a] mb-3 prose prose-sm max-w-none"
+          <div 
+            className="text-[11px] font-bold uppercase tracking-[.22em] text-[#1a6b3a] mb-3 prose prose-sm max-w-none [&_*]:[text-shadow:none!important]"
+            style={{ textShadow: 'none' }}
             dangerouslySetInnerHTML={{ __html: data.subtitle }}
           />
-          <div
-            className="text-[28px] md:text-[35px] font-extrabold text-[#0d2137] leading-[1.12] prose prose-xl max-w-none prose-headings:m-0"
+          <div 
+            className="text-[28px] md:text-[35px] font-extrabold text-[#0d2137] leading-[1.12] prose prose-xl max-w-none prose-headings:m-0 [&_*]:[text-shadow:none!important]"
+            style={{ textShadow: 'none' }}
             dangerouslySetInnerHTML={{ __html: data.title }}
           />
 
           <div className="w-11 h-[3px] bg-[#1a6b3a] rounded mt-4 mb-4" />
-
-          <div
-            className="text-[14px] leading-[1.8] max-w-[520px] text-justify prose prose-sm max-w-none"
-            style={{ color: "white" }}
-            dangerouslySetInnerHTML={{
-              __html: `
-      <div style="background: transparent !important;">
-        ${data.description}
-      </div>
-    `,
-            }}
+          
+          <div 
+            className="text-[14px] leading-[1.8] text-[#3d5166] max-w-[520px] text-justify prose prose-sm max-w-none [&_*]:[text-shadow:none!important]"
+            style={{ textShadow: 'none' }}
+            dangerouslySetInnerHTML={{ __html: data.description }}
           />
         </motion.div>
 
@@ -204,7 +214,7 @@ const IntroductionSection = () => {
       </div>
 
       {/* STATS ROW */}
-      <div className="flex flex-wrap items-center pt-0 border-t border-slate-100 -mt-6 relative z-30">
+      <div className="flex flex-wrap items-center pt-0 -mt-14 relative z-30">
         {sortedFeatures.map((s: any, i: number) => (
           <div key={s._id || i} className="flex items-center">
             <div className="flex items-center gap-3 px-5 py-4 first:pl-0">
@@ -219,7 +229,8 @@ const IntroductionSection = () => {
             {i < sortedFeatures.length - 1 && <div className="hidden sm:block w-px h-10 bg-slate-200" />}
           </div>
         ))}
-      </div>
+        </div>
+      </SectionContainer>
     </section>
   );
 };
