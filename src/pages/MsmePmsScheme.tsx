@@ -127,61 +127,61 @@ const MsmePmsScheme = () => {
                 </p>
 
                 {/* Subsidy Box - Final Refinement for Parity */}
-                <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mb-3 shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
-                  <div className="bg-[#0d3b16] px-5 py-4 md:px-8 md:py-5 grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.26),transparent_55%)] pointer-events-none"></div>
+              </div>
+              <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mt-6 mb-3 shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
+                <div className="bg-[#0d3b16] px-5 py-4 md:px-8 md:py-5 grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.26),transparent_55%)] pointer-events-none"></div>
 
-                    {/* Left: Icon & Amount Container */}
-                    <div className="relative flex items-center gap-4 md:gap-6 shrink-0">
-                      <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-xl bg-[#0a2f11] flex items-center justify-center">
-                        <img
-                          src="/msme_application_checklist_graphic2.png"
-                          alt="Subsidy Bag"
-                          className="w-[90%] h-[90%] object-contain relative z-10"
-                        />
-                      </div>
-
-                      <div className="flex flex-col min-w-0">
-                        <div className="text-white/95 text-[11px] md:text-[13px] font-black leading-none">Get Up To</div>
-                        <div className="flex items-start">
-                          <span className="text-[#f3b71b] text-[38px] md:text-[54px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
-                          <span className="text-[#f4bd18] text-2xl md:text-4xl font-black mt-1 ml-1">*</span>
-                        </div>
-                        <div className="text-white text-[20px] md:text-[28px] font-black uppercase tracking-[0.16em] mt-1 leading-none">SUBSIDY</div>
-                        <div className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.08em] mt-1">UNDER MSME PMS SCHEME</div>
-                      </div>
+                  {/* Left: Icon & Amount Container */}
+                  <div className="relative flex items-center gap-4 md:gap-6 shrink-0">
+                    <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-xl bg-[#0a2f11] flex items-center justify-center">
+                      <img
+                        src="/msme_application_checklist_graphic2.png"
+                        alt="Subsidy Bag"
+                        className="w-[90%] h-[90%] object-contain relative z-10"
+                      />
                     </div>
 
-                    {/* Right: Checklist Column */}
-                    <div className="flex flex-col gap-2.5 relative z-10 w-full md:border-l md:border-white/15 md:pl-6 lg:pl-10">
-                      {[
-                        "Government Financial Support",
-                        "Increase Market Reach",
-                        "Grow Your Business Globally"
-                      ].map((text, i) => (
-                        <div key={i} className="flex items-center gap-3 text-white text-[11px] md:text-[12px] font-bold">
-                          <div className="w-6 h-6 rounded-full border-2 border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
-                            <CheckCircle2 size={12} strokeWidth={3.5} />
-                          </div>
-                          <span className="opacity-95 tracking-tight">{text}</span>
-                        </div>
-                      ))}
+                    <div className="flex flex-col min-w-0">
+                      <div className="text-white/95 text-[11px] md:text-[13px] font-black leading-none">Get Up To</div>
+                      <div className="flex items-start">
+                        <span className="text-[#f3b71b] text-[38px] md:text-[54px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
+                        <span className="text-[#f4bd18] text-2xl md:text-4xl font-black mt-1 ml-1">*</span>
+                      </div>
+                      <div className="text-white text-[20px] md:text-[28px] font-black uppercase tracking-[0.16em] mt-1 leading-none">SUBSIDY</div>
+                      <div className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.08em] mt-1">UNDER MSME PMS SCHEME</div>
                     </div>
                   </div>
 
-                  {/* Yellow Strip Footer */}
-                  <div className="bg-[#f3b71b] py-2 px-8 flex flex-col items-center justify-center text-center">
-                    <div className="flex flex-col md:flex-row items-center gap-1 md:gap-6 text-[10px] md:text-[12px] font-black text-[#1a3615] uppercase tracking-[0.05em]">
-                      <span>TYPICALLY ₹50,000 – ₹1,00,000</span>
-                      <span className="w-[1px] h-3 bg-[#1a3615]/30 hidden md:block"></span>
-                      <span>HIGHER SUPPORT FOR ELIGIBLE CASES</span>
-                    </div>
+                  {/* Right: Checklist Column */}
+                  <div className="flex flex-col gap-2.5 relative z-10 w-full md:border-l md:border-white/15 md:pl-6 lg:pl-10">
+                    {[
+                      "Government Financial Support",
+                      "Increase Market Reach",
+                      "Grow Your Business Globally"
+                    ].map((text, i) => (
+                      <div key={i} className="flex items-center gap-3 text-white text-[11px] md:text-[12px] font-bold">
+                        <div className="w-6 h-6 rounded-full border-2 border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
+                          <CheckCircle2 size={12} strokeWidth={3.5} />
+                        </div>
+                        <span className="opacity-95 tracking-tight">{text}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="text-[11px] text-slate-400 font-bold italic">
-                  *Subsidy amount may vary as per MSME guidelines, category and approval.
+                {/* Yellow Strip Footer */}
+                <div className="bg-[#f3b71b] py-2 px-8 flex flex-col items-center justify-center text-center">
+                  <div className="flex flex-col md:flex-row items-center gap-1 md:gap-6 text-[10px] md:text-[12px] font-black text-[#1a3615] uppercase tracking-[0.05em]">
+                    <span>TYPICALLY ₹50,000 – ₹1,00,000</span>
+                    <span className="w-[1px] h-3 bg-[#1a3615]/30 hidden md:block"></span>
+                    <span>HIGHER SUPPORT FOR ELIGIBLE CASES</span>
+                  </div>
                 </div>
+              </div>
+
+              <div className="text-[11px] text-slate-400 font-bold italic">
+                *Subsidy amount may vary as per MSME guidelines, category and approval.
               </div>
             </div>
           </div>
