@@ -30,7 +30,7 @@ const ConferenceDay3: React.FC = () => {
         </div>
 
         {/* 4. Agenda & Featured Speakers (Side-by-Side, no gap) */}
-        <section className="bg-white py-10 relative left-[20px]">
+        <section className="bg-white py-4 relative left-[20px]">
           <div className="container mx-auto px-6 max-w-[1400px]">
             <div className="flex flex-col xl:flex-row gap-6 items-stretch">
               {/* Agenda — 62% */}
@@ -38,7 +38,6 @@ const ConferenceDay3: React.FC = () => {
                 <Day3Agenda />
               </div>
 
-              {/* Featured Speakers — 38% */}
               <div className="w-full xl:w-[38%]">
                 <Day3FeaturedSpeakers />
               </div>

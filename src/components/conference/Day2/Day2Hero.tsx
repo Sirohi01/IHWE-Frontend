@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Download, Mic, ChevronRight, Home, Users, Share2, Lightbulb } from "lucide-react";
-import amanImage from "../../../assets/bhiya.png"; // Keeping same background for consistency unless user provides another
+import amanImage from "../../../assets/dayimagesarogyasangosti/nista1.png";
 
 const Day2Hero: React.FC = () => {
   return (
@@ -50,7 +50,7 @@ const Day2Hero: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="mb-3"
           >
-            <h1 className="text-[32px] sm:text-[40px] md:text-[48px] lg:text-[54px] font-[900] leading-[0.95] tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] font-semibold font-sans leading-tight tracking-tight">
               <span className="text-[#0B2C66] block uppercase">Global Wellness</span>
               <span className="text-[#4E9F3D] block uppercase">Leadership Forum</span>
             </h1>

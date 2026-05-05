@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { 
-  Stethoscope, Landmark, Leaf, Globe, Building2, GraduationCap, 
+import {
+  Stethoscope, Landmark, Leaf, Globe, Building2, GraduationCap,
   Users, Handshake, Package, Sparkles, Camera, ShieldCheck, UserCheck, Activity, Award, Briefcase
 } from "lucide-react";
 import { introductionApi, SERVER_URL } from "../../lib/api";
@@ -86,7 +86,7 @@ const StatCounter = ({ value }: { value: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  
+
   const numericValue = parseInt(value.replace(/,/g, '')) || 0;
   const suffix = value.replace(/[0-9,]/g, '');
 
@@ -94,9 +94,9 @@ const StatCounter = ({ value }: { value: string }) => {
     if (isInView) {
       let start = 0;
       const end = numericValue;
-      const duration = 2000; 
+      const duration = 2000;
       const increment = end / (duration / 16);
-      
+
       const timer = setInterval(() => {
         start += increment;
         if (start >= end) {
@@ -140,7 +140,7 @@ const IntroductionSection = () => {
   const sortedFeatures = [...features].sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
-    <section 
+    <section
       className="px-6 md:px-14 pt-2 pb-8 overflow-hidden relative transition-colors duration-500"
       style={{ backgroundColor: data.bgColor || '#f5fcfd' }}
     >
@@ -153,20 +153,27 @@ const IntroductionSection = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="pt-10"
         >
-          <div 
+          <div
             className="text-[11px] font-bold uppercase tracking-[.22em] text-[#1a6b3a] mb-3 prose prose-sm max-w-none"
             dangerouslySetInnerHTML={{ __html: data.subtitle }}
           />
-          <div 
+          <div
             className="text-[28px] md:text-[35px] font-extrabold text-[#0d2137] leading-[1.12] prose prose-xl max-w-none prose-headings:m-0"
             dangerouslySetInnerHTML={{ __html: data.title }}
           />
-          
+
           <div className="w-11 h-[3px] bg-[#1a6b3a] rounded mt-4 mb-4" />
-          
-          <div 
-            className="text-[14px] leading-[1.8] text-[#3d5166] max-w-[520px] text-justify prose prose-sm max-w-none"
-            dangerouslySetInnerHTML={{ __html: data.description }}
+
+          <div
+            className="text-[14px] leading-[1.8] max-w-[520px] text-justify prose prose-sm max-w-none"
+            style={{ color: "white" }}
+            dangerouslySetInnerHTML={{
+              __html: `
+      <div style="background: transparent !important;">
+        ${data.description}
+      </div>
+    `,
+            }}
           />
         </motion.div>
 
