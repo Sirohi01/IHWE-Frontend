@@ -52,7 +52,7 @@ const ConferenceAgenda: React.FC = () => {
   }
 
   return (
-    <section className="py-2 bg-white overflow-hidden">
+    <section className="bg-white overflow-hidden">
       <div className="mx-auto max-w-[1380px] relative left-[20px] px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

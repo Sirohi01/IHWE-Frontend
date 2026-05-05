@@ -60,9 +60,7 @@ const Day3FeaturedSpeakers: React.FC = () => {
           FEATURED SPEAKERS —{" "}
           <span className="text-[#4E9F3D]">DAY 3</span>
         </h2>
-        <span className="text-[#4E9F3D] text-[9px] font-black tracking-widest cursor-pointer hover:underline whitespace-nowrap mt-0.5">
-          VIEW ALL SPEAKERS &gt;
-        </span>
+
       </div>
 
       {/* 2×3 Grid */}

@@ -117,7 +117,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
           {/* Marquee Container */}
           <div className="relative w-full overflow-hidden">
             <motion.div
-              className="flex gap-6 w-max py-2"
+              className="flex gap-3 w-max py-2"
               animate={isPaused ? {} : {
                 x: ["0%", "-50%"],
               }}
@@ -130,43 +130,43 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
               {[...displaySpeakers, ...displaySpeakers].map((speaker, index) => (
                 <div
                   key={index}
-                  className="w-[260px] bg-white rounded-[24px] p-6 shadow-sm border border-[#E6ECF3] hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative"
+                  className="w-[190px] bg-white rounded-[18px] p-4 shadow-sm border border-[#E6ECF3] hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative"
                 >
                   {/* Top Icons */}
-                  <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#1E88E5]">
-                    <Mic2 className="w-4 h-4" />
+                  <div className="absolute top-3 left-3 w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center text-[#1E88E5]">
+                    <Mic2 className="w-3 h-3" />
                   </div>
 
-                  <div className="absolute top-4 right-4 text-xl">
+                  <div className="absolute top-3 right-3 text-base">
                     {speaker.flag}
                   </div>
 
                   {/* Profile Image */}
-                  <div className="w-[90px] h-[90px] rounded-full overflow-hidden border-4 border-[#F1F8EE] mb-3 shadow-sm">
+                  <div className="w-[70px] h-[70px] rounded-full overflow-hidden border-[3px] border-[#F1F8EE] mb-2 shadow-sm mt-2">
                     <img
-                      src={speaker.image || "https://via.placeholder.com/90"}
+                      src={speaker.image || "https://via.placeholder.com/70"}
                       alt={speaker.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
 
                   {/* Speaker Details */}
-                  <h3 className="text-[15px] font-bold text-[#1C2B3A] mb-0.5">
+                  <h3 className="text-[12px] font-bold text-[#1C2B3A] mb-0.5 leading-tight">
                     {speaker.name}
                   </h3>
-                  <p className="text-[11px] text-[#5F6B7A] leading-tight mb-0.5">
+                  <p className="text-[10px] text-[#5F6B7A] leading-tight mb-0.5">
                     {speaker.role}
                   </p>
-                  <p className="text-[11px] font-semibold text-[#1C2B3A] mb-3">
+                  <p className="text-[10px] font-semibold text-[#1C2B3A] mb-2">
                     {speaker.org}
                   </p>
 
                   {/* Topic Section */}
-                  <div className="mt-auto pt-3 border-t border-[#F1F5F9] w-full text-left">
-                    <span className="text-[9px] font-bold text-[#8FB569] uppercase block mb-0.5">
+                  <div className="mt-auto pt-2 border-t border-[#F1F5F9] w-full text-left">
+                    <span className="text-[8px] font-bold text-[#8FB569] uppercase block mb-0.5">
                       TOPIC:
                     </span>
-                    <p className="text-[12px] font-medium text-[#1C2B3A] line-clamp-2 leading-snug">
+                    <p className="text-[10px] font-medium text-[#1C2B3A] line-clamp-2 leading-snug">
                       {speaker.topic}
                     </p>
                   </div>
