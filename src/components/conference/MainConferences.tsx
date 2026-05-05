@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { Lightbulb, Sprout, ShieldPlus, ArrowRight } from "lucide-react";
 
 // Import assets
-import ram1 from "../../assets/ram1.png";
-import ram2 from "../../assets/ram2.png";
-import ram3 from "../../assets/ram3.png";
+import day1 from "../../assets/confrencetrack/day1.png";
+import day2 from "../../assets/confrencetrack/day2.png";
+import day3 from "../../assets/confrencetrack/day3.png";
 
 const MainConferences: React.FC = () => {
   const mainConferences = [
@@ -20,7 +20,7 @@ const MainConferences: React.FC = () => {
         "Diagnostics & Precision Medicine",
         "Infrastructure & Investment"
       ],
-      image: ram1,
+      image: day1,
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
@@ -37,7 +37,7 @@ const MainConferences: React.FC = () => {
         "Fitness, Preventive Health & Lifestyle Medicine",
         "Beauty, Personal Care & Wellness Innovation"
       ],
-      image: ram2,
+      image: day2,
       icon: <Sprout className="w-10 h-10 text-white" />,
       accentColor: "#E67E22",
       badgeColor: "bg-[#92400E]",
@@ -54,7 +54,7 @@ const MainConferences: React.FC = () => {
         "Yoga, Mental Health & Wellness",
         "Herbal Industry & Natural Products"
       ],
-      image: ram3,
+      image: day3,
       icon: <ShieldPlus className="w-10 h-10 text-white" />,
       accentColor: "#7C3AED",
       badgeColor: "bg-[#581C87]",

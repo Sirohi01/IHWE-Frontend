@@ -1,33 +1,43 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
-import { conferenceTestimonialsApi } from "@/lib/api";
+import { ChevronLeft, ChevronRight, Quote, Leaf } from "lucide-react";
+
+const FALLBACK_TESTIMONIALS = [
+  {
+    feedback: "My sincere compliments to the organizers and attendees of this monumental event honouring yoga and Ayurveda. I hope you all live a hundred years",
+    name: "Padma Shri Dr. M. Wali",
+    role: "CTO",
+    company: "MediaTech"
+  },
+  {
+    feedback: "The International Health and Wellness Expo was a phenomenal experience! The variety of exhibitors and sessions offered valuable insights into Ayurveda, holistic health, and wellness practices. It was truly a one-stop destination for health enthusiasts. ",
+    name: "Aman Chaudhary",
+    role: "CTo",
+    company: "Pramod kirana Store"
+  },
+  {
+    feedback: "Attending the International Health and Wellness Expo opened my eyes to many natural health solutions. It was inspiring to see Ayurveda and traditional medicine being celebrated alongside modern approaches. ",
+    name: "Shri Acharya Ji",
+    role: "COO",
+    company: ""
+  },
+  {
+    feedback: "A beautifully organized exhibition with a clear focus on enhancing India's health system. The integrated approach was the star of the event, blending Ayurveda, yoga, and modern medicine in one place.",
+    name: "Dr. Sirohi",
+    role: "COO",
+    company: "MediaMantra"
+  }
+];
 
 const IndustryVoices: React.FC = () => {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await conferenceTestimonialsApi.get();
-        if (res) setData(res);
-      } catch (error) {
-        console.error("Error fetching testimonials:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const scroll = useCallback((direction: "left" | "right") => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
-      // 4 cards on xl, 3 on lg, 2 on md, 1 on sm
-      const itemWidth = clientWidth / (window.innerWidth >= 1280 ? 4 : window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
+      const itemWidth = clientWidth / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1);
       const scrollTo = direction === "left" ? scrollLeft - itemWidth : scrollLeft + itemWidth;
 
       if (direction === "right" && scrollLeft + clientWidth >= scrollRef.current.scrollWidth - 50) {
@@ -39,112 +49,101 @@ const IndustryVoices: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && data?.cards?.length > 3 && !isPaused) {
+    if (!isPaused) {
       const interval = setInterval(() => {
         scroll("right");
-      }, 4000);
+      }, 5000);
       return () => clearInterval(interval);
     }
-  }, [loading, data?.cards?.length, isPaused, scroll]);
-
-  if (loading) return null;
-  if (!data || !data.cards || data.cards.length === 0) return null;
-
-  const { subheading, heading, highlightText, cards } = data;
-  const headingParts = heading.split(highlightText);
+  }, [isPaused, scroll]);
 
   return (
-    <section className="py-12 bg-[#FBFDFB] overflow-hidden">
-      <div className="container mx-auto px-6 max-w-[1320px]">
+    <section className="py-4 bg-white overflow-hidden">
+      <div className="mx-auto max-w-[1380px] relative left-[20px] px-6">
         {/* Header Section */}
-        <div className="relative mb-10 flex flex-col items-center">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="h-[1px] w-12 bg-[#4E9F3D]/40" />
-            <span className="text-[12px] font-bold text-[#4E9F3D] uppercase tracking-[0.4em]">
-              {subheading}
-            </span>
-            <div className="h-[1px] w-12 bg-[#4E9F3D]/40" />
-          </div>
-          
-          <h2 className="text-[32px] md:text-[38px] font-[900] text-[#0B2C66] uppercase tracking-tight text-center leading-tight">
-            {headingParts[0]}
-            <span className="text-[#1E88E5]">{highlightText}</span>
-            {headingParts[1]}
+        <div className="relative mb-1 flex flex-col items-center">
+          <h2 className="text-[28px] md:text-[32px] font-[900] uppercase tracking-tight text-center leading-tight">
+            <span className="text-[#4E9F3D]">VOICES FROM</span> <span className="text-[#0B2C66]">INDUSTRY LEADERS</span>
           </h2>
+
+          {/* Leaf Decoration */}
+          <div className="flex items-center gap-3 mt-2">
+            <div className="h-[1px] w-12 bg-gray-200" />
+            <Leaf className="w-5 h-5 text-[#4E9F3D] fill-current opacity-60" />
+            <div className="h-[1px] w-12 bg-gray-200" />
+          </div>
+
           <div className="absolute right-0 bottom-2 hidden lg:block">
-            <a href="#" className="flex items-center gap-2 text-[11px] font-black text-[#4E9F3D] uppercase tracking-[0.2em] hover:text-[#3d7e30] transition-colors">
-              VIEW ALL
+            <a href="#" className="flex items-center gap-1 text-[11px] font-bold text-[#4E9F3D] uppercase hover:underline transition-all">
+              VIEW ALL TESTIMONIALS
               <ChevronRight className="w-4 h-4" />
             </a>
           </div>
         </div>
 
         {/* Slider Container */}
-        <div 
-          className="relative px-2 md:px-10"
+        <div
+          className="relative group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
           {/* Navigation Arrows */}
           <button
             onClick={() => scroll("left")}
-            className="absolute -left-1 md:-left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] hover:border-[#4E9F3D] transition-all"
+            className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] transition-all opacity-0 group-hover:opacity-100"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="absolute -right-1 md:-right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] hover:border-[#4E9F3D] transition-all"
+            className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] transition-all opacity-0 group-hover:opacity-100"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6" />
           </button>
 
           <div
             ref={scrollRef}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar scroll-smooth"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar scroll-smooth"
           >
-            {cards.map((item: any, index: number) => (
-              <motion.div
+            {FALLBACK_TESTIMONIALS.map((item, index) => (
+              <div
                 key={index}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="w-[100%] md:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[calc(25%-15px)] flex-shrink-0 snap-start"
+                className="w-[100%] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 snap-start"
               >
-                <div className="h-full bg-white p-6 rounded-[24px] border border-gray-50 shadow-[0_15px_40px_rgba(0,0,0,0.04)] relative flex flex-col justify-between group hover:shadow-xl transition-all duration-500">
+                <div className="h-full bg-white p-8 rounded-[32px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between">
                   <div className="space-y-4">
                     {/* Green Quote Icon */}
-                    <div className="text-[#4E9F3D]/20">
-                       <Quote className="w-8 h-8 fill-current" />
+                    <div className="text-[#4E9F3D]">
+                      <Quote className="w-8 h-8 fill-current rotate-180" />
                     </div>
-                    {/* Stars */}
-                    <div className="flex gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className={`w-4 h-4 ${i < (item.rating || 5) ? 'text-[#FFB800]' : 'text-gray-200'} fill-current`} viewBox="0 0 24 24">
-                          <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="text-[14px] md:text-[15px] text-[#4A5568] leading-relaxed italic font-medium line-clamp-5">
+                    <p className="text-[15px] text-[#4A5568] leading-relaxed italic font-medium">
                       "{item.feedback}"
                     </p>
                   </div>
-                  <div className="mt-6 pt-5 border-t border-gray-50">
-                    <h4 className="font-black text-[#0B2C66] text-[16px] mb-1">
+                  <div className="mt-8 pt-6 border-t border-gray-50">
+                    <h4 className="font-bold text-[#0B2C66] text-[16px] mb-0.5">
                       — {item.name}
                     </h4>
-                    <p className="text-[10px] font-bold text-[#4E9F3D] uppercase tracking-[0.1em]">
+                    <p className="text-[12px] font-semibold text-[#5F6B7A]">
                       {item.role}{item.company ? `, ${item.company}` : ''}
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
+          </div>
+
+          {/* Indicators */}
+          <div className="flex justify-center gap-2 mt-4">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#4E9F3D]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
           </div>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}} />
