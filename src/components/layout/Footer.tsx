@@ -210,7 +210,7 @@ const Footer = () => {
       icon: <Plane className="w-5 h-5" />,
       line1: "REGISTER ",
       line2: "AS DELEGATE",
-      href: "/hosted-buyer",
+      href: "/conference",
       primary: false,
     },
 

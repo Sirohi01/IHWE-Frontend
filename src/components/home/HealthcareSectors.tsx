@@ -7,6 +7,7 @@ import {
   ShieldCheck, Box, Monitor, Globe, Zap, Package, MapPin
 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
+import SectionContainer from '../layout/SectionContainer';
 
 
 const ICONS_MAP = {
@@ -64,7 +65,7 @@ const HealthcareSectors = () => {
 
   return (
     <section
-      className="relative overflow-hidden pt-[45px] pb-8 px-6 md:px-14 font-sans bg-[#f5f7f5]"
+      className="relative overflow-hidden pt-[45px] pb-8 font-sans bg-[#f5f7f5]"
     >
       {/* Background decorative effects */}
       {/* Top-left dot grid */}
@@ -94,7 +95,7 @@ const HealthcareSectors = () => {
         ))}
       </svg>
 
-      <div className="max-w-[1500px] mx-auto relative z-10">
+      <SectionContainer className="relative z-10">
         
         {/* ===== HEADER ===== */}
         <div style={{textAlign: 'center', marginBottom: 20}}>
@@ -383,7 +384,7 @@ const HealthcareSectors = () => {
             </div>
           </div>
         </div>
-      </div>
+      </SectionContainer>
 
       {/* Hover CSS */}
       <style>{`

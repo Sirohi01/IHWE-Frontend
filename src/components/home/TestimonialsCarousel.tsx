@@ -92,15 +92,15 @@ const VIDEOS_DATA = [
 ];
 
 const STATS = [
-  { icon: Globe, value: "25+", label: "Countries", color: "#005c22ff" },
-  { icon: Users, value: "20,000+", label: "Visitors", color: "#004ac2ff" },
-  { icon: Handshake, value: "500+", label: "Exhibitors", color: "#00742aff" },
-  { icon: Mic2, value: "200+", label: "Speakers", color: "#005f23ff" },
+  { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
+  { icon: Users, value: "8000+", label: "Visitors/Delegates", color: "#004ac2ff" },
+  { icon: Handshake, value: "150+", label: "Exhibitors", color: "#00742aff" },
+  { icon: Mic2, value: "150+", label: "Expert Speakers", color: "#005f23ff" },
 ];
 
 const BOTTOM_STATS = [
-  { icon: Leaf, label: "Trusted by", value: "500+ Brands" },
-  { icon: Globe, label: "25+ Countries", value: "Participation" },
+  { icon: Leaf, label: "Trusted by", value: "150+ Exhibitors" },
+  { icon: Globe, label: "Global Presence", value: "1000+ Global Buyers" },
   { icon: Building2, label: "Government", value: "Supported Initiative" },
   { icon: Users, label: "Global Platform for", value: "Health & Wellness" },
 ];
@@ -520,11 +520,10 @@ const TestimonialsCarousel = () => {
       </div>
 
       {/* ─── BOTTOM STATS BAR ─── */}
-      <div className="border-t border-slate-100 overflow-hidden">
-        <div className="flex items-stretch relative min-h-[50px]">
+      <div className="border-t border-slate-100 overflow-hidden w-full">
+        <div className="container mx-auto max-w-[1400px] flex items-stretch relative min-h-[50px] px-6 md:px-16">
           
-          {/* Spacer to align white bar with the Carousel Previous button (left-6) */}
-          <div className="w-6 flex-shrink-0" />
+          {/* No spacer needed — SectionContainer handles left alignment */}
 
           {/* WHITE STATS SECTION */}
           <div
@@ -571,17 +570,25 @@ const TestimonialsCarousel = () => {
             ))}
           </div>
 
-          {/* GREEN CTA SECTION - Full width on the right */}
           <div
             className="flex flex-col relative flex-1 justify-center"
             style={{
-              background: "linear-gradient(90deg, #1a3a12 0%, #2d5c1e 45%, #a4c639 100%)",
-              clipPath: "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)",
               marginLeft: "-20px",
-              padding: "4px 40px 4px 50px",
               zIndex: 2,
             }}
           >
+            {/* Bleeding background to the right edge */}
+            <div 
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100vw',
+                background: "linear-gradient(90deg, #1a3a12 0%, #2d5c1e 45%, #a4c639 100%)",
+                clipPath: "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)",
+                zIndex: -1
+              }}
+            />
+            <div className="relative z-10 py-1 pl-12 pr-10">
             <div style={{ position: "absolute", top: "4px", right: "5%", opacity: 0.1, pointerEvents: "none" }}>
               <svg width="30" height="30" viewBox="0 0 42 42" fill="none">
                 {[7, 21, 35].flatMap(x =>
@@ -601,12 +608,12 @@ const TestimonialsCarousel = () => {
               </span>
             </div>
 
-            <div className="flex items-center pr-10 -mt-0.5">
+            <div className="flex items-center pr-10 -mt-0.5 gap-x-10">
               <div style={{ color: "rgba(255,255,255,0.95)", fontWeight: 700, fontSize: "16px", whiteSpace: "nowrap" }}>
                 at IHWE 2026!
               </div>
-              <div className="flex gap-2 ml-auto">
-                <div className="relative group/btn">
+              <div className="flex gap-2 ml-auto pl-10">
+                <div className="relative group/btn ml-8">
                   <Sparkle style={{ top: '-6px', left: '10%', animationDelay: '0s' }} />
                   <Sparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
                   <Sparkle style={{ top: '-4px', right: '15%', animationDelay: '0.8s' }} />
@@ -637,6 +644,7 @@ const TestimonialsCarousel = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

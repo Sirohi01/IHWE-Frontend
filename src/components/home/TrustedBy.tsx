@@ -4,6 +4,7 @@ import {
   Users, Handshake, Package, Sparkles, Camera, ShieldCheck, UserCheck, Activity, Award, Briefcase
 } from "lucide-react";
 import { supportedByApi } from "../../lib/api";
+import SectionContainer from "../layout/SectionContainer";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Stethoscope: <Stethoscope size={28} className="text-emerald-700" />,
@@ -51,7 +52,7 @@ const TrustedBy = () => {
       className="relative z-40 w-full py-2 md:py-1 border-y border-white/5 shadow-xl transition-colors duration-500"
       style={{ backgroundColor: data.bgColor || '#23471d' }}
     >
-      <div className="w-full px-6 md:px-14">
+      <SectionContainer>
         
         {/* Row 1: Centered Heading - Glassmorphism Blur Effect */}
         <div className="relative -top-7 md:-top-10 flex items-center justify-center gap-2 md:gap-4 mb-2 md:mb-0 w-full max-w-2xl mx-auto z-50">
@@ -95,7 +96,7 @@ const TrustedBy = () => {
           </div>
         </div>
 
-      </div>
+      </SectionContainer>
     </div>
   );
 };

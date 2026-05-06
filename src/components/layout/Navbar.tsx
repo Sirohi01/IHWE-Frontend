@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Home", path: "/" },
   {
     label: "About Us",
-  
+
     dropdown: [
       {
         label: "About IHWE",
@@ -75,6 +75,12 @@ const navLinks = [
       {
         label: "MSME PMS Scheme",
         path: "/msme-pms-scheme",
+        icon: ShieldCheck,
+        description: "Government subsidy for MSME exhibitors"
+      },
+      {
+        label: "Govt MSME PMS Scheme",
+        path: "/government-msme-pms-schemes",
         icon: ShieldCheck,
         description: "Government subsidy for MSME exhibitors"
       },
@@ -199,9 +205,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
           {/* ─── Desktop Nav ─── */}
           <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
 
-            <div className="relative z-[150] h-full flex items-center gap-4">
+            <div className="relative z-[150] h-full flex items-center gap-2">
               {/* Logo */}
-              <Link to="/" className="h-full flex items-center min-w-[140px] md:min-w-[180px]">
+              <Link to="/" className="h-full flex items-center min-w-[135px] md:min-w-[175px]">
                 {settings?.logo ? (
                   <img
                     src={`${SERVER_URL}${settings.logo}`}
@@ -217,7 +223,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               </Link>
 
               {/* ─── Divider + Venue & Date ─── */}
-              <div className="flex items-center gap-2 ml-1 pl-3 border-l border-slate-600">
+              <div className="flex items-center gap-2 ml-0 pl-3 border-l border-slate-600">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Venue & Date</span>
                   <div className="flex items-center gap-1">
@@ -375,10 +381,8 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#23471d] transition-colors leading-tight">Visitor<br />Pass</span>
                             </Link>
 
-                            <a
-                              href="https://namogange.org/arogya-sangoshthi.php"
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <Link
+                              to="/delegate-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Delegates Register");
@@ -389,7 +393,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 <Handshake className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegates<br />Register</span>
-                            </a>
+                            </Link>
 
                             <Link
                               to="/buyer-registration"
