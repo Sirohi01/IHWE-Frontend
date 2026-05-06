@@ -6,8 +6,8 @@ const agendaData = [
     time: "10:00 AM – 10:45 AM",
     session: "SESSION 1",
     type: "KEYNOTE",
-    topic: "The Future of Preventive Healthcare",
-    description: "Global strategies for prevention and population health.",
+    topic: "Ayurveda & Traditional Wisdom",
+    description: "Deep dive into ancient healing systems and their global relevance.",
     speaker: {
       name: "Dr. Sanjay Gupta",
       role: "Prev. Chief Medical",
@@ -20,8 +20,8 @@ const agendaData = [
     time: "11:00 AM – 11:45 AM",
     session: "SESSION 2",
     type: "PANEL",
-    topic: "Public Health & Community Wellness",
-    description: "Building healthier communities through collaboration and awareness.",
+    topic: "Nutrition, Diet & Lifestyle",
+    description: "Personalized nutrition and dietary habits for long-term health.",
     speaker: {
       name: "Dr. Soumya Swaminathan",
       role: "Prev. Chief Scientist",
@@ -34,8 +34,8 @@ const agendaData = [
     time: "12:00 PM – 12:45 PM",
     session: "SESSION 3",
     type: "EXPERT TALK",
-    topic: "Nutrition, Lifestyle & Mental Well-being",
-    description: "Food, fitness & mindfulness for a healthy tomorrow.",
+    topic: "Yoga, Mental Health & Wellness",
+    description: "Holistic approaches to mental well-being through yoga and mindfulness.",
     speaker: {
       name: "Luke Coutinho",
       role: "Holistic Lifestyle",
@@ -48,8 +48,8 @@ const agendaData = [
     time: "02:00 PM – 02:45 PM",
     session: "SESSION 4",
     type: "PANEL",
-    topic: "Sustainability & Planetary Health",
-    description: "Climate change, environment & health impact.",
+    topic: "Herbal Industry & Natural Products",
+    description: "Supply chain, standardisation and growth in natural products.",
     speaker: {
       name: "Dr. R. Balakrishnan",
       role: "Director",

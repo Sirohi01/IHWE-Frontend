@@ -76,8 +76,8 @@ const agendaData = [
     time: "04:00 PM - 05:00 PM",
     session: "SESSION 6",
     type: "NETWORKING",
-    topic: "Investor Networking & Leadership Forum",
-    description: "Connect with investors, innovators, and healthcare leaders for impactful collaborations.",
+    topic: "Healthcare Infrastructure & Investment",
+    description: "Developing future-ready infrastructure and navigating global healthcare investments.",
     speaker: {
       name: "Industry Leaders",
       role: "Investors | Innovators",
@@ -96,7 +96,7 @@ const Day1Agenda: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight font-sans">
-            DAY 1 AGENDA — 20 AUGUST 2026
+            DAY 1 AGENDA — 21 AUGUST 2026
           </h2>
           <p className="text-[11px] font-bold text-[#5F6B7A] uppercase tracking-[0.2em] mt-1">
             6 Insightful Sessions | 1 Powerful Day
