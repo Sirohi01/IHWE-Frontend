@@ -16,14 +16,14 @@ const AwardsNomination = () => {
     <section className="pt-1 md:pt-2 pb-4 md:pb-6 bg-white overflow-hidden">
       {/* Wider alignment matching home page */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-2"
         >
-          <span className="text-[#008d48] text-[14px] font-black uppercase tracking-[0.25em] block mb-0.5">
+          <span className="text-[#008d48] text-[14px] font-black uppercase tracking-[0.25em] block mb-0.5 pt-2">
             NOMINATION PROCESS
           </span>
           <h2 className="text-[20px] md:text-[26px] font-bold font-serif" style={{ color: navyColor }}>
@@ -38,17 +38,17 @@ const AwardsNomination = () => {
             viewport={{ once: true }}
             className="w-full h-[90px] md:h-[130px] overflow-hidden flex items-center justify-center -mb-2"
           >
-            <img 
-              src={lineImg} 
-              alt="Nomination Process" 
-              className="w-full h-auto min-h-full object-contain" 
-              style={{ objectPosition: 'center' }} 
+            <img
+              src={lineImg}
+              alt="Nomination Process"
+              className="w-full h-auto min-h-full object-contain"
+              style={{ objectPosition: 'center' }}
             />
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-y-4 gap-x-4 w-full mt-1 px-4">
             {steps.map((step, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}

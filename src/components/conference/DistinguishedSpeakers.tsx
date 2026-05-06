@@ -147,13 +147,9 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
                     <Mic2 className="w-3 h-3" />
                   </div>
 
-                    <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-500 border-2 border-[#F1F8EE]">
-                      <img
-                        src={speaker.image?.startsWith('http') ? speaker.image : `${SERVER_URL}${speaker.image}`}
-                        alt={speaker.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                  <div className="absolute top-3 right-3 text-base">
+                    {speaker.flag}
+                  </div>
 
                   {/* Profile Image */}
                   <div className="w-[70px] h-[70px] rounded-full overflow-hidden border-[3px] border-[#F1F8EE] mb-2 shadow-sm mt-2">
