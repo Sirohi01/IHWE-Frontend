@@ -126,7 +126,7 @@ const Topbar = () => {
           </div>
 
           {/* Center Section - Scrolling Marquee - Hidden on small screens */}
-          <div className="hidden md:flex flex-1 min-w-0 max-w-[150px] lg:max-w-[300px] xl:max-w-[550px] 2xl:max-w-[800px] overflow-hidden relative h-full items-center justify-center px-6 ml-10">
+          <div className="hidden md:flex flex-1 min-w-0 max-w-[200px] lg:max-w-[340px] xl:max-w-[560px] 2xl:max-w-[720px] overflow-hidden relative h-full items-center justify-center px-4 ml-6">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
               transition={{

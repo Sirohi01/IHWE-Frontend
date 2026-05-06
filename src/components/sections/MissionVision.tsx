@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as LucideIcons from 'lucide-react';
 import { visionMissionApi } from '@/lib/api';
+import SectionContainer from '../layout/SectionContainer';
 
 interface ContentBlock {
   title: string;
@@ -46,12 +47,9 @@ const MissionVision: React.FC = () => {
   const IconCompMission = (LucideIcons as any)[data.mission.icon] || LucideIcons.Shield;
   const IconCompVision = (LucideIcons as any)[data.vision.icon] || LucideIcons.Sun;
 
-  const visionPills = ['Preventive Healthcare', 'Holistic Wellness', 'Sustainable Living'];
-  const missionPills = ['AYUSH', 'Digital Health', 'Wellness Innovation'];
-
   return (
     <section
-      className="py-10 relative overflow-hidden"
+      className="py-6 relative overflow-hidden"
       style={{ background: '#0d2a1e', fontFamily: "'DM Sans', sans-serif" }}
     >
       {/* Glow accents */}
@@ -60,8 +58,8 @@ const MissionVision: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-56 h-56 rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(80,200,120,0.06) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }} />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6">
-        <div className="grid md:grid-cols-[1fr_1px_1fr] gap-x-10 items-start">
+      <SectionContainer className="relative z-10">
+        <div className="grid md:grid-cols-[1fr_1px_1fr] gap-x-12 items-start">
 
           {/* Vision */}
           <div className="" data-aos="fade-up">
@@ -83,14 +81,6 @@ const MissionVision: React.FC = () => {
               style={{ color: 'rgba(240,236,227,0.68)', fontWeight: 300 }}
               dangerouslySetInnerHTML={{ __html: data.vision.description }}
             />
-            <div className="flex flex-wrap gap-2 mt-4">
-              {visionPills.map((p) => (
-                <span key={p} className="rounded-full px-3 py-1 text-xs"
-                  style={{ background: 'rgba(200,160,85,0.1)', border: '1px solid rgba(200,160,85,0.2)', color: 'rgba(200,160,85,0.9)' }}>
-                  {p}
-                </span>
-              ))}
-            </div>
           </div>
 
           {/* Divider */}
@@ -116,18 +106,10 @@ const MissionVision: React.FC = () => {
               style={{ color: 'rgba(240,236,227,0.68)', fontWeight: 300 }}
               dangerouslySetInnerHTML={{ __html: data.mission.description }}
             />
-            <div className="flex flex-wrap gap-2 mt-4">
-              {missionPills.map((p) => (
-                <span key={p} className="rounded-full px-3 py-1 text-xs"
-                  style={{ background: 'rgba(200,160,85,0.1)', border: '1px solid rgba(200,160,85,0.2)', color: 'rgba(200,160,85,0.9)' }}>
-                  {p}
-                </span>
-              ))}
-            </div>
           </div>
 
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };
