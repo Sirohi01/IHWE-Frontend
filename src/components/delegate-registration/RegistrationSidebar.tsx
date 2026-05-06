@@ -41,55 +41,55 @@ const RegistrationSidebar: React.FC<RegistrationSidebarProps> = ({
         </div>
       </div>
 
-      {/* Includes Section - Very Compact */}
-      <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
-        <h4 className="text-[12px] font-black text-[#0B2C66] uppercase tracking-[0.1em] mb-4 flex items-center gap-2">
-          <div className="w-1 h-4 bg-[#0B2C66] rounded-full" />
+      {/* Includes Section - Balanced Size */}
+      <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <h4 className="text-[14px] font-black text-[#0B2C66] uppercase tracking-[0.1em] mb-5 flex items-center gap-2">
+          <div className="w-1.5 h-5 bg-[#0B2C66] rounded-full" />
           INCLUDES
         </h4>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {[
-            { icon: <Package className="w-4 h-4" />, title: "Delegate Kit", desc: "Exclusive conference kit" },
-            { icon: <ShieldCheck className="w-4 h-4" />, title: "Participation Certificate", desc: "For all selected sessions" },
-            { icon: <Coffee className="w-4 h-4" />, title: "Packed Lunch (Thali)", desc: "For full day options" },
-            { icon: <Users className="w-4 h-4" />, title: "Networking Opportunities", desc: "Connect with experts" }
+            { icon: <Package className="w-5 h-5" />, title: "Delegate Kit", desc: "Exclusive conference kit" },
+            { icon: <ShieldCheck className="w-5 h-5" />, title: "Participation Certificate", desc: "For all selected sessions" },
+            { icon: <Coffee className="w-5 h-5" />, title: "Packed Lunch (Thali)", desc: "For full day options" },
+            { icon: <Users className="w-5 h-5" />, title: "Networking Opportunities", desc: "Connect with experts" }
           ].map((item, idx) => (
-            <div key={idx} className="flex items-start gap-3">
-              <div className="bg-[#F1F8EE] p-1.5 rounded-lg text-[#143111]">{item.icon}</div>
+            <div key={idx} className="flex items-start gap-4">
+              <div className="bg-[#F1F8EE] p-2 rounded-lg text-[#143111]">{item.icon}</div>
               <div>
-                <div className="text-[12px] font-black text-gray-900 leading-none">{item.title}</div>
-                <div className="text-[9px] text-gray-400 font-bold uppercase tracking-tight mt-1">{item.desc}</div>
+                <div className="text-[13px] font-black text-gray-900 leading-none">{item.title}</div>
+                <div className="text-[11px] text-gray-400 font-bold uppercase tracking-tight mt-1">{item.desc}</div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Note - Tighter */}
-      <div className="bg-[#FFF8EE] border border-[#FF9800]/10 rounded-xl p-4 flex items-start gap-3">
-        <Info className="w-4 h-4 text-[#FF9800] shrink-0 mt-0.5" />
+      {/* Note - Balanced Size */}
+      <div className="bg-[#FFF8EE] border border-[#FF9800]/10 rounded-xl p-5 flex items-start gap-4">
+        <Info className="w-5 h-5 text-[#FF9800] shrink-0 mt-0.5" />
         <div>
-          <span className="text-[11px] font-black text-[#855B1C] uppercase tracking-widest block mb-1">NOTE</span>
-          <p className="text-[11px] font-bold text-[#855B1C]/80 leading-tight">
+          <span className="text-[13px] font-black text-[#855B1C] uppercase tracking-widest block mb-1">NOTE</span>
+          <p className="text-[13px] font-bold text-[#855B1C]/80 leading-snug">
             Seats are limited. Early registration recommended.
           </p>
         </div>
       </div>
 
-      {/* Secure Info - Very Compact */}
-      <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
-        <div className="flex items-center gap-3 mb-4">
-          <Lock className="w-4 h-4 text-[#143111]" />
-          <h4 className="text-[12px] font-black text-[#143111] uppercase tracking-[0.05em]">SECURE REGISTRATION</h4>
+      {/* Secure Info - Balanced Size */}
+      <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div className="flex items-center gap-3 mb-5">
+          <Lock className="w-5 h-5 text-[#143111]" />
+          <h4 className="text-[14px] font-black text-[#143111] uppercase tracking-[0.05em]">SECURE REGISTRATION</h4>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[
             "100% Secure Payments",
             "Instant Confirmation",
             "Your data is safe with us"
           ].map((text, idx) => (
-            <div key={idx} className="flex items-center gap-2.5 text-[10px] font-bold text-gray-600">
-              <CheckCircle className="w-3.5 h-3.5 text-green-600" /> {text}
+            <div key={idx} className="flex items-center gap-3 text-[12px] font-bold text-gray-600">
+              <CheckCircle className="w-4 h-4 text-green-600" /> {text}
             </div>
           ))}
         </div>

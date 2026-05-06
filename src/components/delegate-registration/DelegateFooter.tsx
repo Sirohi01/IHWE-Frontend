@@ -73,9 +73,9 @@ const DelegateFooter: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Branding Section */}
-      <div className="bg-white py-12 px-6 lg:px-10 border-t border-gray-100">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+      {/* Main Branding Section - More Compact */}
+      <div className="bg-white py-4 px-6 lg:px-10 border-t border-gray-100">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo & Info */}
           <div className="flex items-center gap-8">
             <img src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />
@@ -87,9 +87,9 @@ const DelegateFooter: React.FC = () => {
           </div>
 
           {/* Partners */}
-          <div className="flex flex-wrap items-center justify-center gap-12">
+          <div className="flex flex-wrap items-center justify-center gap-8">
             <div className="flex flex-col items-center md:items-start">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-4">Part of</p>
+              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Part of</p>
               <div className="flex items-center gap-4">
                  <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
                    {/* Placeholder for Expo Logo */}
@@ -106,7 +106,7 @@ const DelegateFooter: React.FC = () => {
             <div className="h-12 w-[1px] bg-gray-100 hidden md:block" />
 
             <div className="flex flex-col items-center md:items-start">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-4">Supported By</p>
+              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Supported By</p>
               <div className="flex items-center gap-8">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded bg-gray-50 flex items-center justify-center text-[7px] font-bold text-center leading-tight text-gray-400">Govt of<br/>India</div>
