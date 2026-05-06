@@ -46,12 +46,29 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { publicPsmClaimApi } from "@/lib/api";
 
 const MsmePmsScheme = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState({
+    companyName: '',
+    contactPerson: '',
+    mobileNumber: '',
+    emailId: '',
+    udyamNumber: '',
+    gstNumber: '',
+    category: '',
+    companyBrief: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -70,17 +87,44 @@ const MsmePmsScheme = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Application Submitted Successfully",
-        description: "Our team will review your application and get back to you shortly.",
+
+    try {
+      const submitData = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        submitData.append(key, value);
       });
-    }, 2000);
+
+      selectedFiles.forEach((file) => {
+        submitData.append('documents', file);
+      });
+
+      const response = await publicPsmClaimApi.submit(submitData);
+
+      if (response.success) {
+        toast({ title: "Success", description: "Application Submitted successfully!" });
+        setFormData({
+          companyName: '',
+          contactPerson: '',
+          mobileNumber: '',
+          emailId: '',
+          udyamNumber: '',
+          gstNumber: '',
+          category: '',
+          companyBrief: ''
+        });
+        setSelectedFiles([]);
+      } else {
+        toast({ title: "Error", description: response.message || "Failed to submit application", variant: "destructive" });
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({ title: "Error", description: "An error occurred. Please try again.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -225,13 +269,15 @@ const MsmePmsScheme = () => {
       {/* Integrated Action Buttons Bar - Positioned immediately after Hero */}
       <div className="bg-white py-2 px-4 lg:px-16 z-30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
-            <Button className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
-              APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button>
-            {/* <Button variant="outline" className="px-5 py-2 bg-white border border-[#064420] text-[#064420] font-bold text-[13px] uppercase tracking-wide rounded-lg hover:bg-[#064420] hover:text-white transition-all flex items-center gap-3 group">
-              BOOK YOUR STALL <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button> */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="text-[11px] md:text-[12px] text-slate-500 font-bold italic max-w-md">
+              *Subsidy amount may vary as per MSME guidelines, category and approval.
+            </div>
+            <div className="flex flex-col sm:flex-row justify-end items-center gap-3">
+              <Button onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
+                APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -553,19 +599,19 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Company / Organization Name <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
+                        <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
+                        <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
-                        <Input required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
+                        <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleInputChange} required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
-                        <Input required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
+                        <Input name="emailId" value={formData.emailId} onChange={handleInputChange} required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
                       </div>
                     </div>
 
@@ -573,15 +619,15 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Udyam Registration Number <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
+                        <Input name="udyamNumber" value={formData.udyamNumber} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">GST Number</label>
-                        <Input className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
+                        <Input name="gstNumber" value={formData.gstNumber} onChange={handleInputChange} className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
                       </div>
                       <div className="lg:col-span-2 space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Product / Service Category <span className="text-red-500">*</span></label>
-                        <Select required>
+                        <Select required value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
                           <SelectTrigger className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3">
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
@@ -601,7 +647,7 @@ const MsmePmsScheme = () => {
                       {/* Company Brief */}
                       <div className="lg:col-span-5 space-y-1 flex flex-col">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Brief About Your Company / Products <span className="text-red-500">*</span></label>
-                        <Textarea required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
+                        <Textarea name="companyBrief" value={formData.companyBrief} onChange={handleInputChange} required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
                       </div>
 
                       {/* Upload & Help Card Side */}
@@ -717,7 +763,7 @@ const MsmePmsScheme = () => {
 
                 {/* Right: Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-                  <Button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
+                  <Button onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
                     APPLY NOW <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
                   {/* <Button variant="outline" className="px-5 py-2 border-white/25 bg-transparent text-white hover:bg-white/10 font-bold text-[13px] tracking-wide rounded-lg transition-all flex items-center justify-center gap-3 group/btn">

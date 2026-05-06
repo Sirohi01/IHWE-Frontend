@@ -927,3 +927,13 @@ export const speakerApi = {
         return data.success ? data.data : [];
     }
 };
+
+export const publicPsmClaimApi = {
+    submit: async (payload: FormData) => {
+        const response = await fetch(`${API_URL}/public-psm-claim/apply`, {
+            method: 'POST',
+            body: payload
+        });
+        return await response.json();
+    }
+};
