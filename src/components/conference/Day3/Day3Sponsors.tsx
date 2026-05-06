@@ -71,7 +71,7 @@ const sponsorPlans = [
 
 const Day3Sponsors: React.FC = () => {
   return (
-    <section className="pt-12 pb-10 bg-white">
+    <section className="py-4 bg-white">
       <div className="container mx-auto px-6 max-w-[1400px]">
 
         {/* Section Header */}

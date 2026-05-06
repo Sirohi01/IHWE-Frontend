@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dont = () => {
+    const navigate = useNavigate();
     return (
         <div
             style={{
@@ -67,7 +69,9 @@ const Dont = () => {
                         gap: '8px',
                         fontFamily: 'inherit',
                         whiteSpace: 'nowrap',
-                    }}>
+                    }}
+                    onClick={() => navigate('/buyer-registration')}
+                    >
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                         </svg>

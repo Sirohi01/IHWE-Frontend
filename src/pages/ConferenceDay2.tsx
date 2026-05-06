@@ -27,7 +27,7 @@ const ConferenceDay2: React.FC = () => {
         <Day2Agenda />
 
         {/* 5. Speaker Highlights (Reused/Filtered) */}
-        <DistinguishedSpeakers title="SPEAKERS HIGHLIGHTS —" highlight="DAY 2" />
+        <DistinguishedSpeakers title="SPEAKERS HIGHLIGHTS —" highlight="DAY 2" compact={true} />
 
         {/* 6. CTA Section */}
         <Day2CTA />

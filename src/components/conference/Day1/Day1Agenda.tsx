@@ -95,7 +95,7 @@ const Day1Agenda: React.FC = () => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-[24px] font-black text-[#4E9F3D] uppercase tracking-tight">
+          <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight font-sans">
             DAY 1 AGENDA — 20 AUGUST 2026
           </h2>
           <p className="text-[11px] font-bold text-[#5F6B7A] uppercase tracking-[0.2em] mt-1">
@@ -105,21 +105,21 @@ const Day1Agenda: React.FC = () => {
 
 
         <div className="bg-white rounded-xl overflow-hidden border border-[#E2E8F0]">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto max-h-[400px] overflow-y-scroll custom-scrollbar">
             <table className="w-full text-left border-collapse">
-              <thead>
+              <thead className="sticky top-0 z-20">
                 <tr className="bg-[#0B2C66] text-white">
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Time</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Session</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Topic</th>
-                  <th className="px-6 py-3 text-[10px] font-black uppercase tracking-widest">Speaker</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Time</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Session</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Topic</th>
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest">Speaker</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#F1F5F9]">
                 {agendaData.map((item, index) => (
                   <tr key={index} className="transition-colors group">
 
-                    <td className="px-6 py-4 align-top relative">
+                    <td className="px-4 py-2 align-top relative">
                       <div className="absolute left-0 top-3 bottom-3 w-[2px] bg-[#4E9F3D] opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="pl-1">
                         <span className="text-[13px] font-black text-[#4A5568]">{item.time}</span>
@@ -127,7 +127,7 @@ const Day1Agenda: React.FC = () => {
                     </td>
 
 
-                    <td className="px-6 py-4 align-top">
+                    <td className="px-4 py-2 align-top">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[11px] font-black text-[#0B2C66] uppercase tracking-tight">{item.session}</span>
                         <span className="text-[9px] font-black text-[#4E9F3D] uppercase tracking-widest">
@@ -137,7 +137,7 @@ const Day1Agenda: React.FC = () => {
                     </td>
 
                     {/* Topic Column */}
-                    <td className="px-6 py-4 align-top max-w-[400px]">
+                    <td className="px-4 py-2 align-top max-w-[400px]">
                       <div className="space-y-1">
                         <h3 className="text-[14px] font-black text-[#0B2C66] leading-snug">
                           {item.topic}
@@ -149,7 +149,7 @@ const Day1Agenda: React.FC = () => {
                     </td>
 
                     {/* Speaker Column */}
-                    <td className="px-6 py-4 align-top min-w-[250px]">
+                    <td className="px-4 py-2 align-top min-w-[250px]">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
                           <img

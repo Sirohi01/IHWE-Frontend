@@ -13,16 +13,16 @@ import {
 
 const Day3Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t border-gray-100 pt-6 pb-10">
+    <footer className="bg-white border-t border-gray-100 py-3">
       <div className="container mx-auto px-6 max-w-[1400px]">
-        <div className="flex flex-wrap items-center justify-between gap-y-10 gap-x-6">
+        <div className="flex flex-wrap items-center justify-between gap-y-4 gap-x-6">
           
           {/* Info Blocks */}
-          <div className="flex flex-wrap items-center gap-x-12 gap-y-8">
+          <div className="flex flex-wrap items-center gap-x-12 gap-y-4">
             
             {/* Date */}
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
+              <div className="w-10 h-10 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
                 <Calendar className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
@@ -33,7 +33,7 @@ const Day3Footer: React.FC = () => {
 
             {/* Venue */}
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
+              <div className="w-10 h-10 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
                 <MapPin className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
@@ -44,7 +44,7 @@ const Day3Footer: React.FC = () => {
 
             {/* Time */}
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
+              <div className="w-10 h-10 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
                 <Clock className="w-6 h-6" />
               </div>
               <div className="flex flex-col">
@@ -55,7 +55,7 @@ const Day3Footer: React.FC = () => {
 
             {/* Contact */}
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
+              <div className="w-10 h-10 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
                 <Phone className="w-6 h-6" />
               </div>
               <div className="flex flex-col -space-y-1">

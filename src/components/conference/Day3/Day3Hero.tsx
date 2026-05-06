@@ -1,13 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Download, ChevronRight, Home, Users, Share2, ShieldCheck, Globe, Zap } from "lucide-react";
-import amanImage from "../../../assets/bhiya.png";
+import amanImage from "../../../assets/dayimagesarogyasangosti/sagar.png";
 
 const Day3Hero: React.FC = () => {
   return (
     <section className="relative min-h-[750px] lg:min-h-[680px] flex items-center overflow-hidden font-sans">
-
-      {/* Background Image */}
       <div
         className="absolute inset-0 z-0 w-full h-full"
         style={{
@@ -50,10 +48,10 @@ const Day3Hero: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="mb-3"
           >
-            <h1 className="text-[20px] sm:text-[26px] md:text-[32px] lg:text-[36px] font-[900] leading-[1.05] tracking-tighter">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] font-semibold font-sans leading-tight tracking-tight">
               <span className="text-[#0B2C66] block uppercase mb-0.5">Future Of</span>
               <span className="text-[#0B2C66] block uppercase">Preventive</span>
-              <span className="text-[#4E9F3D] block uppercase">Healthcare Conference</span>
+              <span className="text-[#4E9F3D] block uppercase">Healthcare <br /> Conference</span>
             </h1>
           </motion.div>
 
