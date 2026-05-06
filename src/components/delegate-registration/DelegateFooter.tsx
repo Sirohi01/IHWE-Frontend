@@ -91,10 +91,11 @@ const DelegateFooter: React.FC = () => {
             <div className="flex flex-col items-center md:items-start">
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Part of</p>
               <div className="flex items-center gap-4">
-                 <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
-                   {/* Placeholder for Expo Logo */}
-                   <div className="text-[8px] font-black text-center text-gray-300">EXPO<br/>LOGO</div>
-                 </div>
+                  <img 
+                    src="/logo.png" 
+                    alt="International Health & Wellness Expo" 
+                    className="w-14 h-14 object-contain"
+                  />
                  <div className="text-[12px] font-black text-[#143111] leading-tight">
                     <div>INTERNATIONAL</div>
                     <div className="text-green-600">HEALTH & WELLNESS</div>
@@ -109,14 +110,22 @@ const DelegateFooter: React.FC = () => {
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Supported By</p>
               <div className="flex items-center gap-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded bg-gray-50 flex items-center justify-center text-[7px] font-bold text-center leading-tight text-gray-400">Govt of<br/>India</div>
+                  <img 
+                    src="/MSME.png" 
+                    alt="Govt of India" 
+                    className="w-10 h-10 object-contain"
+                  />
                   <div className="text-[11px] font-black text-[#143111]">
                     <div>Ministry of AYUSH</div>
                     <div className="text-[8px] font-bold text-gray-400 uppercase">Government of India</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded bg-gray-50 flex items-center justify-center text-[7px] font-bold text-center leading-tight text-gray-400">NITI<br/>Aayog</div>
+                  <img 
+                    src="/MSME.png" 
+                    alt="NITI Aayog" 
+                    className="w-10 h-10 object-contain"
+                  />
                   <div className="text-[11px] font-black text-[#143111]">
                     <div>NITI Aayog</div>
                     <div className="text-[8px] font-bold text-gray-400 uppercase">Government of India</div>

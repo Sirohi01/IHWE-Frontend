@@ -20,9 +20,7 @@ const RegistrationHeader: React.FC = () => {
           <div className="hidden xl:flex items-center gap-3">
              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Part of</span>
              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
-                  <span className="text-[8px] font-black text-[#143111]">IHWE</span>
-                </div>
+                <img src="/logo.png" alt="IHWE 2026" className="w-10 h-10 object-contain" />
                 <div className="text-[10px] font-black leading-tight">
                   <div>INTERNATIONAL</div>
                   <div className="text-green-600">EXPO 2026</div>

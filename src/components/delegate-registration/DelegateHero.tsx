@@ -12,7 +12,7 @@ const DelegateHero: React.FC = () => {
 
   return (
     <section className="relative w-full h-[400px] overflow-hidden bg-[#F0F7EE]">
-      {/* Background Decorative Leaves (SVG or CSS) */}
+
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
         <div className="absolute top-10 left-10 w-40 h-40 bg-green-200 rounded-full blur-[80px]" />
         <div className="absolute bottom-20 left-1/4 w-60 h-60 bg-green-100 rounded-full blur-[100px]" />
