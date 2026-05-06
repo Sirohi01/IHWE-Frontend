@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const ConferenceCTA: React.FC = () => {
   return (
-    <section className="relative w-full py-12 overflow-hidden bg-[#0A1A31]">
+    <section className="relative w-full py-4 overflow-hidden bg-[#0A1A31]">
       {/* Background Image - Full Width */}
       <div className="absolute inset-0 z-0">
         <img
@@ -28,7 +28,7 @@ const ConferenceCTA: React.FC = () => {
             <img
               src={leafImg}
               alt="Leaf Icon"
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[180px] max-w-none w-auto object-contain opacity-100 drop-shadow-[0_0_20px_rgba(163,230,53,0.4)]"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[160px] max-w-none w-auto object-contain opacity-100 drop-shadow-[0_0_20px_rgba(163,230,53,0.4)]"
             />
           </div>
 
