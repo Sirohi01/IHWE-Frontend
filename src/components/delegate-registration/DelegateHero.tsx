@@ -42,28 +42,29 @@ const DelegateHero: React.FC = () => {
 
 
         <div className="absolute top-1/2 -translate-y-1/2 right-6 lg:right-10 z-20">
-          <div className="bg-[#143111] rounded-2xl p-7 w-[320px] shadow-2xl border border-white/5">
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                  <Calendar className="w-6 h-6 text-[#A3E635]" />
-                </div>
-                <div className="text-white">
-                  <h4 className="text-[16px] font-black leading-none">21 – 23 August 2026</h4>
-                  <p className="text-[12px] font-bold opacity-60 mt-1.5 uppercase">Thursday – Saturday</p>
-                </div>
+          <div className="bg-[#143111] rounded-[20px] p-6 w-[290px] shadow-2xl">
+            {/* Date Row */}
+            <div className="flex items-center gap-5">
+              <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center shrink-0">
+                <Calendar className="w-6 h-6 text-white" strokeWidth={1.5} />
               </div>
+              <div className="text-white">
+                <h4 className="text-[17px] font-bold leading-snug">21 – 23 August 2026</h4>
+                <p className="text-[13px] font-medium text-white/70">Thursday – Saturday</p>
+              </div>
+            </div>
 
-              <div className="h-[1px] w-full bg-white/10" />
+            {/* Divider */}
+            <div className="h-[1px] w-full bg-white/15 my-4" />
 
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                  <MapPin className="w-6 h-6 text-[#A3E635]" />
-                </div>
-                <div className="text-white">
-                  <h4 className="text-[16px] font-black leading-none">Pragati Maidan,</h4>
-                  <p className="text-[12px] font-bold opacity-60 mt-1.5 uppercase">New Delhi, India</p>
-                </div>
+            {/* Venue Row */}
+            <div className="flex items-center gap-5">
+              <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center shrink-0">
+                <MapPin className="w-6 h-6 text-white" strokeWidth={1.5} />
+              </div>
+              <div className="text-white">
+                <h4 className="text-[17px] font-bold leading-snug">Pragati Maidan,</h4>
+                <p className="text-[13px] font-medium text-white/70">New Delhi, India</p>
               </div>
             </div>
           </div>
