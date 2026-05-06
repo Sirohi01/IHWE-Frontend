@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Home", path: "/" },
   {
     label: "About Us",
-  
+
     dropdown: [
       {
         label: "About IHWE",
@@ -75,6 +75,12 @@ const navLinks = [
       {
         label: "MSME PMS Scheme",
         path: "/msme-pms-scheme",
+        icon: ShieldCheck,
+        description: "Government subsidy for MSME exhibitors"
+      },
+      {
+        label: "Govt MSME PMS Scheme",
+        path: "/government-msme-pms-schemes",
         icon: ShieldCheck,
         description: "Government subsidy for MSME exhibitors"
       },
