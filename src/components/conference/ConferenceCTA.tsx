@@ -8,22 +8,22 @@ import { Link } from "react-router-dom";
 
 const ConferenceCTA: React.FC = () => {
   return (
-    <section className="relative w-full py-4 overflow-hidden bg-[#0A1A31]">
-      {/* Background Image - Full Width */}
+    <section className="relative w-full py-3 overflow-hidden bg-[#0A1A31]">
+
       <div className="absolute inset-0 z-0">
         <img
           src={lastBg}
           alt="CTA Background"
           className="w-full h-full object-cover opacity-60"
         />
-        {/* Subtle Gradient Overlay */}
+
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1A31] via-transparent to-[#0A1A31]/50" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1380px] px-6 lg:px-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-        {/* Left Side: Leaf + Text */}
+
         <div className="flex items-center gap-6 lg:gap-12 flex-1">
-          {/* Skeleton Leaf Icon */}
+
           <div className="hidden md:block flex-shrink-0 w-[140px] relative h-10">
             <img
               src={leafImg}
@@ -33,11 +33,12 @@ const ConferenceCTA: React.FC = () => {
           </div>
 
           <div className="text-left">
-            <h2 className="text-[20px] md:text-[24px] font-[900] text-white leading-tight tracking-tight uppercase">
-              Learn. <span className="text-[#A3E635]">Connect.</span> <span className="text-[#1E88E5]">Lead.</span>
+            <h2 className="text-[20px] md:text-[24px] font-[900] text-white leading-tight tracking-tight capitalize">
+              Be Part of the <span className="text-green">Conversation</span><br />
+              That Shapes <span className="text-[#1E88E5]">Tomorrow</span>
             </h2>
             <p className="text-white/80 text-[14px] md:text-[16px] mt-3 font-medium max-w-[650px] leading-relaxed">
-              3 Days of world-class conferences, expert panels, and thought leadership sessions shaping the future of healthcare.
+              Join India's most influential healthcare and wellness<br />conference platform.
             </p>
           </div>
         </div>
@@ -50,7 +51,7 @@ const ConferenceCTA: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               className="group px-8 py-3.5 bg-gradient-to-r from-[#4E9F3D] to-[#2E7D32] text-white rounded-full font-black text-[12px] uppercase tracking-wider flex items-center gap-2 shadow-[0_10px_20px_rgba(78,159,61,0.3)] border border-white/10"
             >
-              REGISTER FOR DELEGATES
+              BOOK YOUR DELEGATE PASS
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>
