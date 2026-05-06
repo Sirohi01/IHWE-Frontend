@@ -153,7 +153,7 @@ const MsmePmsScheme = () => {
               {/* Gold Ribbon - Fixed position with refined spacing */}
               <div className="absolute top-3 left-4 sm:top-8 lg:left-0 z-30">
                 <div className="relative w-28 h-36 lg:w-32 lg:h-44 flex items-center justify-center">
-                  <img src="/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
+                  <img src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
                 </div>
               </div>
 
@@ -180,7 +180,7 @@ const MsmePmsScheme = () => {
                   <div className="relative flex items-center gap-3 md:gap-5 shrink-0">
                     <div className="relative w-20 h-24 md:w-24 md:h-32 shrink-0 flex items-center justify-center">
                       <img
-                        src="/msme_application_checklist_graphic2.png"
+                        src="/msmepmsscheme/mony-bag.png"
                         alt="Subsidy Bag"
                         className="w-full h-full object-contain relative z-10 drop-shadow-xl"
                       />
@@ -234,7 +234,7 @@ const MsmePmsScheme = () => {
         {/* Right Side: Image Banner - Bleeding to edge */}
         <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-[50%] overflow-hidden">
           <img
-            src="/msme_pms_header_banner_bg_1777877814391.png"
+            src="/msmepmsscheme/msme_pms_header_banner.png"
             alt="MSME Exhibition"
             className="w-full h-full object-cover object-[center_20%]"
           />
@@ -242,7 +242,7 @@ const MsmePmsScheme = () => {
           {/* <div className="absolute top-8 right-8 bg-white/95 backdrop-blur shadow-2xl p-4 rounded-xl flex items-center gap-4 border border-slate-100 z-20">
             <div className="flex flex-col items-center">
               <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mb-1">SUPPORTED BY</span>
-              <img src="/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
+              <img src="/msmepmsscheme/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
             </div>
             <div className="w-[1px] h-10 bg-slate-200"></div>
             <div className="flex flex-col text-[8px] font-black text-slate-800 leading-tight">
@@ -259,7 +259,7 @@ const MsmePmsScheme = () => {
         {/* Mobile Image (Visible only on mobile) */}
         <div className="lg:hidden relative min-h-[300px] overflow-hidden">
           <img
-            src="/msme_pms_header_banner_bg_1777877814391.png"
+            src="/msmepmsscheme/msme_pms_header_banner_bg_1777877814391.png"
             alt="MSME Exhibition"
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
           />
@@ -288,20 +288,20 @@ const MsmePmsScheme = () => {
           <div className="bg-white rounded-[12px] shadow-[0_8px_28px_rgba(0,0,0,0.035)] border border-slate-100 py-4 px-3">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
               {[
-                { icon: Globe, val: "1000+", label: "GLOBAL BUYERS" },
-                { icon: Landmark, val: "150+", label: "EXHIBITORS" },
-                { icon: Users, val: "8,000+", label: "VISITORS/ DELEGATES" },
-                { icon: Presentation, val: "18+", label: "CONFERENCE SESSIONS" },
-                { icon: Timer, val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
-                { icon: Handshake, val: "MULTIPLE", label: "NETWORKING EVENTS" },
+                { img: "/msmepmsscheme/img1.png", val: "1,000+", label: "GLOBAL BUYERS" },
+                { img: "/msmepmsscheme/exhibitors.png", val: "150+", label: "EXHIBITORS" },
+                { img: "/msmepmsscheme/visitors.png", val: "8,000+", label: "VISITORS/ DELEGATES" },
+                { img: "/msmepmsscheme/conference.png", val: "18+", label: "CONFERENCE SESSIONS" },
+                { img: "/msmepmsscheme/businessOpportunities.png", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
+                { img: "/msmepmsscheme/networkevents.png", val: "MULTIPLE", label: "NETWORKING EVENTS" },
               ].map((stat, i) => (
-                <div key={i} className={`flex items-center gap-3 px-3 sm:px-5 min-h-[56px] ${i !== 5 ? "lg:border-r border-slate-100" : ""} group`}>
-                  <div className="w-10 h-10 rounded-full bg-[#f5f8f2] flex items-center justify-center shrink-0 ring-1 ring-[#23471d]/10 group-hover:bg-[#23471d]/10 transition-colors">
-                    <stat.icon size={22} className="text-[#23471d]" strokeWidth={1.8} />
+                <div key={i} className={`flex items-center gap-3 px-3 sm:px-5 min-h-[56px] ${i !== 5 ? "lg:border-r border-slate-200/60" : ""} group`}>
+                  <div className="flex items-center justify-center shrink-0 w-10 h-10 md:w-11 md:h-11 transition-transform group-hover:scale-105">
+                    <img src={stat.img} alt={stat.label} className="w-full h-full object-contain" />
                   </div>
-                  <div>
-                    <div className="text-lg md:text-xl font-black text-slate-900 leading-none mb-1">{stat.val}</div>
-                    <div className="text-[8px] md:text-[9px] font-black text-slate-400 tracking-widest uppercase leading-tight">{stat.label}</div>
+                  <div className="flex flex-col justify-center">
+                    <span className="text-[16px] md:text-[18px] font-black text-slate-900 leading-none mb-0.5">{stat.val}</span>
+                    <span className="text-[8px] md:text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">{stat.label}</span>
                   </div>
                 </div>
               ))}
@@ -385,7 +385,7 @@ const MsmePmsScheme = () => {
               <div className="lg:col-span-3">
                 <div className="rounded-[20px] overflow-hidden shadow-lg border border-slate-100 h-full">
                   <img
-                    src="/msme_exhibition_stalls_grid.png"
+                    src="/msmepmsscheme/msme_exhibition_stalls_grid.png"
                     alt="Exhibition Stalls"
                     className="w-full h-full object-cover"
                   />
@@ -543,7 +543,7 @@ const MsmePmsScheme = () => {
                 {/* Checklist Graphic */}
                 <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
                   <img
-                    src="/msme_application_checklist_graphic.png"
+                    src="/msmepmsscheme/approved.png"
                     alt="Application Approved"
                     className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
                   />
