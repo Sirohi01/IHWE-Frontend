@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, FileText, UserCheck, Globe, Calendar, MapPin } from "lucide-react";
-import delegateBg from "@/assets/deligateimage/deligateimage.png";
+import delegateBg from "@/assets/deligateimage/deligatehero.png";
 
 const DelegateHero: React.FC = () => {
   const stats = [
