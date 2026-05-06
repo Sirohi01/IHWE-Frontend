@@ -223,18 +223,18 @@ const MsmePmsScheme = () => {
       </section >
 
       {/* Integrated Action Buttons Bar - Positioned immediately after Hero */}
-      < div className="bg-white py-2 px-4 lg:px-16 z-30" >
+      <div className="bg-white py-2 px-4 lg:px-16 z-30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
           <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
-            <Button className="h-12 px-8 bg-[#064420] hover:bg-[#0a5a2a] text-white font-black text-[12px] uppercase tracking-[0.1em] rounded transition-all flex items-center gap-4 group">
-              APPLY FOR PMS SCHEME NOW <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <Button className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
+              APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Button>
-            {/* <Button variant="outline" className="h-12 px-8 bg-white border-[#064420] text-[#064420] font-black text-[12px] uppercase tracking-[0.1em] rounded hover:bg-[#064420] hover:text-white transition-all flex items-center gap-4 group">
-              BOOK YOUR STALL <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            {/* <Button variant="outline" className="px-5 py-2 bg-white border border-[#064420] text-[#064420] font-bold text-[13px] uppercase tracking-wide rounded-lg hover:bg-[#064420] hover:text-white transition-all flex items-center gap-3 group">
+              BOOK YOUR STALL <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Button> */}
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Stats Bar (Rounded Card Style) */}
       < div className="relative z-40" >
@@ -242,10 +242,10 @@ const MsmePmsScheme = () => {
           <div className="bg-white rounded-[12px] shadow-[0_8px_28px_rgba(0,0,0,0.035)] border border-slate-100 py-4 px-3">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
               {[
-                { icon: Globe, val: "25+", label: "COUNTRIES" },
-                { icon: Landmark, val: "500+", label: "EXHIBITORS" },
-                { icon: Users, val: "20,000+", label: "TRADE VISITORS" },
-                { icon: Presentation, val: "50+", label: "CONFERENCE SESSIONS" },
+                { icon: Globe, val: "1000+", label: "GLOBAL BUYERS" },
+                { icon: Landmark, val: "150+", label: "EXHIBITORS" },
+                { icon: Users, val: "8,000+", label: "VISITORS/ DELEGATES" },
+                { icon: Presentation, val: "18+", label: "CONFERENCE SESSIONS" },
                 { icon: Timer, val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
                 { icon: Handshake, val: "MULTIPLE", label: "NETWORKING EVENTS" },
               ].map((stat, i) => (
@@ -651,12 +651,12 @@ const MsmePmsScheme = () => {
                             <p className="text-[9px] text-white/50 font-bold mb-3 uppercase tracking-tighter">Our team is here to assist you</p>
 
                             <div className="space-y-0.5 mb-3">
-                              <p className="text-[10px] font-black text-white">+91 98765 43210</p>
-                              <p className="text-[8px] font-bold text-white/60 truncate w-full">pms@healthwellnessexpo.com</p>
+                              <p className="text-[10px] font-black text-white">+91 9654900525</p>
+                              <p className="text-[8px] font-bold text-white/60 truncate w-full">info@ihwe.in</p>
                             </div>
 
                             <Link to="/contact" className="w-full">
-                              <Button variant="outline" className="w-full border-yellow-400/20 text-yellow-400 hover:bg-yellow-400 hover:text-[#1a3615] font-black text-[8px] uppercase tracking-[0.2em] h-8 rounded-md transition-all">
+                              <Button variant="outline" className="w-full border-yellow-400/50 text-yellow-400 bg-[#0b1d09] hover:bg-yellow-400 hover:text-[#1a3615] font-black text-[8px] uppercase tracking-[0.2em] h-8 rounded-md transition-all">
                                 CONTACT US
                               </Button>
                             </Link>
@@ -708,7 +708,8 @@ const MsmePmsScheme = () => {
                       Don't Miss This <span className="text-[#f3b71b]">Government-Supported</span> Opportunity!
                     </h3>
                     <p className="text-white/75 text-sm md:text-[15px] font-bold max-w-2xl leading-snug">
-                      Exhibit at IHWE 2026 and take your business to the next level <br className="hidden md:block" />
+                      Exhibit at IHWE 2026 and take your business to the next level
+                      <br className="hidden md:block" />
                       with financial support under the MSME PMS Scheme.
                     </p>
                   </div>
@@ -716,11 +717,11 @@ const MsmePmsScheme = () => {
 
                 {/* Right: Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-                  <Button className="h-12 px-8 bg-orange-500 hover:bg-orange-600 text-white font-black text-[12px] uppercase tracking-[0.12em] rounded-md shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
-                    APPLY NOW <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                  <Button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
+                    APPLY NOW <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
-                  {/* <Button variant="outline" className="h-12 px-8 border-white/25 bg-transparent text-white hover:bg-white/10 font-black text-[12px] uppercase tracking-[0.12em] rounded-md transition-all flex items-center justify-center gap-3 group/btn">
-                    BOOK YOUR STALL <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+                  {/* <Button variant="outline" className="px-5 py-2 border-white/25 bg-transparent text-white hover:bg-white/10 font-bold text-[13px] tracking-wide rounded-lg transition-all flex items-center justify-center gap-3 group/btn">
+                    BOOK YOUR STALL <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Button> */}
                 </div>
               </div>
@@ -734,10 +735,10 @@ const MsmePmsScheme = () => {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-8 w-full lg:w-auto">
                 {[
-                  { icon: Globe, val: "25+", label: "COUNTRIES" },
-                  { icon: Landmark, val: "500+", label: "EXHIBITORS" },
-                  { icon: Users, val: "20,000+", label: "TRADE VISITORS" },
-                  { icon: Presentation, val: "50+", label: "CONFERENCE SESSIONS" },
+                  { icon: Globe, val: "1000+", label: "GLOBAL BUYERS" },
+                  { icon: Landmark, val: "150+", label: "EXHIBITORS" },
+                  { icon: Users, val: "8,000+", label: "VISITORS/ DELEGATES" },
+                  { icon: Presentation, val: "18+", label: "CONFERENCE SESSIONS" },
                   { icon: Timer, val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
                 ].map((stat, i) => (
                   <div key={i} className="flex flex-col items-center lg:items-start">
@@ -750,7 +751,7 @@ const MsmePmsScheme = () => {
                 ))}
               </div>
 
-              <div className="flex flex-col items-center lg:items-end gap-3 shrink-0">
+              {/* <div className="flex flex-col items-center lg:items-end gap-3 shrink-0">
                 <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">FOLLOW US</span>
                 <div className="flex gap-4">
                   {[Facebook, Instagram, Linkedin, Youtube].map((Icon, i) => (
@@ -759,7 +760,7 @@ const MsmePmsScheme = () => {
                     </a>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div >
