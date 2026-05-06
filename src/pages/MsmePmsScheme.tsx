@@ -46,12 +46,29 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { msmePmsSchemeApi } from "@/lib/api";
 
 const MsmePmsScheme = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState({
+    companyName: '',
+    contactPerson: '',
+    mobileNumber: '',
+    emailId: '',
+    udyamNumber: '',
+    gstNumber: '',
+    category: '',
+    companyBrief: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -70,17 +87,44 @@ const MsmePmsScheme = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Application Submitted Successfully",
-        description: "Our team will review your application and get back to you shortly.",
+
+    try {
+      const submitData = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        submitData.append(key, value);
       });
-    }, 2000);
+
+      selectedFiles.forEach((file) => {
+        submitData.append('documents', file);
+      });
+
+      const response = await msmePmsSchemeApi.submit(submitData);
+
+      if (response.success) {
+        toast({ title: "Success", description: "Application Submitted successfully!" });
+        setFormData({
+          companyName: '',
+          contactPerson: '',
+          mobileNumber: '',
+          emailId: '',
+          udyamNumber: '',
+          gstNumber: '',
+          category: '',
+          companyBrief: ''
+        });
+        setSelectedFiles([]);
+      } else {
+        toast({ title: "Error", description: response.message || "Failed to submit application", variant: "destructive" });
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({ title: "Error", description: "An error occurred. Please try again.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -102,9 +146,9 @@ const MsmePmsScheme = () => {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-20">
           {/* Main Banner Container */}
-          <div className="flex flex-col lg:flex-row min-h-[550px]">
+          <div className="flex flex-col lg:flex-row min-h-[450px]">
             {/* Left Side: Content */}
-            <div className="lg:w-[50%] pt-40 sm:pt-4 pb-12 relative z-20 bg-white">
+            <div className="lg:w-[50%] pt-40 sm:pt-4 pb-0 relative z-20 bg-white flex flex-col justify-end">
 
               {/* Gold Ribbon - Fixed position with refined spacing */}
               <div className="absolute top-3 left-4 sm:top-8 lg:left-0 z-30">
@@ -126,45 +170,45 @@ const MsmePmsScheme = () => {
                   <span className="block md:whitespace-nowrap">Financial Assistance from Ministry of MSME, Government of India.</span>
                 </p>
 
-                {/* Subsidy Box - Final Refinement for Parity */}
               </div>
-              <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mt-6 mb-3 shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
-                <div className="bg-[#0d3b16] px-5 py-4 md:px-8 md:py-5 grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 relative overflow-hidden">
+              {/* Subsidy Box - Final Refinement for Parity */}
+              <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mt-auto shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
+                <div className="bg-[#0d3b16] px-5 py-8 md:px-6 md:py-10 grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 md:gap-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.26),transparent_55%)] pointer-events-none"></div>
 
                   {/* Left: Icon & Amount Container */}
-                  <div className="relative flex items-center gap-4 md:gap-6 shrink-0">
-                    <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-xl bg-[#0a2f11] flex items-center justify-center">
+                  <div className="relative flex items-center gap-3 md:gap-5 shrink-0">
+                    <div className="relative w-20 h-24 md:w-24 md:h-32 shrink-0 flex items-center justify-center">
                       <img
                         src="/msme_application_checklist_graphic2.png"
                         alt="Subsidy Bag"
-                        className="w-[90%] h-[90%] object-contain relative z-10"
+                        className="w-full h-full object-contain relative z-10 drop-shadow-xl"
                       />
                     </div>
 
-                    <div className="flex flex-col min-w-0">
-                      <div className="text-white/95 text-[11px] md:text-[13px] font-black leading-none">Get Up To</div>
+                    <div className="flex flex-col min-w-0 pr-2">
+                      <div className="text-white/95 text-[13px] md:text-[14px] font-semibold leading-none mb-1">Get Up To</div>
                       <div className="flex items-start">
-                        <span className="text-[#f3b71b] text-[38px] md:text-[54px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
-                        <span className="text-[#f4bd18] text-2xl md:text-4xl font-black mt-1 ml-1">*</span>
+                        <span className="text-[#f3b71b] text-[40px] md:text-[50px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-sm">₹1,50,000</span>
+                        <span className="text-[#f4bd18] text-2xl md:text-3xl font-black mt-0.5 ml-1">*</span>
                       </div>
-                      <div className="text-white text-[20px] md:text-[28px] font-black uppercase tracking-[0.16em] mt-1 leading-none">SUBSIDY</div>
-                      <div className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.08em] mt-1">UNDER MSME PMS SCHEME</div>
+                      <div className="text-white text-[24px] md:text-[30px] font-black tracking-[0.02em] mt-2 leading-none">SUBSIDY</div>
+                      <div className="text-white/90 text-[11px] md:text-[12px] font-medium mt-1.5 tracking-wide">Under MSME PMS Scheme</div>
                     </div>
                   </div>
 
                   {/* Right: Checklist Column */}
-                  <div className="flex flex-col gap-2.5 relative z-10 w-full md:border-l md:border-white/15 md:pl-6 lg:pl-10">
+                  <div className="flex flex-col gap-3 md:gap-4 relative z-10 w-full md:border-l md:border-white/10 md:pl-6 lg:pl-8">
                     {[
                       "Government Financial Support",
                       "Increase Market Reach",
                       "Grow Your Business Globally"
                     ].map((text, i) => (
-                      <div key={i} className="flex items-center gap-3 text-white text-[11px] md:text-[12px] font-bold">
-                        <div className="w-6 h-6 rounded-full border-2 border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
-                          <CheckCircle2 size={12} strokeWidth={3.5} />
+                      <div key={i} className="flex items-center gap-2 md:gap-3 text-white text-[12px] md:text-[13px] font-normal min-w-0">
+                        <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
+                          <CheckCircle2 size={14} strokeWidth={2.5} />
                         </div>
-                        <span className="opacity-95 tracking-tight">{text}</span>
+                        <span className="opacity-95 tracking-wide whitespace-nowrap text-ellipsis overflow-hidden">{text}</span>
                       </div>
                     ))}
                   </div>
@@ -180,9 +224,9 @@ const MsmePmsScheme = () => {
                 </div>
               </div>
 
-              <div className="text-[11px] text-slate-400 font-bold italic">
+              {/* <div className="text-[11px] text-slate-400 font-bold italic">
                 *Subsidy amount may vary as per MSME guidelines, category and approval.
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -225,13 +269,15 @@ const MsmePmsScheme = () => {
       {/* Integrated Action Buttons Bar - Positioned immediately after Hero */}
       <div className="bg-white py-2 px-4 lg:px-16 z-30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
-            <Button className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
-              APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button>
-            {/* <Button variant="outline" className="px-5 py-2 bg-white border border-[#064420] text-[#064420] font-bold text-[13px] uppercase tracking-wide rounded-lg hover:bg-[#064420] hover:text-white transition-all flex items-center gap-3 group">
-              BOOK YOUR STALL <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button> */}
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+            <div className="text-[11px] md:text-[12px] text-slate-500 font-bold italic max-w-md sm:pt-2">
+              *Subsidy amount may vary as per MSME guidelines, category and approval.
+            </div>
+            <div className="flex flex-col sm:flex-row justify-end items-center gap-3">
+              <Button onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
+                APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -553,19 +599,19 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Company / Organization Name <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
+                        <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
+                        <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
-                        <Input required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
+                        <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleInputChange} required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
-                        <Input required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
+                        <Input name="emailId" value={formData.emailId} onChange={handleInputChange} required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
                       </div>
                     </div>
 
@@ -573,15 +619,15 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Udyam Registration Number <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
+                        <Input name="udyamNumber" value={formData.udyamNumber} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">GST Number</label>
-                        <Input className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
+                        <Input name="gstNumber" value={formData.gstNumber} onChange={handleInputChange} className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
                       </div>
                       <div className="lg:col-span-2 space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Product / Service Category <span className="text-red-500">*</span></label>
-                        <Select required>
+                        <Select required value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
                           <SelectTrigger className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3">
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
@@ -601,7 +647,7 @@ const MsmePmsScheme = () => {
                       {/* Company Brief */}
                       <div className="lg:col-span-5 space-y-1 flex flex-col">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Brief About Your Company / Products <span className="text-red-500">*</span></label>
-                        <Textarea required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
+                        <Textarea name="companyBrief" value={formData.companyBrief} onChange={handleInputChange} required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
                       </div>
 
                       {/* Upload & Help Card Side */}
@@ -717,7 +763,7 @@ const MsmePmsScheme = () => {
 
                 {/* Right: Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-                  <Button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
+                  <Button onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
                     APPLY NOW <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                   </Button>
                   {/* <Button variant="outline" className="px-5 py-2 border-white/25 bg-transparent text-white hover:bg-white/10 font-bold text-[13px] tracking-wide rounded-lg transition-all flex items-center justify-center gap-3 group/btn">
