@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SectionContainer from '../layout/SectionContainer';
 import { 
   Users, 
   UserRound, 
@@ -50,8 +51,8 @@ const extras = [
 
 const BeyondExhibition = () => {
   return (
-    <section className="bg-white pt-0 pb-4 px-6 md:px-14 overflow-hidden">
-      <div className="max-w-[1500px] mx-auto">
+    <section className="bg-white pt-0 pb-4 overflow-hidden">
+      <SectionContainer>
         <div className="bg-[#ecfdf5] rounded-[1.2rem] p-2 lg:p-2.5 flex flex-col xl:flex-row items-center gap-2 border-[1px] border-[#d1fae5] shadow-sm">
           
           {/* LEFT HEADER */}
@@ -95,7 +96,7 @@ const BeyondExhibition = () => {
           </div>
 
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };

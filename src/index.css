@@ -326,4 +326,22 @@
   .animate-spin-slow {
     animation: spin-slow 8s linear infinite;
   }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #94A3B8;
+    border-radius: 10px;
+    border: 2px solid #F1F5F9;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748B;
+  }
 }

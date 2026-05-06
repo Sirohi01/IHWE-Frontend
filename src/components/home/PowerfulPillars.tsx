@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SectionContainer from "../layout/SectionContainer";
 import { Building2, Users, Trophy, Handshake, Leaf, Globe, Activity, Stethoscope, Landmark, GraduationCap, Package, Camera, ShieldCheck, UserCheck, Briefcase, Sparkles, Award } from "lucide-react";
 import { useState, useEffect } from "react";
 import { integratedFormatApi } from "../../lib/api";
@@ -45,8 +46,8 @@ const IntegratedFormatSection = () => {
   const cards = data.cards?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)) || [];
 
   return (
-    <section className="bg-white pt-16 pb-8 px-6 md:px-14 font-['Inter',sans-serif] overflow-hidden">
-      <div className="max-w-[1500px] mx-auto flex flex-col lg:flex-row items-center gap-8">
+    <section className="bg-white pt-4 pb-2 font-['Inter',sans-serif] overflow-hidden">
+      <SectionContainer className="flex flex-col lg:flex-row items-center gap-8">
 
         {/* LEFT COLUMN - HEADING (Narrower to allow more card width) */}
         <div className="w-full lg:w-[22%] flex flex-col items-start text-left shrink-0">
@@ -116,7 +117,7 @@ const IntegratedFormatSection = () => {
           ))}
         </div>
 
-      </div>
+      </SectionContainer>
     </section>
   );
 };

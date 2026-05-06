@@ -41,7 +41,7 @@ const participationCards = [
     color: "border-orange-200 bg-white",
     iconBg: "bg-orange-50 text-orange-600",
     arrowBg: "bg-orange-500",
-    link: "coming-soon"
+    link: "/conference"
   },
   
 

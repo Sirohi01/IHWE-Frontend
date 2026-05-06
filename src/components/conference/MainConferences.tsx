@@ -3,16 +3,15 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Lightbulb, Sprout, ShieldPlus, ArrowRight } from "lucide-react";
 
-// Import assets
-import ram1 from "../../assets/ram1.png";
-import ram2 from "../../assets/ram2.png";
-import ram3 from "../../assets/ram3.png";
+import day1 from "../../assets/confrencetrack/day1.png";
+import day2 from "../../assets/confrencetrack/day2.png";
+import day3 from "../../assets/confrencetrack/day3.png";
 
 const MainConferences: React.FC = () => {
   const mainConferences = [
     {
       day: "DAY 1",
-      date: "20 AUGUST 2026",
+      date: "21 AUGUST 2026",
       title: "HEALTHCARE INNOVATION SUMMIT",
       sessions: [
         "Smart Hospitals & Digital Transformation",
@@ -20,16 +19,16 @@ const MainConferences: React.FC = () => {
         "Diagnostics & Precision Medicine",
         "Infrastructure & Investment"
       ],
-      image: ram1,
+      image: day1,
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
-      shadowColor: "hover:shadow-[#4E9F3D]/20",
+
       link: "/conference/day-1"
     },
     {
       day: "DAY 2",
-      date: "21 AUGUST 2026",
+      date: "22 AUGUST 2026",
       title: "GLOBAL WELLNESS LEADERSHIP FORUM",
       sessions: [
         "Wellness Economy & Global Opportunities",
@@ -37,16 +36,16 @@ const MainConferences: React.FC = () => {
         "Fitness, Preventive Health & Lifestyle Medicine",
         "Beauty, Personal Care & Wellness Innovation"
       ],
-      image: ram2,
+      image: day2,
       icon: <Sprout className="w-10 h-10 text-white" />,
       accentColor: "#E67E22",
       badgeColor: "bg-[#92400E]",
-      shadowColor: "hover:shadow-[#E67E22]/20",
+
       link: "/conference/day-2"
     },
     {
       day: "DAY 3",
-      date: "22 AUGUST 2026",
+      date: "23 AUGUST 2026",
       title: "WELLNESS & AYUSH LEADERSHIP FORUM",
       sessions: [
         "Ayurveda & Traditional Wisdom",
@@ -54,11 +53,11 @@ const MainConferences: React.FC = () => {
         "Yoga, Mental Health & Wellness",
         "Herbal Industry & Natural Products"
       ],
-      image: ram3,
+      image: day3,
       icon: <ShieldPlus className="w-10 h-10 text-white" />,
       accentColor: "#7C3AED",
       badgeColor: "bg-[#581C87]",
-      shadowColor: "hover:shadow-[#7C3AED]/20",
+      shadowColor: "",
       link: "/conference/day-3"
     }
   ];
@@ -73,88 +72,81 @@ const MainConferences: React.FC = () => {
           </h2>
           <div className="h-1 w-20 bg-[#4E9F3D] mx-auto mt-2 rounded-full" />
         </div>
-        {/* Cards grid */}
+
         <div className="grid lg:grid-cols-3 gap-6">
           {mainConferences.map((conf, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.7 }}
-              className={`group relative rounded-[32px] overflow-hidden bg-white shadow-xl transition-all duration-500 ${conf.shadowColor} hover:-translate-y-2 min-h-[400px] flex flex-col`}
-            >
-              {/* Background Image */}
-              <div className="absolute inset-0">
-                <img
-                  src={conf.image}
-                  alt={conf.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                {/* Subtle gradient overlay to ensure text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent opacity-90" />
-              </div>
+            <Link to={conf.link || "#"} key={index} className="block h-full cursor-pointer">
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.7 }}
+                className={`group relative rounded-[32px] overflow-hidden bg-white  transition-all duration-500 ${conf.shadowColor} hover:-translate-y-2 min-h-[330px] flex flex-col h-full`}
+              >
 
-              {/* Card Content */}
-              <div className="relative z-10 p-6 flex flex-col h-full">
-                {/* Header: Day and Date */}
-                <div className="flex justify-between items-start mb-4">
-                  {/* Day Badge */}
-                  <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-8 py-3 rounded-br-[24px] font-black text-[18px] tracking-wider shadow-lg`}>
-                    {conf.day}
-                  </div>
+                <div className="absolute inset-0 w-full h-full overflow-hidden">
+                  <img
+                    src={conf.image}
+                    alt={conf.title}
+                    className="w-full h-full object-cover object-center transition-transform duration-700 scale-110 group-hover:scale-125"
+                  />
 
-                  {/* Date */}
-                  <div className="ml-auto text-[14px] font-bold text-gray-700 bg-white/50 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
-                    {conf.date}
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-white/90" />
                 </div>
 
-                {/* Top Right Icon */}
-                <div className="absolute top-6 right-6">
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white shadow-2xl backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
-                    style={{ backgroundColor: `${conf.accentColor}dd` }}
-                  >
-                    {React.cloneElement(conf.icon as React.ReactElement, { className: "w-8 h-8 text-white" })}
-                  </div>
-                </div>
 
-                {/* Title */}
-                <h3
-                  className="text-[22px] font-[900] leading-[1.2] mb-3 mt-10 uppercase"
-                  style={{ color: "#0B2C66" }}
-                >
-                  {conf.title}
-                </h3>
+                <div className="relative z-10 p-6 flex flex-col h-full">
 
-                {/* Sessions List */}
-                <div className="space-y-2 mb-auto">
-                  {conf.sessions.map((session, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <div
-                        className="w-2 rounded-full mt-1.5 flex-shrink-0"
-                        style={{ backgroundColor: conf.accentColor, height: "8px", width: "8px" }}
-                      />
-                      <span className="text-[13px] font-bold text-gray-800 leading-snug">
-                        {session}
-                      </span>
+                  <div className="flex justify-center items-start mb-4 w-full">
+
+                    <div className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 py-2 rounded-br-[20px] font-black text-[18px] tracking-wider `}>
+                      {conf.day}
                     </div>
-                  ))}
-                </div>
 
-                {/* View Sessions Button */}
-                <Link to={conf.link || "#"} className="mt-4">
-                  <button
-                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-black text-[13px] uppercase tracking-[1px] transition-all duration-300 text-white shadow-lg active:scale-[0.98]"
-                    style={{ backgroundColor: conf.accentColor }}
+
+                    <div
+                      className="text-[16px] font-[900] px-6 py-2 -mt-4"
+                      style={{ color: conf.accentColor }}
+                    >
+                      {conf.date}
+                    </div>
+                  </div>
+
+
+                  <div className="absolute top-6 right-6">
+                    <div
+                      className="w-16 h-16 rounded-full flex items-center justify-center border-4 border-white  backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
+                      style={{ backgroundColor: `${conf.accentColor}dd` }}
+                    >
+                      {React.cloneElement(conf.icon as React.ReactElement, { className: "w-8 h-8 text-white" })}
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className="text-[19px] font-[900] leading-[1.2] mb-3 mt-8 uppercase"
+                    style={{ color: "#0B2C66" }}
                   >
-                    VIEW SESSIONS
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </button>
-                </Link>
-              </div>
-            </motion.div>
+                    {conf.title}
+                  </h3>
+
+                  {/* Sessions List */}
+                  <div className="space-y-2 mb-auto">
+                    {conf.sessions.map((session, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <div
+                          className="w-2 rounded-full mt-1.5 flex-shrink-0"
+                          style={{ backgroundColor: conf.accentColor, height: "8px", width: "8px" }}
+                        />
+                        <span className="text-[12px] font-bold text-gray-800 leading-snug">
+                          {session}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

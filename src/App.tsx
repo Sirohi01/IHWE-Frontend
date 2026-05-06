@@ -11,7 +11,7 @@ const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
-const Conference = lazy(() => import("./pages/Conference"));
+import Conference from "./pages/Conference";
 const Exhibitors = lazy(() => import("./pages/Exhibitors"));
 const WhyExhibit = lazy(() => import("./pages/WhyExhibit"));
 const BookAStand = lazy(() => import("./pages/BookAStand"));
@@ -116,6 +116,7 @@ import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
+const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 
 
 const queryClient = new QueryClient();
@@ -162,6 +163,7 @@ const App = () => {
                     <Route path="/conference/day-1" element={<ConferenceDay1 />} />
                     <Route path="/conference/day-2" element={<ConferenceDay2 />} />
                     <Route path="/conference/day-3" element={<ConferenceDay3 />} />
+                    <Route path="/delegate-registration" element={<DelegateRegistration />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />

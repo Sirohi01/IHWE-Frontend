@@ -927,3 +927,13 @@ export const speakerApi = {
         return data.success ? data.data : [];
     }
 };
+
+export const msmePmsSchemeApi = {
+    submit: async (payload: FormData) => {
+        const response = await fetch(`${API_URL}/msme-pms-scheme/apply`, {
+            method: 'POST',
+            body: payload
+        });
+        return await response.json();
+    }
+};

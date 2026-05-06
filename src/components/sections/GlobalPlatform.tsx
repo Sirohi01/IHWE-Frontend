@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { globalPlatformApi, SERVER_URL } from '@/lib/api';
+import SectionContainer from '../layout/SectionContainer';
 
 interface PlatformData {
   subheading: string;
@@ -52,7 +53,7 @@ const GlobalPlatform: React.FC = () => {
 
   return (
     <section className="pt-6 pb-0 lg:pt-6 lg:pb-0 bg-white relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-7xl">
+      <SectionContainer>
         <div className="grid lg:grid-cols-[1fr_1.3fr] gap-16 items-center">
 
           {/* ── LEFT: SINGLE IMAGE ── */}
@@ -163,7 +164,7 @@ const GlobalPlatform: React.FC = () => {
           </div>
 
         </div>
-      </div>
+      </SectionContainer>
     </section>
   );
 };

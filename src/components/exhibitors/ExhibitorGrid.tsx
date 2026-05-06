@@ -11,14 +11,14 @@ interface Props {
     isLoadingMore?: boolean;
 }
 
-const ExhibitorGrid: React.FC<Props> = ({ exhibitors, onLoadMore, hasMore, isLoadingMore }) => {
+const ExhibitorGrid: React.FC<Props> = ({ exhibitors }) => {
     return (
         <section className="pb-3 pt-2 bg-white min-h-[600px]">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12">
                 <VirtuosoGrid
                     data={exhibitors}
                     useWindowScroll
-                    listClassName="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4"
+                    listClassName="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-10 gap-3"
                     itemContent={(index, exhi) => (
                         <motion.div
                             key={exhi._id}
@@ -47,26 +47,6 @@ const ExhibitorGrid: React.FC<Props> = ({ exhibitors, onLoadMore, hasMore, isLoa
                 {exhibitors.length === 0 && (
                     <div className="text-center py-24 text-gray-400 italic">
                         No exhibitors found matching your search.
-                    </div>
-                )}
-
-                {hasMore && (
-                    <div className="mt-2 flex flex-col items-center">
-                        <button
-                            onClick={onLoadMore}
-                            disabled={isLoadingMore}
-                            className="flex items-center gap-6 px-7 py-2 bg-white border border-gray-200 rounded-xl text-[12px] font-bold uppercase tracking-[0.05em] text-[#1a4a2a] hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm group disabled:opacity-50"
-                        >
-                            {isLoadingMore ? (
-                                <>
-                                    Loading... <Loader2 className="w-4 h-4 animate-spin" />
-                                </>
-                            ) : (
-                                <>
-                                    LOAD MORE EXHIBITORS <ChevronDown className="w-4 h-4 text-gray-400 group-hover:translate-y-0.5 transition-transform" />
-                                </>
-                            )}
-                        </button>
                     </div>
                 )}
             </div>

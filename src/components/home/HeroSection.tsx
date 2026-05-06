@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Sparkles, ArrowRight, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { heroApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "../layout/SectionContainer";
 
 // Sparkle component for the golden button
 const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
@@ -174,6 +175,22 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
           transform: skewX(-20deg);
           animation: shimmer 2s infinite;
         }
+        .hero-title-responsive {
+          font-size: var(--desktop-fs) !important;
+        }
+        .hero-desc-responsive {
+          font-size: var(--desktop-fs-desc) !important;
+        }
+        @media (max-width: 768px) {
+          .hero-title-responsive {
+            font-size: clamp(20px, calc(var(--desktop-fs) * 0.7), 30px) !important;
+            line-height: 1.2 !important;
+          }
+          .hero-desc-responsive {
+            font-size: clamp(13px, calc(var(--desktop-fs-desc) * 0.8), 15px) !important;
+            line-height: 1.5 !important;
+          }
+        }
       `}</style>
 
       <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/5.62]">
@@ -217,8 +234,8 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
         <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
-
-        <div className="relative z-20 px-6 md:px-14 h-full flex flex-col justify-center items-start text-left text-white">
+        
+        <SectionContainer className="relative z-20 h-full flex flex-col justify-center items-start text-left text-white">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -253,11 +270,12 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 className={cn(
                   "font-bold leading-[1.1] tracking-tight text-white uppercase [&_p]:mb-0 [&_div]:mb-0 last:[&_p]:mb-0 last:[&_div]:mb-0",
                   slides[current].title2 ? "mb-[0px]" : "mb-5",
-                  !slides[current].titleFontSize && "text-3xl md:text-4xl lg:text-5xl"
+                  slides[current].titleFontSize ? "hero-title-responsive" : "text-xl sm:text-2xl md:text-4xl lg:text-5xl"
                 )}
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined,
+                  // @ts-ignore
+                  "--desktop-fs": slides[current].titleFontSize ? `${slides[current].titleFontSize}px` : undefined,
                   textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].title }}
@@ -270,11 +288,12 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                   transition={{ delay: 0.35, duration: 0.9 }}
                   className={cn(
                     "font-bold mb-5 leading-[1.1] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_div]:m-0 [&_p]:p-0 [&_div]:p-0",
-                    !slides[current].title2FontSize && "text-3xl md:text-4xl lg:text-5xl"
+                    slides[current].title2FontSize ? "hero-title-responsive" : "text-xl sm:text-2xl md:text-4xl lg:text-5xl"
                   )}
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined,
+                    // @ts-ignore
+                    "--desktop-fs": slides[current].title2FontSize ? `${slides[current].title2FontSize}px` : undefined,
                     textShadow: '0 0 15px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6), 0 0 45px rgba(0,0,0,0.4)'
                   }}
                   dangerouslySetInnerHTML={{ __html: slides[current].title2 }}
@@ -285,10 +304,14 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.9 }}
-                className="font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0"
+                className={cn(
+                  "font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0",
+                  slides[current].descriptionFontSize ? "hero-desc-responsive" : "text-xs sm:text-sm md:text-base"
+                )}
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined,
+                  // @ts-ignore
+                  "--desktop-fs-desc": slides[current].descriptionFontSize ? `${slides[current].descriptionFontSize}px` : undefined,
                   textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
                 }}
                 dangerouslySetInnerHTML={{ __html: slides[current].description }}
@@ -411,7 +434,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
             </motion.div>
           </motion.div>
         </AnimatePresence>
-      </div>
+      </SectionContainer>
 
         <div className="hidden md:flex absolute bottom-16 right-12 z-30 flex flex-col gap-6">
           {slides.map((_, i) => (
