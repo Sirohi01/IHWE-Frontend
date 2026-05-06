@@ -10,7 +10,7 @@ const navLinks = [
   { label: "Home", path: "/" },
   {
     label: "About Us",
-  
+
     dropdown: [
       {
         label: "About IHWE",
@@ -75,6 +75,12 @@ const navLinks = [
       {
         label: "MSME PMS Scheme",
         path: "/msme-pms-scheme",
+        icon: ShieldCheck,
+        description: "Government subsidy for MSME exhibitors"
+      },
+      {
+        label: "Govt MSME PMS Scheme",
+        path: "/government-msme-pms-schemes",
         icon: ShieldCheck,
         description: "Government subsidy for MSME exhibitors"
       },
@@ -375,10 +381,8 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#23471d] transition-colors leading-tight">Visitor<br />Pass</span>
                             </Link>
 
-                            <a
-                              href="https://namogange.org/arogya-sangoshthi.php"
-                              target="_blank"
-                              rel="noopener noreferrer"
+                            <Link
+                              to="/delegate-registration"
                               onClick={() => {
                                 setActiveDropdown(null);
                                 analyticsApi.logClick("Registration: Delegates Register");
@@ -389,7 +393,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                                 <Handshake className="w-3 h-3" />
                               </div>
                               <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wider group-hover:text-[#d26019] transition-colors leading-tight">Delegates<br />Register</span>
-                            </a>
+                            </Link>
 
                             <Link
                               to="/buyer-registration"

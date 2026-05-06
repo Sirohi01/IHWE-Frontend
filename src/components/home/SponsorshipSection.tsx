@@ -379,7 +379,7 @@ const SponsorshipSection = () => {
       ══════════════════════════════════════════ */}
       <div className="bg-white pb-16">
         <SectionContainer>
-          
+
           {/* 1. Limited Slots Bar */}
           <div className="flex flex-col md:flex-row items-center justify-start gap-4 mb-8 -mt-6 pt-2 pb-2.5 px-4 rounded-2xl border border-slate-100 max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
             <div className="flex items-center gap-3">

@@ -10,7 +10,7 @@ const ConferenceHero: React.FC = () => {
   return (
     <section className="relative min-h-[750px] lg:min-h-[680px] flex items-center overflow-hidden font-sans">
 
-      {/* Background Image */}
+
       <div
         className="absolute inset-0 z-0 w-full h-full"
         style={{
@@ -23,11 +23,11 @@ const ConferenceHero: React.FC = () => {
         <div className="absolute inset-0 bg-white/75 lg:bg-white/10" />
       </div>
 
-      {/* Content Container */}
+
       <div className="container mx-auto px-8 lg:px-16 relative z-20">
         <div className="max-w-[600px]">
 
-          {/* Logo Section */}
+
           <div className="flex flex-col items-start gap-0 mb-1">
             <div className="flex items-center gap-1">
               <span className="text-[12px] sm:text-[14px] uppercase tracking-[0.3em] sm:tracking-[0.4em]" style={{ color: darkYellow, fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400 }}>
@@ -43,7 +43,7 @@ const ConferenceHero: React.FC = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mt-1 sm:mt-2"  // Reduced from mt-4 to mt-1
+              className="mt-1 sm:mt-2"
             >
               <img
                 src={arogyaLogo}
@@ -53,7 +53,7 @@ const ConferenceHero: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Badge - Reduced gap */}
+
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -65,7 +65,7 @@ const ConferenceHero: React.FC = () => {
             IHWE CONFERENCE 2026
           </motion.div>
 
-          {/* Main Heading - Stacked vertically, larger font, reduced gaps */}
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -82,7 +82,7 @@ const ConferenceHero: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Description - Reduced gap */}
+
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -94,7 +94,6 @@ const ConferenceHero: React.FC = () => {
             leadership sessions shaping the future of healthcare.
           </motion.p>
 
-          {/* Buttons - Reduced gap */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -102,13 +101,15 @@ const ConferenceHero: React.FC = () => {
             className="flex flex-col sm:flex-row gap-3 sm:gap-4"
             style={{ marginTop: '8px' }}
           >
-            <button
-              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4E9F3D] text-white text-[10px] sm:text-[11px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all whitespace-nowrap"
-              style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400 }}
-            >
-              REGISTER FOR DELEGATES
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
+            <Link to="/delegate-registration">
+              <button
+                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4E9F3D] text-white text-[10px] sm:text-[11px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all whitespace-nowrap"
+                style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400 }}
+              >
+                REGISTER FOR DELEGATES
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </button>
+            </Link>
             <Link to="/speaker-registration">
               <button
                 className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-white text-[#0B2C66] text-[10px] sm:text-[11px] uppercase tracking-wide border border-[#E6ECF3] flex items-center justify-center gap-2 transition-all w-full sm:w-auto"

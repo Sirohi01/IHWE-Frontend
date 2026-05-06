@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote, Leaf } from "lucide-react";
+import { testimonialsApi } from "@/lib/api";
 
 const FALLBACK_TESTIMONIALS = [
   {
@@ -32,7 +33,8 @@ const FALLBACK_TESTIMONIALS = [
 const IndustryVoices: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const scroll = useCallback((direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -49,19 +51,31 @@ const IndustryVoices: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await testimonialsApi.get();
+        if (result) {
+          setData(result);
+        }
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
         scroll("right");
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [loading, data?.cards?.length, isPaused, scroll]);
+  }, [loading, data, isPaused, scroll]);
 
-  if (loading) return null;
-  if (!data || !data.cards || data.cards.length === 0) return null;
-
-  const { subheading, heading, highlightText, cards } = data;
-  const headingParts = (heading && highlightText) ? heading.split(highlightText) : [heading || "", ""];
+  const testimonials = data?.cards || FALLBACK_TESTIMONIALS;
 
   return (
     <section className="py-4 bg-white overflow-hidden">
@@ -111,7 +125,7 @@ const IndustryVoices: React.FC = () => {
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar scroll-smooth"
           >
-            {FALLBACK_TESTIMONIALS.map((item, index) => (
+            {testimonials.map((item: any, index: number) => (
               <div
                 key={index}
                 className="w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start"

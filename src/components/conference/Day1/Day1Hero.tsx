@@ -42,7 +42,7 @@ const Day1Hero: React.FC = () => {
               Day 1
             </span>
             <span className="px-5 py-1.5 bg-white text-[#0B2C66] text-[13px] font-black rounded-full uppercase tracking-widest border-2 border-[#0B2C66] shadow-sm">
-              20 August 2026
+              21 August 2026
             </span>
           </div>
 

@@ -49,9 +49,8 @@ const Day3Hero: React.FC = () => {
             className="mb-3"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] font-semibold font-sans leading-tight tracking-tight">
-              <span className="text-[#0B2C66] block uppercase mb-0.5">Future Of</span>
-              <span className="text-[#0B2C66] block uppercase">Preventive</span>
-              <span className="text-[#4E9F3D] block uppercase">Healthcare <br /> Conference</span>
+              <span className="text-[#0B2C66] block uppercase mb-0.5">Wellness & Ayush</span>
+              <span className="text-[#4E9F3D] block uppercase">Leadership Forum</span>
             </h1>
           </motion.div>
 
