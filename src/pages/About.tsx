@@ -624,7 +624,7 @@ const About = () => {
             <h2 className="text-[#23471d] font-black text-2xl leading-[1.3] mb-1" style={{ fontFamily: "'Inter', sans-serif" }}>
               {journeyData?.mainTitle || "A Legacy of Growth & Innovation"}
             </h2>
-            <p className="text-gray-900 text-[13px] leading-[1.7] max-w-2xl text-justify" style={{ fontFamily: "'Inter', sans-serif", textAlign: 'justify' }}>
+            <p className="text-gray-900 text-[13px] leading-[1.7] mt-1" style={{ fontFamily: "'Inter', sans-serif" }}>
               {journeyData?.mainDescription || "With a proven legacy of delivering result-oriented exhibitions, we forge lasting business relationships and accelerate industry growth."}
             </p>
           </div>
@@ -936,8 +936,8 @@ const About = () => {
       </section>
 
       {/* OUR VENUE - Why Pragati Maidan */}
-      <section className="pt-4 pb-4 bg-white border-t border-gray-100">
-        <div className="container mx-auto px-6">
+      <section className="pt-4 pb-8 bg-white border-t border-gray-100">
+        <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
 
             {/* LEFT - Venue Image - NO border radius */}
@@ -1037,7 +1037,7 @@ const About = () => {
               </div>
             </div>
           </div>
-        </div>
+        </SectionContainer>
       </section>
 
       <style>{`
@@ -1084,41 +1084,39 @@ const About = () => {
           className="pointer-events-none absolute inset-0 opacity-50"
         />
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-start gap-10 lg:gap-40">
+        <SectionContainer className="relative z-10">
+          <div className="flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-4">
             {/* Text Side */}
-            <div className="text-center lg:text-left max-w-2xl" data-aos="fade-right">
-              <div className="flex items-center justify-center lg:justify-start gap-2.5 mb-1.5">
+            <div className="text-center xl:text-left max-w-2xl" data-aos="fade-right">
+              <div className="flex items-center justify-center xl:justify-start gap-2.5 mb-1.5">
                 <div className="h-[1.5px] w-6 bg-[#F3B71B]" />
                 <span className="text-[#F3B71B] font-bold text-[10px] uppercase tracking-[0.25em]">
                   Ignite Your Growth
                 </span>
               </div>
               <h3
-                className="text-white font-extrabold text-2xl md:text-3xl mb-1 leading-tight"
+                className="text-white font-extrabold text-xl md:text-2xl mb-1 leading-tight"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Be Part of India's Global Wellness Movement
               </h3>
-              <p className="text-white/70 font-medium text-[12px] max-w-xl">
+              <p className="text-white/70 font-medium text-[11px] max-w-xl">
                 Exhibit. Connect. Collaborate. Grow. Join healthcare leaders in building the future of wellness.
               </p>
             </div>
 
-            {/* Buttons Side: 2x2 Grid */}
+            {/* Buttons Side: Single Row */}
             <div
-              className="grid grid-cols-2 gap-4 w-full lg:w-auto"
+              className="flex flex-wrap xl:flex-nowrap items-center justify-center gap-2.5 w-full xl:w-auto"
               data-aos="fade-left"
             >
               {[
                 { label: "BOOK YOUR STALL", link: "/book-a-stand", style: "gold" },
-                  { label: "REGISTER AS VISITOR", link: "/visitor-registration", style: "white" },
-                   { label: "REGISTER AS DELEGATE", link: "/contact", style: "white" },
-                { label: "REGISTER AS BUYER", link: "/buyer-registration", style: "white" },
-    
-              
+                { label: "VISITOR REGISTRATION", link: "/visitor-registration", style: "white" },
+                { label: "DELEGATE REGISTER", link: "/contact", style: "white" },
+                { label: "BUYER REGISTER", link: "/buyer-registration", style: "white" },
               ].map((btn, i) => (
-                <div key={i} className="relative group/btn">
+                <div key={i} className="relative group/btn flex-1 xl:flex-none">
                   {btn.style === "gold" && (
                     <>
                       <span style={{ position: 'absolute', pointerEvents: 'none', fontSize: '10px', color: '#fff176', textShadow: '0 0 6px gold', animation: 'sparkleAnim 1.6s ease-in-out infinite', opacity: 0, zIndex: 20, top: '-6px', left: '10%', animationDelay: '0s' }} className="group-hover/btn:opacity-100 transition-opacity">✦</span>
@@ -1129,7 +1127,7 @@ const About = () => {
                   )}
                   <Link
                     to={btn.link}
-                    className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[150px] relative z-10
+                    className={`px-3 py-2 text-[8.5px] font-black uppercase tracking-[0.1em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[135px] xl:min-w-[145px] relative z-10
                       ${btn.style === "gold" ? "golden-btn-footer text-[#1a3516]" : ""}
                       ${btn.style === "white" ? "bg-white text-[#23471d] hover:bg-[#F3B71B]" : ""}
                     `}
@@ -1141,7 +1139,7 @@ const About = () => {
               ))}
             </div>
           </div>
-        </div>
+        </SectionContainer>
       </section>
 
 

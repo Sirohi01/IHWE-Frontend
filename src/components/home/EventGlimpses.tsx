@@ -5,6 +5,7 @@ import {
   Building2, Mic, Sparkles, Globe
 } from 'lucide-react';
 import { glimpseApi, SERVER_URL } from '../../lib/api';
+import SectionContainer from '../layout/SectionContainer';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Users: <Users className="w-5 h-5" />,
@@ -69,7 +70,7 @@ const EventGlimpses = () => {
 
   return (
     <section
-      className="relative pt-6 pb-12 px-4 md:px-0 overflow-hidden font-inter"
+      className="relative pt-6 pb-12 overflow-hidden font-inter"
       style={{ background: '#f5fdf6' }}
     >
       {/* ── BG DECORATIVE ELEMENTS ── */}
@@ -116,7 +117,7 @@ const EventGlimpses = () => {
       </svg>
 
       {/* ── CONTENT ── */}
-      <div className="relative z-10 max-w-[1400px] mx-auto">
+      <SectionContainer className="relative z-10">
 
         {/* Header */}
         <div className="text-center mb-8 px-4">
@@ -257,7 +258,7 @@ const EventGlimpses = () => {
           </div>
         </div>
 
-      </div>
+      </SectionContainer>
     </section>
   );
 };

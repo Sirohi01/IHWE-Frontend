@@ -1,4 +1,5 @@
 import React from 'react';
+import SectionContainer from '../layout/SectionContainer';
 
 const categories = [
   {
@@ -261,7 +262,7 @@ const ExhibitionCategories = () => {
 
   return (
     <section className="bg-white pt-8 md:pt-10 pb-4 md:pb-4 overflow-hidden">
-      <div className="w-full px-6 md:px-14 mx-auto max-w-[1500px]">
+      <SectionContainer>
 
         {/* ── Heading ── */}
         <div style={{
@@ -329,7 +330,7 @@ const ExhibitionCategories = () => {
           ))}
         </div>
 
-      </div>
+      </SectionContainer>
     </section>
   );
 };

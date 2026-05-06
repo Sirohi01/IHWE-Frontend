@@ -353,15 +353,15 @@ const SponsorshipSection = () => {
                 <div className="flex items-center gap-3">
                   <Home className="w-5 h-5 text-[#78903a]" />
                   <div>
-                    <p className="text-white font-bold text-sm leading-none">1,500+</p>
+                    <p className="text-white font-bold text-sm leading-none">150+</p>
                     <p className="text-white/50 text-[9px] uppercase tracking-wider">Exhibitors</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <Users2 className="w-5 h-5 text-[#78903a]" />
                   <div>
-                    <p className="text-white font-bold text-sm leading-none">80,000+</p>
-                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Visitors</p>
+                    <p className="text-white font-bold text-sm leading-none">8000+</p>
+                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Visitors/Delegates</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -374,7 +374,7 @@ const SponsorshipSection = () => {
                 <div className="flex items-center gap-3">
                   <TrendingUp className="w-5 h-5 text-[#78903a]" />
                   <div>
-                    <p className="text-white font-bold text-sm leading-none">₹1,500CR+</p>
+                    <p className="text-white font-bold text-sm leading-none">₹150CR+</p>
                     <p className="text-white/50 text-[9px] uppercase tracking-wider">Business</p>
                   </div>
                 </div>
@@ -436,7 +436,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           TRUSTED BY LEADING BRANDS
       ══════════════════════════════════════════ */}
-      <div className="pb-10">
+      {/* <div className="pb-10">
         <SectionContainer>
 
           <div className="flex items-center gap-4 mb-6">
@@ -466,7 +466,7 @@ const SponsorshipSection = () => {
           </div>
 
         </SectionContainer>
-      </div>
+      </div> */}
     </section>
   );
 };
