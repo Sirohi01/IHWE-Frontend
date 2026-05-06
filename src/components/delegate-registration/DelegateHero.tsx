@@ -1,7 +1,6 @@
 import React from "react";
 import { Users, FileText, UserCheck, Globe, Calendar, MapPin } from "lucide-react";
-import delegateBg from "@/assets/deligateimage/deligatehero.png";
-
+import delegateBg from "@/assets/deligateimage/uoi.png";
 const DelegateHero: React.FC = () => {
   const stats = [
     { label: "Expert Speakers", value: "80+", icon: <UserCheck className="w-8 h-8" /> },
@@ -11,37 +10,37 @@ const DelegateHero: React.FC = () => {
   ];
 
   return (
-    <section className="relative w-full h-[400px] overflow-hidden bg-[#F0F7EE]">
+    <section className="relative w-full h-[300px] overflow-hidden bg-[#F0F7EE]">
 
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
         <div className="absolute top-10 left-10 w-40 h-40 bg-green-200 rounded-full blur-[80px]" />
         <div className="absolute bottom-20 left-1/4 w-60 h-60 bg-green-100 rounded-full blur-[100px]" />
       </div>
 
-      {/* Building Image (Right Side) */}
+
       <div className="absolute top-0 right-0 w-2/3 h-full">
         <img
           src={delegateBg}
           alt="Conference Venue"
           className="w-full h-full object-inherit object-left"
         />
-        {/* Soft fade between left content and right image */}
+
         <div className="absolute inset-0 bg-gradient-to-r from-[#F0F7EE] via-[#F0F7EE]/10 to-transparent" />
       </div>
 
       <div className="relative h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center">
-        {/* Left Content Area */}
+
         <div className="w-1/2 z-10 -mt-10">
-          <h1 className="text-[42px] font-black text-[#143111] leading-tight mb-1 uppercase tracking-tight">
+          <h1 className="text-[42px]  font-black text-[#143111] leading-tight mb-1 uppercase tracking-tight" style={{ paddingLeft: '30px' }}>
             DELEGATE REGISTRATION
           </h1>
-          <p className="text-[17px] text-gray-700 font-bold leading-snug max-w-md">
+          <p className="text-[17px] pl-4 text-gray-700 font-bold leading-snug max-w-md" style={{ paddingLeft: '30px' }}>
             Register now and be a part of India's<br />
             largest healthcare knowledge platform.
           </p>
         </div>
 
-        {/* Right Info Card - Exact Like Image */}
+
         <div className="absolute top-1/2 -translate-y-1/2 right-6 lg:right-10 z-20">
           <div className="bg-[#143111] rounded-2xl p-7 w-[320px] shadow-2xl border border-white/5">
             <div className="space-y-6">
@@ -70,10 +69,10 @@ const DelegateHero: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats Bar - Exact Pill Shape Like Image */}
-        <div className="absolute bottom-[70px] left-9 z-30 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
+
+        <div className="absolute bottom-[30px] left-9 z-30 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
           <div
-            className="bg-white flex items-stretch py-1 pr-10 rounded-l-[0px] overflow-hidden"
+            className="flex items-stretch pr-10 rounded-l-[0px] overflow-hidden"
             style={{ clipPath: "polygon(0% 0%, 88% 0%, 100% 100%, 0% 100%)" }}
           >
             {stats.map((stat, index) => (
@@ -91,7 +90,7 @@ const DelegateHero: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* Vertical Divider */}
+
                 {index < stats.length - 1 && (
                   <div className="w-[1px] bg-gray-100 self-stretch my-5" />
                 )}
