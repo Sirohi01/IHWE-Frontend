@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { publicPsmClaimApi } from "@/lib/api";
+import { msmePmsSchemeApi } from "@/lib/api";
 
 const MsmePmsScheme = () => {
   const { toast } = useToast();
@@ -101,7 +101,7 @@ const MsmePmsScheme = () => {
         submitData.append('documents', file);
       });
 
-      const response = await publicPsmClaimApi.submit(submitData);
+      const response = await msmePmsSchemeApi.submit(submitData);
 
       if (response.success) {
         toast({ title: "Success", description: "Application Submitted successfully!" });
