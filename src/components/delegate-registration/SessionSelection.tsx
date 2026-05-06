@@ -16,19 +16,19 @@ const SessionSelection: React.FC = () => {
       { id: "d1s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Smart Hospitals & Digital Transformation", description: "Exploring the future of smart hospitals, digital health platforms.", price: 500 },
       { id: "d1s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Medical Devices & Innovation", description: "Latest trends in medical devices and modern healthcare.", price: 500 },
       { id: "d1s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Diagnostics & Precision Medicine", description: "Advances in diagnostics, precision medicine and treatment.", price: 500 },
-      { id: "d1s4", number: "4", time: "04:30 PM – 06:00 PM", title: "Infrastructure & Investment", description: "Healthcare infrastructure development and global investments.", price: 500 },
+
     ],
     2: [
       { id: "d2s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Wellness Economy & Global Opportunities", description: "Market trends and global prospects in the wellness sector.", price: 500 },
       { id: "d2s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Ayurveda, AYUSH & Holistic Healing", description: "Traditional wisdom meets modern evidence-based practices.", price: 500 },
       { id: "d2s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Fitness, Preventive Health & Lifestyle", description: "The core pillars of modern wellness and preventive care.", price: 500 },
-      { id: "d2s4", number: "4", time: "04:30 PM – 06:00 PM", title: "Beauty, Personal Care & Innovation", description: "Clean beauty and technological shifts in personal care.", price: 500 },
+
     ],
     3: [
       { id: "d3s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Ayurveda & Traditional Wisdom", description: "Deep dive into ancient healing systems and their relevance.", price: 500 },
       { id: "d3s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Nutrition, Diet & Lifestyle", description: "Personalized nutrition and dietary habits for longevity.", price: 500 },
       { id: "d3s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Yoga, Mental Health & Wellness", description: "Holistic approaches to mental well-being and yoga practices.", price: 500 },
-      { id: "d3s4", number: "4", time: "04:30 PM – 06:00 PM", title: "Herbal Industry & Natural Products", description: "Supply chain and standardisation in natural products.", price: 500 },
+
     ],
   };
 
@@ -54,11 +54,10 @@ const SessionSelection: React.FC = () => {
           <button
             key={day.id}
             onClick={() => setActiveDay(day.id)}
-            className={`relative flex flex-col p-3 rounded-xl border-2 transition-all text-left ${
-              activeDay === day.id
-                ? "bg-[#143111] border-[#143111] text-white shadow-md"
-                : "bg-white border-gray-100 text-gray-400 hover:border-gray-200"
-            }`}
+            className={`relative flex flex-col p-3 rounded-xl border-2 transition-all text-left ${activeDay === day.id
+              ? "bg-[#143111] border-[#143111] text-white shadow-md"
+              : "bg-white border-gray-100 text-gray-400 hover:border-gray-200"
+              }`}
           >
             <div className="flex items-center gap-2 mb-1">
               <Calendar className={`w-4 h-4 ${activeDay === day.id ? "text-white" : "text-gray-300"}`} />
@@ -87,7 +86,7 @@ const SessionSelection: React.FC = () => {
       {/* Sessions List - Compact Cards */}
       <div className="space-y-3 mb-6">
         {sessionsData[activeDay]?.map((session) => (
-          <div 
+          <div
             key={session.id}
             onClick={() => toggleSession(session.id)}
             className="flex items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group"
@@ -107,10 +106,8 @@ const SessionSelection: React.FC = () => {
             </div>
             <div className="w-[110px] p-4 flex flex-col items-center justify-center bg-gray-50/20">
               <div className="text-[18px] font-black text-[#143111]">₹500</div>
-              <div className="text-[9px] font-bold text-gray-400 uppercase tracking-tight mb-3">Per Person</div>
-              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
-                selectedSessions.includes(session.id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
-              }`}>
+              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes(session.id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+                }`}>
                 {selectedSessions.includes(session.id) && <Check className="w-4 h-4 text-white stroke-[3]" />}
               </div>
             </div>
@@ -118,11 +115,10 @@ const SessionSelection: React.FC = () => {
         ))}
 
         {/* All Sessions Card - Compact */}
-        <div 
+        <div
           onClick={() => toggleSession(`all_day_${activeDay}`)}
-          className={`flex items-stretch rounded-xl border-2 transition-all cursor-pointer group ${
-            selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
-          }`}
+          className={`flex items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
+            }`}
         >
           <div className="w-[80px] p-4 flex items-center justify-center text-[#143111] shrink-0">
             <div className="w-12 h-12 rounded-full bg-[#F1F8EE] flex items-center justify-center">
@@ -132,7 +128,7 @@ const SessionSelection: React.FC = () => {
           <div className="flex-1 p-4 flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-1.5">
               <h3 className="text-[15px] font-black text-[#143111] uppercase tracking-tight">
-                ALL 4 SESSIONS – DAY {activeDay}
+                ALL 3 SESSIONS – DAY {activeDay}
               </h3>
               <span className="px-2 py-0.5 bg-[#143111] text-white text-[8px] font-black uppercase rounded">
                 POPULAR
@@ -148,10 +144,8 @@ const SessionSelection: React.FC = () => {
           </div>
           <div className="w-[110px] p-4 flex flex-col items-center justify-center border-l border-gray-100">
             <div className="text-[18px] font-black text-[#143111]">₹1200</div>
-            <div className="text-[9px] font-bold text-gray-400 uppercase tracking-tight mb-3">Per Person</div>
-            <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
-              selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
-            }`}>
+            <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+              }`}>
               {selectedSessions.includes(`all_day_${activeDay}`) && <Check className="w-4 h-4 text-white stroke-[3]" />}
             </div>
           </div>
@@ -161,13 +155,12 @@ const SessionSelection: React.FC = () => {
       <div className="mt-8">
         <h2 className="text-[13px] font-black text-gray-900 uppercase tracking-[0.1em] mb-3">OTHER OPTIONS</h2>
         <div className="space-y-3">
-          
+
           {/* Full Access Pass - Compact */}
-          <div 
+          <div
             onClick={() => toggleSession("full_pass")}
-            className={`flex items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${
-              selectedSessions.includes("full_pass") ? "border-[#0B2C66] shadow-md shadow-blue-900/5" : ""
-            }`}
+            className={`flex items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.includes("full_pass") ? "border-[#0B2C66] shadow-md shadow-blue-900/5" : ""
+              }`}
           >
             <div className="w-[80px] bg-[#0B2C66] p-4 flex items-center justify-center text-white shrink-0 rounded-l-[10px]">
               <Calendar className="w-7 h-7 opacity-40" />
@@ -177,7 +170,7 @@ const SessionSelection: React.FC = () => {
                 ALL 3 DAYS – FULL ACCESS PASS
               </h3>
               <p className="text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">(DAY 1 + DAY 2 + DAY 3)</p>
-              
+
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                 {[
                   "All Sessions (3 Days)",
@@ -196,21 +189,18 @@ const SessionSelection: React.FC = () => {
             </div>
             <div className="w-[140px] p-4 flex flex-col items-center justify-center border-l border-gray-50 bg-gray-50/10">
               <div className="text-[24px] font-black text-[#0B2C66] leading-none mb-1">₹3000</div>
-              <div className="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-tight">Per Person</div>
-              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
-                selectedSessions.includes("full_pass") ? "bg-[#0B2C66] border-[#0B2C66]" : "bg-white border-gray-200"
-              }`}>
+              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("full_pass") ? "bg-[#0B2C66] border-[#0B2C66]" : "bg-white border-gray-200"
+                }`}>
                 {selectedSessions.includes("full_pass") && <Check className="w-4 h-4 text-white stroke-[3]" />}
               </div>
             </div>
           </div>
 
           {/* Paper Presentation Pass - Compact */}
-          <div 
+          <div
             onClick={() => toggleSession("paper_pass")}
-            className={`flex items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${
-              selectedSessions.includes("paper_pass") ? "border-[#6A3DF0] shadow-md shadow-purple-900/5" : ""
-            }`}
+            className={`flex items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.includes("paper_pass") ? "border-[#6A3DF0] shadow-md shadow-purple-900/5" : ""
+              }`}
           >
             <div className="w-[80px] bg-[#6A3DF0] p-4 flex items-center justify-center text-white shrink-0 rounded-l-[10px]">
               <BookOpen className="w-7 h-7 opacity-40" />
@@ -220,7 +210,7 @@ const SessionSelection: React.FC = () => {
                 PAPER PRESENTATION PASS
               </h3>
               <p className="text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">(ANY 1 DAY – 2 SESSIONS)</p>
-              
+
               <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
                 {[
                   "Access to 2 Sessions",
@@ -239,10 +229,8 @@ const SessionSelection: React.FC = () => {
             </div>
             <div className="w-[140px] p-4 flex flex-col items-center justify-center border-l border-gray-50 bg-gray-50/10">
               <div className="text-[24px] font-black text-[#6A3DF0] leading-none mb-1">₹3000</div>
-              <div className="text-[10px] font-bold text-gray-400 uppercase mb-4 tracking-tight">Per Person</div>
-              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${
-                selectedSessions.includes("paper_pass") ? "bg-[#6A3DF0] border-[#6A3DF0]" : "bg-white border-gray-200"
-              }`}>
+              <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("paper_pass") ? "bg-[#6A3DF0] border-[#6A3DF0]" : "bg-white border-gray-200"
+                }`}>
                 {selectedSessions.includes("paper_pass") && <Check className="w-4 h-4 text-white stroke-[3]" />}
               </div>
             </div>
