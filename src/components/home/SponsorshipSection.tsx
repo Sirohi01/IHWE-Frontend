@@ -5,16 +5,35 @@ import {
   Leaf, Monitor, Download, Phone,
   Globe, ShieldCheck, PieChart, Users2,
   Calendar, Star, Handshake, HeadphonesIcon,
-  TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home
+  TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home, Store
 } from 'lucide-react';
 import bgImage from '../../assets/1234.png';
+import titleSponsorImg from '../../assets/icon111.png';
+import poweredByImg from '../../assets/icon222.png';
+import associateSponsorImg from '../../assets/icon333.png';
+import conferenceSponsorImg from '../../assets/icon444.png';
+import registrationSponsorImg from '../../assets/icon555.png';
+import lanyardSponsorImg from '../../assets/icon666.png';
+import wellnessSponsorImg from '../../assets/icon777.png';
+import digitalSponsorImg from '../../assets/icon888.png';
+import leafImg from '../../assets/leave.png';
+import logo1 from '../../logos/logo1.png';
+import logo2 from '../../logos/logo2.png';
+import logo3 from '../../logos/logo3.png';
+import logo4 from '../../logos/logo4.png';
+import logo5 from '../../logos/logo5.png';
+import logo6 from '../../logos/logo6.png';
+import logo7 from '../../logos/logo7.png';
+import logo8 from '../../logos/logo8.png';
+import logo9 from '../../logos/logo9.jpg';
+import logo10 from '../../logos/logo10.webp';
 import SectionContainer from '../layout/SectionContainer';
 
 const SPONSORSHIP_OPPORTUNITIES = [
   {
     title: "TITLE SPONSOR",
     desc: "Maximum visibility\n& brand exclusivity",
-    icon: Trophy,
+    image: titleSponsorImg,
     color: "#d97706",
     bgColor: "#fef3c7",
     badge: "MOST EXCLUSIVE"
@@ -22,49 +41,49 @@ const SPONSORSHIP_OPPORTUNITIES = [
   {
     title: "POWERED BY SPONSOR",
     desc: "Align your brand as the power behind IHWE",
-    icon: Zap,
+    image: poweredByImg,
     color: "#2563eb",
     bgColor: "#eff6ff",
   },
   {
     title: "ASSOCIATE SPONSOR",
     desc: "High-impact visibility & brand recognition",
-    icon: Users,
+    image: associateSponsorImg,
     color: "#16a34a",
     bgColor: "#f0fdf4",
   },
   {
     title: "CONFERENCE SPONSOR",
     desc: "Brand association with knowledge sessions",
-    icon: Mic2,
+    image: conferenceSponsorImg,
     color: "#7c3aed",
     bgColor: "#f5f3ff",
   },
   {
     title: "REGISTRATION SPONSOR",
     desc: "High brand recall at every entry point",
-    icon: UserCheck,
+    image: registrationSponsorImg,
     color: "#0d9488",
     bgColor: "#f0fdfa",
   },
   {
     title: "LANYARD / BADGE SPONSOR",
     desc: "Put your brand around every neck",
-    icon: BadgeCheck,
+    image: lanyardSponsorImg,
     color: "#ea580c",
     bgColor: "#fff7ed",
   },
   {
     title: "WELLNESS ZONE SPONSOR",
     desc: "Showcase your brand in the wellness experience zone",
-    icon: Leaf,
+    image: wellnessSponsorImg,
     color: "#059669",
     bgColor: "#ecfdf5",
   },
   {
     title: "DIGITAL PROMOTION PARTNER",
     desc: "Expand your reach across digital platforms",
-    icon: Monitor,
+    image: digitalSponsorImg,
     color: "#4f46e5",
     bgColor: "#eef2ff",
   }
@@ -80,16 +99,16 @@ const WHY_SPONSOR = [
 ];
 
 const BRANDS = [
-  { name: "PATANJALI", sub: "Patanjali Ayurved", color: "#e65c00" },
-  { name: "Dabur", sub: "", color: "#2d7a2d" },
-  { name: "Himalaya", sub: "SINCE 1930", color: "#1a5fa8" },
-  { name: "Apollo", sub: "Hospitals", color: "#003087" },
-  { name: "ZANDU", sub: "EXPERT IN LIFESTYLE DISORDERS", color: "#c8a000" },
-  { name: "BAIDYANATH", sub: "100 years of caring", color: "#8b1a1a" },
-  { name: "HEALTHKART", sub: "", color: "#1a1a1a" },
-  { name: "Herbalife", sub: "", color: "#e8000d" },
-  { name: "nveda", sub: "", color: "#2d7a2d" },
-  { name: "AND MANY MORE...", sub: "", color: "#555" },
+  { name: "PATANJALI", sub: "", color: "#e65c00", logo: logo1 },
+  { name: "Dabur",     sub: "", color: "#2d7a2d", logo: logo2 },
+  { name: "Himalaya",  sub: "", color: "#1a5fa8", logo: logo3 },
+  { name: "Apollo",    sub: "", color: "#003087", logo: logo4 },
+  { name: "ZANDU",     sub: "", color: "#c8a000", logo: logo5 },
+  { name: "BAIDYANATH",sub: "", color: "#8b1a1a", logo: logo6 },
+  { name: "HEALTHKART",sub: "", color: "#1a1a1a", logo: logo7 },
+  { name: "Herbalife", sub: "", color: "#e8000d", logo: logo8 },
+  { name: "nveda",     sub: "", color: "#2d7a2d", logo: logo9 },
+  { name: "MORE",      sub: "", color: "#555",    logo: logo10 },
 ];
 
 const SponsorshipSection = () => {
@@ -189,11 +208,11 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-2 pb-8">
+      <div className="bg-white pt-2 pb-4">
         <SectionContainer>
 
           {/* Section Divider Header */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-2">
             <div className="flex-1 h-[1px] bg-slate-200" />
             <div className="flex items-center gap-2">
               <Leaf className="w-3.5 h-3.5 text-[#23471d]" />
@@ -231,15 +250,19 @@ const SponsorshipSection = () => {
                   </div>
                 )}
 
-                {/* Icon circle */}
+                {/* Icon or Image circle */}
                 <div
                   className="w-14 h-14 flex items-center justify-center mb-3 mt-1 group-hover:scale-110 transition-transform duration-300"
                   style={{ background: "transparent" }}
                 >
-                  <opp.icon
-                    className={idx === 0 ? "w-7 h-7" : "w-9 h-9"}
-                    style={{ color: idx === 0 ? opp.color : "#1a3a00" }}
-                  />
+                  {opp.image ? (
+                    <img src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
+                  ) : (
+                    <opp.icon 
+                      className="w-9 h-9" 
+                      style={{ color: "#1a3a00" }} 
+                    />
+                  )}
                 </div>
 
                 <h4
@@ -264,144 +287,167 @@ const SponsorshipSection = () => {
         <SectionContainer>
 
           {/* 1. Limited Slots Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8 -mt-6 py-3 px-4 rounded-full border border-slate-100 max-w-fit mx-auto shadow-sm" style={{ background: "#f0f1e9" }}>
+          <div className="flex flex-col md:flex-row items-center justify-start gap-4 mb-8 -mt-6 pt-2 pb-2.5 px-4 rounded-2xl border border-slate-100 max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-[#022f15] rounded-lg flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-white" />
               </div>
               <div>
                 <p className="font-bold text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
-                <p className="text-[11px] text-slate-500">Secure your category before it's gone!</p>
+                <p className="text-[11px] text-slate-900">Secure your category before it's gone!</p>
               </div>
             </div>
-            <div className="hidden md:block w-[1px] h-8 bg-slate-200" />
+            <div className="hidden md:block w-[1.5px] h-8 bg-slate-400/60" />
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0]">
                 <Star className="w-5 h-5 text-[#425d0d]" />
               </div>
-              <p className="text-[11.5px] text-slate-600 font-medium">
+              <p className="text-[11.5px] text-slate-900 font-medium">
                 Featured sponsors get exclusive<br />media coverage & brand promotions.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1.5fr] gap-8 items-start">
-
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-2 items-start -mt-8 relative z-10">
+            
             {/* 2. Dark Green CTA Card */}
-            <div className="bg-[#022f15] rounded-2xl p-4 md:p-6 relative overflow-hidden shadow-xl flex flex-col h-fit">
+            <div className="bg-[#012011] rounded-l-2xl p-4 md:p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
+              {/* Decorative Leaf Image */}
+              <img 
+                src={leafImg} 
+                alt="decorative" 
+                className="absolute -bottom-6 -left-10 w-48 h-48 opacity-40 pointer-events-none object-contain"
+              />
               {/* Decorative Glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+              
+              <div className="relative z-10">
+                {/* Top Row: Title + Buttons */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-5 mb-5 relative">
+                  {/* Decorative Border Bottom (Indented from left) */}
+                  <div className="absolute bottom-0 right-0 lg:left-[320px] left-0 h-[1px] bg-white/10" />
+                  <div className="shrink-0 origin-left scale-y-[1.3]">
+                    <h3 className="text-white font-extrabold text-lg xl:text-xl leading-tight whitespace-nowrap">
+                      ELEVATE YOUR BRAND PRESENCE
+                    </h3>
+                    <h3 className="text-[#c5dfa0] font-extrabold text-lg xl:text-xl leading-tight mt-0.5">
+                      AT IHWE 2026
+                    </h3>
+                  </div>
 
-              <div className="relative z-10 mb-6 flex flex-col gap-6">
-                <div className="max-w-3xl">
-                  <h3 className="text-white font-black text-2xl mb-4 leading-tight">
-                    ELEVATE YOUR BRAND PRESENCE <span className="text-[#c5dfa0]">AT IHWE 2026</span>
-                  </h3>
-                  <p className="text-white/80 text-sm leading-relaxed max-w-xl">
-                    Reach the right audience, build meaningful connections<br />
-                    and grow your business with IHWE.
-                  </p>
-                </div>
+                  {/* Horizontal Buttons Row */}
+                  <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center lg:pt-0.5">
+                    <a 
+                      href="/pdf.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                    >
+                      <FileText className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left text-white">
+                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Download</p>
+                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">Brochure</p>
+                      </div>
+                    </a>
 
-                {/* Horizontal Buttons Row - Left Aligned */}
-                <div className="flex flex-wrap md:flex-nowrap gap-3 items-center">
-                  <a
-                    href="/pdf.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
-                  >
-                    <div className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <FileText className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[9px] font-bold opacity-60 uppercase tracking-widest leading-none mb-1">Download</p>
-                      <p className="text-xs font-bold uppercase whitespace-nowrap">Brochure</p>
-                    </div>
-                  </a>
+                    <Link 
+                      to="/conference"
+                      className="bg-[#78903a] hover:bg-[#8ba643] text-white rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                    >
+                      <Handshake className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left">
+                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Become</p>
+                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">A Sponsor</p>
+                      </div>
+                    </Link>
 
-                  <Link
-                    to="/conference"
-                    className="bg-[#78903a] hover:bg-[#8ba643] text-[#022f15] rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
-                  >
-                    <div className="w-9 h-9 bg-[#022f15]/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Users className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[9px] font-bold opacity-60 uppercase tracking-widest leading-none mb-1">Become</p>
-                      <p className="text-xs font-bold uppercase whitespace-nowrap">A Sponsor</p>
-                    </div>
-                  </Link>
-
-                  <a
-                    href="tel:+919654900525"
-                    className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
-                  >
-                    <div className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <PhoneCall className="w-4 h-4" />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-[9px] font-bold opacity-60 uppercase tracking-widest leading-none mb-1">Talk to</p>
-                      <p className="text-xs font-bold uppercase whitespace-nowrap">Our Team</p>
-                    </div>
-                  </a>
-                </div>
-              </div>
-
-              {/* Updated Stats Row with Legacy Data */}
-              <div className="relative z-10 flex flex-wrap md:flex-nowrap items-center justify-between gap-6 pt-6 border-t border-white/10">
-                <div className="flex items-center gap-3">
-                  <Home className="w-5 h-5 text-[#78903a]" />
-                  <div>
-                    <p className="text-white font-bold text-sm leading-none">150+</p>
-                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Exhibitors</p>
+                    <a 
+                      href="tel:+919654900525"
+                      className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                    >
+                      <HeadphonesIcon className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left text-white">
+                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Talk to</p>
+                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">Our Team</p>
+                      </div>
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Users2 className="w-5 h-5 text-[#78903a]" />
-                  <div>
-                    <p className="text-white font-bold text-sm leading-none">8000+</p>
-                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Visitors/Delegates</p>
+
+                {/* Bottom Row: Description + Stats */}
+                <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-10">
+                  {/* Description */}
+                  <div className="max-w-xl">
+                    <p className="text-white text-[13px] leading-relaxed">
+                      Reach the right audience, build meaningful connections and grow your business with IHWE.
+                    </p>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-[#78903a]" />
-                  <div>
-                    <p className="text-white font-bold text-sm leading-none">10+ Years</p>
-                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Legacy</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <TrendingUp className="w-5 h-5 text-[#78903a]" />
-                  <div>
-                    <p className="text-white font-bold text-sm leading-none">₹150CR+</p>
-                    <p className="text-white/50 text-[9px] uppercase tracking-wider">Business</p>
+
+                  {/* Updated Stats Row with Vertical Dividers */}
+                  <div className="flex items-center gap-x-4 lg:gap-x-5">
+                    <div className="flex items-center gap-2">
+                      <Users2 className="w-6 h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">10,000+</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Visitors</p>
+                      </div>
+                    </div>
+                    
+                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-2">
+                      <Store className="w-6 h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">350+</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-6 h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">25+</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Countries</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-2">
+                      <Infinity className="w-6 h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">Unlimited</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Opportunities</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* 3. Interest Form */}
-            <div
-              className="bg-white rounded-2xl p-4 md:p-5 border border-slate-100 shadow-sm h-fit"
+            <div 
+              className="bg-white rounded-2xl p-3 md:p-4 border border-slate-100 shadow-sm h-fit -mt-12"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
-              <div className="text-center mb-4">
-                <h4 className="font-black text-[#022f15] text-[14px] uppercase tracking-wide">Interested in Sponsoring?</h4>
-                <div className="w-8 h-1 bg-[#78903a] mx-auto mt-1 rounded-full" />
+              <div className="text-center mb-3">
+                <h4 className="font-black text-[#022f15] text-[13px] uppercase tracking-wide">Interested in Sponsoring?</h4>
+                <div className="w-8 h-0.5 bg-[#78903a] mx-auto mt-1 rounded-full" />
               </div>
 
-              <form className="space-y-2.5">
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="text" placeholder="Full Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                  <input type="text" placeholder="Company Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
+              <form className="space-y-2">
+                <div className="grid grid-cols-2 gap-2.5">
+                  <input type="text" placeholder="Full Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
+                  <input type="text" placeholder="Company Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="email" placeholder="Email Address*" className="bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                  <input type="tel" placeholder="Phone Number*" className="bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
+                <div className="grid grid-cols-2 gap-2.5">
+                  <input type="email" placeholder="Email Address*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
+                  <input type="tel" placeholder="Phone Number*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
                 </div>
                 <div className="relative">
-                  <select className="w-full bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all appearance-none text-slate-500">
+                  <select className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all appearance-none text-slate-600">
                     <option>Interested Sponsorship Category*</option>
                     <option>Title Sponsor</option>
                     <option>Powered By Sponsor</option>
@@ -412,19 +458,19 @@ const SponsorshipSection = () => {
                     <option>Wellness Zone Sponsor</option>
                     <option>Digital Promotion Partner</option>
                   </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                     <div className="border-l-2 border-b-2 border-slate-400 w-1.5 h-1.5 -rotate-45" />
                   </div>
                 </div>
-                <textarea placeholder="Message (Optional)" rows={2} className="w-full bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-
-                <button className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98]">
+                <textarea placeholder="Message (Optional)" rows={1} className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
+                
+                <button className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98]">
                   Submit Inquiry
                 </button>
 
-                <p className="flex items-center justify-center gap-2 text-[10px] text-slate-400 mt-4">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Your information is safe with us and will never be shared.
+                <p className="flex items-center justify-center gap-2 text-[9px] text-slate-400 mt-2">
+                  <ShieldCheck className="w-3 h-3" />
+                  Your information is safe with us.
                 </p>
               </form>
             </div>
@@ -436,12 +482,12 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           TRUSTED BY LEADING BRANDS
       ══════════════════════════════════════════ */}
-      {/* <div className="pb-10">
+      <div className="bg-white pt-4 pb-12 -mt-16 border-t border-slate-100">
         <SectionContainer>
 
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <div className="flex-1 h-[1px] bg-slate-200" />
-            <span className="font-bold text-[12px] tracking-[0.25em] uppercase text-slate-700">
+            <span className="font-bold text-[14px] tracking-[0.25em] uppercase text-[#012112]">
               TRUSTED BY LEADING BRANDS
             </span>
             <div className="flex-1 h-[1px] bg-slate-200" />
@@ -449,24 +495,37 @@ const SponsorshipSection = () => {
 
           <div className="flex items-center justify-between gap-4 flex-wrap">
             {BRANDS.map((brand, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-0.5 opacity-80 hover:opacity-100 transition-opacity">
-                <span
-                  className="font-black text-[13px] leading-tight"
-                  style={{ color: brand.color, fontFamily: idx === 0 ? "serif" : "inherit" }}
-                >
-                  {brand.name}
-                </span>
-                {brand.sub && (
-                  <span className="text-[8px] text-slate-500 font-semibold tracking-wide text-center leading-tight max-w-[80px]">
-                    {brand.sub}
-                  </span>
+              <React.Fragment key={idx}>
+                <div className="flex flex-col items-center gap-0.5 transition-all">
+                  {brand.logo ? (
+                    <img 
+                      src={brand.logo} 
+                      alt={brand.name} 
+                      className={`${brand.name === "Dabur" ? "h-12" : brand.name === "HEALTHKART" ? "h-11" : "h-8"} w-auto object-contain`} 
+                    />
+                  ) : (
+                    <span
+                      className="font-black text-[14px] leading-tight"
+                      style={{ color: brand.color, fontFamily: idx === 0 ? "serif" : "inherit" }}
+                    >
+                      {brand.name}
+                    </span>
+                  )}
+                  {brand.sub && (
+                    <span className="text-[8px] text-slate-500 font-semibold tracking-wide text-center leading-tight max-w-[80px]">
+                      {brand.sub}
+                    </span>
+                  )}
+                </div>
+                {idx < BRANDS.length - 1 && (
+                  <div className="hidden lg:block w-[1px] h-6 bg-slate-200" />
                 )}
-              </div>
+              </React.Fragment>
             ))}
           </div>
 
         </SectionContainer>
-      </div> */}
+      </div>
     </section>
   );
 };
