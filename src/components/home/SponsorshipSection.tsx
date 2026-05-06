@@ -71,25 +71,25 @@ const SPONSORSHIP_OPPORTUNITIES = [
 ];
 
 const WHY_SPONSOR = [
-  { icon: Users2,    title: "Showcase your brand to\n10,000+ targeted visitors",   bold: "10,000+" },
-  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)",        bold: "Multi-channel" },
-  { icon: Handshake, title: "Build authority in the health & wellness ecosystem",   bold: "health & wellness" },
-  { icon: Star,      title: "Premium branding across expo touchpoints",             bold: "Premium branding" },
-  { icon: TrendingUp,title: "Direct access to decision-makers & buyers",            bold: "decision-makers" },
-  { icon: Globe,     title: "Global exposure & networking opportunities",            bold: "Global exposure &" },
+  { icon: Users2, title: "Showcase your brand to\n10,000+ targeted visitors", bold: "10,000+" },
+  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)", bold: "Multi-channel" },
+  { icon: Handshake, title: "Build authority in the health & wellness ecosystem", bold: "health & wellness" },
+  { icon: Star, title: "Premium branding across expo touchpoints", bold: "Premium branding" },
+  { icon: TrendingUp, title: "Direct access to decision-makers & buyers", bold: "decision-makers" },
+  { icon: Globe, title: "Global exposure & networking opportunities", bold: "Global exposure &" },
 ];
 
 const BRANDS = [
   { name: "PATANJALI", sub: "Patanjali Ayurved", color: "#e65c00" },
-  { name: "Dabur",     sub: "",                  color: "#2d7a2d" },
-  { name: "Himalaya",  sub: "SINCE 1930",         color: "#1a5fa8" },
-  { name: "Apollo",    sub: "Hospitals",           color: "#003087" },
-  { name: "ZANDU",     sub: "EXPERT IN LIFESTYLE DISORDERS", color: "#c8a000" },
-  { name: "BAIDYANATH",sub: "100 years of caring", color: "#8b1a1a" },
-  { name: "HEALTHKART",sub: "",                   color: "#1a1a1a" },
-  { name: "Herbalife", sub: "",                   color: "#e8000d" },
-  { name: "nveda",     sub: "",                   color: "#2d7a2d" },
-  { name: "AND MANY MORE...", sub: "",            color: "#555" },
+  { name: "Dabur", sub: "", color: "#2d7a2d" },
+  { name: "Himalaya", sub: "SINCE 1930", color: "#1a5fa8" },
+  { name: "Apollo", sub: "Hospitals", color: "#003087" },
+  { name: "ZANDU", sub: "EXPERT IN LIFESTYLE DISORDERS", color: "#c8a000" },
+  { name: "BAIDYANATH", sub: "100 years of caring", color: "#8b1a1a" },
+  { name: "HEALTHKART", sub: "", color: "#1a1a1a" },
+  { name: "Herbalife", sub: "", color: "#e8000d" },
+  { name: "nveda", sub: "", color: "#2d7a2d" },
+  { name: "AND MANY MORE...", sub: "", color: "#555" },
 ];
 
 const SponsorshipSection = () => {
@@ -236,9 +236,9 @@ const SponsorshipSection = () => {
                   className="w-14 h-14 flex items-center justify-center mb-3 mt-1 group-hover:scale-110 transition-transform duration-300"
                   style={{ background: "transparent" }}
                 >
-                  <opp.icon 
-                    className={idx === 0 ? "w-7 h-7" : "w-9 h-9"} 
-                    style={{ color: idx === 0 ? opp.color : "#1a3a00" }} 
+                  <opp.icon
+                    className={idx === 0 ? "w-7 h-7" : "w-9 h-9"}
+                    style={{ color: idx === 0 ? opp.color : "#1a3a00" }}
                   />
                 </div>
 
@@ -262,7 +262,7 @@ const SponsorshipSection = () => {
       ══════════════════════════════════════════ */}
       <div className="bg-white pb-16">
         <SectionContainer>
-          
+
           {/* 1. Limited Slots Bar */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8 -mt-6 py-3 px-4 rounded-full border border-slate-100 max-w-fit mx-auto shadow-sm" style={{ background: "#f0f1e9" }}>
             <div className="flex items-center gap-3">
@@ -286,12 +286,12 @@ const SponsorshipSection = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1.5fr] gap-8 items-start">
-            
+
             {/* 2. Dark Green CTA Card */}
             <div className="bg-[#022f15] rounded-2xl p-4 md:p-6 relative overflow-hidden shadow-xl flex flex-col h-fit">
               {/* Decorative Glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
-              
+
               <div className="relative z-10 mb-6 flex flex-col gap-6">
                 <div className="max-w-3xl">
                   <h3 className="text-white font-black text-2xl mb-4 leading-tight">
@@ -305,9 +305,9 @@ const SponsorshipSection = () => {
 
                 {/* Horizontal Buttons Row - Left Aligned */}
                 <div className="flex flex-wrap md:flex-nowrap gap-3 items-center">
-                  <a 
-                    href="/pdf.pdf" 
-                    target="_blank" 
+                  <a
+                    href="/pdf.pdf"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
                   >
@@ -320,7 +320,7 @@ const SponsorshipSection = () => {
                     </div>
                   </a>
 
-                  <Link 
+                  <Link
                     to="/conference"
                     className="bg-[#78903a] hover:bg-[#8ba643] text-[#022f15] rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
                   >
@@ -333,7 +333,7 @@ const SponsorshipSection = () => {
                     </div>
                   </Link>
 
-                  <a 
+                  <a
                     href="tel:+919654900525"
                     className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 py-3 flex items-center gap-3 transition-all duration-300 group"
                   >
@@ -382,7 +382,7 @@ const SponsorshipSection = () => {
             </div>
 
             {/* 3. Interest Form */}
-            <div 
+            <div
               className="bg-white rounded-2xl p-4 md:p-5 border border-slate-100 shadow-sm h-fit"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
@@ -417,7 +417,7 @@ const SponsorshipSection = () => {
                   </div>
                 </div>
                 <textarea placeholder="Message (Optional)" rows={2} className="w-full bg-[#f8f9fa] border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                
+
                 <button className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98]">
                   Submit Inquiry
                 </button>
@@ -436,7 +436,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           TRUSTED BY LEADING BRANDS
       ══════════════════════════════════════════ */}
-      <div className="pb-10">
+      {/* <div className="pb-10">
         <SectionContainer>
 
           <div className="flex items-center gap-4 mb-6">
@@ -466,7 +466,7 @@ const SponsorshipSection = () => {
           </div>
 
         </SectionContainer>
-      </div>
+      </div> */}
     </section>
   );
 };
