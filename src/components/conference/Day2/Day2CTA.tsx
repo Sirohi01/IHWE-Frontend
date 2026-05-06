@@ -1,6 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, Ticket, Users, Wallet } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.png";
+import one3 from "../../../assets/delegatepassimage/one3.png";
+import one5 from "../../../assets/delegatepassimage/one5.png";
+import one4 from "../../../assets/delegatepassimage/one4.png";
 
 const bgTextures = [
   "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80", // Wellness/Yoga feel
@@ -14,11 +18,11 @@ const Day2CTA: React.FC = () => {
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+          src={backgroundImage}
           className="w-full h-full object-cover"
           alt="Section Background"
         />
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+
       </div>
 
       <div className="container mx-auto px-6 max-w-[1320px] relative z-10">
@@ -38,10 +42,8 @@ const Day2CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Wallet className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-32 h-32 flex items-center justify-center shrink-0 -ml-6">
+                  <img src={one3} alt="Be Part of Day 2" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
@@ -74,10 +76,8 @@ const Day2CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Ticket className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-32 h-32 flex items-center justify-center shrink-0 -ml-6">
+                  <img src={one5} alt="Delegate Pass" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
@@ -110,10 +110,8 @@ const Day2CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-32 h-32 flex items-center justify-center shrink-0 -ml-6">
+                  <img src={one4} alt="Sponsor & Partner" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">

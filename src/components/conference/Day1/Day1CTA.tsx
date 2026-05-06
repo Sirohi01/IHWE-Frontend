@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, Ticket, Users, Wallet } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.png";
+import one1 from "../../../assets/delegatepassimage/one1.png";
+import one2 from "../../../assets/delegatepassimage/one2.png";
+import one from "../../../assets/delegatepassimage/one.png";
 
-
-// Using Unsplash placeholder images for the background textures (city/circuit/tech feel)
 const bgTextures = [
   "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80",
@@ -16,7 +18,7 @@ const Day1CTA: React.FC = () => {
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+          src={backgroundImage}
           className="w-full h-full object-cover"
           alt="Section Background"
         />
@@ -39,10 +41,8 @@ const Day1CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Wallet className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-28 h-28 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one1} alt="Be Part of Day 1" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
@@ -75,10 +75,8 @@ const Day1CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Ticket className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-28 h-28 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one2} alt="Delegate Pass" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
@@ -111,10 +109,8 @@ const Day1CTA: React.FC = () => {
 
             <div className="relative z-10 p-8 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-28 h-28 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one} alt="Sponsor & Partner" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
