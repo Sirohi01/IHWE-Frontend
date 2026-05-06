@@ -17,13 +17,13 @@ const DelegateRegistration: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-grow bg-[#F8FAFC]/30">
-        {/* Stepper Container */}
-        <div className="bg-white border-b border-gray-100">
+        {/* Stepper Container - Compact py-4 */}
+        <div className="bg-white border-b border-gray-100 py-4">
           <RegistrationStepper currentStep={currentStep} />
         </div>
 
-        {/* Content Grid */}
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Content Grid - Standard py-4 gap-8 */}
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Left Content (Step Specific) */}
           <div className="lg:col-span-8">
@@ -46,8 +46,10 @@ const DelegateRegistration: React.FC = () => {
         </div>
       </main>
 
-      {/* Why Attend Section */}
-      <WhyAttend />
+      {/* Why Attend Section - Compact py-4 */}
+      <div className="py-4">
+        <WhyAttend />
+      </div>
 
       {/* Footer */}
       <DelegateFooter />

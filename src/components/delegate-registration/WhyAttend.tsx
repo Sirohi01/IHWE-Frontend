@@ -31,7 +31,7 @@ const WhyAttend: React.FC = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-12 px-6 lg:px-10">
+    <section className="w-full bg-white py-6 px-6 lg:px-10">
       <div className="max-w-[1400px] mx-auto">
         {/* Section Title with Dot-Line Decoration */}
         <div className="relative flex items-center justify-center mb-10 gap-4">
