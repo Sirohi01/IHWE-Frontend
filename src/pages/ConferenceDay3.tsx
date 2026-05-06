@@ -61,9 +61,7 @@ const ConferenceDay3: React.FC = () => {
         </div>
 
         {/* 8. Final Call-to-Action Cards */}
-        <div className="relative left-[20px]">
-          <Day3CTA />
-        </div>
+        <Day3CTA />
 
         {/* 9. Production Footer Bar */}
         <div className="relative left-[20px]">
