@@ -71,10 +71,10 @@ const DelegateHero: React.FC = () => {
         </div>
 
         {/* Stats Bar - Exact Pill Shape Like Image */}
-        <div className="absolute bottom-10 left-0 z-30 ml-9">
+        <div className="absolute bottom-8 left-10 z-30 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
           <div
-            className="bg-white shadow-2xl flex items-stretch py-1  pr-12 overflow-hidden"
-            style={{ clipPath: "polygon(0% 0%, 85% 0%, 100% 100%, 0% 100%)" }}
+            className="bg-white flex items-stretch py-1 pr-24 rounded-l-[0px] overflow-hidden"
+            style={{ clipPath: "polygon(0% 0%, 88% 0%, 100% 100%, 0% 100%)" }}
           >
             {stats.map((stat, index) => (
               <React.Fragment key={index}>
