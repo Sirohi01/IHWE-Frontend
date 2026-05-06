@@ -111,7 +111,7 @@ const Day2Agenda: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight font-sans">
-            DAY 2 AGENDA — 21 AUGUST 2026
+            DAY 2 AGENDA — 22 AUGUST 2026
           </h2>
           <p className="text-[11px] font-bold text-[#5F6B7A] uppercase tracking-[0.2em] mt-1 flex items-center justify-center gap-2">
             6 Insightful Sessions <span className="text-[#4E9F3D] font-black">+</span> 1 Powerful Day <span className="text-[#4E9F3D] font-black">+</span> Unlimited Opportunities
