@@ -31,7 +31,7 @@ const ConferenceDay3: React.FC = () => {
 
         {/* 4. Agenda & Featured Speakers (Side-by-Side, no gap) */}
         <section className="bg-white py-4 relative left-[20px]">
-          <div className="container mx-auto px-6 max-w-[1400px]">
+          <div className="container mx-auto px-6 max-w-[1380px]">
             <div className="flex flex-col xl:flex-row gap-6 items-stretch">
               {/* Agenda — 62% */}
               <div className="w-full xl:w-[62%]">
