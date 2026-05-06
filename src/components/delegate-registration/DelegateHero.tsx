@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, FileText, UserCheck, Globe, Calendar, MapPin } from "lucide-react";
-import pragatiMaidan from "@/assets/Pragati-Maidan.jpg";
+import delegateBg from "@/assets/deligateimage/deligateimage.png";
 
 const DelegateHero: React.FC = () => {
   const stats = [
@@ -21,18 +21,18 @@ const DelegateHero: React.FC = () => {
       {/* Building Image (Right Side) */}
       <div className="absolute top-0 right-0 w-2/3 h-full">
         <img
-          src={pragatiMaidan}
+          src={delegateBg}
           alt="Conference Venue"
-          className="w-full h-full object-cover object-left"
+          className="w-full h-full object-inherit object-left"
         />
         {/* Soft fade between left content and right image */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F0F7EE] via-[#F0F7EE]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F0F7EE] via-[#F0F7EE]/10 to-transparent" />
       </div>
 
       <div className="relative h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center">
         {/* Left Content Area */}
-        <div className="w-1/2 z-10">
-          <h1 className="text-[42px] font-black text-[#143111] leading-tight mb-4 uppercase tracking-tight">
+        <div className="w-1/2 z-10 -mt-10">
+          <h1 className="text-[42px] font-black text-[#143111] leading-tight mb-1 uppercase tracking-tight">
             DELEGATE REGISTRATION
           </h1>
           <p className="text-[17px] text-gray-700 font-bold leading-snug max-w-md">
@@ -71,14 +71,14 @@ const DelegateHero: React.FC = () => {
         </div>
 
         {/* Stats Bar - Exact Pill Shape Like Image */}
-        <div className="absolute bottom-8 left-10 z-30 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
+        <div className="absolute bottom-[70px] left-9 z-30 filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
           <div
-            className="bg-white flex items-stretch py-1 pr-24 rounded-l-[0px] overflow-hidden"
+            className="bg-white flex items-stretch py-1 pr-10 rounded-l-[0px] overflow-hidden"
             style={{ clipPath: "polygon(0% 0%, 88% 0%, 100% 100%, 0% 100%)" }}
           >
             {stats.map((stat, index) => (
               <React.Fragment key={index}>
-                <div className="flex items-center gap-4 px-8 py-5 group">
+                <div className="flex items-center gap-4 px-8 py-4 group">
                   <div className="text-[#143111] opacity-70">
                     {stat.icon}
                   </div>
