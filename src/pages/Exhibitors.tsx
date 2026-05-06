@@ -6,20 +6,15 @@ import ExhibitorCTA from "../components/exhibitors/ExhibitorCTA";
 import { Leaf } from "lucide-react";
 import { exhibitorApi } from "@/lib/api";
 
-const ITEMS_PER_PAGE = 32;
+const ITEMS_PER_PAGE = 80;
 
 const Exhibitors = () => {
     const [exhibitors, setExhibitors] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [loadingMore, setLoadingMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [activeCategory, setActiveCategory] = useState("ALL");
-
-    // Pagination State
     const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(false);
-
-    // Manual debounce logic
+    const [totalPages, setTotalPages] = useState(1);
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     useEffect(() => {
@@ -31,20 +26,13 @@ const Exhibitors = () => {
         return () => clearTimeout(handler);
     }, [searchTerm]);
 
-    useEffect(() => {
-        setPage(1); // Reset page on category change
-    }, [activeCategory]);
-
-    const fetchExhibitors = useCallback(async (isLoadMore = false) => {
-        if (isLoadMore) setLoadingMore(true);
-        else setLoading(true);
-
+    const fetchExhibitors = useCallback(async (targetPage = 1) => {
+        setLoading(true);
         try {
-            const currentPage = isLoadMore ? page + 1 : 1;
             const response = await exhibitorApi.get({
                 category: activeCategory,
                 search: debouncedSearch,
-                page: currentPage,
+                page: targetPage,
                 limit: ITEMS_PER_PAGE
             });
 
@@ -58,37 +46,35 @@ const Exhibitors = () => {
                 newData = response || [];
             }
 
-            if (isLoadMore) {
-                setExhibitors(prev => [...prev, ...newData]);
-                setPage(currentPage);
-            } else {
-                setExhibitors(newData);
-                setPage(1);
-            }
-
-            // Update hasMore status
+            setExhibitors(newData);
             if (pagination) {
-                setHasMore(pagination.page < pagination.totalPages);
-            } else {
-                setHasMore(false);
+                setTotalPages(pagination.totalPages);
             }
-
         } catch (error) {
             console.error("Error fetching exhibitors:", error);
         } finally {
             setLoading(false);
-            setLoadingMore(false);
         }
-    }, [activeCategory, debouncedSearch, page]);
-
-    useEffect(() => {
-        fetchExhibitors(false);
     }, [activeCategory, debouncedSearch]);
+    useEffect(() => {
+        fetchExhibitors(page);
+    }, [page, activeCategory, debouncedSearch, fetchExhibitors]);
+    useEffect(() => {
+        setPage(1);
+    }, [activeCategory, debouncedSearch]);
+    useEffect(() => {
+        if (totalPages <= 1) return;
+
+        const interval = setInterval(() => {
+            setPage(prev => (prev >= totalPages ? 1 : prev + 1));
+        }, 9000);
+
+        return () => clearInterval(interval);
+    }, [totalPages]);
 
     return (
         <div className="bg-white min-h-screen">
             <ExhibitorHero />
-            {/* Header Section - Moved above filters */}
             <div className="text-center py-4 bg-white">
                 <div className="flex items-center justify-center gap-3 mb-1">
                     <div className="w-8 h-[1px] bg-gray-200" />
@@ -97,28 +83,55 @@ const Exhibitors = () => {
                     </span>
                     <div className="w-8 h-[1px] bg-gray-200" />
                 </div>
-                <h2 className="text-2xl md:text-[2.2rem] font-bold text-[#0a3622] tracking-tight">
+                <h2 className="text-xl md:text-[2.0rem] font-semiBold text-[#d26019] tracking-tight">
                     A Platform Trusted by Industry Leaders
                 </h2>
             </div>
 
-            {/* <ExhibitorFilters
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-            /> */}
             {loading ? (
                 <div className="min-h-[400px] flex items-center justify-center">
                     <div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin" />
                 </div>
             ) : (
-                <ExhibitorGrid
-                    exhibitors={exhibitors}
-                    onLoadMore={() => fetchExhibitors(true)}
-                    hasMore={hasMore}
-                    isLoadingMore={loadingMore}
-                />
+                <div className="pb-12">
+                    <ExhibitorGrid exhibitors={exhibitors} />
+
+                    {/* Pagination UI */}
+                    {totalPages > 1 && (
+                        <div className="flex justify-center items-center gap-2 mt-8">
+                            <button
+                                onClick={() => setPage(prev => Math.max(1, prev - 1))}
+                                disabled={page === 1}
+                                className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                            >
+                                Previous
+                            </button>
+
+                            <div className="flex gap-2">
+                                {[...Array(totalPages)].map((_, i) => (
+                                    <button
+                                        key={i + 1}
+                                        onClick={() => setPage(i + 1)}
+                                        className={`w-8 h-8 rounded-full text-xs font-bold transition-all ${page === i + 1
+                                            ? "bg-[#1a4a2a] text-white"
+                                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                            }`}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
+                                disabled={page === totalPages}
+                                className="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
+                </div>
             )}
             <ExhibitorCTA />
         </div>
