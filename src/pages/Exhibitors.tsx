@@ -67,7 +67,7 @@ const Exhibitors = () => {
 
         const interval = setInterval(() => {
             setPage(prev => (prev >= totalPages ? 1 : prev + 1));
-        }, 9000);
+        }, 90000);
 
         return () => clearInterval(interval);
     }, [totalPages]);
