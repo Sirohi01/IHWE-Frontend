@@ -79,7 +79,7 @@ const navLinks = [
         description: "Government subsidy for MSME exhibitors"
       },
       {
-        label: "Govt MSME PMS Scheme",
+        label: "Govt. MSME PMS Scheme",
         path: "/government-msme-pms-schemes",
         icon: ShieldCheck,
         description: "Government subsidy for MSME exhibitors"

@@ -79,10 +79,10 @@ const WhyPart = () => {
             </div>
 
             {/* ── SECTION TWO: DOCUMENTS + HOW IT WORKS ── */}
-            <div className="w-full flex gap-6 mb-4">
+            <div className="w-full flex gap-3">
 
                 {/* ── LEFT: DOCUMENTS REQUIRED ── */}
-                <div className="w-[28%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl  ">
+                <div className="w-[25%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl  ">
                     <h2 className="text-base font-medium text-green-900 uppercase tracking-wide mb-4">
                         Documents Required
                     </h2>
@@ -104,8 +104,8 @@ const WhyPart = () => {
                 </div>
 
                 {/* ── RIGHT: HOW IT WORKS ── */}
-                <div className="w-[72%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl ">
-                    <h2 className="text-lg font-semibold text-gray-900 uppercase tracking-wide mb-2">
+                <div className="w-[75%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl ">
+                    <h2 className="text-lg font-medium text-gray-900 uppercase tracking-wide mb-2">
                         How It Works?
                     </h2>
 
@@ -113,7 +113,7 @@ const WhyPart = () => {
                     <div className="flex items-start justify-between relative">
 
                         {/* Connecting line */}
-                        <div className="absolute top-[52px] left-[8%] right-[8%] h-px border-t-2 border-dashed border-gray-300 z-0" />
+                        <div className="absolute top-[54px] left-[8%] right-[8%] h-px border-t-2 border-dashed border-gray-300 z-0" />
 
                         {[
                             {
@@ -121,13 +121,7 @@ const WhyPart = () => {
                                 title: 'Apply Online',
                                 desc: 'Fill the PMS application form',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M30 6H12a2 2 0 0 0-2 2v32a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V14Z" />
-                                        <polyline points="30 6 30 14 38 14" />
-                                        <line x1="16" y1="22" x2="32" y2="22" />
-                                        <line x1="16" y1="28" x2="28" y2="28" />
-                                        <path d="M28 32l4-4 4 4" />
-                                    </svg>
+                                    <img src="/mpscheme/how1.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -135,11 +129,7 @@ const WhyPart = () => {
                                 title: 'Upload Documents',
                                 desc: 'Submit all required documents online',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <polyline points="16 20 24 12 32 20" />
-                                        <line x1="24" y1="12" x2="24" y2="34" />
-                                        <path d="M10 36a14 14 0 0 0 28 0" />
-                                    </svg>
+                                    <img src="/mpscheme/how2.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -147,11 +137,7 @@ const WhyPart = () => {
                                 title: 'MSME Verification',
                                 desc: 'Documents verified by MSME',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <circle cx="24" cy="20" r="10" />
-                                        <path d="M20 20l3 3 5-5" />
-                                        <path d="M16 30l-4 10M32 30l4 10M20 40h8" />
-                                    </svg>
+                                    <img src="/mpscheme/how3.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -159,13 +145,7 @@ const WhyPart = () => {
                                 title: 'Stall Allocation',
                                 desc: 'Stall will be allocated',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M8 20 L24 8 L40 20" />
-                                        <rect x="14" y="28" width="8" height="12" />
-                                        <rect x="26" y="22" width="12" height="18" />
-                                        <line x1="8" y1="40" x2="40" y2="40" />
-                                        <path d="M8 20 Q16 16 24 20 Q32 24 40 20" />
-                                    </svg>
+                                    <img src="/mpscheme/how4.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -173,13 +153,7 @@ const WhyPart = () => {
                                 title: 'Exhibit at IHWE',
                                 desc: 'Participate in IHWE 2026',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <circle cx="18" cy="16" r="6" />
-                                        <circle cx="32" cy="16" r="6" />
-                                        <path d="M6 40c0-7 5-12 12-12" />
-                                        <path d="M42 40c0-7-5-12-12-12" />
-                                        <path d="M20 40c0-5 2-8 4-8s4 3 4 8" />
-                                    </svg>
+                                    <img src="/mpscheme/how5.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -187,39 +161,75 @@ const WhyPart = () => {
                                 title: 'Claim Reimbursement',
                                 desc: 'Get reimbursement after approval',
                                 icon: (
-                                    <svg width="36" height="36" viewBox="0 0 48 48" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M10 34 Q24 42 38 34" />
-                                        <circle cx="24" cy="20" r="10" />
-                                        <path d="M24 14v12M20 18h6a2 2 0 0 1 0 4h-4a2 2 0 0 0 0 4h6" />
-                                    </svg>
+                                    <img src="/mpscheme/how6.png" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                         ].map((step, i) => (
-                            <div key={i} className="flex flex-col items-center gap-3 relative z-10 flex-1">
+                            <div key={i} className="flex flex-col items-center relative z-10 flex-1">
 
-                                {/* Number badge */}
-                                <div className="w-7 h-7 rounded-full bg-[#1e5c1e] text-white text-xs font-black flex items-center justify-center mb-1">
-                                    {step.num}
-                                </div>
+                                <div className="relative mt-3">
 
-                                {/* Circle with icon */}
-                                <div className="w-24 h-24 rounded-full bg-[#f0f5ec] border border-[#d0e4c0] flex items-center justify-center">
-                                    {step.icon}
+                                    {/* Number badge — top right corner pe */}
+                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-[#1e5c1e] text-white text-xs font-medium flex items-center justify-center z-10 shadow">
+                                        {step.num}
+                                    </div>
+
+                                    {/* Circle with icon */}
+                                    <div className="w-20 h-20 rounded-full bg-[#f0f5ec] border border-[#d0e4c0] flex items-center justify-center mt-0">
+                                        {step.icon}
+                                    </div>
+
                                 </div>
 
                                 {/* Title */}
-                                <div className="text-sm font-bold text-gray-900 text-center leading-snug">
+                                <div className="text-sm font-base text-gray-900 text-center leading-snug mt-1">
                                     {step.title}
                                 </div>
 
                                 {/* Desc */}
-                                <div className="text-xs text-gray-500 text-center leading-snug max-w-[100px]">
+                                <div className="text-xs text-gray-700 text-center leading-snug mt-2">
                                     {step.desc}
                                 </div>
 
                             </div>
                         ))}
                     </div>
+                </div>
+
+            </div>
+
+            {/* SECTION THREE */}
+            <div className="w-full mb-4 mt-6 rounded-2xl bg-[#1e4d1e] flex items-end gap-6 px-6 relative">
+
+                {/* Trophy Image — upar se bahar nikle */}
+                <div className="shrink-0 z-10" style={{ marginBottom: 0, marginTop: '-44px' }}>
+                    <img
+                        src="/mpscheme/trofi1.png"
+                        alt="Trophy"
+                        className="w-28 h-36 object-contain object-bottom block"
+                    />
+                </div>
+
+                {/* Text */}
+                <div className="flex-1 z-10 py-2 mr-6">
+                    <p className="text-base font-semibold text-white leading-snug">
+                        Don't Miss This{' '}
+                        <span className="text-[#f5a623]">Government-Supported Opportunity!</span>
+                    </p>
+                    <p className="text-sm text-gray-200 mt-1 leading-relaxed">
+                        Exhibit at IHWE 2026 and take your business to the next level<br />
+                        with financial support under the MSME PMS Scheme.
+                    </p>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex items-center gap-6 shrink-0 z-10 py-5">
+                    <button className="bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap">
+                        Apply for PMS Scheme →
+                    </button>
+                    <button className="bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap">
+                        Book Your Stall →
+                    </button>
                 </div>
 
             </div>
