@@ -7,7 +7,7 @@ const DelegateFooter: React.FC = () => {
     <footer className="w-full bg-white">
       {/* Top Contact Bar - Dark Green background with colorful icons */}
       <div className="bg-[#143111] py-4 px-6 lg:px-10">
-        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between gap-6">
+        <div className="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-6 pl-[30px]">
           <div className="flex flex-wrap items-center gap-10">
             {/* Helpline */}
             <div className="flex items-center gap-3">
@@ -75,7 +75,7 @@ const DelegateFooter: React.FC = () => {
 
       {/* Main Branding Section - More Compact */}
       <div className="bg-white py-4 px-6 lg:px-10 border-t border-gray-100">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 pl-[30px]">
           {/* Logo & Info */}
           <div className="flex items-center gap-8">
             <img src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />

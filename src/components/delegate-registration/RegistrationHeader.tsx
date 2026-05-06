@@ -5,7 +5,7 @@ import logo from "@/assets/arogyasangosti.png";
 const RegistrationHeader: React.FC = () => {
   return (
     <header className="w-full bg-white py-3 px-6 lg:px-10 border-b border-gray-100">
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4 pl-[30px]">
+      <div className="max-w-[1360px] mx-auto flex items-center justify-between gap-4 pl-[30px]">
         {/* Left: Logo and Title */}
         <div className="flex items-center gap-8">
           <img src={logo} alt="Arogya Sanghoshthi" className="h-10 w-auto" />
