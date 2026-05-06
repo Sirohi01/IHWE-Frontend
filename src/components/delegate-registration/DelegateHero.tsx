@@ -3,10 +3,10 @@ import { Users, FileText, UserCheck, Globe, Calendar, MapPin } from "lucide-reac
 import delegateBg from "@/assets/deligateimage/uoi.png";
 const DelegateHero: React.FC = () => {
   const stats = [
-    { label: "Expert Speakers", value: "80+", icon: <UserCheck className="w-8 h-8" /> },
+    { label: "Expert Speakers", value: "150+", icon: <UserCheck className="w-8 h-8" /> },
     { label: "Power-Packed Sessions", value: "18", icon: <FileText className="w-8 h-8" /> },
     { label: "Delegates", value: "1000+", icon: <Users className="w-8 h-8" /> },
-    { label: "Countries", value: "20+", icon: <Globe className="w-8 h-8" /> },
+    { label: "Global Buyers", value: "1000+", icon: <Globe className="w-8 h-8" /> },
   ];
 
   return (
