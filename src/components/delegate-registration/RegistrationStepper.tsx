@@ -13,7 +13,7 @@ const RegistrationStepper: React.FC<RegistrationStepperProps> = ({ currentStep =
   ];
 
   return (
-    <div className="w-full py-6 px-6 bg-white">
+    <div className="w-full py-2 px-6 bg-white">
       <div className="max-w-[1000px] mx-auto flex items-center justify-between gap-4">
         {steps.map((step, idx) => (
           <React.Fragment key={step.number}>

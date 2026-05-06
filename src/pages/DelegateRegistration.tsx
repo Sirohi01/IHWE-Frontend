@@ -18,7 +18,7 @@ const DelegateRegistration: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-grow bg-[#F8FAFC]/30">
         {/* Stepper Container - Compact py-4 */}
-        <div className="bg-white border-b border-gray-100 py-4">
+        <div className="bg-white border-b border-gray-100 py-1">
           <RegistrationStepper currentStep={currentStep} />
         </div>
 
