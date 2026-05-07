@@ -6,7 +6,7 @@ import {
   Handshake, Camera, Sparkles, FileCheck,
   Info, ShoppingBag, HelpCircle, Lock, CalendarDays,
   ShieldCheck, Home, Phone, ChevronRight,
-  LayoutGrid, Building2, ExternalLink, Star, Mic
+  LayoutGrid, Building2, ExternalLink, Star, Mic, Trophy
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
@@ -58,8 +58,8 @@ const navLinks = [
 
 const bottomTabs = [
   { label: "Home", path: "/", icon: Home },
-  { label: "Exhibit", path: "/why-exhibit", icon: Building2 },
-  { label: "Events", path: "/conference", icon: CalendarDays },
+  { label: "Conference", path: "/conference", icon: Mic },
+  { label: "Award", path: "/awards", icon: Trophy },
   { label: "Contact", path: "/contact", icon: Phone },
 ];
 
@@ -395,11 +395,11 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   "w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200",
                   isActive ? "bg-[#23471d] shadow-md shadow-[#23471d]/20" : "bg-transparent"
                 )}>
-                  <tab.icon className={cn("w-4 h-4 transition-colors", isActive ? "text-white" : "text-slate-400")} />
+                  <tab.icon className={cn("w-4 h-4 transition-colors", isActive ? "text-white" : "text-slate-800")} />
                 </div>
                 <span className={cn(
-                  "text-[9px] font-semibold uppercase tracking-wider transition-colors",
-                  isActive ? "text-[#23471d]" : "text-slate-400"
+                  "text-[9px] font-medium uppercase tracking-wider transition-colors",
+                  isActive ? "text-[#23471d]" : "text-slate-800"
                 )}>
                   {tab.label}
                 </span>
