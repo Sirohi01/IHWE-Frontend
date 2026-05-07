@@ -188,7 +188,7 @@ const SessionSelection: React.FC = () => {
               </div>
             </div>
             <div className="w-[140px] p-4 flex flex-col items-center justify-center border-l border-gray-50 bg-gray-50/10">
-              <div className="text-[24px] font-black text-[#0B2C66] leading-none mb-1">₹3000</div>
+              <div className="text-[20px] font-black text-[#0B2C66] leading-none mb-1">₹3000</div>
               <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("full_pass") ? "bg-[#0B2C66] border-[#0B2C66]" : "bg-white border-gray-200"
                 }`}>
                 {selectedSessions.includes("full_pass") && <Check className="w-4 h-4 text-white stroke-[3]" />}
@@ -228,7 +228,7 @@ const SessionSelection: React.FC = () => {
               </div>
             </div>
             <div className="w-[140px] p-4 flex flex-col items-center justify-center border-l border-gray-50 bg-gray-50/10">
-              <div className="text-[24px] font-black text-[#6A3DF0] leading-none mb-1">₹3000</div>
+              <div className="text-[20px] font-black text-[#6A3DF0] leading-none mb-1">₹3000</div>
               <div className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("paper_pass") ? "bg-[#6A3DF0] border-[#6A3DF0]" : "bg-white border-gray-200"
                 }`}>
                 {selectedSessions.includes("paper_pass") && <Check className="w-4 h-4 text-white stroke-[3]" />}

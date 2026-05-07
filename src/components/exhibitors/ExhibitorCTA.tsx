@@ -57,10 +57,10 @@ const ExhibitorCTA = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4">
+                    <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
                         <Link
                             to="/book-a-stand"
-                            className="px-5 py-2 bg-[#1a4a2a] hover:bg-[#153a21] text-white rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
+                            className="flex-1 sm:flex-none px-2 sm:px-5 py-2.5 bg-[#1a4a2a] hover:bg-[#153a21] text-white rounded-lg font-bold text-[10px] sm:text-[13px] tracking-wide transition-all flex items-center justify-center gap-1.5 sm:gap-3 whitespace-nowrap"
                         >
                             BOOK YOUR STALL <ArrowRight className="w-4 h-4" />
                         </Link>
@@ -69,7 +69,7 @@ const ExhibitorCTA = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             download
-                            className="px-5 py-2 bg-white hover:bg-gray-50 text-[#1a4a2a] border border-[#1a4a2a] rounded-lg font-bold text-[13px] tracking-wide transition-all flex items-center gap-3"
+                            className="flex-1 sm:flex-none px-2 sm:px-5 py-2.5 bg-white hover:bg-gray-50 text-[#1a4a2a] border border-[#1a4a2a] rounded-lg font-bold text-[10px] sm:text-[13px] tracking-wide transition-all flex items-center justify-center gap-1.5 sm:gap-3 whitespace-nowrap"
                         >
                             DOWNLOAD BROCHURE <Download className="w-4 h-4" />
                         </a>
@@ -89,16 +89,16 @@ const ExhibitorCTA = () => {
             {/* Dark Green Bottom Bar - Exact match with dividers and icon positions */}
             <div className="bg-[#0a3622]">
                 <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-                    <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-6">
+                    <div className="grid grid-cols-2 md:flex md:flex-nowrap justify-between items-center gap-y-4 gap-x-4 py-6 md:py-0">
                         {BOTTOM_STATS.map((stat, idx) => (
                             <React.Fragment key={idx}>
-                                <div className="flex items-center gap-4 flex-1 justify-start">
-                                    <div className="text-white shrink-0 w-14 h-14 md:w-20 md:h-20 flex items-center justify-center">
-                                        <img src={stat.icon} alt={stat.label} className="w-14 h-14 md:w-20 md:h-20 object-contain" />
+                                <div className={`flex items-center gap-3 md:gap-4 flex-1 justify-start ${idx === BOTTOM_STATS.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}>
+                                    <div className="text-white shrink-0 w-12 h-12 md:w-20 md:h-20 flex items-center justify-center">
+                                        <img src={stat.icon} alt={stat.label} className="w-12 h-12 md:w-20 md:h-20 object-contain" />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <span className="text-white text-[15px] font-bold leading-tight">{stat.value}</span>
-                                        <span className="text-white text-[11px] leading-tight font-medium uppercase tracking-tight">{stat.label}</span>
+                                        <span className="text-white text-[13px] md:text-[15px] font-bold leading-tight">{stat.value}</span>
+                                        <span className="text-white text-[9px] md:text-[11px] leading-tight font-medium uppercase tracking-tight">{stat.label}</span>
                                     </div>
                                 </div>
                                 {idx < BOTTOM_STATS.length - 1 && (

@@ -228,7 +228,7 @@ const marqueeTracks = [...tracks];
 const ConferenceTracks: React.FC = () => {
   return (
     <section className="pt-4 pb-0 bg-[#F7F9FC] overflow-hidden">
-      <div className="mx-auto px-6 max-w-[1380px] relative left-[20px]">
+      <div className="mx-auto px-6 max-w-[1320px]">
         {/* Section header */}
         <div className="flex flex-col items-center mb-0">
           <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">

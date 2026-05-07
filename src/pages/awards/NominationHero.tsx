@@ -37,8 +37,8 @@ const NominationHero = () => {
             className="flex flex-col items-start"
           >
             {/* IHWE Logo */}
-            <div className="flex justify-start w-full -mt-8 mb-1">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
+            <div className="flex justify-start w-full mt-4 md:-mt-8 mb-1">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[280px] md:w-[500px] object-fill" />
             </div>
 
             <div className="space-y-1">

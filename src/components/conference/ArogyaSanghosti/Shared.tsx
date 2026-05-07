@@ -55,7 +55,7 @@ export const SectionBox: React.FC<{ children: React.ReactNode, style?: React.CSS
         border: `1px solid ${BORDER_COLOR}`,
         borderRadius: 12,
         padding: "8px 14px",
-        marginBottom: 10,
+        marginBottom: 4,
         boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
         position: "relative",
         ...style,
