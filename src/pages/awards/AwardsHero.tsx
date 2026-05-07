@@ -16,12 +16,9 @@ const AwardsHero = () => {
 
 
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 bg-center bg-no-repeat bg-cover md:bg-[length:100%_100%]"
         style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundImage: `url(${heroBg})`
         }}
       ></div>
 
@@ -33,11 +30,11 @@ const AwardsHero = () => {
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-8 flex  flex-col items-start"
+            className="lg:col-span-8 flex flex-col items-center md:items-start text-center md:text-left"
           >
             {/* Awards Logo */}
-            <div className="flex justify-start w-full mt-4 md:-mt-8 mb-1">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[280px] md:w-[500px] object-fill" />
+            <div className="flex justify-center md:justify-start w-full mt-2 md:-mt-8 mb-1">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[240px] sm:w-[300px] md:w-[500px] object-contain" />
             </div>
 
             {/* <div className="flex items-center gap-4">
@@ -55,11 +52,11 @@ const AwardsHero = () => {
               {/* <h1 className="font-[800] text-[25px] md:text-[38px] uppercase" style={{ color: navyColor }}>EXCELLENCE AWARDS 2026</h1> */}
             </div>
 
-            <p className="text-[#555] text-[16px] md:text-[19px] font-semibold tracking-tight mt-4">
+            <p className="text-[#555] text-[14px] md:text-[19px] font-semibold tracking-tight mt-4 px-4 lg:px-0">
               Honouring Excellence in Healthcare, Wellness & Innovation
             </p>
 
-            <div className="w-full max-w-xl h-[1.5px] my-3 relative opacity-100" style={{ backgroundColor: '#f0f0f0' }}>
+            <div className="w-full max-w-xl h-[1.5px] my-3 relative opacity-100 hidden lg:block" style={{ backgroundColor: '#f0f0f0' }}>
               <div
                 className="absolute left-[0%] top-1/2 -translate-y-1/2 h-[1.5px] w-[60%]"
                 style={{ backgroundColor: darkYellow }}
@@ -70,7 +67,7 @@ const AwardsHero = () => {
               ></div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6 mt-4">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" style={{ color: greenColor }} />
                 <span className="font-bold text-[13px] uppercase" style={{ color: navyColor }}>21-23 AUGUST 2026</span>
@@ -91,16 +88,16 @@ const AwardsHero = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-4">
+            <div className="flex flex-row items-center justify-center md:justify-start gap-3 mt-6 w-full md:w-auto">
               <Link
                 to="/awards/nomination"
-                className="text-white px-7 py-2 rounded-md text-[12px] font-black uppercase tracking-[0.1em] flex items-center gap-2.5 shadow-lg transition-all hover:scale-[1.02]"
+                className="flex-1 md:flex-none justify-center text-white px-4 md:px-7 py-2.5 rounded-md text-[10px] md:text-[12px] font-black uppercase tracking-[0.1em] flex items-center gap-2 md:gap-2.5 shadow-lg transition-all hover:scale-[1.02] whitespace-nowrap"
                 style={{ ...jakartaFont, backgroundColor: greenColor }}
               >
-                NOMINATE NOW <span className="text-[16px]">→</span>
+                NOMINATE NOW <span className="text-[14px] md:text-[16px]">→</span>
               </Link>
               <button
-                className="bg-white px-7 py-2 rounded-md text-[12px] font-black uppercase tracking-[0.1em] border-2 transition-all hover:bg-slate-50 shadow-md"
+                className="flex-1 md:flex-none justify-center bg-white px-4 md:px-7 py-2.5 rounded-md text-[10px] md:text-[12px] font-black uppercase tracking-[0.1em] border-2 transition-all hover:bg-slate-50 shadow-md whitespace-nowrap"
                 style={{ ...jakartaFont, borderColor: navyColor, color: navyColor }}
               >
                 BECOME A SPONSOR
