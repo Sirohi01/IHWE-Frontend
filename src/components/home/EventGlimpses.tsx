@@ -24,7 +24,18 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 const EventGlimpses = () => {
   const [glimpseData, setGlimpseData] = useState<any>(null);
   const [current, setCurrent] = useState(0);
-  const visible = 5;
+  const [visibleCount, setVisibleCount] = useState(5);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setVisibleCount(1);
+      else if (window.innerWidth < 1024) setVisibleCount(3);
+      else setVisibleCount(5);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,29 +53,29 @@ const EventGlimpses = () => {
 
   const nextSlide = useCallback(() => {
     if (!glimpseData?.images?.length) return;
-    const maxIndex = Math.max(0, glimpseData.images.length - visible);
+    const maxIndex = Math.max(0, glimpseData.images.length - visibleCount);
     setCurrent(prev => (prev >= maxIndex ? 0 : prev + 1));
-  }, [glimpseData]);
+  }, [glimpseData, visibleCount]);
 
   const prevSlide = () => {
     if (!glimpseData?.images?.length) return;
-    const maxIndex = Math.max(0, glimpseData.images.length - visible);
+    const maxIndex = Math.max(0, glimpseData.images.length - visibleCount);
     setCurrent(prev => (prev <= 0 ? maxIndex : prev - 1));
   };
 
   useEffect(() => {
-    if (glimpseData?.images?.length > visible) {
+    if (glimpseData?.images?.length > visibleCount) {
       const timer = setInterval(nextSlide, 5000);
       return () => clearInterval(timer);
     }
-  }, [nextSlide, glimpseData]);
+  }, [nextSlide, glimpseData, visibleCount]);
 
   if (!glimpseData) return null;
 
   const images = glimpseData.images || [];
   const stats = glimpseData.counters || [];
-  const maxIndex = Math.max(0, images.length - visible);
-  const GAP = 2;
+  const maxIndex = Math.max(0, images.length - visibleCount);
+  const GAP = visibleCount > 1 ? 2 : 0;
 
 
 
@@ -120,40 +131,40 @@ const EventGlimpses = () => {
       <SectionContainer className="relative z-10">
 
         {/* Header */}
-        <div className="text-center mb-8 px-4">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <Leaf size={20} className="text-[#2f8f3a]" />
-            <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[11px]">{glimpseData.subheading || 'Event Glimpses'}</span>
-            <Leaf size={20} className="text-[#2f8f3a] scale-x-[-1]" />
+        <div className="text-left md:text-center mb-8 px-4">
+          <div className="flex items-center justify-start md:justify-center gap-2 mb-2">
+            <Leaf size={18} className="text-[#2f8f3a]" />
+            <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[10px] md:text-[11px]">{glimpseData.subheading || 'Event Glimpses'}</span>
+            <Leaf size={18} className="text-[#2f8f3a] scale-x-[-1] hidden md:block" />
           </div>
           <div 
-            className="text-2xl md:text-4xl font-black text-[#0b2912] mb-3 uppercase tracking-tight flex justify-center items-center"
+            className="text-[22px] md:text-[34px] font-black text-[#0b2912] mb-4 uppercase tracking-tight flex justify-start md:justify-center items-center text-left md:text-center leading-tight"
             dangerouslySetInnerHTML={{ __html: glimpseData.heading }}
           />
-          <div className="flex items-center justify-center gap-4">
-            <div className="h-[1px] w-12 bg-[#b6d9bb]" />
+          <div className="flex items-center justify-start md:justify-center gap-4 max-w-2xl md:mx-auto">
+            <div className="hidden md:block h-[1px] w-12 bg-[#b6d9bb]" />
             <div 
-              className="text-slate-700 text-xs md:text-sm tracking-wide prose prose-sm max-w-none"
+              className="text-slate-700 text-sm md:text-base tracking-wide prose prose-sm max-w-none text-left md:text-center"
               dangerouslySetInnerHTML={{ __html: glimpseData.description }}
             />
-            <div className="h-[1px] w-12 bg-[#b6d9bb]" />
+            <div className="hidden md:block h-[1px] w-12 bg-[#b6d9bb]" />
           </div>
         </div>
 
         {/* Carousel Area */}
-        <div className="relative mb-4 px-2 max-w-[1200px] mx-auto">
+        <div className="relative mb-8 px-2 max-w-[1200px] mx-auto">
           {/* Arrows */}
-          {images.length > visible && (
+          {images.length > visibleCount && (
             <>
               <button
                 onClick={prevSlide}
-                className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
+                className="absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300 active:scale-95"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300"
+                className="absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300 active:scale-95"
               >
                 <ChevronRight size={20} />
               </button>
@@ -161,37 +172,39 @@ const EventGlimpses = () => {
           )}
 
           {/* Slider */}
-          <div className="overflow-hidden rounded-2xl shadow-2xl">
+          <div className="overflow-hidden rounded-2xl shadow-xl">
             <motion.div
               className="flex"
               style={{ gap: `${GAP}px` }}
-              animate={{ x: `${-(current * (100 / visible))}%` }}
+              animate={{ x: `${-(current * (100 / visibleCount))}%` }}
               transition={{ type: 'spring', stiffness: 120, damping: 20 }}
             >
               {images.map((img: any, idx: number) => {
-                // Dynamic window logic: check if the image is currently at the start or end of the 5 visible items
                 const isFirstVisible = idx === current;
-                const isLastVisible = idx === current + visible - 1;
+                const isLastVisible = idx === current + visibleCount - 1;
                 
-                const itemWidth = `calc((100% + ${(visible - 1) * 35}px) / ${visible})`;
+                const itemWidth = `calc((100% + ${(visibleCount - 1) * (visibleCount > 1 ? 35 : 0)}px) / ${visibleCount})`;
+                const negativeMargin = visibleCount > 1 ? '-35px' : '0';
 
                 return (
                   <div
                     key={idx}
                     className={`relative flex-shrink-0 group/card overflow-hidden transition-all duration-700 
-                      ${isFirstVisible ? 'rounded-l-3xl shadow-[-20px_0_40px_rgba(0,0,0,0.1)]' : ''} 
-                      ${isLastVisible ? 'rounded-r-3xl shadow-[20px_0_40px_rgba(0,0,0,0.1)]' : ''}`}
+                      ${isFirstVisible ? 'rounded-l-3xl' : ''} 
+                      ${isLastVisible ? 'rounded-r-3xl' : ''}`}
                     style={{
                       width: itemWidth,
                       minWidth: itemWidth,
-                      marginLeft: idx === 0 ? '0' : '-35px',
-                      height: '260px',
+                      marginLeft: idx === 0 ? '0' : negativeMargin,
+                      height: visibleCount > 1 ? '260px' : '320px',
                       zIndex: isFirstVisible || isLastVisible ? 20 : 10,
-                      clipPath: isFirstVisible 
-                        ? 'polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%)' 
-                        : isLastVisible
-                          ? 'polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)'
-                          : 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                      clipPath: visibleCount > 1 
+                        ? (isFirstVisible 
+                            ? 'polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%)' 
+                            : isLastVisible
+                              ? 'polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)'
+                              : 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)')
+                        : 'none',
                     }}
                   >
                     <img
@@ -224,33 +237,33 @@ const EventGlimpses = () => {
         </div>
 
         {/* Stats Footer Bar */}
-        <div className="px-2 mt-0">
-          <div className="max-w-[1200px] mx-auto bg-[#041a0a] rounded-full p-1.5 flex items-center border border-white/10 shadow-2xl overflow-hidden">
-            <div className="flex-1 flex items-center justify-around px-2">
+        <div className="px-2 mt-6">
+          <div className="max-w-[1200px] mx-auto bg-[#041a0a] rounded-[24px] md:rounded-full p-2.5 flex flex-col md:flex-row items-stretch border border-white/10 shadow-2xl overflow-hidden gap-5 md:gap-0">
+            <div className="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:items-center md:justify-around px-2 py-3 md:py-0 gap-y-6 md:gap-0">
               {stats.map((stat: any, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 px-3 border-r border-white/10 last:border-r-0">
-                  <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#0b4d17] flex-shrink-0">
-                    {ICON_MAP[stat.icon] || <Users size={18} />}
+                <div key={idx} className="flex flex-col md:flex-row items-center gap-2.5 md:gap-3 px-1 md:px-3 border-white/10 md:border-r last:border-r-0 flex-1">
+                  <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#0b4d17] flex-shrink-0 shadow-inner">
+                    {ICON_MAP[stat.icon] || <Users size={16} />}
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-[#2f8f3a] font-bold text-sm leading-none mb-0.5">{stat.number}</span>
-                    <span className="text-white/60 text-[9px] uppercase tracking-wider font-semibold">{stat.label}</span>
+                  <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                    <span className="text-[#2f8f3a] font-black text-[13px] md:text-[14px] leading-tight mb-0.5">{stat.number}</span>
+                    <span className="text-white/70 text-[8px] md:text-[9px] uppercase tracking-[0.1em] font-bold leading-tight px-1">{stat.label}</span>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* CTA White Pill */}
-            <div className="bg-white rounded-full p-1.5 pr-8 flex items-center gap-4 ml-2 shadow-xl flex-shrink-0">
-              <div className="w-10 h-10 rounded-full bg-[#0b4d17] flex items-center justify-center text-white shadow-inner">
-                <Camera size={20} />
+            <div className="bg-white rounded-[18px] md:rounded-full p-3 md:p-1.5 md:pr-10 flex items-center gap-4 w-full md:w-auto shadow-xl flex-shrink-0 hover:bg-slate-50 transition-colors cursor-pointer group">
+              <div className="w-11 h-11 rounded-full bg-[#0b4d17] flex items-center justify-center text-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Camera size={22} />
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#0b4d17] font-black text-[11px] uppercase tracking-tight leading-none">Endless</span>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className="text-[#0b4d17] font-black text-[12px] md:text-[11px] uppercase tracking-tight leading-none">Endless</span>
                   <span className="text-[#0b4d17]/60 text-[9px] font-bold uppercase tracking-widest leading-none">Opportunities</span>
                 </div>
-                <p className="text-[#0b2912] text-[10px] leading-[1.3] font-medium tracking-wide mt-0.5">
+                <p className="text-[#0b2912] text-[10px] md:text-[10px] leading-[1.2] font-semibold tracking-wide">
                   {glimpseData.counterText}
                 </p>
               </div>

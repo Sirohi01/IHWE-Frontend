@@ -53,20 +53,20 @@ const BeyondExhibition = () => {
   return (
     <section className="bg-white pt-0 pb-4 overflow-hidden">
       <SectionContainer>
-        <div className="bg-[#ecfdf5] rounded-[1.2rem] p-2 lg:p-2.5 flex flex-col xl:flex-row items-center gap-2 border-[1px] border-[#d1fae5] shadow-sm">
+        <div className="bg-[#ecfdf5] rounded-[1.2rem] p-4 md:p-6 lg:p-2.5 flex flex-col xl:flex-row items-center gap-6 lg:gap-2 border-[1px] border-[#d1fae5] shadow-sm">
           
           {/* LEFT HEADER */}
-          <div className="w-full xl:w-[20%] flex flex-col items-start text-left border-b xl:border-b-0 xl:border-r border-gray-400/30 pb-2 xl:pb-0 xl:pr-5 -mt-2.5">
-            <h2 className="text-[18px] font-black text-[#0f2a4a] tracking-tighter leading-tight mb-0">
+          <div className="w-full xl:w-[20%] flex flex-col items-center xl:items-start text-center xl:text-left border-b xl:border-b-0 xl:border-r border-gray-400/30 pb-4 xl:pb-0 xl:pr-5">
+            <h2 className="text-[20px] md:text-[18px] font-black text-[#0f2a4a] tracking-tighter leading-tight mb-1 md:mb-0">
               BEYOND <span className="text-[#2e7d32]">AN</span> <span className="text-[#0f2a4a]">EXHIBITION</span>
             </h2>
-            <p className="text-[9px] text-gray-600 font-medium leading-[1.4] max-w-[280px]">
+            <p className="text-[10px] md:text-[9px] text-gray-600 font-medium leading-[1.4] max-w-[280px]">
               A powerful ecosystem of conferences, summits, awards, B2B meetings and global collaborations.
             </p>
           </div>
 
           {/* RIGHT GRID ITEMS */}
-          <div className="w-full xl:w-[80%] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-start gap-1 pt-1">
+          <div className="w-full xl:w-[80%] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-start gap-x-4 gap-y-6 md:gap-1 pt-2 md:pt-1">
             {extras.map((item, index) => (
               <motion.div 
                 key={index}
@@ -83,11 +83,11 @@ const BeyondExhibition = () => {
 
                 {/* TEXT */}
                 <div className="flex flex-col">
-                  <h4 className="text-[9.5px] font-bold text-[#1e4620] leading-[1.1] tracking-tight uppercase">
+                  <h4 className="text-[9.5px] md:text-[9.5px] font-bold text-[#1e4620] leading-[1.1] tracking-tight uppercase">
                     <div>{item.title}</div>
                     <div>{item.title2}</div>
                   </h4>
-                  <p className="text-[9px] text-gray-600 font-bold leading-[1.2] mt-1 max-w-[150px]">
+                  <p className="text-[9px] md:text-[9px] text-gray-600 font-bold leading-[1.2] mt-1 max-w-[150px]">
                     {item.subtitle}
                   </p>
                 </div>

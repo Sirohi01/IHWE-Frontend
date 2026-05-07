@@ -42,31 +42,31 @@ const BlogPreview = () => {
   if (blogs.length === 0) return null;
 
   return (
-    <section className="pt-8 pb-16 lg:pt-12 lg:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
+    <section className="pt-10 pb-16 md:pt-12 md:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
       <SectionContainer>
         {/* BRANDED HEADING */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-8 gap-4 md:gap-6">
           <div data-aos="fade-right">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-3 md:mb-4">
               <div className="h-px w-8 bg-[#23471d]" />
-              <span className="uppercase tracking-[0.4em] text-[#23471d] font-bold text-xs">
+              <span className="uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#23471d] font-bold text-[10px] md:text-xs">
                 Latest Insights
               </span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-inter font-bold text-slate-900 leading-tight">
+            <h2 className="text-2xl md:text-4xl font-inter font-black md:font-bold text-slate-900 leading-tight">
               Global Healthcare <span className="text-[#d26019]">Perspectives</span>
             </h2>
           </div>
           <Link
             to="/blog"
             data-aos="fade-left"
-            className="flex items-center gap-2 text-[#d26019] font-inter font-bold text-xs uppercase tracking-widest hover:gap-4 transition-all"
+            className="flex items-center gap-2 text-[#d26019] font-inter font-bold text-[11px] md:text-xs uppercase tracking-widest hover:gap-4 transition-all w-fit"
           >
             Explore All <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6">
           {blogs.map((post, i) => (
             <Link
               to={`/blog/${post.slug}`}
@@ -76,7 +76,7 @@ const BlogPreview = () => {
               className="group relative block rounded-2xl bg-white border border-slate-100 hover:border-[#23471d]/20 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl overflow-hidden font-inter"
             >
               {/* Image Container */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-56 md:h-48 overflow-hidden">
                 <LazyLoadImage
                   src={`${SERVER_URL}${post.image}`}
                   alt={post.title}
@@ -87,31 +87,31 @@ const BlogPreview = () => {
                 {/* Shiny Sweep */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/25 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
                 {/* Category Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/90 backdrop-blur-md text-[#23471d] text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm font-inter">
+                <div className="absolute top-4 left-4 md:top-3 md:left-3">
+                  <span className="bg-white/90 backdrop-blur-md text-[#23471d] text-[10px] md:text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 md:px-3 md:py-1 rounded-full shadow-sm font-inter">
                     {post.category}
                   </span>
                 </div>
               </div>
 
               {/* CONTENT */}
-              <div className="p-5 relative overflow-hidden">
-                <div className="flex items-center gap-2 text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-3 font-inter">
-                  <Calendar className="w-3 h-3 text-[#d26019]" />
+              <div className="p-6 md:p-5 relative overflow-hidden">
+                <div className="flex items-center gap-2 text-slate-400 text-[10px] md:text-[9px] font-bold uppercase tracking-widest mb-3 font-inter">
+                  <Calendar className="w-3.5 h-3.5 text-[#d26019]" />
                   {new Date(post.createdAt || post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </div>
-                <h3 className="text-base font-bold text-[#23471d] mb-3 leading-snug line-clamp-2 transition-colors font-inter">
+                <h3 className="text-lg md:text-base font-black md:font-bold text-[#23471d] mb-3 leading-snug line-clamp-2 transition-colors font-inter">
                   {post.title}
                 </h3>
-                <p className="text-black text-xs leading-relaxed mb-5 line-clamp-2 font-medium font-inter">
+                <p className="text-slate-700 md:text-black text-[13px] md:text-xs leading-relaxed mb-6 md:mb-5 line-clamp-3 md:line-clamp-2 font-medium font-inter">
                   {post.excerpt}
                 </p>
 
-                <div className="flex items-center justify-between pt-3 border-t border-slate-100 relative z-10 font-inter">
-                  <span className="text-[#23471d] font-bold text-[10px] uppercase tracking-widest flex items-center gap-1.5 group-hover:text-[#d26019] transition-colors">
-                    Read More <ArrowRight className="w-3 h-3" />
+                <div className="flex items-center justify-between pt-4 md:pt-3 border-t border-slate-100 relative z-10 font-inter">
+                  <span className="text-[#23471d] font-bold text-[11px] md:text-[10px] uppercase tracking-widest flex items-center gap-1.5 group-hover:text-[#d26019] transition-colors">
+                    Read More <ArrowRight className="w-4 h-4 md:w-3 md:h-3" />
                   </span>
-                  <span className="text-slate-400 text-[9px] uppercase font-bold tracking-widest">
+                  <span className="text-slate-400 text-[10px] md:text-[9px] uppercase font-bold tracking-widest">
                     {post.readTime || "5 min read"}
                   </span>
                 </div>

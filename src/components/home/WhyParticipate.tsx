@@ -95,33 +95,33 @@ const WhyParticipate = () => {
           viewport={{ once: true }}
           className="w-full lg:w-1/2 relative"
         >
-          {/* Green background block behind image */}
-          <div className="absolute bottom-[-18px] right-[-18px] w-[180px] h-[180px] bg-[#2f8f3a] rounded-[20px] z-0" />
+          {/* Green background block behind image — Hidden on mobile to prevent overlapping features */}
+          <div className="hidden md:block absolute bottom-[-18px] right-[-18px] w-[180px] h-[180px] bg-[#2f8f3a] rounded-[20px] z-0" />
 
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[7px] border-white/70 z-10">
             <img
               src={imageSrc}
               alt={data.imageAltText || "Business Meeting"}
-              className="w-full h-[330px] object-cover"
+              className="w-full h-[280px] md:h-[330px] object-cover"
             />
 
             {/* Floating Badge */}
-            <div className="absolute bottom-6 right-6 bg-white p-4 rounded-2xl shadow-xl border-l-[5px] border-[#2f8f3a] max-w-[190px] z-20 transform hover:-translate-y-2 transition-transform duration-300">
-              <div className="flex items-start gap-3">
-                <Leaf className="w-4 h-4 text-[#2f8f3a] shrink-0 mt-[2px]" fill="#2f8f3a" />
-                <p className="text-[12px] font-bold text-[#071c3d] leading-tight whitespace-pre-line">
+            <div className="absolute bottom-6 right-6 bg-white p-3 md:p-4 rounded-2xl shadow-xl border-l-[5px] border-[#2f8f3a] max-w-[170px] md:max-w-[190px] z-20 transform hover:-translate-y-2 transition-transform duration-300">
+              <div className="flex items-start gap-2 md:gap-3">
+                <Leaf className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#2f8f3a] shrink-0 mt-[2px]" fill="#2f8f3a" />
+                <p className="text-[10px] md:text-[12px] font-bold text-[#071c3d] leading-tight whitespace-pre-line">
                   {data.imageOverlayText || "Build Relationships.\nGenerate Leads.\nGrow Your Business."}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* New 3-point bullets below image */}
-          <div className="flex justify-start items-center gap-8 mt-8 ml-6">
+          {/* New 3-point bullets below image — Optimized for mobile stacking/wrapping */}
+          <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-8 mt-6 md:mt-8 md:ml-6">
             {mainPoints.map((point: string, index: number) => (
               <div key={index} className="flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-[#2f8f3a]" fill="#2f8f3a" color="#fff" />
-                <span className="text-[14px] font-bold text-[#071c3d] tracking-tight uppercase">{point}</span>
+                <span className="text-[13px] md:text-[14px] font-bold text-[#071c3d] tracking-tight uppercase">{point}</span>
               </div>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Quote, ChevronLeft, ChevronRight, MapPin, Play,
@@ -11,6 +11,8 @@ import img1 from '../../assets/1.png';
 import img2 from '../../assets/2 (1).png';
 import img3 from '../../assets/3 (1).png';
 import img4 from '../../assets/4.png';
+
+import { newTestimonialsApi, SERVER_URL } from "@/lib/api";
 
 // ─── Sparkle component for premium button ───
 const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
@@ -31,113 +33,45 @@ const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
   </span>
 );
 
-// ─── Data ───
-const TESTIMONIALS_DATA = [
-  {
-    id: 1,
-    quote: "IHWE helped us connect with serious buyers and expand globally. The response was exceptional and beyond our expectations.",
-    company1: "NatureCure",
-    company2: "International",
-    logoText: "NATURE\nCURE",
-    location: "Dubai, UAE",
-    color: "#23471d",
-    bgImage: img1,
-  },
-  {
-    id: 2,
-    quote: "A powerful platform for healthcare innovation and meaningful networking. We met the right partners for our business.",
-    company1: "MediWell",
-    company2: "Research",
-    logoText: "MEDI\nWELL",
-    location: "Toronto, Canada",
-    color: "#1a4d8f",
-    bgImage: img2,
-  },
-  {
-    id: 3,
-    quote: "We closed multiple distribution deals within 3 days of the expo. It is the best event for international market exposure.",
-    company1: "Herbal Global",
-    company2: "Pvt. Ltd.",
-    logoText: "HERBAL\nGLOBAL",
-    location: "New Delhi, India",
-    color: "#7e22ce",
-    bgImage: img3,
-  },
-  {
-    id: 4,
-    quote: "IHWE brings the right people and the right opportunities for growth. Our brand visibility has increased significantly here.",
-    company1: "NutriLife",
-    company2: "Solutions",
-    logoText: "NUTRI\nLIFE",
-    location: "Bangkok, Thailand",
-    color: "#458a16",
-    bgImage: img4,
-  },
-  {
-    id: 5,
-    quote: "An exceptional event with world-class organization and presence. A must-attend for everyone in the wellness industry.",
-    company1: "BioVita",
-    company2: "Health",
-    logoText: "BIO\nVITA",
-    location: "Frankfurt, Germany",
-    color: "#3e6cc0",
-    bgImage: img1,
-  },
-];
-
-const VIDEOS_DATA = [
-  { id: 1, company: "NatureCure International", location: "Dubai, UAE", bg: "linear-gradient(160deg,#4a5568,#1a202c)" },
-  { id: 2, company: "MediWell Research", location: "Toronto, Canada", bg: "linear-gradient(160deg,#3b5ea6,#1a2d5a)" },
-  { id: 3, company: "Herbal Global Pvt. Ltd.", location: "New Delhi, India", bg: "linear-gradient(160deg,#2d5a2d,#1a3a1a)" },
-];
-
-const STATS = [
-  { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
-  { icon: Users, value: "8000+", label: "Visitors/Delegates", color: "#004ac2ff" },
-  { icon: Handshake, value: "150+", label: "Exhibitors", color: "#00742aff" },
-  { icon: Mic2, value: "150+", label: "Expert Speakers", color: "#005f23ff" },
-];
-
-const BOTTOM_STATS = [
-  { icon: Leaf, label: "Trusted by", value: "150+ Exhibitors" },
-  { icon: Globe, label: "Global Presence", value: "1000+ Global Buyers" },
-  { icon: Building2, label: "Government", value: "Supported Initiative" },
-  { icon: Users, label: "Global Platform for", value: "Health & Wellness" },
-];
-
 // ─── Logo Box ───
-const LogoBox = ({ text, color }) => (
+const LogoBox = ({ text, color }: { text: string; color: string }) => (
   <div
     className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center text-slate-800 font-black text-[5.5px] text-center leading-tight flex-shrink-0 bg-white"
     style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}
   >
-    {text.split("\n").map((w, i) => <div key={i} style={{ color }}>{w}</div>)}
+    {(text || "").split("\n").map((w, i) => <div key={i} style={{ color }}>{w}</div>)}
   </div>
 );
 
 // ─── Testimonial Card ───
-const TestimonialCard = ({ item }) => (
+const TestimonialCard = ({ item }: { item: any }) => (
   <div
-    className="relative bg-white rounded-[24px] border border-slate-100 pt-6 pl-3 pr-6 pb-2 flex flex-col gap-3 w-[225px] flex-shrink-0 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 overflow-hidden group"
+    className="relative bg-white rounded-[24px] border border-slate-100 pt-6 pl-3 pr-6 pb-2 flex flex-col gap-3 w-[250px] md:w-[225px] flex-shrink-0 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 overflow-hidden group"
     style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }}
   >
     <div className="opacity-80">
       <Quote className="w-7 h-7 text-[#458a16] transform -scale-x-100" />
     </div>
 
-    <p className="text-slate-900 text-[11.5px] font-medium leading-relaxed flex-1 line-clamp-3 min-h-[50px]">
+    <p className="text-slate-900 text-[11.5px] font-bold md:font-medium leading-relaxed flex-1 relative z-10">
       {item.quote}
     </p>
 
     <div
-      className="h-[2px] w-8 rounded-full mb-2"
-      style={{ background: `linear-gradient(90deg, ${item.color}, #d26019)` }}
+      className="h-[2px] w-8 rounded-full mb-2 relative z-10"
+      style={{ background: `linear-gradient(90deg, ${item.color || '#23471d'}, #d26019)` }}
     />
 
-    <div className="flex items-start gap-2 mt-auto pt-1 pb-0 relative z-10">
-      <LogoBox text={item.logoText} color={item.color} />
+    <div className="flex items-start gap-2 mt-auto pt-1 pb-0 relative z-20">
+      {item.logo ? (
+        <div className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center overflow-hidden bg-white shrink-0 shadow-sm" style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}>
+          <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-1.5" />
+        </div>
+      ) : (
+        <LogoBox text={item.logoText || (item.company1 ? item.company1.substring(0, 5) : "")} color={item.color || '#23471d'} />
+      )}
       <div className="flex-1 min-w-0 pt-0.5">
-        <div className="font-bold text-[11.5px] leading-tight" style={{ color: item.color }}>
+        <div className="font-bold text-[11.5px] leading-tight" style={{ color: item.color || '#23471d' }}>
           {item.company1}<br />{item.company2}
         </div>
         <div className="flex items-center gap-1 text-slate-700 text-[9.5px] mt-0.5 font-semibold">
@@ -147,39 +81,71 @@ const TestimonialCard = ({ item }) => (
       </div>
     </div>
 
-<img
-  src={item.bgImage}
-  alt=""
-  className="absolute bottom-0 right-0 pointer-events-none"
-  style={{
-    width: 200,
-    height: 200,
-    objectFit: 'contain',
-    zIndex: 1,
-  }}
-/>
+    {item.bottomImage && (
+      <img
+        src={`${SERVER_URL}${item.bottomImage}`}
+        alt=""
+        className="absolute bottom-0 right-0 pointer-events-none opacity-20 md:opacity-100"
+        style={{
+          width: 160,
+          height: 160,
+          objectFit: 'contain',
+          zIndex: 1,
+        }}
+      />
+    )}
   </div>
 );
+
+const getYouTubeThumbnail = (url: string) => {
+  if (!url) return null;
+  let videoId = "";
+  try {
+    if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
+    else if (url.includes("shorts/")) videoId = url.split("shorts/")[1].split("?")[0];
+    else if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
+  } catch (e) { return null; }
+  
+  if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  return null;
+};
 
 // ─── Video Card ───
-const VideoCard = ({ item }) => (
-  <div className="relative rounded-2xl overflow-hidden flex-1 min-w-0 h-40 group cursor-pointer shadow-lg">
-    <div className="absolute inset-0" style={{ background: item.bg }} />
-    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/5 transition-all duration-300" />
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-        <Play className="w-5 h-5 fill-[#4f8519] text-[#4f8519] ml-0.5" />
+const VideoCard = ({ item }: { item: any }) => {
+  // Use background color or linear gradient based on ID for visual variety
+  const colors = [
+    "linear-gradient(160deg,#4a5568,#1a202c)",
+    "linear-gradient(160deg,#3b5ea6,#1a2d5a)",
+    "linear-gradient(160deg,#2d5a2d,#1a3a1a)"
+  ];
+  const bg = colors[item._id ? item._id.charCodeAt(0) % colors.length : 0];
+  const videoLink = item.videoFile ? `${SERVER_URL}${item.videoFile}` : item.videoUrl;
+  const thumb = item.thumbnail ? `${SERVER_URL}${item.thumbnail}` : getYouTubeThumbnail(item.videoUrl);
+
+  return (
+    <div 
+      onClick={() => window.open(videoLink, '_blank')}
+      className="relative rounded-2xl overflow-hidden flex-1 min-w-full sm:min-w-[280px] md:min-w-0 h-48 md:h-40 group cursor-pointer shadow-lg"
+    >
+      <div className="absolute inset-0" style={{ background: bg }}>
+        {thumb && <img src={thumb} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" alt="" />}
+      </div>
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+          <Play className="w-5 h-5 fill-[#4f8519] text-[#4f8519] ml-0.5" />
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+        <div className="text-white font-bold text-xs truncate">{item.title}</div>
+        <div className="text-white/60 text-[10px] font-medium">{item.location}</div>
       </div>
     </div>
-    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-      <div className="text-white font-bold text-[11px] truncate">{item.company}</div>
-      <div className="text-white/60 text-[9px]">{item.location}</div>
-    </div>
-  </div>
-);
+  );
+};
 
 // ─── SVG Lineart Gradient Section Header ───
-const SectionDivider = () => (
+const SectionDivider = ({ text }: { text: string }) => (
   <div className="flex items-center gap-3 px-16 py-5">
     <svg className="flex-1 h-5 overflow-visible" viewBox="0 0 300 18" preserveAspectRatio="none">
       <defs>
@@ -205,12 +171,7 @@ const SectionDivider = () => (
     <div className="flex items-center gap-2 whitespace-nowrap">
       <Leaf className="w-3.5 h-3.5 text-[#23471d]" />
       <span className="font-bold text-slate-900 text-[12px] tracking-[0.12em] uppercase">
-        WHAT OUR{" "}
-        <span style={{ color: "#458a16" }}>EXHIBITORS</span>
-        {" "}
-        <span style={{ color: "#23471d" }}>&</span>
-        {" "}
-        <span style={{ color: "#3e6cc0" }}>PARTNERS SAY</span>
+        {text || "WHAT OUR EXHIBITORS & PARTNERS SAY"}
       </span>
       <Leaf className="w-3.5 h-3.5 text-[#d26019]" />
     </div>
@@ -240,23 +201,80 @@ const SectionDivider = () => (
 
 // ─── Main Component ───
 const TestimonialsCarousel = () => {
+  const [data, setData] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const total = TESTIMONIALS_DATA.length;
-  const VISIBLE = 5;
-
-  const next = () => setActiveIndex(i => (i + 1) % total);
-  const prev = () => setActiveIndex(i => (i - 1 + total) % total);
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
-    if (isPaused) return;
+    const loadData = async () => {
+      const res = await newTestimonialsApi.get();
+      if (res) setData(res);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setVisibleCount(1);
+      else if (window.innerWidth < 1024) setVisibleCount(3);
+      else setVisibleCount(5);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const total = data?.cards?.length || 0;
+  const totalVideos = data?.videos?.length || 0;
+
+  const next = () => { if (total) setActiveIndex(i => (i + 1) % total); };
+  const prev = () => { if (total) setActiveIndex(i => (i - 1 + total) % total); };
+  const nextVideo = useCallback(() => { if (totalVideos) setActiveVideoIndex(i => (i + 1) % totalVideos); }, [totalVideos]);
+
+  useEffect(() => {
+    if (isPaused || !total) return;
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
-  }, [isPaused]);
+  }, [isPaused, total]);
 
-  const visibleCards = Array.from({ length: VISIBLE }, (_, i) =>
-    TESTIMONIALS_DATA[(activeIndex + i) % total]
-  );
+  useEffect(() => {
+    if (isPaused || !totalVideos) return;
+    const t = setInterval(nextVideo, 3000);
+    return () => clearInterval(t);
+  }, [isPaused, totalVideos, nextVideo]);
+
+  const visibleCards = data?.cards ? Array.from({ length: Math.min(visibleCount, total) }, (_, i) =>
+    data.cards[(activeIndex + i) % total]
+  ) : [];
+
+  const videoVisibleCount = window.innerWidth < 768 ? 1 : 3;
+  const visibleVideos = data?.videos ? Array.from({ length: Math.min(videoVisibleCount, totalVideos) }, (_, i) =>
+    data.videos[(activeVideoIndex + i) % totalVideos]
+  ) : [];
+
+  if (!data) return <div className="min-h-[400px] bg-white flex items-center justify-center font-bold text-slate-400">Loading Testimonials...</div>;
+
+  const settings = data.settings;
+
+  // Process heading to support HTML and special IHWE gradient
+  const getProcessedHtml = (text: string) => {
+    if (!text) return { __html: "" };
+    
+    let html = text;
+    
+    // Auto-inject line breaks for the standard heading if they are missing
+    if (html.toLowerCase().trim() === "what industry leaders say about ihwe") {
+      html = "What Industry<br />Leaders Say<br />About IHWE";
+    }
+    
+    // Replace IHWE with a styled span string
+    const styledIhwe = `<span class="font-black" style="background: linear-gradient(to bottom, #23471d 0%, #2a7a1e 40%, #1a56db 55%, #1e40af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block;">IHWE</span>`;
+    
+    html = html.replace(/IHWE/g, styledIhwe);
+    return { __html: html };
+  };
 
   return (
     <section className="relative bg-white overflow-hidden">
@@ -298,99 +316,79 @@ const TestimonialsCarousel = () => {
       `}</style>
 
       {/* ─── TOP HERO BANNER ─── */}
-      <div className="relative w-full min-h-[380px] flex items-center overflow-hidden">
+      <div className="relative w-full min-h-[420px] md:min-h-[380px] flex items-center overflow-hidden py-12 md:py-0">
 
         <div className="absolute inset-0 z-0">
           <img
-            src={testImg}
-            className="w-full h-full object-cover"
-            alt="IHWE Expo Background"
+            src={settings.heroBgImage ? `${SERVER_URL}${settings.heroBgImage}` : testImg}
+            className="w-full h-full object-cover opacity-60 md:opacity-100"
+            alt={settings.heroBgAlt || "IHWE Expo Background"}
           />
+          <div className="absolute inset-0 bg-white/40 md:hidden" />
         </div>
 
-        <div className="relative z-10 max-w-[1400px] mx-auto px-16 flex flex-col md:flex-row items-center gap-12 w-full">
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-16 flex flex-col md:flex-row items-center gap-10 md:gap-12 w-full">
 
           {/* LEFT: Text */}
-          <div className="flex flex-col justify-center w-full md:w-[55%] -mt-10">
-            <div className="flex items-center gap-2 mb-4">
+          <div className="flex flex-col justify-center w-full md:w-[55%] text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
               <div className="w-7 h-7 rounded-lg bg-[#397511] flex items-center justify-center shadow">
                 <Quote className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="text-[#4a8125] font-bold text-[14px] tracking-wide">
-                Voices That Inspire Change
+              <span className="text-[#4a8125] font-bold text-[13px] md:text-[14px] tracking-wide">
+                {settings.subtitle || "Voices That Inspire Change"}
               </span>
             </div>
 
-            <h2 className="text-[46px] font-extrabold text-slate-900 leading-[1.1] mb-3">
-              What Industry<br />
-              Leaders Say<br />
-              About{" "}
-              <span
-                className="font-extrabold"
-                style={{
-                  background: "linear-gradient(to bottom, #23471d 0%, #2a7a1e 40%, #1a56db 55%, #1e40af 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  display: "inline-block",
-                }}
-              >
-                IHWE
-              </span>
-            </h2>
+            <h2 
+              className="text-3xl md:text-[46px] font-black text-slate-900 leading-[1.1] mb-5 md:mb-3"
+              dangerouslySetInnerHTML={getProcessedHtml(settings.heading)}
+            />
 
             <div
-              className="h-1 w-12 rounded-full mb-4"
+              className="h-1.5 w-16 rounded-full mb-6 md:mb-4 mx-auto md:mx-0"
               style={{ background: "linear-gradient(90deg, #23471d 0%, #5f9426 100%)" }}
             />
 
-            <p className="text-slate-800 text-[17px] leading-relaxed max-w-md">
-              Real experiences. Real partnerships. Real impact.
-              Discover how IHWE is transforming the global health & wellness ecosystem.
-            </p>
+            <p 
+              className="text-slate-900 text-[15px] md:text-[17px] leading-relaxed max-w-md mx-auto md:mx-0 font-medium"
+              dangerouslySetInnerHTML={getProcessedHtml(settings.description)}
+            />
           </div>
 
           {/* RIGHT: Stats Card */}
-          <div className="relative flex-1 flex justify-end">
+          <div className="relative w-full md:flex-1 flex justify-center md:justify-end">
             <div
-              className="bg-white rounded-lg pl-5 pr-3 py-2 flex flex-col min-w-[170px]"
-              style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}
+              className="bg-white/90 backdrop-blur-sm md:bg-white rounded-xl pl-6 pr-6 py-3 flex flex-col w-fit min-w-[210px] md:min-w-[230px]"
+              style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
             >
-              {STATS.map((s, i) => {
-                let valStyle = { color: "#5f9426" };
-                if (s.value === "20,000+") {
+              {(settings.heroStats || []).map((s: any, i: number) => {
+                let valStyle: any = { color: s.color || "#5f9426" };
+                if (s.value === "8,000+" || s.value === "1,000+" || s.value === "1000+") {
                   valStyle = {
                     background: "linear-gradient(90deg, #1a7a8a 0%, #4f8519 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
                   };
-                } else if (s.value === "500+") {
-                  valStyle = {
-                    background: "linear-gradient(90deg, #1a4d1a 0%, #5f9426 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  };
-                } else if (s.value === "200+") {
-                  valStyle = {
-                    background: "linear-gradient(90deg, #5f9426 0%, #1a4d1a 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  };
                 }
-
+                const IconComp = s.icon === 'Globe' ? Globe : 
+                                 s.icon === 'Users' ? Users : 
+                                 s.icon === 'Handshake' ? Handshake : 
+                                 s.icon === 'Mic2' ? Mic2 : 
+                                 s.icon === 'Store' ? Store : 
+                                 s.icon === 'Leaf' ? Leaf : Globe;
+                
                 return (
                   <div
                     key={i}
                     className={cn(
                       "flex items-center gap-4 py-3",
-                      i !== STATS.length - 1 && "border-b border-slate-100"
+                      i !== (settings.heroStats.length - 1) && "border-b border-slate-100"
                     )}
                   >
                     <div className="flex items-center justify-center flex-shrink-0">
-                      <s.icon className="w-7 h-7" style={{ color: s.color }} />
+                      <IconComp className="w-7 h-7" style={{ color: s.color || "#5f9426" }} />
                     </div>
                     <div>
                       <div className="font-black text-[16px] leading-none" style={valStyle}>
@@ -408,26 +406,26 @@ const TestimonialsCarousel = () => {
       </div>
 
       {/* ─── SECTION HEADER ─── */}
-      <SectionDivider />
+      <SectionDivider text={settings.dividerText} />
 
       {/* ─── TESTIMONIAL CARDS CAROUSEL ─── */}
       <div
-        className="relative px-16 pb-4"
+        className="relative px-6 md:px-16 pb-4"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <button
           onClick={prev}
-          className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-2xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
         >
-          <ChevronLeft className="w-7 h-7" />
+          <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
         </button>
 
         <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto py-10 -my-10">
           <AnimatePresence mode="popLayout">
             {visibleCards.map((item, i) => (
               <motion.div
-                key={`${item.id}-${activeIndex}-${i}`}
+                key={`${item._id}-${activeIndex}-${i}`}
                 initial={{ opacity: 0, x: 50, scale: 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -50, scale: 0.96 }}
@@ -441,15 +439,15 @@ const TestimonialsCarousel = () => {
 
         <button
           onClick={next}
-          className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-2xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
         >
-          <ChevronRight className="w-7 h-7" />
+          <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
         </button>
       </div>
 
       {/* Pagination Dots */}
       <div className="flex justify-center gap-2 py-2">
-        {TESTIMONIALS_DATA.map((_, i) => (
+        {(data.cards || []).map((_: any, i: number) => (
           <button
             key={i}
             onClick={() => setActiveIndex(i)}
@@ -464,15 +462,15 @@ const TestimonialsCarousel = () => {
       </div>
 
       {/* ─── VIDEO SECTION ─── */}
-      <div className="relative px-16 pt-6 pb-4">
+      <div className="relative px-6 md:px-16 pt-6 pb-0 md:pb-2">
         {/* Left Leaf Decoration */}
-        <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-40 pointer-events-none rotate-45 select-none z-0">
+        <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-20 pointer-events-none rotate-45 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
-        <div className="relative z-10 max-w-[1189px] mx-auto flex flex-col md:flex-row gap-8 items-start justify-center">
+        <div className="relative z-10 max-w-[1189px] mx-auto flex flex-col md:flex-row gap-10 items-center md:items-start justify-center">
 
-          <div className="flex flex-col w-[300px] flex-shrink-0">
+          <div className="flex flex-col w-full md:w-[300px] flex-shrink-0 text-center md:text-left items-center md:items-start">
             <div className="flex items-center gap-4 mb-4">
               <div
                 className="w-14 h-14 rounded-full border-2 flex items-center justify-center bg-white shadow-md flex-shrink-0"
@@ -480,117 +478,157 @@ const TestimonialsCarousel = () => {
               >
                 <Play className="w-7 h-7 ml-1" style={{ color: "#4f8519", fill: "#4f8519" }} />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col text-left">
                 <span style={{ color: "#538417" }} className="font-bold text-[10px] uppercase tracking-widest leading-none mb-1">
-                  Hear Directly From
+                  {settings.videoSubheading || "Hear Directly From"}
                 </span>
-                <h3 className="text-[27px] font-black leading-tight whitespace-nowrap">
-                  <span className="text-black">Our</span>{" "}
+                <h3 className="text-2xl md:text-[27px] font-black leading-tight whitespace-nowrap">
                   <span style={{
                     background: "linear-gradient(90deg, #4f8519 0%, #4f8519 55%, #1a7a8a 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
                   }}>
-                    Exhibitors
+                    {settings.videoMainHeading || "Our Exhibitors"}
                   </span>
                 </h3>
               </div>
             </div>
-            <p className="text-slate-900 text-[11.5px] mb-5 leading-relaxed font-medium">
-              Real stories from real partners who experienced the IHWE impact.
+            <p className="text-slate-900 text-[13px] md:text-[11.5px] mb-6 md:mb-5 leading-relaxed font-medium max-w-sm">
+              {settings.videoDescription}
             </p>
-            <button className="flex items-center gap-1.5 border border-[#4f8519] rounded-lg px-5 py-2.5 text-[#4f8519] font-bold text-[11px] hover:bg-[#4f8519] hover:text-white transition-all duration-300 w-fit">
-              View More Videos
+            <button 
+              onClick={() => settings.videoButtonPath && window.open(settings.videoButtonPath, '_blank')}
+              className="flex items-center gap-1.5 border border-[#4f8519] rounded-lg px-6 py-3 md:px-5 md:py-2.5 text-[#4f8519] font-bold text-[12px] md:text-[11px] hover:bg-[#4f8519] hover:text-white transition-all duration-300 w-fit"
+            >
+              {settings.videoButtonText || "View More Videos"}
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="flex gap-4 flex-1">
-            {VIDEOS_DATA.map((v) => (
-              <VideoCard key={v.id} item={v} />
-            ))}
+          <div className="w-full flex-1 relative min-h-[220px]">
+            <div className="flex gap-4 justify-center overflow-hidden w-full">
+              <AnimatePresence mode="popLayout">
+                {visibleVideos.map((v: any, i: number) => (
+                  <motion.div
+                    key={`${v._id}-${activeVideoIndex}-${i}`}
+                    initial={{ opacity: 0, x: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -20, scale: 0.95 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className={cn(
+                      "flex-1 min-w-0",
+                      window.innerWidth < 768 ? "w-full" : "max-w-[calc(33.33%-11px)]"
+                    )}
+                  >
+                    <VideoCard item={v} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* Video Dots */}
+            <div className="flex justify-center gap-1.5 mt-4">
+              {(data.videos || []).map((_: any, i: number) => (
+                <div
+                  key={i}
+                  onClick={() => setActiveVideoIndex(i)}
+                  className={cn(
+                    "h-1 rounded-full transition-all duration-300 cursor-pointer",
+                    activeVideoIndex === i ? "w-6 bg-[#4f8519]" : "w-1.5 bg-slate-200"
+                  )}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Right Leaf Decoration */}
-        <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-45 pointer-events-none -rotate-12 select-none z-0">
+        <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-20 pointer-events-none -rotate-12 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
       </div>
 
       {/* ─── BOTTOM STATS BAR ─── */}
-      <div className="border-t border-slate-100 overflow-hidden w-full">
-        <div className="container mx-auto max-w-[1400px] flex items-stretch relative min-h-[50px] px-6 md:px-16">
+      <div className="border-t border-slate-100 overflow-hidden w-full py-0 md:py-0 -mt-4 md:-mt-8 relative z-30">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-stretch relative px-6 md:px-16 gap-8 md:gap-0">
           
-          {/* No spacer needed — SectionContainer handles left alignment */}
-
           {/* WHITE STATS SECTION */}
           <div
-            className="flex items-stretch flex-shrink-0"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 items-center flex-shrink-0 w-full md:w-auto"
             style={{
               background: "white",
-              borderRadius: "24px",
-              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+              borderRadius: window.innerWidth > 1024 ? "24px 0 0 24px" : "24px",
+              boxShadow: "rgba(60, 64, 67, 0.2) 0px 1px 2px 0px",
               position: "relative",
               zIndex: 3,
-              paddingLeft: "10px",
-              minWidth: "760px"
+              padding: "2px 8px",
             }}
           >
-            {BOTTOM_STATS.map((s, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 px-4 pt-1 pb-0.5 flex-1"
-                style={{ position: "relative" }}
-              >
-                {i < BOTTOM_STATS.length - 1 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: "10px",
-                      bottom: "10px",
-                      width: "1px",
-                      background: "linear-gradient(to bottom, transparent, #e2e8f0, #cbd5e1, #e2e8f0, transparent)",
-                    }}
-                  />
-                )}
-                <div className="flex items-center justify-center flex-shrink-0">
-                  <s.icon
-                    className="w-5 h-5"
-                    style={{ color: i % 2 === 0 ? "#23471d" : "#2563c8" }}
-                  />
+            {(settings.bottomBarStats || []).map((s: any, i: number) => {
+              // Simple Icon Mapping
+              const IconComp = s.icon === 'Leaf' ? Leaf : 
+                               s.icon === 'Globe' ? Globe : 
+                               s.icon === 'Users' ? Users : 
+                               s.icon === 'Building2' ? Building2 : 
+                               s.icon === 'Handshake' ? Handshake : 
+                               s.icon === 'Mic2' ? Mic2 : 
+                               s.icon === 'Store' ? Store : Globe;
+
+              return (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 px-3 py-1.5 md:py-1 flex-1 min-w-fit"
+                  style={{ position: "relative" }}
+                >
+                  {i < (settings.bottomBarStats.length - 1) && (
+                    <div className="hidden lg:block"
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "8px",
+                        bottom: "8px",
+                        width: "1px",
+                        background: "linear-gradient(to bottom, transparent, #e2e8f0, transparent)",
+                      }}
+                    />
+                  )}
+                  <div className="flex items-center justify-center flex-shrink-0">
+                    <IconComp
+                      className="w-4 h-4 md:w-5 md:h-5 opacity-80"
+                      style={{ color: i % 2 === 0 ? "#23471d" : "#2563c8" }}
+                    />
+                  </div>
+                  <div className="whitespace-nowrap">
+                    <div className="text-slate-800 text-[7.5px] md:text-[7px] font-bold leading-none mb-0.5">{s.label}</div>
+                    <div className="font-black text-slate-900 text-[10px] md:text-[9px] leading-tight">{s.value}</div>
+                  </div>
                 </div>
-                <div className="whitespace-nowrap">
-                  <div className="text-slate-800 text-[8.5px] font-medium leading-none mb-0.5">{s.label}</div>
-                  <div className="font-bold text-slate-800 text-[11.5px] leading-tight">{s.value}</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div
-            className="flex flex-col relative flex-1 justify-center"
+            className="flex flex-col relative flex-1 justify-center w-full min-h-0 ml-0 md:-ml-5"
             style={{
-              marginLeft: "-20px",
               zIndex: 2,
             }}
           >
             {/* Bleeding background to the right edge */}
             <div 
+              className="rounded-[24px] md:rounded-none"
               style={{
                 position: 'absolute',
                 inset: 0,
-                width: '100vw',
+                width: '100%',
                 background: "linear-gradient(90deg, #1a3a12 0%, #2d5c1e 45%, #a4c639 100%)",
-                clipPath: "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)",
+                clipPath: window.innerWidth > 1024 ? "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)" : "none",
                 zIndex: -1
               }}
             />
-            <div className="relative z-10 py-1 pl-12 pr-10">
-            <div style={{ position: "absolute", top: "4px", right: "5%", opacity: 0.1, pointerEvents: "none" }}>
-              <svg width="30" height="30" viewBox="0 0 42 42" fill="none">
+            <div className="relative z-10 py-2 md:py-1 px-6 md:pl-12 md:pr-10 text-center md:text-left">
+            <div style={{ position: "absolute", top: "10px", right: "10%", opacity: 0.1, pointerEvents: "none" }}>
+              <svg width="40" height="40" viewBox="0 0 42 42" fill="none">
                 {[7, 21, 35].flatMap(x =>
                   [7, 21, 35].map(y => (
                     <circle key={`${x}-${y}`} cx={x} cy={y} r="2.8" fill="white" />
@@ -599,54 +637,51 @@ const TestimonialsCarousel = () => {
               </svg>
             </div>
 
-            <div className="flex items-center">
-              <span style={{ color: "#ffffff", fontWeight: 500, fontSize: "16px", marginRight: "8px" }}>
-                Be the Next
+            <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 mb-4 md:mb-0">
+              <span className="text-white font-bold text-lg md:text-[16px]">
+                {settings.ctaMainText || "Be the Next"}
               </span>
-              <span style={{ color: "#f5c842", fontWeight: 500, fontSize: "16px" }}>
-                Success Story
+              <span className="text-[#f5c842] font-black text-xl md:text-[16px]">
+                {settings.ctaSubText || "Success Story"}
               </span>
+              <div className="text-white font-black text-lg md:text-[16px] md:ml-1">
+                {settings.ctaBottomText || "at IHWE 2026!"}
+              </div>
             </div>
 
-            <div className="flex items-center pr-10 -mt-0.5 gap-x-10">
-              <div style={{ color: "rgba(255,255,255,0.95)", fontWeight: 700, fontSize: "16px", whiteSpace: "nowrap" }}>
-                at IHWE 2026!
-              </div>
-              <div className="flex gap-2 ml-auto pl-10">
-                <div className="relative group/btn ml-8">
-                  <Sparkle style={{ top: '-6px', left: '10%', animationDelay: '0s' }} />
-                  <Sparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
-                  <Sparkle style={{ top: '-4px', right: '15%', animationDelay: '0.8s' }} />
-                  <Sparkle style={{ bottom: '-6px', left: '25%', animationDelay: '0.2s' }} />
-                  <Sparkle style={{ bottom: '-8px', right: '30%', animationDelay: '0.6s' }} />
-                  
-                  <button
-                    className="golden-btn-premium flex items-center gap-1 text-[#050A1A] font-bold text-[10px] px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap hover:scale-[1.02]"
-                  >
-                    <Store className="w-3 h-3" />
-                    Book Your Stall <ChevronRight className="w-2.5 h-2.5" />
-                  </button>
-                </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-4 md:mt-0">
+              <div className="relative group/btn w-full sm:w-auto">
+                <Sparkle style={{ top: '-6px', left: '10%', animationDelay: '0s' }} />
+                <Sparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
+                <Sparkle style={{ top: '-4px', right: '15%', animationDelay: '0.8s' }} />
                 
                 <button
-                  className="flex items-center gap-1 font-bold text-[10px] px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap"
-                  style={{
-                    background: "rgba(255,255,255,0.15)",
-                    border: "1.2px solid rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
-                  }}
-                  onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-                  onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}
+                  onClick={() => settings.ctaButton1Path && window.open(settings.ctaButton1Path, '_blank')}
+                  className="golden-btn-premium flex items-center justify-center gap-2 text-[#050A1A] font-black text-[12px] md:text-[10px] w-full px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap hover:scale-[1.02]"
                 >
-                  Apply Now <ChevronRight className="w-2.5 h-2.5" />
+                  <Store className="w-4 h-4 md:w-3 md:h-3" />
+                  {settings.ctaButton1Name || "Book Your Stall"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
                 </button>
               </div>
+              
+              <button
+                onClick={() => settings.ctaButton2Path && window.open(settings.ctaButton2Path, '_blank')}
+                className="flex items-center justify-center gap-2 font-black text-[12px] md:text-[10px] w-full sm:w-auto px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap"
+                style={{
+                  background: "rgba(255,255,255,0.15)",
+                  border: "1.2px solid rgba(255,255,255,0.3)",
+                  color: "white",
+                  boxShadow: "rgba(0,0,0,0.2) 0 4px 10px",
+                }}
+              >
+                {settings.ctaButton2Name || "Apply Now"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
+              </button>
             </div>
           </div>
         </div>
         </div>
       </div>
+
 
     </section>
   );

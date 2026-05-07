@@ -181,9 +181,9 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
         ];
 
         return (
-            <div className="relative z-30 w-full px-6 -mt-3">
+            <div className="relative z-30 w-full px-4 md:px-6 -mt-3">
                 <div className="max-w-6xl mx-auto bg-white shadow-[0_8px_30px_rgba(0,0,0,0.10)] rounded-xl overflow-hidden border border-gray-100/50">
-                    <div ref={sectionRef} className="grid grid-cols-4 divide-x divide-slate-300">
+                    <div ref={sectionRef} className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                         {heroStats.map((s, index) => (
                             <div
                                 key={index}

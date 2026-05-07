@@ -315,13 +315,13 @@ const About = () => {
 
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
 
-        <div className="container mx-auto px-8 text-left text-white relative z-10 flex flex-col justify-center h-full pt-16 pb-6" data-aos="fade-up">
+        <div className="container mx-auto px-5 md:px-8 text-left text-white relative z-10 flex flex-col justify-center min-h-[300px] md:h-full pt-24 md:pt-16 pb-6" data-aos="fade-up">
           <div>
             {heroSubtitle && (
-              <div className="mb-2">
+              <div className="mb-1.5">
                 <div
                   className="subtitle-underline uppercase tracking-tight opacity-90 font-medium [&_a]:text-white [&_a]:no-underline [&_a]:pointer-events-none [&_*]:!bg-transparent [&_p]:!bg-transparent [&_*]:!text-white inline-block"
-                  style={{ fontSize: `${subtitleFontSize}px`, fontFamily: "'Poppins', sans-serif", color: 'white' }}
+                  style={{ fontSize: `clamp(8.5px, 3vw, ${subtitleFontSize}px)`, fontFamily: "'Poppins', sans-serif", color: 'white' }}
                   dangerouslySetInnerHTML={{ __html: heroSubtitle.replace(/<a[^>]*>/gi, '<span>').replace(/<\/a>/gi, '</span>') }}
                 />
               </div>
@@ -329,28 +329,28 @@ const About = () => {
             {heroTitle && (
               <h1
                 className="font-semibold mb-0 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
-                style={{ fontSize: `${titleFontSize}px`, fontFamily: "'Inter', sans-serif", lineHeight: 1.2, display: 'block' }}
+                style={{ fontSize: `clamp(14px, 7vw, ${titleFontSize}px)`, fontFamily: "'Inter', sans-serif", lineHeight: 1.1, display: 'block' }}
                 dangerouslySetInnerHTML={{ __html: heroTitle }}
               />
             )}
             {heroHeading && (
               <h2
-                className="font-bold mb-2 tracking-tight text-white/90"
-                style={{ fontSize: '24px', fontFamily: "'Inter', sans-serif", lineHeight: 1.3, marginTop: '10px' }}
+                className="font-bold mb-1 tracking-tight text-white/90"
+                style={{ fontSize: 'clamp(11px, 4.5vw, 24px)', fontFamily: "'Inter', sans-serif", lineHeight: 1.2, marginTop: '6px' }}
                 dangerouslySetInnerHTML={{ __html: heroHeading }}
               />
             )}
             {heroTitle2 && (
               <h2
                 className="font-semibold mb-2 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
-                style={{ fontSize: `${title2FontSize}px`, fontFamily: "'Inter', sans-serif", lineHeight: 1.2, display: 'block', marginTop: 0 }}
+                style={{ fontSize: `clamp(13px, 6vw, ${title2FontSize}px)`, fontFamily: "'Inter', sans-serif", lineHeight: 1.1, display: 'block', marginTop: 1 }}
                 dangerouslySetInnerHTML={{ __html: heroTitle2 }}
               />
             )}
             {heroDesc && (
               <div
-                className="text-white/90 mb-2 max-w-3xl font-light leading-relaxed [&_*]:!bg-transparent"
-                style={{ fontSize: `${descriptionFontSize}px`, fontFamily: "'Inter', sans-serif" }}
+                className="text-white/90 mb-2 max-w-2xl font-light leading-relaxed [&_*]:!bg-transparent"
+                style={{ fontSize: `clamp(10px, 4vw, ${descriptionFontSize}px)`, fontFamily: "'Inter', sans-serif" }}
                 dangerouslySetInnerHTML={{ __html: heroDesc }}
               />
             )}
@@ -358,9 +358,9 @@ const About = () => {
           <div className="pb-6">
             {/* INFO BAR - above buttons */}
             {(infoBar1 || infoBar2 || infoBar3) && (
-              <div className="flex flex-row items-stretch w-fit mb-3 bg-black/40 backdrop-blur-sm">
+              <div className="flex flex-wrap items-stretch w-fit mb-3 bg-black/40 backdrop-blur-sm">
                 {infoBar1 && (
-                  <div className="flex items-center gap-2 py-2 pr-4 border-r border-white/20">
+                  <div className="flex items-center gap-2 py-2 px-4 border-r border-white/20">
                     <Calendar className="w-3.5 h-3.5 text-[#d26019] shrink-0" strokeWidth={1.5} />
                     <div className="text-white text-[10px] font-bold uppercase tracking-wider leading-tight [&_*]:text-white" dangerouslySetInnerHTML={{ __html: infoBar1 }} />
                   </div>
@@ -372,7 +372,7 @@ const About = () => {
                   </div>
                 )}
                 {infoBar3 && (
-                  <div className="flex items-center gap-2 py-2 pl-4">
+                  <div className="flex items-center gap-2 py-2 px-4">
                     <Globe className="w-3.5 h-3.5 text-[#d26019] shrink-0" strokeWidth={1.5} />
                     <div className="text-white text-[10px] font-bold uppercase tracking-wider leading-tight [&_*]:text-white" dangerouslySetInnerHTML={{ __html: infoBar3 }} />
                   </div>
@@ -382,7 +382,7 @@ const About = () => {
 
             {/* CTA Buttons */}
             {(button1Text || button2Text) && (
-              <div className="flex flex-row gap-3 mt-6">
+              <div className="flex flex-wrap gap-3 mt-6">
                 {button1Text && button1Link && (
                   button1Link.startsWith('http') ? (
                     <a
@@ -945,7 +945,7 @@ const About = () => {
               <img
                 src={PragatiMaidanImg}
                 alt="Pragati Maidan, New Delhi"
-                className="w-full h-[340px] object-cover group-hover:scale-[1.04] transition-transform duration-500"
+                className="w-full h-[240px] md:h-[340px] object-cover group-hover:scale-[1.04] transition-transform duration-500"
               />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)' }} />
               <span
@@ -966,16 +966,16 @@ const About = () => {
 
             {/* RIGHT */}
             <div>
-              <p className="flex items-center gap-2 text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
+              <p className="flex items-center gap-2 text-[#d26019] font-bold text-[11px] md:text-[13px] uppercase tracking-[0.22em] mb-2 md:mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
                 <span className="inline-block w-6 h-[1.5px] bg-[#d26019]" />
                 Our Venue
               </p>
-              <h2 className="font-black text-[32px] text-[#23471d] leading-[1.25] mb-0" style={{ fontFamily: "'Inter', sans-serif" }}>
+              <h2 className="font-black text-[24px] md:text-[32px] text-[#23471d] leading-[1.25] mb-0" style={{ fontFamily: "'Inter', sans-serif" }}>
                 Why Pragati Maidan, New Delhi?
               </h2>
 
               {/* Bullet Points - Circle style like image 2 */}
-              <div className="grid grid-cols-2 gap-x-6 gap-y-5 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 md:gap-y-5 mt-6">
                 {[
                   {
                     color: "#d26019", bg: "#fff3eb",
@@ -1090,24 +1090,24 @@ const About = () => {
             <div className="text-center xl:text-left max-w-2xl" data-aos="fade-right">
               <div className="flex items-center justify-center xl:justify-start gap-2.5 mb-1.5">
                 <div className="h-[1.5px] w-6 bg-[#F3B71B]" />
-                <span className="text-[#F3B71B] font-bold text-[10px] uppercase tracking-[0.25em]">
+                <span className="text-[#F3B71B] font-bold text-[9px] md:text-[10px] uppercase tracking-[0.25em]">
                   Ignite Your Growth
                 </span>
               </div>
               <h3
-                className="text-white font-extrabold text-xl md:text-2xl mb-1 leading-tight"
+                className="text-white font-extrabold text-lg md:text-2xl mb-1 leading-tight px-4 xl:px-0"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Be Part of India's Global Wellness Movement
               </h3>
-              <p className="text-white/70 font-medium text-[11px] max-w-xl">
+              <p className="text-white/70 font-medium text-[10px] md:text-[11px] max-w-xl mx-auto xl:mx-0 px-4 xl:px-0">
                 Exhibit. Connect. Collaborate. Grow. Join healthcare leaders in building the future of wellness.
               </p>
             </div>
 
-            {/* Buttons Side: Single Row */}
+            {/* Buttons Side: Grid on Mobile, Flex on Desktop */}
             <div
-              className="flex flex-wrap xl:flex-nowrap items-center justify-center gap-2.5 w-full xl:w-auto"
+              className="grid grid-cols-2 md:grid-cols-4 xl:flex xl:flex-nowrap items-center justify-center gap-2.5 w-full xl:w-auto px-4 xl:px-0"
               data-aos="fade-left"
             >
               {[
@@ -1127,7 +1127,7 @@ const About = () => {
                   )}
                   <Link
                     to={btn.link}
-                    className={`px-3 py-2 text-[8.5px] font-black uppercase tracking-[0.1em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center min-w-[135px] xl:min-w-[145px] relative z-10
+                    className={`px-2 py-2.5 text-[8.5px] font-black uppercase tracking-[0.05em] transition-all duration-300 rounded-lg shadow-lg hover:-translate-y-1 active:translate-y-0 text-center flex items-center justify-center w-full xl:min-w-[145px] relative z-10
                       ${btn.style === "gold" ? "golden-btn-footer text-[#1a3516]" : ""}
                       ${btn.style === "white" ? "bg-white text-[#23471d] hover:bg-[#F3B71B]" : ""}
                     `}
