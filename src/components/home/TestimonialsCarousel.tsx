@@ -43,59 +43,117 @@ const LogoBox = ({ text, color }: { text: string; color: string }) => (
   </div>
 );
 
+const STATS = [
+  { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
+  { icon: Users, value: "8000+", label: "Visitors/Delegates", color: "#004ac2ff" },
+  { icon: Handshake, value: "150+", label: "Exhibitors", color: "#00742aff" },
+  { icon: Mic2, value: "150+", label: "Expert Speakers", color: "#005f23ff" },
+];
+
 // ─── Testimonial Card ───
-const TestimonialCard = ({ item }: { item: any }) => (
-  <div
-    className="relative bg-white rounded-[24px] border border-slate-100 pt-6 pl-3 pr-6 pb-2 flex flex-col gap-3 w-[250px] md:w-[225px] flex-shrink-0 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 overflow-hidden group"
-    style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }}
-  >
-    <div className="opacity-80">
-      <Quote className="w-7 h-7 text-[#458a16] transform -scale-x-100" />
-    </div>
-
-    <p className="text-slate-900 text-[11.5px] font-bold md:font-medium leading-relaxed flex-1 relative z-10">
-      {item.quote}
-    </p>
-
+const TestimonialCard = ({ item }: { item: any }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const CHAR_LIMIT = 150; 
+  const quoteText = item.quote || "";
+  const isLong = quoteText.length > CHAR_LIMIT;
+  
+  return (
     <div
-      className="h-[2px] w-8 rounded-full mb-2 relative z-10"
-      style={{ background: `linear-gradient(90deg, ${item.color || '#23471d'}, #d26019)` }}
-    />
+      className="relative bg-white rounded-[24px] border border-slate-100 pt-6 pl-3 pr-6 pb-2 flex flex-col gap-2 w-[250px] md:w-[225px] flex-shrink-0 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 overflow-hidden group"
+      style={{ 
+        boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+        height: '235px'
+      }}
+    >
+      {/* Expanded Overlay */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute inset-0 bg-white z-[60] p-6 flex flex-col"
+          >
+            <div className="flex justify-between items-center mb-3">
+              <Quote className="w-5 h-5 text-[#458a16] transform -scale-x-100" />
+              <button 
+                onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                className="text-red-600 font-bold text-[10px] uppercase tracking-widest hover:underline"
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto custom-scrollbar-thin pr-1">
+              <p className="text-slate-900 text-[11.5px] font-bold md:font-medium leading-relaxed">
+                {item.quote}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-    <div className="flex items-start gap-2 mt-auto pt-1 pb-0 relative z-20">
-      {item.logo ? (
-        <div className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center overflow-hidden bg-white shrink-0 shadow-sm" style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}>
-          <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-1.5" />
-        </div>
-      ) : (
-        <LogoBox text={item.logoText || (item.company1 ? item.company1.substring(0, 5) : "")} color={item.color || '#23471d'} />
-      )}
-      <div className="flex-1 min-w-0 pt-0.5">
-        <div className="font-bold text-[11.5px] leading-tight" style={{ color: item.color || '#23471d' }}>
-          {item.company1}<br />{item.company2}
-        </div>
-        <div className="flex items-center gap-1 text-slate-700 text-[9.5px] mt-0.5 font-semibold">
-          <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
-          {item.location}
+      <div className="opacity-80 flex-shrink-0">
+        <Quote className="w-7 h-7 text-[#458a16] transform -scale-x-100" />
+      </div>
+
+      <div className="flex-1 relative z-10 overflow-hidden pr-1 pb-4">
+        <p className="text-slate-900 text-[11.5px] font-bold md:font-medium leading-relaxed">
+          {`${quoteText.substring(0, CHAR_LIMIT).trim()}`}
+          {isLong && (
+            <span 
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(true);
+              }}
+              className="text-red-600 font-black cursor-pointer text-[14px] hover:scale-110 transition-transform relative z-20"
+              style={{ lineHeight: 1 }}
+            >
+              ...
+            </span>
+          )}
+        </p>
+      </div>
+
+      <div
+        className="h-[2px] w-8 rounded-full mb-1 relative z-10 flex-shrink-0"
+        style={{ background: `linear-gradient(90deg, ${item.color || '#23471d'}, #d26019)` }}
+      />
+
+      <div className="flex items-start gap-2 mt-auto pt-1 pb-1 relative z-20 flex-shrink-0">
+        {item.logo ? (
+          <div className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center overflow-hidden bg-white shrink-0 shadow-sm" style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}>
+            <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-1.5" />
+          </div>
+        ) : (
+          <LogoBox text={item.logoText || (item.company1 ? item.company1.substring(0, 5) : "")} color={item.color || '#23471d'} />
+        )}
+        <div className="flex-1 min-w-0 pt-0.5">
+          <div className="font-bold text-[11.5px] leading-tight" style={{ color: item.color || '#23471d' }}>
+            {item.company1}<br />{item.company2}
+          </div>
+          <div className="flex items-center gap-1 text-slate-700 text-[9.5px] mt-0.5 font-semibold">
+            <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
+            {item.location}
+          </div>
         </div>
       </div>
-    </div>
 
-    {item.bottomImage && (
-      <img
-        src={`${SERVER_URL}${item.bottomImage}`}
-        alt=""
-        className="absolute bottom-0 right-0 pointer-events-none opacity-20 md:opacity-100"
-        style={{
-          width: 160,
-          height: 160,
-          objectFit: 'contain',
-          zIndex: 1,
-        }}
-      />
-    )}
-  </div>
-);
+      {item.bottomImage && (
+        <img
+          src={`${SERVER_URL}${item.bottomImage}`}
+          alt=""
+          className="absolute bottom-0 right-0 pointer-events-none opacity-20 md:opacity-100"
+          style={{
+            width: 160,
+            height: 160,
+            objectFit: 'contain',
+            zIndex: 1,
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
 const getYouTubeThumbnail = (url: string) => {
   if (!url) return null;
@@ -350,45 +408,54 @@ const TestimonialsCarousel = () => {
               style={{ background: "linear-gradient(90deg, #23471d 0%, #5f9426 100%)" }}
             />
 
-            <p 
-              className="text-slate-900 text-[15px] md:text-[17px] leading-relaxed max-w-md mx-auto md:mx-0 font-medium"
-              dangerouslySetInnerHTML={getProcessedHtml(settings.description)}
-            />
+            <p className="text-slate-800 text-[15px] md:text-[17px] leading-relaxed max-w-md mx-auto md:mx-0">
+              {settings.description || "Real experiences. Real partnerships. Real impact. Discover how IHWE is transforming the global health & wellness ecosystem."}
+            </p>
           </div>
 
           {/* RIGHT: Stats Card */}
-          <div className="relative w-full md:flex-1 flex justify-center md:justify-end">
+          <div className="relative flex-1 flex justify-end">
             <div
-              className="bg-white/90 backdrop-blur-sm md:bg-white rounded-xl pl-6 pr-6 py-3 flex flex-col w-fit min-w-[210px] md:min-w-[230px]"
-              style={{ boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+              className="bg-white rounded-lg pl-5 pr-3 py-2 flex flex-col min-w-[170px]"
+              style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}
             >
-              {(settings.heroStats || []).map((s: any, i: number) => {
-                let valStyle: any = { color: s.color || "#5f9426" };
-                if (s.value === "8,000+" || s.value === "1,000+" || s.value === "1000+") {
+              {STATS.map((s, i) => {
+                let valStyle: React.CSSProperties = { color: "#5f9426" };
+                if (s.value === "20,000+") {
                   valStyle = {
                     background: "linear-gradient(90deg, #1a7a8a 0%, #4f8519 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
-                  };
+                  } as React.CSSProperties;
+                } else if (s.value === "500+") {
+                  valStyle = {
+                    background: "linear-gradient(90deg, #1a4d1a 0%, #5f9426 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  } as React.CSSProperties;
+                } else if (s.value === "200+") {
+                  valStyle = {
+                    background: "linear-gradient(90deg, #5f9426 0%, #1a4d1a 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  } as React.CSSProperties;
+                } else {
+                  valStyle = { color: s.color };
                 }
-                const IconComp = s.icon === 'Globe' ? Globe : 
-                                 s.icon === 'Users' ? Users : 
-                                 s.icon === 'Handshake' ? Handshake : 
-                                 s.icon === 'Mic2' ? Mic2 : 
-                                 s.icon === 'Store' ? Store : 
-                                 s.icon === 'Leaf' ? Leaf : Globe;
-                
+
                 return (
                   <div
                     key={i}
                     className={cn(
                       "flex items-center gap-4 py-3",
-                      i !== (settings.heroStats.length - 1) && "border-b border-slate-100"
+                      i !== STATS.length - 1 && "border-b border-slate-100"
                     )}
                   >
                     <div className="flex items-center justify-center flex-shrink-0">
-                      <IconComp className="w-7 h-7" style={{ color: s.color || "#5f9426" }} />
+                      <s.icon className="w-7 h-7" style={{ color: s.color }} />
                     </div>
                     <div>
                       <div className="font-black text-[16px] leading-none" style={valStyle}>
