@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Calendar, 
-  MapPin, 
-  Clock, 
-  Phone, 
-  Linkedin, 
-  Facebook, 
-  Instagram, 
-  Youtube 
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Phone,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Youtube
 } from "lucide-react";
 import { socialMediaApi } from "@/lib/api";
 
@@ -44,10 +44,10 @@ const Day3Footer: React.FC = () => {
     <footer className="bg-white border-t border-gray-100 py-3">
       <div className="container mx-auto px-6 max-w-[1380px]">
         <div className="flex flex-wrap items-center justify-between gap-y-4 gap-x-6">
-          
+
           {/* Info Blocks */}
           <div className="flex flex-wrap items-center gap-x-12 gap-y-4">
-            
+
             {/* Date */}
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl border-2 border-[#E2E8F0] flex items-center justify-center text-[#4E9F3D]">
@@ -87,8 +87,8 @@ const Day3Footer: React.FC = () => {
                 <Phone className="w-6 h-6" />
               </div>
               <div className="flex flex-col -space-y-1">
-                <span className="text-[14px] font-black text-[#0B2C66] uppercase">+91 98765 43210</span>
-                <span className="text-[12px] font-bold text-[#5F6B7A]">info@arogyasanghosthi.com</span>
+                <span className="text-[14px] font-black text-[#0B2C66] uppercase">+91-9654900525</span>
+                <span className="text-[12px] font-bold text-[#5F6B7A]">info@ihwe.in</span>
               </div>
             </div>
 
