@@ -17,7 +17,6 @@ const SponsorSection: React.FC = () => {
       <div className="mx-auto max-w-[1320px] px-4">
         <div className="bg-[#F8FAFC] rounded-[24px] border border-[#E2E8F0] p-3">
           <div className="flex flex-col lg:flex-row items-center gap-6">
-            {/* Left text */}
             <div className="lg:w-[35%] flex-shrink-0">
               <div className="space-y-1">
                 <div className="space-y-0.5">
@@ -38,14 +37,13 @@ const SponsorSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right benefits grid - single row with separators */}
+
             <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-0">
               {sponsorBenefits.map((benefit, index) => (
                 <div
                   key={index}
-                  className={`px-3 py-1 flex flex-col items-center text-center gap-3 group ${
-                    index !== 0 ? "lg:border-l border-gray-100" : ""
-                  }`}
+                  className={`px-3 py-1 flex flex-col items-center text-center gap-3 group ${index !== 0 ? "lg:border-l border-gray-100" : ""
+                    }`}
                 >
                   <div className="w-10 h-10 flex items-center justify-center text-[#4E9F3D]">
                     <benefit.icon className="w-7 h-7 stroke-[1.5px] group-hover:scale-110 transition-transform" />
