@@ -157,7 +157,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   <img
                     src={`${SERVER_URL}${settings.logo}`}
                     alt="IHWE Logo"
-                    className="absolute top-[62%] -translate-y-1/2 left-0 h-40 md:h-48 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
+                    className="absolute top-[58%] -translate-y-1/2 left-0 h-32 md:h-40 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
                   />
                 ) : (
                   <div className="flex flex-col">
@@ -330,7 +330,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 <img
                   src={`${SERVER_URL}${settings.logo}`}
                   alt="IHWE Logo"
-                  className="absolute top-[60%] -translate-y-1/2 left-0 h-24 md:h-28 w-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.15)]"
+                  className="absolute top-[56%] -translate-y-1/2 left-0 h-20 md:h-24 w-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.15)]"
                 />
               ) : (
                 <div className="flex flex-col">
