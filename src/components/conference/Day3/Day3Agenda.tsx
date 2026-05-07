@@ -1,103 +1,41 @@
 import React from "react";
 import { Clock } from "lucide-react";
+import { SERVER_URL } from "@/lib/api";
 
-const agendaData = [
-  {
-    time: "10:00 AM – 10:45 AM",
-    session: "SESSION 1",
-    type: "KEYNOTE",
-    topic: "Ayurveda & Traditional Wisdom",
-    description: "Deep dive into ancient healing systems and their global relevance.",
-    speaker: {
-      name: "Dr. Sanjay Gupta",
-      role: "Prev. Chief Medical",
-      company: "Correspondent, CNN",
-      image: "https://randomuser.me/api/portraits/men/20.jpg",
-      flag: "🇺🇸"
-    }
-  },
-  {
-    time: "11:00 AM – 11:45 AM",
-    session: "SESSION 2",
-    type: "PANEL",
-    topic: "Nutrition, Diet & Lifestyle",
-    description: "Personalized nutrition and dietary habits for long-term health.",
-    speaker: {
-      name: "Dr. Soumya Swaminathan",
-      role: "Prev. Chief Scientist",
-      company: "WHO",
-      image: "https://randomuser.me/api/portraits/women/21.jpg",
-      flag: "🇮🇳"
-    }
-  },
-  {
-    time: "12:00 PM – 12:45 PM",
-    session: "SESSION 3",
-    type: "EXPERT TALK",
-    topic: "Yoga, Mental Health & Wellness",
-    description: "Holistic approaches to mental well-being through yoga and mindfulness.",
-    speaker: {
-      name: "Luke Coutinho",
-      role: "Holistic Lifestyle",
-      company: "Expert",
-      image: "https://randomuser.me/api/portraits/men/22.jpg",
-      flag: "🇮🇳"
-    }
-  },
-  {
-    time: "02:00 PM – 02:45 PM",
-    session: "SESSION 4",
-    type: "PANEL",
-    topic: "Herbal Industry & Natural Products",
-    description: "Supply chain, standardisation and growth in natural products.",
-    speaker: {
-      name: "Dr. R. Balakrishnan",
-      role: "Director",
-      company: "PHFI",
-      image: "https://randomuser.me/api/portraits/men/23.jpg",
-      flag: "🇮🇳"
-    }
-  },
-  {
-    time: "03:00 PM – 03:45 PM",
-    session: "SESSION 5",
-    type: "EXPERT TALK",
-    topic: "Research & Innovation in Prevention",
-    description: "From data to action: innovations driving preventive care.",
-    speaker: {
-      name: "Dr. Nikhil Tandon",
-      role: "Director",
-      company: "AIIMS",
-      image: "https://randomuser.me/api/portraits/men/24.jpg",
-      flag: "🇮🇳"
-    }
-  },
-  {
-    time: "04:00 PM – 05:00 PM",
-    session: "SESSION 6",
-    type: "NETWORKING",
-    topic: "Policy, Advocacy & Global Partnerships",
-    description: "Working together for a healthier and equitable future.",
-    speaker: {
-      name: "Policy Leaders",
-      role: "Health Ministers &",
-      company: "Global Experts",
-      image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-      flag: "🌐"
-    }
-  }
-];
+interface Day3AgendaProps {
+  data?: {
+    title?: string;
+    subtitle?: string;
+    sessions: Array<{
+      time: string;
+      topic: string;
+      description: string;
+      type: string;
+      speaker: {
+        name: string;
+        role: string;
+        company: string;
+        image: string;
+        flag: string;
+      };
+    }>;
+  };
+  dayTitle?: string;
+  dayNumber?: number;
+}
 
-const Day3Agenda: React.FC = () => {
+const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) => {
+  const sessions = Array.isArray(data?.sessions) ? data.sessions : [];
+
   return (
     <div className="bg-white h-full flex flex-col">
       {/* Section Header */}
       <div className="text-center mb-5">
         <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight leading-none font-sans">
-          DAY 3 AGENDA — 23 AUGUST 2026
+          {data?.title || dayTitle || `DAY ${dayNumber || 3} AGENDA`}
         </h2>
         <p className="text-[11px] font-bold text-[#5F6B7A] mt-1.5">
-          6 Insightful Sessions &nbsp;|&nbsp; 1 Powerful Day
+          {data?.subtitle || `${sessions.length} Insightful Sessions &nbsp;|&nbsp; 1 Powerful Day`}
         </p>
       </div>
 
@@ -113,50 +51,63 @@ const Day3Agenda: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#F1F5F9]">
-            {agendaData.map((item, index) => (
-              <tr key={index} className="group hover:bg-[#F8FFF8] transition-colors">
-                {/* Time */}
-                <td className="px-4 py-2 align-middle min-w-[150px]">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-[#A0AEC0] shrink-0" />
-                    <span className="text-[11px] font-black text-[#4A5568] leading-tight whitespace-nowrap">{item.time}</span>
-                  </div>
-                </td>
+            {sessions.map((item, index) => {
+              const speakerImg = item.speaker?.image
+                ? (item.speaker.image.startsWith('http') ? item.speaker.image : `${SERVER_URL}${item.speaker.image}`)
+                : "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100";
 
-                {/* Session */}
-                <td className="px-4 py-2 align-middle min-w-[90px]">
-                  <div className="flex flex-col gap-0">
-                    <span className="text-[10px] font-black text-[#0B2C66] uppercase leading-tight">{item.session}</span>
-                    <span className="text-[9px] font-black text-[#4E9F3D] uppercase tracking-wide">{item.type}</span>
-                  </div>
-                </td>
-
-                {/* Topic */}
-                <td className="px-4 py-2 align-middle">
-                  <div className="space-y-0.5">
-                    <p className="text-[12px] font-black text-[#0B2C66] leading-snug">{item.topic}</p>
-                    <p className="text-[11px] text-[#718096] font-medium leading-snug">{item.description}</p>
-                  </div>
-                </td>
-
-                {/* Speaker */}
-                <td className="px-4 py-2 align-middle min-w-[180px]">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src={item.speaker.image}
-                      alt={item.speaker.name}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
-                    />
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-[12px] font-black text-[#0B2C66]">{item.speaker.name}</span>
-                      <span className="text-[10px] font-bold text-[#5F6B7A]">{item.speaker.role}</span>
-                      <span className="text-[10px] font-bold text-[#718096]">{item.speaker.company}</span>
+              return (
+                <tr key={index} className="group hover:bg-[#F8FFF8] transition-colors">
+                  {/* Time */}
+                  <td className="px-4 py-2 align-middle min-w-[150px]">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-[#A0AEC0] shrink-0" />
+                      <span className="text-[11px] font-black text-[#4A5568] leading-tight whitespace-nowrap">{item.time}</span>
                     </div>
-                    <span className="text-[16px] ml-1 shrink-0">{item.speaker.flag}</span>
-                  </div>
+                  </td>
+
+                  {/* Session */}
+                  <td className="px-4 py-2 align-middle min-w-[90px]">
+                    <div className="flex flex-col gap-0">
+                      <span className="text-[10px] font-black text-[#0B2C66] uppercase leading-tight">SESSION {index + 1}</span>
+                      <span className="text-[9px] font-black text-[#4E9F3D] uppercase tracking-wide">{item.type}</span>
+                    </div>
+                  </td>
+
+                  {/* Topic */}
+                  <td className="px-4 py-2 align-middle">
+                    <div className="space-y-0.5">
+                      <p className="text-[12px] font-black text-[#0B2C66] leading-snug">{item.topic}</p>
+                      <p className="text-[11px] text-[#718096] font-medium leading-snug">{item.description}</p>
+                    </div>
+                  </td>
+
+                  {/* Speaker */}
+                  <td className="px-4 py-2 align-middle min-w-[180px]">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={speakerImg}
+                        alt={item.speaker?.name}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
+                      />
+                      <div className="flex flex-col leading-tight">
+                        <span className="text-[12px] font-black text-[#0B2C66]">{item.speaker?.name}</span>
+                        <span className="text-[10px] font-bold text-[#5F6B7A]">{item.speaker?.role}</span>
+                        <span className="text-[10px] font-bold text-[#718096]">{item.speaker?.company}</span>
+                      </div>
+                      <span className="text-[16px] ml-1 shrink-0">{item.speaker?.flag || '🌐'}</span>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+            {sessions.length === 0 && (
+              <tr>
+                <td colSpan={4} className="px-4 py-10 text-center text-gray-400 italic text-xs">
+                  No sessions scheduled for this day yet.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -169,3 +120,6 @@ const Day3Agenda: React.FC = () => {
 };
 
 export default Day3Agenda;
+
+
+
