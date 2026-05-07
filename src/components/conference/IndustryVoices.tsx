@@ -3,30 +3,32 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote, Leaf } from "lucide-react";
 import { testimonialsApi } from "@/lib/api";
 
+import logoImage from "../../assets/arogyasangosti.png";
+
 const FALLBACK_TESTIMONIALS = [
   {
-    feedback: "My sincere compliments to the organizers and attendees of this monumental event honouring yoga and Ayurveda. I hope you all live a hundred years",
-    name: "Padma Shri Dr. M. Wali",
-    role: "CTO",
-    company: "MediaTech"
+    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    name: "Dr. Anjali Chaudhary",
+    role: "Chief Medical Officer",
+    company: "Vana Tech Labs"
   },
   {
-    feedback: "The International Health and Wellness Expo was a phenomenal experience! The variety of exhibitors and sessions offered valuable insights into Ayurveda, holistic health, and wellness practices. It was truly a one-stop destination for health enthusiasts. ",
-    name: "Aman Chaudhary",
-    role: "CTo",
-    company: "Pramod kirana Store"
+    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    name: "Dr. Vansh Chaudhary",
+    role: "CEO",
+    company: "Vana Tech Labs"
   },
   {
-    feedback: "Attending the International Health and Wellness Expo opened my eyes to many natural health solutions. It was inspiring to see Ayurveda and traditional medicine being celebrated alongside modern approaches. ",
-    name: "Shri Acharya Ji",
-    role: "COO",
-    company: ""
+    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    name: "Dr. Nitin Kumar",
+    role: "Director",
+    company: "10 ka Double"
   },
   {
-    feedback: "A beautifully organized exhibition with a clear focus on enhancing India's health system. The integrated approach was the star of the event, blending Ayurveda, yoga, and modern medicine in one place.",
-    name: "Dr. Sirohi",
-    role: "COO",
-    company: "MediaMantra"
+    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    name: "Dr. Rohit Kumar",
+    role: "MD",
+    company: "Namogange Wellness"
   }
 ];
 
@@ -130,7 +132,7 @@ const IndustryVoices: React.FC = () => {
                 key={index}
                 className="w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start"
               >
-                <div className="h-full bg-white p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between">
+                <div className="h-full bg-white p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden">
                   <div className="space-y-3">
                     {/* Green Quote Icon */}
                     <div className="text-[#4E9F3D]">
@@ -140,13 +142,25 @@ const IndustryVoices: React.FC = () => {
                       "{item.feedback}"
                     </p>
                   </div>
-                  <div className="mt-5 pt-4 border-t border-gray-50">
-                    <h4 className="font-bold text-[#0B2C66] text-[13px] mb-0.5">
-                      — {item.name}
-                    </h4>
-                    <p className="text-[10px] font-semibold text-[#5F6B7A]">
-                      {item.role}{item.company ? `, ${item.company}` : ''}
-                    </p>
+
+                  <div className="flex items-end justify-between mt-5 pt-4 border-t border-gray-50 relative z-10">
+                    <div className="flex-1">
+                      <h4 className="font-bold text-[#0B2C66] text-[13px] mb-0.5">
+                        — {item.name}
+                      </h4>
+                      <p className="text-[10px] font-semibold text-[#5F6B7A]">
+                        {item.role}{item.company ? `, ${item.company}` : ''}
+                      </p>
+                    </div>
+
+                    {/* Integrated Logo in Card */}
+                    <div className="shrink-0 ml-2">
+                      <img
+                        src={logoImage}
+                        alt="Company Logo"
+                        className="w-20 h-auto  transition-all duration-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

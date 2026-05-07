@@ -61,8 +61,8 @@ interface DistinguishedSpeakersProps {
 }
 
 const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
-  title = "MEET OUR DISTINGUISHED",
-  highlight = "SPEAKERS",
+  title = "MEET OUR ESTEEMED",
+  highlight = "SPEAKERS 2025",
   compact = false
 }) => {
   const [isPaused, setIsPaused] = useState(false);
