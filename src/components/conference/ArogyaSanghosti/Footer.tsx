@@ -1,8 +1,8 @@
 import React from "react";
 import { TEAL, GOLD, LIGHT_TEAL_BG, BORDER_COLOR, TEXT_DARK } from "./Shared";
-import { 
-    IconGroup, IconStar, IconChat, IconBuild, LeafIcon, IconCalendar, 
-    IconEmail, IconMobile, IconLocation 
+import {
+    IconGroup, IconStar, IconChat, IconBuild, LeafIcon, IconCalendar,
+    IconEmail, IconMobile, IconLocation
 } from "./Icons";
 
 // ─── IMAGE IMPORTS ────────────────────────────────────────────────────────
@@ -21,7 +21,10 @@ export const BottomTagline = () => (
             display: "flex",
             alignItems: "center",
             gap: 16,
-            marginTop: 0,
+            marginTop: 30,
+            marginBottom: 0,
+            marginLeft: 70,
+            marginRight: 70,
             border: `1px solid ${BORDER_COLOR}`,
         }}
     >
@@ -73,7 +76,7 @@ export const Footer = () => (
         <div
             style={{
                 background: `linear-gradient(135deg, ${TEAL} 0%, #0F3D3C 100%)`,
-                padding: "16px 36px",
+                padding: "16px 80px",
                 display: "flex",
                 alignItems: "center",
                 gap: 24,
@@ -131,10 +134,10 @@ export const Footer = () => (
             <div style={{ flex: 1, fontSize: 12, color: "rgba(255,255,255,0.85)", lineHeight: 1.6 }}>
                 <div style={{ fontWeight: 800, fontSize: 12, color: "white", marginBottom: 6, letterSpacing: "0.5px" }}>FOR QUERIES, CONTACT US</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-                    <IconEmail size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>info@arogyasanghosthi.com</span>
+                    <IconEmail size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>info@ihwe.in</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-                    <IconMobile size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>+91 98765 43210</span>
+                    <IconMobile size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>+91-9654900525</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <IconLocation size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>www.ihwe.in</span>
@@ -180,7 +183,7 @@ export const Footer = () => (
         <div
             style={{
                 background: LIGHT_TEAL_BG,
-                padding: "15px 36px",
+                padding: "15px 80px",
                 fontSize: 12,
                 color: TEAL,
                 borderTop: `1px solid ${BORDER_COLOR}`,
@@ -200,7 +203,7 @@ export const Footer = () => (
                     <div style={{ height: 25, width: 1, background: BORDER_COLOR }}></div>
                     <div style={{ fontSize: 12, fontWeight: 900, color: TEAL, letterSpacing: 0.5 }}>NAMO GANGE WELLNESS PVT. LTD.</div>
                 </div>
-                
+
                 <div style={{ display: "flex", gap: 10 }}>
                     <button style={{ background: "white", color: TEAL, border: `1px solid ${TEAL}`, borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>BOOK YOUR STALL</button>
                     <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>REGISTER AS BUYER</button>
