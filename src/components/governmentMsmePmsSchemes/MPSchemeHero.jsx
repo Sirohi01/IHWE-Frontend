@@ -72,18 +72,18 @@ const MPSchemeHero = () => {
             <img
                 src="/mpscheme/heror1.png"
                 alt="80% to 100% Subsidy Available"
-                className="absolute bottom-16 right-[80px] w-32 h-32 object-contain z-10"
+                className="absolute bottom-14 right-[80px] w-32 h-32 object-contain z-11"
             />
 
             {/* ── BOTTOM RIGHT BUTTONS ── */}
             <div className="absolute bottom-8 right-11 z-10 flex gap-[14px] items-center">
                 <button
                     onClick={() => navigate('/msme-application')}
-                    className="bg-green-800 text-white flex items-center gap-2 px-5 py-2.5 text-sm font-medium uppercase rounded-lg font-normal shadow hover:bg-green-900 transition"
+                    className="bg-green-800 text-white flex items-center gap-2 px-5 py-2 text-sm font-medium uppercase rounded-lg font-normal shadow hover:bg-green-900 transition"
                 >
                     Apply for PMS Scheme →
                 </button>
-                <button className="bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-800 rounded-lg py-2.5 px-6 text-sm font-medium uppercase tracking-[0.8px] flex items-center gap-1.5 whitespace-nowrap">
+                <button className="bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-800 rounded-lg py-2 px-6 text-sm font-medium uppercase tracking-[0.8px] flex items-center gap-1.5 whitespace-nowrap">
                     Book Your Stall →
                 </button>
             </div>

@@ -3,7 +3,7 @@ import { ExternalLink, Download } from 'lucide-react'
 
 const VerifyCheck = () => {
     return (
-        <div className=" px-14" >
+        <div className=" px-16" >
             {/* section one  */}
             <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl'>
                 {/* ── HEADING ── */}
@@ -21,7 +21,7 @@ const VerifyCheck = () => {
                 <div className="grid grid-cols-3 gap-4 mb-4">
 
                     {/* Card 1 */}
-                    <div className="bg-[#f7f9f5] border border-[#e0e8d8] rounded-xl p-6 flex flex-col gap-3">
+                    <div className="bg-[#f7f9f5] w-full border border-[#e0e8d8] rounded-xl p-6 flex flex-col gap-3">
                         <div className="flex items-start gap-4">
                             <svg width="64" height="64" viewBox="0 0 56 56" fill="none" stroke="#1e5c1e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
                                 <rect x="6" y="8" width="44" height="30" rx="3" />
@@ -35,7 +35,7 @@ const VerifyCheck = () => {
                                 <p className="text-[13px] font-medium text-gray-500 leading-relaxed">Check IHWE 2026 is officially listed on MSME Portal.</p>
                             </div>
                         </div>
-                        <button className="mt-auto w-full border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1 text-xs font-medium  uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
+                        <button className="mt-auto mx-auto w-[70%] border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1.5 text-xs font-medium uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
                             Verify on MSME Website
                             <ExternalLink size={15} strokeWidth={2} />
                         </button>
@@ -54,7 +54,7 @@ const VerifyCheck = () => {
                                 <p className="text-[13px] font-medium text-gray-500 leading-relaxed">Cross-check PMS Scheme details, benefits & subsidy structure on MSME official website.</p>
                             </div>
                         </div>
-                        <button className="mt-auto w-full border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1 text-xs font-medium  uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
+                        <button className="mt-auto mx-auto w-[70%] border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1.5 text-xs font-medium uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
                             View PMS Scheme
                             <ExternalLink size={15} strokeWidth={2} />
                         </button>
@@ -76,7 +76,7 @@ const VerifyCheck = () => {
                                 <p className="text-[13px] font-normal text-gray-500 leading-relaxed">Download the official approval letter issued for IHWE 2026 under MSME PMS Scheme.</p>
                             </div>
                         </div>
-                        <button className="mt-auto w-full border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1 text-xs font-medium  uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
+                        <button className="mt-auto mx-auto w-[70%] border border-[#1e5c1e] bg-white text-[#1e5c1e] hover:text-white rounded-lg py-1.5 text-xs font-medium uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer hover:bg-green-900 transition">
                             Download Approval Letter
                             <Download size={15} strokeWidth={2} />
                         </button>
