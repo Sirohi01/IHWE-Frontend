@@ -36,17 +36,17 @@ const AwardsCTA = () => {
           </div>
 
           {/* Linked Buttons */}
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:ml-auto shrink-0">
+          <div className="flex flex-row items-center justify-center md:justify-end gap-2 md:ml-auto shrink-0 w-full md:w-auto">
             <Link 
               to="/awards/nomination"
-              className="bg-[#008d48] text-white px-7 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-[#007a3e] shadow-lg active:scale-95"
+              className="flex-1 md:flex-none justify-center bg-[#008d48] text-white px-2 md:px-7 py-2.5 rounded-xl text-[10px] md:text-[12px] font-black uppercase tracking-widest flex items-center gap-1.5 md:gap-2 transition-all hover:bg-[#007a3e] shadow-lg active:scale-95 whitespace-nowrap"
             >
               NOMINATE NOW
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link 
               to="/contact"
-              className="bg-white text-[#002b5c] px-7 py-2.5 rounded-xl text-[12px] font-black uppercase tracking-widest flex items-center gap-2 transition-all hover:bg-slate-50 shadow-lg active:scale-95 border border-slate-100"
+              className="flex-1 md:flex-none justify-center bg-white text-[#002b5c] px-2 md:px-7 py-2.5 rounded-xl text-[10px] md:text-[12px] font-black uppercase tracking-widest flex items-center gap-1.5 md:gap-2 transition-all hover:bg-slate-50 shadow-lg active:scale-95 border border-slate-100 whitespace-nowrap"
             >
               CONTACT US
               <Phone className="w-3.5 h-3.5" />

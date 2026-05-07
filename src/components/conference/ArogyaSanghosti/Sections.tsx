@@ -65,7 +65,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
     ];
 
     return (
-        <SectionBox>
+        <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
             <SectionHeader number="01" title="Basic Details" icon={<IconPerson size={24} color="white" />} />
             <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} lettersOnly />
             <FormField label="Designation" value={form.designation} onChange={set("designation")} />
@@ -98,7 +98,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
 
 
 export const ContactDetailsSection = ({ form, set }: any) => (
-    <SectionBox>
+    <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
         <SectionHeader number="02" title="Contact Details" icon={<IconPhone size={24} color="white" />} />
         <FormField label="Mobile Number" icon={<IconMobile size={22} />} value={form.mobile} onChange={set("mobile")} type="tel" />
         <FormField label="Email Address" icon={<IconEmail size={22} />} value={form.email} onChange={set("email")} type="email" />
@@ -121,7 +121,7 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
     ];
 
     return (
-        <SectionBox>
+        <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
             <SectionHeader number="03" title="Speaker Profile" icon={<IconMic size={20} color="white" />} gold />
             <div style={{ marginBottom: 12 }}>
                 <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 4 }}>
@@ -169,7 +169,7 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
 
 // ─── Section 04: Session Details ──────────────────────────────────────────────
 export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredTrack, sessionType, setSessionType }: any) => (
-    <SectionBox>
+    <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
         <SectionHeader number="04" title="Session Details" icon={<IconChat size={20} color="white" />} />
         <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>
@@ -222,7 +222,7 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
 
 // ─── Section 05: Speaking Experience ──────────────────────────────────────────
 export const SpeakingExperienceSection = ({ form, set, spokenBefore, setSpokenBefore }: any) => (
-    <SectionBox>
+    <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
         <SectionHeader number="05" title="Speaking Experience" icon={<IconStar size={20} color="white" />} />
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 15 }}>
             <span style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700 }}>Have you spoken at conferences before?</span>
@@ -279,7 +279,7 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
     ];
 
     return (
-        <SectionBox>
+        <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
             <SectionHeader number="06" title="Supporting Details" icon={<IconUpload size={20} color="white" />} />
             <div style={{ fontSize: 11, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Please upload / provide the following:</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
@@ -315,7 +315,7 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
 
 // ─── Section 07: Expectations ─────────────────────────────────────────────────
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
-    <SectionBox style={{ height: "220px", display: "flex", flexDirection: "column" }}>
+    <SectionBox style={{ width: "90%", marginLeft: '70px', height: "220px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
         <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
             <div style={{ flex: 1, paddingBottom: 10, alignSelf: "flex-start" }}>
@@ -340,7 +340,7 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
 
 // ─── Section 08: Consent ──────────────────────────────────────────────────────
 export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }: any) => (
-    <SectionBox style={{ height: "220px", display: "flex", flexDirection: "column" }}>
+    <SectionBox style={{ width: "90%", marginLeft: '30px', height: "220px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
         <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 18, paddingBottom: 10, flex: 1, alignSelf: "flex-start" }}>

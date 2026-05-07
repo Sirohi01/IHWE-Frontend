@@ -55,7 +55,7 @@ const AwardsAbout = () => {
               </p>
             </div>
 
-            <div className="border-t border-slate-100">
+            <div className="border-t border-slate-200">
               <img
                 src={credImg}
                 alt="Award Features"

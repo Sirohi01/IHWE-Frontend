@@ -1,6 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, Ticket, Users, Wallet } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.png";
+import one8 from "../../../assets/delegatepassimage/one8.png";
+import one7 from "../../../assets/delegatepassimage/one7.png";
+import one6 from "../../../assets/delegatepassimage/one6.png";
 
 const bgTextures = [
   "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80",
@@ -14,14 +18,13 @@ const Day3CTA: React.FC = () => {
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80"
+          src={backgroundImage}
           className="w-full h-full object-cover"
           alt="Section Background"
         />
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
       </div>
 
-      <div className="container mx-auto px-6 max-w-[1400px] relative z-10">
+      <div className="container mx-auto px-6 max-w-[1320px] relative z-10">
         <div className="grid md:grid-cols-3 gap-6">
 
           {/* Card 1: BE PART OF DAY 3 */}
@@ -36,24 +39,22 @@ const Day3CTA: React.FC = () => {
               <img src={bgTextures[0]} className="w-full h-full object-cover" alt="" />
             </div>
 
-            <div className="relative z-10 p-8 h-full flex flex-col">
+            <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Wallet className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one8} alt="Be Part of Day 3" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
-                  <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
+                  <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">
                     Be Part Of <br /> Day 3
                   </h3>
-                  <p className="text-[12px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
+                  <p className="text-[13px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
                     Join leaders and innovators shaping the future of preventive healthcare.
                   </p>
                 </div>
               </div>
 
-              <button className="mx-auto mt-auto w-fit px-8 py-3 bg-white text-[#1A4D2E] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#0B2C66] hover:text-white transition-all shadow-lg">
+              <button className="mx-auto mt-2 w-fit px-8 py-3 bg-white text-[#1A4D2E] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#0B2C66] hover:text-white transition-all shadow-lg">
                 Register For Day 3
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -72,24 +73,22 @@ const Day3CTA: React.FC = () => {
               <img src={bgTextures[1]} className="w-full h-full object-cover" alt="" />
             </div>
 
-            <div className="relative z-10 p-8 h-full flex flex-col">
+            <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Ticket className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one7} alt="Delegate Pass" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
-                  <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
+                  <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">
                     Delegate <br /> Pass
                   </h3>
-                  <p className="text-[12px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
+                  <p className="text-[13px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
                     Access all 3 days of conferences, networking & more.
                   </p>
                 </div>
               </div>
 
-              <button className="mt-auto w-fit px-8 py-3 bg-white text-[#0B2C66] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#1E88E5] hover:text-white transition-all shadow-lg mx-auto">
+              <button className="mt-2 w-fit px-8 py-3 bg-white text-[#0B2C66] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#1E88E5] hover:text-white transition-all shadow-lg mx-auto">
                 Book Delegate Pass
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -108,24 +107,22 @@ const Day3CTA: React.FC = () => {
               <img src={bgTextures[2]} className="w-full h-full object-cover" alt="" />
             </div>
 
-            <div className="relative z-10 p-8 h-full flex flex-col">
+            <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0">
-                  <div className="w-10 h-10 rounded-full border border-white/40 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-white" />
-                  </div>
+                <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
+                  <img src={one6} alt="Sponsor & Partner" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
-                  <h3 className="text-[18px] font-black text-white uppercase tracking-tight leading-tight">
+                  <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">
                     Sponsor & <br /> Partner
                   </h3>
-                  <p className="text-[12px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
+                  <p className="text-[13px] text-white/80 font-medium leading-relaxed mt-2 line-clamp-2">
                     Showcase your brand and connect with global health leaders.
                   </p>
                 </div>
               </div>
 
-              <button className="mt-auto w-fit px-8 py-3 bg-white text-[#1A4D2E] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#4E9F3D] hover:text-white transition-all shadow-lg mx-auto">
+              <button className="mt-2 w-fit px-8 py-3 bg-white text-[#1A4D2E] rounded-full font-black text-[11px] uppercase tracking-widest flex items-center gap-3 hover:bg-[#4E9F3D] hover:text-white transition-all shadow-lg mx-auto">
                 Become A Sponsor
                 <ChevronRight className="w-4 h-4" />
               </button>

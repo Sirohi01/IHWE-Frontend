@@ -1,13 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Headphones, Phone, Mail, Globe, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import logo from "@/assets/arogyasangosti.png";
+import { socialMediaApi } from "@/lib/api";
 
 const DelegateFooter: React.FC = () => {
+  const [socialLinks, setSocialLinks] = useState({
+    facebook: "https://www.facebook.com/namogangewellness.event",
+    instagram: "https://instagram.com",
+    twitter: "https://twitter.com",
+    youtube: "https://youtube.com",
+    linkedin: "https://linkedin.com",
+  });
+
+  useEffect(() => {
+    const fetchSocialLinks = async () => {
+      try {
+        const data = await socialMediaApi.get();
+        if (data) {
+          setSocialLinks({
+            facebook: data.facebook || "https://www.facebook.com/namogangewellness.event",
+            instagram: data.instagram || "https://instagram.com",
+            twitter: data.twitter || "https://twitter.com",
+            youtube: data.youtube || "https://youtube.com",
+            linkedin: data.linkedin || "https://linkedin.com",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching social links:", error);
+      }
+    };
+    fetchSocialLinks();
+  }, []);
+
   return (
     <footer className="w-full bg-white">
       {/* Top Contact Bar - Dark Green background with colorful icons */}
       <div className="bg-[#143111] py-4 px-6 lg:px-10">
-        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between gap-6">
+        <div className="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-6 pl-[30px]">
           <div className="flex flex-wrap items-center gap-10">
             {/* Helpline */}
             <div className="flex items-center gap-3">
@@ -25,7 +54,7 @@ const DelegateFooter: React.FC = () => {
               <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#A3E635]">
                 <Phone className="w-4 h-4 fill-current" />
               </div>
-              <span className="text-[15px] font-black text-white">+91 98765 43210</span>
+              <span className="text-[15px] font-black text-white">+91-9654900525</span>
             </div>
 
             <div className="h-8 w-[1px] bg-white/10" />
@@ -35,7 +64,7 @@ const DelegateFooter: React.FC = () => {
               <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#A3E635]">
                 <Mail className="w-4 h-4" />
               </div>
-              <span className="text-[13px] font-bold text-white tracking-tight">info@arogyasanghoshti.com</span>
+              <span className="text-[13px] font-bold text-white tracking-tight">info@ihwe.in</span>
             </div>
 
             <div className="h-8 w-[1px] bg-white/10" />
@@ -53,19 +82,19 @@ const DelegateFooter: React.FC = () => {
           <div className="flex items-center gap-5">
             <span className="text-[12px] font-black text-white uppercase tracking-widest opacity-60">Follow Us</span>
             <div className="flex items-center gap-3">
-              <a href="#" className="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
+              <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <Linkedin className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
+              <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#1877f2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
+              <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <span className="font-black text-[10px]">X</span>
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
+              <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
+              <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#ff0000] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <Youtube className="w-4 h-4" />
               </a>
             </div>
@@ -75,7 +104,7 @@ const DelegateFooter: React.FC = () => {
 
       {/* Main Branding Section - More Compact */}
       <div className="bg-white py-4 px-6 lg:px-10 border-t border-gray-100">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 pl-[30px]">
           {/* Logo & Info */}
           <div className="flex items-center gap-8">
             <img src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />
@@ -91,16 +120,16 @@ const DelegateFooter: React.FC = () => {
             <div className="flex flex-col items-center md:items-start">
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Part of</p>
               <div className="flex items-center gap-4">
-                  <img 
-                    src="/logo.png" 
-                    alt="International Health & Wellness Expo" 
-                    className="w-14 h-14 object-contain"
-                  />
-                 <div className="text-[12px] font-black text-[#143111] leading-tight">
-                    <div>INTERNATIONAL</div>
-                    <div className="text-green-600">HEALTH & WELLNESS</div>
-                    <div>EXPO 2026</div>
-                 </div>
+                <img
+                  src="/logo.png"
+                  alt="International Health & Wellness Expo"
+                  className="w-14 h-14 object-contain"
+                />
+                <div className="text-[12px] font-black text-[#143111] leading-tight">
+                  <div>INTERNATIONAL</div>
+                  <div className="text-green-600">HEALTH & WELLNESS</div>
+                  <div>EXPO 2026</div>
+                </div>
               </div>
             </div>
 
@@ -110,9 +139,9 @@ const DelegateFooter: React.FC = () => {
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Supported By</p>
               <div className="flex items-center gap-8">
                 <div className="flex items-center gap-3">
-                  <img 
-                    src="/MSME.png" 
-                    alt="Govt of India" 
+                  <img
+                    src="/MSME.png"
+                    alt="Govt of India"
                     className="w-10 h-10 object-contain"
                   />
                   <div className="text-[11px] font-black text-[#143111]">
@@ -121,9 +150,9 @@ const DelegateFooter: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <img 
-                    src="/MSME.png" 
-                    alt="NITI Aayog" 
+                  <img
+                    src="/MSME.png"
+                    alt="NITI Aayog"
                     className="w-10 h-10 object-contain"
                   />
                   <div className="text-[11px] font-black text-[#143111]">

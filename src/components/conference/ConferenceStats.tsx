@@ -11,11 +11,11 @@ const InfinityIcon = () => (
 );
 
 const statsData = [
-  { icon: Users, value: "50+", label: "Expert Speakers" },
+  { icon: Users, value: "150+", label: "Expert Speakers" },
   { icon: Mic, value: "18", label: "Premium Sessions" },
   { icon: Calendar, value: "3", label: "Days Major Conferences" },
-  { icon: Trophy, value: "1000+", label: "Delegates" },
-  { icon: Globe2, value: "20+", label: "Countries" },
+  { icon: Trophy, value: "1000+", label: "Visitors/Delegates" },
+  { icon: Globe2, value: "1000+", label: "Global Buyers" },
   { icon: InfinityIcon, value: "", label: "Endless Opportunities", custom: true },
 ];
 

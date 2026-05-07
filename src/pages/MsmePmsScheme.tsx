@@ -2,37 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   CheckCircle2,
-  ChevronRight,
-  FileText,
   HelpCircle,
   Upload,
   Users,
-  Globe,
-  Building2,
-  Mic,
-  Calendar,
-  Briefcase,
   ShieldCheck,
-  TrendingUp,
-  Award,
-  Download,
   Phone,
-  Mail,
   Instagram,
   Facebook,
   Linkedin,
   Youtube,
   ArrowRight,
-  IdCard,
-  Store,
-  Package,
-  Landmark,
-  Clock,
-  Share2,
-  Handshake,
-  Presentation,
-  Timer,
-  Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,12 +25,35 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import { msmePmsSchemeApi } from "@/lib/api";
 
 const MsmePmsScheme = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [socialLinks, setSocialLinks] = useState({
+    facebook: "https://www.facebook.com/namogangewellness.event",
+    instagram: "https://instagram.com",
+    twitter: "https://twitter.com",
+    youtube: "https://youtube.com",
+    linkedin: "https://linkedin.com",
+  });
+  const [formData, setFormData] = useState({
+    companyName: '',
+    contactPerson: '',
+    mobileNumber: '',
+    emailId: '',
+    udyamNumber: '',
+    gstNumber: '',
+    category: '',
+    companyBrief: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -70,17 +72,44 @@ const MsmePmsScheme = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Application Submitted Successfully",
-        description: "Our team will review your application and get back to you shortly.",
+
+    try {
+      const submitData = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        submitData.append(key, value);
       });
-    }, 2000);
+
+      selectedFiles.forEach((file) => {
+        submitData.append('documents', file);
+      });
+
+      const response = await msmePmsSchemeApi.submit(submitData);
+
+      if (response.success) {
+        toast({ title: "Success", description: "Application Submitted successfully!" });
+        setFormData({
+          companyName: '',
+          contactPerson: '',
+          mobileNumber: '',
+          emailId: '',
+          udyamNumber: '',
+          gstNumber: '',
+          category: '',
+          companyBrief: ''
+        });
+        setSelectedFiles([]);
+      } else {
+        toast({ title: "Error", description: response.message || "Failed to submit application", variant: "destructive" });
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({ title: "Error", description: "An error occurred. Please try again.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -102,14 +131,14 @@ const MsmePmsScheme = () => {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-20">
           {/* Main Banner Container */}
-          <div className="flex flex-col lg:flex-row min-h-[550px]">
+          <div className="flex flex-col lg:flex-row min-h-[450px]">
             {/* Left Side: Content */}
-            <div className="lg:w-[50%] pt-40 sm:pt-4 pb-12 relative z-20 bg-white">
+            <div className="lg:w-[50%] pt-40 sm:pt-4 pb-0 relative z-20 bg-white flex flex-col justify-end">
 
               {/* Gold Ribbon - Fixed position with refined spacing */}
               <div className="absolute top-3 left-4 sm:top-8 lg:left-0 z-30">
                 <div className="relative w-28 h-36 lg:w-32 lg:h-44 flex items-center justify-center">
-                  <img src="/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
+                  <img src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
                 </div>
               </div>
 
@@ -126,45 +155,45 @@ const MsmePmsScheme = () => {
                   <span className="block md:whitespace-nowrap">Financial Assistance from Ministry of MSME, Government of India.</span>
                 </p>
 
-                {/* Subsidy Box - Final Refinement for Parity */}
               </div>
-              <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mt-6 mb-3 shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
-                <div className="bg-[#0d3b16] px-5 py-4 md:px-8 md:py-5 grid grid-cols-1 md:grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] items-center gap-4 md:gap-6 relative overflow-hidden">
+              {/* Subsidy Box - Final Refinement for Parity */}
+              <div className="w-full lg:w-[760px] max-w-[calc(100vw-3rem)] mt-auto shadow-[0_18px_38px_rgba(11,43,15,0.18)] rounded-[16px] overflow-hidden border border-[#f3b71b]/20">
+                <div className="bg-[#0d3b16] px-5 py-8 md:px-6 md:py-10 grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-4 md:gap-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(255,255,255,0.10),transparent_34%),linear-gradient(135deg,rgba(0,0,0,0.26),transparent_55%)] pointer-events-none"></div>
 
                   {/* Left: Icon & Amount Container */}
-                  <div className="relative flex items-center gap-4 md:gap-6 shrink-0">
-                    <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0 rounded-xl bg-[#0a2f11] flex items-center justify-center">
+                  <div className="relative flex items-center gap-3 md:gap-5 shrink-0">
+                    <div className="relative w-20 h-24 md:w-24 md:h-32 shrink-0 flex items-center justify-center">
                       <img
-                        src="/msme_application_checklist_graphic2.png"
+                        src="/msmepmsscheme/mony-bag.png"
                         alt="Subsidy Bag"
-                        className="w-[90%] h-[90%] object-contain relative z-10"
+                        className="w-full h-full object-contain relative z-10 drop-shadow-xl"
                       />
                     </div>
 
-                    <div className="flex flex-col min-w-0">
-                      <div className="text-white/95 text-[11px] md:text-[13px] font-black leading-none">Get Up To</div>
+                    <div className="flex flex-col min-w-0 pr-2">
+                      <div className="text-white/95 text-[13px] md:text-[14px] font-semibold leading-none mb-1">Get Up To</div>
                       <div className="flex items-start">
-                        <span className="text-[#f3b71b] text-[38px] md:text-[54px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-md">₹1,50,000</span>
-                        <span className="text-[#f4bd18] text-2xl md:text-4xl font-black mt-1 ml-1">*</span>
+                        <span className="text-[#f3b71b] text-[40px] md:text-[50px] font-extrabold leading-[0.85] tracking-tighter drop-shadow-sm">₹1,50,000</span>
+                        <span className="text-[#f4bd18] text-2xl md:text-3xl font-black mt-0.5 ml-1">*</span>
                       </div>
-                      <div className="text-white text-[20px] md:text-[28px] font-black uppercase tracking-[0.16em] mt-1 leading-none">SUBSIDY</div>
-                      <div className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.08em] mt-1">UNDER MSME PMS SCHEME</div>
+                      <div className="text-white text-[24px] md:text-[30px] font-black tracking-[0.02em] mt-2 leading-none">SUBSIDY</div>
+                      <div className="text-white/90 text-[11px] md:text-[12px] font-medium mt-1.5 tracking-wide">Under MSME PMS Scheme</div>
                     </div>
                   </div>
 
                   {/* Right: Checklist Column */}
-                  <div className="flex flex-col gap-2.5 relative z-10 w-full md:border-l md:border-white/15 md:pl-6 lg:pl-10">
+                  <div className="flex flex-col gap-3 md:gap-4 relative z-10 w-full md:border-l md:border-white/10 md:pl-6 lg:pl-8">
                     {[
                       "Government Financial Support",
                       "Increase Market Reach",
                       "Grow Your Business Globally"
                     ].map((text, i) => (
-                      <div key={i} className="flex items-center gap-3 text-white text-[11px] md:text-[12px] font-bold">
-                        <div className="w-6 h-6 rounded-full border-2 border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
-                          <CheckCircle2 size={12} strokeWidth={3.5} />
+                      <div key={i} className="flex items-center gap-2 md:gap-3 text-white text-[12px] md:text-[13px] font-normal min-w-0">
+                        <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border border-[#f4bd18] flex items-center justify-center shrink-0 text-[#f4bd18]">
+                          <CheckCircle2 size={14} strokeWidth={2.5} />
                         </div>
-                        <span className="opacity-95 tracking-tight">{text}</span>
+                        <span className="opacity-95 tracking-wide whitespace-nowrap text-ellipsis overflow-hidden">{text}</span>
                       </div>
                     ))}
                   </div>
@@ -180,9 +209,9 @@ const MsmePmsScheme = () => {
                 </div>
               </div>
 
-              <div className="text-[11px] text-slate-400 font-bold italic">
+              {/* <div className="text-[11px] text-slate-400 font-bold italic">
                 *Subsidy amount may vary as per MSME guidelines, category and approval.
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -190,7 +219,7 @@ const MsmePmsScheme = () => {
         {/* Right Side: Image Banner - Bleeding to edge */}
         <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-[50%] overflow-hidden">
           <img
-            src="/msme_pms_header_banner_bg_1777877814391.png"
+            src="/msmepmsscheme/msme_pms_header_banner.png"
             alt="MSME Exhibition"
             className="w-full h-full object-cover object-[center_20%]"
           />
@@ -198,7 +227,7 @@ const MsmePmsScheme = () => {
           {/* <div className="absolute top-8 right-8 bg-white/95 backdrop-blur shadow-2xl p-4 rounded-xl flex items-center gap-4 border border-slate-100 z-20">
             <div className="flex flex-col items-center">
               <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mb-1">SUPPORTED BY</span>
-              <img src="/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
+              <img src="/msmepmsscheme/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
             </div>
             <div className="w-[1px] h-10 bg-slate-200"></div>
             <div className="flex flex-col text-[8px] font-black text-slate-800 leading-tight">
@@ -215,23 +244,26 @@ const MsmePmsScheme = () => {
         {/* Mobile Image (Visible only on mobile) */}
         <div className="lg:hidden relative min-h-[300px] overflow-hidden">
           <img
-            src="/msme_pms_header_banner_bg_1777877814391.png"
+            src="/msmepmsscheme/msme_pms_header_banner.png"
             alt="MSME Exhibition"
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
         </div>
       </section >
 
       {/* Integrated Action Buttons Bar - Positioned immediately after Hero */}
       <div className="bg-white py-2 px-4 lg:px-16 z-30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="flex flex-col sm:flex-row justify-end items-center gap-4">
-            <Button className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
-              APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button>
-            {/* <Button variant="outline" className="px-5 py-2 bg-white border border-[#064420] text-[#064420] font-bold text-[13px] uppercase tracking-wide rounded-lg hover:bg-[#064420] hover:text-white transition-all flex items-center gap-3 group">
-              BOOK YOUR STALL <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Button> */}
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+            <div className="text-[11px] md:text-[12px] text-slate-500 font-bold italic max-w-md sm:pt-2">
+              *Subsidy amount may vary as per MSME guidelines, category and approval.
+            </div>
+            <div className="flex flex-col sm:flex-row justify-end items-center gap-3">
+              <Button onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })} className="px-5 py-2 bg-[#064420] hover:bg-[#0a5a2a] text-white font-bold text-[13px] uppercase tracking-wide rounded-lg transition-all flex items-center gap-3 group">
+                APPLY FOR PMS SCHEME NOW <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -242,20 +274,24 @@ const MsmePmsScheme = () => {
           <div className="bg-white rounded-[12px] shadow-[0_8px_28px_rgba(0,0,0,0.035)] border border-slate-100 py-4 px-3">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
               {[
-                { icon: Globe, val: "1000+", label: "GLOBAL BUYERS" },
-                { icon: Landmark, val: "150+", label: "EXHIBITORS" },
-                { icon: Users, val: "8,000+", label: "VISITORS/ DELEGATES" },
-                { icon: Presentation, val: "18+", label: "CONFERENCE SESSIONS" },
-                { icon: Timer, val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
-                { icon: Handshake, val: "MULTIPLE", label: "NETWORKING EVENTS" },
+                { img: "/msmepmsscheme/global.png", val: "1,000+", label: "GLOBAL BUYERS" },
+                { img: "/msmepmsscheme/exhibitors.png", val: "150+", label: "EXHIBITORS" },
+                { img: "/msmepmsscheme/visitors.png", val: "8,000+", label: "VISITORS/ DELEGATES" },
+                { img: "/msmepmsscheme/conference.png", val: "18+", label: "CONFERENCE SESSIONS" },
+                { img: "/msmepmsscheme/businessOpportunities.png", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
+                { img: "/msmepmsscheme/networkevents.png", val: "MULTIPLE", label: "NETWORKING EVENTS" },
               ].map((stat, i) => (
-                <div key={i} className={`flex items-center gap-3 px-3 sm:px-5 min-h-[56px] ${i !== 5 ? "lg:border-r border-slate-100" : ""} group`}>
-                  <div className="w-10 h-10 rounded-full bg-[#f5f8f2] flex items-center justify-center shrink-0 ring-1 ring-[#23471d]/10 group-hover:bg-[#23471d]/10 transition-colors">
-                    <stat.icon size={22} className="text-[#23471d]" strokeWidth={1.8} />
+                <div key={i} className={`flex items-center justify-center gap-3 md:gap-4 px-2 sm:px-4 min-h-[64px] ${i !== 5 ? "lg:border-r border-slate-200/60" : ""} group`}>
+                  <div className="flex items-center justify-center shrink-0 w-10 h-12 md:w-[60px] md:h-[60px] transition-transform group-hover:scale-105">
+                    <img
+                      src={stat.img}
+                      alt={stat.label}
+                      className={`object-contain w-[75%] h-[75%]`}
+                    />
                   </div>
-                  <div>
-                    <div className="text-lg md:text-xl font-black text-slate-900 leading-none mb-1">{stat.val}</div>
-                    <div className="text-[8px] md:text-[9px] font-black text-slate-400 tracking-widest uppercase leading-tight">{stat.label}</div>
+                  <div className="flex flex-col justify-center">
+                    <span className="text-[16px] md:text-[18px] font-black text-slate-900 leading-none mb-0.5">{stat.val}</span>
+                    <span className="text-[8px] md:text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">{stat.label}</span>
                   </div>
                 </div>
               ))}
@@ -268,24 +304,22 @@ const MsmePmsScheme = () => {
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               {/* About Section */}
-              <div className="lg:col-span-4 bg-white rounded-[20px] border border-slate-100 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col">
-                <h2 className="text-2xl font-black text-[#1a3615] mb-2 uppercase tracking-tight">ABOUT PMS SCHEME</h2>
-                <div className="flex gap-2 mb-8">
+              <div className="lg:col-span-4 bg-white rounded-[20px] border border-slate-100 p-6 flex flex-col justify-center">
+                <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">ABOUT PMS SCHEME</h2>
+                <div className="flex gap-2 mb-5">
                   <div className="w-6 h-1 bg-[#23471d]"></div>
                   <div className="w-3 h-1 bg-slate-200"></div>
                 </div>
 
-                <div className="flex flex-row gap-6 items-start">
-                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center shrink-0 border border-slate-100">
-                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-[#23471d]/20 flex items-center justify-center p-2">
-                      <Landmark className="text-[#23471d] w-8 h-8" />
-                    </div>
+                <div className="flex flex-row gap-5 items-center">
+                  <div className="w-24 h-24 lg:w-28 lg:h-28 shrink-0 transition-transform hover:scale-105">
+                    <img src="/msmepmsscheme/aboutpmsscheme.png" alt="About PMS Scheme" className="w-full h-full object-contain" />
                   </div>
-                  <div className="space-y-4 flex-1">
-                    <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
+                  <div className="space-y-3 flex-1">
+                    <p className="text-[12px] md:text-[13px] text-slate-600 leading-relaxed font-medium">
                       The Procurement and Marketing Support (PMS) Scheme of the Ministry of MSME, Government of India, aims to provide financial assistance to Micro, Small and Medium Enterprises (MSMEs) for participating in domestic and international exhibitions / trade fairs.
                     </p>
-                    <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
+                    <p className="text-[12px] md:text-[13px] text-slate-600 leading-relaxed font-medium">
                       The scheme helps MSMEs promote their products, explore new markets, enhance brand visibility and generate business opportunities.
                     </p>
                   </div>
@@ -293,29 +327,29 @@ const MsmePmsScheme = () => {
               </div>
 
               {/* Benefits Section */}
-              <div className="lg:col-span-8 bg-white rounded-[20px] border border-slate-100 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                <h2 className="text-2xl font-black text-[#1a3615] mb-2 uppercase tracking-tight">BENEFITS OF PMS SCHEME</h2>
-                <div className="flex gap-2 mb-8">
+              <div className="lg:col-span-8 bg-white rounded-[20px] border border-slate-100 p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">BENEFITS OF PMS SCHEME</h2>
+                <div className="flex gap-2 mb-5">
                   <div className="w-12 h-1 bg-[#d26019]"></div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-slate-100 rounded-2xl overflow-hidden">
                   {[
-                    { icon: Landmark, title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
-                    { icon: Package, title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
-                    { icon: Globe, title: "Market Exposure", desc: "Showcase your products to national & international buyers" },
-                    { icon: TrendingUp, title: "Business Growth", desc: "Generate leads & expand your network" },
-                    { icon: ShieldCheck, title: "Government Support", desc: "Exhibit with the backing of Ministry of MSME" },
-                    { icon: Award, title: "Brand Visibility", desc: "Enhance brand credibility and recognition" },
+                    { img: "/msmepmsscheme/reimbursement.png", title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
+                    { img: "/msmepmsscheme/reducedCost.png", title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
+                    { img: "/msmepmsscheme/marketexposure.png", title: "Market Exposure", desc: "Showcase your products to national & international buyers" },
+                    { img: "/msmepmsscheme/businessgrowth.png", title: "Business Growth", desc: "Generate leads & expand your network" },
+                    { img: "/msmepmsscheme/govsupport.png", title: "Government Support", desc: "Exhibit with the backing of Ministry of MSME" },
+                    { img: "/msmepmsscheme/brandvisibility.png", title: "Brand Visibility", desc: "Enhance brand credibility and recognition" },
                   ].map((benefit, i) => (
-                    <div key={i} className={`p-5 hover:bg-slate-50 transition-all border-b border-r border-slate-100 last:border-r-0 group`}>
-                      <div className="flex flex-row gap-4 items-start">
-                        <div className="w-12 h-12 bg-[#0d4a1f] rounded-full flex items-center justify-center text-[#f4bd18] shrink-0 shadow-[0_8px_16px_rgba(13,74,31,0.18)] ring-4 ring-[#f5f8f2] group-hover:scale-105 transition-transform">
-                          <benefit.icon size={22} strokeWidth={1.9} />
+                    <div key={i} className={`p-4 hover:bg-slate-50 transition-all border-b border-r border-slate-100 last:border-r-0 group`}>
+                      <div className="flex flex-row gap-4 items-center">
+                        <div className="w-[64px] h-[64px] md:w-[80px] md:h-[80px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <img src={benefit.img} alt={benefit.title} className="w-full h-full object-contain" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-[12px] font-black text-slate-800 leading-tight mb-1.5 group-hover:text-[#23471d] transition-colors">{benefit.title}</h4>
-                          <p className="text-[10px] font-medium text-slate-500 leading-relaxed">
+                          <h4 className="text-[11px] md:text-[12px] font-black text-slate-800 leading-tight mb-1 group-hover:text-[#23471d] transition-colors">{benefit.title}</h4>
+                          <p className="text-[9px] md:text-[10px] font-medium text-slate-500 leading-relaxed">
                             {benefit.desc}
                           </p>
                         </div>
@@ -323,7 +357,7 @@ const MsmePmsScheme = () => {
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 text-[10px] text-slate-400 italic font-medium">
+                <p className="mt-4 text-[9px] text-slate-400 italic font-medium">
                   *Subsidy amount may vary as per MSME guidelines, category and approval.
                 </p>
               </div>
@@ -339,7 +373,7 @@ const MsmePmsScheme = () => {
               <div className="lg:col-span-3">
                 <div className="rounded-[20px] overflow-hidden shadow-lg border border-slate-100 h-full">
                   <img
-                    src="/msme_exhibition_stalls_grid.png"
+                    src="/msmepmsscheme/msme_exhibition_stalls_grid.png"
                     alt="Exhibition Stalls"
                     className="w-full h-full object-cover"
                   />
@@ -374,7 +408,8 @@ const MsmePmsScheme = () => {
                 {/* Why PMS Scheme */}
                 <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
                   <div className="flex items-center gap-3 mb-6">
-                    <TrendingUp className="text-[#1a3615]" size={26} strokeWidth={2.5} />
+                    {/* <TrendingUp className="text-[#1a3615]" size={26} strokeWidth={2.5} /> */}
+                    <img src="/msmepmsscheme/whypms.png" alt="Why PMS Scheme" className="w-8 h-8 object-contain shrink-0" />
                     <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">WHY PMS SCHEME?</h3>
                   </div>
                   <ul className="space-y-4 flex-1">
@@ -422,20 +457,20 @@ const MsmePmsScheme = () => {
             {/* Bottom Grid: Documents & How to Apply */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
               {/* Documents Required */}
-              <div className="lg:col-span-4 bg-[#f9fafb] rounded-[20px] p-8 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
-                <h3 className="text-[18px] font-black text-[#1a3615] mb-6 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
-                <ul className="space-y-4">
+              <div className="lg:col-span-4 bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+                <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
+                <ul className="space-y-3">
                   {[
-                    { label: "Udyam Registration Certificate", icon: Building2 },
-                    { label: "PAN Card", icon: IdCard },
-                    { label: "GST Certificate", icon: ShieldCheck },
-                    { label: "Company Profile", icon: Store },
-                    { label: "Product / Service Details", icon: Package },
-                    { label: "Bank Account Details", icon: Landmark },
+                    { label: "Udyam Registration Certificate", img: "/msmepmsscheme/udyamreg.png" },
+                    { label: "PAN Card", img: "/msmepmsscheme/pan.png" },
+                    { label: "GST Certificate", img: "/msmepmsscheme/gstcerti.png" },
+                    { label: "Company Profile", img: "/msmepmsscheme/companyprofile.png" },
+                    { label: "Product / Service Details", img: "/msmepmsscheme/productdetails.png" },
+                    { label: "Bank Account Details", img: "/msmepmsscheme/bankaccdetails.png" },
                   ].map((doc, i) => (
                     <li key={i} className="flex gap-5 items-center group">
-                      <div className="w-8 h-8 flex items-center justify-center text-[#1a3615] group-hover:scale-110 transition-transform">
-                        <doc.icon size={22} strokeWidth={2.5} />
+                      <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                        <img src={doc.img} alt={doc.label} className="w-full h-full object-contain" />
                       </div>
                       <span className="text-[14px] font-bold text-slate-700 leading-tight">{doc.label}</span>
                     </li>
@@ -444,13 +479,13 @@ const MsmePmsScheme = () => {
               </div>
 
               {/* How to Apply */}
-              <div className="lg:col-span-8 bg-[#f9fafb] rounded-[20px] p-8 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-6 relative overflow-hidden">
+              <div className="lg:col-span-8 bg-[#f9fafb] rounded-[20px] p-4 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-6 relative overflow-hidden">
                 <div className="flex-1 relative">
                   <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">HOW TO APPLY?</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
                     {/* Column 1: Steps 1, 2, 3 */}
-                    <div className="space-y-4 relative">
+                    <div className="space-y-3 relative">
                       {/* Vertical Line for Column 1 */}
                       <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
 
@@ -472,7 +507,7 @@ const MsmePmsScheme = () => {
                     </div>
 
                     {/* Column 2: Steps 4, 5 */}
-                    <div className="space-y-4 relative mt-4 md:mt-0">
+                    <div className="space-y-3 relative mt-4 md:mt-0">
                       {/* Vertical Line for Column 2 */}
                       <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
 
@@ -497,15 +532,15 @@ const MsmePmsScheme = () => {
                 {/* Checklist Graphic */}
                 <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
                   <img
-                    src="/msme_application_checklist_graphic.png"
+                    src="/msmepmsscheme/approved.png"
                     alt="Application Approved"
                     className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
                   />
-                  <div className="absolute bottom-[15%] right-[15%]">
+                  {/* <div className="absolute bottom-[15%] right-[15%]">
                     <div className="inline-block bg-[#1a3615] text-white text-[11px] font-black px-6 py-2 rounded-full shadow-2xl uppercase tracking-widest border-4 border-white animate-bounce-slow">
                       APPROVED
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -536,7 +571,9 @@ const MsmePmsScheme = () => {
                   <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
-                        <HelpCircle size={12} />
+                        {/* <HelpCircle size={12} /> */}
+                        <img src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
+
                       </div>
                       <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
                     </div>
@@ -553,19 +590,19 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Company / Organization Name <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
+                        <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
+                        <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
-                        <Input required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
+                        <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleInputChange} required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
-                        <Input required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
+                        <Input name="emailId" value={formData.emailId} onChange={handleInputChange} required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
                       </div>
                     </div>
 
@@ -573,15 +610,15 @@ const MsmePmsScheme = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Udyam Registration Number <span className="text-red-500">*</span></label>
-                        <Input required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
+                        <Input name="udyamNumber" value={formData.udyamNumber} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
                       </div>
                       <div className="space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">GST Number</label>
-                        <Input className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
+                        <Input name="gstNumber" value={formData.gstNumber} onChange={handleInputChange} className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
                       </div>
                       <div className="lg:col-span-2 space-y-1">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Product / Service Category <span className="text-red-500">*</span></label>
-                        <Select required>
+                        <Select required value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
                           <SelectTrigger className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3">
                             <SelectValue placeholder="Select category" />
                           </SelectTrigger>
@@ -601,7 +638,7 @@ const MsmePmsScheme = () => {
                       {/* Company Brief */}
                       <div className="lg:col-span-5 space-y-1 flex flex-col">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Brief About Your Company / Products <span className="text-red-500">*</span></label>
-                        <Textarea required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
+                        <Textarea name="companyBrief" value={formData.companyBrief} onChange={handleInputChange} required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
                       </div>
 
                       {/* Upload & Help Card Side */}
@@ -690,77 +727,83 @@ const MsmePmsScheme = () => {
         </section >
 
         {/* Footer CTA - Rebuilt for exact parity with brochure design */}
-        < section className="py-2 bg-white" >
+        <section className="py-2 bg-white font-['Barlow',sans-serif]">
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="bg-[#123b17] rounded-[14px] px-5 py-4 md:px-7 md:py-5 shadow-[0_16px_34px_rgba(10,42,15,0.16)] relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent pointer-events-none"></div>
+            <div className="bg-[#123b17] rounded-lg px-4 md:px-8 py-4 shadow-lg relative flex flex-col lg:flex-row items-center justify-between gap-6">
 
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-6 relative z-10">
-                {/* Left: Megaphone & Text */}
-                <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-5 text-center sm:text-left">
-                  <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 flex items-center justify-center relative rounded-full bg-[#f4bd18]/10">
-                    <div className="absolute inset-1 rounded-full border border-[#f4bd18]/20"></div>
-                    <Megaphone size={42} className="text-[#f4bd18] drop-shadow-xl -rotate-12" strokeWidth={2.2} />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <h3 className="text-xl md:text-2xl font-black text-white leading-tight tracking-normal">
-                      Don't Miss This <span className="text-[#f3b71b]">Government-Supported</span> Opportunity!
-                    </h3>
-                    <p className="text-white/75 text-sm md:text-[15px] font-bold max-w-2xl leading-snug">
-                      Exhibit at IHWE 2026 and take your business to the next level
-                      <br className="hidden md:block" />
-                      with financial support under the MSME PMS Scheme.
-                    </p>
-                  </div>
+              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
+                <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 -my-8 md:-my-10 relative z-10 drop-shadow-xl transition-transform hover:scale-105">
+                  <img src="/msmepmsscheme/Announcement.png" alt="Announcement" className="w-full h-full object-contain" />
                 </div>
 
-                {/* Right: Buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full lg:w-auto">
-                  <Button className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] tracking-wide rounded-lg shadow-xl transition-all flex items-center justify-center gap-3 group/btn">
-                    APPLY NOW <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
-                  {/* <Button variant="outline" className="px-5 py-2 border-white/25 bg-transparent text-white hover:bg-white/10 font-bold text-[13px] tracking-wide rounded-lg transition-all flex items-center justify-center gap-3 group/btn">
-                    BOOK YOUR STALL <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Button> */}
+                <div className="space-y-1 mt-4 sm:mt-0">
+                  <h3 className="text-xl md:text-[22px] font-bold text-white leading-tight tracking-wide">
+                    Don't Miss This <span className="text-[#f59e0b]">Government-Supported Opportunity!</span>
+                  </h3>
+                  <p className="text-white/90 text-sm md:text-[15px] font-normal max-w-xl leading-snug">
+                    Exhibit at IHWE 2026 and take your business to the next level
+                    <br className="hidden md:block" />
+                    with financial support under the MSME PMS Scheme.
+                  </p>
                 </div>
+              </div>
+
+              {/* Right: Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto mt-2 lg:mt-0">
+                <Button
+                  onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="px-2 py-2.5 h-auto bg-orange-500 hover:bg-orange-600 text-white font-bold text-[12px] md:text-[13px] tracking-wide rounded flex items-center justify-center gap-2 transition-colors border border-[#f59e0b]"
+                >
+                  APPLY FOR PMS SCHEME <ArrowRight size={14} />
+                </Button>
+
+                {/* <Button
+                  variant="outline"
+                  className="px-6 py-2.5 h-auto border border-white bg-transparent text-white hover:bg-white/10 font-bold text-[12px] md:text-[13px] tracking-wide rounded flex items-center justify-center gap-2 transition-colors"
+                >
+                  BOOK YOUR STALL <ArrowRight size={14} />
+                </Button> */}
               </div>
             </div>
           </div>
-        </section >
+        </section>
 
         {/* Final Footer Strip (Repeating stats for impact) */}
         < div className="bg-[#123b17] py-2 border-t border-white/5" >
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 md:gap-8 w-full lg:w-auto">
+            <div className="flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-4 w-full">
+
+              {/* Stats Strip */}
+              <div className="flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-y-4 lg:gap-y-0 w-full xl:w-auto">
                 {[
-                  { icon: Globe, val: "1000+", label: "GLOBAL BUYERS" },
-                  { icon: Landmark, val: "150+", label: "EXHIBITORS" },
-                  { icon: Users, val: "8,000+", label: "VISITORS/ DELEGATES" },
-                  { icon: Presentation, val: "18+", label: "CONFERENCE SESSIONS" },
-                  { icon: Timer, val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
+                  { img: "/msmepmsscheme/global1.png", val: "1000+", label: "GLOBAL BUYERS" },
+                  { img: "/msmepmsscheme/exhibitors.png", val: "150+", label: "EXHIBITORS" },
+                  { img: "/msmepmsscheme/visitors.png", val: "8,000+", label: "VISITORS/ DELEGATES" },
+                  { img: "/msmepmsscheme/conference.png", val: "18+", label: "CONFERENCE SESSIONS" },
+                  { img: "/msmepmsscheme/businessOpportunities1.png", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
                 ].map((stat, i) => (
-                  <div key={i} className="flex flex-col items-center lg:items-start">
-                    <div className="flex items-center gap-2 mb-1">
-                      <stat.icon size={22} className="text-orange-500" strokeWidth={1.9} />
-                      <span className="text-lg font-black text-white">{stat.val}</span>
+                  <div key={i} className={`flex items-center gap-2.5 ${i !== 4 ? 'lg:border-r lg:border-white/10 lg:pr-5 lg:mr-5' : ''}`}>
+                    <div className="flex items-center justify-center shrink-0 w-12 h-12 md:w-14 md:h-14">
+                      <img src={stat.img} alt={stat.label} className={`object-contain opacity-90 w-[75%] h-[75%]`} />
                     </div>
-                    <span className="text-[9px] font-bold text-white/40 tracking-widest uppercase">{stat.label}</span>
+                    <div className="flex flex-col justify-center">
+                      <span className="text-[13px] md:text-[15px] font-black text-white leading-tight">{stat.val}</span>
+                      <span className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase leading-tight tracking-wide">{stat.label}</span>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              {/* <div className="flex flex-col items-center lg:items-end gap-3 shrink-0">
-                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">FOLLOW US</span>
-                <div className="flex gap-4">
-                  {[Facebook, Instagram, Linkedin, Youtube].map((Icon, i) => (
-                    <a key={i} href="#" className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/60 hover:bg-[#23471d] hover:text-white transition-all hover:border-transparent">
-                      <Icon size={16} />
-                    </a>
-                  ))}
+              {/* Social Icons */}
+              <div className="flex flex-col items-center xl:items-start gap-1.5 shrink-0">
+                <span className="text-[9px] font-black text-white uppercase tracking-wider">FOLLOW US</span>
+                <div className="flex gap-2">
+                  <a href={socialLinks.facebook} target="_blank" className="w-9 h-9 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Facebook size={16} strokeWidth={2.5} className="fill-white" /></a>
+                  <a href={socialLinks.instagram} target="_blank" className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Instagram size={16} strokeWidth={2.5} /></a>
+                  <a href={socialLinks.linkedin} target="_blank" className="w-9 h-9 rounded-full bg-[#0A66C2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Linkedin size={16} strokeWidth={0} className="fill-white" /></a>
+                  <a href={socialLinks.youtube} target="_blank" className="w-9 h-9 rounded-full bg-[#FF0000] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Youtube size={16} strokeWidth={2.5} /></a>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </div >

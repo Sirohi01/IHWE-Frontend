@@ -19,18 +19,26 @@ const WhatPar = () => {
     }, [totalPages]);
 
     return (
-        <div className="bg-[#FAF9F2] py-8 px-14 font-['Barlow',sans-serif]">
+        <div className="bg-[#FAF9F2] py-8 px-16 font-['Barlow',sans-serif]">
             <div className='flex justify-between w-full gap-4'>
 
                 {/* ── LEFT: IMPACT BOX ── */}
-                <div className="w-[40%] bg-[#1e4020] rounded-[14px] pt-6 px-7 pb-7 relative overflow-hidden flex-1">
-
+                <div
+                    className="w-[40%] rounded-[14px] pt-6 px-7 pb-7 relative flex-1"
+                    style={{
+                        backgroundImage: "url('/bsmeet/world-map.png')",
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: '#1e4020',
+                    }}
+                >
                     {/* World Map Background */}
-                    <img
+                    {/* <img
                         src="/bsmeet/world-map.png"
                         alt=""
                         className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
-                    />
+                    /> */}
 
                     {/* Title */}
                     <div className="text-[15px] font-extrabold text-[#d4a832] uppercase tracking-[0.8px] text-center mb-[22px] relative z-10">

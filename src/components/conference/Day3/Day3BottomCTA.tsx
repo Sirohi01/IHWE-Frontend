@@ -5,7 +5,7 @@ import { Download, Handshake } from "lucide-react";
 const Day3BottomCTA: React.FC = () => {
   return (
     <section className="pt-2 pb-0 bg-white">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      <div className="container mx-auto px-6 max-w-[1380px]">
         
         {/* Banner */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 py-6 px-10 rounded-3xl bg-[#F8FAFC] border border-[#E2E8F0]">

@@ -49,7 +49,7 @@ const detailsData = [
 const Day3Details: React.FC = () => {
   return (
     <section className="py-4 bg-white">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      <div className="container mx-auto px-6 max-w-[1380px]">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {detailsData.map((section, idx) => (
             <motion.div
