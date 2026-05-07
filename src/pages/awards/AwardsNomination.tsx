@@ -36,7 +36,7 @@ const AwardsNomination = () => {
             initial={{ opacity: 0, scale: 0.99 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="w-full h-[90px] md:h-[130px] overflow-hidden flex items-center justify-center -mb-2"
+            className="w-full h-[130px] overflow-hidden hidden md:flex items-center justify-center -mb-2"
           >
             <img
               src={lineImg}
@@ -46,7 +46,10 @@ const AwardsNomination = () => {
             />
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-y-4 gap-x-4 w-full mt-1 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-y-5 md:gap-x-4 w-full mt-6 md:mt-1 px-4 relative">
+            {/* Vertical connecting line for mobile */}
+            <div className="absolute left-[39.5px] top-4 bottom-10 w-[2px] bg-slate-100 md:hidden"></div>
+
             {steps.map((step, idx) => (
               <motion.div
                 key={idx}
@@ -54,14 +57,24 @@ const AwardsNomination = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 + idx * 0.05 }}
-                className="flex flex-col items-center text-center px-1"
+                className="flex flex-row md:flex-col items-start md:items-center text-left md:text-center px-1 gap-5 md:gap-0 relative z-10"
               >
-                <h3 className="text-[12px] font-black mb-1 uppercase tracking-tight leading-tight" style={{ color: navyColor }}>
-                  {step.title}
-                </h3>
-                <p className="text-slate-600 text-[12px] font-medium leading-[1.3] max-w-[200px] whitespace-pre-line">
-                  {step.desc}
-                </p>
+                {/* Number indicator for mobile */}
+                <div 
+                  className="md:hidden flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-black text-xl shadow-md border-2 border-white"
+                  style={{ backgroundColor: '#008d48', color: 'white' }}
+                >
+                  {idx + 1}
+                </div>
+
+                <div className="flex flex-col pt-1.5 md:pt-0">
+                  <h3 className="text-[15px] md:text-[12px] font-black mb-1 uppercase tracking-tight leading-tight" style={{ color: navyColor }}>
+                    {step.title}
+                  </h3>
+                  <p className="text-slate-600 text-[13px] md:text-[12px] font-medium leading-[1.4] md:leading-[1.3] max-w-[280px] md:max-w-[200px] whitespace-pre-line">
+                    {step.desc}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
