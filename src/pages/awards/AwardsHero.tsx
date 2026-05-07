@@ -26,7 +26,7 @@ const AwardsHero = () => {
       ></div>
 
       {/* Full width hero content */}
-      <div className="relative z-10 pt-1 pb-2">
+      <div className="relative z-10 pt-8 md:pt-1 pb-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-[1400px] mx-auto px-6 md:px-12">
 
           <motion.div
@@ -36,8 +36,8 @@ const AwardsHero = () => {
             className="lg:col-span-8 flex  flex-col items-start"
           >
             {/* Awards Logo */}
-            <div className="flex justify-start w-full -mt-8 mb-1">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[500px] object-fill" />
+            <div className="flex justify-start w-full mt-4 md:-mt-8 mb-1">
+              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[280px] md:w-[500px] object-fill" />
             </div>
 
             {/* <div className="flex items-center gap-4">
