@@ -173,7 +173,7 @@ const IntroductionSection = () => {
             dangerouslySetInnerHTML={{ __html: data.subtitle }}
           />
           <div 
-            className="text-[28px] md:text-[35px] font-extrabold text-[#0d2137] leading-[1.12] prose prose-xl max-w-none prose-headings:m-0 [&_*]:[text-shadow:none!important]"
+            className="text-[24px] md:text-[35px] font-extrabold text-[#0d2137] leading-[1.2] md:leading-[1.12] prose prose-xl max-w-none prose-headings:m-0 [&_*]:[text-shadow:none!important]"
             style={{ textShadow: 'none' }}
             dangerouslySetInnerHTML={{ __html: data.title }}
           />
@@ -181,7 +181,7 @@ const IntroductionSection = () => {
           <div className="w-11 h-[3px] bg-[#1a6b3a] rounded mt-4 mb-4" />
           
           <div 
-            className="text-[14px] leading-[1.8] text-[#3d5166] max-w-[520px] text-justify prose prose-sm max-w-none [&_*]:[text-shadow:none!important]"
+            className="text-[13px] md:text-[14px] leading-[1.8] text-[#3d5166] max-w-[520px] text-justify prose prose-sm max-w-none [&_*]:[text-shadow:none!important]"
             style={{ textShadow: 'none' }}
             dangerouslySetInnerHTML={{ __html: data.description }}
           />
@@ -193,20 +193,20 @@ const IntroductionSection = () => {
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center justify-center relative pt-10"
+          className="flex flex-col items-center justify-center relative pt-4 md:pt-10"
         >
-          {/* Top-Right Countdown — Aligned with Title */}
-          <div className="absolute top-[40px] right-0 flex flex-col items-end gap-1 z-20">
+          {/* Top-Right Countdown — Adjusted for Mobile */}
+          <div className="relative md:absolute md:top-[40px] md:right-0 flex flex-col items-center md:items-end gap-1 z-20 mb-8 md:mb-0">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1a6b3a]">Event Begins In</span>
             <EventCountdown />
           </div>
 
-          <div className="relative mt-20">
+          <div className="relative mt-4 md:mt-20">
             {data.image && (
               <img
                 src={`${SERVER_URL}${data.image}`}
                 alt={data.altText || "IHWE Introduction"}
-                className="w-full max-w-[850px] object-contain scale-110 translate-x-4"
+                className="w-full max-w-[850px] object-contain scale-100 md:scale-110 md:translate-x-4"
               />
             )}
           </div>
@@ -214,19 +214,26 @@ const IntroductionSection = () => {
       </div>
 
       {/* STATS ROW */}
-      <div className="flex flex-wrap items-center pt-0 -mt-14 relative z-30">
+      <div className="flex flex-col md:flex-row items-start md:items-center pt-8 md:pt-0 mt-4 md:-mt-14 relative z-30 justify-start">
         {sortedFeatures.map((s: any, i: number) => (
-          <div key={s._id || i} className="flex items-center">
-            <div className="flex items-center gap-3 px-5 py-4 first:pl-0">
-              {ICON_MAP[s.icon] || <Award size={32} className="text-gray-400" />}
+          <div key={s._id || i} className="flex flex-col md:flex-row items-start md:items-center w-full md:w-auto">
+            <div className="flex items-center gap-4 px-0 md:px-5 py-4 md:py-4 md:first:pl-0">
+              <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center border border-slate-100 md:border-none md:bg-transparent md:shadow-none md:w-auto md:h-auto">
+                {ICON_MAP[s.icon] || <Award size={28} className="text-gray-400" />}
+              </div>
               <div>
                 <p className="text-[20px] md:text-[22px] font-extrabold text-[#3b6fd4] leading-none">
                   <StatCounter value={s.number} />
                 </p>
-                <p className="text-[8.5px] font-bold uppercase tracking-[.12em] text-[#6b8099] mt-1">{s.label}</p>
+                <p className="text-[9px] md:text-[8.5px] font-bold uppercase tracking-[.15em] text-[#6b8099] mt-1.5">{s.label}</p>
               </div>
             </div>
-            {i < sortedFeatures.length - 1 && <div className="hidden sm:block w-px h-10 bg-slate-200" />}
+            {i < sortedFeatures.length - 1 && (
+              <>
+                <div className="hidden md:block w-px h-10 bg-slate-200" />
+                <div className="block md:hidden w-full h-px bg-slate-100 my-1" />
+              </>
+            )}
           </div>
         ))}
         </div>

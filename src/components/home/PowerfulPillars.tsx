@@ -49,7 +49,7 @@ const IntegratedFormatSection = () => {
     <section className="bg-white pt-4 pb-2 font-['Inter',sans-serif] overflow-hidden">
       <SectionContainer className="flex flex-col lg:flex-row items-center gap-8">
 
-        {/* LEFT COLUMN - HEADING (Narrower to allow more card width) */}
+        {/* LEFT COLUMN - HEADING */}
         <div className="w-full lg:w-[22%] flex flex-col items-start text-left shrink-0">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-[1.5px] w-10 bg-[#2f8f3a]" />
@@ -59,19 +59,19 @@ const IntegratedFormatSection = () => {
           </div>
 
           <div className="flex items-end gap-1 mb-5">
-            <h2 className="text-[30px] font-black leading-[1.1] tracking-tight strip-editor-bg prose prose-xl max-w-none [&_*]:!bg-transparent inline-block"
+            <h2 className="text-[28px] md:text-[30px] font-black leading-[1.1] tracking-tight strip-editor-bg prose prose-xl max-w-none [&_*]:!bg-transparent inline-block"
                 style={{ color: data.leafColor }}>
               <div dangerouslySetInnerHTML={{ __html: data.title }} className="inline" />
-              <Leaf className="w-8 h-8 ml-1 inline-block align-baseline flex-shrink-0 transform translate-y-[3px]" style={{ color: data.leafColor, fill: data.leafColor }} />
+              <Leaf className="w-7 h-7 md:w-8 md:h-8 ml-1 inline-block align-baseline flex-shrink-0 transform translate-y-[3px]" style={{ color: data.leafColor, fill: data.leafColor }} />
             </h2>
           </div>
 
-          <div className="flex flex-col gap-5 max-w-[380px] text-[13.5px] leading-[1.6] text-gray-500 font-medium text-justify strip-editor-bg prose prose-sm max-w-none [&_*]:!bg-transparent"
+          <div className="flex flex-col gap-5 max-w-[380px] text-[13px] md:text-[13.5px] leading-[1.6] text-gray-500 font-medium text-justify strip-editor-bg prose prose-sm max-w-none [&_*]:!bg-transparent"
                dangerouslySetInnerHTML={{ __html: data.description }} />
         </div>
 
         {/* RIGHT COLUMN - CARDS GRID */}
-        <div className="w-full lg:w-[75%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-8 lg:pt-0">
+        <div className="w-full lg:w-[75%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-3 pt-14 lg:pt-0">
           {cards.map((card, i) => (
             <motion.div
               key={i}

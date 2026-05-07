@@ -183,17 +183,40 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         }
         @media (max-width: 768px) {
           .hero-title-responsive {
-            font-size: clamp(20px, calc(var(--desktop-fs) * 0.7), 30px) !important;
-            line-height: 1.2 !important;
+            font-size: clamp(16px, 7vw, 22px) !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.01em !important;
+          }
+          .hero-title-responsive * {
+            font-size: inherit !important;
+            line-height: inherit !important;
           }
           .hero-desc-responsive {
-            font-size: clamp(13px, calc(var(--desktop-fs-desc) * 0.8), 15px) !important;
-            line-height: 1.5 !important;
+            font-size: clamp(10px, 3vw, 11px) !important;
+            line-height: 1.4 !important;
+            margin-bottom: 1rem !important;
+            opacity: 0.95;
+          }
+          .hero-desc-responsive * {
+            font-size: inherit !important;
+            line-height: inherit !important;
+          }
+          .hero-subtitle-responsive {
+            font-size: 8px !important;
+            letter-spacing: 0.1em !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .hero-title-gap {
+            margin-bottom: 4px !important;
+          }
+          .hero-desc-gap {
+            margin-bottom: 16px !important;
           }
         }
       `}</style>
 
-      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/5.62]">
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[16/5.62]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}
@@ -235,7 +258,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         <div className="absolute top-40 right-20 w-64 h-64 bg-white/5 rounded-full blur-[120px] z-10 animate-pulse" />
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-[150px] z-10" />
         
-        <SectionContainer className="relative z-20 h-full flex flex-col justify-center items-start text-left text-white">
+        <SectionContainer className="relative z-20 h-full flex flex-col justify-center items-start text-left text-white pt-16 sm:pt-0 pb-8 sm:pb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -252,7 +275,10 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 className="flex items-center gap-3 mb-2"
               >
                 <span className="w-10 h-[1px] bg-white/40" />
-                <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] filter"
+                <span className={cn(
+                  "uppercase tracking-[0.15em] font-semibold text-[#FF4400] flex items-center gap-2 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] filter",
+                  slides[current].subtitleFontSize ? "hero-subtitle-responsive" : "text-[10px]"
+                )}
                   style={{ 
                     fontSize: slides[current].subtitleFontSize ? `${slides[current].subtitleFontSize}px` : undefined,
                     textShadow: '0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.4)'
@@ -268,7 +294,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.9 }}
                 className={cn(
-                  "font-bold leading-[1.1] tracking-tight text-white uppercase [&_p]:mb-0 [&_div]:mb-0 last:[&_p]:mb-0 last:[&_div]:mb-0",
+                  "font-bold leading-[1.1] tracking-tight text-white uppercase [&_p]:mb-0 [&_div]:mb-0 last:[&_p]:mb-0 last:[&_div]:mb-0 hero-title-gap",
                   slides[current].title2 ? "mb-[0px]" : "mb-5",
                   slides[current].titleFontSize ? "hero-title-responsive" : "text-xl sm:text-2xl md:text-4xl lg:text-5xl"
                 )}
@@ -287,7 +313,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.9 }}
                   className={cn(
-                    "font-bold mb-5 leading-[1.1] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_div]:m-0 [&_p]:p-0 [&_div]:p-0",
+                    "font-bold mb-5 leading-[1.1] tracking-tight text-white/90 uppercase [&_p]:m-0 [&_div]:m-0 [&_p]:p-0 [&_div]:p-0 hero-title-gap",
                     slides[current].title2FontSize ? "hero-title-responsive" : "text-xl sm:text-2xl md:text-4xl lg:text-5xl"
                   )}
                   style={{
@@ -305,7 +331,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.9 }}
                 className={cn(
-                  "font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0",
+                  "font-light mb-10 max-w-4xl text-white/85 leading-relaxed tracking-wide [&_p]:mb-1 [&_div]:mb-1 last:[&_p]:mb-0 last:[&_div]:mb-0 hero-desc-gap",
                   slides[current].descriptionFontSize ? "hero-desc-responsive" : "text-xs sm:text-sm md:text-base"
                 )}
                 style={{
@@ -321,7 +347,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.9 }}
-              className="flex flex-wrap flex-col sm:flex-row gap-3 items-center"
+              className="flex flex-wrap flex-col sm:flex-row gap-3 items-start sm:items-center w-full sm:w-auto"
             >
               {slides[current].button1Name && (
                 <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
@@ -338,7 +364,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                         href={slides[current].button1Url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                        className="golden-btn-hero group rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                       >
                         <span className="relative z-10 flex items-center gap-2">
                           {slides[current].button1Name}
@@ -350,7 +376,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                         to={slides[current].button1Url}
                         target={forceNewTab ? "_blank" : undefined}
                         rel={forceNewTab ? "noopener noreferrer" : undefined}
-                        className="golden-btn-hero group rounded-xl px-4 py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                        className="golden-btn-hero group rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                       >
                         <span className="relative z-10 flex items-center gap-2">
                           {slides[current].button1Name}
@@ -361,7 +387,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                   ) : (
                     <button
                       onClick={onRegisterVisit}
-                      className="golden-btn-hero group rounded-xl px-5 py-2.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[10px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
+                      className="golden-btn-hero group rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 text-[#0b2912] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-black w-full sm:w-auto flex items-center justify-center shrink-0"
                     >
                       <span className="relative z-10 flex items-center gap-2">
                         {slides[current].button1Name}
@@ -378,7 +404,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button3Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -391,7 +417,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button3Url || "/conference"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button3Name}
@@ -408,7 +434,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     href={slides[current].button2Url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}
@@ -421,7 +447,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
                     to={slides[current].button2Url || "/book-a-stand"}
                     target={forceNewTab ? "_blank" : undefined}
                     rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-4 py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
                   >
                     <span className="relative z-10 flex items-center gap-2">
                       {slides[current].button2Name}

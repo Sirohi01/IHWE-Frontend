@@ -214,43 +214,45 @@ const SponsorshipSection = () => {
       ══════════════════════════════════════════ */}
       <div className="pt-4 pb-0 border-b border-slate-100 overflow-hidden" style={{ background: "#f8f7f5" }}>
         <SectionContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-x-8 gap-y-4 lg:gap-8 items-start">
 
             {/* ── LEFT: Heading block ── */}
-            <div className="flex flex-col justify-start">
+            <div className="flex flex-col items-start text-left w-full">
               {/* Badge */}
               <div
-                className="inline-flex items-center gap-2.5 border border-[#12321d]/10 rounded-full px-5 py-2 mb-5 w-fit shadow-sm"
+                className="inline-flex items-center gap-2 border border-[#12321d]/10 rounded-full px-3 py-1.5 md:px-5 md:py-2 mb-5 w-fit shadow-sm text-left"
                 style={{ background: "#e9ece3" }}
               >
-                <Leaf className="w-3.5 h-3.5 text-[#12321d]" />
-                <span className="text-[#12321d] font-extrabold text-[11px] tracking-[0.15em] uppercase whitespace-nowrap">
+                <Leaf className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#12321d]" />
+                <span className="text-[#12321d] font-extrabold text-[9px] md:text-[11px] tracking-[0.15em] uppercase whitespace-nowrap">
                   Sponsorship Opportunities Open
                 </span>
               </div>
 
-              <h2 className="font-black leading-[1.1] mb-3" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
+              <h2 className="font-black leading-[1.1] mb-3 text-left" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
                 <span style={{ color: "#023316" }}>BECOME A</span><br />
                 <span style={{ color: "#78903a" }}>SPONSOR</span>
               </h2>
 
-              <p className="text-[#242927] font-bold text-[12px] mb-3 leading-snug uppercase tracking-wide">
+              <p className="text-[#242927] font-bold text-[12px] mb-3 leading-snug uppercase tracking-wide text-left">
                 Position Your Brand at the Forefront<br />of the Wellness Industry
               </p>
 
-              <p className="text-slate-700 text-[12.5px] font-medium leading-relaxed">
+              <div className="text-slate-700 text-[12.5px] font-medium leading-relaxed text-left">
                 <span className="block lg:whitespace-nowrap">Partner with International Health & Wellness Expo 2026 and</span>
                 <span className="block lg:whitespace-nowrap">unlock premium visibility, strategic connections and unmatched</span>
                 <span className="block lg:whitespace-nowrap">business opportunities with industry leaders and decision-makers.</span>
-              </p>
+              </div>
             </div>
 
             {/* ── CENTER: Expo Image ── */}
-            <img
-              src={bgImage}
-              alt="IHWE Expo"
-              className="w-full h-[420px] object-contain object-center relative z-20 -mt-20 -ml-4 scale-[1.18] -mb-16"
-            />
+            <div className="relative h-[400px] lg:h-[330px] w-full flex justify-center">
+              <img
+                src={bgImage}
+                alt="IHWE Expo"
+                className="w-full h-full object-contain object-center relative z-20 scale-[1.2] lg:scale-[1.2] lg:-mt-12 lg:-ml-4 lg:-mb-28"
+              />
+            </div>
 
             {/* ── RIGHT: Why Sponsor IHWE? ── */}
             <div className="pl-0 pr-2 pb-0 pt-0">
@@ -259,20 +261,19 @@ const SponsorshipSection = () => {
                 className="rounded-b-xl px-4 py-1 mb-2 text-center w-fit mx-auto"
                 style={{ background: "#022f15" }}
               >
-                <span className="text-white font-semibold text-[18px] tracking-[0.2em] uppercase">
+                <span className="text-white font-bold text-[14px] md:text-[18px] tracking-[0.1em] md:tracking-[0.2em] uppercase whitespace-nowrap">
                   WHY SPONSOR IHWE?
                 </span>
               </div>
 
               {/* Items */}
-              <div className="grid grid-cols-2 gap-x-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                 {WHY_SPONSOR.map((item, idx) => (
                   <div
                     key={idx}
                     className="flex items-center gap-3 py-2.5 pr-3"
                     style={{
                       borderBottom: "1px solid #e5e7eb",
-                      borderRight: idx % 2 === 0 ? "1px solid #e5e7eb" : "none",
                     }}
                   >
                     <div
@@ -281,7 +282,7 @@ const SponsorshipSection = () => {
                     >
                       <item.icon className="w-5 h-5" style={{ color: "#425d0d" }} />
                     </div>
-                    <p className="text-slate-700 text-[11px] font-medium leading-snug whitespace-pre-line">
+                    <p className="text-slate-700 text-[12px] sm:text-[11px] font-medium leading-snug whitespace-pre-line">
                       {item.title.split(item.bold).map((part, i, arr) =>
                         i < arr.length - 1 ? (
                           <React.Fragment key={i}>
@@ -302,24 +303,24 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-2 pb-4">
+      <div className="bg-white pt-0 pb-4">
         <SectionContainer>
 
           {/* Section Divider Header */}
-          <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center gap-2 md:gap-4 mb-4">
             <div className="flex-1 h-[1px] bg-slate-200" />
-            <div className="flex items-center gap-2">
-              <Leaf className="w-3.5 h-3.5 text-[#23471d]" />
-              <span className="font-bold text-[14px] tracking-[0.25em] uppercase" style={{ color: "#153421" }}>
+            <div className="flex items-center gap-2 shrink-0">
+              <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d]" />
+              <span className="font-bold text-[11px] md:text-[14px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-center" style={{ color: "#153421" }}>
                 SPONSORSHIP OPPORTUNITIES
               </span>
-              <Leaf className="w-3.5 h-3.5 text-[#23471d] scale-x-[-1]" />
+              <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d] scale-x-[-1]" />
             </div>
             <div className="flex-1 h-[1px] bg-slate-200" />
           </div>
 
-          {/* 8-column cards */}
-          <div className="grid grid-cols-8 gap-3">
+          {/* Responsive grid cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 md:gap-4">
             {SPONSORSHIP_OPPORTUNITIES.map((opp, idx) => (
               <div
                 key={idx}
@@ -381,31 +382,31 @@ const SponsorshipSection = () => {
         <SectionContainer>
 
           {/* 1. Limited Slots Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-start gap-4 mb-8 -mt-6 pt-2 pb-2.5 px-4 rounded-2xl border border-slate-100 max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#022f15] rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-white" />
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-6 lg:gap-4 mb-10 lg:mb-8 mt-4 lg:-mt-6 pt-3 pb-3 lg:pb-2.5 px-5 lg:px-4 rounded-2xl border border-slate-100 w-full lg:max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
+            <div className="flex items-center gap-4 lg:gap-3">
+              <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
+                <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />
               </div>
               <div>
-                <p className="font-bold text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
-                <p className="text-[11px] text-slate-900">Secure your category before it's gone!</p>
+                <p className="font-bold text-[14px] lg:text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
+                <p className="text-[12px] lg:text-[11px] text-slate-900">Secure your category before it's gone!</p>
               </div>
             </div>
-            <div className="hidden md:block w-[1.5px] h-8 bg-slate-400/60" />
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0]">
-                <Star className="w-5 h-5 text-[#425d0d]" />
+            <div className="hidden lg:block w-[1.5px] h-8 bg-slate-400/60" />
+            <div className="flex items-center gap-4 lg:gap-3">
+              <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0] shrink-0">
+                <Star className="w-6 h-6 lg:w-5 lg:h-5 text-[#425d0d]" />
               </div>
-              <p className="text-[11.5px] text-slate-900 font-medium">
-                Featured sponsors get exclusive<br />media coverage & brand promotions.
+              <p className="text-[12.5px] lg:text-[11.5px] text-slate-900 font-medium">
+                Featured sponsors get exclusive<br className="hidden lg:block" /> media coverage & brand promotions.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-2 items-start -mt-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 items-start mt-0 lg:-mt-8 relative z-10">
             
             {/* 2. Dark Green CTA Card */}
-            <div className="bg-[#012011] rounded-l-2xl p-4 md:p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
+            <div className="bg-[#012011] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
               {/* Decorative Leaf Image */}
               <img 
                 src={leafImg} 
@@ -417,11 +418,11 @@ const SponsorshipSection = () => {
               
               <div className="relative z-10">
                 {/* Top Row: Title + Buttons */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-5 mb-5 relative">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 lg:gap-6 pb-6 lg:pb-5 mb-6 lg:mb-5 relative">
                   {/* Decorative Border Bottom (Indented from left) */}
                   <div className="absolute bottom-0 right-0 lg:left-[320px] left-0 h-[1px] bg-white/10" />
-                  <div className="shrink-0 origin-left scale-y-[1.3]">
-                    <h3 className="text-white font-extrabold text-lg xl:text-xl leading-tight whitespace-nowrap">
+                  <div className="shrink-0 origin-left scale-y-[1.1] lg:scale-y-[1.3] text-center lg:text-left">
+                    <h3 className="text-white font-extrabold text-lg xl:text-xl leading-tight lg:whitespace-nowrap">
                       ELEVATE YOUR BRAND PRESENCE
                     </h3>
                     <h3 className="text-[#c5dfa0] font-extrabold text-lg xl:text-xl leading-tight mt-0.5">
@@ -430,90 +431,90 @@ const SponsorshipSection = () => {
                   </div>
 
                   {/* Horizontal Buttons Row */}
-                  <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center lg:pt-0.5">
+                  <div className="flex flex-wrap lg:flex-nowrap gap-3 lg:gap-2 items-center justify-center lg:justify-start lg:pt-0.5">
                     <a 
                       href="/pdf.pdf" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                      className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
-                      <FileText className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <FileText className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
                       <div className="text-left text-white">
-                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Download</p>
-                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">Brochure</p>
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Download</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Brochure</p>
                       </div>
                     </a>
 
                     <Link 
                       to="/conference"
-                      className="bg-[#78903a] hover:bg-[#8ba643] text-white rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                      className="bg-[#78903a] hover:bg-[#8ba643] text-white rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
-                      <Handshake className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <Handshake className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
                       <div className="text-left">
-                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Become</p>
-                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">A Sponsor</p>
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Become</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">A Sponsor</p>
                       </div>
                     </Link>
 
                     <a 
                       href="tel:+919654900525"
-                      className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5 transition-all duration-300 group min-w-[125px]"
+                      className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
-                      <HeadphonesIcon className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+                      <HeadphonesIcon className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
                       <div className="text-left text-white">
-                        <p className="text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Talk to</p>
-                        <p className="text-[10px] font-medium uppercase whitespace-nowrap">Our Team</p>
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Talk to</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Our Team</p>
                       </div>
                     </a>
                   </div>
                 </div>
 
                 {/* Bottom Row: Description + Stats */}
-                <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-10">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
                   {/* Description */}
-                  <div className="max-w-xl">
-                    <p className="text-white text-[13px] leading-relaxed">
+                  <div className="max-w-xl text-center lg:text-left">
+                    <p className="text-white text-[14px] lg:text-[13px] leading-relaxed">
                       Reach the right audience, build meaningful connections and grow your business with IHWE.
                     </p>
                   </div>
 
-                  {/* Updated Stats Row with Vertical Dividers */}
-                  <div className="flex items-center gap-x-4 lg:gap-x-5">
-                    <div className="flex items-center gap-2">
-                      <Users2 className="w-6 h-6 text-[#FFC81E]" />
+                  {/* Updated Stats Row */}
+                  <div className="grid grid-cols-2 md:flex items-center gap-6 lg:gap-x-5">
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Users2 className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">8,000+</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">8,000+</p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
                       </div>
                     </div>
                     
-                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
 
-                    <div className="flex items-center gap-2">
-                      <Store className="w-6 h-6 text-[#FFC81E]" />
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Store className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">150+</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">150+</p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
                       </div>
                     </div>
 
-                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
 
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-6 h-6 text-[#FFC81E]" />
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Globe className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">1000+</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Global Buyers</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">1000+</p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Global Buyers</p>
                       </div>
                     </div>
 
-                    <div className="hidden md:block w-[1px] h-6 bg-white/10" />
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
 
-                    <div className="flex items-center gap-2">
-                      <Infinity className="w-6 h-6 text-[#FFC81E]" />
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Infinity className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">Unlimited</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Opportunities</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">Unlimited</p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Opportunities</p>
                       </div>
                     </div>
                   </div>
@@ -523,7 +524,7 @@ const SponsorshipSection = () => {
 
             {/* 3. Interest Form */}
             <div 
-              className="bg-white rounded-2xl p-3 md:p-4 border border-slate-100 shadow-sm h-fit -mt-12"
+              className="bg-white rounded-2xl p-5 lg:p-4 border border-slate-100 shadow-sm h-fit mt-4 lg:-mt-12"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
               <div className="text-center mb-3">
@@ -681,49 +682,67 @@ const SponsorshipSection = () => {
         </SectionContainer>
       </div>
 
+      <style>{`
+        @keyframes marqueeScroll {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        .marquee-wrapper {
+          display: flex;
+          width: max-content;
+          animation: marqueeScroll 40s linear infinite;
+          padding-left: 2rem;
+        }
+        .marquee-wrapper:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+
       {/* ══════════════════════════════════════════
           TRUSTED BY LEADING BRANDS
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-4 pb-12 -mt-16 border-t border-slate-100">
+      <div className="bg-white pt-4 pb-4 -mt-10 lg:-mt-16 border-t border-slate-100 relative z-10">
         <SectionContainer>
 
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-[1px] bg-slate-200" />
-            <span className="font-bold text-[14px] tracking-[0.25em] uppercase text-[#012112]">
+          <div className="flex items-center gap-4 mb-10 lg:mb-8">
+            <div className="flex-1 h-[1.5px] bg-slate-300" />
+            <span className="font-bold text-[12px] lg:text-[14px] tracking-[0.15em] lg:tracking-[0.25em] uppercase text-[#012112] text-center">
               TRUSTED BY LEADING BRANDS
             </span>
-            <div className="flex-1 h-[1px] bg-slate-200" />
+            <div className="flex-1 h-[1.5px] bg-slate-300" />
           </div>
 
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            {BRANDS.map((brand, idx) => (
-              <React.Fragment key={idx}>
-                <div className="flex flex-col items-center gap-0.5 transition-all">
-                  {brand.logo ? (
-                    <img 
-                      src={brand.logo} 
-                      alt={brand.name} 
-                      className={`${brand.name === "Dabur" ? "h-12" : brand.name === "HEALTHKART" ? "h-11" : "h-8"} w-auto object-contain`} 
-                    />
-                  ) : (
-                    <span
-                      className="font-black text-[14px] leading-tight"
-                      style={{ color: brand.color, fontFamily: idx === 0 ? "serif" : "inherit" }}
-                    >
-                      {brand.name}
-                    </span>
-                  )}
-                  {brand.sub && (
-                    <span className="text-[8px] text-slate-500 font-semibold tracking-wide text-center leading-tight max-w-[80px]">
-                      {brand.sub}
-                    </span>
-                  )}
+          <div className="overflow-hidden relative w-full mt-4">
+            <div className="marquee-wrapper">
+              {/* Double the brands for seamless loop */}
+              {[...BRANDS, ...BRANDS].map((brand, idx) => (
+                <div key={idx} className="flex items-center">
+                  <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
+                    {brand.logo ? (
+                      <img 
+                        src={brand.logo} 
+                        alt={brand.name} 
+                        className={`${brand.name === "Dabur" ? "h-12 md:h-20 lg:h-16" : brand.name === "HEALTHKART" ? "h-10 md:h-16 lg:h-14" : "h-9 md:h-14 lg:h-12"} w-auto object-contain transition-all duration-300`} 
+                      />
+                    ) : (
+                      <span
+                        className="font-black text-[15px] md:text-[20px] lg:text-[18px] leading-tight"
+                        style={{ color: brand.color, fontFamily: idx % BRANDS.length === 0 ? "serif" : "inherit" }}
+                      >
+                        {brand.name}
+                      </span>
+                    )}
+                    {brand.sub && (
+                      <span className="text-[7px] md:text-[8px] text-slate-500 font-semibold tracking-wide text-center leading-tight max-w-[80px]">
+                        {brand.sub}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-[1.5px] h-6 bg-slate-300" />
                 </div>
-                {idx < BRANDS.length - 1 && (
-                  <div className="hidden lg:block w-[1px] h-6 bg-slate-200" />
-                )}
-              </React.Fragment>
-            ))}
+              ))}
+            </div>
           </div>
 
         </SectionContainer>
