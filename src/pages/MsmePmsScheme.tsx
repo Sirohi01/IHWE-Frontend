@@ -244,10 +244,11 @@ const MsmePmsScheme = () => {
         {/* Mobile Image (Visible only on mobile) */}
         <div className="lg:hidden relative min-h-[300px] overflow-hidden">
           <img
-            src="/msmepmsscheme/msme_pms_header_banner_bg_1777877814391.png"
+            src="/msmepmsscheme/msme_pms_header_banner.png"
             alt="MSME Exhibition"
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
         </div>
       </section >
 
@@ -570,7 +571,9 @@ const MsmePmsScheme = () => {
                   <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
-                        <HelpCircle size={12} />
+                        {/* <HelpCircle size={12} /> */}
+                        <img src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
+
                       </div>
                       <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
                     </div>
