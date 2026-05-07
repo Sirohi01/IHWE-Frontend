@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { API_URL } from '../../lib/api';
+
 import {
   Trophy, Zap, Users, Mic2, BadgeCheck, UserCheck,
   Leaf, Monitor, Download, Phone,
   Globe, ShieldCheck, PieChart, Users2,
   Calendar, Star, Handshake, HeadphonesIcon,
-  TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home, Store
+  TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home, Store, CheckCircle
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import bgImage from '../../assets/1234.png';
 import titleSponsorImg from '../../assets/icon111.png';
 import poweredByImg from '../../assets/icon222.png';
@@ -29,7 +34,31 @@ import logo9 from '../../logos/logo9.jpg';
 import logo10 from '../../logos/logo10.webp';
 import SectionContainer from '../layout/SectionContainer';
 
-const SPONSORSHIP_OPPORTUNITIES = [
+// ─── Interfaces ───
+interface Opportunity {
+  title: string;
+  desc: string;
+  image?: string;
+  icon?: React.ElementType;
+  color: string;
+  bgColor?: string;
+  badge?: string;
+}
+
+interface WhySponsor {
+  icon: React.ElementType;
+  title: string;
+  bold: string;
+}
+
+interface Brand {
+  name: string;
+  sub: string;
+  color: string;
+  logo?: string;
+}
+
+const SPONSORSHIP_OPPORTUNITIES: Opportunity[] = [
   {
     title: "TITLE SPONSOR",
     desc: "Maximum visibility\n& brand exclusivity",
@@ -89,16 +118,16 @@ const SPONSORSHIP_OPPORTUNITIES = [
   }
 ];
 
-const WHY_SPONSOR = [
-  { icon: Users2, title: "Showcase your brand to\n10,000+ targeted visitors", bold: "10,000+" },
-  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)", bold: "Multi-channel" },
-  { icon: Handshake, title: "Build authority in the health & wellness ecosystem", bold: "health & wellness" },
-  { icon: Star, title: "Premium branding across expo touchpoints", bold: "Premium branding" },
-  { icon: TrendingUp, title: "Direct access to decision-makers & buyers", bold: "decision-makers" },
-  { icon: Globe, title: "Global exposure & networking opportunities", bold: "Global exposure &" },
+const WHY_SPONSOR: WhySponsor[] = [
+  { icon: Users2,    title: "Showcase your brand to\n10,000+ targeted visitors",   bold: "10,000+" },
+  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)",        bold: "Multi-channel" },
+  { icon: Handshake, title: "Build authority in the health & wellness ecosystem",   bold: "health & wellness" },
+  { icon: Star,      title: "Premium branding across expo touchpoints",             bold: "Premium branding" },
+  { icon: TrendingUp,title: "Direct access to decision-makers & buyers",            bold: "decision-makers" },
+  { icon: Globe,     title: "Global exposure & networking opportunities",            bold: "Global exposure &" },
 ];
 
-const BRANDS = [
+const BRANDS: Brand[] = [
   { name: "PATANJALI", sub: "", color: "#e65c00", logo: logo1 },
   { name: "Dabur",     sub: "", color: "#2d7a2d", logo: logo2 },
   { name: "Himalaya",  sub: "", color: "#1a5fa8", logo: logo3 },
@@ -112,7 +141,72 @@ const BRANDS = [
 ];
 
 const SponsorshipSection = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    companyName: '',
+    email: '',
+    phone: '',
+    category: 'Interested Sponsorship Category*',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Basic Validation
+    if (!formData.fullName || !formData.companyName || !formData.email || !formData.phone) {
+      toast.warning("Please fill all required fields marked with *");
+      return;
+    }
+
+    if (formData.category === 'Interested Sponsorship Category*') {
+      toast.warning("Please select a sponsorship category");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_URL}/sponsorship-enquiry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setIsSuccess(true);
+        setFormData({
+          fullName: '',
+          companyName: '',
+          email: '',
+          phone: '',
+          category: 'Interested Sponsorship Category*',
+          message: ''
+        });
+
+        // Reset success state after 4 seconds to show form again
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 4000);
+      } else {
+        toast.error(data.message || "Failed to submit enquiry");
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
+
     <section className="bg-white overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* ══════════════════════════════════════════
@@ -257,12 +351,12 @@ const SponsorshipSection = () => {
                 >
                   {opp.image ? (
                     <img src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
-                  ) : (
+                  ) : opp.icon ? (
                     <opp.icon 
                       className="w-9 h-9" 
                       style={{ color: "#1a3a00" }} 
                     />
-                  )}
+                  ) : null}
                 </div>
 
                 <h4
@@ -388,8 +482,8 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-2">
                       <Users2 className="w-6 h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">10,000+</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Visitors</p>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">8,000+</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
                       </div>
                     </div>
                     
@@ -398,7 +492,7 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-2">
                       <Store className="w-6 h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">350+</p>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">150+</p>
                         <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
                       </div>
                     </div>
@@ -408,8 +502,8 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-2">
                       <Globe className="w-6 h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">25+</p>
-                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Countries</p>
+                        <p className="text-[#FFC81E] font-bold text-[14px] leading-none">1000+</p>
+                        <p className="text-white text-[8px] font-medium uppercase tracking-widest mt-1">Global Buyers</p>
                       </div>
                     </div>
 
@@ -437,42 +531,150 @@ const SponsorshipSection = () => {
                 <div className="w-8 h-0.5 bg-[#78903a] mx-auto mt-1 rounded-full" />
               </div>
 
-              <form className="space-y-2">
-                <div className="grid grid-cols-2 gap-2.5">
-                  <input type="text" placeholder="Full Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                  <input type="text" placeholder="Company Name*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                </div>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <input type="email" placeholder="Email Address*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                  <input type="tel" placeholder="Phone Number*" className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                </div>
-                <div className="relative">
-                  <select className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all appearance-none text-slate-600">
-                    <option>Interested Sponsorship Category*</option>
-                    <option>Title Sponsor</option>
-                    <option>Powered By Sponsor</option>
-                    <option>Associate Sponsor</option>
-                    <option>Conference Sponsor</option>
-                    <option>Registration Sponsor</option>
-                    <option>Lanyard / Badge Sponsor</option>
-                    <option>Wellness Zone Sponsor</option>
-                    <option>Digital Promotion Partner</option>
-                  </select>
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <div className="border-l-2 border-b-2 border-slate-400 w-1.5 h-1.5 -rotate-45" />
-                  </div>
-                </div>
-                <textarea placeholder="Message (Optional)" rows={1} className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" />
-                
-                <button className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98]">
-                  Submit Inquiry
-                </button>
+              <AnimatePresence mode="wait">
+                {isSuccess ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-col items-center justify-center py-10 px-4 min-h-[300px] text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+                      className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4"
+                    >
+                      <CheckCircle className="w-10 h-10 text-green-600" />
+                    </motion.div>
+                    
+                    <motion.h4 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-[#022f15] font-black text-xl mb-2"
+                    >
+                      Inquiry Received!
+                    </motion.h4>
+                    
+                    <motion.p 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-slate-600 text-sm leading-relaxed"
+                    >
+                      Thank you for your interest. Our team will get back to you shortly with more details.
+                    </motion.p>
 
-                <p className="flex items-center justify-center gap-2 text-[9px] text-slate-400 mt-2">
-                  <ShieldCheck className="w-3 h-3" />
-                  Your information is safe with us.
-                </p>
-              </form>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      className="mt-6 flex items-center gap-2 text-[10px] text-slate-400"
+                    >
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                      Form will reset automatically...
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.form 
+                    key="sponsorship-form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit} 
+                    className="space-y-2"
+                  >
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <input 
+                        type="text" 
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        placeholder="Full Name*" 
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        required
+                      />
+                      <input 
+                        type="text" 
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleChange}
+                        placeholder="Company Name*" 
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <input 
+                        type="email" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Email Address*" 
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        required
+                      />
+                      <input 
+                        type="tel" 
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="Phone Number*" 
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        required
+                      />
+                    </div>
+                    <div className="relative">
+                      <select 
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all appearance-none text-slate-600"
+                        required
+                      >
+                        <option>Interested Sponsorship Category*</option>
+                        <option>Title Sponsor</option>
+                        <option>Powered By Sponsor</option>
+                        <option>Associate Sponsor</option>
+                        <option>Conference Sponsor</option>
+                        <option>Registration Sponsor</option>
+                        <option>Lanyard / Badge Sponsor</option>
+                        <option>Wellness Zone Sponsor</option>
+                        <option>Digital Promotion Partner</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <div className="border-l-2 border-b-2 border-slate-400 w-1.5 h-1.5 -rotate-45" />
+                      </div>
+                    </div>
+                    <textarea 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Message (Optional)" 
+                      rows={1} 
+                      className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                    />
+                    
+                    <button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center"
+                    >
+                      {isSubmitting ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : "Submit Inquiry"}
+                    </button>
+
+                    <p className="flex items-center justify-center gap-2 text-[9px] text-slate-400 mt-2">
+                      <ShieldCheck className="w-3 h-3" />
+                      Your information is safe with us.
+                    </p>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+
             </div>
 
           </div>

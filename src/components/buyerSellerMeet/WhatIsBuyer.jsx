@@ -40,7 +40,7 @@ const features = [
 
 const WhatIsBuyer = () => {
     return (
-        <div className="relative overflow-hidden py-4 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className="relative overflow-hidden py-4 px-8 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
 
             {/* Heading */}
             <h2 className='text-xl font-medium' style={{ fontFamily: "'Barlow Condensed', sans-serif", color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'center', }}>
@@ -61,7 +61,7 @@ const WhatIsBuyer = () => {
             </p>
 
             {/* Feature Cards */}
-            <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
+            {/* <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
                 {features.map((feat, i) => (
                     <div key={i} className="flex flex-col items-center text-center gap-3 p-4 rounded-xl"
                         style={{ background: '#fff', border: '1px solid #d4e4bc' }}>
@@ -76,6 +76,32 @@ const WhatIsBuyer = () => {
                             {feat.desc}
                         </div>
                     </div>
+                ))}
+            </div> */}
+
+            {/* Feature Cards */}
+            <div className="flex items-start">
+                {features.map((feat, i) => (
+                    <React.Fragment key={i}>
+                        {/* Card — no border */}
+                        <div className="flex-1 flex flex-col items-center text-center gap-3 p-4">
+                            <div className="flex items-center justify-center rounded-full"
+                                style={{ width: '74px', height: '74px', border: '2px solid #b0c890', background: '#fff', flexShrink: 0 }}>
+                                {feat.icon}
+                            </div>
+                            <div style={{ fontSize: '13px', fontWeight: 800, color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '0.4px', lineHeight: 1.4, whiteSpace: 'pre-line' }}>
+                                {feat.title}
+                            </div>
+                            <div style={{ fontSize: '13px', color: '#5a7050', lineHeight: 1.55 }}>
+                                {feat.desc}
+                            </div>
+                        </div>
+
+                        {/* Vertical divider — last card ke baad nahi */}
+                        {i < features.length - 1 && (
+                            <div className="self-stretch w-px bg-[#d4e4bc] my-4" />
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
         </div>

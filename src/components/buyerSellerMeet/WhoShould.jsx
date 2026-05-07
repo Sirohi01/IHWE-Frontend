@@ -192,7 +192,7 @@ const BuyerIcon = () => (
 const WhoShould = () => {
     return (
 
-        <div className=" relative w-full overflow-hidden py-8 px-14 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className=" relative w-full overflow-hidden py-8 px-16 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
             <div className='flex justify-between flex-row'>
                 {/* ── LEFT: WHO SHOULD + BUYERS ── */}
                 <div>
@@ -200,7 +200,7 @@ const WhoShould = () => {
                         WHO SHOULD PARTICIPATE?
                     </h2>
 
-                    <div style={{ fontFamily: "'Barlow', sans-serif", position: 'relative' }}>
+                    <div >
 
                         {/* ── HEADER with diagonal right-side cut ── */}
                         <div className="py-2 text-center text-sm font-medium rounded-t-md bg-[#6a8c3a] text-white uppercase tracking-[1px] [clip-path:polygon(0_0,82%_0,100%_100%,0_100%)]">

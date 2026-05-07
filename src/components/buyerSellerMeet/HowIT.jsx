@@ -5,36 +5,36 @@ const steps = [
         num: 1,
         title: "REGISTER\nONLINE",
         desc: "Sign up as Buyer or Seller",
-        icon: <img src="/bsmeet/howit1.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img src="/bsmeet/howit11.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 2,
         title: "PROFILE SCREENING\n& APPROVAL",
         desc: "Our team verifies your profile",
-        icon: <img src="/bsmeet/howit2.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img src="/bsmeet/howit22.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 3,
         title: "MEETING\nMATCHMAKING",
         desc: "We match you with relevant partners",
-        icon: <img src="/bsmeet/howit3.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img src="/bsmeet/howit33.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 4,
         title: "SCHEDULE\nCONFIRMATION",
         desc: "Get your meeting calendar",
-        icon: <img src="/bsmeet/howit4.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img src="/bsmeet/howit44.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 5,
         title: "FACE-TO-FACE\nMEETINGS AT EXPO",
         desc: "Meet, discuss & grow your business",
-        icon: <img src="/bsmeet/howit5.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img src="/bsmeet/howit55.png" alt="" className="w-full h-full object-contain" />,
     },
 ]
 
 const ArrowIcon = () => (
-    <div className="flex items-center mt-10 shrink-0">
+    <div className="flex items-center mt-12 shrink-0">
         <svg width="20" height="18" viewBox="0 0 28 18" fill="none">
             <path d="M2 9h22M20 3l6 6-6 6" stroke="#3a7a30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -60,11 +60,11 @@ const industries = [
 
 const HowIT = () => {
     return (
-        <div className="py-4 px-14 font-['Barlow',sans-serif]">
+        <div className="py-4 px-16 font-['Barlow',sans-serif]">
             <div className='flex flex-row items-stretch gap-4'>
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
-                <div className='w-[60%] flex flex-col'>
+                <div className='w-[63%] flex flex-col'>
 
                     {/* Section Title */}
                     {/* HOW IT WORKS? heading with side lines */}
@@ -91,7 +91,7 @@ const HowIT = () => {
                                 <div className="flex flex-col items-center flex-1">
 
                                     {/* ✅ FIXED: Circle with proper border, overflow hidden, padding */}
-                                    <div className="mt-5 w-[60px] h-[60px] rounded-full border-[2.5px] border-[#3a7a30] bg-white flex items-center justify-center overflow-hidden shrink-0 p-3 box-border">
+                                    <div className="mt-5 w-[80px] h-[80px] rounded-full border-[2.5px] border-[#3a7a30] bg-white flex items-center justify-center overflow-hidden shrink-0 p-3">
                                         {step.icon}
                                     </div>
 
@@ -119,7 +119,7 @@ const HowIT = () => {
                 </div>
 
                 {/* ── RIGHT SIDE: INDUSTRIES COVERED ── */}
-                <div className='w-[40%] flex flex-col'>
+                <div className='w-[37%] flex flex-col'>
 
                     {/* Section Title */}
 

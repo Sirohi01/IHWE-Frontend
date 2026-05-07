@@ -19,8 +19,8 @@ const Day3Hero: React.FC = () => {
       </div>
 
       {/* Content Container */}
-      <div className="container mx-auto px-6 max-w-[1400px] relative z-20">
-        <div className="max-w-[850px] relative left-[20px]">
+      <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
+        <div className="max-w-[750px] relative left-[20px]">
 
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-[14px] text-[#5F6B7A] font-black mb-6">

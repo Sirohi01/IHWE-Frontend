@@ -1,50 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { floatingVideoApi, SERVER_URL } from '@/lib/api';
 
 const FloatingVideo: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videos, setVideos] = useState<any[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rotationTimer, setRotationTimer] = useState(7);
 
-  if (!isVisible) return null;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [v, t] = await Promise.all([
+          floatingVideoApi.getAll(),
+          floatingVideoApi.getSettings()
+        ]);
+        setVideos(v.filter((vid: any) => vid.status === 'active'));
+        setRotationTimer(t);
+      } catch (error) {
+        console.error("Error fetching floating videos:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (videos.length > 1 && !isModalOpen) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % videos.length);
+      }, rotationTimer * 1000);
+      return () => clearInterval(interval);
+    }
+  }, [videos, rotationTimer, isModalOpen]);
+
+  if (!isVisible || videos.length === 0) return null;
+
+  const currentVideo = videos[currentIndex];
 
   return (
     <>
       {/* Floating Preview Card */}
-      <div className="fixed bottom-1 right-1 z-[9999] w-[100px] md:w-[130px] aspect-[9/16] bg-black shadow-2xl border-2 border-white/20 overflow-hidden group rounded-lg">
-        {/* Video Thumbnail (Paused Video) */}
-        <div className="relative w-full h-full cursor-pointer" onClick={() => setIsModalOpen(true)}>
-          <video
-            src="/video.mp4"
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-          />
-          
-          {/* Centered Play Button */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-10 h-10 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
-              <Play size={20} fill="currentColor" className="ml-1" />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentVideo._id}
+          initial={{ opacity: 0, x: 50, scale: 0.8 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: 50, scale: 0.8 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="fixed bottom-1 right-1 z-[9999] w-[100px] md:w-[130px] aspect-[9/16] bg-black shadow-2xl border-2 border-white/20 overflow-hidden group rounded-lg"
+        >
+          {/* Video Thumbnail (Auto-playing Preview) */}
+          <div className="relative w-full h-full cursor-pointer" onClick={() => setIsModalOpen(true)}>
+            <video
+              key={`${currentVideo._id}-preview`}
+              src={`${SERVER_URL}${currentVideo.videoUrl}#t=0.1`}
+              muted
+              playsInline
+              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+            />
+            
+            {/* Centered Play Button */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-10 h-10 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
+                <Play size={20} fill="currentColor" className="ml-1" />
+              </div>
+            </div>
+
+            {/* Label Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+              <p className="text-[10px] text-white font-bold uppercase tracking-widest text-center leading-tight">
+                {currentVideo.title || "Watch Highlights"}
+              </p>
             </div>
           </div>
 
-          {/* Label Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-            <p className="text-[10px] text-white font-bold uppercase tracking-widest text-center leading-tight">Watch Highlights</p>
-          </div>
-        </div>
-
-        {/* Close Button (Small Preview) */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsVisible(false);
-          }}
-          className="absolute top-2 right-2 p-1 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors z-10"
-        >
-          <X size={14} />
-        </button>
-      </div>
+          {/* Close Button (Small Preview) */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsVisible(false);
+            }}
+            className="absolute top-2 right-2 p-1 bg-black/60 hover:bg-red-600 text-white rounded-full transition-colors z-10"
+          >
+            <X size={14} />
+          </button>
+        </motion.div>
+      </AnimatePresence>
 
       {/* Full Screen Video Popup (Modal) */}
       <AnimatePresence>
@@ -71,7 +114,7 @@ const FloatingVideo: React.FC = () => {
 
               {/* High Quality Video */}
               <video
-                src="/video.mp4"
+                src={`${SERVER_URL}${currentVideo.videoUrl}`}
                 controls
                 autoPlay
                 className="w-full h-full max-h-[85vh] object-contain"
