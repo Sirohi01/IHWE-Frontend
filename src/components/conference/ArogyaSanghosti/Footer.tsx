@@ -21,7 +21,10 @@ export const BottomTagline = () => (
             display: "flex",
             alignItems: "center",
             gap: 16,
-            marginTop: 0,
+            marginTop: 30,
+            marginBottom: 0,
+            marginLeft: 70,
+            marginRight: 70,
             border: `1px solid ${BORDER_COLOR}`,
         }}
     >
@@ -73,7 +76,7 @@ export const Footer = () => (
         <div
             style={{
                 background: `linear-gradient(135deg, ${TEAL} 0%, #0F3D3C 100%)`,
-                padding: "16px 36px",
+                padding: "16px 80px",
                 display: "flex",
                 alignItems: "center",
                 gap: 24,
@@ -180,7 +183,7 @@ export const Footer = () => (
         <div
             style={{
                 background: LIGHT_TEAL_BG,
-                padding: "15px 36px",
+                padding: "15px 80px",
                 fontSize: 12,
                 color: TEAL,
                 borderTop: `1px solid ${BORDER_COLOR}`,
