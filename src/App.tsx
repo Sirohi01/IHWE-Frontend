@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
@@ -30,9 +30,7 @@ const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasan
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
-const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
-const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
-const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
+const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
 const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
@@ -160,9 +158,10 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/conference" element={<Conference />} />
-                    <Route path="/conference/day-1" element={<ConferenceDay1 />} />
-                    <Route path="/conference/day-2" element={<ConferenceDay2 />} />
-                    <Route path="/conference/day-3" element={<ConferenceDay3 />} />
+                    <Route path="/conference/day-1" element={<Navigate to="/conference/1" replace />} />
+                    <Route path="/conference/day-2" element={<Navigate to="/conference/2" replace />} />
+                    <Route path="/conference/day-3" element={<Navigate to="/conference/3" replace />} />
+                    <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />

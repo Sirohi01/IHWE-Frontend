@@ -117,7 +117,7 @@ const ConferenceAgenda: React.FC = () => {
                 }
               `}} />
 
-              <div className="max-h-[380px] overflow-y-auto agenda-scroll">
+              <div className="h-[380px] overflow-y-auto agenda-scroll">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeDay}

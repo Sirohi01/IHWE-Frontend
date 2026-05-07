@@ -5,7 +5,6 @@ import {
     IconEmail, IconMobile, IconLocation
 } from "./Icons";
 
-// ─── IMAGE IMPORTS ────────────────────────────────────────────────────────
 import networkImg from "../../../assets/arogyasangostiimageform/Network with industry leaders.png";
 import shareExpertiseImg from "../../../assets/arogyasangostiimageform/SHARE YOUR EXPERTISE.png";
 import influenceImg from "../../../assets/arogyasangostiimageform/nfluence heathcare conversation.png";
