@@ -209,7 +209,7 @@ const CategoryCard = ({ item, width = '140px' }) => (
       alignItems: 'center',
       justifyContent: 'flex-start',
       textAlign: 'center',
-      background: '#fff',
+      background: '#ECFDF5',
       padding: '16px 10px 14px',
       borderRadius: '18px',
       border: '1px solid #e8edf2',
@@ -261,11 +261,11 @@ const ExhibitionCategories = () => {
   const row2 = categories.slice(8);
 
   return (
-    <section className="bg-white pt-8 md:pt-10 pb-4 md:pb-4 overflow-hidden">
+    <section className="bg-white pt-8 md:pt-5 pb-4 md:pb-4 overflow-hidden">
       <SectionContainer>
 
         {/* ── Heading ── */}
-        <div className="flex items-center justify-center gap-4 md:gap-[18px] mb-8 md:mb-10">
+        <div className="flex items-center justify-center gap-4 md:gap-[18px] mb-5 md:mb-6">
           {/* Left line + dot */}
           <div className="hidden md:flex items-center">
             <div style={{ height: '1.5px', width: '120px', background: 'linear-gradient(to right, transparent, #b0bec5)' }} />
@@ -318,7 +318,7 @@ const ExhibitionCategories = () => {
           {/* Row 2: 7 cards - Single Row */}
           <div className="flex flex-nowrap md:justify-start gap-3 overflow-x-auto no-scrollbar pb-2">
             {row2.map((item, i) => (
-              <CategoryCard key={i} item={item} width="160px" />
+              <CategoryCard key={i} item={item} width="163px" />
             ))}
           </div>
         </div>

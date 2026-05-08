@@ -254,12 +254,13 @@ const AttendanceInfo = () => {
           {/* RIGHT: WHO SHOULD ATTEND */}
           <div className="xl:col-span-3 relative z-20 xl:-mb-10 mt-6 xl:mt-3">
             <div className="bg-white border border-gray-300 rounded-[1.1rem] overflow-hidden shadow-xl">
-              <div className="bg-[#0b2912] text-white p-4 md:p-3 flex items-center justify-between shadow-md">
-                <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-white" />
-                  <span className="text-[13.5px] font-black uppercase tracking-wider">WHO SHOULD ATTEND?</span>
+              <div className="bg-[#0b2912] text-white p-2.5 md:p-2 flex items-center justify-center shadow-md relative">
+                <div className="flex items-center gap-2.5">
+                  <Users className="w-4 h-4 text-white" />
+                  <span className="text-[15px] font-black uppercase tracking-wider">WHO SHOULD ATTEND?</span>
                 </div>
-                <div className="hidden md:grid grid-cols-3 gap-1 opacity-40">
+                {/* Decoration dots moved to absolute right */}
+                <div className="hidden md:grid grid-cols-3 gap-1 opacity-40 absolute right-4">
                   {[...Array(9)].map((_, i) => <div key={i} className="w-0.5 h-0.5 bg-white rounded-full" />)}
                 </div>
               </div>

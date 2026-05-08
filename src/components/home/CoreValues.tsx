@@ -48,11 +48,11 @@ const CoreValues = () => {
   const highlights = data.highlights?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)) || [];
 
   return (
-    <section className="bg-white pb-2 overflow-hidden">
+    <section className="bg-[#2F6B3F] pb-2 overflow-hidden">
       <SectionContainer>
         <div className="flex flex-col lg:flex-row gap-0">
           {/* RIGHT CONTENT - Full width row */}
-          <div className="w-full border-t border-b border-gray-200 py-3">
+          <div className="w-full border-t border-b border-white/10 py-3">
             <div className="flex flex-wrap lg:flex-nowrap items-center justify-between gap-y-10 gap-x-4">
               {highlights.map((item: any, index: number) => (
                 <motion.div
@@ -65,9 +65,9 @@ const CoreValues = () => {
                 >
                   {/* Icon Container */}
                   <div className="relative shrink-0">
-                    <div className="w-12 h-12 rounded-full border-[1px] border-gray-100 flex items-center justify-center bg-white shadow-sm transition-all duration-500 group-hover:shadow-md relative z-10">
+                    <div className="w-12 h-12 rounded-full border-[1px] border-white/20 flex items-center justify-center bg-white shadow-sm relative z-10">
                       <div
-                        className="w-[85%] h-[85%] rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110"
+                        className="w-[85%] h-[85%] rounded-full flex items-center justify-center"
                         style={{ backgroundColor: COLORS[index % 4], color: '#fff' }}
                       >
                         {/* Smaller icons for tighter fit */}
@@ -78,17 +78,17 @@ const CoreValues = () => {
 
                   {/* Text Content */}
                   <div className="flex flex-col">
-                    <h3 className="text-[11px] font-black tracking-tight text-[#071c3d] mb-0.5">
+                    <h3 className="text-[11px] font-black tracking-tight text-white mb-0.5">
                       {item.title}
                     </h3>
-                    <p className="text-[10px] text-gray-500 font-medium leading-[1.3] max-w-[180px]">
+                    <p className="text-[10px] text-gray-200 font-medium leading-[1.3] max-w-[180px]">
                       {item.description}
                     </p>
                   </div>
 
                   {/* Vertical Divider */}
                   {index < highlights.length - 1 && (
-                    <div className="hidden lg:block h-8 w-[1px] bg-gray-100 absolute -right-2 top-1/2 -translate-y-1/2" />
+                    <div className="hidden lg:block h-8 w-[1px] bg-white/10 absolute -right-2 top-1/2 -translate-y-1/2" />
                   )}
                 </motion.div>
               ))}

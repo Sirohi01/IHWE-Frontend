@@ -214,13 +214,13 @@ const SponsorshipSection = () => {
       ══════════════════════════════════════════ */}
       <div className="pt-10 md:pt-16 pb-0 border-b border-slate-100 overflow-hidden" style={{ background: "#f8f7f5" }}>
         <SectionContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-x-8 gap-y-4 lg:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-x-8 gap-y-4 lg:gap-4 items-start lg:-mb-6">
 
             {/* ── LEFT: Heading block ── */}
             <div className="flex flex-col items-start text-left w-full">
               {/* Badge */}
               <div
-                className="inline-flex items-center gap-2 border border-[#12321d]/10 rounded-full px-3 py-1.5 md:px-5 md:py-2 mb-5 w-fit shadow-sm text-left"
+                className="inline-flex items-center gap-2 border border-[#12321d]/10 rounded-full px-3 py-1.5 md:px-5 md:py-2 mb-3 w-fit shadow-sm text-left"
                 style={{ background: "#e9ece3" }}
               >
                 <Leaf className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#12321d]" />
@@ -229,12 +229,12 @@ const SponsorshipSection = () => {
                 </span>
               </div>
 
-              <h2 className="font-black leading-[1.1] mb-3 text-left" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
+              <h2 className="font-black leading-[1.1] mb-2 text-left" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
                 <span style={{ color: "#023316" }}>BECOME A</span><br />
                 <span style={{ color: "#78903a" }}>SPONSOR</span>
               </h2>
 
-              <p className="text-[#242927] font-bold text-[12px] mb-3 leading-snug uppercase tracking-wide text-left">
+              <p className="text-[#242927] font-bold text-[12px] mb-2 leading-snug uppercase tracking-wide text-left">
                 Position Your Brand at the Forefront<br />of the Wellness Industry
               </p>
 
@@ -246,11 +246,11 @@ const SponsorshipSection = () => {
             </div>
 
             {/* ── CENTER: Expo Image ── */}
-            <div className="relative h-[400px] lg:h-[330px] w-full flex justify-center">
+            <div className="relative h-[400px] lg:h-[300px] w-full flex justify-center">
               <img
                 src={bgImage}
                 alt="IHWE Expo"
-                className="w-full h-full object-contain object-center relative z-20 scale-[1.2] lg:scale-[1.2] lg:-mt-12 lg:-ml-4 lg:-mb-28"
+                className="w-full h-full object-contain object-center relative z-20 scale-[1.2] lg:scale-[1.2] lg:-mt-12 lg:-ml-4 lg:-mb-[160px]"
               />
             </div>
 
@@ -271,7 +271,7 @@ const SponsorshipSection = () => {
                 {WHY_SPONSOR.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center gap-3 py-2.5 pr-3"
+                    className="flex items-center gap-3 py-1 pr-3"
                     style={{
                       borderBottom: "1px solid #e5e7eb",
                     }}
@@ -303,7 +303,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-3 pb-4">
+      <div className="bg-white pt-4 pb-4">
         <SectionContainer>
 
           {/* Section Divider Header */}
@@ -311,7 +311,7 @@ const SponsorshipSection = () => {
             <div className="flex-1 h-[1px] bg-slate-200" />
             <div className="flex items-center gap-2 shrink-0">
               <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d]" />
-              <span className="font-bold text-[11px] md:text-[14px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-center" style={{ color: "#153421" }}>
+              <span className="font-bold text-[11px] md:text-[14px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-center" style={{ color: "#6E1A37" }}>
                 SPONSORSHIP OPPORTUNITIES
               </span>
               <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d] scale-x-[-1]" />
@@ -382,7 +382,7 @@ const SponsorshipSection = () => {
         <SectionContainer>
 
           {/* 1. Limited Slots Bar */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-6 lg:gap-4 mb-10 lg:mb-8 mt-2 lg:-mt-5 pt-1.5 pb-3 lg:pb-2.5 px-5 lg:px-4 rounded-2xl border border-slate-100 w-full lg:max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-8 lg:gap-10 mb-10 lg:mb-8 mt-2 lg:-mt-5 pt-1.5 pb-3 lg:pb-2.5 px-6 lg:px-10 rounded-2xl border border-slate-100 w-full lg:max-w-[810px] ml-0 shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
             <div className="flex items-center gap-4 lg:gap-3">
               <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
                 <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />

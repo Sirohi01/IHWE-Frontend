@@ -25,7 +25,7 @@ const MarqueeStrip = () => {
 
   return (
     <section 
-      className="py-4 mt-4 overflow-hidden" 
+      className="py-3 mt-0 mb-4 overflow-hidden" 
       style={{ backgroundColor: data.bgColor || "#23471d" }}
     >
       <style>{`
