@@ -303,7 +303,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-0 pb-4">
+      <div className="bg-white pt-3 pb-4">
         <SectionContainer>
 
           {/* Section Divider Header */}
@@ -378,7 +378,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           BOTTOM: Limited Slots Bar + CTA & Form
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-2 md:pt-4 pb-16 border-t border-slate-100">
+      <div className="bg-white pt-2 md:pt-4 pb-16">
         <SectionContainer>
 
           {/* 1. Limited Slots Bar */}

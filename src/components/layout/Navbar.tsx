@@ -6,7 +6,8 @@ import {
   Handshake, Camera, Sparkles, FileCheck,
   Info, ShoppingBag, HelpCircle, Lock, CalendarDays,
   ShieldCheck, Home, Phone, ChevronRight,
-  LayoutGrid, Building2, ExternalLink, Star, Mic, Trophy
+  LayoutGrid, Building2, ExternalLink, Star, Mic, Trophy,
+  Store, UserPlus, Globe, Award
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { settingsApi, analyticsApi, SERVER_URL } from "@/lib/api";
@@ -64,12 +65,12 @@ const bottomTabs = [
 ];
 
 const registrationOptions = [
-  { label: "Book A Stand", path: "/book-a-stand", icon: Briefcase, color: "green" },
-  { label: "Visitor Pass", path: "/visitor-registration", icon: Users, color: "orange" },
-  { label: "Delegates", path: "/delegate-registration", icon: Handshake, color: "green" },
-  { label: "Buyer Reg.", path: "/buyer-registration", icon: ShoppingBag, color: "orange" },
-  { label: "Media", path: "/media-registration", icon: Camera, color: "green" },
-  { label: "Speaker", path: "/speaker-registration", icon: Mic, color: "orange" },
+  { label: "BOOK A STALL", path: "/book-a-stand", icon: Store, color: "green" },
+  { label: "REGISTER AS VISITOR", path: "/visitor-registration", icon: UserPlus, color: "orange" },
+  { label: "DELEGATE REGISTRATION", path: "/delegate-registration", icon: Globe, color: "green" },
+  { label: "REGISTER AS BUYER", path: "/buyer-registration", icon: Users, color: "orange" },
+  { label: "SPONSORSHIP OPPORTUNITIES", path: "/contact", icon: Award, color: "green" },
+  { label: "TALK TO EXPO ADVISOR", path: "tel:+919654900525", icon: Phone, color: "orange" },
 ];
 
 const quickPills = [
@@ -279,39 +280,47 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                         >
                           <div className="grid grid-cols-2">
                             {[
-                              { to: "/book-a-stand", icon: Briefcase, label: "Book A\nStand", color: "orange", click: "Registration: Book A Stand" },
-                              { to: "/visitor-registration", icon: Users, label: "Visitor\nPass", color: "green", click: "Registration: Visitor Pass" },
-                              { to: "/delegate-registration", icon: Handshake, label: "Delegates\nRegister", color: "orange", click: "Registration: Delegates Register" },
-                              { to: "/buyer-registration", icon: ShoppingBag, label: "Buyer\nRegister", color: "orange", click: "Registration: Buyer Register" },
-                              { to: "/media-registration", icon: Camera, label: "Media &\nPartners", color: "green", click: "Registration: Media & Partners" },
-                              { to: "/speaker-registration", icon: Sparkles, label: "Speaker\nRegister", color: "green", click: "Registration: Speaker Register" },
-                              { to: "/seller-registration", icon: Briefcase, label: "Seller\nRegister", color: "orange", click: "Registration: Seller Register" },
-                            ].map((item, idx) => (
-                              <Link
-                                key={item.to}
-                                to={item.to}
-                                onClick={() => { setActiveDropdown(null); analyticsApi.logClick(item.click); }}
-                                className={cn(
+                              { to: "/book-a-stand", icon: Store, label: "BOOK A\nSTALL", color: "orange", click: "Registration: Book A Stall" },
+                              { to: "/visitor-registration", icon: UserPlus, label: "REGISTER AS\nVISITOR", color: "green", click: "Registration: Visitor Pass" },
+                              { to: "/delegate-registration", icon: Globe, label: "DELEGATE\nREGISTRATION", color: "orange", click: "Registration: Delegates Register" },
+                              { to: "/buyer-registration", icon: Users, label: "REGISTER AS\nBUYER", color: "green", click: "Registration: Buyer Register" },
+                              { to: "/contact", icon: Award, label: "SPONSORSHIP\nOPPORTUNITIES", color: "orange", click: "Registration: Sponsorship" },
+                              { to: "tel:+919654900525", icon: Phone, label: "TALK TO EXPO\nADVISOR", color: "green", click: "Registration: Expo Advisor" },
+                            ].map((item, idx) => {
+                              const commonProps = {
+                                key: item.to,
+                                onClick: () => { setActiveDropdown(null); analyticsApi.logClick(item.click); },
+                                className: cn(
                                   "flex items-center gap-1.5 px-2 py-2 hover:bg-slate-50 text-left transition-all group relative z-20 border-b border-slate-100",
                                   idx % 2 === 0 ? "border-r" : ""
-                                )}
-                              >
-                                <div className={cn(
-                                  "w-6 h-6 flex-shrink-0 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm",
-                                  item.color === "orange"
-                                    ? "bg-[#d26019]/5 text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white"
-                                    : "bg-[#23471d]/5 text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white"
-                                )}>
-                                  <item.icon className="w-3 h-3" />
-                                </div>
-                                <span className={cn(
-                                  "text-[9px] font-semibold text-slate-800 uppercase tracking-wider transition-colors leading-tight whitespace-pre-line",
-                                  item.color === "orange" ? "group-hover:text-[#d26019]" : "group-hover:text-[#23471d]"
-                                )}>
-                                  {item.label}
-                                </span>
-                              </Link>
-                            ))}
+                                )
+                              };
+
+                              const Content = (
+                                <>
+                                  <div className={cn(
+                                    "w-6 h-6 flex-shrink-0 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm",
+                                    item.color === "orange"
+                                      ? "bg-[#d26019]/5 text-[#d26019] group-hover:bg-[#d26019] group-hover:text-white"
+                                      : "bg-[#23471d]/5 text-[#23471d] group-hover:bg-[#23471d] group-hover:text-white"
+                                  )}>
+                                    <item.icon className="w-3 h-3" />
+                                  </div>
+                                  <span className={cn(
+                                    "text-[9px] font-semibold text-slate-800 uppercase tracking-wider transition-colors leading-tight whitespace-pre-line",
+                                    item.color === "orange" ? "group-hover:text-[#d26019]" : "group-hover:text-[#23471d]"
+                                  )}>
+                                    {item.label}
+                                  </span>
+                                </>
+                              );
+
+                              return item.to.startsWith("tel:") ? (
+                                <a href={item.to} {...commonProps}>{Content}</a>
+                              ) : (
+                                <Link to={item.to} {...commonProps}>{Content}</Link>
+                              );
+                            })}
                           </div>
                         </motion.div>
                       </div>
@@ -473,25 +482,34 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
               <div className="px-5 mt-5">
                 <div className="text-[9px] font-semibold text-[#23471d] uppercase tracking-[0.15em] mb-3">Register Now</div>
                 <div className="grid grid-cols-3 gap-2">
-                  {registrationOptions.map((opt) => (
-                    <Link
-                      key={opt.path}
-                      to={opt.path}
-                      onClick={() => setMobileOpen(false)}
-                      className="flex flex-col items-center gap-2 bg-white border border-slate-100 rounded-2xl py-3 px-2 active:scale-95 transition-all"
-                      style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }}
-                    >
-                      <div className={cn(
-                        "w-9 h-9 rounded-xl flex items-center justify-center",
-                        opt.color === "green" ? "bg-[#23471d]/10 text-[#23471d]" : "bg-[#d26019]/10 text-[#d26019]"
-                      )}>
-                        <opt.icon className="w-4 h-4" />
-                      </div>
-                      <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wide text-center leading-tight">
-                        {opt.label}
-                      </span>
-                    </Link>
-                  ))}
+                  {registrationOptions.map((opt) => {
+                    const commonProps = {
+                      key: opt.path,
+                      onClick: () => setMobileOpen(false),
+                      className: "flex flex-col items-center gap-2 bg-white border border-slate-100 rounded-2xl py-3 px-2 active:scale-95 transition-all",
+                      style: { boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }
+                    };
+
+                    const Content = (
+                      <>
+                        <div className={cn(
+                          "w-9 h-9 rounded-xl flex items-center justify-center",
+                          opt.color === "green" ? "bg-[#23471d]/10 text-[#23471d]" : "bg-[#d26019]/10 text-[#d26019]"
+                        )}>
+                          <opt.icon className="w-4 h-4" />
+                        </div>
+                        <span className="text-[9px] font-semibold text-slate-800 uppercase tracking-wide text-center leading-tight">
+                          {opt.label}
+                        </span>
+                      </>
+                    );
+
+                    return opt.path.startsWith("tel:") ? (
+                      <a href={opt.path} {...commonProps}>{Content}</a>
+                    ) : (
+                      <Link to={opt.path} {...commonProps}>{Content}</Link>
+                    );
+                  })}
                 </div>
               </div>
 
