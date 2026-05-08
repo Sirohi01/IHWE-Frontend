@@ -133,32 +133,43 @@ const ConferenceAgenda: React.FC = () => {
                         className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 px-6 py-4 hover:bg-[#F8FAFC] transition-colors"
                       >
                         {/* Time */}
-                        <div className="w-[140px] flex-shrink-0">
+                        <div className="w-[140px] shrink-0">
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-[#4E9F3D]" />
-                            <span className="text-[13px] font-medium text-[#1C2B3A]">
+                            <span className="text-[13px] font-bold text-[#1C2B3A]">
                               {session.time}
                             </span>
                           </div>
                         </div>
 
                         {/* Session Topic */}
-                        <div className="flex-1">
-                          <p className="text-[13px] font-medium text-[#0B2C66] leading-snug">
+                        <div className="flex-1 min-w-[200px]">
+                          <p className="text-[14px] font-black text-[#0B2C66] leading-snug">
                             {session.topic}
                           </p>
                         </div>
 
-                        {/* Speaker & Type */}
-                        <div className="flex items-center gap-3 text-[#5F6B7A] md:w-[280px] flex-shrink-0">
-                          <div className="flex items-center gap-1.5">
-                            <User className="w-3.5 h-3.5" />
-                            <span className="text-[13px] font-medium truncate">{session.speakers}</span>
+                        {/* Speaker & Type Group */}
+                        <div className="flex items-center justify-between gap-4 md:w-[320px] shrink-0">
+                          {/* Speaker */}
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <div className="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center shrink-0 border border-gray-100">
+                              <User className="w-3.5 h-3.5 text-[#5F6B7A]" />
+                            </div>
+                            <span className="text-[13px] font-bold text-[#5F6B7A] truncate">
+                              {session.speakers || "-"}
+                            </span>
                           </div>
-                          <span className="text-[#E2E8F0] font-light">|</span>
-                          <span className="text-[13px] font-medium text-[#5F6B7A]">
-                            {session.type}
-                          </span>
+
+                          {/* Separator & Type */}
+                          <div className="flex items-center gap-3 shrink-0">
+                            <div className="h-4 w-[1px] bg-[#E2E8F0]" />
+                            <div className="w-[100px] text-right">
+                              <span className="text-[11px] font-black text-[#4E9F3D] uppercase tracking-widest">
+                                {session.type}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
