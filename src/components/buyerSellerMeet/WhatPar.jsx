@@ -48,10 +48,10 @@ const WhatPar = () => {
                     {/* Stats Row — 4 columns with dashed dividers */}
                     <div className="grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
                         {[
-                            { icon: '/bsmeet/bsm1.png', num: '1200+', label: 'Pre-scheduled\nMeetings' },
-                            { icon: '/bsmeet/bsm2.png', num: '600+', label: 'Verified\nBuyers' },
-                            { icon: '/bsmeet/bsm3.png', num: '350+', label: 'Exhibiting\nBrands' },
-                            { icon: '/bsmeet/bsm4.png', num: '25+', label: 'Countries\nParticipated' },
+                            { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
+                            { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
+                            { icon: '/bsmeet/bsm3.png', num: '100+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm4.png', num: '', label: 'Global\nParticipation' },
                         ].map((item, i) => (
                             <React.Fragment key={i}>
                                 {/* Dashed divider before every item except first */}
@@ -83,7 +83,7 @@ const WhatPar = () => {
                                 <div key={i} className="min-w-[33%] px-[5px] box-border">
                                     <div className="border border-[#e4e4e4] rounded-[10px] pt-3.5 px-3 pb-3 flex flex-col justify-between gap-2.5 h-full">
                                         <div>
-                                            <div className="text-[28px] text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-bold">"</div>
+                                            <div className="text-xl text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-medium">&#10077;</div>
                                             <div className="text-sm text-[#333] leading-[1.55] mt-1.5">{t.text}</div>
                                         </div>
                                         <div className="flex items-end justify-between gap-2">
