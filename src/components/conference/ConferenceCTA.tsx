@@ -51,7 +51,7 @@ const ConferenceCTA: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               className="group px-8 py-3.5 bg-gradient-to-r from-[#4E9F3D] to-[#2E7D32] text-white rounded-full font-black text-[12px] uppercase tracking-wider flex items-center gap-2 shadow-[0_10px_20px_rgba(78,159,61,0.3)] border border-white/10"
             >
-              BOOK YOUR DELEGATE PASS
+              REGISTER AS DELEGATE
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>
