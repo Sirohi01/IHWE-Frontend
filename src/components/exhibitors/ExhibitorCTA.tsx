@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { settingsApi, SERVER_URL } from '../../lib/api';
 import leaveImg from '../../assets/leave.png';
 import cta1 from '../../assets/cta1.png';
 import cta2 from '../../assets/cta2.png';
@@ -19,19 +18,7 @@ const BOTTOM_STATS = [
 ];
 
 const ExhibitorCTA = () => {
-    const [settings, setSettings] = React.useState<any>(null);
-
-    React.useEffect(() => {
-        settingsApi.get().then(res => {
-            if (res) setSettings(res);
-        });
-    }, []);
-
-    const domesticBrochureUrl = React.useMemo(() => {
-        if (!settings?.domesticRegistrationFormPdf) return '#';
-        const path = settings.domesticRegistrationFormPdf;
-        return path.startsWith('http') ? path : `${SERVER_URL}${path}`;
-    }, [settings]);
+    const domesticBrochureUrl = '/pdf.pdf';
 
     return (
         <section className="bg-white">
