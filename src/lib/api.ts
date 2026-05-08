@@ -954,3 +954,11 @@ export const msmePmsSchemeApi = {
         return await response.json();
     }
 };
+
+export const distinguishedSpeakerApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/distinguished-speakers`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
