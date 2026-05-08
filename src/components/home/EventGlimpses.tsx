@@ -132,15 +132,25 @@ const EventGlimpses = () => {
 
         {/* Header */}
         <div className="text-left md:text-center mb-8 px-4">
-          <div className="flex items-center justify-start md:justify-center gap-2 mb-2">
-            <Leaf size={18} className="text-[#2f8f3a]" />
-            <span className="text-[#0b4d17] font-bold tracking-[0.2em] uppercase text-[10px] md:text-[11px]">{glimpseData.subheading || 'Event Glimpses'}</span>
-            <Leaf size={18} className="text-[#2f8f3a] scale-x-[-1] hidden md:block" />
+          <div className="flex items-center justify-start md:justify-center gap-2 mb-2.5">
+            <Leaf size={20} className="text-[#2f8f3a]" />
+            <span className="text-[#0b4d17] font-bold tracking-[0.25em] uppercase text-[12px] md:text-[14px]">
+              {glimpseData.subheading || 'Event Glimpses'}
+            </span>
+            <Leaf size={20} className="text-[#2f8f3a] scale-x-[-1] hidden md:block" />
           </div>
-          <div 
-            className="text-[22px] md:text-[34px] font-black text-[#0b2912] mb-4 uppercase tracking-tight flex justify-start md:justify-center items-center text-left md:text-center leading-tight"
-            dangerouslySetInnerHTML={{ __html: glimpseData.heading }}
-          />
+          <h2 
+            className="text-[16px] md:text-[29px] font-black text-[#0b2912] mb-4 uppercase tracking-tight flex flex-col justify-start md:justify-center items-center text-left md:text-center leading-[1.3] max-w-4xl mx-auto px-4"
+          >
+            {glimpseData.heading?.toUpperCase().includes("OF THE") ? (
+              <>
+                <span className="opacity-90 block">{glimpseData.heading.substring(0, glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
+                <span className="text-[#2f8f3a] mt-1 block">{glimpseData.heading.substring(glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
+              </>
+            ) : (
+              <span dangerouslySetInnerHTML={{ __html: glimpseData.heading }} />
+            )}
+          </h2>
           <div className="flex items-center justify-start md:justify-center gap-4 max-w-2xl md:mx-auto">
             <div className="hidden md:block h-[1px] w-12 bg-[#b6d9bb]" />
             <div 

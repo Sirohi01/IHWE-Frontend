@@ -212,7 +212,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           TOP HERO: LEFT (text) | CENTER (image) | RIGHT (why sponsor)
       ══════════════════════════════════════════ */}
-      <div className="pt-4 pb-0 border-b border-slate-100 overflow-hidden" style={{ background: "#f8f7f5" }}>
+      <div className="pt-10 md:pt-16 pb-0 border-b border-slate-100 overflow-hidden" style={{ background: "#f8f7f5" }}>
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-x-8 gap-y-4 lg:gap-8 items-start">
 
@@ -303,7 +303,7 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           SPONSORSHIP OPPORTUNITIES SECTION
       ══════════════════════════════════════════ */}
-      <div className="bg-white pt-0 pb-4">
+      <div className="bg-white pt-3 pb-4">
         <SectionContainer>
 
           {/* Section Divider Header */}
@@ -378,11 +378,11 @@ const SponsorshipSection = () => {
       {/* ══════════════════════════════════════════
           BOTTOM: Limited Slots Bar + CTA & Form
       ══════════════════════════════════════════ */}
-      <div className="bg-white pb-16">
+      <div className="bg-white pt-2 md:pt-4 pb-16">
         <SectionContainer>
 
           {/* 1. Limited Slots Bar */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-6 lg:gap-4 mb-10 lg:mb-8 mt-4 lg:-mt-6 pt-3 pb-3 lg:pb-2.5 px-5 lg:px-4 rounded-2xl border border-slate-100 w-full lg:max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-6 lg:gap-4 mb-10 lg:mb-8 mt-2 lg:-mt-5 pt-1.5 pb-3 lg:pb-2.5 px-5 lg:px-4 rounded-2xl border border-slate-100 w-full lg:max-w-fit ml-0 xl:ml-[13.5%] shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
             <div className="flex items-center gap-4 lg:gap-3">
               <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
                 <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />
@@ -403,7 +403,7 @@ const SponsorshipSection = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 items-start mt-0 lg:-mt-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 items-start mt-0 lg:-mt-6 relative z-10">
             
             {/* 2. Dark Green CTA Card */}
             <div className="bg-[#012011] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
@@ -493,7 +493,7 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-3 lg:gap-2">
                       <Store className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">150+</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">100+</p>
                         <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
                       </div>
                     </div>
@@ -524,7 +524,7 @@ const SponsorshipSection = () => {
 
             {/* 3. Interest Form */}
             <div 
-              className="bg-white rounded-2xl p-5 lg:p-4 border border-slate-100 shadow-sm h-fit mt-4 lg:-mt-12"
+              className="bg-white rounded-2xl p-5 lg:p-4 border border-slate-100 shadow-sm h-fit mt-4 lg:-mt-16"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
               <div className="text-center mb-3">
