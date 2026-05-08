@@ -95,12 +95,7 @@ const IndustryVoices: React.FC = () => {
             <div className="h-[1px] w-12 bg-gray-200" />
           </div>
 
-          <div className="absolute right-0 bottom-2 hidden lg:block">
-            <a href="#" className="flex items-center gap-1 text-[11px] font-bold text-[#4E9F3D] uppercase hover:underline transition-all">
-              VIEW ALL TESTIMONIALS
-              <ChevronRight className="w-4 h-4" />
-            </a>
-          </div>
+
         </div>
 
         {/* Slider Container */}
