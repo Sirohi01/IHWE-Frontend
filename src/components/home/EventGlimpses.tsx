@@ -81,7 +81,7 @@ const EventGlimpses = () => {
 
   return (
     <section
-      className="relative pt-6 pb-12 overflow-hidden font-inter"
+      className="relative pt-6 pb-3 overflow-hidden font-inter"
       style={{ background: '#f5fdf6' }}
     >
       {/* ── BG DECORATIVE ELEMENTS ── */}
@@ -131,7 +131,7 @@ const EventGlimpses = () => {
       <SectionContainer className="relative z-10">
 
         {/* Header */}
-        <div className="text-left md:text-center mb-8 px-4">
+        <div className="text-left md:text-center mb-4 px-4">
           <div className="flex items-center justify-start md:justify-center gap-2 mb-2.5">
             <Leaf size={20} className="text-[#2f8f3a]" />
             <span className="text-[#0b4d17] font-bold tracking-[0.25em] uppercase text-[12px] md:text-[14px]">
@@ -140,12 +140,12 @@ const EventGlimpses = () => {
             <Leaf size={20} className="text-[#2f8f3a] scale-x-[-1] hidden md:block" />
           </div>
           <h2 
-            className="text-[16px] md:text-[29px] font-black text-[#0b2912] mb-4 uppercase tracking-tight flex flex-col justify-start md:justify-center items-center text-left md:text-center leading-[1.3] max-w-4xl mx-auto px-4"
+            className="text-[16px] md:text-[29px] font-black text-[#0b2912] mb-2 uppercase tracking-tight flex flex-col justify-start md:justify-center items-center text-left md:text-center leading-[1.1] max-w-4xl mx-auto px-4"
           >
             {glimpseData.heading?.toUpperCase().includes("OF THE") ? (
               <>
-                <span className="opacity-90 block">{glimpseData.heading.substring(0, glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
-                <span className="text-[#2f8f3a] mt-1 block">{glimpseData.heading.substring(glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
+                <span className="opacity-90 block text-[13px] md:text-[22px]">{glimpseData.heading.substring(0, glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
+                <span className="text-[#2f8f3a] mt-0 block">{glimpseData.heading.substring(glimpseData.heading.toUpperCase().indexOf("OF THE") + 6)}</span>
               </>
             ) : (
               <span dangerouslySetInnerHTML={{ __html: glimpseData.heading }} />
@@ -162,7 +162,7 @@ const EventGlimpses = () => {
         </div>
 
         {/* Carousel Area */}
-        <div className="relative mb-8 px-2 max-w-[1200px] mx-auto">
+        <div className="relative mb-0 px-2 max-w-[1200px] mx-auto">
           {/* Arrows */}
           {images.length > visibleCount && (
             <>
@@ -247,24 +247,24 @@ const EventGlimpses = () => {
         </div>
 
         {/* Stats Footer Bar */}
-        <div className="px-2 mt-6">
+        <div className="px-2 mt-2">
           <div className="max-w-[1200px] mx-auto bg-[#041a0a] rounded-[24px] md:rounded-full p-2.5 flex flex-col md:flex-row items-stretch border border-white/10 shadow-2xl overflow-hidden gap-5 md:gap-0">
-            <div className="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:items-center md:justify-around px-2 py-3 md:py-0 gap-y-6 md:gap-0">
+            <div className="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:items-center md:justify-start px-2 py-3 md:py-0 gap-y-6 md:gap-0">
               {stats.map((stat: any, idx: number) => (
-                <div key={idx} className="flex flex-col md:flex-row items-center gap-2.5 md:gap-3 px-1 md:px-3 border-white/10 md:border-r last:border-r-0 flex-1">
+                <div key={idx} className="flex flex-col md:flex-row items-start md:items-center gap-2.5 md:gap-3 px-3 md:px-4 border-white/10 md:border-r last:border-r-0 flex-1">
                   <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#0b4d17] flex-shrink-0 shadow-inner">
                     {ICON_MAP[stat.icon] || <Users size={16} />}
                   </div>
-                  <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                  <div className="flex flex-col items-start text-left">
                     <span className="text-[#2f8f3a] font-black text-[13px] md:text-[14px] leading-tight mb-0.5">{stat.number}</span>
-                    <span className="text-white/70 text-[8px] md:text-[9px] uppercase tracking-[0.1em] font-bold leading-tight px-1">{stat.label}</span>
+                    <span className="text-white/70 text-[8px] md:text-[9px] uppercase tracking-[0.1em] font-bold leading-tight">{stat.label}</span>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* CTA White Pill */}
-            <div className="bg-white rounded-[18px] md:rounded-full p-3 md:p-1.5 md:pr-10 flex items-center gap-4 w-full md:w-auto shadow-xl flex-shrink-0 hover:bg-slate-50 transition-colors cursor-pointer group">
+            <div className="bg-white rounded-[18px] md:rounded-full p-3 md:p-1.5 md:pr-6 flex items-center gap-3 w-full md:w-[280px] shadow-xl flex-shrink-0 hover:bg-slate-50 transition-colors cursor-pointer group">
               <div className="w-11 h-11 rounded-full bg-[#0b4d17] flex items-center justify-center text-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform">
                 <Camera size={22} />
               </div>

@@ -65,7 +65,7 @@ const HealthcareSectors = () => {
 
   return (
     <section
-      className="relative overflow-hidden pt-[45px] pb-8 font-sans bg-[#f5f7f5]"
+      className="relative overflow-hidden pt-[25px] pb-2 font-sans bg-[#f5f7f5]"
     >
       {/* Background decorative effects */}
       {/* Top-left dot grid */}
@@ -98,8 +98,8 @@ const HealthcareSectors = () => {
       <SectionContainer className="relative z-10">
         
         {/* ===== HEADER ===== */}
-        <div className="text-center mb-6 lg:mb-10">
-          <div className="flex items-center justify-center gap-3 lg:gap-4 mb-3 lg:mb-4">
+        <div className="text-center mb-3 lg:mb-5">
+          <div className="flex items-center justify-center gap-3 lg:gap-4 mb-1 lg:mb-1">
             {/* Left leaf */}
             <Leaf className="text-[#2e7d32] w-6 lg:w-8 h-6 lg:h-8" />
             
@@ -127,14 +127,7 @@ const HealthcareSectors = () => {
             <div className="hidden lg:block h-[1.5px] w-8 bg-[#1b5e20] opacity-60"/>
           </div>
 
-          {/* Small leaf center with longer gradient lines */}
-          <div className="flex items-center justify-center gap-3 mt-1">
-            <div className="h-[1.2px] w-16 lg:w-32 bg-gradient-to-l from-[#1b5e20] to-transparent opacity-40"/>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#2e7d32">
-              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-5 8Z"/>
-            </svg>
-            <div className="h-[1.2px] w-16 lg:w-32 bg-gradient-to-r from-[#1b5e20] to-transparent opacity-40"/>
-          </div>
+          {/* Decoration removed */}
         </div>
 
         {/* ===== CARDS GRID ===== */}
@@ -160,15 +153,15 @@ const HealthcareSectors = () => {
               }}
             >
               {/* Top Section: Icon & Masked Image */}
-              <div style={{ height: 125, position: 'relative', display: 'flex' }}>
+              <div style={{ height: 110, position: 'relative', display: 'flex' }}>
                 {/* Left Side: Icon Container */}
                 <div style={{ width: '45%', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: 15, zIndex: 10 }}>
                   <div style={{
-                    width: 72,
-                    height: 72,
+                    width: 64,
+                    height: 64,
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #4caf50 100%)',
-                    border: '5px solid #ffffff',
+                    border: '4px solid #ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -178,14 +171,14 @@ const HealthcareSectors = () => {
                   }}
                     className="card-icon-circle"
                   >
-                    <IconComponent name={sector.icon} size={32} />
+                    <IconComponent name={sector.icon} size={28} />
                   </div>
                 </div>
 
                 {/* Right Side: Image with Curve Mask */}
                 <div style={{ 
                   width: '75%', 
-                  height: 120, 
+                  height: 105, 
                   position: 'absolute', 
                   right: 10, 
                   top: 10,
@@ -213,12 +206,12 @@ const HealthcareSectors = () => {
               </div>
 
               {/* Text Content */}
-              <div style={{ padding: '12px 20px 20px', flexGrow: 1 }}>
+              <div style={{ padding: '10px 16px 16px', flexGrow: 1 }}>
                 <h3 style={{
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 700,
                   color: '#1b5e20',
-                  marginBottom: 8,
+                  marginBottom: 6,
                   lineHeight: 1.2,
                   textTransform: 'uppercase',
                   letterSpacing: '0.01em',
@@ -226,20 +219,20 @@ const HealthcareSectors = () => {
                   {sector.title}
                 </h3>
                 <p style={{
-                  fontSize: 12,
+                  fontSize: 11.5,
                   color: '#333',
                   fontWeight: 500,
                   fontFamily: "'Segoe UI', sans-serif",
-                  lineHeight: 1.6,
+                  lineHeight: 1.5,
                   margin: 0,
                 }}>
                   {sector.description}
                 </p>
                 {/* Short Accent Line */}
                 <div style={{
-                  marginTop: 14,
-                  height: 3,
-                  width: 32,
+                  marginTop: 12,
+                  height: 2.5,
+                  width: 28,
                   background: '#1b5e20',
                   borderRadius: 2,
                   transition: 'width 0.3s ease',
@@ -252,7 +245,7 @@ const HealthcareSectors = () => {
         </div>
 
         {/* ===== BOTTOM STATS BAR ===== */}
-        <div className="stats-bar-container flex flex-col lg:flex-row items-stretch overflow-hidden bg-white rounded-[20px] shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] mt-10 p-1 lg:p-1">
+        <div className="stats-bar-container flex flex-col lg:flex-row items-stretch overflow-hidden bg-white rounded-[20px] shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] mt-4 p-1 lg:p-1">
           {/* Stats items */}
           <div className="flex-1 flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-row items-center p-2 lg:pl-4 font-sans gap-2 lg:gap-0">
             {bottomStats.map((stat, i) => (

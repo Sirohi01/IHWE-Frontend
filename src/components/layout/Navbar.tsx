@@ -23,6 +23,8 @@ const navLinks = [
       { label: "Advisory Board Members", path: "/advisory-board", icon: Users, description: "Meet the experts behind the exhibition" },
       { label: "Media", path: "/media-registration", icon: Camera, description: "Latest updates, press releases and event coverage" },
       { label: "Blogs", path: "/blog", icon: Sparkles, description: "Latest news and insights from the wellness industry" },
+       { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Media / Gallery", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
     ],
   },
   {
@@ -37,12 +39,11 @@ const navLinks = [
     ],
   },
   {
-    label: "Explore",
-    dropdown: [
-      { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
-      { label: "Media / Gallery", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
-      { label: "Industry Segments", path: "/why-visit", icon: Sparkles, description: "Experience the latest in health & wellness" },
-    ],
+    label: "Buyer-Seller Meet",
+    // dropdown: [
+     
+    //   { label: "Industry Segments", path: "/why-visit", icon: Sparkles, description: "Experience the latest in health & wellness" },
+    // ],
   },
   {
     label: "Opportunities",
@@ -153,7 +154,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
           {/* ─── DESKTOP NAV (unchanged) ─── */}
           <div className="hidden xl:flex items-center justify-between py-0 relative h-14">
             <div className="relative z-[150] h-full flex items-center gap-2">
-              <Link to="/" className="h-full flex items-center min-w-[135px] md:min-w-[175px]">
+              <Link to="/" className="h-full flex items-center min-w-[120px] md:min-w-[155px]">
                 {settings?.logo ? (
                   <img
                     src={`${SERVER_URL}${settings.logo}`}
@@ -167,7 +168,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   </div>
                 )}
               </Link>
-              <div className="flex items-center gap-2 ml-0 pl-3 border-l border-slate-600">
+              <div className="flex items-center gap-1 ml-0 pl-2 border-l border-slate-600">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Venue & Date</span>
                   <div className="flex items-center gap-1">
@@ -193,7 +194,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   <Link
                     to={link.path || "#"}
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                    className={`px-2 py-2 text-[11px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${
+                    className={`px-2 py-2 text-[10.5px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${
                       location.pathname === link.path ? "text-[#d26019]" : "text-slate-900"
                     }`}
                   >

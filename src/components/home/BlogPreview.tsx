@@ -42,12 +42,12 @@ const BlogPreview = () => {
   if (blogs.length === 0) return null;
 
   return (
-    <section className="pt-10 pb-16 md:pt-12 md:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
+    <section className="pt-4 pb-16 md:pt-6 md:pb-22 overflow-x-hidden" style={{ backgroundColor: "#F7F8F0" }}>
       <SectionContainer>
         {/* BRANDED HEADING */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 md:mb-8 gap-4 md:gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-4 gap-4 md:gap-6">
           <div data-aos="fade-right">
-            <div className="flex items-center gap-3 mb-3 md:mb-4">
+            <div className="flex items-center gap-3 mb-2">
               <div className="h-px w-8 bg-[#23471d]" />
               <span className="uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#23471d] font-bold text-[10px] md:text-xs">
                 Latest Insights

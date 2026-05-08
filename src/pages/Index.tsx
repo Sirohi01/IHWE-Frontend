@@ -34,6 +34,8 @@ import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
 import FloatingVideo from "@/components/home/FloatingVideo";
 import SponsorshipSection from "@/components/home/SponsorshipSection";
+import MsmePmsSection from "@/components/home/MsmePmsSection";
+import BuyerSellerMeet from "@/components/home/BuyerSellerMeet";
 
 interface IndexProps {
   onRegisterVisit: () => void;
@@ -51,12 +53,16 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <WhyParticipate />
       <ConferenceSeminars />
       <ExhibitionCategories />
-      <BeyondExhibition />
+         <BeyondExhibition />
+         {/* <MsmePmsSection /> */}
+   
       <AttendanceInfo />
       <EventInfoBanner />
+   
       <SponsorshipSection />
       <HealthcareSectors />
       <MarqueeStrip />
+      <BuyerSellerMeet />
       <EventGlimpses />
       {/* <AboutSection /> */}
       {/* <DownloadsSection /> */}

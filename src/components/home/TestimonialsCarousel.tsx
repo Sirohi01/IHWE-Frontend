@@ -272,7 +272,7 @@ const VideoCard = ({ item }: { item: any }) => {
 
 // ─── SVG Lineart Gradient Section Header ───
 const SectionDivider = ({ text }: { text: string }) => (
-  <div className="flex items-center gap-3 px-16 py-5">
+  <div className="flex items-center gap-3 px-16 pt-5 pb-0">
     <svg className="flex-1 h-5 overflow-visible" viewBox="0 0 300 18" preserveAspectRatio="none">
       <defs>
         <linearGradient id="lg-left" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -296,7 +296,7 @@ const SectionDivider = ({ text }: { text: string }) => (
 
     <div className="flex items-center gap-2 whitespace-nowrap">
       <Leaf className="w-3.5 h-3.5 text-[#23471d]" />
-      <span className="font-bold text-slate-900 text-[12px] tracking-[0.12em] uppercase">
+      <span className="font-bold text-[#6E1A37] text-[15px] tracking-[0.12em] uppercase">
         {text || "WHAT OUR EXHIBITORS & PARTNERS SAY"}
       </span>
       <Leaf className="w-3.5 h-3.5 text-[#d26019]" />
@@ -507,7 +507,7 @@ const TestimonialsCarousel = () => {
           <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
         </button>
 
-        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto pt-14 pb-10 -mb-10">
+        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto pt-5 pb-10 -mb-10">
           <AnimatePresence mode="popLayout">
             {visibleCards.map((item, i) => (
               <motion.div
@@ -551,43 +551,13 @@ const TestimonialsCarousel = () => {
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
-        <div className="relative z-10 max-w-[1189px] mx-auto flex flex-col md:flex-row gap-10 items-center md:items-start justify-center">
-          <div className="flex flex-col w-full md:w-[300px] flex-shrink-0 text-center md:text-left items-center md:items-start">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-full border-2 flex items-center justify-center bg-white shadow-md flex-shrink-0" style={{ borderColor: "#538417" }}>
-                <Play className="w-7 h-7 ml-1" style={{ color: "#4f8519", fill: "#4f8519" }} />
+        <div className="relative z-10 max-w-[1400px] mx-auto overflow-hidden">
+          <div className="marquee-wrapper-videos flex gap-4">
+            {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
+              <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
+                <VideoCard item={v} />
               </div>
-              <div className="flex flex-col text-left">
-                <span style={{ color: "#538417" }} className="font-bold text-[10px] uppercase tracking-widest leading-none mb-1">
-                  {settings.videoSubheading || "Hear Directly From"}
-                </span>
-                <h3 className="text-2xl md:text-[27px] font-black leading-tight whitespace-nowrap">
-                  <span style={{ background: "linear-gradient(90deg, #4f8519 0%, #4f8519 55%, #1a7a8a 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                    {settings.videoMainHeading || "Our Exhibitors"}
-                  </span>
-                </h3>
-              </div>
-            </div>
-            <p className="text-slate-900 text-[13px] md:text-[11.5px] mb-6 md:mb-5 leading-relaxed font-medium max-w-sm">
-              {settings.videoDescription}
-            </p>
-            <button
-              onClick={() => settings.videoButtonPath && window.open(settings.videoButtonPath, '_blank')}
-              className="flex items-center gap-1.5 border border-[#4f8519] rounded-lg px-6 py-3 md:px-5 md:py-2.5 text-[#4f8519] font-bold text-[12px] md:text-[11px] hover:bg-[#4f8519] hover:text-white transition-all duration-300 w-fit"
-            >
-              {settings.videoButtonText || "View More Videos"}
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="w-full flex-1 relative min-h-[220px] overflow-hidden">
-            <div className="marquee-wrapper-videos flex gap-4">
-              {[...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
-                <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
-                  <VideoCard item={v} />
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
 
@@ -597,7 +567,7 @@ const TestimonialsCarousel = () => {
       </div>
 
       {/* ─── BOTTOM STATS BAR ─── */}
-      <div className="overflow-hidden w-full pb-6 md:pb-10 -mt-7 md:-mt-12 relative z-30">
+      <div className="overflow-hidden w-full pb-5 mt-2 relative z-30">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-stretch relative px-6 md:px-16 gap-8 md:gap-0">
 
           <div
