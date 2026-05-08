@@ -10,26 +10,42 @@ const FALLBACK_TESTIMONIALS = [
     feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Anjali Chaudhary",
     role: "Chief Medical Officer",
-    company: "Vana Tech Labs"
+    company: "Vana Tech Labs",
+    image: "https://randomuser.me/api/portraits/women/1.jpg"
   },
   {
     feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Vansh Chaudhary",
     role: "CEO",
-    company: "Vana Tech Labs"
+    company: "Vana Tech Labs",
+    image: "https://randomuser.me/api/portraits/men/2.jpg"
   },
   {
     feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Nitin Kumar",
     role: "Director",
-    company: "10 ka Double"
+    company: "10 ka Double",
+    image: "https://randomuser.me/api/portraits/men/3.jpg"
   },
   {
     feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Rohit Kumar",
     role: "MD",
-    company: "Namogange Wellness"
+    company: "Namogange Wellness",
+    image: "https://randomuser.me/api/portraits/men/4.jpg"
   }
+];
+
+// Different background colors for cards
+const cardBackgrounds = [
+  "bg-gradient-to-br from-white to-[#F0F9FF]", // Light blue tint
+  "bg-gradient-to-br from-white to-[#F0FDF4]", // Light green tint
+  "bg-gradient-to-br from-white to-[#FFF7ED]", // Light orange tint
+  "bg-gradient-to-br from-white to-[#FEF2F2]", // Light red tint
+  "bg-gradient-to-br from-white to-[#FAF5FF]", // Light purple tint
+  "bg-gradient-to-br from-white to-[#FFF1F5]", // Light pink tint
+  "bg-gradient-to-br from-white to-[#F5F3FF]", // Light indigo tint
+  "bg-gradient-to-br from-white to-[#ECFEFF]", // Light cyan tint
 ];
 
 const IndustryVoices: React.FC = () => {
@@ -37,20 +53,7 @@ const IndustryVoices: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
-  const scroll = useCallback((direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const itemWidth = clientWidth / (window.innerWidth >= 1024 ? 4 : window.innerWidth >= 768 ? 3 : window.innerWidth >= 640 ? 2 : 1);
-      const scrollTo = direction === "left" ? scrollLeft - itemWidth : scrollLeft + itemWidth;
-
-      if (direction === "right" && scrollLeft + clientWidth >= scrollRef.current.scrollWidth - 50) {
-        scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
-      }
-    }
-  }, []);
+  const [marqueeItems, setMarqueeItems] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,51 +71,85 @@ const IndustryVoices: React.FC = () => {
     fetchData();
   }, []);
 
+
   useEffect(() => {
-    if (!isPaused) {
-      const interval = setInterval(() => {
-        scroll("right");
-      }, 5000);
-      return () => clearInterval(interval);
+    const testimonials = data?.cards || FALLBACK_TESTIMONIALS;
+
+    setMarqueeItems([...testimonials, ...testimonials, ...testimonials, ...testimonials]);
+  }, [data]);
+
+
+  useEffect(() => {
+    if (!isPaused && marqueeItems.length > 0 && scrollRef.current) {
+      let animationId: number;
+      let startTime: number | null = null;
+      const scrollSpeed = 0.5;
+
+      const animateScroll = (timestamp: number) => {
+        if (!scrollRef.current) return;
+
+        if (!startTime) startTime = timestamp;
+
+
+        scrollRef.current.scrollLeft += scrollSpeed;
+
+
+        if (scrollRef.current.scrollLeft + scrollRef.current.clientWidth >= scrollRef.current.scrollWidth - 50) {
+          scrollRef.current.scrollLeft = 1;
+        }
+
+        animationId = requestAnimationFrame(animateScroll);
+      };
+
+      animationId = requestAnimationFrame(animateScroll);
+
+      return () => {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+      };
     }
-  }, [loading, data, isPaused, scroll]);
+  }, [isPaused, marqueeItems]);
 
   const testimonials = data?.cards || FALLBACK_TESTIMONIALS;
+  const displayItems = marqueeItems.length > 0 ? marqueeItems : testimonials;
 
   return (
     <section className="py-4 bg-white overflow-hidden">
       <div className="mx-auto max-w-[1380px] relative left-[20px] px-6">
-        {/* Header Section */}
+
         <div className="relative mb-1 flex flex-col items-center">
-          <h2 className="text-[28px] md:text-[32px] font-[900] uppercase tracking-tight text-center leading-tight">
+          <h2 className="text-[28px] md:text-[30px] font-[900] uppercase tracking-tight text-center leading-tight">
             <span className="text-[#4E9F3D]">VOICES FROM</span> <span className="text-[#0B2C66]">INDUSTRY LEADERS</span>
           </h2>
 
-          {/* Leaf Decoration */}
-          <div className="flex items-center gap-3 mt-2">
-            <div className="h-[1px] w-12 bg-gray-200" />
-            <Leaf className="w-5 h-5 text-[#4E9F3D] fill-current opacity-60" />
-            <div className="h-[1px] w-12 bg-gray-200" />
-          </div>
 
 
         </div>
 
-        {/* Slider Container */}
+
         <div
           className="relative group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Navigation Arrows */}
+
           <button
-            onClick={() => scroll("left")}
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollLeft -= 300;
+              }
+            }}
             className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] transition-all opacity-0 group-hover:opacity-100"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
-            onClick={() => scroll("right")}
+            onClick={() => {
+              if (scrollRef.current) {
+                scrollRef.current.scrollLeft += 300;
+              }
+            }}
             className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] transition-all opacity-0 group-hover:opacity-100"
           >
             <ChevronRight className="w-6 h-6" />
@@ -120,16 +157,32 @@ const IndustryVoices: React.FC = () => {
 
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 no-scrollbar scroll-smooth"
+            className="flex gap-6 overflow-x-auto pb-8 no-scrollbar"
+            style={{ scrollBehavior: "auto", overflowX: "auto" }}
           >
-            {testimonials.map((item: any, index: number) => (
+            {displayItems.map((item: any, index: number) => (
               <div
                 key={index}
-                className="w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start"
+                className="w-[85%] sm:w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0"
               >
-                <div className="h-full bg-white p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden">
-                  <div className="space-y-3">
-                    {/* Green Quote Icon */}
+                <div className={`h-full ${cardBackgrounds[index % cardBackgrounds.length]} p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden`}>
+                  {/* Subtle pattern overlay */}
+                  <div className="absolute inset-0 opacity-5 pointer-events-none">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#4E9F3D] rounded-full blur-3xl"></div>
+                  </div>
+
+                  <div className="flex justify-center mb-4 relative z-10">
+                    <img
+                      src={item.image || `https://randomuser.me/api/portraits/${index % 2 === 0 ? 'women' : 'men'}/${(index % 10) + 1}.jpg`}
+                      alt={item.name}
+                      className="w-28 h-28 rounded-full object-cover border-4 border-[#4E9F3D] p-0.5 shadow-md"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=4E9F3D&color=fff&rounded=true&size=120&bold=true`;
+                      }}
+                    />
+                  </div>
+
+                  <div className="space-y-3 relative z-10">
                     <div className="text-[#4E9F3D]">
                       <Quote className="w-6 h-6 fill-current rotate-180" />
                     </div>
@@ -147,22 +200,13 @@ const IndustryVoices: React.FC = () => {
                         {item.role}{item.company ? `, ${item.company}` : ''}
                       </p>
                     </div>
-
-                    {/* Integrated Logo in Card */}
-                    {/* <div className="shrink-0 ml-2">
-                      <img
-                        src={logoImage}
-                        alt="Company Logo"
-                        className="w-20 h-auto  transition-all duration-500"
-                      />
-                    </div> */}
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Indicators */}
+
           <div className="flex justify-center gap-2 mt-4">
             <div className="w-2.5 h-2.5 rounded-full bg-[#4E9F3D]" />
             <div className="w-2.5 h-2.5 rounded-full bg-gray-200" />
