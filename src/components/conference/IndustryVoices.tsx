@@ -149,13 +149,13 @@ const IndustryVoices: React.FC = () => {
                     </div>
 
                     {/* Integrated Logo in Card */}
-                    <div className="shrink-0 ml-2">
+                    {/* <div className="shrink-0 ml-2">
                       <img
                         src={logoImage}
                         alt="Company Logo"
                         className="w-20 h-auto  transition-all duration-500"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
