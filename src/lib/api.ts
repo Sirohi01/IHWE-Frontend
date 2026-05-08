@@ -377,6 +377,14 @@ export const ePromotionApi = {
     }
 };
 
+export const ePromotionPackagesApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/packages`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
 export const stallVendorApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/stall-vendor`);

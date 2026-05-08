@@ -144,7 +144,6 @@ const App = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/awards/nomination" element={<NominationFormPage />} />
-
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
@@ -201,7 +200,7 @@ const App = () => {
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
-<Route path="epromotion" element={<ExhibitorEPromotion />} />
+                    <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="psm-claim">
                       <Route index element={<ExhibitorMSMEPage />} />
                       <Route path="reports" element={<PsmReports />} />
