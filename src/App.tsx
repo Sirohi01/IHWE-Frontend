@@ -22,8 +22,8 @@ const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
 const GovernmentMsmePmsSchemes = lazy(() => import("./pages/governmentMsmePmsSchemes/GovernmentMsmePmsSchemes"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
-const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
-const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
+const BuyerRegistration = lazy(() => import("./pages/buyer/BuyerRegistration"));
+const InternationalBuyerRegistration = lazy(() => import("./pages/buyer/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasangostiform"));
@@ -130,7 +130,7 @@ const App = () => {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
