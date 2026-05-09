@@ -792,6 +792,14 @@ export const visitorApi = {
     }
 };
 
+export const conferenceTrackApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/conference-tracks`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const policyApi = {
     getByPage: async (page: string) => {
         const response = await fetch(`${API_URL}/policies/${page}`);
