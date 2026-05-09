@@ -123,7 +123,7 @@ const BuyerLanding = () => {
                     <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[70%]">
 
                         {/* Register as a Buyer */}
-                        <div className="text-[#a8d060] text-lg font-medium uppercase tracking-widest">
+                        <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
                             Register as a Buyer
                         </div>
 
