@@ -4,6 +4,7 @@ import {
   Quote, ChevronLeft, ChevronRight, MapPin, Play,
   Globe, Users, Handshake, Mic2, Leaf, Building2, PlayCircle, Store
 } from 'lucide-react';
+import SectionContainer from '../layout/SectionContainer';
 import { cn } from "@/lib/utils";
 import testImg from '../../assets/test11.jpeg';
 import leafPng from '../../assets/leaf.png';
@@ -91,7 +92,7 @@ const TestimonialCard = ({ item }: { item: any }) => {
         className="relative bg-white rounded-[22px] border border-slate-100 flex flex-col overflow-hidden group hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500"
         style={{
           boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
-          minHeight: '240px',
+          height: '280px',
         }}
       >
         {/* ── Expanded Full-Text Overlay ── */}
@@ -134,25 +135,30 @@ const TestimonialCard = ({ item }: { item: any }) => {
                 </p>
               </div>
 
-              {/* Company info footer */}
+              {/* Company info footer - UPDATED to show full name */}
               <div
                 className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0"
                 style={{ background: "#fafafa" }}
               >
                 {item.logo ? (
-                  <div className="w-7 h-7 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
                     <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0.5" />
                   </div>
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
                     {item.company1?.substring(0, 2)}
                   </div>
                 )}
-                <div className="min-w-0">
-                  <div className="font-bold text-[10px] truncate" style={{ color: item.color || '#23471d' }}>
-                    {item.company1}{item.company2 ? ` ${item.company2}` : ''}
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[10px] leading-tight" style={{ color: item.color || '#23471d' }}>
+                    {item.company1}
                   </div>
-                  <div className="flex items-center gap-1 text-slate-400 text-[9px]">
+                  {item.company2 && (
+                    <div className="font-semibold text-[9px] leading-tight opacity-80 mt-0.5" style={{ color: item.color || '#23471d' }}>
+                      {item.company2}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 text-slate-400 text-[8.5px] mt-1">
                     <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
                     {item.location}
                   </div>
@@ -163,14 +169,45 @@ const TestimonialCard = ({ item }: { item: any }) => {
         </AnimatePresence>
 
         {/* ── Top: Company Info (below floating logo) ── */}
-        <div className="pt-10 px-4 pb-0 text-center flex-shrink-0">
-          <div className="font-bold text-[12px] leading-tight" style={{ color: item.color || '#23471d' }}>
-            {item.company1}
-            {item.company2 && <><br />{item.company2}</>}
+        <div className="pt-[52px] px-4 pb-0 text-center flex-shrink-0 min-h-[82px]">
+          {/* Company 1 Slot */}
+          <div className="h-[16px] mb-0.5">
+            <div className="font-bold text-[11.5px] leading-tight px-1 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              <span className={item.company1.length > 25 ? "truncate max-w-[190px]" : ""}>{item.company1}</span>
+              {item.company1.length > 25 && (
+                <span 
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                  className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                >
+                  ...
+                </span>
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-1">
+          
+          {/* Company 2 / Title Slot */}
+          <div className="h-[16px]">
+            <div className="font-bold text-[10.5px] leading-tight px-1 opacity-90 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              {item.company2 ? (
+                <>
+                  <span className={item.company2.length > 30 ? "truncate max-w-[190px]" : ""}>{item.company2}</span>
+                  {item.company2.length > 30 && (
+                    <span 
+                      onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                      className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                    >
+                      ...
+                    </span>
+                  )}
+                </>
+              ) : ""}
+            </div>
+          </div>
+
+          {/* Location Slot */}
+          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-2">
             <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
-            {item.location}
+            <span className="truncate max-w-[150px]">{item.location}</span>
           </div>
         </div>
 
@@ -181,34 +218,38 @@ const TestimonialCard = ({ item }: { item: any }) => {
         />
 
         {/* ── Quote Section ── */}
-        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 min-h-0 relative">
+        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 relative min-h-0">
           <Quote className="w-5 h-5 text-[#458a16] transform -scale-x-100 opacity-70 mb-1.5 flex-shrink-0" />
 
-          <p className="text-slate-700 text-[11px] font-medium leading-relaxed flex-1">
-            {isLong
-              ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…`
-              : quoteText
-            }
-          </p>
+          <div className="flex-1 overflow-hidden">
+            <p className="text-slate-700 text-[11px] font-medium leading-relaxed">
+              {isLong
+                ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…`
+                : quoteText
+              }
+            </p>
+          </div>
 
           {/* ── "Read More" Button ── */}
-          {isLong && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsExpanded(true);
-              }}
-              className="mt-1.5 flex items-center gap-0.5 self-start text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
-              style={{
-                color: '#23471d',
-                background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)',
-                border: '1px solid #c6e6c6',
-              }}
-            >
-              Read more
-              <span style={{ fontSize: '8px' }}>→</span>
-            </button>
-          )}
+          <div className="mt-auto pt-2 flex-shrink-0">
+            {isLong && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded(true);
+                }}
+                className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
+                style={{
+                  color: '#23471d',
+                  background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)',
+                  border: '1px solid #c6e6c6',
+                }}
+              >
+                Read more
+                <span style={{ fontSize: '8px' }}>→</span>
+              </button>
+            )}
+          </div>
 
           {/* Bottom decorative image */}
           {item.bottomImage && (
@@ -546,20 +587,25 @@ const TestimonialsCarousel = () => {
       </div>
 
       {/* ─── VIDEO SECTION ─── */}
-      <div className="relative px-6 md:px-16 pt-6 pb-0 md:pb-2">
+      <div className="relative pt-6 pb-0 md:pb-2">
         <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-20 pointer-events-none rotate-45 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
-        <div className="relative z-10 max-w-[1400px] mx-auto overflow-hidden">
-          <div className="marquee-wrapper-videos flex gap-4">
-            {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
-              <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
-                <VideoCard item={v} />
+        <SectionContainer className="relative z-10">
+          <div className="flex flex-col md:flex-row items-stretch">
+            {/* Left side constrained marquee - now expanded to full right */}
+            <div className="w-full overflow-hidden">
+              <div className="marquee-wrapper-videos flex gap-4">
+                {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
+                  <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
+                    <VideoCard item={v} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </SectionContainer>
 
         <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-20 pointer-events-none -rotate-12 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />

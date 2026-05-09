@@ -203,7 +203,7 @@ const CategoryCard = ({ item, width = '140px' }) => (
   <div
     style={{
       width: width,
-      flexShrink: 0,
+      flexShrink: width === '100%' ? undefined : 0,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -315,10 +315,10 @@ const ExhibitionCategories = () => {
             ))}
           </div>
 
-          {/* Row 2: 7 cards - Single Row */}
-          <div className="flex flex-nowrap md:justify-start gap-3 overflow-x-auto no-scrollbar pb-2">
+          {/* Row 2: 7 cards - fills full width */}
+          <div className="grid grid-cols-7 gap-3 overflow-x-auto no-scrollbar pb-2">
             {row2.map((item, i) => (
-              <CategoryCard key={i} item={item} width="163px" />
+              <CategoryCard key={i} item={item} width="100%" />
             ))}
           </div>
         </div>
