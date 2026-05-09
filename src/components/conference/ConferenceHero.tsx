@@ -8,7 +8,7 @@ import arogyaLogo from "../../assets/arogyasangosti.png";
 const ConferenceHero: React.FC = () => {
   const darkYellow = "#C9A227";
   return (
-    <section className="relative min-h-[750px] lg:min-h-[550px] flex items-center overflow-hidden font-sans" style={{ backgroundColor: "#caf0f8" }}>
+    <section className="relative min-h-[750px] lg:min-h-[600px] flex items-center overflow-hidden font-sans" style={{ backgroundColor: "#caf0f8" }}>
 
 
       <div
