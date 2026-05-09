@@ -61,18 +61,35 @@ const FloatingVideo: React.FC = () => {
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
             />
             
+            {/* Video Title - Now at the top */}
+            <div className="absolute top-0 left-0 right-0 p-2 bg-gradient-to-b from-black/80 to-transparent z-10">
+              <p className="text-[8px] md:text-[9px] text-white font-black uppercase tracking-[0.15em] text-center leading-tight drop-shadow-lg">
+                {currentVideo.title || "Watch Highlights"}
+              </p>
+            </div>
+
             {/* Centered Play Button */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-10 h-10 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
-                <Play size={20} fill="currentColor" className="ml-1" />
+                <Play size={18} fill="currentColor" className="ml-1" />
               </div>
             </div>
 
-            {/* Label Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-              <p className="text-[10px] text-white font-bold uppercase tracking-widest text-center leading-tight">
-                {currentVideo.title || "Watch Highlights"}
-              </p>
+            {/* White Band - Name and Company */}
+            <div className="absolute bottom-0 left-0 right-0 bg-white py-1 px-1 border-t border-gray-100 flex flex-col items-center justify-center min-h-[28px]">
+              {currentVideo.name && (
+                <p className="text-[9px] md:text-[10px] text-gray-900 font-black uppercase tracking-tight text-center leading-none truncate w-full px-1">
+                  {currentVideo.name}
+                </p>
+              )}
+              {currentVideo.companyName && (
+                <p 
+                  className="text-[7px] md:text-[8px] font-bold uppercase tracking-tighter text-center leading-tight mt-0.5 truncate w-full px-1"
+                  style={{ color: currentVideo.companyNameColor === 'green' ? '#23471d' : '#d26019' }}
+                >
+                  {currentVideo.companyName}
+                </p>
+              )}
             </div>
           </div>
 
