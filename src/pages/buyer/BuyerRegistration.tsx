@@ -322,6 +322,7 @@ const BuyerRegistration = () => {
 
     const [formData, setFormData] = useState(initialFormState);
     const [showMembershipOptions, setShowMembershipOptions] = useState(false);
+    const [buyerType, setBuyerType] = useState<'domestic' | 'international'>('domestic');
 
     const membershipPackages = useMemo(() => config?.packages?.filter((p: any) => p.category === 'Membership') || [], [config]);
     const passPackages = useMemo(() => config?.packages?.filter((p: any) => p.category === 'Pass') || [], [config]);
@@ -1033,33 +1034,6 @@ const BuyerRegistration = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans">
-            {/* <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: "url('/doin.jpg')"
-                }}
-            >
-
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        Visitor Experience
-                    </p>
-
-                    <h1
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
-                    >
-                        Witness the Future of Wellness
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        Join 8,000+ healthcare professionals and discover the latest innovations in health and wellness.
-                    </p>
-
-                </div>
-            </section> */}
 
             <section
                 className="hero-background-registration relative overflow-hidden "
@@ -1145,75 +1119,111 @@ const BuyerRegistration = () => {
             </section>
 
             {/* button section  */}
-            <section className="py-12 px-6 text-center bg-white" >
+            <section className="w-full pt-4 px-6 text-center bg-white " >
                 {/* Title with Leaf Icons */}
-                <div className="flex items-center justify-center gap-4 mb-10">
+                <div className="flex items-center justify-center gap-4 mb-2">
                     <div className="flex items-center gap-2">
-                        <img src="/buyer/leaf-left.png" alt="" className="w-6 h-auto opacity-80" />
                         <span className="block w-12 h-[1px] bg-gray-300"></span>
                     </div>
-                    <h2 className="text-xl font-bold tracking-[0.15em] text-[#1a3352] uppercase">
+                    <h2 className="text-lg font-medium tracking-[0.15em] text-[#1a3352] uppercase">
                         Choose Your Category
                     </h2>
                     <div className="flex items-center gap-2">
                         <span className="block w-12 h-[1px] bg-gray-300"></span>
-                        <img src="/buyer/leaf-right.png" alt="" className="w-6 h-auto " />
                     </div>
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
 
                     {/* Domestic Buyer */}
-                    <div className="relative flex items-center gap-6 bg-[#f7fcf2] border border-[#e2f0d5] rounded-2xl px-6 py-2 overflow-hidden text-left cursor-pointer group hover:shadow-xl hover:border-green-300 transition-all duration-500 h-[180px]"
-                        style={{
-                            backgroundImage: "url('/buyer/doin.jpg')",
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'left',
-                            backgroundRepeat: 'no-repeat'
-                        }}
+                    <div
+                        onClick={() => setBuyerType('domestic')}
+                        className={`relative flex items-center gap-6 bg-[#f7fcf2] border-2 rounded-xl px-4 py-3 overflow-hidden text-left cursor-pointer group transition-all duration-300 active:scale-[0.98] ${buyerType === 'domestic'
+                            ? 'border-[#a8d060] shadow-[0_8px_30px_rgba(77,127,29,0.2)] ring-4 ring-[#a8d060]/20'
+                            : 'border-[#dfeccd] shadow-sm hover:shadow-md opacity-70 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                            }`}
                     >
-                        {/* Icon with Double Circle */}
+
+                        {/* Background Full Image */}
+                        <img
+                            src="/buyer/dombuybg.png"
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
+                        />
+
+                        {/* Logo */}
                         <div className="relative shrink-0 z-10">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-[#3b6d11]">
-                                <img src="/buyer/dombuy.png" alt="Domestic" className="w-12 h-12 object-contain filter brightness-0 invert" />
+                            <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'domestic' ? 'border-[#eef6e2] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
+                                <div className="w-20 h-20 rounded-full bg-[#4d7f1d] flex items-center justify-center">
+                                    <img
+                                        src="/buyer/dombuy.png"
+                                        alt="Domestic"
+                                        className="w-26 h-26 object-contain"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="z-10">
-                            <h3 className="text-[#3b6d11] font-medium text-2xl mb-2 uppercase tracking-tight">Domestic Buyer</h3>
-                            <p className="text-gray-600 text-sm leading-relaxed max-w-[280px]">
+                        {/* Content */}
+                        <div className="relative z-10">
+                            <h3 className="text-[#4d7f1d] font-bold text-xl leading-none mb-2 uppercase tracking-wide">
+                                Domestic Buyer
+                            </h3>
+
+                            <p className="text-[#2d2d2d] text-sm leading-relaxed max-w-[350px] font-medium">
                                 For buyers based in India looking to connect with leading brands and manufacturers.
                             </p>
+                            {/* Active Button Pill */}
+                            <div className={`mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${buyerType === 'domestic' ? 'bg-[#4d7f1d] text-white' : 'bg-[#eef6e2] text-[#4d7f1d] group-hover:bg-[#dcedc8]'}`}>
+                                {buyerType === 'domestic' ? '✓ Selected' : 'Select Domestic'}
+                            </div>
                         </div>
-
                     </div>
 
                     {/* International Buyer */}
-                    <div className="relative flex items-center gap-6 bg-[#f4f8fd] border border-[#deeaf8] rounded-2xl px-6 py-2 overflow-hidden text-left cursor-pointer group hover:shadow-xl hover:border-blue-300 transition-all duration-500 h-[180px]">
-                        {/* Icon with Double Circle */}
-                        <div className="relative shrink-0 z-10">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-[#185fa5]">
-                                <img src="/buyer/intbuy.png" alt="International" className="w-12 h-12 object-contain filter brightness-0 invert" />
-                            </div>
-                        </div>
+                    <div
+                        onClick={() => setBuyerType('international')}
+                        className={`relative flex items-center gap-6 bg-[#f4f8fd] border-2 rounded-xl px-4 py-3 overflow-hidden text-left cursor-pointer group transition-all duration-300 active:scale-[0.98] ${buyerType === 'international'
+                            ? 'border-[#4f8fe0] shadow-[0_8px_30px_rgba(24,95,165,0.2)] ring-4 ring-[#4f8fe0]/20'
+                            : 'border-[#d9e7f6] shadow-sm hover:shadow-md opacity-70 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                            }`}
+                    >
 
-                        <div className="z-10">
-                            <h3 className="text-[#185fa5] font-black text-2xl mb-2 uppercase tracking-tight">International Buyer</h3>
-                            <p className="text-gray-600 text-sm leading-relaxed max-w-[280px]">
-                                For international buyers looking to source premium products and build global partnerships.
-                            </p>
-                        </div>
-
-                        {/* Background Landmark Image - Global Cities */}
+                        {/* Background Full Image */}
                         <img
                             src="/buyer/intbuybg.png"
                             alt=""
-                            className="absolute right-0 bottom-0 h-full w-auto object-contain  group-hover:opacity-40 group-hover:scale-110 transition-all duration-700 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
                         />
 
-                        {/* Subtle Wave Bottom Decoration */}
-                        <img src="/buyer/wave-blue.png" alt="" className="absolute left-0 bottom-0 w-full h-auto opacity-10" />
+                        {/* Logo */}
+                        <div className="relative shrink-0 z-10">
+                            <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'international' ? 'border-[#e4eef9] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
+                                <div className="w-20 h-20 rounded-full bg-[#185fa5] flex items-center justify-center">
+                                    <img
+                                        src="/buyer/intbuy.png"
+                                        alt="International"
+                                        className="w-26 h-26 object-contain"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="relative z-10">
+                            <h3 className="text-[#185fa5] font-bold text-xl leading-none mb-2 uppercase tracking-wide">
+                                International Buyer
+                            </h3>
+
+                            <p className="text-[#2d2d2d] text-sm leading-relaxed max-w-[350px] font-medium">
+                                For international buyers looking to source premium products and build global partnerships.
+                            </p>
+                            {/* Active Button Pill */}
+                            <div className={`mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${buyerType === 'international' ? 'bg-[#185fa5] text-white' : 'bg-[#e4eef9] text-[#185fa5] group-hover:bg-[#d0e1f3]'}`}>
+                                {buyerType === 'international' ? '✓ Selected' : 'Select International'}
+                            </div>
+                        </div>
                     </div>
 
                 </div>
