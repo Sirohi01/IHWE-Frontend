@@ -308,7 +308,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
     fetchSpeakers();
   }, []);
 
-  // Measure content width for infinite scroll
+
   useEffect(() => {
     if (scrollRef.current && displaySpeakers.length > 0) {
       const measureWidths = () => {
@@ -327,21 +327,16 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
     }
   }, [displaySpeakers]);
 
-  // MANUAL SPEED CONTROL - Directly set the duration you want
-  // For 150 speakers: set 60 for 1 minute, 120 for 2 minutes, 180 for 3 minutes
-  const getAnimationDuration = () => {
-    // 🔧 CHANGE THIS VALUE DIRECTLY - This is the total time in seconds
-    // for ONE complete cycle of all speakers
-    const TOTAL_CYCLE_DURATION_SECONDS = 600; // 90 seconds = 1.5 minutes
 
-    // No auto-calculation, just return the value you set
+  const getAnimationDuration = () => {
+
+    const TOTAL_CYCLE_DURATION_SECONDS = 700;
+
+
     return TOTAL_CYCLE_DURATION_SECONDS;
   };
 
-  // OR use this simpler approach - just uncomment and set your desired duration
-  // const ANIMATION_DURATION = 90; // Change this number (in seconds)
 
-  // Infinite scroll animation
   const getInfiniteSpeakers = () => {
     if (displaySpeakers.length === 0) return [];
     return [...displaySpeakers, ...displaySpeakers];

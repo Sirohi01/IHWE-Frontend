@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -232,7 +232,7 @@ const BookAStand = () => {
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
     const [isComingSoon, setIsComingSoon] = useState(true);
-    
+
     // Optimized Data Fetch - Priority Loading (Removed Promise.all for better performance)
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -945,7 +945,7 @@ const BookAStand = () => {
                 onClose={() => { setPaymentModal(null); setIsLoading(false); }}
             />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
-            <section
+            {/* <section
                 className="hero-background-registration"
                 style={{
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
@@ -972,6 +972,217 @@ const BookAStand = () => {
                         {heroData?.shortDescription || "Showcase your innovations to 8,000+ top healthcare professionals. Fill out the form and our team will tailor the perfect space for your brand."}
                     </p>
                 </div>
+            </section> */}
+            {/* bg section  */}
+            <section
+                className="hero-background-registration relative overflow-hidden "
+                style={{
+                    backgroundImage: "url('/exhibition/bg.png')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'left',
+                    backgroundRepeat: 'no-repeat',
+                    fontFamily: "'Barlow', sans-serif",
+                }}
+            >
+                <div className="w-full">
+                    <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[60%]">
+
+                        {/* Register as a Buyer */}
+                        <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
+                            Exhibition stall booking
+                        </div>
+
+                        {/* Main Heading */}
+                        <div>
+                            <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                Book Your
+                            </h1>
+                            <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                Exhibition <span className="text-[#a8d060]"  >Stand</span>
+                            </h1>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-white/90 text-lg leading-relaxed max-w-lg">
+                            Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
+                        </p>
+
+                        {/* Stats Row */}
+                        <div className="flex items-center mt-2 gap-2">
+                            {[
+                                {
+                                    num: '', label: '8,000+\nHealthcare\nProfessionals',
+                                    icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
+                                },
+                                {
+                                    num: '', label: 'Custom\nStall\nSolutions',
+                                    icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
+                                },
+                                {
+                                    num: '', label: 'Maximum\nBrand\nVisibility',
+                                    icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
+                                },
+                                {
+                                    num: '', label: 'High-Value\nBusiness\nConnections',
+                                    icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
+                                },
+                            ].map((stat, i) => (
+                                <React.Fragment key={i}>
+                                    <div className="flex flex-col items-center text-center px-1.5">
+                                        <div>{stat.icon}</div>
+                                        {stat.num && (
+                                            <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                                {stat.num}
+                                            </div>
+                                        )}
+                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
+                                            {stat.label}
+                                        </div>
+                                    </div>
+                                    {i < 3 && (
+                                        <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+
+                        <div className="mt-4">
+                            <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
+                                Book Your Stall Now
+                                <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div className="w-[40%]">
+                        {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
+                    </div>
+                </div>
+            </section>
+
+            {/* bannar section  */}
+            <section className="flex items-center justify-between mx-12 my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                {[
+                    {
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
+                        title: 'Global Platform',
+                        desc: 'Uniting healthcare, wellness, and sustainable industries',
+                    },
+                    {
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
+                        title: 'Trusted Brands',
+                        desc: "Connect with India's most trusted brands & manufacturers",
+                    },
+                    {
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
+                        title: 'Targeted Audience',
+                        desc: 'Engage with qualified buyers, Investors & decision makers',
+                    },
+                    {
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
+                        title: 'Business Growth',
+                        desc: 'Expand your market & accelerate your growth',
+                    },
+                ].map((item, i) => (
+                    <React.Fragment key={i}>
+                        <div className="flex items-start gap-3 flex-1 px-4 ">
+                            {/* Icon Circle */}
+                            <div className="w-11 h-11 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
+                                {item.icon}
+                            </div>
+                            {/* Text */}
+                            <div>
+                                <p className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</p>
+                                <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                            </div>
+                        </div>
+                        {/* Divider */}
+                        {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
+                    </React.Fragment>
+                ))}
+            </section>
+
+            {/* button section */}
+            <section className="bg-white border border-gray-100 mx-12 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
+
+                {/* Left Side */}
+                <div className="flex-1 flex flex-col justify-between">
+                    <div>
+                        <p className="text-gray-900 text-xl font-semibold mb-1">9th Edition of</p>
+                        <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
+                            International Health & Wellness Expo 2026<br />(IHWE Global Edition)
+                        </h2>
+                        <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
+                        <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                            Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH,
+                            organic, and sustainable industries under one roof. Whether you are a visitor
+                            discovering innovations or a corporate buyer seeking meaningful business
+                            connections, IHWE offers a high-value, curated experience with India's most
+                            trusted brands and manufacturers.
+                        </p>
+                        <p className="text-gray-600 text-sm">
+                            Register now and be part of a powerful global movement in{' '}
+                            <span className="text-[#4a8f2f] font-semibold">health & wellness.</span>
+                        </p>
+                    </div>
+                </div>
+
+                {/* Divider */}
+                <div className="w-px bg-gray-200 self-stretch" />
+
+                {/* Right Side */}
+                <div className="flex-1">
+                    <h3 className="text-gray-800 font-semibold text-base mb-1">Choose Exhibitor Category</h3>
+                    <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
+
+                    <div className="grid grid-cols-2 gap-4">
+
+                        {/* Domestic Exhibitor */}
+                        <div className="bg-[#f0f7e6] border border-[#c8e6a0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
+                            <div className="w-14 h-14 rounded-full bg-[#d6edb8] flex items-center justify-center">
+                                <img src="/icons/domestic.png" alt="Domestic" className="w-7 h-7 object-contain" />
+                            </div>
+                            <div>
+                                <p className="text-[#1a4d1a] font-bold text-sm mb-1">Domestic Exhibitor</p>
+                                <p className="text-gray-400 text-xs">For exhibitors based in India</p>
+                            </div>
+                            <button className="flex items-center gap-2 bg-[#1a4d1a] hover:bg-[#163d16] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
+                                Register Now
+                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                    <svg className="w-3 h-3 text-[#1a4d1a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+
+                        {/* International Exhibitor */}
+                        <div className="bg-[#fff7f0] border border-[#f5d5b0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
+                            <div className="w-14 h-14 rounded-full bg-[#fde8cc] flex items-center justify-center">
+                                <img src="/icons/international.png" alt="International" className="w-7 h-7 object-contain" />
+                            </div>
+                            <div>
+                                <p className="text-[#7a3a00] font-bold text-sm mb-1">International Exhibitor</p>
+                                <p className="text-gray-400 text-xs">For exhibitors based outside India</p>
+                            </div>
+                            <button className="flex items-center gap-2 bg-[#e07820] hover:bg-[#c96a18] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
+                                Register Now
+                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                    <svg className="w-3 h-3 text-[#e07820]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
             </section>
 
             {/* -- MAIN CONTENT -- */}
@@ -1031,7 +1242,7 @@ const BookAStand = () => {
                                                         download
                                                         className="flex items-center gap-2 px-4 py-2 border border-[#23471d] text-[#23471d] text-[11px] font-bold hover:bg-[#23471d] hover:text-white transition-all"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                                                         Domestic Registration Form
                                                     </a>
                                                 )}
@@ -1043,7 +1254,7 @@ const BookAStand = () => {
                                                         download
                                                         className="flex items-center gap-2 px-4 py-2 border border-[#d26019] text-[#d26019] text-[11px] font-bold hover:bg-[#d26019] hover:text-white transition-all"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                                                         International Registration Form
                                                     </a>
                                                 )}
