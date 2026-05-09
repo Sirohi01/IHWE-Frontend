@@ -574,7 +574,7 @@ const MsmePmsScheme = () => {
         </section >
 
         {/* Detailed Guidelines Grid */}
-        < section className="py-2 bg-white" >
+        < section className="py-2 bg-[#f3fbf2] border-y border-[#d3eed1]" >
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Left: Imagery Collage */}
@@ -645,7 +645,10 @@ const MsmePmsScheme = () => {
                 </div>
               </div>
             </div>
-
+          </div>
+        </section >
+        < section className="pb-4 bg-white border-y border-[#d3eed1]" >
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             {/* Bottom Grid: Documents & How to Apply */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
               {/* Documents Required */}
@@ -740,7 +743,7 @@ const MsmePmsScheme = () => {
         </section >
 
         {/* Application Form Section - High Density Compact UI */}
-        < section id="apply-form" >
+        < section id="apply-form" className="py-4 bg-[#f3fbf2] border-t border-[#d3eed1]" >
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100 p-5 lg:p-7">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
