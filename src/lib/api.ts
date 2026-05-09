@@ -960,6 +960,11 @@ export const msmePmsSchemeApi = {
             body: payload
         });
         return await response.json();
+    },
+    getPageContent: async () => {
+        const response = await fetch(`${API_URL}/msme-pms-scheme/page-content`);
+        const data = await response.json();
+        return data.success ? data.data : null;
     }
 };
 
