@@ -332,7 +332,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
   const getAnimationDuration = () => {
     // 🔧 CHANGE THIS VALUE DIRECTLY - This is the total time in seconds
     // for ONE complete cycle of all speakers
-    const TOTAL_CYCLE_DURATION_SECONDS = 100; // 90 seconds = 1.5 minutes
+    const TOTAL_CYCLE_DURATION_SECONDS = 600; // 90 seconds = 1.5 minutes
 
     // No auto-calculation, just return the value you set
     return TOTAL_CYCLE_DURATION_SECONDS;
