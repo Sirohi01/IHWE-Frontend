@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { 
-  Users, 
-  Target, 
-  Store, 
+import {
+  Users,
+  Target,
+  Store,
   Handshake,
   CheckCircle2
 } from "lucide-react";
@@ -48,7 +48,7 @@ const detailsData = [
 
 const Day3Details: React.FC = () => {
   return (
-    <section className="py-4 bg-white">
+    <section className="py-0 bg-white" >
       <div className="container mx-auto px-6 max-w-[1380px]">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {detailsData.map((section, idx) => (

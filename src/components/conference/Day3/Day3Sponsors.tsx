@@ -75,7 +75,7 @@ const Day3Sponsors: React.FC = () => {
       <div className="container mx-auto px-6 max-w-[1380px]">
 
         {/* Section Header */}
-        <div className="text-center mb-10 flex flex-col items-center">
+        <div className="text-center mb-1 flex flex-col items-center">
           <div className="flex items-center gap-4 mb-2">
             <div className="h-[2px] w-12 bg-[#4E9F3D]" />
             <h2 className="text-[20px] font-[900] text-[#0B2C66] uppercase tracking-tighter">
@@ -83,14 +83,11 @@ const Day3Sponsors: React.FC = () => {
             </h2>
             <div className="h-[2px] w-12 bg-[#4E9F3D]" />
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-[#4E9F3D]" />
-            <div className="w-1 h-1 rounded-full bg-[#4E9F3D]/40" />
-          </div>
+
         </div>
 
         {/* Pricing Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">
           {sponsorPlans.map((plan, idx) => (
             <motion.div
               key={idx}
@@ -102,31 +99,31 @@ const Day3Sponsors: React.FC = () => {
             >
               {/* Plan Header */}
               <div
-                className="py-4 px-3 text-center"
+                className="py-2 px-3 text-center"
                 style={{ backgroundColor: plan.color }}
               >
-                <h3 className="text-[11px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
+                <h3 className="text-[16px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
               </div>
 
-              <div className="p-5 flex flex-col h-full bg-[#F8FAFC]/30">
-                <div className="text-center mb-6">
-                  <span className="text-[20px] font-black text-[#0B2C66]" style={{ color: plan.color }}>{plan.price}</span>
+              <div className="p-3 flex flex-col h-full -mt-2">
+                <div className="text-center mb-2">
+                  <span className="text-[18px] font-black text-[#0B2C66]" style={{ color: plan.color }}>{plan.price}</span>
                 </div>
 
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-2 mb-2">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <div
                         className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
                         style={{ backgroundColor: plan.color }}
                       />
-                      <span className="text-[11px] font-bold text-[#5F6B7A] leading-tight">{feature}</span>
+                      <span className="text-[10px] font-bold text-[#5F6B7A] leading-tight">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <button
-                  className="mt-auto py-2.5 px-4 rounded-full text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
+                  className="mt-auto py-2 px-4 rounded-full text-[15px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
                   style={{ backgroundColor: plan.color }}
                 >
                   CHOOSE PLAN
