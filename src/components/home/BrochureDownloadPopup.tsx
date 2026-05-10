@@ -148,7 +148,7 @@ const BrochureDownloadPopup: React.FC = () => {
     if (location.pathname === "/" || location.pathname === "/home") {
       const timer = setTimeout(() => {
         setIsOpen(true);
-      }, 500);
+      }, 7000);
       return () => clearTimeout(timer);
     } else {
       setIsOpen(false);

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 import {
   Quote, ChevronLeft, ChevronRight, MapPin, Play,
   Globe, Users, Handshake, Mic2, Leaf, Building2, PlayCircle, Store
@@ -43,6 +43,35 @@ const LogoBox = ({ text, color }: { text: string; color: string }) => (
     {(text || "").split("\n").map((w, i) => <div key={i} style={{ color }}>{w}</div>)}
   </div>
 );
+
+// ── Animated counter — counts up when scrolled into view ──
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const STATS = [
   { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
@@ -521,7 +550,9 @@ const TestimonialsCarousel = () => {
                       <s.icon className="w-7 h-7" style={{ color: s.color }} />
                     </div>
                     <div>
-                      <div className="font-black text-[16px] leading-none" style={valStyle}>{s.value}</div>
+                      <div className="font-black text-[16px] leading-none" style={valStyle}>
+                        {/^[\d,]+/.test(s.value) ? <StatCounter value={s.value} /> : s.value}
+                      </div>
                       <div className="text-slate-900 text-[11px] font-medium mt-1">{s.label}</div>
                     </div>
                   </div>

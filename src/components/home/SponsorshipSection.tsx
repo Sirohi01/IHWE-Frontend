@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../lib/api';
@@ -10,7 +10,7 @@ import {
   Calendar, Star, Handshake, HeadphonesIcon,
   TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home, Store, CheckCircle
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 
 import bgImage from '../../assets/1234.png';
 import titleSponsorImg from '../../assets/icon111.png';
@@ -139,6 +139,35 @@ const BRANDS: Brand[] = [
   { name: "nveda",     sub: "", color: "#2d7a2d", logo: logo9 },
   { name: "MORE",      sub: "", color: "#555",    logo: logo10 },
 ];
+
+// Animated counter — counts up when section scrolls into view
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const SponsorshipSection = () => {
   const [formData, setFormData] = useState({
@@ -381,25 +410,27 @@ const SponsorshipSection = () => {
       <div className="bg-white pt-2 md:pt-4 pb-16">
         <SectionContainer>
 
-          {/* 1. Limited Slots Bar */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-8 lg:gap-10 mb-10 lg:mb-8 mt-2 lg:-mt-5 pt-1.5 pb-3 lg:pb-2.5 px-6 lg:px-10 rounded-2xl border border-slate-100 w-full lg:max-w-[810px] ml-0 shadow-sm relative z-20" style={{ background: "#f0f1e9" }}>
-            <div className="flex items-center gap-4 lg:gap-3">
-              <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
-                <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />
+          {/* 1. Limited Slots Bar - Wrapped in grid for consistent alignment */}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 mb-10 lg:mb-8 mt-2 lg:-mt-5 relative z-20">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-8 lg:gap-10 pt-1.5 pb-3 lg:pb-2.5 px-6 lg:px-10 rounded-2xl border border-slate-100 w-full shadow-sm" style={{ background: "#f0f1e9" }}>
+              <div className="flex items-center gap-4 lg:gap-3">
+                <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
+                  <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-[14px] lg:text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
+                  <p className="text-[12px] lg:text-[11px] text-slate-900">Secure your category before it's gone!</p>
+                </div>
               </div>
-              <div>
-                <p className="font-bold text-[14px] lg:text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
-                <p className="text-[12px] lg:text-[11px] text-slate-900">Secure your category before it's gone!</p>
+              <div className="hidden lg:block w-[1.5px] h-8 bg-slate-400/60" />
+              <div className="flex items-center gap-4 lg:gap-3">
+                <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0] shrink-0">
+                  <Star className="w-6 h-6 lg:w-5 lg:h-5 text-[#425d0d]" />
+                </div>
+                <p className="text-[12.5px] lg:text-[11.5px] text-slate-900 font-medium">
+                  Featured sponsors get exclusive<br className="hidden lg:block" /> media coverage & brand promotions.
+                </p>
               </div>
-            </div>
-            <div className="hidden lg:block w-[1.5px] h-8 bg-slate-400/60" />
-            <div className="flex items-center gap-4 lg:gap-3">
-              <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0] shrink-0">
-                <Star className="w-6 h-6 lg:w-5 lg:h-5 text-[#425d0d]" />
-              </div>
-              <p className="text-[12.5px] lg:text-[11.5px] text-slate-900 font-medium">
-                Featured sponsors get exclusive<br className="hidden lg:block" /> media coverage & brand promotions.
-              </p>
             </div>
           </div>
 
@@ -483,7 +514,7 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-3 lg:gap-2">
                       <Users2 className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">8,000+</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="8,000+" /></p>
                         <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
                       </div>
                     </div>
@@ -493,7 +524,7 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-3 lg:gap-2">
                       <Store className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">100+</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="150+" /></p>
                         <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
                       </div>
                     </div>
@@ -503,7 +534,7 @@ const SponsorshipSection = () => {
                     <div className="flex items-center gap-3 lg:gap-2">
                       <Globe className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
                       <div>
-                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">1000+</p>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="1000+" /></p>
                         <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Global Buyers</p>
                       </div>
                     </div>
