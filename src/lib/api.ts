@@ -797,6 +797,14 @@ export const visitorApi = {
             body: JSON.stringify(payload)
         });
         return await response.json();
+    },
+    submitGroup: async (payload: any) => {
+        const response = await fetch(`${API_URL}/group-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
     }
 };
 

@@ -21,7 +21,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
 const GovernmentMsmePmsSchemes = lazy(() => import("./pages/governmentMsmePmsSchemes/GovernmentMsmePmsSchemes"));
-const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
+const VisitorRegistration = lazy(() => import("./pages/visitors/VisitorRegistration"));
 const BuyerRegistration = lazy(() => import("./pages/buyer/BuyerRegistration"));
 const InternationalBuyerRegistration = lazy(() => import("./pages/buyer/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
@@ -31,7 +31,7 @@ const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
 const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
-const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
+const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -110,12 +110,13 @@ import PaymentReminders from "@/pages/navbar_page/PaymentReminders";
 import Notification from "@/pages/navbar_page/Notification";
 import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
 import ExProfile from "@/pages/navbar_page/ExProfile";
-import AddInternationalVistor from "@/pages/international_vistor/AddInternationalVistor";
+import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
+const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
 
 const queryClient = new QueryClient();
@@ -163,6 +164,7 @@ const App = () => {
                     <Route path="/conference/day-3" element={<Navigate to="/conference/3" replace />} />
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
+                    <Route path="/group-registration" element={<GroupRegistration />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />
