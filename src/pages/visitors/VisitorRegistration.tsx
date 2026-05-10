@@ -554,7 +554,7 @@ const VisitorRegistration = () => {
             >
                 <div className="max-w-[1400px] mx-auto px-4 md:px-12 relative z-10 w-full">
                     <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between w-full gap-6 lg:gap-4">
-                        <div className="flex flex-col w-full lg:w-[60%] text-center lg:text-left items-center lg:items-start pt-10 pb-6">
+                        <div className="flex flex-col w-full lg:w-[60%] text-center lg:text-left items-center lg:items-start">
                             {/* Badge Row */}
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#0b2d09]/90 border border-[#C7DF36] rounded-full text-[#C7DF36] text-[12px] sm:text-[13px] font-extrabold uppercase tracking-wider w-fit backdrop-blur-sm shadow-md mb-4">
                                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-[#C7DF36] flex items-center justify-center shrink-0 shadow-inner">
@@ -677,25 +677,9 @@ const VisitorRegistration = () => {
                                                     <span>FOR RESIDENTS</span>
                                                     <span className="opacity-90 font-bold">WITHIN INDIA</span>
                                                 </div>
-                                                <div className="flex items-center gap-5 mt-4 mb-6">
-                                                    <div className="w-24 h-24 rounded-full bg-[#f8fdf8] flex items-center justify-center shrink-0 shadow-sm border border-slate-100 relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                                                        <div className="absolute inset-0 bg-gradient-to-b from-[#eef7ec] to-white opacity-60" />
-                                                        <svg viewBox="0 0 100 100" className="w-16 h-16 text-[#1a5f15] relative z-10 opacity-95" fill="currentColor">
-                                                            <g opacity="0.15">
-                                                                <circle cx="20" cy="60" r="10" />
-                                                                <circle cx="35" cy="65" r="12" />
-                                                                <circle cx="65" cy="65" r="12" />
-                                                                <circle cx="80" cy="60" r="10" />
-                                                            </g>
-                                                            <rect x="38" y="22" width="24" height="3" rx="0.5" />
-                                                            <rect x="34" y="26" width="32" height="4" rx="0.5" />
-                                                            <rect x="30" y="31" width="40" height="2" rx="0.5" />
-                                                            <path d="M28 34 H72 V75 H60 V48 A10 10 0 0 0 40 48 V75 H28 Z" />
-                                                            <path d="M32 40 H36 V65 H32 Z" opacity="0.5" />
-                                                            <path d="M64 40 H68 V65 H64 Z" opacity="0.5" />
-                                                            <rect x="26" y="34" width="48" height="1.5" />
-                                                            <rect x="26" y="75" width="48" height="1.5" />
-                                                        </svg>
+                                                <div className="flex items-center gap-5 mb-6">
+                                                    <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
+                                                        <img src="/visitor/domestic.png" alt="Domestic Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#1a5f15] tracking-tight leading-tight">Domestic Visitor</h3>
@@ -722,15 +706,9 @@ const VisitorRegistration = () => {
 
                                             {/* INTERNATIONAL CARD */}
                                             <div className="border border-[#ffebd8] bg-[#fffcf9] hover:border-[#e25c05] hover:shadow-xl hover:shadow-[#fff5eb] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
-                                                <div className="flex items-center gap-5 mt-4 mb-6">
-                                                    <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm border border-slate-100 relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                                                        <div className="absolute inset-0 bg-gradient-to-b from-[#fff4ec] to-white opacity-80" />
-                                                        <svg viewBox="0 0 100 100" className="w-16 h-16 text-[#e25c05] relative z-10 opacity-95" fill="currentColor">
-                                                            <circle cx="50" cy="50" r="32" fill="transparent" stroke="currentColor" strokeWidth="3" />
-                                                            <path d="M50 18c-8.8 0-16 7.2-16 16 0 3.8 1.3 7.3 3.5 10.1L35 48c-2-1.5-3-3.5-3-5.8 0-4.4 3.6-8 8-8 2.5 0 4.7 1.1 6.2 2.9 1.5.6 2.8.6 4.2 0 2-1 4.6-.2 5.6 1.8l.8-2c-1-3.6-4-6.3-7.8-6.8-1-.2-2-.4-3-.4m12.4 22c-.6-.2-1-.2-1.6.2-1.2.7-1.2 2.5-.6 3.8.8 1.8 2.8 2.4 4.5 1.4 1-.6 1.5-1.8 1.2-3-.4-1-1.4-2-2.2-2.2m-24.6 3c-.8.8-1.2 2-.8 3 .5 1.5 2 2.2 3.5 1.7 1.4-.5 2-2 1.4-3.4-.5-1.5-2.2-2.2-3.7-1.5" />
-                                                            <path d="M50 18c17.7 0 32 14.3 32 32S67.7 82 50 82 18 67.7 18 50 32.3 18 50 18zm0 4c-15.5 0-28 12.5-28 28s12.5 28 28 28 28-12.5 28-28S65.5 22 50 22z" opacity="0.15" />
-                                                            <path d="M50 22c15.4 0 28 12.6 28 28 0 7.5-3 14.3-7.8 19.2-.5-.8-1.2-1.6-2.2-1.8-2-.5-3.8 1-4 3-.2 2 1.2 3.8 3.2 4C62 77.6 56.2 80 50 80c-15.4 0-28-12.6-28-28 0-3.2.5-6.3 1.5-9.2 1 .5 2.2.6 3.2.2 2-.8 3-3 2.2-5-.8-2-3-3-5-2.2-.7.3-1.3.7-1.8 1.2C22.8 32.6 35.2 22 50 22z" fill="currentColor" />
-                                                        </svg>
+                                                <div className="flex items-center gap-5 mb-6">
+                                                    <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
+                                                        <img src="/visitor/international.png" alt="International Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#e25c05] tracking-tight leading-tight">International Visitor</h3>
@@ -757,14 +735,9 @@ const VisitorRegistration = () => {
 
                                             {/* GROUP CARD */}
                                             <div className="border border-[#dfe9f8] bg-[#f7faff] hover:border-[#0e4293] hover:shadow-xl hover:shadow-[#edf4fe] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
-                                                <div className="flex items-center gap-5 mt-4 mb-6">
-                                                    <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm border border-slate-100 relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                                                        <div className="absolute inset-0 bg-gradient-to-b from-[#eff5ff] to-white opacity-80" />
-                                                        <svg viewBox="0 0 100 100" className="w-16 h-16 text-[#0e4293] relative z-10 opacity-95" fill="currentColor">
-                                                            <circle cx="50" cy="36" r="11" /><path d="M28 72 C28 55, 72 55, 72 72 Z" />
-                                                            <circle cx="30" cy="44" r="8" /><path d="M12 72 C12 60, 45 60, 45 72 Z" opacity="0.8" />
-                                                            <circle cx="70" cy="44" r="8" /><path d="M55 72 C55 60, 88 60, 88 72 Z" opacity="0.8" />
-                                                        </svg>
+                                                <div className="flex items-center gap-5 mb-6">
+                                                    <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
+                                                        <img src="/visitor/group.png" alt="Group Registration" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#0e4293] tracking-tight leading-tight">Group Registration</h3>
