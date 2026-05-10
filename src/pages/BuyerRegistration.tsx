@@ -2009,7 +2009,7 @@ const BuyerRegistration = () => {
 
 
 const ErrorDisplay = ({ name, errors }: { name: string; errors: Record<string, string> }) => (
-    errors[name] ? <span className="text-red-500 text-[10px] mt-0.5 block h-3 font-medium animate-in fade-in slide-in-from-top-1">{errors[name]}</span> : <div className="h-3" />
+    errors[name] ? <span className="text-red-500 text-[10px] mt-0.5 block h-3 font-medium animate-in fade-in slide-in-from-top-1">{errors[name]}</span> : null
 );
 
 export default BuyerRegistration;
