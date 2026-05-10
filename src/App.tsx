@@ -31,7 +31,7 @@ const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
 const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
-const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
+const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
