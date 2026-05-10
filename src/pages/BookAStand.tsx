@@ -1244,15 +1244,16 @@ const BookAStand = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             className="bg-white border border-slate-500 shadow-2xl overflow-hidden rounded-sm"
                                         >
-                                            <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+                                            <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
                                                 <div>
-                                                    <h2 className="text-xl font-bold text-slate-900 uppercase" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                                    <h2 className="text-base font-medium uppercase tracking-wider text-white">
                                                         {exhibitorType === 'domestic' ? 'Domestic Exhibitor Registration' : 'International Exhibitor Registration'}
                                                     </h2>
-                                                    <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
+                                                    <p className="text-xs text-[#a8d060] uppercase tracking-[0.3em] font-semibold mb-1">
                                                         9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
                                                     </p>
                                                 </div>
+                                                <ShieldCheck className="text-[#a8d060]" size={22} />
                                             </div>
                                             <form onSubmit={handleSubmit} className="px-8 pt-4 pb-8 space-y-4 font-inter bg-white">
                                                 <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
