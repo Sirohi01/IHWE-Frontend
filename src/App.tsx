@@ -30,6 +30,16 @@ const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasan
 const SellerRegistration = lazy(() => import("./pages/SellerRegistration"));
 const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors"));
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
+const ConferenceDay1 = lazy(() => import("./pages/ConferenceDay1"));
+const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
+const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
+// const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
+const HotelStay = lazy(() => import("./pages/support/HotelStay"));
+const TravelAssistance = lazy(() => import("./pages/support/TravelAssistance"));
+const StallDesign = lazy(() => import("./pages/support/StallDesign"));
+const LogisticsSupport = lazy(() => import("./pages/support/LogisticsSupport"));
+const PrintingBranding = lazy(() => import("./pages/support/PrintingBranding"));
+const HospitalityDesk = lazy(() => import("./pages/support/HospitalityDesk"));
 const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
 const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -158,6 +168,12 @@ const App = () => {
                     <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
+                    <Route path="/support/hotel-stay" element={<HotelStay />} />
+                    <Route path="/support/travel-assistance" element={<TravelAssistance />} />
+                    <Route path="/support/stall-design" element={<StallDesign />} />
+                    <Route path="/support/logistics-support" element={<LogisticsSupport />} />
+                    <Route path="/support/printing-branding" element={<PrintingBranding />} />
+                    <Route path="/support/hospitality-desk" element={<HospitalityDesk />} />
                     <Route path="/conference" element={<Conference />} />
                     <Route path="/conference/day-1" element={<Navigate to="/conference/1" replace />} />
                     <Route path="/conference/day-2" element={<Navigate to="/conference/2" replace />} />
