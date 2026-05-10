@@ -945,34 +945,7 @@ const BookAStand = () => {
                 onClose={() => { setPaymentModal(null); setIsLoading(false); }}
             />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
-            {/* <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
-                    backgroundColor: "#1a3516"
-                }}
-            >
-                <div className="absolute inset-0 bg-black/45" />
 
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || ""}
-                    </p>
-
-                    <h1
-                        className="text-[60px] font-inter font-bold mb-6 leading-[1.1]"
-                    >
-                        {heroData?.heading || "Book Your Exhibition Stand"}
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Showcase your innovations to 8,000+ top healthcare professionals. Fill out the form and our team will tailor the perfect space for your brand."}
-                    </p>
-                </div>
-            </section> */}
             {/* bg section  */}
             <section
                 className="hero-background-registration relative overflow-hidden "
@@ -1092,7 +1065,7 @@ const BookAStand = () => {
                     <React.Fragment key={i}>
                         <div className="flex items-start gap-3 flex-1 px-4 ">
                             {/* Icon Circle */}
-                            <div className="w-11 h-11 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
+                            <div className="w-16 h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
                                 {item.icon}
                             </div>
                             {/* Text */}
@@ -1113,7 +1086,7 @@ const BookAStand = () => {
                 {/* Left Side */}
                 <div className="flex-1 flex flex-col justify-between">
                     <div>
-                        <p className="text-gray-900 text-xl font-semibold mb-1">9th Edition of</p>
+                        <p className="text-gray-900 text-xl font-medium mb-1">9th Edition of</p>
                         <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
                             International Health & Wellness Expo 2026<br />(IHWE Global Edition)
                         </h2>
@@ -1137,21 +1110,21 @@ const BookAStand = () => {
 
                 {/* Right Side */}
                 <div className="flex-1">
-                    <h3 className="text-gray-800 font-semibold text-base mb-1">Choose Exhibitor Category</h3>
+                    <h3 className="text-gray-900 text-xl font-medium mb-1">Choose Exhibitor Category</h3>
                     <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
 
                     <div className="grid grid-cols-2 gap-4">
 
                         {/* Domestic Exhibitor */}
-                        <div className="bg-[#f0f7e6] border border-[#c8e6a0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
-                            <div className="w-14 h-14 rounded-full bg-[#d6edb8] flex items-center justify-center">
-                                <img src="/icons/domestic.png" alt="Domestic" className="w-7 h-7 object-contain" />
+                        <div className="bg-[#f0f7e6] border border-[#c8e6a0] rounded-xl px-5 py-2 flex flex-col items-center text-center gap-2">
+                            <div className=" flex items-center justify-center">
+                                <img src="/exhibition/dom.png" alt="Domestic" className="w-18 h-20 object-contain" />
                             </div>
                             <div>
-                                <p className="text-[#1a4d1a] font-bold text-sm mb-1">Domestic Exhibitor</p>
-                                <p className="text-gray-400 text-xs">For exhibitors based in India</p>
+                                <p className="text-gray-800 font-medium text-base mb-1">Domestic Exhibitor</p>
+                                <p className="text-gray-700 text-xs">For exhibitors based in India</p>
                             </div>
-                            <button className="flex items-center gap-2 bg-[#1a4d1a] hover:bg-[#163d16] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
+                            <button className="flex gap-2 items-center bg-[#1a4d1a] hover:bg-[#163d16] text-white text-xs font-medium uppercase tracking-widest px-5 py-1.5 rounded-lg transition-colors">
                                 Register Now
                                 <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
                                     <svg className="w-3 h-3 text-[#1a4d1a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1162,15 +1135,15 @@ const BookAStand = () => {
                         </div>
 
                         {/* International Exhibitor */}
-                        <div className="bg-[#fff7f0] border border-[#f5d5b0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
-                            <div className="w-14 h-14 rounded-full bg-[#fde8cc] flex items-center justify-center">
-                                <img src="/icons/international.png" alt="International" className="w-7 h-7 object-contain" />
+                        <div className="bg-[#fff7f0] border border-[#f5d5b0] rounded-xl px-5 py-2 flex flex-col items-center text-center gap-2">
+                            <div className="flex items-center justify-center mt-2">
+                                <img src="/exhibition/int.png" alt="International" className="w-18 h-16 object-contain" />
                             </div>
-                            <div>
-                                <p className="text-[#7a3a00] font-bold text-sm mb-1">International Exhibitor</p>
-                                <p className="text-gray-400 text-xs">For exhibitors based outside India</p>
+                            <div className="mt-2">
+                                <p className="text-gray-800 font-medium text-base mb-1">International Exhibitor</p>
+                                <p className="text-gray-700 text-xs">For exhibitors based outside India</p>
                             </div>
-                            <button className="flex items-center gap-2 bg-[#e07820] hover:bg-[#c96a18] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
+                            <button className="flex items-center gap-2 bg-[#e07820] hover:bg-[#c96a18] text-white text-xs font-medium uppercase tracking-widest px-5 py-1.5 rounded-lg transition-colors">
                                 Register Now
                                 <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
                                     <svg className="w-3 h-3 text-[#e07820]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
