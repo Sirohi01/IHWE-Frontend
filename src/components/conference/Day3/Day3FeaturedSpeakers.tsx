@@ -16,10 +16,10 @@ const Day3FeaturedSpeakers: React.FC<Day3FeaturedSpeakersProps> = ({ data, dayNu
   const speakers = Array.isArray(data) ? data : [];
 
   return (
-    <div className="bg-white h-full flex flex-col py-2" style={{ backgroundColor: '#F5F5F0' }}>
+    <div className="bg-white h-full flex flex-col py-2 -mt-4" style={{ backgroundColor: '#F5F5F0' }}>
       {/* Header */}
       <div className="flex items-start justify-between mb-5 text-center justify-center items-center ">
-        <h2 className="text-[14px] font-black text-[#0B2C66] uppercase tracking-tight leading-snug">
+        <h2 className="text-[14px] font-black text-[#0B2C66] uppercase tracking-tight leading-snug mx-auto">
           FEATURED SPEAKERS —{" "}
           <span className="text-[#4E9F3D]">DAY {dayNumber || 3}</span>
         </h2>

@@ -28,8 +28,8 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
   const sessions = Array.isArray(data?.sessions) ? data.sessions : [];
 
   return (
-    <div className="bg-white h-full flex flex-col py-2" style={{ backgroundColor: '#F5F5F0' }}>
-      {/* Section Header */}
+    <div className="bg-white h-full flex flex-col py-2 -mt-4" style={{ backgroundColor: '#F5F5F0' }}>
+
       <div className="text-center mb-5">
         <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight leading-none font-sans">
           {data?.title || dayTitle || `DAY ${dayNumber || 3} AGENDA`}
@@ -39,7 +39,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
         </p>
       </div>
 
-      {/* Table */}
+
       <div className="-mt-4 overflow-x-auto flex-1 border border-[#E2E8F0] rounded-xl overflow-hidden max-h-[400px] overflow-y-scroll custom-scrollbar">
         <table className="w-full text-left border-collapse">
           <thead className="sticky top-0 z-10">
@@ -58,7 +58,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
 
               return (
                 <tr key={index} className="group hover:bg-[#F8FFF8] transition-colors">
-                  {/* Time */}
+
                   <td className="px-4 py-2 align-middle min-w-[150px]">
                     <div className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-[#A0AEC0] shrink-0" />
@@ -66,7 +66,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
                     </div>
                   </td>
 
-                  {/* Session */}
+
                   <td className="px-4 py-2 align-middle min-w-[90px]">
                     <div className="flex flex-col gap-0">
                       <span className="text-[10px] font-black text-[#0B2C66] uppercase leading-tight">SESSION {index + 1}</span>
@@ -74,7 +74,6 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
                     </div>
                   </td>
 
-                  {/* Topic */}
                   <td className="px-4 py-2 align-middle">
                     <div className="space-y-0.5">
                       <p className="text-[12px] font-black text-[#0B2C66] leading-snug">{item.topic}</p>
@@ -82,7 +81,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
                     </div>
                   </td>
 
-                  {/* Speaker */}
+
                   <td className="px-4 py-2 align-middle min-w-[180px]">
                     <div className="flex items-center gap-3">
                       <img
