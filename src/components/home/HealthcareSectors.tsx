@@ -65,7 +65,7 @@ const HealthcareSectors = () => {
 
   return (
     <section
-      className="relative overflow-hidden pt-[45px] pb-8 font-sans bg-[#f5f7f5]"
+      className="relative overflow-hidden pt-[25px] pb-2 font-sans bg-[#f5f7f5]"
     >
       {/* Background decorative effects */}
       {/* Top-left dot grid */}
@@ -98,20 +98,13 @@ const HealthcareSectors = () => {
       <SectionContainer className="relative z-10">
         
         {/* ===== HEADER ===== */}
-        <div style={{textAlign: 'center', marginBottom: 20}}>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginBottom: 8}}>
+        <div className="text-center mb-3 lg:mb-5">
+          <div className="flex items-center justify-center gap-3 lg:gap-4 mb-1 lg:mb-1">
             {/* Left leaf */}
-            <Leaf size={30} className="text-[#2e7d32]" />
+            <Leaf className="text-[#2e7d32] w-6 lg:w-8 h-6 lg:h-8" />
             
             {/* Title */}
-            <h2 style={{
-              fontSize: 'clamp(20px, 2.8vw, 34px)',
-              fontWeight: 900,
-              letterSpacing: '-0.5px',
-              margin: 0,
-              lineHeight: 1.1,
-              color: '#1a1a1a',
-            }}>
+            <h2 className="font-black leading-[1.1] m-0 text-[#1a1a1a] tracking-tight" style={{ fontSize: 'clamp(22px, 4vw, 36px)' }}>
               {content.heading.split(' ').map((word, i) => (
                 <React.Fragment key={i}>
                   {i > 0 && ' '}
@@ -123,50 +116,22 @@ const HealthcareSectors = () => {
             </h2>
             
             {/* Right leaf */}
-            <Leaf size={30} className="text-[#2e7d32] scale-x-[-1]" />
+            <Leaf className="text-[#2e7d32] w-6 lg:w-8 h-6 lg:h-8 scale-x-[-1]" />
           </div>
 
           {/* Subtitle row */}
-          <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap: 15, marginBottom: 6}}>
-            {/* Left underline removed */}
-            <p style={{
-              fontSize: 15,
-              fontWeight: 400,
-              color: '#000000',
-              letterSpacing: '0.03em',
-              margin: 0,
-            }}>
+          <div className="flex items-center justify-center gap-4 mb-2">
+            <p className="text-[13px] lg:text-[15px] font-medium text-black tracking-wide m-0">
               {content.subtitle}
             </p>
-            <div style={{height: 1.5, width: 30, background: '#1b5e20', opacity: 0.6}}/>
+            <div className="hidden lg:block h-[1.5px] w-8 bg-[#1b5e20] opacity-60"/>
           </div>
 
-          {/* Small leaf center with longer gradient lines */}
-          <div style={{display:'flex', alignItems: 'center', justifyContent:'center', gap: 12, marginTop: 2}}>
-            <div style={{
-              height: 1.2, 
-              width: 120, 
-              background: 'linear-gradient(to left, #1b5e20, transparent)', 
-              opacity: 0.4 
-            }}/>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#2e7d32">
-              <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-5 8Z"/>
-            </svg>
-            <div style={{
-              height: 1.2, 
-              width: 120, 
-              background: 'linear-gradient(to right, #1b5e20, transparent)', 
-              opacity: 0.4 
-            }}/>
-          </div>
+          {/* Decoration removed */}
         </div>
 
         {/* ===== CARDS GRID ===== */}
-        <div className="sectors-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '16px',
-        }}>
+        <div className="sectors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {sectors.map((sector, index) => (
             <motion.div
               key={index}
@@ -188,15 +153,15 @@ const HealthcareSectors = () => {
               }}
             >
               {/* Top Section: Icon & Masked Image */}
-              <div style={{ height: 125, position: 'relative', display: 'flex' }}>
+              <div style={{ height: 110, position: 'relative', display: 'flex' }}>
                 {/* Left Side: Icon Container */}
                 <div style={{ width: '45%', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: 15, zIndex: 10 }}>
                   <div style={{
-                    width: 72,
-                    height: 72,
+                    width: 64,
+                    height: 64,
                     borderRadius: '50%',
                     background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #4caf50 100%)',
-                    border: '5px solid #ffffff',
+                    border: '4px solid #ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -206,14 +171,14 @@ const HealthcareSectors = () => {
                   }}
                     className="card-icon-circle"
                   >
-                    <IconComponent name={sector.icon} size={32} />
+                    <IconComponent name={sector.icon} size={28} />
                   </div>
                 </div>
 
                 {/* Right Side: Image with Curve Mask */}
                 <div style={{ 
                   width: '75%', 
-                  height: 120, 
+                  height: 105, 
                   position: 'absolute', 
                   right: 10, 
                   top: 10,
@@ -241,12 +206,12 @@ const HealthcareSectors = () => {
               </div>
 
               {/* Text Content */}
-              <div style={{ padding: '12px 20px 20px', flexGrow: 1 }}>
+              <div style={{ padding: '10px 16px 16px', flexGrow: 1 }}>
                 <h3 style={{
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 700,
                   color: '#1b5e20',
-                  marginBottom: 8,
+                  marginBottom: 6,
                   lineHeight: 1.2,
                   textTransform: 'uppercase',
                   letterSpacing: '0.01em',
@@ -254,20 +219,20 @@ const HealthcareSectors = () => {
                   {sector.title}
                 </h3>
                 <p style={{
-                  fontSize: 12,
+                  fontSize: 11.5,
                   color: '#333',
                   fontWeight: 500,
                   fontFamily: "'Segoe UI', sans-serif",
-                  lineHeight: 1.6,
+                  lineHeight: 1.5,
                   margin: 0,
                 }}>
                   {sector.description}
                 </p>
                 {/* Short Accent Line */}
                 <div style={{
-                  marginTop: 14,
-                  height: 3,
-                  width: 32,
+                  marginTop: 12,
+                  height: 2.5,
+                  width: 28,
                   background: '#1b5e20',
                   borderRadius: 2,
                   transition: 'width 0.3s ease',
@@ -280,105 +245,39 @@ const HealthcareSectors = () => {
         </div>
 
         {/* ===== BOTTOM STATS BAR ===== */}
-        <div style={{
-          marginTop: 24,
-          background: '#fff',
-          borderRadius: 20,
-          boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset',
-          display: 'flex',
-          alignItems: 'stretch',
-          overflow: 'hidden',
-          padding: '4px',
-        }}>
+        <div className="stats-bar-container flex flex-col lg:flex-row items-stretch overflow-hidden bg-white rounded-[20px] shadow-[rgba(0,0,0,0.05)_0px_0px_0px_1px,rgb(209,213,219)_0px_0px_0px_1px_inset] mt-4 p-1 lg:p-1">
           {/* Stats items */}
-          <div style={{
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            paddingLeft: 8,
-            fontFamily: "'Segoe UI', sans-serif",
-            flexWrap: 'nowrap',
-            minWidth: 0
-          }}>
+          <div className="flex-1 flex flex-col sm:grid sm:grid-cols-2 lg:flex lg:flex-row items-center p-2 lg:pl-4 font-sans gap-2 lg:gap-0">
             {bottomStats.map((stat, i) => (
               <React.Fragment key={i}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  padding: '8px 10px',
-                  flex: 1,
-                  minWidth: 0
-                }}>
-                  <div style={{
-                    width: 42,
-                    height: 42,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #0a3d0c 0%, #1b5e20 60%, #2e7d32 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    color: '#fff',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  }}>
-                    {React.cloneElement(stat.icon as React.ReactElement, { className: 'w-5 h-5', stroke: 'white', strokeWidth: 2.5 })}
+                <div className="flex items-center gap-4 lg:gap-3 p-3 lg:p-2 flex-1 w-full lg:w-auto">
+                  <div className="w-12 lg:w-10 h-12 lg:h-10 rounded-full bg-gradient-to-br from-[#0a3d0c] via-[#1b5e20] to-[#2e7d32] flex items-center justify-center shrink-0 text-white shadow-md">
+                    {React.cloneElement(stat.icon as React.ReactElement, { className: 'w-6 lg:w-5 h-6 lg:h-5', stroke: 'white', strokeWidth: 2.5 })}
                   </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{
-                      fontSize: 12.5, 
-                      fontWeight: 700, 
-                      color: '#1b5e20', 
-                      marginBottom: 1,
-                      lineHeight: 1.2
-                    }}>
+                  <div>
+                    <div className="text-[14px] lg:text-[12.5px] font-bold text-[#1b5e20] leading-tight mb-1">
                       {stat.title}
                     </div>
-                    <div style={{
-                      fontSize: 10.5, 
-                      color: '#444', 
-                      fontWeight: 500, 
-                      lineHeight: 1.2,
-                    }}>
+                    <div className="text-[12px] lg:text-[10.5px] text-slate-600 font-medium leading-tight">
                       {stat.desc}
                     </div>
                   </div>
                 </div>
                 {i < bottomStats.length - 1 && (
-                  <div style={{ width: 1, height: 32, borderLeft: '1.5px dotted #b0b8b0', alignSelf: 'center', flexShrink: 0 }} />
+                  <div className="hidden lg:block w-[1px] h-8 border-l-[1.5px] border-dotted border-[#b0b8b0] self-center shrink-0 mx-2" />
                 )}
               </React.Fragment>
             ))}
           </div>
 
           {/* CTA Dark Green Box */}
-          <div style={{
-            background: '#1b5e20',
-            padding: '12px 25px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            minWidth: 180,
-            flexShrink: 0,
-            borderRadius: '0 20px 20px 0',
-            gap: 2,
-            cursor: 'pointer',
-          }}>
-            <div style={{fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.1}}>
+          <div className="bg-[#1b5e20] px-8 lg:px-6 py-6 lg:py-4 flex flex-col items-center lg:items-start justify-center min-w-full lg:min-w-[200px] shrink-0 rounded-b-[20px] lg:rounded-none lg:rounded-r-[20px] gap-1 cursor-pointer hover:bg-[#144718] transition-colors">
+            <div className="text-[14px] lg:text-[13px] font-bold text-white/90 uppercase tracking-widest leading-none mb-1">
               Explore. Connect.
             </div>
-            <div style={{
-              fontSize: 17,
-              fontWeight: 800,
-              lineHeight: 1.1,
-              color: '#86efac',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-            }}>
+            <div className="text-[20px] lg:text-[18px] font-black text-[#86efac] flex items-center gap-3 leading-none">
               Innovate. Grow.
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="#86efac" style={{flexShrink:0}}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#86efac" className="shrink-0">
                 <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 0 0 8 20C19 20 22 3 22 3c-1 2-8 2-5 8Z"/>
               </svg>
             </div>
@@ -395,17 +294,12 @@ const HealthcareSectors = () => {
           width: 56px !important;
           background: #2e7d32 !important;
         }
-        @media (max-width: 1200px) {
-          .sectors-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
-        }
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
           .sectors-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
           .sectors-grid {
             grid-template-columns: 1fr !important;
           }

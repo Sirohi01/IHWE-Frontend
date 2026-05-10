@@ -131,7 +131,7 @@ const Topbar = () => {
               animate={{ x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
-                duration: 50,
+                duration: 80,
                 ease: "linear",
                 delay: 0
               }}

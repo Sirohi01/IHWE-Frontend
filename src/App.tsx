@@ -22,8 +22,8 @@ const Gallery = lazy(() => import("./pages/Gallery"));
 const BuyerSellerMeet = lazy(() => import("./pages/buyerSellerMeet/BuyerSellerMeet"));
 const GovernmentMsmePmsSchemes = lazy(() => import("./pages/governmentMsmePmsSchemes/GovernmentMsmePmsSchemes"));
 const VisitorRegistration = lazy(() => import("./pages/VisitorRegistration"));
-const BuyerRegistration = lazy(() => import("./pages/BuyerRegistration"));
-const InternationalBuyerRegistration = lazy(() => import("./pages/InternationalBuyerRegistration"));
+const BuyerRegistration = lazy(() => import("./pages/buyer/BuyerRegistration"));
+const InternationalBuyerRegistration = lazy(() => import("./pages/buyer/InternationalBuyerRegistration"));
 const TravelAccommodation = lazy(() => import("./pages/TravelAccommodation"));
 const MediaRegistration = lazy(() => import("./pages/MediaRegistration"));
 const SpeakerRegistration = lazy(() => import("./components/conference/Arogyasangostiform"));
@@ -56,6 +56,7 @@ const ExhibitorStallManagementPage = lazy(() => import("./pages/exhibitor/Exhibi
 const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEventsPage"));
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
+const ExhibitorEPromotion = lazy(() => import("./pages/exhibitor/ExhibitorEPromotion"));
 const ExhibitorSellerRegistrationPage = lazy(() => import("@/pages/exhibitor/ExhibitorSellerRegistrationPage"));
 const SellerPortal = lazy(() => import("@/pages/SellerPortal"));
 const SellerDashboardHome = lazy(() => import("@/pages/exhibitor/seller/SellerDashboardHome"));
@@ -129,7 +130,7 @@ const App = () => {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ScrollToTopOnNavigation />
             <BuyerAuthProvider>
               <Toaster />
@@ -143,7 +144,6 @@ const App = () => {
                     <Route path="/about" element={<About />} />
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/awards/nomination" element={<NominationFormPage />} />
-
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
@@ -200,6 +200,7 @@ const App = () => {
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
+                    <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="psm-claim">
                       <Route index element={<ExhibitorMSMEPage />} />
                       <Route path="reports" element={<PsmReports />} />

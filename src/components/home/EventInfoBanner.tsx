@@ -81,52 +81,52 @@ const EventInfoBanner = () => {
             <Leaf className="w-24 h-24 text-white fill-white" />
           </div>
 
-          <SectionContainer className="relative z-10 flex flex-wrap xl:flex-nowrap items-center justify-between gap-4 py-3">
+          <SectionContainer className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8 xl:gap-4 py-8 md:py-6 xl:py-3">
 
             {/* Date */}
-            <div className="flex items-center gap-3 border-r border-white/10 pr-6">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md shrink-0">
-                <Calendar className="w-5 h-5 text-[#0b2912]" />
+            <div className="flex flex-col md:flex-row items-center gap-3 xl:border-r border-white/10 xl:pr-6 text-center md:text-left">
+              <div className="w-12 h-12 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center shadow-md shrink-0">
+                <Calendar className="w-6 h-6 md:w-5 md:h-5 text-[#0b2912]" />
               </div>
               <div>
-                <p className="text-[18px] font-bold text-white leading-none">21 – 23</p>
-                <p className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">AUGUST 2026</p>
+                <p className="text-[20px] md:text-[18px] font-bold text-white leading-none">21 – 23</p>
+                <p className="text-[12px] md:text-[11px] font-semibold text-gray-300 uppercase tracking-wider">AUGUST 2026</p>
               </div>
             </div>
 
             {/* Venue */}
-            <div className="flex items-center gap-3 border-r border-white/10 pr-6">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md shrink-0">
-                <MapPin className="w-5 h-5 text-[#0b2912]" />
+            <div className="flex flex-col md:flex-row items-center gap-3 xl:border-r border-white/10 xl:pr-6 text-center md:text-left">
+              <div className="w-12 h-12 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center shadow-md shrink-0">
+                <MapPin className="w-6 h-6 md:w-5 md:h-5 text-[#0b2912]" />
               </div>
               <div>
-                <p className="text-[14px] font-bold text-white leading-tight uppercase tracking-tight">PRAGATI MAIDAN</p>
-                <p className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">NEW DELHI, INDIA</p>
+                <p className="text-[16px] md:text-[14px] font-bold text-white leading-tight uppercase tracking-tight">PRAGATI MAIDAN</p>
+                <p className="text-[12px] md:text-[11px] font-semibold text-gray-300 uppercase tracking-wider">NEW DELHI, INDIA</p>
               </div>
             </div>
 
             {/* Global Edition */}
-            <div className="flex items-center gap-3 border-r border-white/10 pr-6">
-              <div className="w-10 h-10 bg-[#ff6b00] rounded-lg flex items-center justify-center shadow-md shrink-0">
-                <Globe className="w-5 h-5 text-white" />
+            <div className="flex flex-col md:flex-row items-center gap-3 xl:border-r border-white/10 xl:pr-6 text-center md:text-left">
+              <div className="w-12 h-12 md:w-10 md:h-10 bg-[#ff6b00] rounded-lg flex items-center justify-center shadow-md shrink-0">
+                <Globe className="w-6 h-6 md:w-5 md:h-5 text-white" />
               </div>
               <div>
-                <p className="text-[14px] font-bold text-white leading-tight uppercase tracking-tight">GLOBAL EDITION</p>
-                <p className="text-[9px] font-semibold text-gray-300 leading-tight max-w-[130px]">CONNECTING THE WORLD OF HEALTH & WELLNESS</p>
+                <p className="text-[16px] md:text-[14px] font-bold text-white leading-tight uppercase tracking-tight">GLOBAL EDITION</p>
+                <p className="text-[10px] md:text-[9px] font-semibold text-gray-300 leading-tight max-w-[200px] md:max-w-[130px]">CONNECTING THE WORLD OF HEALTH & WELLNESS</p>
               </div>
             </div>
 
             {/* Tagline */}
-            <div className="flex items-center gap-3 flex-grow">
-              <Trophy className="w-8 h-8 text-[#facc15] shrink-0" />
+            <div className="flex flex-col md:flex-row items-center gap-3 flex-grow text-center md:text-left">
+              <Trophy className="w-10 h-10 md:w-8 md:h-8 text-[#facc15] shrink-0" />
               <div>
-                <p className="text-[13px] font-bold text-white uppercase leading-tight tracking-tight">BE PART OF INDIA'S BIGGEST</p>
-                <p className="text-[15px] font-bold text-[#86efac] leading-none uppercase tracking-tighter">HEALTH & WELLNESS SHOW!</p>
+                <p className="text-[14px] md:text-[13px] font-bold text-white uppercase leading-tight tracking-tight">BE PART OF INDIA'S BIGGEST</p>
+                <p className="text-[16px] md:text-[15px] font-bold text-[#86efac] leading-none uppercase tracking-tighter">HEALTH & WELLNESS SHOW!</p>
               </div>
             </div>
 
             {/* ✅ CTA Button — Golden with Sparkles */}
-            <Link to="/book-a-stand" className="mr-6 shrink-0">
+            <Link to="/book-a-stand" className="xl:mr-6 shrink-0 w-full md:w-auto flex justify-center">
               <div style={{ position: 'relative', display: 'inline-block' }}>
 
                 {/* Sparkles around button */}
@@ -141,7 +141,7 @@ const EventInfoBanner = () => {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="golden-btn text-[#0b2912] px-6 py-2.5 rounded-[1rem] font-black text-[13px] flex items-center gap-2.5 whitespace-nowrap transition-all"
+                  className="golden-btn text-[#0b2912] px-8 md:px-6 py-3 md:py-2.5 rounded-[1rem] font-black text-[14px] md:text-[13px] flex items-center gap-2.5 whitespace-nowrap transition-all"
                 >
                   BOOK YOUR STALL NOW!
                   <div className="w-5 h-5 bg-[#0b2912] rounded-full flex items-center justify-center z-10 relative">

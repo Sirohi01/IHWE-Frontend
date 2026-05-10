@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -322,6 +322,7 @@ const BuyerRegistration = () => {
 
     const [formData, setFormData] = useState(initialFormState);
     const [showMembershipOptions, setShowMembershipOptions] = useState(false);
+    const [buyerType, setBuyerType] = useState<'domestic' | 'international'>('domestic');
 
     const membershipPackages = useMemo(() => config?.packages?.filter((p: any) => p.category === 'Membership') || [], [config]);
     const passPackages = useMemo(() => config?.packages?.filter((p: any) => p.category === 'Pass') || [], [config]);
@@ -1033,34 +1034,6 @@ const BuyerRegistration = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans">
-            <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`
-                }}
-            >
-                <div className="absolute inset-0 bg-black/45" />
-
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || "Visitor Experience"}
-                    </p>
-
-                    <h1
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
-                    >
-                        {heroData?.heading || "Witness the Future of Wellness"}
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Join 8,000+ healthcare professionals and discover the latest innovations in health and wellness."}
-                    </p>
-
-                </div>
-            </section>
 
             <section className="py-4 relative bg-[#F8FAFC]">
                 <div className="container mx-auto px-4 max-w-[1400px]">
@@ -1744,7 +1717,6 @@ const BuyerRegistration = () => {
                     </AnimatePresence>
                 </div>
             </section >
-
 
             <AnimatePresence>
                 {

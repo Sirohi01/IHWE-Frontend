@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Quote, ChevronLeft, ChevronRight, MapPin, Play,
   Globe, Users, Handshake, Mic2, Leaf, Building2, PlayCircle, Store
 } from 'lucide-react';
+import SectionContainer from '../layout/SectionContainer';
 import { cn } from "@/lib/utils";
 import testImg from '../../assets/test11.jpeg';
 import leafPng from '../../assets/leaf.png';
@@ -11,6 +12,8 @@ import img1 from '../../assets/1.png';
 import img2 from '../../assets/2 (1).png';
 import img3 from '../../assets/3 (1).png';
 import img4 from '../../assets/4.png';
+
+import { newTestimonialsApi, SERVER_URL } from "@/lib/api";
 
 // ─── Sparkle component for premium button ───
 const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
@@ -31,65 +34,15 @@ const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
   </span>
 );
 
-// ─── Data ───
-const TESTIMONIALS_DATA = [
-  {
-    id: 1,
-    quote: "IHWE helped us connect with serious buyers and expand globally. The response was exceptional and beyond our expectations.",
-    company1: "NatureCure",
-    company2: "International",
-    logoText: "NATURE\nCURE",
-    location: "Dubai, UAE",
-    color: "#23471d",
-    bgImage: img1,
-  },
-  {
-    id: 2,
-    quote: "A powerful platform for healthcare innovation and meaningful networking. We met the right partners for our business.",
-    company1: "MediWell",
-    company2: "Research",
-    logoText: "MEDI\nWELL",
-    location: "Toronto, Canada",
-    color: "#1a4d8f",
-    bgImage: img2,
-  },
-  {
-    id: 3,
-    quote: "We closed multiple distribution deals within 3 days of the expo. It is the best event for international market exposure.",
-    company1: "Herbal Global",
-    company2: "Pvt. Ltd.",
-    logoText: "HERBAL\nGLOBAL",
-    location: "New Delhi, India",
-    color: "#7e22ce",
-    bgImage: img3,
-  },
-  {
-    id: 4,
-    quote: "IHWE brings the right people and the right opportunities for growth. Our brand visibility has increased significantly here.",
-    company1: "NutriLife",
-    company2: "Solutions",
-    logoText: "NUTRI\nLIFE",
-    location: "Bangkok, Thailand",
-    color: "#458a16",
-    bgImage: img4,
-  },
-  {
-    id: 5,
-    quote: "An exceptional event with world-class organization and presence. A must-attend for everyone in the wellness industry.",
-    company1: "BioVita",
-    company2: "Health",
-    logoText: "BIO\nVITA",
-    location: "Frankfurt, Germany",
-    color: "#3e6cc0",
-    bgImage: img1,
-  },
-];
-
-const VIDEOS_DATA = [
-  { id: 1, company: "NatureCure International", location: "Dubai, UAE", bg: "linear-gradient(160deg,#4a5568,#1a202c)" },
-  { id: 2, company: "MediWell Research", location: "Toronto, Canada", bg: "linear-gradient(160deg,#3b5ea6,#1a2d5a)" },
-  { id: 3, company: "Herbal Global Pvt. Ltd.", location: "New Delhi, India", bg: "linear-gradient(160deg,#2d5a2d,#1a3a1a)" },
-];
+// ─── Logo Box ───
+const LogoBox = ({ text, color }: { text: string; color: string }) => (
+  <div
+    className="w-16 h-16 rounded-full border-[3px] border-white flex items-center justify-center text-slate-800 font-black text-[6px] text-center leading-tight bg-white"
+    style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.13), 0 0 0 2px #e2e8f0" }}
+  >
+    {(text || "").split("\n").map((w, i) => <div key={i} style={{ color }}>{w}</div>)}
+  </div>
+);
 
 const STATS = [
   { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
@@ -98,89 +51,269 @@ const STATS = [
   { icon: Mic2, value: "150+", label: "Expert Speakers", color: "#005f23ff" },
 ];
 
-const BOTTOM_STATS = [
-  { icon: Leaf, label: "Trusted by", value: "150+ Exhibitors" },
-  { icon: Globe, label: "Global Presence", value: "1000+ Global Buyers" },
-  { icon: Building2, label: "Government", value: "Supported Initiative" },
-  { icon: Users, label: "Global Platform for", value: "Health & Wellness" },
-];
-
-// ─── Logo Box ───
-const LogoBox = ({ text, color }) => (
-  <div
-    className="w-10 h-10 rounded-full border border-slate-100 flex items-center justify-center text-slate-800 font-black text-[5.5px] text-center leading-tight flex-shrink-0 bg-white"
-    style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}
-  >
-    {text.split("\n").map((w, i) => <div key={i} style={{ color }}>{w}</div>)}
-  </div>
-);
-
 // ─── Testimonial Card ───
-const TestimonialCard = ({ item }) => (
-  <div
-    className="relative bg-white rounded-[24px] border border-slate-100 pt-6 pl-3 pr-6 pb-2 flex flex-col gap-3 w-[225px] flex-shrink-0 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500 overflow-hidden group"
-    style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }}
-  >
-    <div className="opacity-80">
-      <Quote className="w-7 h-7 text-[#458a16] transform -scale-x-100" />
-    </div>
+const TestimonialCard = ({ item }: { item: any }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const CHAR_LIMIT = 155;
+  const quoteText = item.quote || "";
+  const isLong = quoteText.length > CHAR_LIMIT;
 
-    <p className="text-slate-900 text-[11.5px] font-medium leading-relaxed flex-1 line-clamp-3 min-h-[50px]">
-      {item.quote}
-    </p>
-
+  return (
     <div
-      className="h-[2px] w-8 rounded-full mb-2"
-      style={{ background: `linear-gradient(90deg, ${item.color}, #d26019)` }}
-    />
+      className="relative flex flex-col w-[250px] md:w-[230px] flex-shrink-0"
+      style={{ paddingTop: '32px' }}
+    >
+      {/* ── Floating Logo Circle (overlaps top of card) ── */}
+      <div
+        className="absolute top-0 left-1/2 z-20 flex items-center justify-center"
+        style={{ transform: 'translateX(-50%)' }}
+      >
+        {item.logo ? (
+          <div
+            className="w-16 h-16 rounded-full border-[3px] border-white flex items-center justify-center overflow-hidden bg-white"
+            style={{ boxShadow: "0 4px 18px rgba(0,0,0,0.15), 0 0 0 2px #e2e8f0" }}
+          >
+            <img
+              src={`${SERVER_URL}${item.logo}`}
+              alt="logo"
+              className="w-full h-full object-contain p-1.5"
+            />
+          </div>
+        ) : (
+          <LogoBox
+            text={item.logoText || (item.company1 ? item.company1.substring(0, 5) : "")}
+            color={item.color || '#23471d'}
+          />
+        )}
+      </div>
 
-    <div className="flex items-start gap-2 mt-auto pt-1 pb-0 relative z-10">
-      <LogoBox text={item.logoText} color={item.color} />
-      <div className="flex-1 min-w-0 pt-0.5">
-        <div className="font-bold text-[11.5px] leading-tight" style={{ color: item.color }}>
-          {item.company1}<br />{item.company2}
+      {/* ── Card Body ── */}
+      <div
+        className="relative bg-white rounded-[22px] border border-slate-100 flex flex-col overflow-hidden group hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500"
+        style={{
+          boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+          height: '280px',
+        }}
+      >
+        {/* ── Expanded Full-Text Overlay ── */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.22 }}
+              className="absolute inset-0 bg-white z-[60] flex flex-col rounded-[22px]"
+              style={{ boxShadow: "inset 0 0 0 2px #e2e8f0" }}
+            >
+              {/* Expanded Header */}
+              <div
+                className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0"
+                style={{ background: "linear-gradient(90deg, #f8fdf5 0%, #fff8f3 100%)" }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Quote className="w-4 h-4 text-[#458a16] transform -scale-x-100" />
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Full Review</span>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                  className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full transition-all duration-200"
+                  style={{
+                    color: '#23471d',
+                    background: '#f0faf0',
+                    border: '1px solid #c6e6c6',
+                  }}
+                >
+                  ✕ Close
+                </button>
+              </div>
+
+              {/* Expanded Content */}
+              <div className="flex-1 overflow-y-auto px-4 py-3">
+                <p className="text-slate-800 text-[11.5px] font-medium leading-relaxed">
+                  {item.quote}
+                </p>
+              </div>
+
+              {/* Company info footer - UPDATED to show full name */}
+              <div
+                className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0"
+                style={{ background: "#fafafa" }}
+              >
+                {item.logo ? (
+                  <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
+                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0.5" />
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
+                    {item.company1?.substring(0, 2)}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[10px] leading-tight" style={{ color: item.color || '#23471d' }}>
+                    {item.company1}
+                  </div>
+                  {item.company2 && (
+                    <div className="font-semibold text-[9px] leading-tight opacity-80 mt-0.5" style={{ color: item.color || '#23471d' }}>
+                      {item.company2}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 text-slate-400 text-[8.5px] mt-1">
+                    <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
+                    {item.location}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Top: Company Info (below floating logo) ── */}
+        <div className="pt-[52px] px-4 pb-0 text-center flex-shrink-0 min-h-[82px]">
+          {/* Company 1 Slot */}
+          <div className="h-[16px] mb-0.5">
+            <div className="font-bold text-[11.5px] leading-tight px-1 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              <span className={item.company1.length > 25 ? "truncate max-w-[190px]" : ""}>{item.company1}</span>
+              {item.company1.length > 25 && (
+                <span 
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                  className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                >
+                  ...
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {/* Company 2 / Title Slot */}
+          <div className="h-[16px]">
+            <div className="font-bold text-[10.5px] leading-tight px-1 opacity-90 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              {item.company2 ? (
+                <>
+                  <span className={item.company2.length > 30 ? "truncate max-w-[190px]" : ""}>{item.company2}</span>
+                  {item.company2.length > 30 && (
+                    <span 
+                      onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                      className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                    >
+                      ...
+                    </span>
+                  )}
+                </>
+              ) : ""}
+            </div>
+          </div>
+
+          {/* Location Slot */}
+          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-2">
+            <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
+            <span className="truncate max-w-[150px]">{item.location}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1 text-slate-700 text-[9.5px] mt-0.5 font-semibold">
-          <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
-          {item.location}
+
+        {/* ── Gradient Divider ── */}
+        <div
+          className="h-[1.5px] mx-4 mt-3 rounded-full flex-shrink-0"
+          style={{ background: `linear-gradient(90deg, ${item.color || '#23471d'}, #d26019)` }}
+        />
+
+        {/* ── Quote Section ── */}
+        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 relative min-h-0">
+          <Quote className="w-5 h-5 text-[#458a16] transform -scale-x-100 opacity-70 mb-1.5 flex-shrink-0" />
+
+          <div className="flex-1 overflow-hidden">
+            <p className="text-slate-700 text-[11px] font-medium leading-relaxed">
+              {isLong
+                ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…`
+                : quoteText
+              }
+            </p>
+          </div>
+
+          {/* ── "Read More" Button ── */}
+          <div className="mt-auto pt-2 flex-shrink-0">
+            {isLong && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded(true);
+                }}
+                className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
+                style={{
+                  color: '#23471d',
+                  background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)',
+                  border: '1px solid #c6e6c6',
+                }}
+              >
+                Read more
+                <span style={{ fontSize: '8px' }}>→</span>
+              </button>
+            )}
+          </div>
+
+          {/* Bottom decorative image */}
+          {item.bottomImage && (
+            <img
+              src={`${SERVER_URL}${item.bottomImage}`}
+              alt=""
+              className="absolute bottom-0 right-0 pointer-events-none opacity-10 md:opacity-20"
+              style={{ width: 65, height: 65, objectFit: 'contain', zIndex: 1 }}
+            />
+          )}
         </div>
       </div>
     </div>
+  );
+};
 
-<img
-  src={item.bgImage}
-  alt=""
-  className="absolute bottom-0 right-0 pointer-events-none"
-  style={{
-    width: 200,
-    height: 200,
-    objectFit: 'contain',
-    zIndex: 1,
-  }}
-/>
-  </div>
-);
+const getYouTubeThumbnail = (url: string) => {
+  if (!url) return null;
+  let videoId = "";
+  try {
+    if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
+    else if (url.includes("shorts/")) videoId = url.split("shorts/")[1].split("?")[0];
+    else if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
+  } catch (e) { return null; }
+  if (videoId) return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  return null;
+};
 
 // ─── Video Card ───
-const VideoCard = ({ item }) => (
-  <div className="relative rounded-2xl overflow-hidden flex-1 min-w-0 h-40 group cursor-pointer shadow-lg">
-    <div className="absolute inset-0" style={{ background: item.bg }} />
-    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/5 transition-all duration-300" />
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
-        <Play className="w-5 h-5 fill-[#4f8519] text-[#4f8519] ml-0.5" />
+const VideoCard = ({ item }: { item: any }) => {
+  const colors = [
+    "linear-gradient(160deg,#4a5568,#1a202c)",
+    "linear-gradient(160deg,#3b5ea6,#1a2d5a)",
+    "linear-gradient(160deg,#2d5a2d,#1a3a1a)"
+  ];
+  const bg = colors[item._id ? item._id.charCodeAt(0) % colors.length : 0];
+  const videoLink = item.videoFile ? `${SERVER_URL}${item.videoFile}` : item.videoUrl;
+  const thumb = item.thumbnail ? `${SERVER_URL}${item.thumbnail}` : getYouTubeThumbnail(item.videoUrl);
+
+  return (
+    <div
+      onClick={() => window.open(videoLink, '_blank')}
+      className="relative rounded-2xl overflow-hidden flex-1 min-w-full sm:min-w-[280px] md:min-w-0 h-48 md:h-40 group cursor-pointer shadow-lg"
+    >
+      <div className="absolute inset-0" style={{ background: bg }}>
+        {thumb && <img src={thumb} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" alt="" />}
+      </div>
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+          <Play className="w-5 h-5 fill-[#4f8519] text-[#4f8519] ml-0.5" />
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+        <div className="text-white font-bold text-xs truncate">{item.title}</div>
+        <div className="text-white/60 text-[10px] font-medium">{item.location}</div>
       </div>
     </div>
-    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-      <div className="text-white font-bold text-[11px] truncate">{item.company}</div>
-      <div className="text-white/60 text-[9px]">{item.location}</div>
-    </div>
-  </div>
-);
+  );
+};
 
 // ─── SVG Lineart Gradient Section Header ───
-const SectionDivider = () => (
-  <div className="flex items-center gap-3 px-16 py-5">
+const SectionDivider = ({ text }: { text: string }) => (
+  <div className="flex items-center gap-3 px-16 pt-5 pb-0">
     <svg className="flex-1 h-5 overflow-visible" viewBox="0 0 300 18" preserveAspectRatio="none">
       <defs>
         <linearGradient id="lg-left" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -204,13 +337,8 @@ const SectionDivider = () => (
 
     <div className="flex items-center gap-2 whitespace-nowrap">
       <Leaf className="w-3.5 h-3.5 text-[#23471d]" />
-      <span className="font-bold text-slate-900 text-[12px] tracking-[0.12em] uppercase">
-        WHAT OUR{" "}
-        <span style={{ color: "#458a16" }}>EXHIBITORS</span>
-        {" "}
-        <span style={{ color: "#23471d" }}>&</span>
-        {" "}
-        <span style={{ color: "#3e6cc0" }}>PARTNERS SAY</span>
+      <span className="font-bold text-[#6E1A37] text-[15px] tracking-[0.12em] uppercase">
+        {text || "WHAT OUR EXHIBITORS & PARTNERS SAY"}
       </span>
       <Leaf className="w-3.5 h-3.5 text-[#d26019]" />
     </div>
@@ -240,23 +368,60 @@ const SectionDivider = () => (
 
 // ─── Main Component ───
 const TestimonialsCarousel = () => {
+  const [data, setData] = useState<any>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const total = TESTIMONIALS_DATA.length;
-  const VISIBLE = 5;
-
-  const next = () => setActiveIndex(i => (i + 1) % total);
-  const prev = () => setActiveIndex(i => (i - 1 + total) % total);
+  const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
-    if (isPaused) return;
-    const t = setInterval(next, 4000);
-    return () => clearInterval(t);
-  }, [isPaused]);
+    const loadData = async () => {
+      const res = await newTestimonialsApi.get();
+      if (res) setData(res);
+    };
+    loadData();
+  }, []);
 
-  const visibleCards = Array.from({ length: VISIBLE }, (_, i) =>
-    TESTIMONIALS_DATA[(activeIndex + i) % total]
-  );
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setVisibleCount(1);
+      else if (window.innerWidth < 1024) setVisibleCount(3);
+      else setVisibleCount(5);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const total = data?.cards?.length || 0;
+  const totalVideos = data?.videos?.length || 0;
+
+  const next = () => { if (total) setActiveIndex(i => (i + 1) % total); };
+  const prev = () => { if (total) setActiveIndex(i => (i - 1 + total) % total); };
+
+  useEffect(() => {
+    if (isPaused || !total) return;
+    const t = setInterval(prev, 4000);
+    return () => clearInterval(t);
+  }, [isPaused, total]);
+
+  const visibleCards = data?.cards ? Array.from({ length: Math.min(visibleCount, total) }, (_, i) =>
+    data.cards[(activeIndex + i) % total]
+  ) : [];
+
+  if (!data) return <div className="min-h-[400px] bg-white flex items-center justify-center font-bold text-slate-400">Loading Testimonials...</div>;
+
+  const settings = data.settings;
+
+  const getProcessedHtml = (text: string) => {
+    if (!text) return { __html: "" };
+    let html = text;
+    if (html.toLowerCase().trim() === "what industry leaders say about ihwe") {
+      html = "What Industry<br />Leaders Say<br />About IHWE";
+    }
+    const styledIhwe = `<span class="font-black" style="background: linear-gradient(to bottom, #23471d 0%, #2a7a1e 40%, #1a56db 55%, #1e40af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: inline-block;">IHWE</span>`;
+    html = html.replace(/IHWE/g, styledIhwe);
+    return { __html: html };
+  };
 
   return (
     <section className="relative bg-white overflow-hidden">
@@ -295,107 +460,68 @@ const TestimonialsCarousel = () => {
           transform: skewX(-20deg);
           animation: shimmer 2s infinite;
         }
+        @keyframes marqueeScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-wrapper-videos {
+          display: flex;
+          width: max-content;
+          animation: marqueeScroll 30s linear infinite;
+        }
+        .marquee-wrapper-videos:hover {
+          animation-play-state: paused;
+        }
       `}</style>
 
       {/* ─── TOP HERO BANNER ─── */}
-      <div className="relative w-full min-h-[380px] flex items-center overflow-hidden">
-
+      <div className="relative w-full min-h-[420px] md:min-h-[380px] flex items-center overflow-hidden py-12 md:py-0">
         <div className="absolute inset-0 z-0">
           <img
-            src={testImg}
-            className="w-full h-full object-cover"
-            alt="IHWE Expo Background"
+            src={settings.heroBgImage ? `${SERVER_URL}${settings.heroBgImage}` : testImg}
+            className="w-full h-full object-cover opacity-60 md:opacity-100"
+            alt={settings.heroBgAlt || "IHWE Expo Background"}
           />
+          <div className="absolute inset-0 bg-white/40 md:hidden" />
         </div>
 
-        <div className="relative z-10 max-w-[1400px] mx-auto px-16 flex flex-col md:flex-row items-center gap-12 w-full">
-
-          {/* LEFT: Text */}
-          <div className="flex flex-col justify-center w-full md:w-[55%] -mt-10">
-            <div className="flex items-center gap-2 mb-4">
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-16 flex flex-col md:flex-row items-center gap-10 md:gap-12 w-full">
+          <div className="flex flex-col justify-center w-full md:w-[55%] text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
               <div className="w-7 h-7 rounded-lg bg-[#397511] flex items-center justify-center shadow">
                 <Quote className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="text-[#4a8125] font-bold text-[14px] tracking-wide">
-                Voices That Inspire Change
+              <span className="text-[#4a8125] font-bold text-[13px] md:text-[14px] tracking-wide">
+                {settings.subtitle || "Voices That Inspire Change"}
               </span>
             </div>
-
-            <h2 className="text-[46px] font-extrabold text-slate-900 leading-[1.1] mb-3">
-              What Industry<br />
-              Leaders Say<br />
-              About{" "}
-              <span
-                className="font-extrabold"
-                style={{
-                  background: "linear-gradient(to bottom, #23471d 0%, #2a7a1e 40%, #1a56db 55%, #1e40af 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  display: "inline-block",
-                }}
-              >
-                IHWE
-              </span>
-            </h2>
-
+            <h2
+              className="text-3xl md:text-[46px] font-black text-slate-900 leading-[1.1] mb-5 md:mb-3"
+              dangerouslySetInnerHTML={getProcessedHtml(settings.heading)}
+            />
             <div
-              className="h-1 w-12 rounded-full mb-4"
+              className="h-1.5 w-16 rounded-full mb-6 md:mb-4 mx-auto md:mx-0"
               style={{ background: "linear-gradient(90deg, #23471d 0%, #5f9426 100%)" }}
             />
-
-            <p className="text-slate-800 text-[17px] leading-relaxed max-w-md">
-              Real experiences. Real partnerships. Real impact.
-              Discover how IHWE is transforming the global health & wellness ecosystem.
+            <p className="text-slate-800 text-[15px] md:text-[17px] leading-relaxed max-w-md mx-auto md:mx-0">
+              {settings.description || "Real experiences. Real partnerships. Real impact. Discover how IHWE is transforming the global health & wellness ecosystem."}
             </p>
           </div>
 
-          {/* RIGHT: Stats Card */}
           <div className="relative flex-1 flex justify-end">
             <div
               className="bg-white rounded-lg pl-5 pr-3 py-2 flex flex-col min-w-[170px]"
               style={{ boxShadow: "rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px" }}
             >
               {STATS.map((s, i) => {
-                let valStyle = { color: "#5f9426" };
-                if (s.value === "20,000+") {
-                  valStyle = {
-                    background: "linear-gradient(90deg, #1a7a8a 0%, #4f8519 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  };
-                } else if (s.value === "500+") {
-                  valStyle = {
-                    background: "linear-gradient(90deg, #1a4d1a 0%, #5f9426 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  };
-                } else if (s.value === "200+") {
-                  valStyle = {
-                    background: "linear-gradient(90deg, #5f9426 0%, #1a4d1a 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  };
-                }
-
+                let valStyle: React.CSSProperties = { color: s.color };
                 return (
-                  <div
-                    key={i}
-                    className={cn(
-                      "flex items-center gap-4 py-3",
-                      i !== STATS.length - 1 && "border-b border-slate-100"
-                    )}
-                  >
+                  <div key={i} className={cn("flex items-center gap-4 py-3", i !== STATS.length - 1 && "border-b border-slate-100")}>
                     <div className="flex items-center justify-center flex-shrink-0">
                       <s.icon className="w-7 h-7" style={{ color: s.color }} />
                     </div>
                     <div>
-                      <div className="font-black text-[16px] leading-none" style={valStyle}>
-                        {s.value}
-                      </div>
+                      <div className="font-black text-[16px] leading-none" style={valStyle}>{s.value}</div>
                       <div className="text-slate-900 text-[11px] font-medium mt-1">{s.label}</div>
                     </div>
                   </div>
@@ -403,31 +529,30 @@ const TestimonialsCarousel = () => {
               })}
             </div>
           </div>
-
         </div>
       </div>
 
       {/* ─── SECTION HEADER ─── */}
-      <SectionDivider />
+      <SectionDivider text={settings.dividerText} />
 
       {/* ─── TESTIMONIAL CARDS CAROUSEL ─── */}
       <div
-        className="relative px-16 pb-4"
+        className="relative px-6 md:px-16 pb-4"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <button
           onClick={prev}
-          className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-2xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
         >
-          <ChevronLeft className="w-7 h-7" />
+          <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
         </button>
 
-        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto py-10 -my-10">
+        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto pt-5 pb-10 -mb-10">
           <AnimatePresence mode="popLayout">
             {visibleCards.map((item, i) => (
               <motion.div
-                key={`${item.id}-${activeIndex}-${i}`}
+                key={`${item._id}-${activeIndex}-${i}`}
                 initial={{ opacity: 0, x: 50, scale: 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -50, scale: 0.96 }}
@@ -441,210 +566,142 @@ const TestimonialsCarousel = () => {
 
         <button
           onClick={next}
-          className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-2xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
         >
-          <ChevronRight className="w-7 h-7" />
+          <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
         </button>
       </div>
 
       {/* Pagination Dots */}
       <div className="flex justify-center gap-2 py-2">
-        {TESTIMONIALS_DATA.map((_, i) => (
+        {(data.cards || []).map((_: any, i: number) => (
           <button
             key={i}
             onClick={() => setActiveIndex(i)}
             className={cn(
               "h-1.5 rounded-full transition-all duration-300",
-              activeIndex === i
-                ? "w-8 bg-[#23471d]"
-                : "w-1.5 bg-slate-200 hover:bg-slate-300"
+              activeIndex === i ? "w-8 bg-[#23471d]" : "w-1.5 bg-slate-200 hover:bg-slate-300"
             )}
           />
         ))}
       </div>
 
       {/* ─── VIDEO SECTION ─── */}
-      <div className="relative px-16 pt-6 pb-4">
-        {/* Left Leaf Decoration */}
-        <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-40 pointer-events-none rotate-45 select-none z-0">
+      <div className="relative pt-6 pb-0 md:pb-2">
+        <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-20 pointer-events-none rotate-45 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
-        <div className="relative z-10 max-w-[1189px] mx-auto flex flex-col md:flex-row gap-8 items-start justify-center">
-
-          <div className="flex flex-col w-[300px] flex-shrink-0">
-            <div className="flex items-center gap-4 mb-4">
-              <div
-                className="w-14 h-14 rounded-full border-2 flex items-center justify-center bg-white shadow-md flex-shrink-0"
-                style={{ borderColor: "#538417" }}
-              >
-                <Play className="w-7 h-7 ml-1" style={{ color: "#4f8519", fill: "#4f8519" }} />
-              </div>
-              <div className="flex flex-col">
-                <span style={{ color: "#538417" }} className="font-bold text-[10px] uppercase tracking-widest leading-none mb-1">
-                  Hear Directly From
-                </span>
-                <h3 className="text-[27px] font-black leading-tight whitespace-nowrap">
-                  <span className="text-black">Our</span>{" "}
-                  <span style={{
-                    background: "linear-gradient(90deg, #4f8519 0%, #4f8519 55%, #1a7a8a 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}>
-                    Exhibitors
-                  </span>
-                </h3>
+        <SectionContainer className="relative z-10">
+          <div className="flex flex-col md:flex-row items-stretch">
+            {/* Left side constrained marquee - now expanded to full right */}
+            <div className="w-full overflow-hidden">
+              <div className="marquee-wrapper-videos flex gap-4">
+                {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
+                  <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
+                    <VideoCard item={v} />
+                  </div>
+                ))}
               </div>
             </div>
-            <p className="text-slate-900 text-[11.5px] mb-5 leading-relaxed font-medium">
-              Real stories from real partners who experienced the IHWE impact.
-            </p>
-            <button className="flex items-center gap-1.5 border border-[#4f8519] rounded-lg px-5 py-2.5 text-[#4f8519] font-bold text-[11px] hover:bg-[#4f8519] hover:text-white transition-all duration-300 w-fit">
-              View More Videos
-              <ChevronRight className="w-4 h-4" />
-            </button>
           </div>
+        </SectionContainer>
 
-          <div className="flex gap-4 flex-1">
-            {VIDEOS_DATA.map((v) => (
-              <VideoCard key={v.id} item={v} />
-            ))}
-          </div>
-        </div>
-
-        {/* Right Leaf Decoration */}
-        <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-45 pointer-events-none -rotate-12 select-none z-0">
+        <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-20 pointer-events-none -rotate-12 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
       </div>
 
       {/* ─── BOTTOM STATS BAR ─── */}
-      <div className="border-t border-slate-100 overflow-hidden w-full">
-        <div className="container mx-auto max-w-[1400px] flex items-stretch relative min-h-[50px] px-6 md:px-16">
-          
-          {/* No spacer needed — SectionContainer handles left alignment */}
+      <div className="overflow-hidden w-full pb-5 mt-2 relative z-30">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-stretch relative px-6 md:px-16 gap-8 md:gap-0">
 
-          {/* WHITE STATS SECTION */}
           <div
-            className="flex items-stretch flex-shrink-0"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 items-center flex-shrink-0 w-full md:w-auto"
             style={{
               background: "white",
-              borderRadius: "24px",
-              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
+              borderRadius: window.innerWidth > 1024 ? "24px 0 0 24px" : "24px",
+              boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px",
               position: "relative",
               zIndex: 3,
-              paddingLeft: "10px",
-              minWidth: "760px"
+              padding: "2px 8px",
             }}
           >
-            {BOTTOM_STATS.map((s, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 px-4 pt-1 pb-0.5 flex-1"
-                style={{ position: "relative" }}
-              >
-                {i < BOTTOM_STATS.length - 1 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: "10px",
-                      bottom: "10px",
-                      width: "1px",
-                      background: "linear-gradient(to bottom, transparent, #e2e8f0, #cbd5e1, #e2e8f0, transparent)",
-                    }}
-                  />
-                )}
-                <div className="flex items-center justify-center flex-shrink-0">
-                  <s.icon
-                    className="w-5 h-5"
-                    style={{ color: i % 2 === 0 ? "#23471d" : "#2563c8" }}
-                  />
+            {(settings.bottomBarStats || []).map((s: any, i: number) => {
+              const IconComp = s.icon === 'Leaf' ? Leaf :
+                s.icon === 'Globe' ? Globe :
+                s.icon === 'Users' ? Users :
+                s.icon === 'Building2' ? Building2 :
+                s.icon === 'Handshake' ? Handshake :
+                s.icon === 'Mic2' ? Mic2 :
+                s.icon === 'Store' ? Store : Globe;
+
+              return (
+                <div key={i} className="flex items-center gap-2 px-3 py-1.5 md:py-1 flex-1 min-w-fit" style={{ position: "relative" }}>
+                  {i < (settings.bottomBarStats.length - 1) && (
+                    <div className="hidden lg:block" style={{ position: "absolute", right: 0, top: "8px", bottom: "8px", width: "1px", background: "linear-gradient(to bottom, transparent, #e2e8f0, transparent)" }} />
+                  )}
+                  <div className="flex items-center justify-center flex-shrink-0">
+                    <IconComp className="w-4 h-4 md:w-5 md:h-5 opacity-80" style={{ color: i % 2 === 0 ? "#23471d" : "#2563c8" }} />
+                  </div>
+                  <div className="whitespace-nowrap">
+                    <div className="text-slate-800 text-[9.5px] md:text-[8.5px] font-bold leading-none mb-0.5">{s.label}</div>
+                    <div className="font-black text-slate-900 text-[14px] md:text-[13px] leading-tight">{s.value}</div>
+                  </div>
                 </div>
-                <div className="whitespace-nowrap">
-                  <div className="text-slate-800 text-[8.5px] font-medium leading-none mb-0.5">{s.label}</div>
-                  <div className="font-bold text-slate-800 text-[11.5px] leading-tight">{s.value}</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div
-            className="flex flex-col relative flex-1 justify-center"
-            style={{
-              marginLeft: "-20px",
-              zIndex: 2,
-            }}
-          >
-            {/* Bleeding background to the right edge */}
-            <div 
+          <div className="flex flex-col relative flex-1 justify-center w-full min-h-0 ml-0 md:-ml-5" style={{ zIndex: 2 }}>
+            <div
+              className="rounded-[24px] md:rounded-none"
               style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100vw',
+                position: 'absolute', inset: 0, width: '100%',
                 background: "linear-gradient(90deg, #1a3a12 0%, #2d5c1e 45%, #a4c639 100%)",
-                clipPath: "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)",
+                clipPath: window.innerWidth > 1024 ? "polygon(20px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%)" : "none",
                 zIndex: -1
               }}
             />
-            <div className="relative z-10 py-1 pl-12 pr-10">
-            <div style={{ position: "absolute", top: "4px", right: "5%", opacity: 0.1, pointerEvents: "none" }}>
-              <svg width="30" height="30" viewBox="0 0 42 42" fill="none">
-                {[7, 21, 35].flatMap(x =>
-                  [7, 21, 35].map(y => (
+            <div className="relative z-10 py-2 md:py-1 px-6 md:pl-12 md:pr-10 text-center md:text-left">
+              <div style={{ position: "absolute", top: "10px", right: "10%", opacity: 0.1, pointerEvents: "none" }}>
+                <svg width="40" height="40" viewBox="0 0 42 42" fill="none">
+                  {[7, 21, 35].flatMap(x => [7, 21, 35].map(y => (
                     <circle key={`${x}-${y}`} cx={x} cy={y} r="2.8" fill="white" />
-                  ))
-                )}
-              </svg>
-            </div>
-
-            <div className="flex items-center">
-              <span style={{ color: "#ffffff", fontWeight: 500, fontSize: "16px", marginRight: "8px" }}>
-                Be the Next
-              </span>
-              <span style={{ color: "#f5c842", fontWeight: 500, fontSize: "16px" }}>
-                Success Story
-              </span>
-            </div>
-
-            <div className="flex items-center pr-10 -mt-0.5 gap-x-10">
-              <div style={{ color: "rgba(255,255,255,0.95)", fontWeight: 700, fontSize: "16px", whiteSpace: "nowrap" }}>
-                at IHWE 2026!
+                  )))}
+                </svg>
               </div>
-              <div className="flex gap-2 ml-auto pl-10">
-                <div className="relative group/btn ml-8">
+
+              <div className="flex flex-col md:flex-row items-center md:justify-start gap-1 md:gap-2 mb-4 md:mb-0">
+                <span className="text-white font-bold text-base md:text-[14px]">{settings.ctaMainText || "Be the Next"}</span>
+                <span className="text-[#f5c842] font-black text-lg md:text-[15px]">{settings.ctaSubText || "Success Story"}</span>
+                <div className="text-white font-black text-base md:text-[14px] md:ml-1">{settings.ctaBottomText || "at IHWE 2026!"}</div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-4 md:mt-0">
+                <div className="relative group/btn w-full sm:w-auto">
                   <Sparkle style={{ top: '-6px', left: '10%', animationDelay: '0s' }} />
                   <Sparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
                   <Sparkle style={{ top: '-4px', right: '15%', animationDelay: '0.8s' }} />
-                  <Sparkle style={{ bottom: '-6px', left: '25%', animationDelay: '0.2s' }} />
-                  <Sparkle style={{ bottom: '-8px', right: '30%', animationDelay: '0.6s' }} />
-                  
                   <button
-                    className="golden-btn-premium flex items-center gap-1 text-[#050A1A] font-bold text-[10px] px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap hover:scale-[1.02]"
+                    onClick={() => settings.ctaButton1Path && window.open(settings.ctaButton1Path, '_blank')}
+                    className="golden-btn-premium flex items-center justify-center gap-2 text-[#050A1A] font-black text-[12px] md:text-[10px] w-full px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap hover:scale-[1.02]"
                   >
-                    <Store className="w-3 h-3" />
-                    Book Your Stall <ChevronRight className="w-2.5 h-2.5" />
+                    <Store className="w-4 h-4 md:w-3 md:h-3" />
+                    {settings.ctaButton1Name || "Book Your Stall"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
                   </button>
                 </div>
-                
+
                 <button
-                  className="flex items-center gap-1 font-bold text-[10px] px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap"
-                  style={{
-                    background: "rgba(255,255,255,0.15)",
-                    border: "1.2px solid rgba(255,255,255,0.3)",
-                    color: "white",
-                    boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
-                  }}
-                  onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-                  onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}
+                  onClick={() => settings.ctaButton2Path && window.open(settings.ctaButton2Path, '_blank')}
+                  className="flex items-center justify-center gap-2 font-black text-[12px] md:text-[10px] w-full sm:w-auto px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap"
+                  style={{ background: "rgba(255,255,255,0.15)", border: "1.2px solid rgba(255,255,255,0.3)", color: "white", boxShadow: "rgba(0,0,0,0.2) 0 4px 10px" }}
                 >
-                  Apply Now <ChevronRight className="w-2.5 h-2.5" />
+                  {settings.ctaButton2Name || "Apply Now"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
                 </button>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 

@@ -203,13 +203,13 @@ const CategoryCard = ({ item, width = '140px' }) => (
   <div
     style={{
       width: width,
-      flexShrink: 0,
+      flexShrink: width === '100%' ? undefined : 0,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'flex-start',
       textAlign: 'center',
-      background: '#fff',
+      background: '#ECFDF5',
       padding: '16px 10px 14px',
       borderRadius: '18px',
       border: '1px solid #e8edf2',
@@ -261,45 +261,28 @@ const ExhibitionCategories = () => {
   const row2 = categories.slice(8);
 
   return (
-    <section className="bg-white pt-8 md:pt-10 pb-4 md:pb-4 overflow-hidden">
+    <section className="bg-white pt-8 md:pt-5 pb-4 md:pb-4 overflow-hidden">
       <SectionContainer>
 
         {/* ── Heading ── */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '18px',
-          marginBottom: '28px',
-        }}>
+        <div className="flex items-center justify-center gap-4 md:gap-[18px] mb-5 md:mb-6">
           {/* Left line + dot */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{ height: '1.5px', width: '140px', background: 'linear-gradient(to right, transparent, #b0bec5)' }} />
+          <div className="hidden md:flex items-center">
+            <div style={{ height: '1.5px', width: '120px', background: 'linear-gradient(to right, transparent, #b0bec5)' }} />
             <div style={{
               width: '10px', height: '10px', borderRadius: '50%',
               border: '2.5px solid #0d47a1', background: '#fff', flexShrink: 0,
             }} />
           </div>
 
-          {/* ✅ KEY FIX: "EXHIBITION" word ko alag span mein rakha with backgroundClip */}
-          <h2 style={{
-            fontSize: '22px',
-            fontWeight: '900',
-            letterSpacing: '1px',
-            color: '#0f172a',
-            textTransform: 'uppercase',
-            margin: 0,
-            fontFamily: "'Inter', 'Segoe UI', sans-serif",
-            whiteSpace: 'nowrap',
-            lineHeight: 1,
-          }}>
+          <h2 className="text-[18px] md:text-[22px] font-black tracking-tight md:tracking-wider text-[#0f172a] uppercase m-0 font-['Inter'] leading-[1.2] md:leading-none text-center px-4 md:px-0">
             OUR CORE{' '}
             <span style={{
               background: 'linear-gradient(135deg, #22c55e 0%, #0891b2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              display: 'inline-block', // ✅ inline-block zaroori hai gradient ke liye
+              display: 'inline-block',
             }}>
               EXHIBITION
             </span>
@@ -307,27 +290,37 @@ const ExhibitionCategories = () => {
           </h2>
 
           {/* Right dot + line */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="hidden md:flex items-center">
             <div style={{
               width: '10px', height: '10px', borderRadius: '50%',
               border: '2.5px solid #0d47a1', background: '#fff', flexShrink: 0,
             }} />
-            <div style={{ height: '1.5px', width: '140px', background: 'linear-gradient(to left, transparent, #b0bec5)' }} />
+            <div style={{ height: '1.5px', width: '120px', background: 'linear-gradient(to left, transparent, #b0bec5)' }} />
           </div>
         </div>
 
-        {/* Row 1: 8 cards - Single Row */}
-        <div className="flex flex-nowrap md:justify-start gap-3 mb-4 overflow-x-auto no-scrollbar pb-2">
-          {row1.map((item, i) => (
-            <CategoryCard key={i} item={item} width="140px" />
+        {/* Mobile View: 2-column Grid */}
+        <div className="grid md:hidden grid-cols-2 gap-3 mb-6">
+          {categories.map((item, i) => (
+            <CategoryCard key={i} item={item} width="100%" />
           ))}
         </div>
 
-        {/* Row 2: 7 cards - Single Row */}
-        <div className="flex flex-nowrap md:justify-start gap-3 overflow-x-auto no-scrollbar pb-2">
-          {row2.map((item, i) => (
-            <CategoryCard key={i} item={item} width="160px" />
-          ))}
+        {/* Desktop View: Original 2-row Layout */}
+        <div className="hidden md:block">
+          {/* Row 1: 8 cards - Single Row */}
+          <div className="flex flex-nowrap md:justify-start gap-3 mb-4 overflow-x-auto no-scrollbar pb-2">
+            {row1.map((item, i) => (
+              <CategoryCard key={i} item={item} width="140px" />
+            ))}
+          </div>
+
+          {/* Row 2: 7 cards - fills full width */}
+          <div className="grid grid-cols-7 gap-3 overflow-x-auto no-scrollbar pb-2">
+            {row2.map((item, i) => (
+              <CategoryCard key={i} item={item} width="100%" />
+            ))}
+          </div>
         </div>
 
       </SectionContainer>

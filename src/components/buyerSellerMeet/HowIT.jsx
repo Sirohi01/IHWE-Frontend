@@ -60,7 +60,7 @@ const industries = [
 
 const HowIT = () => {
     return (
-        <div className="py-4 px-16 font-['Barlow',sans-serif]">
+        <div className="py-4 px-16">
             <div className='flex flex-row items-stretch gap-4'>
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
@@ -101,7 +101,7 @@ const HowIT = () => {
                                     </div>
 
                                     {/* Title */}
-                                    <div className="mt-6 text-sm font-medium text-[#1a3d20] uppercase text-center whitespace-pre-line">
+                                    <div className="mt-6 text-sm font-medium text-[#d4a832] uppercase text-center whitespace-pre-line">
                                         {step.title}
                                     </div>
 

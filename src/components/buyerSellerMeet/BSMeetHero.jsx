@@ -11,15 +11,19 @@ const BSMeetHero = () => {
                 backgroundImage: "url('/bsmeet/bg2.png')"
             }}
         >
-            {/* DARK OVERLAY (text readable banane ke liye) */}
-            <div className="absolute inset-0"></div>
+            {/* GREEN OVERLAY */}
+            <div className="absolute inset-0 bg-green-500/10"></div>
 
             <div className="relative z-10 py-1 px-6 md:px-16">
-                <div className="grid md:grid-cols-2 gap-10 items-center">
+                <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
-                    <div>
-                        <h2 className="text-2xl md:text-4xl font-medium text-green-900 leading-tight">
+                    <div className="w-[55%]">
+                        <h2 className="text-2xl md:text-4xl mt-4 font-bold text-green-900 leading-tight">
+                            IHWE 2026
+
+                        </h2>
+                        <h2 className="text-2xl md:text-6xl font-bold text-green-900 leading-tight">
                             BUYER–SELLER <br />
                             <span style={{ color: '#739b20' }}>MEET 2026</span>
                         </h2>
@@ -35,58 +39,46 @@ const BSMeetHero = () => {
                         </p>
 
                         {/* BUTTONS */}
-                        <div className="flex gap-6 mt-10">
+                        <div className="flex gap-6 mt-6">
                             <button
                                 onClick={() => navigate('/buyer-registration')}
-                                className="bg-green-800 text-white flex items-center gap-2 px-5 py-2 rounded-lg font-normal shadow hover:bg-green-900 transition"
+                                className="text-sm bg-green-800 text-white flex items-center gap-2 px-5 py-1.5 rounded-lg font-normal shadow hover:bg-green-900 transition"
                             >
                                 <FaUserTie className="text-lg" />
                                 REGISTER AS BUYER
                             </button>
                             <button
-                                onClick={() => navigate('/seller-registration')}
-                                className="bg-yellow-600 text-white flex items-center gap-2 px-5 py-2 rounded-lg font-normal shadow hover:bg-yellow-700 transition"
+                                onClick={() => navigate('/exhibitor-login')}
+                                className="text-sm bg-yellow-600 text-white flex items-center gap-2 px-5 py-1.5 rounded-lg font-normal shadow hover:bg-yellow-700 transition"
                             >
                                 <FaStore className="text-lg" />
                                 REGISTER AS SELLER
                             </button>
                         </div>
 
-                        {/* DATE + LOCATION */}
-                        {/* <div className="flex flex-col bg-gray-200 md:flex-row gap-6 mt-8 text-gray-700 text-sm md:text-lg">
-                            <div className="flex items-center gap-2">
-                                📅 <span>26 – 29 MARCH 2026</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                📍 <span>PRAGATI MAIDAN, NEW DELHI, INDIA</span>
-                            </div>
-                        </div> */}
-                        <div className="inline-flex items-stretch overflow-hidden rounded-xl mt-12"
+                        <div className="inline-flex items-stretch overflow-hidden rounded-xl mt-6"
                             style={{ background: "#edf2e4", border: "1.5px solid #c8d8b0" }}>
 
-                            {/* DATE */}
-                            <div className="flex items-center gap-3 px-10 py-1"
+                            <div className="flex items-center gap-3 px-10 py-2"
                                 style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase", whiteSpace: "nowrap" }}>
 
                                 <FaCalendarAlt size={20} color="#1a3d20" />
                                 21 - 23 AUGUST 2026
                             </div>
 
-                            {/* Separator */}
                             <div style={{ width: "1.5px", background: "#c0d4a8", margin: "10px 0" }} />
 
-                            {/* LOCATION */}
-                            <div className="flex items-center gap-3 px-10 py-1"
+                            <div className="flex items-center gap-3 px-10 py-2 "
                                 style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase" }}>
 
                                 <FaMapMarkerAlt size={20} color="#1a3d20" />
-                                <span>PRAGATI MAIDAN<br />NEW DELHI, INDIA</span>
+                                <span>PRAGATI MAIDAN, NEW DELHI, INDIA</span>
                             </div>
                         </div>
                     </div>
 
                     {/* RIGHT SIDE EMPTY (optional ya kuch aur add kar sakte ho) */}
-                    <div className="relative">
+                    <div className="relative w-[45%]">
                         {/* Base Image */}
                         <img src="/bsmeet/bsmeetRight3.png" alt="Buyer Seller Meet" className="mix-blend-multiply bg-transparent object-contain w-full h-auto" />
                         {/* Overlapping WhatsApp Button Image */}

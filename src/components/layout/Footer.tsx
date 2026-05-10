@@ -277,21 +277,21 @@ const Footer = () => {
         }
       `}</style>
       {/* ── TOP HEADER BAR: Logo + CTA Buttons ── */}
-      <div style={{ borderBottom: "1px solid #1E2A45" }}>
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4">
+      <div className="border-b border-[#1E2A45]">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-6 md:py-4 gap-6 md:gap-4">
           {/* Left: Logo + divider + edition */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
             <Link to="/" className="shrink-0">
               <div className="bg-white rounded-xl py-2 px-4 shadow-lg flex items-center gap-4">
                 <img
                   src="/logo.png"
                   alt="IHWE"
-                  className="h-11 w-auto object-contain"
+                  className="h-10 md:h-11 w-auto object-contain"
                 />
                 <div className="w-[1px] h-8 bg-slate-500" />
                 <div className="flex flex-col">
-                  <p className="text-[7.5px] text-slate-500 font-bold uppercase tracking-[0.1em] leading-none mb-1">Organised By</p>
-                  <p className="text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <p className="text-[7px] md:text-[7.5px] text-slate-500 font-bold uppercase tracking-[0.1em] leading-none mb-1">Organised By</p>
+                  <p className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
                     NAMO GANGE WELLNESS PVT. LTD.
                   </p>
                 </div>
@@ -299,26 +299,26 @@ const Footer = () => {
             </Link>
           </div>
 
-          {/* Right: 4 CTA Buttons */}
-          <div className="flex items-center gap-2.5">
+          {/* Right: CTA Buttons */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:flex items-center gap-2 md:gap-2.5 w-full md:w-auto">
             {ctaButtons.map((btn) => (
-              <div key={btn.line2} className="relative group/btn">
+              <div key={btn.line2} className="relative group/btn w-full md:w-auto">
                 {btn.primary && (
-                  <>
+                  <div className="hidden md:block">
                     <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
                     <Sparkle style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
                     <Sparkle style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
                     <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                     <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
-                  </>
+                  </div>
                 )}
                 <Link
                   to={btn.href}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all relative z-10 ${btn.primary
+                  className={`flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3.5 py-2 md:py-2 rounded-lg transition-all relative z-10 w-full justify-center ${btn.primary
                     ? "golden-btn-footer hover:scale-[1.02]"
                     : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10 hover:scale-[1.02]"
                     }`}
-                  style={{ minWidth: "120px" }}
+                  style={{ minWidth: "auto" }}
                 >
                   <span
                     className={`shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
@@ -326,22 +326,22 @@ const Footer = () => {
                   >
                     {btn.icon}
                   </span>
-                  <div className="flex-1 min-w-0 text-left">
+                  <div className="flex flex-col text-left min-w-0">
                     <p
-                      className={`font-semibold leading-none text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                      className={`font-semibold leading-none text-[8px] md:text-[9.5px] tracking-wide ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
                         }`}
                     >
                       {btn.line1}
                     </p>
                     <p
-                      className={`font-bold text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
+                      className={`font-bold text-[10px] md:text-[11.5px] tracking-wide leading-tight mt-0.5 ${btn.primary ? "text-[#050A1A]" : "text-white"
                         }`}
                     >
                       {btn.line2}
                     </p>
                   </div>
                   <ArrowRight
-                    className={`w-3.5 h-3.5 shrink-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
+                    className={`w-3 h-3 md:w-3.5 md:h-3.5 shrink-0 ml-auto md:ml-0 ${btn.primary ? "text-[#050A1A]" : "text-[#F3B71B]"
                       }`}
                   />
                 </Link>
@@ -353,18 +353,9 @@ const Footer = () => {
 
       {/* ── MAIN 5-COLUMN GRID ── */}
       <div className="max-w-[1400px] mx-auto px-6">
-        <div
-          className="grid"
-          style={{
-            gridTemplateColumns: "1.2fr 0.8fr 1fr 1fr 1fr",
-            borderBottom: "1px solid #1E2A45",
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 border-b border-[#1E2A45]">
           {/* COL 1: Event Info */}
-          <div
-            className="flex flex-col gap-3 py-5 pr-2"
-            style={{ borderRight: "1px solid #1E2A45" }}
-          >
+          <div className="flex flex-col gap-4 py-8 md:py-6 md:pr-6 border-b lg:border-b-0 lg:border-r border-[#1E2A45]">
             <div>
               <div className="mb-1.5 flex items-center gap-1.5">
                 <span className="text-white font-bold text-[15px] leading-none">9th IHWE</span>
@@ -419,10 +410,7 @@ const Footer = () => {
           </div>
 
           {/* COL 2: Quick Links */}
-          <div
-            className="py-5 px-4"
-            style={{ borderRight: "1px solid #1E2A45" }}
-          >
+          <div className="py-8 md:py-6 px-0 md:px-6 border-b md:border-b-0 md:border-r border-[#1E2A45]">
             <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
               QUICK LINKS
             </p>
@@ -442,10 +430,7 @@ const Footer = () => {
           </div>
 
           {/* COL 3: Exhibitor Resources */}
-          <div
-            className="py-5 px-4"
-            style={{ borderRight: "1px solid #1E2A45" }}
-          >
+          <div className="py-8 md:py-6 px-0 md:px-6 border-b lg:border-b-0 lg:border-r border-[#1E2A45]">
             <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
               EXHIBITOR RESOURCES
             </p>
@@ -465,10 +450,7 @@ const Footer = () => {
           </div>
 
           {/* COL 4: Contact Information */}
-          <div
-            className="py-5 px-4"
-            style={{ borderRight: "1px solid #1E2A45" }}
-          >
+          <div className="py-8 md:py-6 px-0 md:px-6 border-b md:border-b-0 md:border-r border-[#1E2A45]">
             <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
               CONTACT INFORMATION
             </p>
@@ -523,7 +505,7 @@ const Footer = () => {
           </div>
 
           {/* COL 5: Event Highlights */}
-          <div className="py-5 px-4">
+          <div className="py-8 md:py-6 px-0 md:px-6">
             <p className="text-[#F3B71B] font-bold text-[11.5px] uppercase tracking-widest">
               EVENT HIGHLIGHTS
             </p>
@@ -544,18 +526,11 @@ const Footer = () => {
 
       {/* ── STATS BAR ── */}
       <div className="max-w-[1400px] mx-auto px-6">
-        <div
-          className="grid grid-cols-4"
-          style={{ borderBottom: "1px solid #1E2A45" }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 border-b border-[#1E2A45]">
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="flex items-center gap-3.5 py-4 px-5"
-              style={{
-                borderRight:
-                  i < stats.length - 1 ? "1px solid #1E2A45" : "none",
-              }}
+              className="flex items-center gap-4 py-6 md:py-5 px-4 md:px-5 border-b sm:border-b-0 sm:border-r border-[#1E2A45] last:border-none"
             >
               {s.icon}
               <div className="flex flex-col">
@@ -591,14 +566,14 @@ const Footer = () => {
 
       {/* ── BOTTOM BAR ── */}
       <div
-        className="flex items-center justify-between flex-wrap gap-3 px-5 py-3.5"
+        className="flex flex-col md:flex-row items-center justify-between gap-6 px-6 py-6"
         style={{ background: "#030712" }}
       >
         <p className="text-[11px] text-slate-500">
           © 2026 International Health & Wellness Expo. All Rights Reserved.
         </p>
 
-        <div className="flex items-center flex-wrap">
+        <div className="flex items-center justify-center flex-wrap gap-y-2">
           {[
             { label: "Privacy Policy", href: "/privacy-policy" },
             { label: "Terms & Conditions", href: "/terms-of-service" },
@@ -609,10 +584,7 @@ const Footer = () => {
             <Link
               key={p.label}
               to={p.href}
-              className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-2.5"
-              style={{
-                borderRight: i < 4 ? "1px solid #1E2A45" : "none",
-              }}
+              className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-3 border-r border-[#1E2A45] last:border-none"
             >
               {p.label}
             </Link>

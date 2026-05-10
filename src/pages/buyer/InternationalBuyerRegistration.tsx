@@ -536,26 +536,58 @@ const InternationalBuyerRegistration = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans">
-            <section className="hero-background-registration" style={{ backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})` }}>
-                <div className="absolute inset-0 bg-black/45" />
+            {/* <section className="relative h-[250px] flex items-center justify-center overflow-hidden">
+                <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[10000ms] hover:scale-110"
+                    style={{
+                        backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`,
+                    }}
+                />
+                <div className="absolute inset-0 bg-black/60" />
                 <div className="container mx-auto px-4 text-center text-white relative z-10">
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">{heroData?.title || "International Registration"}</p>
-                    <h1 className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight">{heroData?.heading || "International Buyer Registration"}</h1>
-                    <p className="w-1/2 text-lg flex align-text-center font-normal justify-center mx-auto mb-4 opacity-80">{heroData?.shortDescription || "International Buyer Registration"}</p>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        <p className="text-xs uppercase tracking-[0.4em] mb-3 text-emerald-400 font-bold">
+                            {heroData?.title || "International Portal"}
+                        </p>
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
+                            {heroData?.heading || "International Buyer Registration"}
+                        </h1>
+                        <p className="max-w-2xl mx-auto text-sm md:text-base opacity-80 font-medium">
+                            {heroData?.shortDescription || "Connect with premium Indian health and wellness brands at IHWE 2026."}
+                        </p>
+                    </motion.div>
                 </div>
-            </section>
+            </section> */}
 
-            <section className="py-8 relative bg-[#F8FAFC]">
+            <section className="py-4 relative bg-[#F8FAFC]">
                 <div className="container mx-auto px-4 max-w-[1400px]">
                     <AnimatePresence mode="wait">
                         {submitted ? (
-                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white border border-slate-200 p-12 flex flex-col items-center text-center space-y-5 shadow-2xl rounded-xl">
-                                <CheckCircle size={48} className="text-emerald-500" />
-                                <h2 className="text-2xl font-bold">Registration Successful!</h2>
-                                <Link to="/"><Button className="rounded-full bg-[#23471d]">Return Home</Button></Link>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="bg-white border border-slate-200 p-12 flex flex-col items-center text-center space-y-5 shadow-2xl rounded-2xl"
+                            >
+                                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                                    <CheckCircle size={48} className="text-emerald-600" />
+                                </div>
+                                <h2 className="text-3xl font-bold text-slate-900">Registration Successful!</h2>
+                                <p className="text-slate-500 max-w-md">Thank you for registering. Our international relations team will contact you shortly with your participation details.</p>
+                                <Link to="/">
+                                    <Button className="rounded-full bg-[#23471d] px-8 h-12 text-sm font-bold uppercase tracking-widest">
+                                        Return Home
+                                    </Button>
+                                </Link>
                             </motion.div>
                         ) : (
-                            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-xl rounded-lg overflow-hidden">
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden"
+                            >
                                 <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
                                     <div>
                                         <h2 className="text-base font-bold uppercase tracking-wider font-sans">International Buyer Registration</h2>

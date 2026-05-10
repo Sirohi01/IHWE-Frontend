@@ -42,7 +42,7 @@ const WhyPart = () => {
     ];
 
     return (
-        <div className="px-14">
+        <div className="px-16">
 
             {/* ── SECTION ONE: WHY PARTICIPATE ── */}
             <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl mt-4 mb-4'>                {/* Heading */}
@@ -105,7 +105,7 @@ const WhyPart = () => {
 
                 {/* ── RIGHT: HOW IT WORKS ── */}
                 <div className="w-[75%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl ">
-                    <h2 className="text-lg font-medium text-gray-900 uppercase tracking-wide mb-2">
+                    <h2 className="text-lg font-medium text-gray-900 px-2 uppercase tracking-wide mb-2">
                         How It Works?
                     </h2>
 
