@@ -132,7 +132,7 @@ const MultiSelectDropdown = ({
             <button
                 type="button"
                 onClick={() => setOpen((p) => !p)}
-                className={`w-full min-h-[32px] px-3 py-1.5 rounded-[2px] border text-left text-[12px] font-medium bg-white transition-all outline-none flex items-center justify-between gap-2 flex-wrap
+                className={`w-full min-h-[34px] px-3 py-1.5 rounded-[2px] border text-left text-[12px] font-medium bg-white transition-all outline-none flex items-center justify-between gap-2 flex-wrap
                     ${error ? "border-red-400" : open ? `border-[#23471d]` : "border-slate-400"} hover:border-[#23471d]`}
             >
                 <span className="flex flex-wrap gap-1 flex-1">
@@ -958,14 +958,14 @@ const BuyerRegistration = () => {
     };
 
 
-    const inputClasses = "w-full h-8 px-3 py-2 rounded-[2px] border border-slate-400 bg-white text-left text-[12px] font-medium text-slate-900 outline-none shadow-none transition-all ring-offset-background focus:border-[#23471d] focus:ring-[#23471d]/10 placeholder:text-slate-400 font-sans";
-    const labelClasses = "text-[12px] font-semibold text-slate-900 mb-0.5 block text-left font-sans ";
-    const sectionTitleClasses = "text-[13px] font-black text-[#23471d] pb-1 border-b border-emerald-500/20 flex items-center gap-1.5 mb-3 uppercase tracking-tight font-sans";
-    const buttonTextClasses = "text-[11px] font-bold uppercase tracking-wider font-sans";
+    const inputClasses = "w-full h-[28px] px-3 py-1.5 rounded border border-slate-400 bg-white text-left text-[12px] font-normal text-slate-900 outline-none shadow-none transition-all ring-offset-background focus:border-[#23471d] focus:ring-[#23471d]/10 placeholder:text-slate-400";
+    const labelClasses = "text-[12px] font-medium text-slate-900 mb-0.5 block text-left";
+    const sectionTitleClasses = "text-sm font-medium text-[#23471d] pb-1 border-b border-emerald-500/20 flex items-center gap-1 mb-1 uppercase tracking-tight";
+    const buttonTextClasses = "text-[11px] font-bold uppercase tracking-wider ";
 
     if (isComingSoon) {
         return (
-            <div className="min-h-screen bg-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
+            <div className="min-h-screen bg-white  flex flex-col items-center justify-center relative overflow-hidden">
 
                 <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
@@ -1033,7 +1033,7 @@ const BuyerRegistration = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#FDFDFD] font-sans">
+        <div className="min-h-screen bg-[#FDFDFD] ">
 
             <section className="py-4 relative bg-[#F8FAFC]">
                 <div className="container mx-auto px-4 max-w-[1400px]">
@@ -1043,7 +1043,7 @@ const BuyerRegistration = () => {
                                 <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500"><CheckCircle size={48} strokeWidth={1.5} /></div>
                                 <div className="space-y-2">
                                     <h2 className="text-2xl font-bold text-slate-900 font-serif">Registration Successful!</h2>
-                                    <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed font-sans">Thank you for choosing IHWE 2026. Your registration details and payment confirmation have been emailed to you.</p>
+                                    <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed ">Thank you for choosing IHWE 2026. Your registration details and payment confirmation have been emailed to you.</p>
                                 </div>
                                 <div className="flex flex-wrap gap-4 justify-center">
                                     <Button onClick={handleReset} className={`rounded-full px-8 h-10 border-[#23471d] text-[#23471d] hover:bg-emerald-50 ${buttonTextClasses} shadow-sm`} variant="outline">Register Another</Button>
@@ -1052,33 +1052,42 @@ const BuyerRegistration = () => {
                             </motion.div>
                         ) : (
                             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
-                                <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
+                                <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
+
                                     <div>
-                                        <h2 className="text-base font-bold uppercase tracking-wider font-sans">Domestic Buyer Registration</h2>
-                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium font-sans">9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</p>
+                                        <h2 className="text-base font-medium uppercase tracking-wider text-white">
+                                            Domestic Buyer Registration
+                                        </h2>
+                                        <p className="text-xs text-[#a8d060] uppercase tracking-[0.3em] font-semibold mb-1">
+                                            9th Edition · International Health & Wellness Expo 2026 · IHWE Global Edition
+
+                                        </p>
+
                                     </div>
-                                    <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
+
+                                    <ShieldCheck className="text-[#a8d060]" size={22} />
+
                                 </div>
-                                <form onSubmit={handleSubmit} className="p-5 space-y-5">
+                                <form onSubmit={handleSubmit} className=" space-y-2 px-5">
 
                                     <div className="space-y-2">
-                                        <h3 className={sectionTitleClasses}> Personal & Company Information</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Full Name *</Label><Input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={`${inputClasses} ${errors.fullName ? 'border-red-400' : ''}`} /><ErrorDisplay name="fullName" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Designation *</Label><Input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Current Position" className={`${inputClasses} ${errors.designation ? 'border-red-400' : ''}`} /><ErrorDisplay name="designation" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Company Name *</Label><Input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={`${inputClasses} ${errors.companyName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyName" errors={errors} /></div>
+                                        <h3 className={`${sectionTitleClasses} mt-2`}> Personal & Company Information</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-1 gap-x-2">
+                                            <div><label className={labelClasses}>Full Name <span className="text-red-600">*</span></label><input required name="fullName" value={formData.fullName} onChange={handleChange} placeholder="As per ID Proof" className={`${inputClasses} ${errors.fullName ? 'border-red-400' : ''}`} /><ErrorDisplay name="fullName" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Designation <span className="text-red-600">*</span></label><input required name="designation" value={formData.designation} onChange={handleChange} placeholder="Current Position" className={`${inputClasses} ${errors.designation ? 'border-red-400' : ''}`} /><ErrorDisplay name="designation" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Company Name <span className="text-red-600">*</span></label><input required name="companyName" value={formData.companyName} onChange={handleChange} placeholder="Full Registered Name" className={`${inputClasses} ${errors.companyName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyName" errors={errors} /></div>
                                             <div>
-                                                <Label className={labelClasses}>Business Role *</Label>
+                                                <label className={labelClasses}>Business Role <span className="text-red-600">*</span></label>
                                                 {!formData.businessType.toString().toLowerCase().includes('other') ? (
                                                     <Select required value={formData.businessType} onValueChange={(v) => handleSelectChange('businessType', v)}>
                                                         <SelectTrigger className={`${inputClasses} ${errors.businessType ? 'border-red-400' : ''}`}>
                                                             <SelectValue placeholder="Select Type" />
                                                         </SelectTrigger>
-                                                        <SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">
+                                                        <SelectContent side="bottom" className="bg-white  text-[12px] max-h-[300px]">
                                                             {(() => {
                                                                 const staticGroups = [
                                                                     { title: 'Trade & Distribution', icon: <Store size={14} />, items: ['Distributor', 'Super Distributor', 'Wholesaler', 'Retailer (Single Store)', 'Retail Chain / Multi-Store', 'Modern Trade Buyer'] },
-                                                                    { title: 'Manufacturing & Business', icon: <Factory size={14} />, items: ['Manufacturer', 'Private Label Buyer', 'Franchise Seeker', 'Investor'] },
+                                                                    { title: 'Manufacturing & Business', icon: <Factory size={14} />, items: ['Manufacturer', 'Private label Buyer', 'Franchise Seeker', 'Investor'] },
                                                                     { title: 'International Trade', icon: <Globe size={14} />, items: ['Importer', 'Exporter', 'International Buying Agent'] },
                                                                     { title: 'Online & Digital', icon: <Laptop size={14} />, items: ['E-commerce Seller', 'D2C Brand Owner'] },
                                                                     { title: 'Healthcare & Medical', icon: <HeartPulse size={14} />, items: ['Hospital / Clinic', 'Doctor / Medical Practitioner', 'Pharmacy / Chemist', 'Diagnostic Center'] },
@@ -1142,7 +1151,7 @@ const BuyerRegistration = () => {
                                                     </Select>
                                                 ) : (
                                                     <div className="relative">
-                                                        <Input
+                                                        <input
                                                             name="otherBusinessType"
                                                             value={formData.otherBusinessType}
                                                             onChange={handleChange}
@@ -1165,13 +1174,13 @@ const BuyerRegistration = () => {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
+                                    <div className="">
                                         <h3 className={sectionTitleClasses}>Contact Information</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-1 gap-x-5">
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Mobile Number (10 digits) * <div className="inline-flex w-32 overflow-hidden align-middle ml-2 items-center h-4 relative"><motion.span initial={{ x: "100%" }} animate={{ x: "-100%" }} transition={{ repeat: Infinity, duration: 4, ease: "linear" }} className="text-red-500 text-[10px] uppercase font-semibold whitespace-nowrap absolute">Our team will contact you</motion.span></div></Label>
+                                                <label className={labelClasses}>Mobile Number (10 digits) <span className="text-red-600">*</span></label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><Smartphone className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
+                                                    <div className="relative flex-1"><input required name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} placeholder="10-digit mobile number" className={`${inputClasses} pl-7 ${errors.mobileNumber ? 'border-red-400' : ''}`} disabled={mobileOtpVerified || mobileOtpSent} maxLength={10} /></div>
                                                     {!mobileOtpVerified && !mobileOtpSent && (
                                                         <Button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile || formData.mobileNumber.length !== 10} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
                                                             {isVerifying.mobile ? <Loader2 className="animate-spin" size={10} /> : 'Send OTP'}
@@ -1187,7 +1196,7 @@ const BuyerRegistration = () => {
                                                 <ErrorDisplay name="mobileNumber" errors={errors} />
                                                 {mobileOtpSent && !mobileOtpVerified && (
                                                     <div className="space-y-1">
-                                                        <Input placeholder="Enter 6-digit OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
+                                                        <input placeholder="Enter 6-digit OTP" value={mobileOtpValue} onChange={(e) => setMobileOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
                                                         <div className="flex items-center justify-between">
                                                             <span className="text-[10px] text-slate-400">Didn't receive it?</span>
                                                             {mobileResendTimer > 0 ? (
@@ -1201,11 +1210,11 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div><Label className={labelClasses}>Alternate Number (10 digits) *</Label><Input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="10-digit alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Alternate Number (10 digits) <span className="text-red-600">*</span></label><input required name="alternateNumber" value={formData.alternateNumber} onChange={handleChange} placeholder="10-digit alternate number" className={`${inputClasses} ${errors.alternateNumber ? 'border-red-400' : ''}`} maxLength={10} /><ErrorDisplay name="alternateNumber" errors={errors} /></div>
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Email Address (OTP) *</Label>
+                                                <label className={labelClasses}>Email Address (OTP) <span className="text-red-600">*</span></label>
                                                 <div className="flex gap-2">
-                                                    <div className="relative flex-1"><AtSign className="absolute left-2 top-1.5 text-slate-400" size={12} /><Input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7 ${errors.emailAddress ? 'border-red-400' : ''}`} disabled={emailOtpVerified || emailOtpSent} /></div>
+                                                    <div className="relative flex-1"><input type="email" required name="emailAddress" value={formData.emailAddress} onChange={handleChange} placeholder="Work Email" className={`${inputClasses} pl-7 ${errors.emailAddress ? 'border-red-400' : ''}`} disabled={emailOtpVerified || emailOtpSent} /></div>
                                                     {!emailOtpVerified && !emailOtpSent && (
                                                         <Button type="button" onClick={() => requestOtp('email')} disabled={isVerifying.email || !formData.emailAddress} className={`bg-[#23471d] text-[10px] h-7 px-2 whitespace-nowrap ${buttonTextClasses}`}>
                                                             {isVerifying.email ? <Loader2 className="animate-spin" size={10} /> : 'Send OTP'}
@@ -1221,7 +1230,7 @@ const BuyerRegistration = () => {
                                                 <ErrorDisplay name="emailAddress" errors={errors} />
                                                 {emailOtpSent && !emailOtpVerified && (
                                                     <div className="space-y-1">
-                                                        <Input placeholder="Enter 6-digit OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
+                                                        <input placeholder="Enter 6-digit OTP" value={emailOtpValue} onChange={(e) => setEmailOtpValue(e.target.value)} className={`${inputClasses} tracking-[0.3em] text-center font-bold`} maxLength={6} inputMode="numeric" />
                                                         <div className="flex items-center justify-between">
                                                             <span className="text-[10px] text-slate-400">Didn't receive it?</span>
                                                             {emailResendTimer > 0 ? (
@@ -1235,28 +1244,28 @@ const BuyerRegistration = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div><Label className={labelClasses}>Website (Optional)</Label><Input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={`${inputClasses} ${errors.website ? 'border-red-400' : ''}`} /><ErrorDisplay name="website" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Website (Optional)</label><input name="website" value={formData.website} onChange={handleChange} placeholder="https://..." className={`${inputClasses} ${errors.website ? 'border-red-400' : ''}`} /><ErrorDisplay name="website" errors={errors} /></div>
                                         </div>
                                     </div>
 
 
                                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
-                                        <div><Label className={labelClasses}>Registered Address *</Label><Input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
-                                        <div><Label className={labelClasses}>State/Province *</Label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
-                                        <div><Label className={labelClasses}>City *</Label><Select value={formData.city} onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince || loadingLocations.cities}><SelectTrigger className={`${inputClasses} ${errors.city ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.cities ? "Loading..." : "Select City"} /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px] max-h-[200px]">{cities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="city" errors={errors} /></div>
-                                        <div><Label className={labelClasses}>Pin Code (6 digits) *</Label><Input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} maxLength={6} /><ErrorDisplay name="pinCode" errors={errors} /></div>
+                                        <div><label className={labelClasses}>Registered Address <span className="text-red-600">*</span></label><input required name="registeredAddress" value={formData.registeredAddress} onChange={handleChange} placeholder="Full Corporate Address" className={`${inputClasses} ${errors.registeredAddress ? 'border-red-400' : ''}`} /><ErrorDisplay name="registeredAddress" errors={errors} /></div>
+                                        <div><label className={labelClasses}>State/Province <span className="text-red-600">*</span></label><Select value={formData.stateProvince} onValueChange={(v) => handleSelectChange('stateProvince', v)} disabled={loadingLocations.states}><SelectTrigger className={`${inputClasses} ${errors.stateProvince ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.states ? "Select State" : "Select State"} /></SelectTrigger><SelectContent className="bg-white  text-[12px] max-h-[200px]">{states.map(s => <SelectItem key={s._id} value={s.name}>{s.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="stateProvince" errors={errors} /></div>
+                                        <div><label className={labelClasses}>City <span className="text-red-600">*</span></label><Select value={formData.city} onValueChange={(v) => handleSelectChange('city', v)} disabled={!formData.stateProvince || loadingLocations.cities}><SelectTrigger className={`${inputClasses} ${errors.city ? 'border-red-400' : ''}`}><SelectValue placeholder={loadingLocations.cities ? "Loading..." : "Select City"} /></SelectTrigger><SelectContent className="bg-white  text-[12px] max-h-[200px]">{cities.map(c => <SelectItem key={c._id} value={c.name}>{c.name}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="city" errors={errors} /></div>
+                                        <div><label className={labelClasses}>Pin Code (6 digits) <span className="text-red-600">*</span></label><input required name="pinCode" value={formData.pinCode} onChange={handleChange} placeholder="Postal Code" className={`${inputClasses} ${errors.pinCode ? 'border-red-400' : ''}`} maxLength={6} /><ErrorDisplay name="pinCode" errors={errors} /></div>
                                     </div>
 
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> 1. Company Business Profile </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Company / Firm Name *</Label><Input required name="companyFirmName" value={formData.companyFirmName} onChange={handleChange} placeholder="Company / Firm Name" className={`${inputClasses} ${errors.companyFirmName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyFirmName" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Brand Name</Label><Input name="brandName" value={formData.brandName} onChange={handleChange} placeholder="Brand Name" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Business Type *</Label><Select required value={formData.basicBusinessType} onValueChange={(v) => handleSelectChange('basicBusinessType', v)}><SelectTrigger className={`${inputClasses} ${errors.basicBusinessType ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Proprietorship', 'Partnership', 'Pvt Ltd', 'LLP', 'Others'].map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="basicBusinessType" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Year of Establishment *</Label><Input required name="yearOfEstablishment" value={formData.yearOfEstablishment} onChange={handleChange} placeholder="e.g. 2010" className={`${inputClasses} ${errors.yearOfEstablishment ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearOfEstablishment" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>GST Number <span className="font-normal text-slate-500">(Optional but recommended)</span></Label><Input name="gstNumber" value={formData.gstNumber} onChange={handleChange} placeholder="GST Number" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>PAN Number <span className="font-normal text-slate-500">(Optional)</span></Label><Input name="panNumber" value={formData.panNumber} onChange={handleChange} placeholder="PAN Number" className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Buyer Industry *</Label><Select required value={formData.buyerIndustry} onValueChange={(v) => handleSelectChange('buyerIndustry', v)}><SelectTrigger className={`${inputClasses} ${errors.buyerIndustry ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Industry" /></SelectTrigger><SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyerIndustry" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Company / Firm Name <span className="text-red-600">*</span></label><input required name="companyFirmName" value={formData.companyFirmName} onChange={handleChange} placeholder="Company / Firm Name" className={`${inputClasses} ${errors.companyFirmName ? 'border-red-400' : ''}`} /><ErrorDisplay name="companyFirmName" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Brand Name</label><input name="brandName" value={formData.brandName} onChange={handleChange} placeholder="Brand Name" className={inputClasses} /></div>
+                                            <div><label className={labelClasses}>Business Type <span className="text-red-600">*</span></label><Select required value={formData.basicBusinessType} onValueChange={(v) => handleSelectChange('basicBusinessType', v)}><SelectTrigger className={`${inputClasses} ${errors.basicBusinessType ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Type" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{['Proprietorship', 'Partnership', 'Pvt Ltd', 'LLP', 'Others'].map((t: string) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="basicBusinessType" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Year of Establishment <span className="text-red-600">*</span></label><input required name="yearOfEstablishment" value={formData.yearOfEstablishment} onChange={handleChange} placeholder="e.g. 2010" className={`${inputClasses} ${errors.yearOfEstablishment ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearOfEstablishment" errors={errors} /></div>
+                                            <div><label className={labelClasses}>GST Number <span className="font-normal text-slate-500">(Optional but recommended)</span></label><input name="gstNumber" value={formData.gstNumber} onChange={handleChange} placeholder="GST Number" className={inputClasses} /></div>
+                                            <div><label className={labelClasses}>PAN Number <span className="font-normal text-slate-500">(Optional)</span></label><input name="panNumber" value={formData.panNumber} onChange={handleChange} placeholder="PAN Number" className={inputClasses} /></div>
+                                            <div><label className={labelClasses}>Buyer Industry <span className="text-red-600">*</span></label><Select required value={formData.buyerIndustry} onValueChange={(v) => handleSelectChange('buyerIndustry', v)}><SelectTrigger className={`${inputClasses} ${errors.buyerIndustry ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Industry" /></SelectTrigger><SelectContent side="bottom" className="bg-white  text-[12px] max-h-[300px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="buyerIndustry" errors={errors} /></div>
                                         </div>
                                     </div>
 
@@ -1264,10 +1273,10 @@ const BuyerRegistration = () => {
                                     <div className="space-y-2 pt-2">
                                         <h3 className={sectionTitleClasses}> 2. Business Profile Details</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Nature of Business *</Label><Input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Years in Business *</Label><Input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Number of Outlets / Branches *</Label><Input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Annual Turnover *</Label><Select required value={formData.annualTurnover} onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={`${inputClasses} ${errors.annualTurnover ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Range" /></SelectTrigger><SelectContent side="bottom" className="bg-white font-sans text-[12px] max-h-[300px]">{(config?.annualTurnoverRanges || ['Below 50 Lakhs', '50L – 2 Cr', '2 – 10 Cr', '10 Cr+']).map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="annualTurnover" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Nature of Business <span className="text-red-600">*</span></label><input required name="natureOfBusiness" value={formData.natureOfBusiness} onChange={handleChange} placeholder="Short description" className={`${inputClasses} ${errors.natureOfBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="natureOfBusiness" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Years in Business <span className="text-red-600">*</span></label><input type="number" required name="yearsInBusiness" value={formData.yearsInBusiness} onChange={handleChange} placeholder="e.g. 10" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.yearsInBusiness ? 'border-red-400' : ''}`} /><ErrorDisplay name="yearsInBusiness" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Number of Outlets / Branches <span className="text-red-600">*</span></label><input type="number" required name="numberOfOutlets" value={formData.numberOfOutlets} onChange={handleChange} placeholder="e.g. 5" className={`${inputClasses} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${errors.numberOfOutlets ? 'border-red-400' : ''}`} /><ErrorDisplay name="numberOfOutlets" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Annual Turnover <span className="text-red-600">*</span></label><Select required value={formData.annualTurnover} onValueChange={(v) => handleSelectChange('annualTurnover', v)}><SelectTrigger className={`${inputClasses} ${errors.annualTurnover ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Range" /></SelectTrigger><SelectContent side="bottom" className="bg-white  text-[12px] max-h-[300px]">{(config?.annualTurnoverRanges || ['Below 50 Lakhs', '50L – 2 Cr', '2 – 10 Cr', '10 Cr+']).map((r: string) => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="annualTurnover" errors={errors} /></div>
                                         </div>
                                     </div>
 
@@ -1277,9 +1286,9 @@ const BuyerRegistration = () => {
                                     <div className="space-y-2">
                                         <h3 className={sectionTitleClasses}> Sourcing & Buying Interests</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-y-4 gap-x-5">
-                                            <div><Label className={labelClasses}>Primary Product Interest *</Label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Primary Product Interest <span className="text-red-600">*</span></label><Select value={formData.primaryProductInterest} onValueChange={(v) => handleSelectChange('primaryProductInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.primaryProductInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Choose Interest" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{config?.primaryProductInterests?.map((i: string) => <SelectItem key={i} value={i}>{i}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="primaryProductInterest" errors={errors} /></div>
                                             <div className="">
-                                                <Label className={labelClasses}>Secondary Product Categories</Label>
+                                                <label className={labelClasses}>Secondary Product Categories</label>
                                                 <div className="mt-1">
                                                     <MultiSelectDropdown
                                                         options={config?.secondaryProductCategories || ['Ayurveda', 'Organic', 'Wellness', 'Pharma', 'Cosmetics']}
@@ -1290,21 +1299,21 @@ const BuyerRegistration = () => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div><Label className={labelClasses}>Interested in Importing Products?</Label><Select value={formData.interestedInImporting} onValueChange={(v) => handleSelectChange('interestedInImporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Interested in Export Partnerships?</Label><Select value={formData.interestedInExporting} onValueChange={(v) => handleSelectChange('interestedInExporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
-                                            <div><Label className={labelClasses}>Business Model Preference</Label><Select value={formData.businessModelPreference} onValueChange={(v) => handleSelectChange('businessModelPreference', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Model" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.businessModelOptions?.map((m: string) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><label className={labelClasses}>Interested in Importing Products?</label><Select value={formData.interestedInImporting} onValueChange={(v) => handleSelectChange('interestedInImporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><label className={labelClasses}>Interested in Export Partnerships?</label><Select value={formData.interestedInExporting} onValueChange={(v) => handleSelectChange('interestedInExporting', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Yes / No" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{['Yes', 'No'].map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><label className={labelClasses}>Business Model Preference</label><Select value={formData.businessModelPreference} onValueChange={(v) => handleSelectChange('businessModelPreference', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Model" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{config?.businessModelOptions?.map((m: string) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
 
-                                            <div><Label className={labelClasses}>Estimated Monthly Purchase </Label><Input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 " className={inputClasses} /></div>
-                                            <div><Label className={labelClasses}>Est. Annual Purchase Value *</Label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Purchase Frequency</Label><Select value={formData.purchaseFrequency} onValueChange={(v) => handleSelectChange('purchaseFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Frequency" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{config?.purchaseFrequencyOptions?.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
+                                            <div><label className={labelClasses}>Estimated Monthly Purchase </label><input name="estimatedPurchaseVolume" value={formData.estimatedPurchaseVolume} onChange={handleChange} placeholder="e.g. 5000 " className={inputClasses} /></div>
+                                            <div><label className={labelClasses}>Est. Annual Purchase Value <span className="text-red-600">*</span></label><Select value={formData.estimatedAnnualPurchaseValue} onValueChange={(v) => handleSelectChange('estimatedAnnualPurchaseValue', v)}><SelectTrigger className={`${inputClasses} ${errors.estimatedAnnualPurchaseValue ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{(config?.annualPurchaseValueRanges || ['Below 10 Lakhs', '10-50 Lakhs', '50 Lakhs - 1 Crore', '1-5 Crore', '5+ Crore']).map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="estimatedAnnualPurchaseValue" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Purchase Frequency</label><Select value={formData.purchaseFrequency} onValueChange={(v) => handleSelectChange('purchaseFrequency', v)}><SelectTrigger className={inputClasses}><SelectValue placeholder="Select Frequency" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{config?.purchaseFrequencyOptions?.map((f: string) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent></Select></div>
 
 
-                                            <div><Label className={labelClasses}>Purchase Timeline *</Label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Matchmaking Interest *</Label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
-                                            <div><Label className={labelClasses}>Role in Purchase Decision *</Label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white font-sans text-[12px]}">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
-                                            <div className="mt-1">
-                                                <Label className={labelClasses}>Specific Product Requirements</Label>
-                                                <Textarea name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={`${inputClasses} h-auto min-h-[50px] py-1`} placeholder="Any custom needs..." />
+                                            <div><label className={labelClasses}>Purchase Timeline <span className="text-red-600">*</span></label><Select value={formData.purchaseTimeline} onValueChange={(v) => handleSelectChange('purchaseTimeline', v)}><SelectTrigger className={`${inputClasses} ${errors.purchaseTimeline ? 'border-red-400' : ''}`}><SelectValue placeholder="Select" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{(config?.purchaseTimelines || ['Immediate', '1–3 Months', '3–6 Months', 'Exploring']).map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="purchaseTimeline" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Matchmaking Interest <span className="text-red-600">*</span></label><Select value={formData.matchmakingInterest} onValueChange={(v) => handleSelectChange('matchmakingInterest', v)}><SelectTrigger className={`${inputClasses} ${errors.matchmakingInterest ? 'border-red-400' : ''}`}><SelectValue placeholder="Yes/No" /></SelectTrigger><SelectContent className="bg-white  text-[12px]"><SelectItem value="Yes">Yes</SelectItem><SelectItem value="No">No</SelectItem></SelectContent></Select><ErrorDisplay name="matchmakingInterest" errors={errors} /></div>
+                                            <div><label className={labelClasses}>Role in Purchase Decision <span className="text-red-600">*</span></label><Select value={formData.roleInPurchaseDecision} onValueChange={(v) => handleSelectChange('roleInPurchaseDecision', v)}><SelectTrigger className={`${inputClasses} ${errors.roleInPurchaseDecision ? 'border-red-400' : ''}`}><SelectValue placeholder="Select Role" /></SelectTrigger><SelectContent className="bg-white  text-[12px]">{(config?.roles || ['Final Decision Maker', 'Influencer', 'Research Only']).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent></Select><ErrorDisplay name="roleInPurchaseDecision" errors={errors} /></div>
+                                            <div>
+                                                <label className={labelClasses}>Specific Product Requirements</label>
+                                                <input name="specificProductRequirements" value={formData.specificProductRequirements} onChange={handleChange} className={inputClasses} placeholder="Any custom needs..." />
                                             </div>
                                         </div>
 
@@ -1315,7 +1324,7 @@ const BuyerRegistration = () => {
                                         <h3 className={sectionTitleClasses}> Supplier Preference</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 gap-x-5">
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Preferred Supplier Region *</Label>
+                                                <label className={labelClasses}>Preferred Supplier Region <span className="text-red-600">*</span></label>
                                                 <MultiSelectDropdown
                                                     options={config?.regions || ['North India', 'South India', 'East India', 'West India', 'Pan India', 'Global']}
                                                     selected={formData.preferredSupplierRegion}
@@ -1327,7 +1336,7 @@ const BuyerRegistration = () => {
                                                 <ErrorDisplay name="preferredSupplierRegion" errors={errors} />
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Preferred Supplier Type *</Label>
+                                                <label className={labelClasses}>Preferred Supplier Type <span className="text-red-600">*</span></label>
                                                 <MultiSelectDropdown
                                                     options={config?.supplierTypes || ['Manufacturer', 'Exporter', 'MSME', 'Startup', 'Wholesaler']}
                                                     selected={formData.preferredSupplierType}
@@ -1339,7 +1348,7 @@ const BuyerRegistration = () => {
                                                 <ErrorDisplay name="preferredSupplierType" errors={errors} />
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Preferred State (Optional)</Label>
+                                                <label className={labelClasses}>Preferred State (Optional)</label>
                                                 <MultiSelectDropdown
                                                     options={states.map(s => s.name)}
                                                     selected={formData.preferredState}
@@ -1349,14 +1358,14 @@ const BuyerRegistration = () => {
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Preferred Company Size</Label>
+                                                <label className={labelClasses}>Preferred Company Size</label>
                                                 <Select value={formData.preferredCompanySize} onValueChange={(v) => handleSelectChange('preferredCompanySize', v)}>
                                                     <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Size" /></SelectTrigger>
-                                                    <SelectContent className="bg-white font-sans text-[12px]">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                                                    <SelectContent className="bg-white  text-[12px]">{config?.companySizes?.map((s: string) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
                                                 </Select>
                                             </div>
                                             <div className="space-y-1">
-                                                <Label className={labelClasses}>Certification & Compliance</Label>
+                                                <label className={labelClasses}>Certification & Compliance</label>
                                                 <MultiSelectDropdown
                                                     options={config?.certificationOptions || ['ISO', 'GMP', 'FDA', 'AYUSH', 'Organic', 'Others']}
                                                     selected={formData.requiredCertifications}
@@ -1371,27 +1380,27 @@ const BuyerRegistration = () => {
                                     <div className="space-y-1">
                                         <h3 className={sectionTitleClasses}>Pricing Preference</h3>
                                         <div className="flex gap-4 p-2">
-                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Premium'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Premium')} className="h-3 w-3" /> Premium</label>
-                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Mid-Range'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Mid-Range')} className="h-3 w-3" /> Mid-Range</label>
-                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 font-sans`}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 `}><Checkbox checked={formData.pricingPreference === 'Premium'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Premium')} className="h-3 w-3" /> Premium</label>
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 `}><Checkbox checked={formData.pricingPreference === 'Mid-Range'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Mid-Range')} className="h-3 w-3" /> Mid-Range</label>
+                                            <label className={`flex items-center gap-1 text-[12px] font-medium text-slate-700 `}><Checkbox checked={formData.pricingPreference === 'Budget'} onCheckedChange={() => handleSelectChange('pricingPreference', 'Budget')} className="h-3 w-3" /> Budget</label>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
+                                    <div className="space-y-1">
                                         <h3 className={sectionTitleClasses}> B2B Meeting Preferences</h3>
 
 
 
 
                                         {formData.requirePreScheduledB2B === 'Yes' && (
-                                            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                                            <div className="space-y-1 animate-in fade-in slide-in-from-top-2 duration-300">
 
 
                                                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
                                                     <div className="space-y-1.5">
                                                         <div className="flex justify-between items-center mb-1">
-                                                            <Label className="text-[11px] font-semibold">Preferred Meeting Categories *</Label>
+                                                            <label className={labelClasses}>Preferred Meeting Categories <span className="text-red-600">*</span></label>
                                                             {formData.preferredMeetingCategories.length === 0 &&
                                                                 <span className="text-[9px] text-red-500 font-bold">Required</span>
                                                             }
@@ -1409,7 +1418,7 @@ const BuyerRegistration = () => {
 
 
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold mb-1 block">Exhibitor Types to Meet</Label>
+                                                        <label className={labelClasses}>Exhibitor Types to Meet</label>
                                                         <MultiSelectDropdown
                                                             options={config?.exhibitorTypeOptions || []}
                                                             selected={formData.preferredExhibitorTypes}
@@ -1421,9 +1430,9 @@ const BuyerRegistration = () => {
 
 
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold mb-1 block">💼 Meeting Objectives *</Label>
+                                                        <label className={labelClasses}>💼 Meeting Objectives <span className="text-red-600">*</span></label>
                                                         <MultiSelectDropdown
-                                                            options={config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private Label / OEM", "Investment / Business Expansion"]}
+                                                            options={config?.meetingObjectiveOptions || ["Product Sourcing", "Partnership / Collaboration", "Distribution Opportunities", "Private label / OEM", "Investment / Business Expansion"]}
                                                             selected={formData.meetingObjectives}
                                                             onChange={(val) => { handleSelectChange('meetingObjectives', val); setErrors(p => ({ ...p, meetingObjectives: '' })); }}
                                                             placeholder="Select objectives..."
@@ -1435,9 +1444,9 @@ const BuyerRegistration = () => {
 
 
                                                     <div className="space-y-1.5">
-                                                        <Label className="text-[11px] font-semibold mb-1 block">🏷 Preferred Business Type *</Label>
+                                                        <label className={labelClasses}>🏷 Preferred Business Type <span className="text-red-600">*</span></label>
                                                         <MultiSelectDropdown
-                                                            options={config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private Label", "Franchise", "Exclusive Distribution"]}
+                                                            options={config?.preferredBusinessTypeOptions || ["Bulk Purchase", "Private label", "Franchise", "Exclusive Distribution"]}
                                                             selected={formData.preferredBusinessTypes}
                                                             onChange={(val) => { handleSelectChange('preferredBusinessTypes', val); setErrors(p => ({ ...p, preferredBusinessTypes: '' })); }}
                                                             placeholder="Select business types..."
@@ -1451,7 +1460,7 @@ const BuyerRegistration = () => {
 
                                                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                                                     <div>
-                                                        <Label className={labelClasses}>Preferred Day *</Label>
+                                                        <label className={labelClasses}>Preferred Day <span className="text-red-600">*</span></label>
                                                         <Select value={formData.preferredMeetingDay} onValueChange={(v) => handleSelectChange('preferredMeetingDay', v)}>
                                                             <SelectTrigger className={`${inputClasses} ${errors.preferredMeetingDay ? 'border-red-400' : ''}`}>
                                                                 <SelectValue placeholder="Select Day" />
@@ -1466,7 +1475,7 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>Time Slot *</Label>
+                                                        <label className={labelClasses}>Time Slot <span className="text-red-600">*</span></label>
                                                         <Select value={formData.preferredTimeSlot} onValueChange={(v) => handleSelectChange('preferredTimeSlot', v)}>
                                                             <SelectTrigger className={`${inputClasses} ${errors.preferredTimeSlot ? 'border-red-400' : ''}`}>
                                                                 <SelectValue placeholder="Select Slot" />
@@ -1481,7 +1490,7 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>Number of Meetings</Label>
+                                                        <label className={labelClasses}>Number of Meetings</label>
                                                         <Select value={formData.numberOfMeetingsInterested} onValueChange={(v) => handleSelectChange('numberOfMeetingsInterested', v)}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Count" />
@@ -1495,7 +1504,7 @@ const BuyerRegistration = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>Priority Level</Label>
+                                                        <label className={labelClasses}>Priority Level</label>
                                                         <Select value={formData.meetingPriorityLevel} onValueChange={(v) => handleSelectChange('meetingPriorityLevel', v)}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Priority" />
@@ -1511,7 +1520,7 @@ const BuyerRegistration = () => {
 
 
                                                 <div className="space-y-1.5">
-                                                    <Label className="text-[11px] font-semibold">📝 Specific Meeting Requirements</Label>
+                                                    <label className={labelClasses}>📝 Specific Meeting Requirements</label>
                                                     <Textarea
                                                         name="meetingRequirements"
                                                         placeholder="👉 Mention specific expectations, brands you want to meet, or items you are sourcing..."
@@ -1525,14 +1534,14 @@ const BuyerRegistration = () => {
                                         )}
                                     </div>
 
-                                    <div id="package-section" className="space-y-4 pt-4 border-t border-slate-100">
+                                    <div id="package-section" className="space-y-4 pt-2 pb-6">
                                         <h3 className={sectionTitleClasses}> Registration Category 🔹</h3>
                                         <div className="relative">
                                             {!showMembershipOptions ? (
                                                 <div className="space-y-4">
                                                     <div className="flex items-center gap-2 px-2">
                                                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                                                        <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Available Registration Passes</p>
+                                                        <p className="text-sm font-medium text-slate-600 uppercase tracking-[0.2em] ">Available Registration Passes</p>
                                                     </div>
 
                                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
@@ -1550,7 +1559,7 @@ const BuyerRegistration = () => {
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full font-sans group 
+                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full  group 
                                                                         ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
@@ -1561,7 +1570,7 @@ const BuyerRegistration = () => {
                                                                     )}
 
                                                                     <div className="mb-3">
-                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800  group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ₹{pkg.price}
                                                                         </h4>
                                                                         <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
@@ -1576,7 +1585,7 @@ const BuyerRegistration = () => {
 
                                                                         <div className="space-y-1.5">
                                                                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium ">
                                                                                 {pkg.benefits.map((b: string, i: number) => (
                                                                                     <li key={i} className="flex items-start gap-2">
                                                                                         <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
@@ -1594,7 +1603,7 @@ const BuyerRegistration = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all  
                                                                         ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
                                                                     `}>
                                                                         {pkg.cta || "Select Plan"}
@@ -1607,13 +1616,88 @@ const BuyerRegistration = () => {
                                                         {membershipPackages.length > 0 && (
                                                             <div
                                                                 onClick={() => setShowMembershipOptions(true)}
-                                                                className={`relative p-3 border-2 border-dashed border-emerald-300 bg-emerald-50/20 transition-all rounded-xl flex flex-col justify-center items-center text-center font-sans cursor-pointer hover:border-emerald-500 hover:bg-emerald-50/40
-                                                                `}
+                                                                className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
+                                                                style={{
+                                                                    backgroundImage: 'url(/buyer/optionbg.png)',
+                                                                    backgroundSize: 'cover',
+                                                                    backgroundPosition: 'center',
+                                                                    minHeight: '120px',
+                                                                }}
                                                             >
-                                                                <h4 className="text-[14px] font-black text-emerald-800 mb-1 font-sans">Membership Option</h4>
-                                                                <div className={`text-[11px] text-emerald-500 font-bold uppercase mt-2 px-4 py-1.5 border border-emerald-200 rounded-full bg-white shadow-sm font-sans`}>
-                                                                    View More Plans →
+                                                                {/* Overlay */}
+                                                                <div className="absolute inset-0 rounded-xl"
+                                                                    style={{ background: 'linear-gradient(135deg, rgba(26,61,20,0.82) 0%, rgba(74,143,47,0.55) 100%)' }}
+                                                                />
+
+                                                                {/* Content */}
+                                                                <div className="relative z-10 flex flex-col items-center justify-between h-full px-4 py-4 gap-3">
+
+                                                                    {/* Top — Logo + org name */}
+                                                                    <div className="flex flex-col items-center gap-1">
+                                                                        <img
+                                                                            src="/buyer/icoa.png"
+                                                                            alt="ICOA"
+                                                                            className="w-48 h-auto object-contain"
+                                                                            style={{
+                                                                                filter: 'drop-shadow(0 0 12px rgba(168,208,96,0.9)) drop-shadow(0 0 24px rgba(168,208,96,0.5)) drop-shadow(0 0 40px rgba(168,208,96,0.3))',
+                                                                            }}
+                                                                        />
+                                                                        <p
+                                                                            className="text-lg font-bold uppercase tracking-[0.18em] text-center"
+                                                                            style={{
+                                                                                background: 'linear-gradient(90deg, #a8d060, #d4f07a, #a8d060)',
+                                                                                WebkitBackgroundClip: 'text',
+                                                                                WebkitTextFillColor: 'transparent',
+                                                                                textShadow: 'none',
+                                                                            }}
+                                                                        >
+                                                                            International Council of Ayush
+                                                                        </p>
+                                                                    </div>
+
+                                                                    {/* Middle — Heading */}
+                                                                    <h4 className="text-[15px] font-black text-white text-center leading-tight"
+                                                                        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+                                                                    >
+                                                                        Unlock <span className="text-[#a8d060]">Premium</span> Membership
+                                                                    </h4>
+                                                                    <p className="text-sm text-white/80 text-center leading-relaxed px-2">
+                                                                        Join ICOA's exclusive network of<br />
+                                                                        Ayush professionals & wellness brands.<br />
+                                                                        Get certified, grow your reach,<br />
+                                                                        and unlock global opportunities.
+                                                                    </p>
+
+                                                                    {/* Bottom — Button */}
+                                                                    <button
+                                                                        className="flex items-center gap-3 px-5 py-2 rounded-full font-medium uppercase tracking-widest text-[11px] text-white w-fit"
+                                                                        style={{
+                                                                            background: 'linear-gradient(135deg, #2d7a1f, #4a9e2f)',
+                                                                            border: '1.5px solid rgba(168,208,96,0.6)',
+                                                                            boxShadow: '0 0 0 0 rgba(168,208,96,0.4)',
+                                                                            animation: 'gentlePulse 2s ease-in-out infinite',
+                                                                        }}
+                                                                    >
+                                                                        Register Now
+                                                                        <span
+                                                                            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                                                                            style={{ background: 'rgba(168,208,96,0.25)', border: '1px solid rgba(168,208,96,0.5)' }}
+                                                                        >
+                                                                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                                <path d="M5 12h14M13 6l6 6-6 6" />
+                                                                            </svg>
+                                                                        </span>
+                                                                    </button>
+
                                                                 </div>
+
+                                                                <style>{`
+    @keyframes gentlePulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(168,208,96,0.5); }
+      50%       { box-shadow: 0 0 18px rgba(168,208,96,0.9); }
+    }
+  `}</style>
+
                                                             </div>
                                                         )}
                                                     </div>
@@ -1623,7 +1707,7 @@ const BuyerRegistration = () => {
                                                     <div className="flex items-center justify-between px-2">
                                                         <div className="flex items-center gap-2">
                                                             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] font-sans">Exclusive Membership Plans</p>
+                                                            <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] ">Exclusive Membership Plans</p>
                                                         </div>
                                                         <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
                                                     </div>
@@ -1645,7 +1729,7 @@ const BuyerRegistration = () => {
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full font-sans group cursor-pointer
+                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full  group cursor-pointer
                                                                         ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
@@ -1656,7 +1740,7 @@ const BuyerRegistration = () => {
                                                                     )}
 
                                                                     <div className="mb-3">
-                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 font-sans group-hover:text-[#23471d] transition-colors">
+                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800  group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ₹{pkg.price}
                                                                         </h4>
                                                                         <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
@@ -1671,7 +1755,7 @@ const BuyerRegistration = () => {
 
                                                                         <div className="space-y-1.5">
                                                                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium font-sans">
+                                                                            <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium ">
                                                                                 {pkg.benefits.map((b: string, i: number) => (
                                                                                     <li key={i} className="flex items-start gap-2">
                                                                                         <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
@@ -1689,7 +1773,7 @@ const BuyerRegistration = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all font-sans 
+                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all  
                                                                         ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
                                                                     `}>
                                                                         {pkg.cta || "Select Plan"}
@@ -1736,8 +1820,8 @@ const BuyerRegistration = () => {
 
                                 <div className="bg-[#23471d] p-4 text-white flex justify-between items-center sticky top-0 z-10">
                                     <div>
-                                        <h3 className="font-bold uppercase tracking-wider text-sm font-sans">Registration & Payment Terms</h3>
-                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium font-sans">
+                                        <h3 className="font-bold uppercase tracking-wider text-sm ">Registration & Payment Terms</h3>
+                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.2em] font-medium ">
                                             {tempSelectedPackage?.name} - ₹{tempSelectedPackage?.price}
                                         </p>
                                     </div>
@@ -1771,7 +1855,7 @@ const BuyerRegistration = () => {
                                 </div>
 
 
-                                <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar font-sans flex-1">
+                                <div className="p-6 overflow-y-auto text-[12px] leading-relaxed text-slate-600 space-y-4 font-medium custom-scrollbar  flex-1">
                                     {loadingPolicies ? (
                                         <div className="flex flex-col items-center justify-center py-20 gap-3">
                                             <Loader2 className="animate-spin text-emerald-500" size={32} />
@@ -1827,9 +1911,9 @@ const BuyerRegistration = () => {
                                                     checked={policyConsents.paymentTerms}
                                                     onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, paymentTerms: !!checked }))}
                                                 />
-                                                <Label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                <label htmlFor="consent-payment" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
                                                     I have read, understood, and agree to the <span className="font-bold text-[#23471d]">Payment Terms & Conditions</span>, including the strictly non-refundable and non-transferable policy.
-                                                </Label>
+                                                </label>
                                             </div>
                                         )}
 
@@ -1840,9 +1924,9 @@ const BuyerRegistration = () => {
                                                     checked={policyConsents.refundPolicy}
                                                     onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, refundPolicy: !!checked }))}
                                                 />
-                                                <Label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                <label htmlFor="consent-refund" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
                                                     I have read, understood, and agree to the <span className="font-bold text-red-600">Refund & Cancellation Policy</span>, acknowledging that all payments are strictly non-refundable.
-                                                </Label>
+                                                </label>
                                             </div>
                                         )}
 
@@ -1853,9 +1937,9 @@ const BuyerRegistration = () => {
                                                     checked={policyConsents.privacyPolicy}
                                                     onCheckedChange={(checked) => setPolicyConsents(prev => ({ ...prev, privacyPolicy: !!checked }))}
                                                 />
-                                                <Label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
+                                                <label htmlFor="consent-privacy" className="text-[11px] leading-tight text-slate-700 font-medium cursor-pointer">
                                                     I hereby provide my consent for the collection, processing, storage, and sharing of my personal data in accordance with the <span className="font-bold text-[#23471d]">Privacy Policy</span>.
-                                                </Label>
+                                                </label>
                                             </div>
                                         )}
                                     </div>
@@ -1864,7 +1948,7 @@ const BuyerRegistration = () => {
                                         <Button
                                             variant="outline"
                                             onClick={() => setShowTermsModal(false)}
-                                            className={`flex-1 h-9 text-xs font-sans ${buttonTextClasses}`}
+                                            className={`flex-1 h-9 text-xs  ${buttonTextClasses}`}
                                         >
                                             Cancel
                                         </Button>
@@ -1907,7 +1991,7 @@ const BuyerRegistration = () => {
                                 initial={{ scale: 0.85, y: 30 }}
                                 animate={{ scale: 1, y: 0 }}
                                 exit={{ scale: 0.85, y: 30 }}
-                                className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden font-sans border border-slate-200"
+                                className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden  border border-slate-200"
                             >
 
                                 <div className="bg-[#23471d] px-6 py-4 flex items-center gap-3">
@@ -1981,7 +2065,7 @@ const BuyerRegistration = () => {
 
 
 const ErrorDisplay = ({ name, errors }: { name: string; errors: Record<string, string> }) => (
-    errors[name] ? <span className="text-red-500 text-[10px] mt-0.5 block h-3 font-medium animate-in fade-in slide-in-from-top-1">{errors[name]}</span> : null
+    errors[name] ? <span className="text-red-500 text-[10px] mt-0.5 block h-3 font-medium animate-in fade-in slide-in-from-top-1">{errors[name]}</span> : <div className="" />
 );
 
 export default BuyerRegistration;
