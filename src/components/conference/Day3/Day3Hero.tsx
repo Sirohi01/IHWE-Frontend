@@ -58,7 +58,7 @@ const Day3Hero: React.FC<Day3HeroProps> = ({ data, defaultImage }) => {
       ></div>
 
 
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-transparent"></div>
+      <div className="absolute left-0 top-0 h-full w-[55%] bg-gradient-to-r from-[#9fd2dd]/80 via-[#caf0f8]/20 to-transparent"></div>
 
       <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
         <div className="max-w-[750px] relative left-[20px]" >

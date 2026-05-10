@@ -72,6 +72,8 @@ const IndustryVoices: React.FC = () => {
 
   const testimonials = data?.cards || FALLBACK_TESTIMONIALS;
 
+  const isMarqueeEnabled = testimonials.length >= 5;
+
   useEffect(() => {
     if (scrollRef.current && testimonials.length > 0) {
       const measureWidths = () => {
@@ -79,7 +81,8 @@ const IndustryVoices: React.FC = () => {
         const contentContainer = scrollContainer?.querySelector(".scroll-content");
 
         if (contentContainer && scrollContainer) {
-          const contentWidthValue = contentContainer.scrollWidth / 2;
+          const multiplier = isMarqueeEnabled ? 0.5 : 1;
+          const contentWidthValue = contentContainer.scrollWidth * multiplier;
           setContentWidth(contentWidthValue);
         }
       };
@@ -88,16 +91,11 @@ const IndustryVoices: React.FC = () => {
       window.addEventListener("resize", measureWidths);
       return () => window.removeEventListener("resize", measureWidths);
     }
-  }, [testimonials]);
-
-  const getAnimationDuration = () => {
-
-    const TOTAL_CYCLE_DURATION_SECONDS = 100;
-    return TOTAL_CYCLE_DURATION_SECONDS;
-  };
+  }, [testimonials, isMarqueeEnabled]);
 
   const getInfiniteItems = () => {
     if (testimonials.length === 0) return [];
+    if (!isMarqueeEnabled) return testimonials;
     return [...testimonials, ...testimonials];
   };
 
@@ -145,10 +143,10 @@ const IndustryVoices: React.FC = () => {
             className="relative w-full overflow-hidden no-scrollbar"
           >
             <motion.div
-              className="scroll-content flex gap-6 py-8 w-max"
-              animate={isPaused ? {} : { x: [0, -contentWidth] }}
+              className={`scroll-content flex gap-6 py-8 w-max ${!isMarqueeEnabled ? 'justify-center' : ''}`}
+              animate={isPaused || !isMarqueeEnabled ? {} : { x: [0, -contentWidth] }}
               transition={{
-                duration: getAnimationDuration(),
+                duration: 100,
                 ease: "linear",
                 repeat: Infinity,
                 repeatType: "loop",

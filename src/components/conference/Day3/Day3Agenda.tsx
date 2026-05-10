@@ -28,7 +28,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
   const sessions = Array.isArray(data?.sessions) ? data.sessions : [];
 
   return (
-    <div className="bg-white h-full flex flex-col">
+    <div className="bg-white h-full flex flex-col py-2" style={{ backgroundColor: '#F5F5F0' }}>
       {/* Section Header */}
       <div className="text-center mb-5">
         <h2 className="text-[18px] md:text-[20px] font-black text-[#4E9F3D] uppercase tracking-tight leading-none font-sans">
@@ -40,7 +40,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto flex-1 border border-[#E2E8F0] rounded-xl overflow-hidden max-h-[400px] overflow-y-scroll custom-scrollbar">
+      <div className="-mt-4 overflow-x-auto flex-1 border border-[#E2E8F0] rounded-xl overflow-hidden max-h-[400px] overflow-y-scroll custom-scrollbar">
         <table className="w-full text-left border-collapse">
           <thead className="sticky top-0 z-10">
             <tr className="bg-[#0B2C66] text-white">
@@ -95,7 +95,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
                         <span className="text-[10px] font-bold text-[#5F6B7A]">{item.speaker?.role}</span>
                         <span className="text-[10px] font-bold text-[#718096]">{item.speaker?.company}</span>
                       </div>
-                      <span className="text-[16px] ml-1 shrink-0">{item.speaker?.flag || '🌐'}</span>
+                      {/* <span className="text-[16px] ml-1 shrink-0">{item.speaker?.flag || '🌐'}</span> */}
                     </div>
                   </td>
                 </tr>
@@ -112,9 +112,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
         </table>
       </div>
 
-      <p className="text-[10px] text-[#A0AEC0] font-bold uppercase tracking-widest mt-3">
-        * Agenda is subject to change
-      </p>
+
     </div>
   );
 };
