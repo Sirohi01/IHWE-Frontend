@@ -14,7 +14,7 @@ const BuyerLanding = () => {
     const isComingSoon = false;
     const [heroData, setHeroData] = useState<any>(null);
     const navigate = useNavigate();
-    const [buyerType, setBuyerType] = useState<'domestic' | 'international'>('domestic');
+    const [buyerType, setBuyerType] = useState<'domestic' | 'international' | null>(null);
 
 
     useEffect(() => {
@@ -123,23 +123,38 @@ const BuyerLanding = () => {
                     <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[70%]">
 
                         {/* Register as a Buyer */}
-                        <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
-                            Register as a Buyer
+                        <div className="inline-block mt-6 w-fit">
+                            <h2
+                                className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-[#1a4d1a] bg-[#a8d060] px-3 py-1 rounded-sm border-l-4 border-[#5a9e20]"
+                                style={{ animation: 'gentleBounce 2s ease-in-out infinite' }}
+                            >
+                                Register as a Buyer
+                                <style>{`
+      @keyframes gentleBounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-4px); }
+      }
+    `}</style>
+                            </h2>
                         </div>
 
                         {/* Main Heading */}
-                        <div>
+                        <div className="mt-2">
                             <h1 className="text-5xl font-black text-white uppercase leading-tight">
                                 Unlock Business
                             </h1>
-                            <h1 className="text-5xl font-black text-[#a8d060] uppercase leading-tight">
-                                Opportunities
+                            <h1 className="text-5xl font-black uppercase leading-tight">
+                                <span className="text-[#a8d060] drop-shadow-[0_0_20px_rgba(168,208,96,0.4)]">
+                                    Opportunities
+                                </span>
                             </h1>
                         </div>
 
                         {/* Description */}
-                        <p className="text-white/90 text-lg leading-relaxed max-w-md">
-                            Join 8,000+ verified seller | buyers, connect with top exhibitors,
+                        <p className="text-white/90 text-lg leading-relaxed max-w-md mt-4">
+                            Join{' '}
+                            <span className="text-[#a8d060] font-bold">8,000+ verified</span>{' '}
+                            seller | buyers, connect with top exhibitors,
                             explore quality products, and grow your business.
                         </p>
 
