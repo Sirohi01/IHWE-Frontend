@@ -71,8 +71,8 @@ const sponsorPlans = [
 
 const Day3Sponsors: React.FC = () => {
   return (
-    <section className="py-4 bg-white">
-      <div className="container mx-auto px-6 max-w-[1380px]">
+    <section className="py-4 bg-white max-w-[1340px] mx-auto" style={{ backgroundColor: "#e2f1d0ff" }}>
+      <div className="container mx-auto px-6 ">
 
         {/* Section Header */}
         <div className="text-center mb-1 flex flex-col items-center">
