@@ -1,22 +1,45 @@
 import React, { useState, useEffect } from 'react'
-
-const testimonials = [
-    { text: 'We connected with 15+ serious buyers in one day – highly effective platform.', author: '– Director,\nHerbal Wellness Pvt. Ltd.', img: '/bsmeet/slider1.png' },
-    { text: 'The pre-scheduled meetings saved time and gave us quality business opportunities.', author: '– Business Head,\nOrganic India', img: '/bsmeet/slider2.png' },
-    { text: 'A well-organized event that helped us expand our reach globally and meet the right partners.', author: '– CEO,\nGlobal Wellness', img: '/bsmeet/slider1.png' },
-    { text: 'Excellent matchmaking! We closed several deals during the expo itself.', author: '– VP Sales,\nNutriLife', img: '/bsmeet/slider2.png' },
-]
+import { api } from '../../lib/api';
 
 const WhatPar = () => {
+    const [testimonials, setTestimonials] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const totalPages = Math.ceil(testimonials.length / 2);
+    const [loading, setLoading] = useState(true);
+
+    const fetchTestimonials = async () => {
+        try {
+            const res = await api.get('/api/bsm-testimonials/testimonials');
+            if (res.data.success) {
+                setTestimonials(res.data.data);
+            }
+        } catch (err) {
+            console.error('Error fetching BSM testimonials:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % totalPages);
-        }, 3000); // 3 seconds per slide
-        return () => clearInterval(timer);
-    }, [totalPages]);
+        fetchTestimonials();
+    }, []);
+
+    useEffect(() => {
+        if (testimonials.length > 2) {
+            const timer = setInterval(() => {
+                setCurrentIndex((prev) => (prev + 1) % (testimonials.length));
+            }, 3000); 
+            return () => clearInterval(timer);
+        }
+    }, [testimonials.length]);
+
+    // Slider logic: Translate by 50% for 2 items view
+    const getTransform = () => {
+        if (testimonials.length <= 2) return 'translateX(0%)';
+        // If we are at the last item, we shouldn't translate past the end
+        const maxIndex = testimonials.length - 2;
+        const index = Math.min(currentIndex, maxIndex);
+        return `translateX(-${index * 50}%)`;
+    };
 
     return (
         <div className="bg-[#FAF9F2] py-8 px-16 font-['Barlow',sans-serif]">
@@ -33,28 +56,20 @@ const WhatPar = () => {
                         backgroundColor: '#1e4020',
                     }}
                 >
-                    {/* World Map Background */}
-                    {/* <img
-                        src="/bsmeet/world-map.png"
-                        alt=""
-                        className="absolute inset-0 w-full h-full object-cover opacity-[0.12] pointer-events-none"
-                    /> */}
-
                     {/* Title */}
                     <div className="text-[15px] font-extrabold text-[#d4a832] uppercase tracking-[0.8px] text-center mb-[22px] relative z-10">
                         Buyer–Seller Meet 2026 Impact
                     </div>
 
-                    {/* Stats Row — 4 columns with dashed dividers */}
+                    {/* Stats Row */}
                     <div className="grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
                         {[
-                            { icon: '/bsmeet/bsm1.png', num: '1200+', label: 'Pre-scheduled\nMeetings' },
-                            { icon: '/bsmeet/bsm2.png', num: '600+', label: 'Verified\nBuyers' },
-                            { icon: '/bsmeet/bsm3.png', num: '350+', label: 'Exhibiting\nBrands' },
-                            { icon: '/bsmeet/bsm4.png', num: '25+', label: 'Countries\nParticipated' },
+                            { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
+                            { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
+                            { icon: '/bsmeet/bsm3.png', num: '100+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
                         ].map((item, i) => (
                             <React.Fragment key={i}>
-                                {/* Dashed divider before every item except first */}
                                 {i > 0 && (
                                     <div className="border-l-[1.5px] border-dashed border-white/30 self-stretch mx-1" />
                                 )}
@@ -73,66 +88,53 @@ const WhatPar = () => {
                 </div>
 
                 {/* ── MIDDLE: TESTIMONIALS ── */}
-                <div className="w-[60%] bg-white rounded-[14px] p-3 pb-5 flex flex-col gap-3.5 border border-[#e8e8e8] min-w-0">
-                    <div className="text-lg font-medium text-[#1a3d20] uppercase tracking-[0.5px] text-center">
+                <div className="w-[60%] bg-[#2A4924] rounded-[14px] p-4 pb-5 flex flex-col gap-4 border border-[#e8e8e8] min-w-0 shadow-sm relative overflow-hidden">
+                    <div className="text-lg font-bold text-[#d4a832] uppercase tracking-[0.5px] text-center">
                         What Participants Say
                     </div>
-                    <div className="flex-1 overflow-hidden flex items-center">
-                        <div className="flex transition-transform duration-500 ease-in-out w-full" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-                            {testimonials.map((t, i) => (
-                                <div key={i} className="min-w-[33%] px-[5px] box-border">
-                                    <div className="border border-[#e4e4e4] rounded-[10px] pt-3.5 px-3 pb-3 flex flex-col justify-between gap-2.5 h-full">
-                                        <div>
-                                            <div className="text-[28px] text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-bold">"</div>
-                                            <div className="text-sm text-[#333] leading-[1.55] mt-1.5">{t.text}</div>
-                                        </div>
-                                        <div className="flex items-end justify-between gap-2">
-                                            <div className="text-sm font-medium text-[#555] leading-[1.5] italic whitespace-pre-line">{t.author}</div>
-                                            {/* <img src={t.img} alt="" style={{ width: '55px', height: '55px', borderRadius: '50%', objectFit: 'fit', border: '2px solid #f0e8d0', flexShrink: 0 }} /> */}
+                    <div className="flex-1 overflow-hidden flex items-center relative">
+                        {loading ? (
+                            <div className="w-full h-40 flex items-center justify-center text-[#d4a832] font-bold uppercase tracking-widest text-xs">
+                                Loading Testimonials...
+                            </div>
+                        ) : (
+                            <div className="flex transition-transform duration-700 ease-in-out w-full" style={{ transform: getTransform() }}>
+                                {testimonials.map((t, i) => (
+                                    <div key={t._id || i} className="min-w-[50%] px-2 box-border">
+                                        <div className="bg-[#fcfdfa] border border-[#e4e4e4] rounded-[10px] p-4 flex flex-col justify-between gap-3 h-full hover:shadow-md transition-shadow duration-300">
+                                            <div>
+                                                <div className="text-3xl text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-medium opacity-70">&#10077;</div>
+                                                <div className="text-[13px] md:text-sm text-[#444] leading-[1.6] mt-2 font-medium">{t.text}</div>
+                                            </div>
+                                            <div className="flex items-end justify-between gap-2 mt-2 pt-3 border-t border-gray-100">
+                                                <div className="flex flex-col">
+                                                    <div className="text-[13px] font-bold text-[#2a4d30] leading-[1.2]">— {t.name}</div>
+                                                    <div className="text-[11px] font-medium text-gray-500 leading-[1.2] mt-0.5">{t.designation}</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {!loading && testimonials.length > 2 && (
+                        <div className="flex justify-center gap-2 mt-1">
+                            {Array.from({ length: testimonials.length - 1 }).map((_, i) => (
+                                <div
+                                    key={i}
+                                    onClick={() => setCurrentIndex(i)}
+                                    className={`h-2.5 rounded-full cursor-pointer transition-all duration-500 ${currentIndex === i ? 'bg-[#3a7a30] w-6' : 'bg-[#ccc] w-2.5 hover:bg-[#a0b898]'}`}
+                                />
                             ))}
                         </div>
-                    </div>
-                    <div className="flex justify-center gap-1.5">
-                        {Array.from({ length: totalPages }).map((_, i) => (
-                            <div
-                                key={i}
-                                onClick={() => setCurrentIndex(i)}
-                                className={`w-2.5 h-2.5 rounded-full cursor-pointer transition-colors duration-300 ${currentIndex === i ? 'bg-[#3a7a30]' : 'bg-[#ccc]'}`}
-                            />
-                        ))}
-                    </div>
+                    )}
                 </div>
-
-                {/* ── RIGHT: FORM ── */}
-                {/* <div style={{ flex: 1, background: '#1e4020', borderRadius: '14px', padding: '22px 18px 20px', display: 'flex', flexDirection: 'column', gap: '14px', minWidth: 0 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center', lineHeight: 1.3 }}>
-                        Join the Buyer–Seller Meet
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        {['Full Name*', 'Company Name*', 'Email*', 'Mobile Number*'].map((p, i) => (
-                            <input key={i} type="text" placeholder={p} style={{ background: '#fff', border: 'none', borderRadius: '6px', padding: '10px 12px', fontSize: '11.5px', color: '#333', outline: 'none', width: '100%', fontFamily: 'inherit' }} />
-                        ))}
-                        <select style={{ background: '#fff', border: 'none', borderRadius: '6px', padding: '10px 12px', fontSize: '11.5px', color: '#888', outline: 'none', width: '100%', fontFamily: 'inherit', gridColumn: '1' }}>
-                            <option value="" disabled selected>I am a* (Buyer / Seller)</option>
-                            <option>Buyer</option>
-                            <option>Seller</option>
-                        </select>
-                        <input type="text" placeholder="Product Interest*" style={{ background: '#fff', border: 'none', borderRadius: '6px', padding: '10px 12px', fontSize: '11.5px', color: '#333', outline: 'none', width: '100%', fontFamily: 'inherit' }} />
-                    </div>
-                    <button style={{ background: '#c99a2e', border: 'none', borderRadius: '6px', padding: '13px', fontSize: '13px', fontWeight: 800, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px', cursor: 'pointer', width: '100%', fontFamily: 'inherit' }}>
-                        Submit Registration
-                    </button>
-                    <div style={{ fontSize: '10px', color: '#aacca5', textAlign: 'center', lineHeight: 1.4 }}>
-                        🔒 Your information is safe with us and will never be shared.
-                    </div>
-                </div> */}
 
             </div>
         </div>
     )
 }
 
-export default WhatPar
+export default WhatPar;

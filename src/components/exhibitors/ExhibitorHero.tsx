@@ -9,7 +9,7 @@ import h4 from '../../assets/h4.png';
 const STATS = [
     { label: 'Years of Legacy', value: '10+', icon: h4 },
     { label: 'Visitors/Delegates', value: '8,000+', icon: h1 },
-    { label: 'EXHIBITORS', value: '150+', icon: h2 },
+    { label: 'EXHIBITORS', value: '100+', icon: h2 },
     { label: 'GLOBAL BUYERS', value: '1,000+', icon: h3 },
 
 ];

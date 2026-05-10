@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, AtSign, Globe, ShieldCheck, Lock } from "lucide-react";
@@ -7,11 +7,15 @@ import HeroBg from "@/assets/buyer.jpg";
 import { heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import BuyerRegistration from "./buyer/BuyerRegistration";
+import InternationalBuyerRegistration from "./buyer/InternationalBuyerRegistration";
 
 const BuyerLanding = () => {
     const isComingSoon = false;
     const [heroData, setHeroData] = useState<any>(null);
     const navigate = useNavigate();
+    const [buyerType, setBuyerType] = useState<'domestic' | 'international' | null>(null);
+
 
     useEffect(() => {
         const fetchHero = async () => {
@@ -24,6 +28,14 @@ const BuyerLanding = () => {
         };
         fetchHero();
     }, []);
+
+    const formRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (buyerType && formRef.current) {
+            formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [buyerType]);
 
     if (isComingSoon) {
         return (
@@ -96,80 +108,219 @@ const BuyerLanding = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
-            {/* ── HERO SECTION ── */}
             <section
-                className="hero-background-registration"
+                className="hero-background-registration relative overflow-hidden "
                 style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`
+                    backgroundImage: "url('/buyer/doin.jpg')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'left',
+                    backgroundRepeat: 'no-repeat',
+                    fontFamily: "'Barlow', sans-serif",
                 }}
             >
-                <div className="absolute inset-0 bg-black/45" />
 
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || "Buyer Experience"}
-                    </p>
+                <div className="w-full">
+                    <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[70%]">
 
-                    <h1
-                        className="text-4xl md:text-6xl font-serif font-semibold mb-6 italic tracking-tight"
-                    >
-                        {heroData?.heading || "Lead the Transformation of Wellness"}
-                    </h1>
+                        {/* Register as a Buyer */}
+                        <div className="inline-block mt-6 w-fit">
+                            <h2
+                                className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-[#1a4d1a] bg-[#a8d060] px-3 py-1 rounded-sm border-l-4 border-[#5a9e20]"
+                                style={{ animation: 'gentleBounce 2s ease-in-out infinite' }}
+                            >
+                                Register as a Buyer
+                                <style>{`
+      @keyframes gentleBounce {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-4px); }
+      }
+    `}</style>
+                            </h2>
+                        </div>
 
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Join the global network of sourcing professionals and discover premium manufacturers in health and wellness."}
-                    </p>
+                        {/* Main Heading */}
+                        <div className="mt-2">
+                            <h1 className="text-5xl font-black text-white uppercase leading-tight">
+                                Unlock Business
+                            </h1>
+                            <h1 className="text-5xl font-black uppercase leading-tight">
+                                <span className="text-[#a8d060] drop-shadow-[0_0_20px_rgba(168,208,96,0.4)]">
+                                    Opportunities
+                                </span>
+                            </h1>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-white/90 text-lg leading-relaxed max-w-md mt-4">
+                            Join{' '}
+                            <span className="text-[#a8d060] font-bold">8,000+ verified</span>{' '}
+                            seller | buyers, connect with top exhibitors,
+                            explore quality products, and grow your business.
+                        </p>
+
+                        {/* Stats Row */}
+                        <div className="flex items-center mt-4 gap-2">
+                            {[
+                                {
+                                    num: '1,000+', label: 'Buyers',
+                                    icon: <img src="/buyer/sb1.png" alt="" className="w-24 h-auto object-contain" />
+                                },
+                                {
+                                    num: '150+', label: 'Exhibitors',
+                                    icon: <img src="/buyer/sb2.png" alt="" className="w-24 h-auto object-contain" />,
+                                },
+                                {
+                                    num: '5,000+', label: 'Products',
+                                    icon: <img src="/buyer/sb3.png" alt="" className="w-24 h-auto object-contain" />,
+                                },
+                                {
+                                    num: 'Global', label: 'Participation',
+                                    icon: <img src="/buyer/sb4.png" alt="" className="w-24 h-auto object-contain" />,
+                                },
+                            ].map((stat, i) => (
+                                <React.Fragment key={i}>
+                                    <div className="flex flex-col items-center text-center px-4">
+                                        <div className="">
+                                            {stat.icon}
+                                        </div>
+                                        <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                            {stat.num}
+                                        </div>
+                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-2 opacity-90">
+                                            {stat.label}
+                                        </div>
+                                    </div>
+                                    {/* Vertical Divider */}
+                                    {i < 3 && (
+                                        <div className="h-32 w-[1.5px] bg-[#a8d060]/30" />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+
+                    </div>
+
+                    <div className="w-[30%]">
+                        {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
+                    </div>
                 </div>
             </section>
 
-            {/* ── MAIN CONTENT ── */}
-            <section className="pt-8 pb-24 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
-                    >
-                        <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 justify-between items-center text-left">
-                            <h3 className="text-[22px] mb-2 font-semibold text-[#d26019]">
-                                Welcome to the 9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
-                            </h3>
-                            <p className="mb-2">
-                                Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH, organic, and sustainable industries under one roof.
-                            </p>
-                            <p className="mb-2">
-                                Whether you are a visitor discovering innovations or a corporate buyer seeking meaningful business connections, IHWE offers a high-value, curated experience with India’s most trusted brands and manufacturers.
-                            </p>
-                            <p className="mb-2">
-                                Register now and be part of a powerful global movement in health & wellness.
-                            </p>
-                        </div>
+            {/* button section  */}
+            <section className="w-full pt-4 px-6 text-center bg-white " >
+                {/* Title with Leaf Icons */}
+                <div className="flex items-center justify-center gap-4 mb-2">
+                    <div className="flex items-center gap-2">
+                        <span className="block w-12 h-[1px] bg-gray-300"></span>
+                    </div>
+                    <h2 className="text-lg font-medium tracking-[0.15em] text-[#1a3352] uppercase">
+                        Choose Your Category
+                    </h2>
+                    <div className="flex items-center gap-2">
+                        <span className="block w-12 h-[1px] bg-gray-300"></span>
+                    </div>
+                </div>
 
-                        <div className="text-center py-12 space-y-6">
-                            <h2 className="text-2xl font-bold text-slate-800">
-                                Choose Buyer Category
-                            </h2>
-                            <div className="flex justify-center gap-6">
-                                <button
-                                    onClick={() => navigate("/buyer-registration-form")}
-                                    className="px-6 py-2 bg-[#23471d] text-white font-semibold shadow hover:scale-105 transition-all flex items-center gap-2"
-                                >
-                                    Domestic Buyer <ArrowRight size={16} />
-                                </button>
-                                <button
-                                    onClick={() => navigate("/international-buyer-registration")}
-                                    className="px-6 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all flex items-center gap-2"
-                                >
-                                    International Buyer <ArrowRight size={16} />
-                                </button>
+                {/* Cards Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+
+                    {/* Domestic Buyer */}
+                    <div
+                        onClick={() => setBuyerType('domestic')}
+                        className={`relative flex items-center gap-6 bg-[#f7fcf2] border-2 rounded-xl px-4 py-3 overflow-hidden text-left cursor-pointer group transition-all duration-300 active:scale-[0.98] ${buyerType === 'domestic'
+                            ? 'border-[#a8d060] shadow-[0_8px_30px_rgba(77,127,29,0.2)] ring-4 ring-[#a8d060]/20'
+                            : 'border-[#dfeccd] shadow-sm hover:shadow-md opacity-70 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                            }`}
+                    >
+
+                        {/* Background Full Image */}
+                        <img
+                            src="/buyer/dombuybg.png"
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
+                        />
+
+                        {/* Logo */}
+                        <div className="relative shrink-0 z-10">
+                            <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'domestic' ? 'border-[#eef6e2] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
+                                <div className="w-20 h-20 rounded-full bg-[#4d7f1d] flex items-center justify-center">
+                                    <img
+                                        src="/buyer/dombuy.png"
+                                        alt="Domestic"
+                                        className="w-26 h-26 object-contain"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
+
+                        {/* Content */}
+                        <div className="relative z-10">
+                            <h3 className="text-[#4d7f1d] font-medium text-lg leading-none mb-1 uppercase tracking-wide">
+                                Domestic Buyer
+                            </h3>
+
+                            <p className="text-[#2d2d2d] text-sm leading-relaxed max-w-[350px] font-medium">
+                                For buyers based in India looking to connect with leading brands and manufacturers.
+                            </p>
+                            {/* Active Button Pill */}
+                            <div className={`mt-1 inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-widest transition-all ${buyerType === 'domestic' ? 'bg-[#4d7f1d] text-white' : 'bg-[#eef6e2] text-[#4d7f1d] group-hover:bg-[#dcedc8]'}`}>
+                                {buyerType === 'domestic' ? '✓ Selected' : 'Select Domestic'}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* International Buyer */}
+                    <div
+                        onClick={() => setBuyerType('international')}
+                        className={`relative flex items-center gap-6 bg-[#f4f8fd] border-2 rounded-xl px-4 py-3 overflow-hidden text-left cursor-pointer group transition-all duration-300 active:scale-[0.98] ${buyerType === 'international'
+                            ? 'border-[#4f8fe0] shadow-[0_8px_30px_rgba(24,95,165,0.2)] ring-4 ring-[#4f8fe0]/20'
+                            : 'border-[#d9e7f6] shadow-sm hover:shadow-md opacity-70 hover:opacity-100 grayscale-[30%] hover:grayscale-0'
+                            }`}
+                    >
+
+                        {/* Background Full Image */}
+                        <img
+                            src="/buyer/intbuybg.png"
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
+                        />
+
+                        {/* Logo */}
+                        <div className="relative shrink-0 z-10">
+                            <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'international' ? 'border-[#e4eef9] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
+                                <div className="w-20 h-20 rounded-full bg-[#185fa5] flex items-center justify-center">
+                                    <img
+                                        src="/buyer/intbuy.png"
+                                        alt="International"
+                                        className="w-26 h-26 object-contain"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="relative z-10">
+                            <h3 className="text-[#185fa5] font-medium text-lg leading-none mb-1 uppercase tracking-wide">
+                                International Buyer
+                            </h3>
+
+                            <p className="text-[#2d2d2d] text-sm leading-relaxed max-w-[350px] font-medium">
+                                For international buyers looking to source premium products and build global partnerships.
+                            </p>
+                            {/* Active Button Pill */}
+                            <div className={`mt-1 inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-medium uppercase tracking-widest transition-all ${buyerType === 'international' ? 'bg-[#185fa5] text-white' : 'bg-[#e4eef9] text-[#185fa5] group-hover:bg-[#d0e1f3]'}`}>
+                                {buyerType === 'international' ? '✓ Selected' : 'Select International'}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
+
+            <div ref={formRef} className="scroll-mt-10">
+                {buyerType === 'domestic' && <BuyerRegistration key="domestic" />}
+                {buyerType === 'international' && <InternationalBuyerRegistration key="international" />}
+            </div>
         </div>
     );
 };

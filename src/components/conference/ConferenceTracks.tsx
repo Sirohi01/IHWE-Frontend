@@ -21,9 +21,9 @@ const tracks = [
     iconColor: "#15803d",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
-        <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/>
-        <circle cx="20" cy="10" r="2"/>
+        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3" />
+        <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+        <circle cx="20" cy="10" r="2" />
       </svg>
     ),
   },
@@ -45,7 +45,7 @@ const tracks = [
     iconColor: "#1d4ed8",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 7v4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M14 9h-4"/><path d="M18 11h2a2 2 0 0 1 2-2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16"/>
+        <path d="M12 7v4" /><path d="M14 21v-3a2 2 0 0 0-4 0v3" /><path d="M14 9h-4" /><path d="M18 11h2a2 2 0 0 1 2-2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2" /><path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16" />
       </svg>
     ),
   },
@@ -56,10 +56,10 @@ const tracks = [
     iconColor: "#4d7c0f",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 20h10"/>
-        <path d="M10 20c5.5-2.5.8-6.4 3-10"/>
-        <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/>
-        <path d="M14.1 6a7 7 0 0 1 1.1 7.7c-1.5 2.9-3.9 4.4-5.7 4.8 2.3-6.2 4-9.2 4.6-12.5z"/>
+        <path d="M7 20h10" />
+        <path d="M10 20c5.5-2.5.8-6.4 3-10" />
+        <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z" />
+        <path d="M14.1 6a7 7 0 0 1 1.1 7.7c-1.5 2.9-3.9 4.4-5.7 4.8 2.3-6.2 4-9.2 4.6-12.5z" />
       </svg>
     ),
   },
@@ -70,10 +70,10 @@ const tracks = [
     iconColor: "#7e22ce",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="5" r="2"/>
-        <path d="M12 8c-2 0-4 1.5-4 3.5 0 1.5 1 2.5 2 3l2 1 2-1c1-.5 2-1.5 2-3 0-2-2-3.5-4-3.5z"/>
-        <path d="M12 15.5v5"/>
-        <path d="M9 19h6"/>
+        <circle cx="12" cy="5" r="2" />
+        <path d="M12 8c-2 0-4 1.5-4 3.5 0 1.5 1 2.5 2 3l2 1 2-1c1-.5 2-1.5 2-3 0-2-2-3.5-4-3.5z" />
+        <path d="M12 15.5v5" />
+        <path d="M9 19h6" />
       </svg>
     ),
   },
@@ -84,9 +84,9 @@ const tracks = [
     iconColor: "#be123c",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 3c-1.5 3-5 5-5 9a5 5 0 0 0 10 0c0-4-3.5-6-5-9z"/>
-        <path d="M12 17v4"/>
-        <path d="M9 20h6"/>
+        <path d="M12 3c-1.5 3-5 5-5 9a5 5 0 0 0 10 0c0-4-3.5-6-5-9z" />
+        <path d="M12 17v4" />
+        <path d="M9 20h6" />
       </svg>
     ),
   },
@@ -97,11 +97,11 @@ const tracks = [
     iconColor: "#3730a3",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/>
-        <path d="M8 21h8"/><path d="M12 17v4"/>
-        <path d="M7 8h2v5H7z"/>
-        <path d="M11 10h2v3h-2z"/>
-        <path d="M15 6h2v7h-2z"/>
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8" /><path d="M12 17v4" />
+        <path d="M7 8h2v5H7z" />
+        <path d="M11 10h2v3h-2z" />
+        <path d="M15 6h2v7h-2z" />
       </svg>
     ),
   },
@@ -112,9 +112,9 @@ const tracks = [
     iconColor: "#0891b2",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        <path d="M2 12h20"/>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        <path d="M2 12h20" />
       </svg>
     ),
   },
@@ -125,8 +125,8 @@ const tracks = [
     iconColor: "#b45309",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
-        <path d="m8.5 8.5 7 7"/>
+        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+        <path d="m8.5 8.5 7 7" />
       </svg>
     ),
   },
@@ -137,8 +137,8 @@ const tracks = [
     iconColor: "#15803d",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
-        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" />
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
       </svg>
     ),
   },
@@ -149,9 +149,9 @@ const tracks = [
     iconColor: "#1d4ed8",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2"/>
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-        <path d="M10 11h4"/><path d="M12 9v4"/>
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+        <path d="M10 11h4" /><path d="M12 9v4" />
       </svg>
     ),
   },
@@ -162,10 +162,10 @@ const tracks = [
     iconColor: "#7e22ce",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="5" r="2"/>
-        <path d="M8 22v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-        <path d="M16 18h4"/><path d="M18 16v4"/>
-        <path d="M9 22v-4"/><path d="M15 22v-4"/>
+        <circle cx="12" cy="5" r="2" />
+        <path d="M8 22v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <path d="M16 18h4" /><path d="M18 16v4" />
+        <path d="M9 22v-4" /><path d="M15 22v-4" />
       </svg>
     ),
   },
@@ -176,9 +176,9 @@ const tracks = [
     iconColor: "#be123c",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 12h.01"/><path d="M15 12h.01"/>
-        <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/>
-        <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5.5 4.5 1.4"/>
+        <path d="M9 12h.01" /><path d="M15 12h.01" />
+        <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" />
+        <path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5.5 4.5 1.4" />
       </svg>
     ),
   },
@@ -189,8 +189,8 @@ const tracks = [
     iconColor: "#b45309",
     icon: (
       <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
       </svg>
     ),
   },
@@ -201,8 +201,8 @@ const tracks = [
     iconColor: "#0891b2",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        <path d="m9 12 2 2 4-4"/>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="m9 12 2 2 4-4" />
       </svg>
     ),
   },
@@ -213,31 +213,31 @@ const tracks = [
     iconColor: "#3730a3",
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
   },
 ];
 
-// Duplicate tracks for seamless marquee
+
 const marqueeTracks = [...tracks];
 
 const ConferenceTracks: React.FC = () => {
   return (
-    <section className="pt-4 pb-0 bg-[#F7F9FC] overflow-hidden">
+    <section className="pt-3 pb-0 bg-[#F7F9FC] overflow-hidden" style={{ backgroundColor: "#caf0f8" }}>
       <div className="mx-auto px-6 max-w-[1320px]">
-        {/* Section header */}
+
         <div className="flex flex-col items-center mb-0">
           <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
             EXPLORE CONFERENCE <span className="text-[#1E88E5]">TRACKS</span>
           </h2>
-          <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
+          <div className="h-1 w-20 bg-[#4E9F3D] mt-0 rounded-full" />
         </div>
 
-        {/* Marquee Container */}
+
         <Marquee
           speed={40}
           pauseOnHover={true}
@@ -245,14 +245,14 @@ const ConferenceTracks: React.FC = () => {
           direction="left"
           loop={0}
           autoFill={false}
-          className="py-6"
+          className="py-2"
         >
           {marqueeTracks.map((track, index) => (
             <div
               key={index}
-              className="group w-[150px] md:w-[180px] h-[190px] mx-2 p-4 rounded-[24px] bg-white border border-[#E6ECF3] flex flex-col items-center justify-center text-center hover:shadow-xl hover:border-[#4E9F3D] transition-all duration-300 cursor-pointer shadow-sm"
+              className="group w-[150px] md:w-[180px] h-[180px] mx-2 p-0 rounded-[24px] bg-white border border-[#E6ECF3] flex flex-col items-center justify-center text-center hover:shadow-xl hover:border-[#4E9F3D] transition-all duration-300 cursor-pointer shadow-sm"
             >
-              <div 
+              <div
                 className="w-20 h-20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 rounded-full"
                 style={{ backgroundColor: track.color, color: track.iconColor }}
               >
