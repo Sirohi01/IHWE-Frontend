@@ -1002,6 +1002,64 @@ const InternationalBuyerRegistration = () => {
                                                         })}
 
                                                         {membershipPackages.length > 0 && (
+                                                            //                                                             <div
+                                                            //                                                                 onClick={() => setShowMembershipOptions(true)}
+                                                            //                                                                 className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
+                                                            //                                                                 style={{
+                                                            //                                                                     backgroundImage: 'url(/buyer/optionbg.png)',
+                                                            //                                                                     backgroundSize: 'cover',
+                                                            //                                                                     backgroundPosition: 'center',
+                                                            //                                                                     minHeight: '120px',
+                                                            //                                                                 }}
+                                                            //                                                             >
+                                                            //                                                                 {/* Overlay */}
+                                                            //                                                                 <div className="absolute inset-0 bg-black/10 rounded-xl" />
+
+                                                            //                                                                 {/* Top content — no bg, just text with shadow */}
+                                                            //                                                                 <div className="absolute top-4 left-4 z-10">
+                                                            //                                                                     <h4 className="text-[17px] font-black text-white leading-tight"
+                                                            //                                                                         style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
+                                                            //                                                                     >
+                                                            //                                                                         Unlock Premium
+                                                            //                                                                     </h4>
+                                                            //                                                                     <h4 className="text-[17px] font-black text-[#a8d060] leading-tight"
+                                                            //                                                                         style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
+                                                            //                                                                     >
+                                                            //                                                                         Membership
+                                                            //                                                                     </h4>
+                                                            //                                                                 </div>
+
+                                                            //                                                                 {/* Bottom gradient + button */}
+                                                            //                                                                 <div
+                                                            //                                                                     className="absolute bottom-0 left-0 right-0 px-4 py-4 z-10"
+                                                            //                                                                     style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent)' }}
+                                                            //                                                                 >
+                                                            //                                                                     <div
+                                                            //                                                                         className="flex items-center gap-2 px-4 py-2 rounded-full font-black uppercase tracking-widest text-[11px] text-[#1a3d14] w-fit"
+                                                            //                                                                         style={{
+                                                            //                                                                             background: 'linear-gradient(135deg, #a8d060, #7ab830)',
+                                                            //                                                                             boxShadow: '0 0 12px rgba(168,208,96,0.6)',
+                                                            //                                                                             animation: 'gentlePulse 2s ease-in-out infinite',
+                                                            //                                                                         }}
+                                                            //                                                                     >
+                                                            //                                                                         View More Plans
+                                                            //                                                                         <span className="w-5 h-5 rounded-full bg-[#1a3d14] flex items-center justify-center shrink-0">
+                                                            //                                                                             <svg className="w-3 h-3 text-[#a8d060]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                            //                                                                                 <path d="M5 12h14M13 6l6 6-6 6" />
+                                                            //                                                                             </svg>
+                                                            //                                                                         </span>
+                                                            //                                                                     </div>
+                                                            //                                                                 </div>
+
+                                                            //                                                                 <style>{`
+                                                            //     @keyframes gentlePulse {
+                                                            //       0%, 100% { box-shadow: 0 0 10px rgba(168,208,96,0.5); }
+                                                            //       50%       { box-shadow: 0 0 20px rgba(168,208,96,0.9); }
+                                                            //     }
+                                                            //   `}</style>
+
+                                                            //                                                             </div>
+
                                                             <div
                                                                 onClick={() => setShowMembershipOptions(true)}
                                                                 className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
@@ -1013,48 +1071,76 @@ const InternationalBuyerRegistration = () => {
                                                                 }}
                                                             >
                                                                 {/* Overlay */}
-                                                                <div className="absolute inset-0 bg-black/10 rounded-xl" />
+                                                                <div className="absolute inset-0 rounded-xl"
+                                                                    style={{ background: 'linear-gradient(135deg, rgba(26,61,20,0.82) 0%, rgba(74,143,47,0.55) 100%)' }}
+                                                                />
 
-                                                                {/* Top content — no bg, just text with shadow */}
-                                                                <div className="absolute top-4 left-4 z-10">
-                                                                    <h4 className="text-[17px] font-black text-white leading-tight"
-                                                                        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
-                                                                    >
-                                                                        Unlock Premium
-                                                                    </h4>
-                                                                    <h4 className="text-[17px] font-black text-[#a8d060] leading-tight"
-                                                                        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
-                                                                    >
-                                                                        Membership
-                                                                    </h4>
-                                                                </div>
+                                                                {/* Content */}
+                                                                <div className="relative z-10 flex flex-col items-center justify-between h-full px-4 py-4 gap-3">
 
-                                                                {/* Bottom gradient + button */}
-                                                                <div
-                                                                    className="absolute bottom-0 left-0 right-0 px-4 py-4 z-10"
-                                                                    style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent)' }}
-                                                                >
-                                                                    <div
-                                                                        className="flex items-center gap-2 px-4 py-2 rounded-full font-black uppercase tracking-widest text-[11px] text-[#1a3d14] w-fit"
+                                                                    {/* Top — Logo + org name */}
+                                                                    <div className="flex flex-col items-center gap-1">
+                                                                        <img
+                                                                            src="/buyer/icoa.png"
+                                                                            alt="ICOA"
+                                                                            className="w-48 h-auto object-contain"
+                                                                            style={{
+                                                                                filter: 'drop-shadow(0 0 12px rgba(168,208,96,0.9)) drop-shadow(0 0 24px rgba(168,208,96,0.5)) drop-shadow(0 0 40px rgba(168,208,96,0.3))',
+                                                                            }}
+                                                                        />
+                                                                        <p
+                                                                            className="text-lg font-bold uppercase tracking-[0.18em] text-center"
+                                                                            style={{
+                                                                                background: 'linear-gradient(90deg, #a8d060, #d4f07a, #a8d060)',
+                                                                                WebkitBackgroundClip: 'text',
+                                                                                WebkitTextFillColor: 'transparent',
+                                                                                textShadow: 'none',
+                                                                            }}
+                                                                        >
+                                                                            International Council of Ayush
+                                                                        </p>
+                                                                    </div>
+
+                                                                    {/* Middle — Heading */}
+                                                                    <h4 className="text-[15px] font-black text-white text-center leading-tight"
+                                                                        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+                                                                    >
+                                                                        Unlock <span className="text-[#a8d060]">Premium</span> Membership
+                                                                    </h4>
+                                                                    <p className="text-sm text-white/80 text-center leading-relaxed px-2">
+                                                                        Join ICOA's exclusive network of<br />
+                                                                        Ayush professionals & wellness brands.<br />
+                                                                        Get certified, grow your reach,<br />
+                                                                        and unlock global opportunities.
+                                                                    </p>
+
+                                                                    {/* Bottom — Button */}
+                                                                    <button
+                                                                        className="flex items-center gap-3 px-5 py-2 rounded-full font-medium uppercase tracking-widest text-[11px] text-white w-fit"
                                                                         style={{
-                                                                            background: 'linear-gradient(135deg, #a8d060, #7ab830)',
-                                                                            boxShadow: '0 0 12px rgba(168,208,96,0.6)',
+                                                                            background: 'linear-gradient(135deg, #2d7a1f, #4a9e2f)',
+                                                                            border: '1.5px solid rgba(168,208,96,0.6)',
+                                                                            boxShadow: '0 0 0 0 rgba(168,208,96,0.4)',
                                                                             animation: 'gentlePulse 2s ease-in-out infinite',
                                                                         }}
                                                                     >
-                                                                        View More Plans
-                                                                        <span className="w-5 h-5 rounded-full bg-[#1a3d14] flex items-center justify-center shrink-0">
-                                                                            <svg className="w-3 h-3 text-[#a8d060]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                        Register Now
+                                                                        <span
+                                                                            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                                                                            style={{ background: 'rgba(168,208,96,0.25)', border: '1px solid rgba(168,208,96,0.5)' }}
+                                                                        >
+                                                                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                                                                 <path d="M5 12h14M13 6l6 6-6 6" />
                                                                             </svg>
                                                                         </span>
-                                                                    </div>
+                                                                    </button>
+
                                                                 </div>
 
                                                                 <style>{`
     @keyframes gentlePulse {
-      0%, 100% { box-shadow: 0 0 10px rgba(168,208,96,0.5); }
-      50%       { box-shadow: 0 0 20px rgba(168,208,96,0.9); }
+      0%, 100% { box-shadow: 0 0 8px rgba(168,208,96,0.5); }
+      50%       { box-shadow: 0 0 18px rgba(168,208,96,0.9); }
     }
   `}</style>
 
