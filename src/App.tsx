@@ -32,6 +32,7 @@ const StallDesigningVendors = lazy(() => import("./pages/StallDesigningVendors")
 const IndustryZoneDetail = lazy(() => import("./pages/IndustryZoneDetail"));
 const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
 const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
+const TravelPartner = lazy(() => import("./pages/TravelPartner"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -171,6 +172,7 @@ const App = () => {
                     <Route path="/buyer-seller-meet" element={<BuyerSellerMeet />} />
                     <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
+                    <Route path="/travel-partner" element={<TravelPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/why-visit" element={<WhyVisit />} />
