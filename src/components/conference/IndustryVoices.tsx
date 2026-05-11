@@ -113,7 +113,7 @@ const IndustryVoices: React.FC = () => {
 
   return (
     <section className="py-4 bg-white overflow-hidden">
-      <div className="mx-auto max-w-[1380px] relative left-[20px] px-6">
+      <div className="mx-auto max-w-[1350px] pl-10 lg:pl-5 px-3">
         <div className="relative mb-1 flex flex-col items-center">
           <h2 className="text-[28px] md:text-[30px] font-[900] uppercase tracking-tight text-center leading-tight">
             <span className="text-[#4E9F3D]">VOICES FROM</span> <span className="text-[#0B2C66]">INDUSTRY LEADERS</span>
@@ -155,7 +155,7 @@ const IndustryVoices: React.FC = () => {
               {infiniteItems.map((item: any, index: number) => (
                 <div
                   key={`${index}-${item.name}`}
-                  className="w-[300px] flex-shrink-0"
+                  className="w-[350px] flex-shrink-0"
                 >
                   <div className={`h-[380px] ${cardBackgrounds[index % cardBackgrounds.length]} p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden`}>
                     <div className="absolute inset-0 opacity-5 pointer-events-none">

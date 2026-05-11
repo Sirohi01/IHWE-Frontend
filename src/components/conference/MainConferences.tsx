@@ -94,7 +94,7 @@ const MainConferences: React.FC = () => {
 
   return (
     <section className="py-8 bg-white">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      <div className="mx-auto max-w-[1330px] pl-6 lg:pl-2">
 
 
         <div className="text-center mb-6">

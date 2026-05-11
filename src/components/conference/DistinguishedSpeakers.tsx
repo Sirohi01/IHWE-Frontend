@@ -353,7 +353,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
       className={`${compact ? "py-4" : "pt-0 pb-4"
         } bg-white overflow-hidden relative`}
     >
-      <div className="mx-auto max-w-[1380px] relative left-[20px] rounded-[30px] px-8 py-4">
+      <div className="mx-auto max-w-[1330px] relative left-[10px] rounded-[30px] px-0 py-4">
 
         {/* HEADER */}
         <div className="flex justify-center items-center mb-4 px-4">
