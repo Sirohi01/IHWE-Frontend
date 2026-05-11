@@ -48,7 +48,7 @@ const ConferenceCTA: React.FC = () => {
 
         {/* Right Side Button - Thinner */}
         <div className="flex-shrink-0 ml-4">
-          <Link to="/delegate-registration">
+          <Link to="/delegate-registration" target="_blank" rel="noopener noreferrer">
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
