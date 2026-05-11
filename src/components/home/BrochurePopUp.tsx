@@ -183,7 +183,7 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   <Sparkle color="#fff176" style={{ top: '-6px', left: '10%' }} />
                   <Sparkle color="#fff176" style={{ bottom: '-6px', right: '15%', animationDelay: '0.4s' }} />
                   <button 
-                    onClick={() => window.location.href = "/msme-pms-scheme"}
+                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
                     className="orange-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
                   >
                     <CheckCircle className="w-3.5 h-3.5 text-white shrink-0" />
@@ -199,7 +199,7 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   <Sparkle color="#a4c639" style={{ top: '-6px', right: '10%' }} />
                   <Sparkle color="#a4c639" style={{ bottom: '-6px', left: '15%', animationDelay: '0.6s' }} />
                   <button 
-                    onClick={() => window.location.href = "/msme-pms-scheme"}
+                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
                     className="white-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
                   >
                     <Info className="w-3.5 h-3.5 text-[#28396C] shrink-0" />
@@ -215,7 +215,7 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   <Sparkle color="#fff176" style={{ top: '-6px', right: '40%' }} />
                   <Sparkle color="#fff176" style={{ bottom: '-6px', right: '10%', animationDelay: '0.2s' }} />
                   <button 
-                    onClick={() => window.location.href = "/book-a-stand"}
+                    onClick={() => window.open("/book-a-stand", "_blank")}
                     className="golden-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
                   >
                     <Store className="w-3.5 h-3.5 text-[#050A1A] shrink-0" />

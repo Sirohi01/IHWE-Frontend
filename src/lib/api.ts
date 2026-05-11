@@ -954,3 +954,11 @@ export const msmePmsSchemeApi = {
         return await response.json();
     }
 };
+
+export const exhibitorTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/exhibitor-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};

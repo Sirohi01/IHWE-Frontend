@@ -6,17 +6,18 @@ import { cn } from "@/lib/utils";
 import { heroApi, SERVER_URL } from "@/lib/api";
 import SectionContainer from "../layout/SectionContainer";
 
-// Sparkle component for the golden button
-const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
+// Sparkle component for buttons - Enhanced visibility
+const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
   <span
     style={{
       position: 'absolute',
       pointerEvents: 'none',
-      fontSize: '12px',
-      color: '#fff176',
-      textShadow: '0 0 6px gold, 0 0 12px gold',
+      fontSize: '16px',
+      color: color,
+      textShadow: `0 0 8px ${color}, 0 0 16px ${color}, 0 0 24px ${color}`,
       animation: 'sparkleAnim 1.6s ease-in-out infinite',
       opacity: 0,
+      zIndex: 20,
       ...style,
     }}
   >
@@ -351,12 +352,14 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
             >
               {slides[current].button1Name && (
                 <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
-                  {/* Sparkles around button */}
-                  <Sparkle style={{ top: '-12px', left: '10%', animationDelay: '0s' }} />
-                  <Sparkle style={{ top: '-10px', left: '45%', animationDelay: '0.4s' }} />
-                  <Sparkle style={{ top: '-14px', right: '15%', animationDelay: '0.8s' }} />
-                  <Sparkle style={{ bottom: '-12px', left: '20%', animationDelay: '0.2s' }} />
-                  <Sparkle style={{ bottom: '-10px', right: '25%', animationDelay: '0.6s' }} />
+                  {/* Enhanced Gold Sparkles */}
+                  <Sparkle style={{ top: '-15px', left: '10%', animationDelay: '0s' }} />
+                  <Sparkle style={{ top: '-12px', left: '45%', animationDelay: '0.4s' }} />
+                  <Sparkle style={{ top: '-16px', right: '15%', animationDelay: '0.8s' }} />
+                  <Sparkle style={{ bottom: '-15px', left: '20%', animationDelay: '0.2s' }} />
+                  <Sparkle style={{ bottom: '-12px', right: '25%', animationDelay: '0.6s' }} />
+                  <Sparkle style={{ top: '20%', left: '-10px', animationDelay: '0.3s' }} />
+                  <Sparkle style={{ top: '60%', right: '-10px', animationDelay: '0.7s' }} />
 
                   {slides[current].button1Url ? (
                     slides[current].button1Url.startsWith('http') ? (
@@ -399,63 +402,79 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               )}
 
               {slides[current].button3Name && (
-                slides[current].button3Url?.startsWith('http') ? (
-                  <a
-                    href={slides[current].button3Url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button3Name}
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                    <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </a>
-                ) : (
-                  <Link
-                    to={slides[current].button3Url || "/conference"}
-                    target={forceNewTab ? "_blank" : undefined}
-                    rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button3Name}
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                    <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </Link>
-                )
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                  {/* Enhanced Blue Sparkles */}
+                  <Sparkle color="#60a5fa" style={{ top: '-15px', left: '20%', animationDelay: '0.2s' }} />
+                  <Sparkle color="#60a5fa" style={{ bottom: '-15px', right: '15%', animationDelay: '0.6s' }} />
+                  <Sparkle color="#60a5fa" style={{ top: '10%', right: '-12px', animationDelay: '0.4s' }} />
+                  <Sparkle color="#60a5fa" style={{ bottom: '20%', left: '-12px', animationDelay: '0.8s' }} />
+                  <Sparkle color="#60a5fa" style={{ top: '-12px', left: '50%', animationDelay: '0s' }} />
+                  {slides[current].button3Url?.startsWith('http') ? (
+                    <a
+                      href={slides[current].button3Url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button3Name}
+                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
+                      <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={slides[current].button3Url || "/conference"}
+                      target={forceNewTab ? "_blank" : undefined}
+                      rel={forceNewTab ? "noopener noreferrer" : undefined}
+                      className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#134698] text-white hover:bg-black transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(19,70,152,0.2)] hover:shadow-[0_12px_30px_rgba(0,0,0,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button3Name}
+                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform duration-300" />
+                      </span>
+                      <span className="absolute inset-0 bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </Link>
+                  )}
+                </div>
               )}
 
               {slides[current].button2Name && (
-                slides[current].button2Url?.startsWith('http') ? (
-                  <a
-                    href={slides[current].button2Url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button2Name}
-                      <Sparkles size={11} className="group-hover:rotate-180 transition-transform duration-500" />
-                    </span>
-                    <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </a>
-                ) : (
-                  <Link
-                    to={slides[current].button2Url || "/book-a-stand"}
-                    target={forceNewTab ? "_blank" : undefined}
-                    rel={forceNewTab ? "noopener noreferrer" : undefined}
-                    className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {slides[current].button2Name}
-                      <Sparkles size={11} className="group-hover:rotate-180 transition-transform duration-500" />
-                    </span>
-                    <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  </Link>
-                )
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                  {/* Enhanced Green Sparkles */}
+                  <Sparkle color="#4ade80" style={{ top: '-15px', right: '20%', animationDelay: '0.4s' }} />
+                  <Sparkle color="#4ade80" style={{ bottom: '-15px', left: '15%', animationDelay: '0.8s' }} />
+                  <Sparkle color="#4ade80" style={{ top: '30%', left: '-12px', animationDelay: '0.2s' }} />
+                  <Sparkle color="#4ade80" style={{ bottom: '40%', right: '-12px', animationDelay: '0.6s' }} />
+                  <Sparkle color="#4ade80" style={{ top: '-12px', left: '40%', animationDelay: '0s' }} />
+                  {slides[current].button2Url?.startsWith('http') ? (
+                    <a
+                      href={slides[current].button2Url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button2Name}
+                        <Sparkles size={11} className="group-hover:rotate-180 transition-transform duration-500" />
+                      </span>
+                      <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={slides[current].button2Url || "/book-a-stand"}
+                      target={forceNewTab ? "_blank" : undefined}
+                      rel={forceNewTab ? "noopener noreferrer" : undefined}
+                      className="group relative overflow-hidden rounded-xl px-4 py-2 sm:px-4 sm:py-1.5 bg-[#23471d] text-white hover:bg-[#d26019] transition-all duration-500 uppercase tracking-[0.15em] text-[9px] font-bold border-2 border-white shadow-[0_8px_20px_rgba(35,71,29,0.2)] hover:shadow-[0_12px_30px_rgba(35,71,29,0.3)] w-full sm:w-auto flex items-center justify-center shrink-0"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        {slides[current].button2Name}
+                        <Sparkles size={11} className="group-hover:rotate-180 transition-transform duration-500" />
+                      </span>
+                      <span className="absolute inset-0 bg-[#d26019] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                    </Link>
+                  )}
+                </div>
               )}
             </motion.div>
           </motion.div>

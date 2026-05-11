@@ -220,7 +220,7 @@ const BuyerSellerMeet = () => {
 
           {/* ── RIGHT CONTENT: Feature Box ── */}
           <div
-            className="bg-[#FFFBF1] rounded-xl py-6 px-3 lg:py-8 lg:pl-2 lg:pr-2 lg:max-w-fit w-full flex flex-wrap lg:flex-nowrap items-start justify-center gap-y-5 lg:gap-0"
+            className="bg-[#FFFBF1] rounded-xl py-6 px-3 lg:py-8 lg:pl-2 lg:pr-2 lg:max-w-fit w-full flex flex-wrap lg:flex-nowrap items-start justify-center gap-y-5 lg:gap-0 lg:-mt-12"
             style={{ boxShadow: '4px -4px 12px rgba(0, 0, 0, 0.08)' }}
           >
             {[
@@ -348,6 +348,8 @@ const BuyerSellerMeet = () => {
 
             <Link 
               to="/buyer-registration" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="b2b-maroon-btn flex items-center gap-3 px-7 h-9 rounded-xl no-underline"
             >
               <CalendarClock className="btn-icon w-4 h-4" />

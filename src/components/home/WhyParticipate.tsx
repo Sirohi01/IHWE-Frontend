@@ -194,11 +194,13 @@ const WhyParticipate = () => {
             {/* ── More Info Button ── */}
             <Link
               to="/why-exhibit"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 h-8 rounded-lg border border-[#2f8f3a] bg-white text-[#2f8f3a] hover:bg-[#2f8f3a]/5 transition-all hover:scale-[1.02] shadow-sm relative z-10"
             >
               <Info className="w-[14px] h-[14px] shrink-0" />
               <span className="font-bold text-[10px] tracking-widest uppercase">
-                Why Exhibit
+                Why Exhibit?
               </span>
             </Link>
           </div>

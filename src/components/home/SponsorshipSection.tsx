@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { API_URL } from '../../lib/api';
+import { API_URL, socialMediaApi, settingsApi, analyticsApi } from '../../lib/api';
 
 import {
   Trophy, Zap, Users, Mic2, BadgeCheck, UserCheck,
@@ -181,9 +181,126 @@ const SponsorshipSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // OTP States
+  const [emailOtp, setEmailOtp] = useState('');
+  const [phoneOtp, setPhoneOtp] = useState('');
+  const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
+  const [isPhoneOtpSent, setIsPhoneOtpSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailSending, setIsEmailSending] = useState(false);
+  const [isPhoneSending, setIsPhoneSending] = useState(false);
+  const [isEmailVerifying, setIsEmailVerifying] = useState(false);
+  const [isPhoneVerifying, setIsPhoneVerifying] = useState(false);
+
+  // Dynamic Contact Data
+  const [whatsappNumber, setWhatsappNumber] = useState("919654900525");
+  const [whatsappMsg, setWhatsappMsg] = useState("Hello! I am interested in Sponsorship opportunities for IHWE 2026.");
+  const [contactPhone, setContactPhone] = useState("+91 9654900525");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [socialData, settingsData] = await Promise.all([
+          socialMediaApi.get(),
+          settingsApi.get()
+        ]);
+
+        if (socialData) {
+          if (socialData.whatsappNumber) setWhatsappNumber(socialData.whatsappNumber);
+          if (socialData.whatsappMessage) setWhatsappMsg(socialData.whatsappMessage);
+        }
+
+        if (settingsData && settingsData.phoneNumber) {
+          setContactPhone(settingsData.phoneNumber);
+        }
+      } catch (error) {
+        console.error("Error fetching sponsorship contact data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const cleanWhatsAppNumber = whatsappNumber.replace(/\D/g, "");
+  const whatsappUrl = `https://wa.me/${cleanWhatsAppNumber}?text=${encodeURIComponent(whatsappMsg)}`;
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Reset verification if identifier changes
+    if (e.target.name === 'email') {
+      setIsEmailVerified(false);
+      setIsEmailOtpSent(false);
+    }
+    if (e.target.name === 'phone') {
+      setIsPhoneVerified(false);
+      setIsPhoneOtpSent(false);
+    }
+  };
+
+  const requestOtp = async (type: 'email' | 'phone') => {
+    const identifier = type === 'email' ? formData.email : formData.phone;
+    if (!identifier) {
+      toast.warning(`Please enter your ${type} first`);
+      return;
+    }
+
+    if (type === 'email') setIsEmailSending(true);
+    else setIsPhoneSending(true);
+
+    try {
+      const response = await fetch(`${API_URL}/otp/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier, type, name: formData.fullName, source: 'SPONSOR' })
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(`OTP sent to your ${type}`);
+        if (type === 'email') setIsEmailOtpSent(true);
+        else setIsPhoneOtpSent(true);
+      } else {
+        toast.error(data.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      if (type === 'email') setIsEmailSending(false);
+      else setIsPhoneSending(false);
+    }
+  };
+
+  const verifyOtp = async (type: 'email' | 'phone') => {
+    const identifier = type === 'email' ? formData.email : formData.phone;
+    const otp = type === 'email' ? emailOtp : phoneOtp;
+
+    if (!otp) {
+      toast.warning("Please enter the OTP");
+      return;
+    }
+
+    if (type === 'email') setIsEmailVerifying(true);
+    else setIsPhoneVerifying(true);
+
+    try {
+      const response = await fetch(`${API_URL}/otp/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier, otp, type })
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(`${type === 'email' ? 'Email' : 'WhatsApp'} verified!`);
+        if (type === 'email') setIsEmailVerified(true);
+        else setIsPhoneVerified(true);
+      } else {
+        toast.error(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      if (type === 'email') setIsEmailVerifying(false);
+      else setIsPhoneVerifying(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -197,6 +314,11 @@ const SponsorshipSection = () => {
 
     if (formData.category === 'Interested Sponsorship Category*') {
       toast.warning("Please select a sponsorship category");
+      return;
+    }
+
+    if (!isEmailVerified || !isPhoneVerified) {
+      toast.warning("Please verify both your email and WhatsApp number");
       return;
     }
 
@@ -218,6 +340,12 @@ const SponsorshipSection = () => {
           category: 'Interested Sponsorship Category*',
           message: ''
         });
+        setEmailOtp('');
+        setPhoneOtp('');
+        setIsEmailVerified(false);
+        setIsPhoneVerified(false);
+        setIsEmailOtpSent(false);
+        setIsPhoneOtpSent(false);
 
         // Reset success state after 4 seconds to show form again
         setTimeout(() => {
@@ -476,19 +604,22 @@ const SponsorshipSection = () => {
                       </div>
                     </a>
 
-                    <Link 
-                      to="/conference"
+                    <a 
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => analyticsApi.logClick("Sponsorship WhatsApp")}
                       className="bg-[#78903a] hover:bg-[#8ba643] text-white rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
                       <Handshake className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
                       <div className="text-left">
-                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Become</p>
-                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">A Sponsor</p>
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Any</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Query?</p>
                       </div>
-                    </Link>
+                    </a>
 
                     <a 
-                      href="tel:+919654900525"
+                      href={`tel:${contactPhone.replace(/\s+/g, '')}`}
                       className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
                       <HeadphonesIcon className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
@@ -637,26 +768,106 @@ const SponsorshipSection = () => {
                         required
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <input 
-                        type="email" 
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email Address*" 
-                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
-                        required
-                      />
-                      <input 
-                        type="tel" 
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="Phone Number*" 
-                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
-                        required
-                      />
+                    <div className="grid grid-cols-1 gap-2.5">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="relative">
+                          <input 
+                            type="email" 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email Address*" 
+                            className={`w-full bg-[#f8f9fa] border ${isEmailVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`} 
+                            required
+                            disabled={isEmailVerified}
+                          />
+                          {!isEmailVerified && (
+                            <button
+                              type="button"
+                              onClick={() => requestOtp('email')}
+                              disabled={isEmailSending || !formData.email}
+                              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8.5px] font-bold bg-[#78903a] text-white px-2.5 py-1.5 rounded-md hover:bg-[#5d702d] disabled:bg-slate-300 disabled:text-slate-500 transition-all shadow-sm active:scale-95"
+                            >
+                              {isEmailSending ? 'Sending...' : isEmailOtpSent ? 'Resend' : 'Send OTP'}
+                            </button>
+                          )}
+                          {isEmailVerified && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                            </div>
+                          )}
+                        </div>
+                        {isEmailOtpSent && !isEmailVerified && (
+                          <div className="flex gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                            <input
+                              type="text"
+                              value={emailOtp}
+                              onChange={(e) => setEmailOtp(e.target.value)}
+                              placeholder="Enter Email OTP"
+                              className="flex-1 bg-white border border-[#78903a]/30 rounded-lg px-3 py-1.5 text-[10px] outline-none focus:ring-2 focus:ring-[#78903a]/20"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => verifyOtp('email')}
+                              disabled={isEmailVerifying}
+                              className="bg-[#78903a] text-white px-3 py-1.5 rounded-lg text-[9px] font-bold"
+                            >
+                              {isEmailVerifying ? '...' : 'Verify'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <div className="relative">
+                          <input 
+                            type="tel" 
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="WhatsApp Number*" 
+                            className={`w-full bg-[#f8f9fa] border ${isPhoneVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`} 
+                            required
+                            disabled={isPhoneVerified}
+                          />
+                          {!isPhoneVerified && (
+                            <button
+                              type="button"
+                              onClick={() => requestOtp('phone')}
+                              disabled={isPhoneSending || !formData.phone}
+                              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8.5px] font-bold bg-[#78903a] text-white px-2.5 py-1.5 rounded-md hover:bg-[#5d702d] disabled:bg-slate-300 disabled:text-slate-500 transition-all shadow-sm active:scale-95"
+                            >
+                              {isPhoneSending ? 'Sending...' : isPhoneOtpSent ? 'Resend' : 'Send OTP'}
+                            </button>
+                          )}
+                          {isPhoneVerified && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                            </div>
+                          )}
+                        </div>
+                        {isPhoneOtpSent && !isPhoneVerified && (
+                          <div className="flex gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                            <input
+                              type="text"
+                              value={phoneOtp}
+                              onChange={(e) => setPhoneOtp(e.target.value)}
+                              placeholder="Enter WhatsApp OTP"
+                              className="flex-1 bg-white border border-[#78903a]/30 rounded-lg px-3 py-1.5 text-[10px] outline-none focus:ring-2 focus:ring-[#78903a]/20"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => verifyOtp('phone')}
+                              disabled={isPhoneVerifying}
+                              className="bg-[#78903a] text-white px-3 py-1.5 rounded-lg text-[9px] font-bold"
+                            >
+                              {isPhoneVerifying ? '...' : 'Verify'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
+                    
                     <div className="relative">
                       <select 
                         name="category"
@@ -690,12 +901,12 @@ const SponsorshipSection = () => {
                     
                     <button 
                       type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-[#153421] hover:bg-[#022f15] text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center"
+                      disabled={isSubmitting || !isEmailVerified || !isPhoneVerified}
+                      className={`w-full ${(!isEmailVerified || !isPhoneVerified) ? 'bg-slate-400' : 'bg-[#153421] hover:bg-[#022f15]'} text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center`}
                     >
                       {isSubmitting ? (
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      ) : "Submit Inquiry"}
+                      ) : (!isEmailVerified || !isPhoneVerified) ? "Verify Email & WhatsApp to Submit" : "Submit Inquiry"}
                     </button>
 
                     <p className="flex items-center justify-center gap-2 text-[9px] text-slate-400 mt-2">
