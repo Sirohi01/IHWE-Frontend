@@ -945,7 +945,7 @@ const InternationalBuyerRegistration = () => {
                                                                     )}
 
                                                                     <div className="mb-3">
-                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800 group-hover:text-[#23471d] transition-colors">
+                                                                        <h4 className="text-[15px] font-semibold leading-tight text-slate-800 group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ${pkg.price}
                                                                         </h4>
                                                                         {pkg.tagline && (
@@ -964,8 +964,8 @@ const InternationalBuyerRegistration = () => {
 
                                                                         {pkg.benefits && pkg.benefits.length > 0 && (
                                                                             <div className="space-y-1.5">
-                                                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
-                                                                                <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium">
+                                                                                <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">What You Get:</p>
+                                                                                <ul className="text-[11px] text-gray-700 space-y-1.5 font-medium">
                                                                                     {pkg.benefits.map((b: string, i: number) => (
                                                                                         <li key={i} className="flex items-start gap-2">
                                                                                             <CheckCircle size={12} className="text-emerald-500 mt-0.5 shrink-0" />
@@ -986,11 +986,27 @@ const InternationalBuyerRegistration = () => {
                                                                         )}
                                                                     </div>
 
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all 
-                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    <div className={`mt-4 w-full py-2.5 text-white rounded-lg bg-green-600 hover:bg-green-700 text-center text-[11px] font-medium uppercase tracking-widest transition-all 
+                                                                        ${isSelected ? ' shadow-lg' : ''}
                                                                     `}>
                                                                         {pkg.cta || "Select Plan"}
                                                                     </div>
+
+                                                                    {/* <div className="flex justify-center">
+                                                                        <button
+                                                                            className="flex justify-between items-center gap-3 px-5 py-1 rounded-lg font-medium uppercase tracking-widest text-[11px] text-white w-fit bg-green-600 hover:bg-green-700"
+                                                                        >
+                                                                            <span>{pkg.cta || "Select Plan"}</span>
+                                                                            <span
+                                                                                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                                                                                style={{ background: 'rgba(168,208,96,0.2)', border: '1.5px solid rgba(168,208,96,0.6)' }}
+                                                                            >
+                                                                                <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                                    <path d="M5 12h14M13 6l6 6-6 6" />
+                                                                                </svg>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div> */}
                                                                 </div>
                                                             );
                                                         })}
