@@ -58,7 +58,7 @@ const Partnership = () => {
 
                 <h1 className="text-white text-5xl md:text-7xl font-black leading-[0.95] uppercase">
                  Healthier
-                  <span className="block text-[#7ed957] mt-0">
+                  <span className="block text-[#619941] mt-0">
                     Tomorrow
                   </span>
                 </h1>
@@ -77,13 +77,13 @@ const Partnership = () => {
                 {/* BUTTONS */}
                 <div className="flex flex-wrap gap-3 mt-4">
 
-                  <button className="bg-[#6ac63c] hover:bg-[#58b02d] transition-all duration-300 text-white font-black uppercase px-4 py-1 rounded-[20px] shadow-2xl">
+                  <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
 
                     Register As Partner
 
                   </button>
 
-                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white font-black uppercase px-4 py-2 rounded-[20px]">
+                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-4 py-2 rounded-[20px]">
 
                     Explore Opportunities
 
@@ -102,7 +102,7 @@ const Partnership = () => {
                   
 
                   {/* FLOATING CARD */}
-                  <div className="absolute top-10 right-6 bg-[#042a64] border-[4px] border-[#7ed957] rounded-[30px] p-6 w-[280px] shadow-2xl rotate-[6deg]">
+                  <div className="absolute top-10 right-6 bg-[#042a64] border-[4px] border-[#619941] rounded-[30px] p-6 w-[280px] shadow-2xl rotate-[6deg]">
 
                     {[
                       {
@@ -111,8 +111,8 @@ const Partnership = () => {
                         image: "/images/partnership/visitors.png",
                       },
                       {
-                        number: "50+",
-                        label: "Countries Participating",
+                        number: "100+",
+                        label: "Global Buyers",
                         image: "/images/partnership/globe.png",
                       },
                       {
@@ -196,7 +196,7 @@ const Partnership = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
              <div className=" p-2 md:p-4 border-r border-[#ececec] last:border-r-0 mt-10">
-                    <h3 className="text-[#16316b] text-lg md:text-xl font-black uppercase">WHY PARTNER <span className="text-[#7ed957]">WITH IHWE 2026?</span></h3>
+                    <h3 className="text-[#16316b] text-lg md:text-xl font-black uppercase">WHY PARTNER <span className="text-[#619941]">WITH IHWE 2026?</span></h3>
                 </div>
               {[
                 {
@@ -260,7 +260,7 @@ const Partnership = () => {
       </section>
 
      {/* PARTNER CATEGORIES */}
-<section className="py-8 px-4 md:px-10 lg:px-16 xl:px-24 bg-[#f7f7f7]">
+<section className="py-8 px-4 md:px-10 lg:px-16 xl:px-24">
 
   <div className="max-w-[1450px] mx-auto">
 
@@ -269,26 +269,26 @@ const Partnership = () => {
 
       <div className="flex items-center justify-center gap-3 mb-2">
 
-        <div className="w-10 h-[2px] bg-[#63b832]" />
+        <div className="w-10 h-[2px] bg-[#619941]" />
 
-        <span className="text-[#63b832] text-sm font-bold uppercase tracking-[2px]">
+        <span className="text-[#619941] text-sm font-bold uppercase tracking-[2px]">
           Partnership Opportunities
         </span>
 
-        <div className="w-10 h-[2px] bg-[#63b832]" />
+        <div className="w-10 h-[2px] bg-[#619941]" />
 
       </div>
 
-      <h2 className="text-[20px] md:text-[36px] font-black text-[#102040] uppercase leading-tight">
+      <h3 className="text-[18px] md:text-[24px] font-black text-[#102040] uppercase leading-tight">
 
         Our Partner Categories
-        <span className="text-[#63b832]">
+        <span className="text-[#619941]">
           {" "} & Benefits
         </span>
 
-      </h2>
+      </h3>
 
-      <p className="text-[#555] text-sm md:text-base mt-3">
+      <p className="text-[#555] text-sm md:text-base mt-2">
         Choose a category that fits your business goals and unlock exclusive advantages.
       </p>
 
@@ -301,9 +301,9 @@ const Partnership = () => {
         {
           no: "01",
           title: "Hotel & Stay Partner",
-          image: "/images/hotel.jpg",
-          color: "#63b832",
-          icon: "/images/hotel-icon.png",
+          image: "/images/partnership/3.png",
+          color: "#619941",
+          icon: "/images/partnership/bed.png",
           points: [
             "Brand visibility on official platforms",
             "Direct access to exhibitors & delegates",
@@ -315,9 +315,9 @@ const Partnership = () => {
         {
           no: "02",
           title: "Travel Partner",
-          image: "/images/travel.jpg",
+          image: "/images/partnership/2.png",
           color: "#2f68c5",
-          icon: "/images/travel-icon.png",
+          icon: "/images/partnership/aeroplan.png",
           points: [
             "Featured as official travel partner",
             "Exposure to global exhibitors & buyers",
@@ -329,9 +329,9 @@ const Partnership = () => {
         {
           no: "03",
           title: "Stall Design & Fabrication",
-          image: "/images/stall.jpg",
+          image: "/images/partnership/1.png",
           color: "#11a7b8",
-          icon: "/images/stall-icon.png",
+          icon: "/images/partnership/home.png",
           points: [
             "Official branding on event collaterals",
             "High visibility at venue",
@@ -343,9 +343,9 @@ const Partnership = () => {
         {
           no: "04",
           title: "Logistics Partner",
-          image: "/images/logistics.jpg",
+          image: "/images/partnership/Logistics.png",
           color: "#7b43c9",
-          icon: "/images/logistics-icon.png",
+          icon: "/images/partnership/delivery.png",
           points: [
             "Listed as official logistics partner",
             "International partner recognition",
@@ -357,9 +357,9 @@ const Partnership = () => {
         {
           no: "05",
           title: "Printing & Branding",
-          image: "/images/printing.jpg",
+          image: "/images/partnership/printing.png",
           color: "#ff7a00",
-          icon: "/images/printing-icon.png",
+          icon: "/images/partnership/print.jpg",
           points: [
             "Branding across event materials",
             "On-site branding opportunities",
@@ -371,9 +371,9 @@ const Partnership = () => {
         {
           no: "06",
           title: "Hospitality Partner",
-          image: "/images/hospitality.jpg",
+          image: "/images/partnership/hospitality.jpg",
           color: "#e93d8b",
-          icon: "/images/hospitality-icon.png",
+          icon: "/images/partnership/bell.png",
           points: [
             "Recognition as hospitality partner",
             "Networking with delegates & exhibitors",
@@ -443,10 +443,8 @@ const Partnership = () => {
 
             {/* ICON */}
             <div
-              className="absolute -top-10 left-6 w-20 h-20 rounded-full shadow-xl flex items-center justify-center p-4 border-[5px] border-white"
-              style={{
-                backgroundColor: item.color,
-              }}
+              className="absolute -top-10 left-6 w-20 h-20 rounded-full flex items-center justify-center border-white"
+              
             >
 
               <img
@@ -534,7 +532,164 @@ const Partnership = () => {
   </div>
 
 </section>
+{/* IMPACT PARTNERSHIP SECTION */}
+<section
+  className="relative overflow-hidden bg-no-repeat bg-top bg-contain"
+  style={{
+    backgroundImage: "url('/images/partnership/impact-bg.png')",
+    backgroundSize: "100% auto", // FULL IMAGE SHOW
+  }}
+>
 
+  
+  <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 py-16">
+
+    {/* HEADING */}
+    <div className="text-center mb-16">
+
+      <div className="flex items-center justify-center gap-4 mb-4">
+
+        <div className="w-12 h-[2px] bg-[#6ab43b]" />
+
+        <h2 className="text-[24px] md:text-[44px] font-black uppercase tracking-tight text-[#13264b]">
+          Together, We Create{" "}
+          <span className="text-[#6ab43b]">
+            Impact
+          </span>
+        </h2>
+
+        <div className="w-12 h-[2px] bg-[#6ab43b]" />
+
+      </div>
+
+      <p className="text-[#475569] text-[15px] md:text-[17px] max-w-[900px] mx-auto leading-8">
+        Build meaningful collaborations and unlock growth opportunities with
+        strategic partnerships at IHWE 2026.
+      </p>
+
+    </div>
+
+    {/* ICON STEPS */}
+    <div className="relative mb-24 pt-10">
+
+      {/* LINE */}
+      <div className="hidden lg:block absolute top-[58px] left-0 w-full h-[2px] bg-[#bcd1ea]" />
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-6 relative z-10">
+
+        {[
+          {
+            title: "Access Global Audience",
+            color: "#67a92e",
+            icon: "/images/partnership/group.png",
+          },
+          {
+            title: "Increase Brand Reach",
+            color: "#0aa2c5",
+            icon: "/images/partnership/target.png",
+          },
+          {
+            title: "Drive Business Growth",
+            color: "#1f49c3",
+            icon: "/images/partnership/growth.png",
+          },
+          {
+            title: "Build Valuable Networks",
+            color: "#6e3fbc",
+            icon: "/images/partnership/network.png",
+          },
+          {
+            title: "Gain Recognition",
+            color: "#e72f81",
+            icon: "/images/partnership/award.png",
+          },
+          {
+            title: "Global Movement",
+            color: "#ff7800",
+            icon: "/images/partnership/global.png",
+          },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className="relative flex flex-col items-center text-center group"
+          >
+
+          
+
+            {/* TITLE */}
+            <h3 className="mt-5 text-[#13264b] text-[15px] md:text-[16px] font-bold leading-6 max-w-[170px]">
+              {item.title}
+            </h3>
+
+          </div>
+        ))}
+
+      </div>
+
+    </div>
+
+    {/* CTA BOX */}
+    <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#03134b] to-[#001c68] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+
+      {/* GLOW */}
+      <div className="absolute left-[-80px] top-[-50px] w-[260px] h-[260px] bg-cyan-400/20 blur-[120px]" />
+      <div className="absolute right-[-100px] bottom-[-100px] w-[280px] h-[280px] bg-green-500/20 blur-[120px]" />
+
+      <div className="relative z-10 grid lg:grid-cols-[220px_1fr_320px] gap-10 items-center px-6 md:px-10 lg:px-14 py-10">
+
+        {/* GLOBE */}
+        <div className="flex justify-center lg:justify-start">
+
+          <img
+            src="/images/partnership/globe.png"
+            alt=""
+            className="w-[170px] md:w-[200px] object-contain drop-shadow-[0_0_25px_rgba(0,180,255,0.5)]"
+          />
+
+        </div>
+
+        {/* TEXT */}
+        <div className="text-center lg:text-left">
+
+          <h3 className="text-white text-[28px] md:text-[42px] font-black uppercase leading-tight">
+
+            Ready To Partner
+            <br />
+
+            <span className="text-[#85db48]">
+              For A Healthier Future?
+            </span>
+
+          </h3>
+
+          <p className="text-white/80 text-[15px] md:text-[17px] leading-8 mt-5 max-w-[650px]">
+            Join hands with IHWE 2026 and grow your business with endless
+            networking, branding, and collaboration opportunities.
+          </p>
+
+        </div>
+
+        {/* BUTTON */}
+        <div className="flex justify-center lg:justify-end">
+
+          <button className="group h-[64px] px-10 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white font-black uppercase tracking-wide text-sm shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
+
+            Register As Official Partner
+
+            <span className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#5aad2b] text-xl group-hover:translate-x-1 transition-all">
+              →
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
     </div>
   );
 };
