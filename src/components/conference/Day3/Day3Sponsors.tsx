@@ -74,7 +74,7 @@ const Day3Sponsors: React.FC = () => {
     <section className="py-4 bg-white max-w-[1340px] mx-auto" style={{ backgroundColor: "#e2f1d0ff" }}>
       <div className="container mx-auto px-6 ">
 
-        {/* Section Header */}
+
         <div className="text-center mb-1 flex flex-col items-center">
           <div className="flex items-center gap-4 mb-2">
             <div className="h-[2px] w-12 bg-[#4E9F3D]" />
@@ -86,7 +86,7 @@ const Day3Sponsors: React.FC = () => {
 
         </div>
 
-        {/* Pricing Grid */}
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">
           {sponsorPlans.map((plan, idx) => (
             <motion.div
@@ -97,7 +97,7 @@ const Day3Sponsors: React.FC = () => {
               transition={{ delay: idx * 0.05 }}
               className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col group hover:shadow-xl transition-all duration-300"
             >
-              {/* Plan Header */}
+
               <div
                 className="py-2 px-3 text-center"
                 style={{ backgroundColor: plan.color }}

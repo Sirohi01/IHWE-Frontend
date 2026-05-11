@@ -40,18 +40,18 @@ const Day3About: React.FC<Day3AboutProps> = ({ data }) => {
   const focusAreas = Array.isArray(aboutData.focusAreas) ? aboutData.focusAreas : [];
 
   return (
-    <section className="py-4 bg-[#F8FAFC]">
+    <section className="py-4 ">
       <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
-          {/* About Text */}
+
           <div className="lg:w-[40%]">
             <h2 className="text-[16px] font-black text-[#4E9F3D] uppercase tracking-[0.1em] mb-4">
               {aboutData.title}
             </h2>
 
             <div className="relative pl-6">
-              {/* Green Vertical Line */}
+
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#4E9F3D] rounded-full" />
 
               <div className="space-y-4">
@@ -67,7 +67,7 @@ const Day3About: React.FC<Day3AboutProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* Key Focus Areas */}
+
           <div className="lg:w-[60%]">
             <h2 className="text-[16px] font-black text-[#4E9F3D] uppercase tracking-[0.1em] mb-4">
               Key Focus Areas
