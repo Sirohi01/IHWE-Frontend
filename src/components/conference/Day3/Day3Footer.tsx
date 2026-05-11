@@ -41,8 +41,8 @@ const Day3Footer: React.FC = () => {
   }, []);
 
   return (
-    <footer className="border-t border-gray-100 py-3" style={{ backgroundColor: '#F5F5F0' }}>
-      <div className="container  px-6 max-w-[1380px]" style={{ backgroundColor: '#F5F5F0' }}>
+    <footer className="border-t border-gray-100 py-3" >
+      <div className="container  px-6 max-w-[1380px]" >
         <div className="flex flex-wrap items-center justify-between gap-y-4 gap-x-6">
 
           {/* Info Blocks */}
