@@ -227,7 +227,7 @@ const marqueeTracks = [...tracks];
 
 const ConferenceTracks: React.FC = () => {
   return (
-    <section className="pt-3 pb-0 bg-[#F7F9FC] overflow-hidden " style={{ backgroundColor: "#caf0f8" }}>
+    <section className="pt-3 pb-4 bg-[#F7F9FC] overflow-hidden " style={{ backgroundColor: "#caf0f8" }}>
       <div className="mx-auto max-w-[1330px] pl-6 lg:pl-2">
 
         <div className="flex flex-col items-center mb-0">
