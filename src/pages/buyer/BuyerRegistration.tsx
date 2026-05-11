@@ -1036,7 +1036,7 @@ const BuyerRegistration = () => {
         <div className="min-h-screen bg-[#FDFDFD] ">
 
             <section className="py-4 relative bg-[#F8FAFC]">
-                <div className="container mx-auto px-4 max-w-[1400px]">
+                <div className="px-16">
                     <AnimatePresence mode="wait">
                         {submitted ? (
                             <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white border border-slate-200 p-12 flex flex-col items-center text-center space-y-5 shadow-2xl rounded-xl">
@@ -1051,7 +1051,7 @@ const BuyerRegistration = () => {
                                 </div>
                             </motion.div>
                         ) : (
-                            <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg overflow-hidden">
+                            <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] rounded-lg">
                                 <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
 
                                     <div>
@@ -1543,37 +1543,29 @@ const BuyerRegistration = () => {
                                                         <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                                                         <p className="text-sm font-medium text-slate-600 uppercase tracking-[0.2em] ">Available Registration Passes</p>
                                                     </div>
-
                                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
                                                         {passPackages.map((pkg: any) => {
                                                             const isSelected = formData.registrationCategory === pkg.name;
-                                                            const colorMap: Record<string, any> = {
-                                                                blue: { border: 'border-blue-400 bg-blue-50/10', accent: 'text-blue-700', badge: 'bg-emerald-500' },
-                                                                yellow: { border: 'border-amber-400 bg-amber-50/10', accent: 'text-amber-700', badge: 'bg-amber-400' },
-                                                                green: { border: 'border-emerald-400 bg-emerald-50/10', accent: 'text-emerald-700', badge: 'bg-emerald-500' },
-                                                                red: { border: 'border-red-400 bg-red-50/10', accent: 'text-red-700', badge: 'bg-red-500' }
-                                                            };
-                                                            const theme = colorMap[pkg.color] || colorMap.blue;
 
                                                             return (
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full  group 
-                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    className={`relative p-5 border-2 bg-green-500/10 transition-all cursor-pointer rounded-xl flex flex-col h-full  group 
+                                                                        ${isSelected ? `border-[#23471d]   shadow-2xl ring-1 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200  hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
                                                                     {pkg.badge && (
-                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                        <div className="absolute -top-3 bg-emerald-500 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ">
                                                                             ⭐ {pkg.badge}
                                                                         </div>
                                                                     )}
 
                                                                     <div className="mb-3">
-                                                                        <h4 className="text-[15px] font-black leading-tight text-slate-800  group-hover:text-[#23471d] transition-colors">
+                                                                        <h4 className="text-[15px] font-semibold leading-tight text-slate-800  group-hover:text-[#23471d] transition-colors">
                                                                             {pkg.name} – ₹{pkg.price}
                                                                         </h4>
-                                                                        <p className={`text-[10px] font-bold uppercase tracking-tight mt-1 ${theme.accent}`}>
+                                                                        <p className="text-[10px] font-bold uppercase tracking-tight mt-1">
                                                                             {pkg.tagline}
                                                                         </p>
                                                                     </div>
@@ -1584,7 +1576,7 @@ const BuyerRegistration = () => {
                                                                         </p>
 
                                                                         <div className="space-y-1.5">
-                                                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">What You Get:</p>
+                                                                            <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">What You Get:</p>
                                                                             <ul className="text-[11px] text-slate-700 space-y-1.5 font-medium ">
                                                                                 {pkg.benefits.map((b: string, i: number) => (
                                                                                     <li key={i} className="flex items-start gap-2">
@@ -1595,18 +1587,27 @@ const BuyerRegistration = () => {
                                                                             </ul>
                                                                         </div>
 
-                                                                        <div className={`p-2 rounded-lg ${theme.border} border`}>
+                                                                        <div className="p-2 rounded-lg border border-slate-200">
                                                                             <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Why Choose This:</p>
                                                                             <p className="text-[10px] text-slate-700 font-semibold leading-snug">
                                                                                 {pkg.whyChoose}
                                                                             </p>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all  
-                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
-                                                                    `}>
-                                                                        {pkg.cta || "Select Plan"}
+                                                                    <div className="flex justify-center">
+                                                                        <button
+                                                                            className="flex justify-between items-center gap-3 px-5 py-1 rounded-lg font-medium uppercase tracking-widest text-[11px] text-white w-fit bg-green-600 hover:bg-green-700"
+                                                                        >
+                                                                            <span>{pkg.cta || "Select Plan"}</span>
+                                                                            <span
+                                                                                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                                                                                style={{ background: 'rgba(168,208,96,0.2)', border: '1.5px solid rgba(168,208,96,0.6)' }}
+                                                                            >
+                                                                                <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                                    <path d="M5 12h14M13 6l6 6-6 6" />
+                                                                                </svg>
+                                                                            </span>
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             );
@@ -1614,90 +1615,100 @@ const BuyerRegistration = () => {
 
 
                                                         {membershipPackages.length > 0 && (
-                                                            <div
-                                                                onClick={() => setShowMembershipOptions(true)}
-                                                                className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
-                                                                style={{
-                                                                    backgroundImage: 'url(/buyer/optionbg.png)',
-                                                                    backgroundSize: 'cover',
-                                                                    backgroundPosition: 'center',
-                                                                    minHeight: '120px',
-                                                                }}
-                                                            >
-                                                                {/* Overlay */}
-                                                                <div className="absolute inset-0 rounded-xl"
-                                                                    style={{ background: 'linear-gradient(135deg, rgba(26,61,20,0.82) 0%, rgba(74,143,47,0.55) 100%)' }}
-                                                                />
+                                                            <div className="relative">
 
-                                                                {/* Content */}
-                                                                <div className="relative z-10 flex flex-col items-center justify-between h-full px-4 py-4 gap-3">
-
-                                                                    {/* Top — Logo + org name */}
-                                                                    <div className="flex flex-col items-center gap-1">
-                                                                        <img
-                                                                            src="/buyer/icoa.png"
-                                                                            alt="ICOA"
-                                                                            className="w-48 h-auto object-contain"
-                                                                            style={{
-                                                                                filter: 'drop-shadow(0 0 12px rgba(168,208,96,0.9)) drop-shadow(0 0 24px rgba(168,208,96,0.5)) drop-shadow(0 0 40px rgba(168,208,96,0.3))',
-                                                                            }}
-                                                                        />
-                                                                        <p
-                                                                            className="text-lg font-bold uppercase tracking-[0.18em] text-center"
-                                                                            style={{
-                                                                                background: 'linear-gradient(90deg, #a8d060, #d4f07a, #a8d060)',
-                                                                                WebkitBackgroundClip: 'text',
-                                                                                WebkitTextFillColor: 'transparent',
-                                                                                textShadow: 'none',
-                                                                            }}
-                                                                        >
-                                                                            International Council of Ayush
-                                                                        </p>
-                                                                    </div>
-
-                                                                    {/* Middle — Heading */}
-                                                                    <h4 className="text-[15px] font-black text-white text-center leading-tight"
-                                                                        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
-                                                                    >
-                                                                        Unlock <span className="text-[#a8d060]">Premium</span> Membership
-                                                                    </h4>
-                                                                    <p className="text-sm text-white/80 text-center leading-relaxed px-2">
-                                                                        Join ICOA's exclusive network of<br />
-                                                                        Ayush professionals & wellness brands.<br />
-                                                                        Get certified, grow your reach,<br />
-                                                                        and unlock global opportunities.
-                                                                    </p>
-
-                                                                    {/* Bottom — Button */}
-                                                                    <button
-                                                                        className="flex items-center gap-3 px-5 py-2 rounded-full font-medium uppercase tracking-widest text-[11px] text-white w-fit"
-                                                                        style={{
-                                                                            background: 'linear-gradient(135deg, #2d7a1f, #4a9e2f)',
-                                                                            border: '1.5px solid rgba(168,208,96,0.6)',
-                                                                            boxShadow: '0 0 0 0 rgba(168,208,96,0.4)',
-                                                                            animation: 'gentlePulse 2s ease-in-out infinite',
-                                                                        }}
-                                                                    >
-                                                                        Register Now
-                                                                        <span
-                                                                            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                                                                            style={{ background: 'rgba(168,208,96,0.25)', border: '1px solid rgba(168,208,96,0.5)' }}
-                                                                        >
-                                                                            <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                                                <path d="M5 12h14M13 6l6 6-6 6" />
-                                                                            </svg>
-                                                                        </span>
-                                                                    </button>
-
+                                                                {/* Badge — card ke upar half bahar */}
+                                                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md text-white bg-emerald-500 whitespace-nowrap">
+                                                                    ⭐ Recommended
                                                                 </div>
 
-                                                                <style>{`
-    @keyframes gentlePulse {
-      0%, 100% { box-shadow: 0 0 8px rgba(168,208,96,0.5); }
-      50%       { box-shadow: 0 0 18px rgba(168,208,96,0.9); }
-    }
-  `}</style>
+                                                                {/* Card */}
+                                                                <div
+                                                                    onClick={() => setShowMembershipOptions(true)}
+                                                                    className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
+                                                                    style={{
+                                                                        backgroundImage: 'url(/buyer/optionbg.png)',
+                                                                        backgroundSize: 'cover',
+                                                                        backgroundPosition: 'center',
+                                                                        minHeight: '120px',
+                                                                    }}
+                                                                >
+                                                                    {/* Overlay */}
+                                                                    <div className="absolute inset-0 rounded-xl"
+                                                                        style={{ background: 'linear-gradient(135deg, rgba(26,61,20,0.82) 0%, rgba(74,143,47,0.55) 100%)' }}
+                                                                    />
 
+                                                                    {/* Content */}
+                                                                    <div className="relative z-10 flex flex-col items-center justify-between h-full px-4 pt-6 pb-4 gap-3">
+
+                                                                        {/* Top — Logo + org name */}
+                                                                        <div className="flex flex-col items-center gap-1">
+                                                                            <img
+                                                                                src="/buyer/icoa.png"
+                                                                                alt="ICOA"
+                                                                                className="w-48 h-auto object-contain"
+                                                                                style={{
+                                                                                    filter: 'drop-shadow(0 0 12px rgba(168,208,96,0.9)) drop-shadow(0 0 24px rgba(168,208,96,0.5)) drop-shadow(0 0 40px rgba(168,208,96,0.3))',
+                                                                                }}
+                                                                            />
+                                                                            <p
+                                                                                className="text-lg font-bold uppercase tracking-[0.18em] text-center"
+                                                                                style={{
+                                                                                    background: 'linear-gradient(90deg, #a8d060, #d4f07a, #a8d060)',
+                                                                                    WebkitBackgroundClip: 'text',
+                                                                                    WebkitTextFillColor: 'transparent',
+                                                                                    textShadow: 'none',
+                                                                                }}
+                                                                            >
+                                                                                International Council of Ayush
+                                                                            </p>
+                                                                        </div>
+
+                                                                        {/* Middle — Heading */}
+                                                                        <h4
+                                                                            className="text-[15px] font-black text-white text-center leading-tight"
+                                                                            style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+                                                                        >
+                                                                            Unlock <span className="text-[#a8d060]">Premium</span> Membership
+                                                                        </h4>
+
+                                                                        <p className="text-sm text-white/80 text-center leading-relaxed px-2">
+                                                                            Join ICOA's exclusive network of<br />
+                                                                            Ayush professionals & wellness brands.<br />
+                                                                            Get certified, grow your reach,<br />
+                                                                            and unlock global opportunities.
+                                                                        </p>
+
+                                                                        {/* Bottom — Button */}
+                                                                        <button
+                                                                            className="flex items-center gap-3 px-5 py-1 rounded-lg font-medium uppercase tracking-widest text-[11px] text-white w-fit"
+                                                                            style={{
+                                                                                background: 'linear-gradient(135deg, #2d7a1f, #4a9e2f)',
+                                                                                border: '1.5px solid rgba(168,208,96,0.6)',
+                                                                                animation: 'gentlePulse 2s ease-in-out infinite',
+                                                                            }}
+                                                                        >
+                                                                            Register Now
+                                                                            <span
+                                                                                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                                                                                style={{ background: 'rgba(168,208,96,0.25)', border: '1px solid rgba(168,208,96,0.5)' }}
+                                                                            >
+                                                                                <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                                    <path d="M5 12h14M13 6l6 6-6 6" />
+                                                                                </svg>
+                                                                            </span>
+                                                                        </button>
+
+                                                                    </div>
+
+                                                                    <style>{`
+      @keyframes gentlePulse {
+        0%, 100% { box-shadow: 0 0 8px rgba(168,208,96,0.5); }
+        50%       { box-shadow: 0 0 18px rgba(168,208,96,0.9); }
+      }
+    `}</style>
+
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>
@@ -1709,7 +1720,6 @@ const BuyerRegistration = () => {
                                                             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                                                             <p className="text-[11px] font-black text-slate-600 uppercase tracking-[0.2em] ">Exclusive Membership Plans</p>
                                                         </div>
-                                                        <Button type="button" onClick={() => setShowMembershipOptions(false)} variant="ghost" className={`h-8 text-[11px] text-emerald-700 font-black hover:bg-emerald-50 border border-emerald-100 ${buttonTextClasses}`}>← Back</Button>
                                                     </div>
 
                                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
@@ -1729,12 +1739,12 @@ const BuyerRegistration = () => {
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all rounded-xl flex flex-col h-full  group cursor-pointer
-                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    className={`relative bg-green-500/10 p-5 border-2 transition-all rounded-xl flex flex-col h-full  group cursor-pointer
+                                                                        ${isSelected ? `border-[#23471d]  shadow-2xl ring-1 ring-emerald-100 scale-[1.02] z-10` : `border-green-100 hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
                                                                     {pkg.badge && (
-                                                                        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white ${theme.badge}`}>
+                                                                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm z-20 text-white bg-emerald-500">
                                                                             ⭐ {pkg.badge}
                                                                         </div>
                                                                     )}
@@ -1773,15 +1783,21 @@ const BuyerRegistration = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    <div className={`mt-4 w-full py-2.5 rounded-lg text-center text-[11px] font-black uppercase tracking-widest transition-all  
-                                                                        ${isSelected ? 'bg-[#23471d] text-white shadow-lg' : 'bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white'}
+                                                                    <div className={`mt-4 w-full py-1.5 rounded-lg text-white text-center text-xs bg-green-600 hover:bg-green-700 font-medium uppercase tracking-widest transition-all  
+                                                                        ${isSelected ? 'shadow-lg' : ''}
                                                                     `}>
                                                                         {pkg.cta || "Select Plan"}
                                                                     </div>
                                                                 </div>
                                                             );
                                                         })}
+                                                        <div className="flex justify-end px-2 h-7 text-center items-center">
+                                                            <button type="button" onClick={() => setShowMembershipOptions(false)} className="px-6 py-1.5 text-sm text-white font-medium bg-red-500 hover:bg-red-600 border border-red-600 rounded-lg transition-all shadow-sm">← Back to Passes</button>
+                                                        </div>
                                                     </div>
+
+
+
                                                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3 mt-4">
                                                         <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
                                                         <p className="text-[11px] font-medium text-amber-800 leading-relaxed">

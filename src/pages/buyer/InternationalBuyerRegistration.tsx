@@ -564,13 +564,7 @@ const InternationalBuyerRegistration = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden"
                             >
-                                {/* <div className="bg-[#23471d] px-5 py-3 text-white flex justify-between items-center">
-                                    <div>
-                                        <h2 className="text-base font-bold uppercase tracking-wider ">International Buyer Registration</h2>
-                                        <p className="text-[9px] text-emerald-300 uppercase tracking-[0.3em] font-medium ">9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)</p>
-                                    </div>
-                                    <ShieldCheck className="text-emerald-400 opacity-50" size={24} />
-                                </div> */}
+                                Available Registration Passes
 
                                 <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
 
@@ -940,8 +934,8 @@ const InternationalBuyerRegistration = () => {
                                                                 <div
                                                                     key={pkg.name}
                                                                     onClick={() => handlePackageSelection(pkg)}
-                                                                    className={`relative p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full group 
-                                                                        ${isSelected ? `border-[#23471d] bg-white shadow-2xl ring-4 ring-emerald-100 scale-[1.02] z-10` : `border-slate-200 bg-white hover:border-emerald-300 hover:shadow-lg`}
+                                                                    className={`relative bg-green-500/10 p-5 border-2 transition-all cursor-pointer rounded-xl flex flex-col h-full group 
+                                                                        ${isSelected ? `border-[#23471d]  shadow-2xl ring-2 ring-emerald-100 scale-[1.02] z-10` : `border-green-200  hover:border-emerald-300 hover:shadow-lg`}
                                                                     `}
                                                                 >
                                                                     {pkg.badge && (
@@ -1002,64 +996,6 @@ const InternationalBuyerRegistration = () => {
                                                         })}
 
                                                         {membershipPackages.length > 0 && (
-                                                            //                                                             <div
-                                                            //                                                                 onClick={() => setShowMembershipOptions(true)}
-                                                            //                                                                 className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
-                                                            //                                                                 style={{
-                                                            //                                                                     backgroundImage: 'url(/buyer/optionbg.png)',
-                                                            //                                                                     backgroundSize: 'cover',
-                                                            //                                                                     backgroundPosition: 'center',
-                                                            //                                                                     minHeight: '120px',
-                                                            //                                                                 }}
-                                                            //                                                             >
-                                                            //                                                                 {/* Overlay */}
-                                                            //                                                                 <div className="absolute inset-0 bg-black/10 rounded-xl" />
-
-                                                            //                                                                 {/* Top content — no bg, just text with shadow */}
-                                                            //                                                                 <div className="absolute top-4 left-4 z-10">
-                                                            //                                                                     <h4 className="text-[17px] font-black text-white leading-tight"
-                                                            //                                                                         style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
-                                                            //                                                                     >
-                                                            //                                                                         Unlock Premium
-                                                            //                                                                     </h4>
-                                                            //                                                                     <h4 className="text-[17px] font-black text-[#a8d060] leading-tight"
-                                                            //                                                                         style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
-                                                            //                                                                     >
-                                                            //                                                                         Membership
-                                                            //                                                                     </h4>
-                                                            //                                                                 </div>
-
-                                                            //                                                                 {/* Bottom gradient + button */}
-                                                            //                                                                 <div
-                                                            //                                                                     className="absolute bottom-0 left-0 right-0 px-4 py-4 z-10"
-                                                            //                                                                     style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent)' }}
-                                                            //                                                                 >
-                                                            //                                                                     <div
-                                                            //                                                                         className="flex items-center gap-2 px-4 py-2 rounded-full font-black uppercase tracking-widest text-[11px] text-[#1a3d14] w-fit"
-                                                            //                                                                         style={{
-                                                            //                                                                             background: 'linear-gradient(135deg, #a8d060, #7ab830)',
-                                                            //                                                                             boxShadow: '0 0 12px rgba(168,208,96,0.6)',
-                                                            //                                                                             animation: 'gentlePulse 2s ease-in-out infinite',
-                                                            //                                                                         }}
-                                                            //                                                                     >
-                                                            //                                                                         View More Plans
-                                                            //                                                                         <span className="w-5 h-5 rounded-full bg-[#1a3d14] flex items-center justify-center shrink-0">
-                                                            //                                                                             <svg className="w-3 h-3 text-[#a8d060]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                            //                                                                                 <path d="M5 12h14M13 6l6 6-6 6" />
-                                                            //                                                                             </svg>
-                                                            //                                                                         </span>
-                                                            //                                                                     </div>
-                                                            //                                                                 </div>
-
-                                                            //                                                                 <style>{`
-                                                            //     @keyframes gentlePulse {
-                                                            //       0%, 100% { box-shadow: 0 0 10px rgba(168,208,96,0.5); }
-                                                            //       50%       { box-shadow: 0 0 20px rgba(168,208,96,0.9); }
-                                                            //     }
-                                                            //   `}</style>
-
-                                                            //                                                             </div>
-
                                                             <div
                                                                 onClick={() => setShowMembershipOptions(true)}
                                                                 className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
