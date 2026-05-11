@@ -417,7 +417,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
               {infiniteSpeakers.map((speaker, index) => (
                 <div
                   key={`${index}-${speaker.name}`}
-                  className="w-[190px] h-[225px] bg-white rounded-[18px] p-2.5 shadow-sm border border-[#E6ECF3] hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative flex-shrink-0"
+                  className="w-[190px] h-[200px] bg-white rounded-[18px] p-2.5 shadow-sm border border-[#E6ECF3] hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative flex-shrink-0"
                 >
                   <div className="absolute top-2 left-2 w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center text-[#1E88E5]">
                     <Mic2 className="w-5 h-5" />
