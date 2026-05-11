@@ -1,24 +1,44 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { 
-  ShieldCheck, 
-  Users, 
-  Globe, 
-  Apple, 
-  Microscope, 
-  Handshake 
+import {
+  ShieldCheck,
+  Users,
+  Globe,
+  Apple,
+  Microscope,
+  Handshake
 } from "lucide-react";
 
-const focusAreas = [
-  { icon: ShieldCheck, title: "Preventive Medicine & Early Detection" },
-  { icon: Users, title: "Public Health & Community Wellness" },
-  { icon: Globe, title: "Sustainability & Planetary Health" },
-  { icon: Apple, title: "Nutrition, Lifestyle & Mental Well-being" },
-  { icon: Microscope, title: "Research, Innovation & Evidence-based Care" },
-  { icon: Handshake, title: "Policy, Advocacy & Global Partnerships" },
+interface Day3AboutProps {
+  data?: {
+    title: string;
+    description: string;
+    descriptionSecondary: string;
+    focusAreas: string[];
+  };
+}
+
+const defaultFocusAreas = [
+  "Preventive Medicine & Early Detection",
+  "Public Health & Community Wellness",
+  "Sustainability & Planetary Health",
+  "Nutrition, Lifestyle & Mental Well-being",
+  "Research, Innovation & Evidence-based Care",
+  "Policy, Advocacy & Global Partnerships",
 ];
 
-const Day3About: React.FC = () => {
+const iconMap = [ShieldCheck, Users, Globe, Apple, Microscope, Handshake];
+
+const Day3About: React.FC<Day3AboutProps> = ({ data }) => {
+  const aboutData = (data && typeof data === 'object') ? data : {
+    title: "About Day 3",
+    description: "The Future of Preventive Healthcare Conference focuses on building a proactive healthcare ecosystem through prevention, early detection, public health strategies, and sustainability.",
+    descriptionSecondary: "This day brings together global thought leaders to create actionable solutions for a healthier, resilient & sustainable future.",
+    focusAreas: defaultFocusAreas
+  };
+
+  const focusAreas = Array.isArray(aboutData.focusAreas) ? aboutData.focusAreas : [];
+
   return (
     <section className="py-4 bg-[#F8FAFC]">
       <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
@@ -27,7 +47,7 @@ const Day3About: React.FC = () => {
           {/* About Text */}
           <div className="lg:w-[40%]">
             <h2 className="text-[16px] font-black text-[#4E9F3D] uppercase tracking-[0.1em] mb-4">
-              About Day 3
+              {aboutData.title}
             </h2>
 
             <div className="relative pl-6">
@@ -36,11 +56,13 @@ const Day3About: React.FC = () => {
 
               <div className="space-y-4">
                 <p className="text-[13px] md:text-[14px] text-[#4A5568] leading-[1.6] font-medium">
-                  The Future of Preventive Healthcare Conference focuses on building a proactive healthcare ecosystem through prevention, early detection, public health strategies, and sustainability.
+                  {aboutData.description}
                 </p>
-                <p className="text-[15px] md:text-[16px] text-[#4A5568] leading-[1.7] font-medium">
-                  This day brings together global thought leaders to create actionable solutions for a healthier, resilient & sustainable future.
-                </p>
+                {aboutData.descriptionSecondary && (
+                  <p className="text-[15px] md:text-[16px] text-[#4A5568] leading-[1.7] font-medium">
+                    {aboutData.descriptionSecondary}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -52,23 +74,26 @@ const Day3About: React.FC = () => {
             </h2>
 
             <div className="grid sm:grid-cols-2 gap-x-4 gap-y-0.5">
-              {focusAreas.map((area, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  className="flex items-center gap-2.5 p-1 rounded-[16px] border border-transparent hover:bg-white hover:shadow-sm transition-all group"
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#F0FDF4] flex items-center justify-center text-[#4E9F3D] shrink-0 border border-[#DCFCE7]/50 shadow-sm">
-                    <area.icon className="w-5 h-5" />
-                  </div>
-                  <span className="text-[13px] font-black text-[#0B2C66] leading-snug">
-                    {area.title}
-                  </span>
-                </motion.div>
-              ))}
+              {focusAreas.map((area, index) => {
+                const Icon = iconMap[index % iconMap.length];
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                    className="flex items-center gap-2.5 p-1 rounded-[16px] border border-transparent hover:bg-white hover:shadow-sm transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-[#F0FDF4] flex items-center justify-center text-[#4E9F3D] shrink-0 border border-[#DCFCE7]/50 shadow-sm">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-[13px] font-black text-[#0B2C66] leading-snug">
+                      {area}
+                    </span>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
@@ -79,3 +104,5 @@ const Day3About: React.FC = () => {
 };
 
 export default Day3About;
+
+

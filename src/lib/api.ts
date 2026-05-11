@@ -377,6 +377,14 @@ export const ePromotionApi = {
     }
 };
 
+export const ePromotionPackagesApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/packages`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
 export const stallVendorApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/stall-vendor`);
@@ -789,6 +797,22 @@ export const visitorApi = {
             body: JSON.stringify(payload)
         });
         return await response.json();
+    },
+    submitGroup: async (payload: any) => {
+        const response = await fetch(`${API_URL}/group-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    }
+};
+
+export const conferenceTrackApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/conference-tracks`);
+        const data = await response.json();
+        return data.success ? data.data : null;
     }
 };
 
@@ -952,6 +976,19 @@ export const msmePmsSchemeApi = {
             body: payload
         });
         return await response.json();
+    },
+    getPageContent: async () => {
+        const response = await fetch(`${API_URL}/msme-pms-scheme/page-content`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const distinguishedSpeakerApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/distinguished-speakers`);
+        const data = await response.json();
+        return data.success ? data.data : [];
     }
 };
 

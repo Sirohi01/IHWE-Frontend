@@ -552,7 +552,7 @@ Each Day Card (Day 1, 2, 3):
 
 ```
 Header (Columns 1-12):
-├─ Label: "MEET OUR DISTINGUISHED" (Poppins 14px SemiBold Uppercase)
+├─ Label: "MEET OUR ESTEEMED" (Poppins 14px SemiBold Uppercase)
 ├─ Heading: "Global Speakers" (Poppins 44px Bold)
 │  └─ "Speakers" = Green #4E9F3D
 ├─ Navigation Arrows (Right):
