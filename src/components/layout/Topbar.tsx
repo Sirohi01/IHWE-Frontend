@@ -44,7 +44,7 @@ const Topbar = () => {
           100% { opacity: 0; transform: scale(0.5) translateY(-4px); }
         }
         .marquee-golden-text {
-          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 35%, #fff176 50%, #ffdd00 65%, #f5c842 100%);
           background-size: 200% 200%;
           animation: goldShift 2.5s ease infinite;
           -webkit-background-clip: text;
@@ -65,7 +65,7 @@ const Topbar = () => {
         }
       `}</style>
       <motion.div
-        className="bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-[150] py-1"
+        className="bg-[#002511] border-b border-white/5 text-slate-300 text-[11px] relative z-[150] py-1"
       >
       <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
  

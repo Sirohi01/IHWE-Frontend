@@ -11,8 +11,8 @@ const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
       position: 'absolute',
       pointerEvents: 'none',
       fontSize: '12px',
-      color: '#fff176',
-      textShadow: '0 0 6px gold, 0 0 12px gold',
+      color: '#5ef5e0',
+      textShadow: '0 0 6px #0A7C6E, 0 0 12px #0fe8d0',
       animation: 'sparkleAnim 1.6s ease-in-out infinite',
       opacity: 0,
       ...style,
@@ -43,10 +43,10 @@ const EventInfoBanner = () => {
           100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
         }
         .golden-btn {
-          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background: linear-gradient(135deg, #0A7C6E 0%, #0db39e 40%, #0A7C6E 100%);
           background-size: 200% 200%;
           animation: goldShift 2.5s ease infinite;
-          box-shadow: 0 0 16px 4px rgba(255,200,0,0.45), 0 4px 20px rgba(255,165,0,0.35);
+          box-shadow: 0 0 16px 4px rgba(10,124,110,0.45), 0 4px 20px rgba(13,179,158,0.35);
           position: relative;
           overflow: hidden;
         }
@@ -57,7 +57,7 @@ const EventInfoBanner = () => {
           left: -75%;
           width: 50%;
           height: 200%;
-          background: linear-gradient(to right, transparent, rgba(255,255,255,0.55), transparent);
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
           transform: skewX(-20deg);
           animation: shimmer 2s infinite;
         }
@@ -126,7 +126,7 @@ const EventInfoBanner = () => {
             </div>
 
             {/* ✅ CTA Button — Golden with Sparkles */}
-            <Link to="/book-a-stand" className="xl:mr-6 shrink-0 w-full md:w-auto flex justify-center">
+            <Link to="/visitor-registration" target="_blank" rel="noopener noreferrer" className="xl:mr-6 shrink-0 w-full md:w-auto flex justify-center">
               <div style={{ position: 'relative', display: 'inline-block' }}>
 
                 {/* Sparkles around button */}
@@ -141,11 +141,11 @@ const EventInfoBanner = () => {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="golden-btn text-[#0b2912] px-8 md:px-6 py-3 md:py-2.5 rounded-[1rem] font-black text-[14px] md:text-[13px] flex items-center gap-2.5 whitespace-nowrap transition-all"
+                  className="golden-btn text-white px-8 md:px-6 py-3 md:py-2.5 rounded-[1rem] font-black text-[14px] md:text-[13px] flex items-center gap-2.5 whitespace-nowrap transition-all"
                 >
-                  BOOK YOUR STALL NOW!
-                  <div className="w-5 h-5 bg-[#0b2912] rounded-full flex items-center justify-center z-10 relative">
-                    <ArrowRight className="w-3.5 h-3.5 text-white" />
+                 REGISTER AS VISITOR!
+                  <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center z-10 relative">
+                    <ArrowRight className="w-3.5 h-3.5 text-[#0A7C6E]" />
                   </div>
                 </motion.button>
               </div>

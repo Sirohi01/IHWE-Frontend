@@ -85,6 +85,7 @@ const Partners = () => {
       desc: <>Handpicked hotels at exclusive<br />rates for exhibitors, buyers<br />and delegates.</>,
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=400",
       iconBg: "#1a1f3f",
+      path: "/support/hotel-stay"
     },
     {
       title: "TRAVEL ASSISTANCE",
@@ -92,6 +93,7 @@ const Partners = () => {
       desc: <>Flight bookings, airport transfers,<br />local transport and complete<br />travel arrangements.</>,
       image: part111,
       iconBg: "#141a34",
+      path: "/support/travel-assistance"
     },
     {
       title: "STALL DESIGN & FABRICATION",
@@ -99,6 +101,7 @@ const Partners = () => {
       desc: <>Creative stall design, fabrication<br />and installation to make your<br />brand stand out.</>,
       image: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=400",
       iconBg: "#0e7490",
+      path: "/support/stall-design"
     },
     {
       title: "LOGISTICS SUPPORT",
@@ -106,6 +109,7 @@ const Partners = () => {
       desc: <>Freight forwarding, customs<br />clearance, storage and material<br />handling support.</>,
       image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=400",
       iconBg: "#7c3aed",
+      path: "/support/logistics-support"
     },
     {
       title: "PRINTING & BRANDING",
@@ -113,6 +117,7 @@ const Partners = () => {
       desc: <>High-quality printing, signage<br />and branding solutions for<br />maximum visibility.</>,
       image: "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&q=80&w=400",
       iconBg: "#ea580c",
+      path: "/support/printing-branding"
     },
     {
       title: "HOSPITALITY DESK",
@@ -120,6 +125,7 @@ const Partners = () => {
       desc: <>On-ground assistance for all<br />your queries to ensure a smooth<br />and pleasant experience.</>,
       image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=400",
       iconBg: "#0f766e",
+      path: "/support/hospitality-desk"
     },
   ];
 
@@ -177,6 +183,38 @@ const Partners = () => {
           background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
           transform: skewX(-20deg);
           animation: greenSweep 2s infinite;
+        }
+
+        .vendor-green-btn {
+          background: linear-gradient(135deg, #084c17 0%, #16511e 50%, #2e7d32 100%);
+          background-size: 200% auto;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          position: relative;
+          overflow: hidden;
+        }
+        .vendor-green-btn:hover {
+          background-position: right center;
+          transform: translateY(-2px);
+          box-shadow: 0 15px 30px rgba(8, 76, 23, 0.4);
+        }
+        .vendor-green-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transition: all 0.6s;
+        }
+        .vendor-green-btn:hover::before {
+          left: 100%;
         }
       `}</style>
 
@@ -337,12 +375,14 @@ const Partners = () => {
                   </div>
 
                   {/* Learn More */}
-                  <button
-                    className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
-                    style={{ color: "#24660a" }}
-                  >
-                    Learn More <ArrowRight className="w-3 h-3" />
-                  </button>
+                  <Link to={card.path || "#"}>
+                    <button
+                      className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
+                      style={{ color: "#24660a" }}
+                    >
+                      Learn More <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </Link>
                 </div>
 
                 {/* RIGHT — image */}

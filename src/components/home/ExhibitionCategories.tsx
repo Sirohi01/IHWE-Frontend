@@ -199,6 +199,10 @@ const categories = [
   },
 ];
 
+// 🎨 Single beautiful light gradient — same for ALL cards
+// White → very light mint/cyan: fresh, clean, premium feel
+const CARD_BG = 'linear-gradient(145deg, #ffffff 0%, #e8f8f2 55%, #ddf0fa 100%)';
+
 const CategoryCard = ({ item, width = '140px' }) => (
   <div
     style={{
@@ -209,11 +213,11 @@ const CategoryCard = ({ item, width = '140px' }) => (
       alignItems: 'center',
       justifyContent: 'flex-start',
       textAlign: 'center',
-      background: '#ECFDF5',
+      background: CARD_BG,
       padding: '16px 10px 14px',
       borderRadius: '18px',
       border: '1px solid #e8edf2',
-      boxShadow: '0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04)',
+      boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
       transition: 'all 0.25s ease',
       cursor: 'pointer',
       minHeight: '148px',
@@ -225,7 +229,7 @@ const CategoryCard = ({ item, width = '140px' }) => (
     }}
     onMouseLeave={e => {
       e.currentTarget.style.transform = 'translateY(0)';
-      e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04)';
+      e.currentTarget.style.boxShadow = 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px';
       e.currentTarget.style.borderColor = '#e8edf2';
     }}
   >
@@ -233,13 +237,15 @@ const CategoryCard = ({ item, width = '140px' }) => (
       width: '62px',
       height: '62px',
       borderRadius: '50%',
-      background: item.color,
+      background: '#ffffff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: '12px',
       color: item.iconColor,
       flexShrink: 0,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+      border: '1px solid #f1f5f9',
     }}>
       {item.icon}
     </div>
@@ -308,15 +314,15 @@ const ExhibitionCategories = () => {
 
         {/* Desktop View: Original 2-row Layout */}
         <div className="hidden md:block">
-          {/* Row 1: 8 cards - Single Row */}
-          <div className="flex flex-nowrap md:justify-start gap-3 mb-4 overflow-x-auto no-scrollbar pb-2">
+          {/* Row 1: 8 cards */}
+          <div className="grid grid-cols-8 gap-[11px] mb-[14px]">
             {row1.map((item, i) => (
-              <CategoryCard key={i} item={item} width="140px" />
+              <CategoryCard key={i} item={item} width="100%" />
             ))}
           </div>
 
-          {/* Row 2: 7 cards - fills full width */}
-          <div className="grid grid-cols-7 gap-3 overflow-x-auto no-scrollbar pb-2">
+          {/* Row 2: 7 cards */}
+          <div className="grid grid-cols-7 gap-[11px]">
             {row2.map((item, i) => (
               <CategoryCard key={i} item={item} width="100%" />
             ))}
