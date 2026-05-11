@@ -40,7 +40,7 @@ const Day3About: React.FC<Day3AboutProps> = ({ data }) => {
   const focusAreas = Array.isArray(aboutData.focusAreas) ? aboutData.focusAreas : [];
 
   return (
-    <section className="py-4 ">
+    <section className="py-4" >
       <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
 
