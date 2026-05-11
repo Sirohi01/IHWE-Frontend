@@ -34,6 +34,7 @@ const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
 const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
+const Partnership = lazy(() => import("./pages/Partnership"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -157,6 +158,7 @@ const App = () => {
                     <Route path="/stall-designing-vendors" element={<StallDesigningVendors />} />
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
+                    <Route path="/partnership" element={<Partnership />} />
                     <Route path="/conference" element={<Conference />} />
                     <Route path="/conference/day-1" element={<Navigate to="/conference/1" replace />} />
                     <Route path="/conference/day-2" element={<Navigate to="/conference/2" replace />} />
