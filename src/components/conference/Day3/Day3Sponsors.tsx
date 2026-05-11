@@ -102,7 +102,7 @@ const Day3Sponsors: React.FC = () => {
                 className="py-2 px-3 text-center"
                 style={{ backgroundColor: plan.color }}
               >
-                <h3 className="text-[16px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
+                <h3 className="text-[12px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
               </div>
 
               <div className="p-3 flex flex-col h-full -mt-2">
@@ -123,7 +123,7 @@ const Day3Sponsors: React.FC = () => {
                 </ul>
 
                 <button
-                  className="mt-auto py-2 px-4 rounded-full text-[15px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
+                  className="mt-auto py-2 px-4 rounded-sm text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
                   style={{ backgroundColor: plan.color }}
                 >
                   CHOOSE PLAN
