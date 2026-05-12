@@ -23,7 +23,7 @@ const CombineGrid = () => {
                         <div className="w-8 h-8 rounded-lg bg-white border-2 border-[#166534] flex items-center justify-center shadow-sm shrink-0">
                             <User2 size={16} className="text-[#166534]" strokeWidth={2.5} />
                         </div>
-                        <h3 className="text-[12px] font-black text-[#051d40] uppercase tracking-wide">Who Can Apply?</h3>
+                        <h3 className="text-[13px] font-black text-[#051d40] uppercase tracking-wide">Who Can Apply?</h3>
                     </div>
 
                     {/* LIST CONTENT */}
@@ -36,7 +36,7 @@ const CombineGrid = () => {
                         ].map((text, i) => (
                             <div key={i} className="flex items-start gap-2.5">
                                 <CheckCircle size={13} className="text-[#166534] mt-0.5 shrink-0 opacity-80" strokeWidth={2.5} />
-                                <span className="text-[10.5px] font-bold text-slate-700 leading-snug">{text}</span>
+                                <span className="text-[11px] font-bold text-slate-700 leading-snug">{text}</span>
                             </div>
                         ))}
                     </div>
@@ -61,7 +61,7 @@ const CombineGrid = () => {
                         <div className="w-8 h-8 rounded-lg bg-white border-2 border-[#1d4ed8] flex items-center justify-center shadow-sm shrink-0">
                             <Target size={16} className="text-[#1d4ed8]" strokeWidth={2.5} />
                         </div>
-                        <h3 className="text-[12px] font-black text-[#051d40] uppercase tracking-wide">Why Participate Under PMS Scheme?</h3>
+                        <h3 className="text-[13px] font-black text-[#051d40] uppercase tracking-wide">Why Participate Under PMS Scheme?</h3>
                     </div>
 
                     {/* LIST CONTENT */}
@@ -75,7 +75,7 @@ const CombineGrid = () => {
                         ].map((text, i) => (
                             <div key={i} className="flex items-start gap-2.5">
                                 <CheckCircle size={13} className="text-[#166534] mt-0.5 shrink-0 opacity-80" strokeWidth={2.5} />
-                                <span className="text-[10.5px] font-bold text-slate-700 leading-snug">{text}</span>
+                                <span className="text-[11px] font-bold text-slate-700 leading-snug">{text}</span>
                             </div>
                         ))}
                     </div>
@@ -100,7 +100,7 @@ const CombineGrid = () => {
                         <div className="w-8 h-8 rounded-lg bg-white border-2 border-[#15803d] flex items-center justify-center shadow-sm shrink-0">
                             <Briefcase size={16} className="text-[#15803d]" strokeWidth={2.5} />
                         </div>
-                        <h3 className="text-[12px] font-black text-[#15803d] uppercase tracking-wide">Benefits of PMS Scheme</h3>
+                        <h3 className="text-[13px] font-black text-[#15803d] uppercase tracking-wide">Benefits of PMS Scheme</h3>
                     </div>
 
                     {/* LIST CONTENT - Unique Mini Icons */}
@@ -114,15 +114,16 @@ const CombineGrid = () => {
                             { t: "Brand Visibility, Enhance Recognition", i: "/msmepmsscheme/brandvisibility.png" }
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3">
-                                <img src={item.i} className="w-8 h-8 object-contain shrink-0" alt="" />
-                                <span className="text-[10.5px] font-bold text-slate-700 leading-tight">{item.t}</span>
+                                {/* <img src={item.i} className="w-8 h-8 object-contain shrink-0" alt="" /> */}
+                                <CheckCircle size={13} className="text-[#166534] mt-0.5 shrink-0 opacity-80" strokeWidth={2.5} />
+                                <span className="text-[11px] font-bold text-slate-700 leading-tight">{item.t}</span>
                             </div>
                         ))}
                     </div>
 
                     {/* Small print bottom disclaimer */}
                     <div className="mt-3">
-                        <p className="text-[8px] text-slate-500 font-bold uppercase leading-tight tracking-tight">
+                        <p className="text-[9px] text-slate-500 font-bold uppercase leading-tight tracking-tight">
                             *Subsidy amount may vary as per MSME<br />guidelines, category and approval.
                         </p>
                     </div>

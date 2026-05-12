@@ -4,7 +4,7 @@ import { CheckCircle2, TrendingUp, Globe, Landmark, Calendar, MapPin, ArrowRight
 const MPSchemeHero = ({ onApplyClick }) => {
     return (
         <div
-            className="w-full relative min-h-[450px] lg:min-h-[520px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
+            className="w-full relative min-h-[400px] lg:min-h-[480px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
         >
             <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row relative z-10 h-full py-8 lg:py-0">
 
@@ -101,7 +101,7 @@ const MPSchemeHero = ({ onApplyClick }) => {
                                 <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full border-4 border-white/10 flex flex-col items-center justify-center bg-[#166534] shadow-xl relative overflow-hidden">
                                     <span className="text-[9px] font-medium text-[#fbbf24] tracking-wider">★</span>
                                     <h3 className="text-[16px] lg:text-[18px] font-medium text-white leading-none">80% <span className="text-[10px] opacity-80 font-normal">TO</span></h3>
-                                    <h3 className="text-[18px] lg:text-[20px] font-medium text-white leading-none -mt-0.5">100%</h3>
+                                    <h3 className=" Subsidy Badgetext-[18px] lg:text-[20px] font-medium text-white leading-none -mt-0.5">100%</h3>
                                     <span className="text-[7px] lg:text-[8px] font-medium text-white/80 uppercase tracking-widest mt-1">Subsidy</span>
                                     <span className="text-[7px] lg:text-[8px] font-medium text-white/80 uppercase tracking-widest -mt-0.5">Available</span>
                                 </div>
@@ -117,7 +117,7 @@ const MPSchemeHero = ({ onApplyClick }) => {
                         >
                             Apply for PMS Scheme →
                         </button>
-                        <button 
+                        <button
                             onClick={() => window.open('/book-a-stand', '_blank')}
                             className="w-full sm:w-auto bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-800 rounded-lg py-2.5 sm:py-2 px-6 text-xs sm:text-sm font-medium uppercase tracking-[0.8px] flex items-center justify-center gap-1.5 whitespace-nowrap"
                         >

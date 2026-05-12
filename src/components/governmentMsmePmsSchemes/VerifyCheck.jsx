@@ -10,7 +10,7 @@ const VerifyCheck = () => {
             icon: Settings,
             color: "green",
             link: "#how-works",
-            img: "/mpscheme/qa1.jpg"
+            img: "/mpscheme/qa1.png"
         },
         {
             title: "VERIFY EVENT LISTING",
@@ -19,7 +19,7 @@ const VerifyCheck = () => {
             icon: BadgeCheck,
             color: "blue",
             link: "https://my.msme.gov.in",
-            img: "/mpscheme/qa2.jpg"
+            img: "/mpscheme/qa2.png"
         },
         {
             title: "VERIFY PMS SCHEME",
@@ -28,7 +28,7 @@ const VerifyCheck = () => {
             icon: ShieldCheck,
             color: "purple",
             link: "https://msme.gov.in",
-            img: "/mpscheme/qa3.jpg"
+            img: "/mpscheme/qa3.png"
         },
         {
             title: "VIEW APPROVAL LETTER",
@@ -37,7 +37,7 @@ const VerifyCheck = () => {
             icon: FileText,
             color: "orange",
             link: "#",
-            img: "/mpscheme/qa4.jpg"
+            img: "/mpscheme/qa4.png"
         },
         {
             title: "NEW MSME REGISTRATION",
@@ -46,7 +46,7 @@ const VerifyCheck = () => {
             icon: UserPlus,
             color: "rose",
             link: "https://udyamregistration.gov.in",
-            img: "/mpscheme/qa5.jpg"
+            img: "/mpscheme/qa5.png"
         }
     ];
 
@@ -99,20 +99,20 @@ const VerifyCheck = () => {
                                         onError={(e) => { e.target.src = "https://placehold.co/300x200?text=Image"; }}
                                     />
                                     {/* White Overlap Mask Area */}
-                                    <div className="absolute top-0 left-0 w-[85px] h-[85px] bg-white/90 backdrop-blur-[2px] rounded-br-[3.5rem] shadow-[4px_4px_15px_rgba(0,0,0,0.08)] flex items-start justify-start p-2 z-10">
-                                        <div className={`w-14 h-14 rounded-full ${clr.iconBg} flex items-center justify-center shadow-sm`}>
-                                            <card.icon className={clr.iconText} size={26} strokeWidth={2} />
+                                    <div className="absolute top-0 left-0 w-[75px] h-[75px] bg-white rounded-br-[45px] shadow-sm flex items-center justify-center z-10">
+                                        <div className={`w-14 h-14 rounded-full ${clr.iconBg} flex items-center justify-center border border-slate-100 shadow-inner`}>
+                                            <card.icon className={clr.iconText} size={24} strokeWidth={2} />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* BOTTOM CONTENT */}
                                 <div className="p-4 flex-1 flex flex-col items-center text-center bg-white">
-                                    <h3 className={`text-[12px] font-black leading-snug mb-3 uppercase tracking-tight ${clr.text}`}>
+                                    <h3 className={`text-[13px] font-black leading-snug mb-3 uppercase tracking-tight ${clr.text}`}>
                                         {card.title}
                                     </h3>
 
-                                    <p className="text-[12px] text-gray-600 font-medium leading-relaxed flex-1 min-h-[44px] mb-4 px-1">
+                                    <p className="text-[13px] text-gray-600 font-medium leading-relaxed flex-1 min-h-[44px] mb-4 px-1">
                                         {card.desc}
                                     </p>
 
@@ -138,7 +138,7 @@ const VerifyCheck = () => {
                 <div className="w-full lg:w-[30%] xl:w-[25%] bg-[#f0f4f9] border border-[#e2e8f0] rounded-2xl p-4 shadow-sm flex flex-col font-['Barlow',sans-serif]">
                     <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide">Subsidy Structure</h3>
                     <p className="text-[10px] text-slate-600 font-medium mt-0.5">Get financial support up to</p>
-                    <h2 className="text-[24px] font-black text-[#1e5c1e] leading-none mt-1.5 mb-4">₹1,50,000*</h2>
+                    <h2 className="text-[22px] font-black text-[#1e5c1e] leading-none mt-1.5 mb-4">₹1,50,000*</h2>
 
                     <div className="flex gap-2.5 mb-4">
                         {/* Sub-Card 1 */}
@@ -153,7 +153,7 @@ const VerifyCheck = () => {
                             </div>
                             <div className="flex flex-col justify-center">
                                 <div className="text-[12px] font-black text-[#d97706] leading-tight uppercase">Up To 80%</div>
-                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For General Category <br />of MSMEs</p>
+                                <p className="text-[10px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For General Category <br />of MSMEs</p>
                             </div>
                         </div>
 
@@ -166,7 +166,7 @@ const VerifyCheck = () => {
                             </div>
                             <div className="flex flex-col justify-center">
                                 <div className="text-[12px] font-black text-[#16a34a] leading-tight uppercase">Up To 100%</div>
-                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For Special Category <br />of MSMEs</p>
+                                <p className="text-[10px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For Special Category <br />of MSMEs</p>
                             </div>
                         </div>
                     </div>
@@ -175,11 +175,11 @@ const VerifyCheck = () => {
                     <div className="space-y-2.5 mt-auto">
                         <div className="flex items-start gap-2">
                             <CheckCircle size={12} className="text-[#1e5c1e] mt-0.5 shrink-0" strokeWidth={3} />
-                            <span className="text-[10px] font-bold text-slate-700 leading-tight">Maximum reimbursement: ₹1.5 Lakhs</span>
+                            <span className="text-[11px] font-bold text-slate-700 leading-tight">Maximum reimbursement: ₹1.5 Lakhs</span>
                         </div>
                         <div className="flex items-start gap-2">
                             <CheckCircle size={12} className="text-[#1e5c1e] mt-0.5 shrink-0" strokeWidth={3} />
-                            <span className="text-[10px] font-bold text-slate-700 leading-[1.4]">Reimbursement is processed after successful <br />participation & approval by MSME.</span>
+                            <span className="text-[11px] font-bold text-slate-700 leading-[1.4]">Reimbursement is processed after successful <br />participation & approval by MSME.</span>
                         </div>
                     </div>
                 </div>
@@ -202,10 +202,10 @@ const VerifyCheck = () => {
                                     <>Stall booked under an approved<br />event like IHWE 2026</>
                                 ].map((text, i) => (
                                     <div key={i} className="flex items-start gap-2">
-                                        <div className="shrink-0 w-4 h-4 rounded-full border border-[#d9480f] flex items-center justify-center mt-0.5">
-                                            <CheckCircle size={11} className="text-[#d9480f]" strokeWidth={3} />
+                                        <div className="shrink-0 w-4 h-4  flex items-center justify-center mt-0.5">
+                                            <CheckCircle size={13} className="text-[#d9480f]" strokeWidth={3} />
                                         </div>
-                                        <span className="text-[10.5px] font-bold text-slate-700 leading-tight">{text}</span>
+                                        <span className="text-[11px] font-bold text-slate-700 leading-tight">{text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -222,10 +222,10 @@ const VerifyCheck = () => {
                                     <>First-time participants in international<br />exhibitions with valid criteria</>
                                 ].map((text, i) => (
                                     <div key={i} className="flex items-start gap-2">
-                                        <div className="shrink-0 w-4 h-4 rounded-full border border-[#166534] flex items-center justify-center mt-0.5">
-                                            <CheckCircle size={11} className="text-[#166534]" strokeWidth={3} />
+                                        <div className="shrink-0 w-4 h-4 flex items-center justify-center mt-0.5">
+                                            <CheckCircle size={13} className="text-[#166534]" strokeWidth={3} />
                                         </div>
-                                        <span className="text-[10.5px] font-bold text-slate-700 leading-tight">{text}</span>
+                                        <span className="text-[11px] font-bold text-slate-700 leading-tight">{text}</span>
                                     </div>
                                 ))}
                             </div>

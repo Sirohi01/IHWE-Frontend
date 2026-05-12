@@ -237,7 +237,7 @@ const WhyPart = ({ onApplyClick }) => {
                     <button className="w-full sm:w-auto text-center justify-center flex bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap" onClick={onApplyClick}>
                         Apply for PMS Scheme →
                     </button>
-                    <button 
+                    <button
                         onClick={() => window.open('/book-a-stand', '_blank')}
                         className="w-full sm:w-auto text-center justify-center flex bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap"
                     >

@@ -35,9 +35,9 @@ const ExpensesIndustries = () => {
             {/* ── LEFT CARD: WHAT EXPENSES ARE ELIGIBLE ── */}
             <div className="bg-white rounded-2xl border border-[#e2e8f0] shadow-sm p-6 flex flex-col relative group transition-all duration-300 hover:shadow-md">
                 <div className="mb-6">
-                    <h3 className="text-medium font-black text-[#051d40] uppercase tracking-wide">What Expenses Are Eligible</h3>
-                    <h3 className="text-medium font-black text-[#051d40] uppercase tracking-wide -mt-1">For Reimbursement?</h3>
-                    <p className="text-[10px] text-slate-600 font-medium mt-2 leading-tight">
+                    <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide">What Expenses Are Eligible</h3>
+                    <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide -mt-1">For Reimbursement?</h3>
+                    <p className="text-[11px] text-slate-600 font-medium mt-2 leading-tight">
                         Reimbursement is provided for the<br />following eligible heads:
                     </p>
                 </div>
@@ -50,7 +50,7 @@ const ExpensesIndustries = () => {
                                 <div className="w-12 h-12 mb-2.5 text-[#166534] flex items-center justify-center transition-transform duration-300 group-hover/item:-translate-y-1 shrink-0">
                                     <item.icon strokeWidth={1.5} size={32} />
                                 </div>
-                                <span className="text-[9px] font-bold text-[#051d40] leading-tight tracking-tight min-h-[24px] flex items-start justify-center text-center w-full">
+                                <span className="text-[10px] font-bold text-[#051d40] leading-tight tracking-tight min-h-[24px] flex items-start justify-center text-center w-full">
                                     {item.label}
                                 </span>
                             </div>
@@ -86,7 +86,7 @@ const ExpensesIndustries = () => {
                 <div className="relative z-20 p-6 flex-1 pr-4 sm:pr-[28%] flex flex-col">
                     {/* Header */}
                     <div className="mb-6">
-                        <h3 className="text-medium font-black text-[#051d40] uppercase tracking-wide">Industries We Serve</h3>
+                        <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide">Industries We Serve</h3>
                     </div>
 
                     {/* Responsive Grid, 2 cols small, 3 cols medium, 5 cols large */}
@@ -96,7 +96,7 @@ const ExpensesIndustries = () => {
                                 <div className="w-11 h-11 mb-2 text-[#1d4ed8] flex items-center justify-center transition-all duration-300 group-hover/item:scale-110 shrink-0">
                                     <item.icon strokeWidth={1.5} size={28} />
                                 </div>
-                                <span className="text-[9px] font-bold text-[#051d40] leading-tight tracking-tight min-h-[24px] flex items-start justify-center text-center w-full">
+                                <span className="text-[10px] font-bold text-[#051d40] leading-tight tracking-tight min-h-[24px] flex items-start justify-center text-center w-full">
                                     {item.label}
                                 </span>
 
