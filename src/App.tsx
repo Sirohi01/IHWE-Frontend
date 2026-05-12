@@ -46,6 +46,7 @@ const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePm
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
+const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -169,6 +170,8 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/partnership" element={<Partnership />} />
+                    <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
+
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
                     <Route path="/support/travel-assistance" element={<TravelAssistance />} />
                     <Route path="/support/stall-design" element={<StallDesign />} />

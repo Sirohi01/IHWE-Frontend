@@ -7,7 +7,7 @@ import {
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
+import { Link } from "react-router-dom";
 import partnersHeroFallback from "../assets/cara14.jpg";
 
 const Partnership = () => {
@@ -45,7 +45,7 @@ const Partnership = () => {
 
           
           {/* CONTENT */}
-          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 pt-16">
+          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-22 pt-16">
 
             <div className="grid lg:grid-cols-[1fr_0.9fr] gap-10 items-center">
 
@@ -300,6 +300,7 @@ const Partnership = () => {
           title: "Hotel & Stay Partner",
           image: "/images/partnership/3.png",
           color: "#619941",
+          link: "",
           icon: "/images/partnership/bed.png",
           points: [
             "Brand visibility on official platforms",
@@ -314,6 +315,7 @@ const Partnership = () => {
           title: "Travel Partner",
           image: "/images/partnership/2.png",
           color: "#2f68c5",
+          link: "",
           icon: "/images/partnership/aeroplan.png",
           points: [
             "Featured as official travel partner",
@@ -328,6 +330,7 @@ const Partnership = () => {
           title: "Stall Design & Fabrication",
           image: "/images/partnership/1.png",
           color: "#11a7b8",
+          link: "/fabrication-partner",
           icon: "/images/partnership/home.png",
           points: [
             "Official branding on event collaterals",
@@ -342,6 +345,7 @@ const Partnership = () => {
           title: "Logistics Partner",
           image: "/images/partnership/Logistics.png",
           color: "#7b43c9",
+          link: "",
           icon: "/images/partnership/delivery.png",
           points: [
             "Listed as official logistics partner",
@@ -356,6 +360,7 @@ const Partnership = () => {
           title: "Printing & Branding",
           image: "/images/partnership/printing.png",
           color: "#ff7a00",
+          link: "",
           icon: "/images/partnership/print.png",
           points: [
             "Branding across event materials",
@@ -370,6 +375,7 @@ const Partnership = () => {
           title: "Hospitality Partner",
           image: "/images/partnership/hospitality.jpg",
           color: "#e93d8b",
+          link: "",
           icon: "/images/partnership/bell.png",
           points: [
             "Recognition as hospitality partner",
@@ -501,24 +507,37 @@ const Partnership = () => {
             </ul>
 
             {/* BUTTON */}
-            <button
-              className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
-              style={{
-                borderColor: item.color,
-                color: item.color,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = item.color;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
-            >
-
-              View Benefits →
-
-            </button>
-
+          {/* BUTTON */}
+              {item.link ? (
+                <Link to={item.link}>
+                  <button
+                    className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
+                    style={{
+                      borderColor: item.color,
+                      color: item.color,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = item.color;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                  >
+                    View Benefits →
+                  </button>
+                </Link>
+              ) : (
+                <button
+                  disabled
+                  className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm opacity-50 cursor-not-allowed"
+                  style={{
+                    borderColor: item.color,
+                    color: item.color,
+                  }}
+                >
+                  Coming Soon
+                </button>
+              )}
           </div>
 
         </motion.div>
