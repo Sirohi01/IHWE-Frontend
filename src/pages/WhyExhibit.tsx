@@ -303,28 +303,28 @@ const WhyExhibit = () => {
     { 
       img: band1, 
       val: "8,000+", 
-      label: "VISITORS", 
+      label: "VISITORS / DELEGATES", 
       desc1: "Qualified trade visitors",
       desc2: "from India & across the globe"
     },
     { 
       img: band2, 
-      val: "300+", 
+      val: "150+", 
       label: "EXHIBITORS", 
       desc1: "Leading brands &",
       desc2: "organizations participating"
     },
     { 
       img: band3, 
-      val: "25+", 
-      label: "COUNTRIES", 
+      val: "1000+", 
+      label: "GLOBAL BUYERS", 
       desc1: "Global participation",
       desc2: "& representation"
     },
     { 
       img: band4, 
-      val: "100+", 
-      label: "SPEAKERS", 
+      val: "150+", 
+      label: "EXPERTS SPEAKERS", 
       desc1: "Industry experts",
       desc2: "& thought leaders"
     },

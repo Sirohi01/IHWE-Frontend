@@ -8,6 +8,7 @@ import {
   HeartHandshake, Trophy, Zap, Globe, TrendingUp
 } from "lucide-react";
 import { partnersApi } from "@/lib/api";
+import PartnershipPopup from "@/components/popups/PartnershipPopup";
 
 import partImage1 from "../assets/partimage1.png";
 import partImage from "../assets/partimage.png";
@@ -65,6 +66,15 @@ const GoldSparkle = ({ style, color = "#fff176" }: { style?: React.CSSProperties
 
 const Partners = () => {
   const [partnerGroups, setPartnerGroups] = useState<any[]>([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    // Automatically open popup after a small delay
+    const timer = setTimeout(() => {
+      setIsPopupOpen(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -681,6 +691,7 @@ const Partners = () => {
         </div>
       </div>
 
+      <PartnershipPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
     </div>
   );
 };
