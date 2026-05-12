@@ -1,40 +1,42 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Quote, Leaf } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { conferenceTestimonialsApi, SERVER_URL } from "@/lib/api";
-import logoImage from "../../assets/arogyasangosti.png";
 
 const FALLBACK_TESTIMONIALS = [
   {
-    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    feedback:
+      "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Anjali Chaudhary",
     role: "Chief Medical Officer",
     company: "Vana Tech Labs",
-    image: "https://randomuser.me/api/portraits/women/1.jpg"
+    image: "https://randomuser.me/api/portraits/women/1.jpg",
   },
   {
-    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    feedback:
+      "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Vansh Chaudhary",
     role: "CEO",
     company: "Vana Tech Labs",
-    image: "https://randomuser.me/api/portraits/men/2.jpg"
+    image: "https://randomuser.me/api/portraits/men/2.jpg",
   },
   {
-    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    feedback:
+      "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Nitin Kumar",
     role: "Director",
     company: "10 ka Double",
-    image: "https://randomuser.me/api/portraits/men/3.jpg"
+    image: "https://randomuser.me/api/portraits/men/3.jpg",
   },
   {
-    feedback: "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
+    feedback:
+      "IHWE provided an unmatched platform to showcase our innovations. The quality of attendees and the networking opportunities exceeded all expectations.",
     name: "Dr. Rohit Kumar",
     role: "MD",
     company: "Namogange Wellness",
-    image: "https://randomuser.me/api/portraits/men/4.jpg"
-  }
+    image: "https://randomuser.me/api/portraits/men/4.jpg",
+  },
 ];
-
 
 const cardBackgrounds = [
   "bg-gradient-to-br from-white to-[#F0F9FF]",
@@ -72,7 +74,7 @@ const IndustryVoices: React.FC = () => {
 
   const testimonials = data?.cards || FALLBACK_TESTIMONIALS;
 
-  const isMarqueeEnabled = testimonials.length >= 5;
+  const isMarqueeEnabled = testimonials.length >= 2;
 
   useEffect(() => {
     if (scrollRef.current && testimonials.length > 0) {
@@ -104,8 +106,15 @@ const IndustryVoices: React.FC = () => {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === "left" ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+      const scrollTo =
+        direction === "left"
+          ? scrollLeft - clientWidth
+          : scrollLeft + clientWidth;
+
+      scrollRef.current.scrollTo({
+        left: scrollTo,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -113,10 +122,11 @@ const IndustryVoices: React.FC = () => {
 
   return (
     <section className="py-4 bg-white overflow-hidden">
-      <div className="mx-auto max-w-[1380px] relative left-[20px] px-6">
+      <div className="mx-auto max-w-[1350px] pl-10 lg:pl-5 px-3">
         <div className="relative mb-1 flex flex-col items-center">
           <h2 className="text-[28px] md:text-[30px] font-[900] uppercase tracking-tight text-center leading-tight">
-            <span className="text-[#4E9F3D]">VOICES FROM</span> <span className="text-[#0B2C66]">INDUSTRY LEADERS</span>
+            <span className="text-[#4E9F3D]">VOICES FROM</span>{" "}
+            <span className="text-[#0B2C66]">INDUSTRY LEADERS</span>
           </h2>
         </div>
 
@@ -131,6 +141,7 @@ const IndustryVoices: React.FC = () => {
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
+
           <button
             onClick={() => scroll("right")}
             className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white flex items-center justify-center border border-gray-100 shadow-lg text-gray-400 hover:text-[#4E9F3D] transition-all opacity-0 group-hover:opacity-100"
@@ -143,10 +154,15 @@ const IndustryVoices: React.FC = () => {
             className="relative w-full overflow-hidden no-scrollbar"
           >
             <motion.div
-              className={`scroll-content flex gap-6 py-8 w-max ${!isMarqueeEnabled ? 'justify-center' : ''}`}
-              animate={isPaused || !isMarqueeEnabled ? {} : { x: [0, -contentWidth] }}
+              className={`scroll-content flex gap-6 py-8 w-max ${!isMarqueeEnabled ? "justify-center" : ""
+                }`}
+              animate={
+                isPaused || !isMarqueeEnabled
+                  ? {}
+                  : { x: [0, -contentWidth] }
+              }
               transition={{
-                duration: 100,
+                duration: 20,
                 ease: "linear",
                 repeat: Infinity,
                 repeatType: "loop",
@@ -155,20 +171,32 @@ const IndustryVoices: React.FC = () => {
               {infiniteItems.map((item: any, index: number) => (
                 <div
                   key={`${index}-${item.name}`}
-                  className="w-[300px] flex-shrink-0"
+                  className="w-[350px] flex-shrink-0"
                 >
-                  <div className={`h-[380px] ${cardBackgrounds[index % cardBackgrounds.length]} p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden`}>
+                  <div
+                    className={`h-[380px] ${cardBackgrounds[index % cardBackgrounds.length]
+                      } p-5 rounded-[24px] border border-[#E6ECF3] shadow-sm hover:shadow-md transition-all duration-300 relative flex flex-col justify-between overflow-hidden`}
+                  >
                     <div className="absolute inset-0 opacity-5 pointer-events-none">
                       <div className="absolute top-0 right-0 w-32 h-32 bg-[#4E9F3D] rounded-full blur-3xl"></div>
                     </div>
 
                     <div className="flex justify-center mb-4 relative z-10">
                       <img
-                        src={item.image ? `${SERVER_URL}${item.image}` : `https://randomuser.me/api/portraits/${index % 2 === 0 ? 'women' : 'men'}/${(index % 10) + 1}.jpg`}
+                        src={
+                          item.image
+                            ? item.image.startsWith("http")
+                              ? item.image
+                              : `${SERVER_URL}${item.image}`
+                            : `https://randomuser.me/api/portraits/${index % 2 === 0 ? "women" : "men"
+                            }/${(index % 10) + 1}.jpg`
+                        }
                         alt={item.name}
                         className="w-28 h-28 rounded-full object-cover border-4 border-[#4E9F3D] p-0.5 shadow-md"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=4E9F3D&color=fff&rounded=true&size=120&bold=true`;
+                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            item.name
+                          )}&background=4E9F3D&color=fff&rounded=true&size=120&bold=true`;
                         }}
                       />
                     </div>
@@ -177,6 +205,7 @@ const IndustryVoices: React.FC = () => {
                       <div className="text-[#4E9F3D]">
                         <Quote className="w-6 h-6 fill-current rotate-180" />
                       </div>
+
                       <p className="text-[12px] text-[#4A5568] leading-relaxed italic font-medium line-clamp-6">
                         "{item.feedback}"
                       </p>
@@ -187,8 +216,10 @@ const IndustryVoices: React.FC = () => {
                         <h4 className="font-bold text-[#0B2C66] text-[13px] mb-0.5">
                           — {item.name}
                         </h4>
+
                         <p className="text-[10px] font-semibold text-[#5F6B7A]">
-                          {item.role}{item.company ? `, ${item.company}` : ''}
+                          {item.role}
+                          {item.company ? `, ${item.company}` : ""}
                         </p>
                       </div>
                     </div>
@@ -206,11 +237,20 @@ const IndustryVoices: React.FC = () => {
           </div>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `,
+        }}
+      />
     </section>
   );
 };
