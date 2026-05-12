@@ -34,8 +34,8 @@ import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
 import FloatingVideo from "@/components/home/FloatingVideo";
 import SponsorshipSection from "@/components/home/SponsorshipSection";
-import MsmePmsSection from "@/components/home/MsmePmsSection";
 import BuyerSellerMeet from "@/components/home/BuyerSellerMeet";
+import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
 
 interface IndexProps {
   onRegisterVisit: () => void;
@@ -44,7 +44,8 @@ interface IndexProps {
 const Index = ({ onRegisterVisit }: IndexProps) => {
   return (
     <>
-      <HeroSection onRegisterVisit={onRegisterVisit} />
+      <BrochureDownloadPopup />
+      <HeroSection onRegisterVisit={onRegisterVisit} forceNewTab={true} />
       <TrustedBy />
       <IntroductionSection />
       <GlobalPlatformSection />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, CheckCircle, FileDown, Info } from 'lucide-react';
+import { X, ArrowRight, CheckCircle, FileDown, Info, Store } from 'lucide-react';
 import bannerImg from '../../assets/banner2.png';
 
 interface BrochurePopUpProps {
@@ -113,6 +113,26 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
               transform: skewX(-20deg);
               animation: shimmer 2s infinite;
             }
+            .golden-btn-popup {
+              background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+              background-size: 200% 200%;
+              animation: goldShift 2.5s ease infinite;
+              box-shadow: 0 0 12px 3px rgba(255,200,0,0.3), 0 4px 10px rgba(255,165,0,0.25);
+              position: relative;
+              overflow: hidden;
+              font-family: 'Roboto', sans-serif;
+            }
+            .golden-btn-popup::before {
+              content: '';
+              position: absolute;
+              top: -50%;
+              left: -75%;
+              width: 50%;
+              height: 200%;
+              background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+              transform: skewX(-20deg);
+              animation: shimmer 2s infinite;
+            }
           `}</style>
 
           {/* Backdrop */}
@@ -162,7 +182,10 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                 <div className="relative group/btn shrink-0">
                   <Sparkle color="#fff176" style={{ top: '-6px', left: '10%' }} />
                   <Sparkle color="#fff176" style={{ bottom: '-6px', right: '15%', animationDelay: '0.4s' }} />
-                  <button className="orange-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]">
+                  <button 
+                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
+                    className="orange-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
+                  >
                     <CheckCircle className="w-3.5 h-3.5 text-white shrink-0" />
                     <div className="flex flex-col text-left leading-[1]">
                       <span className="font-bold text-[9px] tracking-tight text-white uppercase">APPLY UNDER</span>
@@ -175,7 +198,10 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                 <div className="relative group/btn shrink-0">
                   <Sparkle color="#a4c639" style={{ top: '-6px', right: '10%' }} />
                   <Sparkle color="#a4c639" style={{ bottom: '-6px', left: '15%', animationDelay: '0.6s' }} />
-                  <button className="white-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]">
+                  <button 
+                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
+                    className="white-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
+                  >
                     <Info className="w-3.5 h-3.5 text-[#28396C] shrink-0" />
                     <div className="flex flex-col text-left leading-[1]">
                       <span className="font-bold text-[9px] tracking-tight text-[#28396C] uppercase">KNOW YOUR</span>
@@ -184,15 +210,18 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   </button>
                 </div>
 
-                {/* 3. Download Scheme Brochure (BLUE + ORANGE SPARKLES) */}
+                {/* 3. Book Your Stall (GOLDEN + GOLD SPARKLES) */}
                 <div className="relative group/btn shrink-0">
-                  <Sparkle color="#E87F24" style={{ top: '-6px', right: '40%' }} />
-                  <Sparkle color="#E87F24" style={{ bottom: '-6px', right: '10%', animationDelay: '0.2s' }} />
-                  <button className="blue-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]">
-                    <FileDown className="w-3.5 h-3.5 text-white shrink-0" />
+                  <Sparkle color="#fff176" style={{ top: '-6px', right: '40%' }} />
+                  <Sparkle color="#fff176" style={{ bottom: '-6px', right: '10%', animationDelay: '0.2s' }} />
+                  <button 
+                    onClick={() => window.open("/book-a-stand", "_blank")}
+                    className="golden-btn-popup flex items-center gap-1.5 px-4 h-9 rounded-lg transition-transform hover:scale-[1.03] min-w-[110px]"
+                  >
+                    <Store className="w-3.5 h-3.5 text-[#050A1A] shrink-0" />
                     <div className="flex flex-col text-left leading-[1]">
-                      <span className="font-bold text-[9px] tracking-tight text-white uppercase">DOWNLOAD</span>
-                      <span className="font-bold text-[9px] tracking-tight text-white uppercase">BROCHURE</span>
+                      <span className="font-bold text-[9px] tracking-tight text-[#050A1A] uppercase">BOOK YOUR</span>
+                      <span className="font-bold text-[9px] tracking-tight text-[#050A1A] uppercase">STALL NOW</span>
                     </div>
                   </button>
                 </div>

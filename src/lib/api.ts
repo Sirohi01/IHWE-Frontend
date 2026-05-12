@@ -797,6 +797,14 @@ export const visitorApi = {
             body: JSON.stringify(payload)
         });
         return await response.json();
+    },
+    submitGroup: async (payload: any) => {
+        const response = await fetch(`${API_URL}/group-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
     }
 };
 
@@ -981,5 +989,13 @@ export const distinguishedSpeakerApi = {
         const response = await fetch(`${API_URL}/distinguished-speakers`);
         const data = await response.json();
         return data.success ? data.data : [];
+    }
+};
+
+export const exhibitorTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/exhibitor-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
     }
 };

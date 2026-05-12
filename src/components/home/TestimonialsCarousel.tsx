@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 import {
-  Quote, ChevronLeft, ChevronRight, MapPin, Play,
+  Quote, ChevronLeft, ChevronRight, MapPin, Play, ArrowRight,
   Globe, Users, Handshake, Mic2, Leaf, Building2, PlayCircle, Store
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import SectionContainer from '../layout/SectionContainer';
 import { cn } from "@/lib/utils";
 import testImg from '../../assets/test11.jpeg';
@@ -34,6 +35,25 @@ const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
   </span>
 );
 
+// ─── Sparkle component for teal button ───
+const TealSparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#5ef5e0',
+      textShadow: '0 0 6px #0A7C6E, 0 0 12px #0fe8d0',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
+
 // ─── Logo Box ───
 const LogoBox = ({ text, color }: { text: string; color: string }) => (
   <div
@@ -44,6 +64,35 @@ const LogoBox = ({ text, color }: { text: string; color: string }) => (
   </div>
 );
 
+// ── Animated counter — counts up when scrolled into view ──
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
 const STATS = [
   { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
   { icon: Users, value: "8000+", label: "Visitors/Delegates", color: "#004ac2ff" },
@@ -52,8 +101,11 @@ const STATS = [
 ];
 
 // ─── Testimonial Card ───
-const TestimonialCard = ({ item }: { item: any }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const TestimonialCard = ({ item, expandedCardId, setExpandedCardId }: { item: any; expandedCardId: string | null; setExpandedCardId: (id: string | null) => void }) => {
+  const isExpanded = expandedCardId === item._id;
+  const setIsExpanded = (val: boolean) => {
+    setExpandedCardId(val ? item._id : null);
+  };
   const CHAR_LIMIT = 155;
   const quoteText = item.quote || "";
   const isLong = quoteText.length > CHAR_LIMIT;
@@ -76,7 +128,7 @@ const TestimonialCard = ({ item }: { item: any }) => {
             <img
               src={`${SERVER_URL}${item.logo}`}
               alt="logo"
-              className="w-full h-full object-contain p-1.5"
+              className="w-full h-full object-contain p-0.5 transform scale-110"
             />
           </div>
         ) : (
@@ -142,7 +194,7 @@ const TestimonialCard = ({ item }: { item: any }) => {
               >
                 {item.logo ? (
                   <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
-                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0.5" />
+                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0 transform scale-110" />
                   </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
@@ -372,6 +424,7 @@ const TestimonialsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -461,16 +514,49 @@ const TestimonialsCarousel = () => {
           animation: shimmer 2s infinite;
         }
         @keyframes marqueeScroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        @keyframes marqueeScrollRight {
+          0% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        .marquee-wrapper-cards {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: marqueeScrollRight 50s linear infinite;
+        }
+        .marquee-wrapper-cards:hover {
+          animation-play-state: paused;
         }
         .marquee-wrapper-videos {
           display: flex;
           width: max-content;
+          will-change: transform;
           animation: marqueeScroll 30s linear infinite;
         }
         .marquee-wrapper-videos:hover {
           animation-play-state: paused;
+        }
+        .teal-btn {
+          background: linear-gradient(135deg, #0A7C6E 0%, #0db39e 40%, #0A7C6E 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(10,124,110,0.45), 0 4px 20px rgba(13,179,158,0.35);
+          position: relative;
+          overflow: hidden;
+        }
+        .teal-btn::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
         }
       `}</style>
 
@@ -521,7 +607,9 @@ const TestimonialsCarousel = () => {
                       <s.icon className="w-7 h-7" style={{ color: s.color }} />
                     </div>
                     <div>
-                      <div className="font-black text-[16px] leading-none" style={valStyle}>{s.value}</div>
+                      <div className="font-black text-[16px] leading-none" style={valStyle}>
+                        {/^[\d,]+/.test(s.value) ? <StatCounter value={s.value} /> : s.value}
+                      </div>
                       <div className="text-slate-900 text-[11px] font-medium mt-1">{s.label}</div>
                     </div>
                   </div>
@@ -535,55 +623,28 @@ const TestimonialsCarousel = () => {
       {/* ─── SECTION HEADER ─── */}
       <SectionDivider text={settings.dividerText} />
 
-      {/* ─── TESTIMONIAL CARDS CAROUSEL ─── */}
-      <div
-        className="relative px-6 md:px-16 pb-4"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <button
-          onClick={prev}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
-        >
-          <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
-        </button>
-
-        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto pt-5 pb-10 -mb-10">
-          <AnimatePresence mode="popLayout">
-            {visibleCards.map((item, i) => (
-              <motion.div
-                key={`${item._id}-${activeIndex}-${i}`}
-                initial={{ opacity: 0, x: 50, scale: 0.96 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -50, scale: 0.96 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-              >
-                <TestimonialCard item={item} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        <button
-          onClick={next}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
-        >
-          <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
-        </button>
-      </div>
-
-      {/* Pagination Dots */}
-      <div className="flex justify-center gap-2 py-2">
-        {(data.cards || []).map((_: any, i: number) => (
-          <button
-            key={i}
-            onClick={() => setActiveIndex(i)}
-            className={cn(
-              "h-1.5 rounded-full transition-all duration-300",
-              activeIndex === i ? "w-8 bg-[#23471d]" : "w-1.5 bg-slate-200 hover:bg-slate-300"
-            )}
-          />
-        ))}
+      {/* ─── TESTIMONIAL CARDS MARQUEE (Right Scrolling) ─── */}
+      <div className="relative pt-10 pb-8">
+        <SectionContainer className="relative z-10">
+          <div className="w-full overflow-hidden">
+            <div className="marquee-wrapper-cards gap-6">
+              {/* Create multiple sets for seamless infinite loop */}
+              {[1, 2, 3].map((set) => (
+                <div key={set} className="flex gap-6">
+                  {(data.cards || []).map((item: any, i: number) => (
+                    <div key={`${set}-${i}`} className="flex-shrink-0">
+                      <TestimonialCard 
+                        item={item} 
+                        expandedCardId={expandedCardId}
+                        setExpandedCardId={setExpandedCardId}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionContainer>
       </div>
 
       {/* ─── VIDEO SECTION ─── */}
@@ -594,12 +655,15 @@ const TestimonialsCarousel = () => {
 
         <SectionContainer className="relative z-10">
           <div className="flex flex-col md:flex-row items-stretch">
-            {/* Left side constrained marquee - now expanded to full right */}
             <div className="w-full overflow-hidden">
-              <div className="marquee-wrapper-videos flex gap-4">
-                {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
-                  <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
-                    <VideoCard item={v} />
+              <div className="marquee-wrapper-videos gap-4">
+                {[1, 2, 3].map((set) => (
+                  <div key={set} className="flex gap-4">
+                    {(data.videos || []).map((v: any, i: number) => (
+                      <div key={`${set}-${i}`} className="w-[280px] md:w-[320px] flex-shrink-0">
+                        <VideoCard item={v} />
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
@@ -692,13 +756,27 @@ const TestimonialsCarousel = () => {
                   </button>
                 </div>
 
-                <button
-                  onClick={() => settings.ctaButton2Path && window.open(settings.ctaButton2Path, '_blank')}
-                  className="flex items-center justify-center gap-2 font-black text-[12px] md:text-[10px] w-full sm:w-auto px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap"
-                  style={{ background: "rgba(255,255,255,0.15)", border: "1.2px solid rgba(255,255,255,0.3)", color: "white", boxShadow: "rgba(0,0,0,0.2) 0 4px 10px" }}
-                >
-                  {settings.ctaButton2Name || "Apply Now"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
-                </button>
+                <Link to="/visitor-registration" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex justify-center">
+                  <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                    {/* Sparkles around button */}
+                    <TealSparkle style={{ top: '-10px', left: '10%', animationDelay: '0s' }} />
+                    <TealSparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
+                    <TealSparkle style={{ top: '-12px', right: '15%', animationDelay: '0.8s' }} />
+                    <TealSparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.2s' }} />
+                    <TealSparkle style={{ bottom: '-8px', right: '30%', animationDelay: '0.6s' }} />
+
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="teal-btn text-white px-8 md:px-6 py-3 md:py-2 rounded-xl md:rounded-lg font-black text-[12px] md:text-[10px] flex items-center justify-center gap-2.5 whitespace-nowrap transition-all w-full"
+                    >
+                      REGISTER AS VISITOR!
+                      <div className="w-5 h-5 md:w-4 md:h-4 bg-white rounded-full flex items-center justify-center z-10 relative">
+                        <ArrowRight className="w-3.5 h-3.5 md:w-3 md:h-3 text-[#0A7C6E]" />
+                      </div>
+                    </motion.button>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

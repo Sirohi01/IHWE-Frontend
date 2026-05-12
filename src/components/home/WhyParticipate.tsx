@@ -1,4 +1,4 @@
-import { CheckCircle2, FileDown, ArrowRight, Leaf, Store } from 'lucide-react';
+import { CheckCircle2, FileDown, ArrowRight, Leaf, Store, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
 import SectionContainer from '../layout/SectionContainer';
 import { Link } from 'react-router-dom';
@@ -144,7 +144,7 @@ const WhyParticipate = () => {
           </div>
 
           {/* ── BUTTONS ROW ── */}
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
 
             {/* ── GOLDEN "BOOK A STALL" BUTTON with sparkles ── */}
             <div className="relative group/btn">
@@ -190,6 +190,19 @@ const WhyParticipate = () => {
                 <ArrowRight className="w-3 h-3 text-white group-hover/btn:translate-x-1 transition-transform" />
               </a>
             </div>
+
+            {/* ── More Info Button ── */}
+            <Link
+              to="/why-exhibit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 h-8 rounded-lg border border-[#2f8f3a] bg-white text-[#2f8f3a] hover:bg-[#2f8f3a]/5 transition-all hover:scale-[1.02] shadow-sm relative z-10"
+            >
+              <Info className="w-[14px] h-[14px] shrink-0" />
+              <span className="font-bold text-[10px] tracking-widest uppercase">
+                Why Exhibit?
+              </span>
+            </Link>
           </div>
         </motion.div>
 
