@@ -5,6 +5,17 @@ import {
   MapPin, Mail, Phone, Clock, Send, CheckCircle, Loader2,
 } from "lucide-react";
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "../components/layout/SectionContainer";
+import contactBg from "@/assets/contactbg.png";
+import conbg from "@/assets/conbg.png";
+import arrowImg from "@/assets/arrow.png";
+import leafImg from "@/assets/leaf.png";
+import teleImg from "@/assets/tele.png";
+import webg from "@/assets/webg.png";
+import c1 from "@/assets/c1.png";
+import c2 from "@/assets/c2.png";
+import c3 from "@/assets/c3.png";
+import c4 from "@/assets/c4.png";
 
 
 const Contact = () => {
@@ -97,25 +108,33 @@ const Contact = () => {
 
   const contactInfo = [
     {
+      icon: MapPin,
+      label: "OFFICE LOCATION",
+      title: settings?.addresses?.[0]?.title || "Head Office",
+      value: settings?.addresses?.[0]?.street || "Namo Gange Wellness Pvt Ltd 12/2B, Site-II, Sunrise Industrial Area, Mohan Nagar, Ghaziabad, Uttar Pradesh - 201007",
+      isHtml: true,
+    },
+    {
       icon: Phone,
-      label: "Call Us",
-      values: contactPhones.map((p: any) => ({ text: p.phone, href: `tel:${p.phone}` })),
+      label: "CALL US",
+      value: contactPhones[0]?.phone || "+91-9654900525",
       sub: "Mon – Sat, 9:00 AM – 6:00 PM (GST)",
-      accent: "#d26019",
+      color: "#01601d",
+      link: "tel:+919654900525",
     },
     {
       icon: Mail,
-      label: "Email Us",
-      values: contactEmails.map((e: any) => ({ text: e.email, href: `mailto:${e.email}` })),
+      label: "EMAIL US",
+      value: contactEmails[0]?.email || "info@ihwe.in",
       sub: "We'll respond within 24 hours",
-      accent: "#d26019",
+      color: "#0056b3",
+      link: `mailto:${contactEmails[0]?.email || "info@ihwe.in"}`,
     },
     {
       icon: Clock,
-      label: "Working Hours",
-      values: [{ text: "Mon – Sat: 9:00 AM – 6:00 PM", href: null }],
+      label: "WORKING HOURS",
+      value: "Mon – Sat: 9:00 AM – 6:00 PM",
       sub: "Sunday: Closed",
-      accent: "#d26019",
     },
   ];
 
@@ -253,195 +272,262 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-[#f9fafb] min-h-screen font-inter">
-      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
+    <div className="bg-[#f3f4f6] min-h-screen font-inter overflow-hidden">
+      {/* ── HERO SECTION ── */}
       <section
-        className="hero-background-standard"
+        className="relative min-h-[140px] md:min-h-[200px] flex items-center pt-10 md:pt-14 pb-4 md:pb-6"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`
+          backgroundImage: `url(${contactBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
-
-        <div className="absolute inset-0 bg-black/40" />
-        <div
-          className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
-          style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
-        />
-
-        <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-            {heroData?.title || "Reach Out"}
-          </p>
-          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
-            {heroData?.heading || "Contact Us"}
-          </h1>
-          <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            {heroData?.shortDescription || "Have questions about the expo, exhibiting, or partnerships? We'd love to hear from you."}
-          </p>
-        </div>
-      </section>
-
-
-      {/* CONTACT FORM + INFO */}
-      <section className="py-12 bg-[#fafafa] border-t border-slate-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14" data-aos="fade-up">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div className="h-px w-8 bg-[#23471d]" />
-              <span className="text-xs font-bold uppercase tracking-[0.4em] text-[#23471d]">Get In Touch</span>
-              <div className="h-px w-8 bg-[#23471d]" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-inter text-slate-900">
-              Send Us a <span className="text-[#23471d]">Message</span>
-            </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
-            {/* LEFT: info */}
-            <div className="lg:col-span-2 space-y-5" data-aos="fade-right">
-              {/* Added Office Cards here */}
-              <div className="grid grid-cols-1 gap-4 mb-6">
-                {officeCards.map((office, i) => (
-                  <div
-                    key={`${office.city}-${i}`}
-                    className="group border border-slate-100 p-5 hover:border-[#23471d]/30 hover:shadow-md transition-all duration-300 bg-white"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-11 h-11 bg-[#23471d]/10 flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300">
-                        <MapPin className="w-5 h-5 text-[#23471d] group-hover:text-white transition-colors duration-300" />
+        {/* Removed Overlay as requested */}
+        
+        <SectionContainer className="relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div className="text-white max-w-4xl" data-aos="fade-right">
+              <div className="inline-flex items-center gap-2 mb-6">
+                <Mail className="w-4 h-4 text-[#72a01d]" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#72a01d]">CONTACT US</span>
+                <div className="w-8 h-[1px] bg-[#72a01d]" />
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight drop-shadow-lg">
+                WE'RE HERE <br />
+                <span className="text-[#73ad1d]">TO HELP YOU!</span>
+              </h1>
+              
+              <p className="text-white text-base mb-8 max-w-xl leading-relaxed drop-shadow-md">
+                Have questions about the expo, exhibiting,<br />
+                partnerships or anything else?<br />
+                Our team is just a message away.
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-y-4">
+                {[
+                  { icon: Clock, label: "QUICK RESPONSE", sub: "We reply within 24 hrs" },
+                  { icon: CheckCircle, label: "EXPERT SUPPORT", sub: "Dedicated team to help" },
+                  { icon: Send, label: "RELIABLE ASSISTANCE", sub: "We're just a message away" },
+                ].map((item, i, arr) => (
+                  <div key={i} className="flex items-center">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#8cc63f] flex items-center justify-center shrink-0">
+                        <item.icon className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <div className="text-[11px] font-bold uppercase tracking-widest text-[#23471d] mb-1">Office Location</div>
-                        <h3 className="text-sm font-bold text-slate-800 mb-1">{office.city}</h3>
-                        <div 
-                          className="text-xs text-slate-500 leading-relaxed rich-address-content"
-                          dangerouslySetInnerHTML={{ __html: office.addressHtml }}
-                        />
+                        <p className="text-[10px] font-bold text-white tracking-wider leading-none mb-1">{item.label}</p>
+                        <p className="text-[10px] text-white">{item.sub}</p>
                       </div>
                     </div>
+                    {i < arr.length - 1 && (
+                      <div className="hidden md:block w-[1px] h-8 bg-white/30 mx-6 md:mx-8" />
+                    )}
                   </div>
                 ))}
               </div>
+            </div>
 
-              {contactInfo.map((info) => (
-                <div key={info.label} className="group flex items-start gap-4 p-5 bg-white border border-slate-100 hover:border-[#23471d]/30 hover:shadow-md transition-all duration-300">
-                  <div className="w-11 h-11 rounded-none bg-[#23471d]/10 flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300">
-                    <info.icon className="w-5 h-5 text-[#23471d] group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">{info.label}</div>
-                    <div className="space-y-1">
-                      {info.values.map((val: any, i: number) => (
-                        val.href ? (
-                          <a
-                            key={`val-${i}`}
-                            href={val.href}
-                            className="block text-gray-700 font-semibold hover:text-[#d26019] transition-colors"
+            {/* Floating Info Card (WE VALUE YOUR TIME) */}
+            <div className="hidden lg:block w-44 bg-white rounded-2xl shadow-2xl px-3 py-6 relative transform hover:-translate-y-2 transition-all duration-500" data-aos="fade-left">
+              <div className="absolute top-0 right-0 w-24 h-24 opacity-[0.03] pointer-events-none overflow-hidden rounded-tr-2xl">
+                <img src={leafImg} alt="" className="w-full h-full object-contain rotate-45" />
+              </div>
+              
+              <div className="flex flex-col items-center text-center">
+                {/* Floating Icon Header */}
+                <div className="w-20 h-20 rounded-full bg-[#73ad1d] flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(115,173,29,0.3)] -mt-14 border-4 border-white transition-transform duration-300 hover:scale-110 relative z-10">
+                  <img src={webg} alt="Web Icon" className="w-12 h-12 object-contain" />
+                </div>
+                
+                <h3 className="text-[17px] font-black text-[#151f43] tracking-tighter uppercase leading-none">WE VALUE</h3>
+                <h3 className="text-[17px] font-black text-[#151f43] tracking-tighter uppercase mb-3 mt-1">YOUR TIME</h3>
+                
+                <div className="w-12 h-[3px] bg-[#73ad1d] rounded-full mb-4" />
+                
+                <p className="text-xs text-gray-900 font-bold leading-relaxed px-2">
+                  Reach out to us and <br /> we'll get back to you <br /> promptly!
+                </p>
+
+                {/* Decorative corner accent */}
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#73ad1d] rounded-tl-2xl opacity-10" />
+              </div>
+            </div>
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ── OVERLAPPING CARDS SECTION ── */}
+      <section className="relative z-20 pb-20">
+        <SectionContainer>
+          <div className="grid lg:grid-cols-12 gap-8 items-stretch">
+            
+            {/* Left: Office Location */}
+            <div 
+              className="lg:col-span-4 bg-white rounded-xl p-6 flex flex-col relative overflow-hidden" 
+              style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset' }}
+              data-aos="fade-up"
+            >
+              {/* Removed absolute watermark to place it contextually */}
+
+              <div className="divide-y divide-gray-200 relative z-10">
+                {contactInfo.map((info, i) => (
+                  <div key={i} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0 relative group">
+                    <div className="w-12 h-12 rounded-full bg-[#01601d] flex items-center justify-center shrink-0 shadow-md">
+                      <info.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-bold text-black tracking-[0.2em] mb-1">{info.label}</p>
+                      {info.title && <h4 className="text-sm font-bold text-black mb-1">{info.title}</h4>}
+                      {info.isHtml ? (
+                        <div 
+                          className="text-xs text-black leading-relaxed font-bold"
+                          dangerouslySetInnerHTML={{ __html: info.value }}
+                        />
+                      ) : (
+                        info.link ? (
+                          <a 
+                            href={info.link}
+                            className="text-sm font-bold hover:underline transition-all"
+                            style={{ color: info.color || "black" }}
                           >
-                            {val.text}
+                            {info.value}
                           </a>
                         ) : (
-                          <p key={`val-${i}`} className="text-gray-700 font-semibold">
-                            {val.text}
+                          <p 
+                            className="text-sm font-bold"
+                            style={{ color: info.color || "black" }}
+                          >
+                            {info.value}
                           </p>
                         )
-                      ))}
+                      )}
+                      {info.sub && <p className="text-[11px] text-black font-medium mt-1">{info.sub}</p>}
                     </div>
-                    <div className="text-xs text-slate-600 mt-0.5">{info.sub}</div>
+                    {i === 0 && (
+                      <div className="absolute right-0 bottom-0 translate-x-2 translate-y-1 opacity-70 pointer-events-none w-14 md:w-16">
+                        <img 
+                          src={conbg} 
+                          alt="Building" 
+                          className="w-full h-auto object-contain"
+                          style={{ filter: 'grayscale(1) brightness(0.5) sepia(1) hue-rotate(190deg) saturate(20)' }}
+                        />
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
-
-              <div className="p-5 bg-[#23471d] text-white">
-                <h4 className="font-bold text-sm uppercase tracking-wide mb-2">International Support Desk</h4>
-                <p className="text-white/90 text-sm leading-relaxed text-justify mb-4">
-                  {supportDeskText}
-                </p>
+                ))}
               </div>
             </div>
 
-            {/* RIGHT: form */}
-            <div className="lg:col-span-3" data-aos="fade-left">
+            {/* Right: Contact Form */}
+            <div 
+              className="lg:col-span-8 bg-white rounded-xl p-5 md:p-6 relative overflow-hidden" 
+              style={{ boxShadow: 'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px' }}
+              data-aos="fade-up" 
+              data-aos-delay="100"
+            >
+              {/* Decorative Leaf in top right */}
+              <div className="absolute -top-14 -right-1 w-40  pointer-events-none transform rotate-[15deg]">
+                <img src={leafImg} alt="Decorative Leaf" className="w-full h-full object-contain" />
+              </div>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                  <img src={teleImg} alt="Telegram Icon" className="w-14 h-14 object-contain" />
+                </div>
+                <div className="flex items-center gap-6">
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#151f43]">
+                      SEND US A <span className="text-[#1e6b13]">MESSAGE</span>
+                    </h2>
+                    <p className="text-[#151f43] text-sm font-medium">Share your query and we'll get back to you.</p>
+                  </div>
+                </div>
+              </div>
+
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="bg-white border border-green-300 p-14 flex flex-col items-center justify-center min-h-[480px] shadow-sm"
+                    className="flex flex-col items-center justify-center py-12 text-center"
                   >
-                    <CheckCircle className="w-20 h-20 text-green-500 mb-6" />
-                    <h3 className="text-2xl font-bold text-slate-900 mb-3 text-center">Message Sent!</h3>
-                    <p className="text-slate-500 text-center text-sm max-w-sm mb-6">Thank you for reaching out. Our team will respond within 24 hours.</p>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
-                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                      Form will reset automatically...
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                      <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
+                    <p className="text-gray-600">Your message has been sent successfully. <br />We'll get back to you shortly.</p>
                   </motion.div>
                 ) : (
-                  <motion.div 
-                    key="form"
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    exit={{ opacity: 0 }}
-                    className="bg-white border border-slate-100 p-8 shadow-sm"
-                  >
-                    <div className="space-y-6">
-                      {/* Row 1: Name & Phone */}
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <input
-                            type="text" name="name" placeholder="Full Name *" value={formData.name} onChange={handleChange}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.name ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"}`}
-                          />
-                          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                  <div className="space-y-4">
+                    {/* Row 1: Name & Phone */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#085a25] group-focus-within:text-[#23471d] transition-colors">
+                          <CheckCircle className="w-4 h-4" />
                         </div>
-                        
-                        <div className="relative flex items-center group">
-                          <input
-                            type="tel" name="phone" placeholder="Phone Number *" value={formData.phone} onChange={handleChange}
-                            disabled={phoneVerified || phoneOtpSent}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.phone ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"} ${phoneVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""} ${phoneOtpSent && !phoneVerified ? "border-orange-200" : ""}`}
-                          />
-                          {!phoneVerified && (
-                            <button
-                              onClick={sendPhoneOtp}
-                              disabled={sendingPhoneOtp || !formData.phone || phoneResendTimer > 0}
-                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-200 transition-all shadow-sm active:scale-95 ${phoneResendTimer > 0 ? "bg-slate-300" : ""}`}
-                            >
-                              {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `Resend in ${phoneResendTimer}s` : phoneOtpSent ? "Resend OTP" : "Send OTP"}
-                            </button>
-                          )}
-                          {phoneVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}
-                          {errors.phone && <p className="absolute -bottom-5 left-0 text-red-500 text-xs">{errors.phone}</p>}
+                        <input
+                          type="text" name="name" placeholder="Full Name *" value={formData.name} onChange={handleChange}
+                          className={`w-full pl-11 pr-4 py-2.5 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.name ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"}`}
+                        />
+                        {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.name}</p>}
+                      </div>
+                      
+                      <div className="relative group flex items-center">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#085a25] group-focus-within:text-[#23471d] transition-colors z-10">
+                          <Phone className="w-4 h-4" />
                         </div>
+                        <input
+                          type="tel" name="phone" placeholder="Phone Number *" value={formData.phone} onChange={handleChange}
+                          disabled={phoneVerified || phoneOtpSent}
+                          className={`w-full pl-11 pr-24 py-2.5 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.phone ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"} ${phoneVerified ? "bg-green-50 border-green-200" : ""}`}
+                        />
+                        {!phoneVerified && (
+                          <button
+                            onClick={sendPhoneOtp}
+                            disabled={sendingPhoneOtp || !formData.phone || phoneResendTimer > 0}
+                            className="absolute right-2 px-3 py-1.5 bg-white border border-[#085a25] text-[#085a25] text-[10px] font-bold uppercase rounded-md hover:bg-[#085a25] hover:text-white transition-all disabled:"
+                          >
+                            {sendingPhoneOtp ? "..." : phoneResendTimer > 0 ? `${phoneResendTimer}s` : "SEND OTP"}
+                          </button>
+                        )}
+                        {phoneVerified && <CheckCircle size={18} className="absolute right-3 text-green-500" />}
+                        {errors.phone && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px]">{errors.phone}</p>}
+                      </div>
+                    </div>
+
+                    {/* Row 2: Email & Service */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="relative group flex items-center">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#085a25] group-focus-within:text-[#23471d] transition-colors z-10">
+                          <Mail className="w-4 h-4" />
+                        </div>
+                        <input
+                          type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange}
+                          disabled={emailVerified || emailOtpSent}
+                          className={`w-full pl-11 pr-24 py-2.5 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.email ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"} ${emailVerified ? "bg-green-50 border-green-200" : ""}`}
+                        />
+                        {!emailVerified && (
+                          <button
+                            onClick={sendEmailOtp}
+                            disabled={sendingEmailOtp || !formData.email || emailResendTimer > 0}
+                            className="absolute right-2 px-3 py-1.5 bg-white border border-[#085a25] text-[#085a25] text-[10px] font-bold uppercase rounded-md hover:bg-[#085a25] hover:text-white transition-all disabled:"
+                          >
+                            {sendingEmailOtp ? "..." : emailResendTimer > 0 ? `${emailResendTimer}s` : "SEND OTP"}
+                          </button>
+                        )}
+                        {emailVerified && <CheckCircle size={18} className="absolute right-3 text-green-500" />}
+                        {errors.email && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px]">{errors.email}</p>}
                       </div>
 
-                      {/* Row 2: Email & Service */}
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="relative flex items-center group">
-                          <input
-                            type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange}
-                            disabled={emailVerified || emailOtpSent}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.email ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"} ${emailVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""} ${emailOtpSent && !emailVerified ? "border-orange-200" : ""}`}
-                          />
-                          {!emailVerified && (
-                            <button
-                              onClick={sendEmailOtp}
-                              disabled={sendingEmailOtp || !formData.email || emailResendTimer > 0}
-                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all shadow-sm active:scale-95 ${emailResendTimer > 0 ? "bg-slate-300" : ""}`}
-                            >
-                              {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `Resend in ${emailResendTimer}s` : emailOtpSent ? "Resend OTP" : "Send OTP"}
-                            </button>
-                          )}
-                          {emailVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}
-                          {errors.email && <p className="absolute -bottom-5 left-0 text-red-500 text-xs">{errors.email}</p>}
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#085a25] group-focus-within:text-[#23471d] transition-colors z-10">
+                          <CheckCircle className="w-4 h-4" />
                         </div>
-
                         <select
                           name="service" value={formData.service} onChange={handleChange}
-                          className="w-full px-4 py-[13px] border-2 border-slate-200 focus:border-[#23471d] text-sm outline-none transition-colors bg-white text-slate-500 h-[52px]"
+                          className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-[#23471d] focus:bg-white transition-all appearance-none"
                         >
                           <option value="">Select Inquiry Type...</option>
                           <option value="exhibition">Exhibition & Stands</option>
@@ -452,88 +538,103 @@ const Contact = () => {
                           <option value="other">Other</option>
                         </select>
                       </div>
+                    </div>
 
-                      {/* Row 3: Combined OTPs (Shared space) */}
-                      {( (phoneOtpSent || sendingPhoneOtp) && !phoneVerified || (emailOtpSent || sendingEmailOtp) && !emailVerified ) && (
-                        <div className="grid md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-4 duration-500 ease-out">
-                          {/* WhatsApp OTP Column */}
-                          <div>
-                            { (phoneOtpSent || sendingPhoneOtp) && !phoneVerified ? (
-                              <div className="flex gap-2">
-                                <input
-                                  type="text" 
-                                  placeholder={sendingPhoneOtp ? "Sending..." : "WhatsApp OTP"} 
-                                  value={phoneOtp} 
-                                  onChange={(e) => setPhoneOtp(e.target.value)}
-                                  disabled={sendingPhoneOtp}
-                                  className={`flex-1 px-4 py-2.5 border-2 border-[#d26019]/30 text-xs outline-none focus:border-[#d26019] bg-orange-50/50 placeholder:text-orange-300 font-medium tracking-widest text-center ${sendingPhoneOtp ? "opacity-50 cursor-not-allowed" : ""}`}
-                                  maxLength={6}
-                                />
-                                <button
-                                  onClick={confirmPhoneOtp}
-                                  disabled={verifyingPhone || !phoneOtp || sendingPhoneOtp}
-                                  className="px-4 py-2.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] transition-all shadow-md active:scale-95"
-                                >
-                                  {verifyingPhone ? "..." : "Verify"}
-                                </button>
-                              </div>
-                            ) : <div className="hidden md:block h-10" />}
+                    {/* OTP Inputs */}
+                    {((phoneOtpSent && !phoneVerified) || (emailOtpSent && !emailVerified)) && (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {phoneOtpSent && !phoneVerified && (
+                          <div className="flex gap-2">
+                            <input
+                              type="text" placeholder="Phone OTP" value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)}
+                              className="flex-1 px-4 py-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-center tracking-widest font-bold outline-none"
+                              maxLength={6}
+                            />
+                            <button onClick={confirmPhoneOtp} disabled={verifyingPhone} className="px-6 py-3 bg-[#23471d] text-white text-xs font-bold rounded-lg hover:bg-[#1a3a14]">
+                              {verifyingPhone ? "..." : "VERIFY"}
+                            </button>
                           </div>
-
-                          {/* Email OTP Column */}
-                          <div>
-                            { (emailOtpSent || sendingEmailOtp) && !emailVerified ? (
-                              <div className="flex gap-2">
-                                <input
-                                  type="text" 
-                                  placeholder={sendingEmailOtp ? "Sending..." : "Email OTP"} 
-                                  value={emailOtp} 
-                                  onChange={(e) => setEmailOtp(e.target.value)}
-                                  disabled={sendingEmailOtp}
-                                  className={`flex-1 px-4 py-2.5 border-2 border-[#d26019]/30 text-xs outline-none focus:border-[#d26019] bg-orange-50/50 placeholder:text-orange-300 font-medium tracking-widest text-center ${sendingEmailOtp ? "opacity-50 cursor-not-allowed" : ""}`}
-                                  maxLength={6}
-                                />
-                                <button
-                                  onClick={confirmEmailOtp}
-                                  disabled={verifyingEmail || !emailOtp || sendingEmailOtp}
-                                  className="px-4 py-2.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] transition-all shadow-md active:scale-95"
-                                >
-                                  {verifyingEmail ? "..." : "Verify"}
-                                </button>
-                              </div>
-                            ) : <div className="hidden md:block h-10" />}
+                        )}
+                        {emailOtpSent && !emailVerified && (
+                          <div className="flex gap-2">
+                            <input
+                              type="text" placeholder="Email OTP" value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)}
+                              className="flex-1 px-4 py-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-center tracking-widest font-bold outline-none"
+                              maxLength={6}
+                            />
+                            <button onClick={confirmEmailOtp} disabled={verifyingEmail} className="px-6 py-3 bg-[#23471d] text-white text-xs font-bold rounded-lg hover:bg-[#1a3a14]">
+                              {verifyingEmail ? "..." : "VERIFY"}
+                            </button>
                           </div>
-                        </div>
-                      )}
-
-                      <div>
-                        <textarea
-                          name="message" placeholder="Tell us more about your inquiry..." value={formData.message} onChange={handleChange} rows={5}
-                          className={`w-full px-4 py-3 border-2 text-sm outline-none transition-colors resize-none ${errors.message ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"}`}
-                        />
-                        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                        )}
                       </div>
+                    )}
 
+                    <div className="relative group">
+                      <textarea
+                        name="message" placeholder="Tell us more about your inquiry..." value={formData.message} onChange={handleChange} rows={4}
+                        className={`w-full px-4 py-3 bg-gray-50 border rounded-lg text-sm outline-none transition-all resize-none ${errors.message ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"}`}
+                      />
+                      {errors.message && <p className="text-red-500 text-[10px] mt-1">{errors.message}</p>}
+                    </div>
+
+                    <div className="flex flex-col md:flex-row items-stretch rounded-lg overflow-hidden shadow-xl group/btn">
                       <button
                         onClick={handleSubmit} disabled={submitting}
-                        className="w-full bg-[#23471d] hover:bg-[#1a3a14] disabled:bg-slate-300 text-white font-bold py-4 px-6 uppercase tracking-widest text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                        className="flex-1 bg-gradient-to-r from-[#2e7d32] via-[#1b5e20] to-[#0d47a1] text-white font-bold py-3 px-6 uppercase tracking-widest text-[13px] transition-all flex items-center justify-center gap-3 active:scale-[0.98] relative z-10"
                       >
-                        {submitting ? (<><Loader2 className="w-4 h-4 animate-spin" />Sending...</>) : (<>Send Message <Send className="w-4 h-4" /></>)}
+                        {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <>SEND MESSAGE <Send className="w-4 h-4" /></>}
                       </button>
+
+                      <div className="hidden md:flex bg-gradient-to-r from-[#fbc02d] to-[#f9a825] px-6 py-3 items-center gap-3 relative -left-1" style={{ clipPath: 'polygon(15px 0, 100% 0, 100% 100%, 0% 100%)', marginLeft: '-30px' }}>
+                        <div className="text-[#0d47a1] text-[10px] font-black leading-tight ml-4">
+                          We'll get back <br /> to you shortly!
+                        </div>
+                        <div className="relative">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-[#0d47a1]">
+                            <circle cx="12" cy="12" r="4" />
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </AnimatePresence>
             </div>
           </div>
-        </div>
+        </SectionContainer>
+      </section>
+
+      {/* ── TRUST BAND ── */}
+      <section className="relative z-30 -mt-16">
+        <SectionContainer>
+          <div className="bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-100 py-5 px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-y-8">
+              {[
+                { img: c1, top: "100% SECURE", bot: "Your information is safe with us" },
+                { img: c2, top: "DEDICATED TEAM", bot: "We are here to help" },
+                { img: c3, top: "QUICK RESPONSE", bot: "We reply within 24 hrs" },
+                { img: c4, top: "TRUSTED SUPPORT", bot: "Your satisfaction is our priority" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-4 px-6 border-gray-300 md:border-r last:border-none">
+                  <img src={item.img} alt={item.top} className="w-12 h-12 object-contain shrink-0" />
+                  <div>
+                    <p className="text-[13px] font-bold text-[#044716] leading-tight tracking-tight">{item.top}</p>
+                    <p className="text-[11px] text-gray-900 font-bold leading-tight mt-1">{item.bot}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionContainer>
       </section>
 
       {/* MAP */}
       {settings?.mapIframe && (
-        <section className="py-16 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-4" data-aos="fade-up">
-            <div className="overflow-hidden shadow-lg border border-slate-100 min-h-[420px] flex items-center justify-center bg-slate-50">
+        <section className="pt-10 pb-8 bg-[#f3f4f6] -mt-4">
+          <SectionContainer data-aos="fade-up">
+            <div className="overflow-hidden rounded-2xl shadow-xl border border-white min-h-[420px] flex items-center justify-center bg-white">
               {settings.mapIframe.includes("<iframe") ? (
                 <div
                   dangerouslySetInnerHTML={{ __html: settings.mapIframe }}
@@ -551,7 +652,7 @@ const Contact = () => {
                 />
               )}
             </div>
-          </div>
+          </SectionContainer>
         </section>
       )}
 

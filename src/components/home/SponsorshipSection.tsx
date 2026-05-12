@@ -956,7 +956,10 @@ const SponsorshipSection = () => {
           </div>
 
           <div className="overflow-hidden relative w-full mt-4">
-            <div className="marquee-wrapper">
+            <div 
+              className="marquee-wrapper"
+              style={{ animationDuration: `${Math.max(BRANDS.length * 4, 20)}s` }}
+            >
               {/* Double the brands for seamless loop */}
               {[...BRANDS, ...BRANDS].map((brand, idx) => (
                 <div key={idx} className="flex items-center">

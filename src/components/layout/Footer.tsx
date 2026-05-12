@@ -281,8 +281,8 @@ const Footer = () => {
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-6 md:py-4 gap-6 md:gap-4">
           {/* Left: Logo + divider + edition */}
           <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-            <div className="bg-white rounded-xl py-2 px-4 shadow-lg flex items-center gap-4">
-              <Link to="/" className="shrink-0 flex items-center">
+            <div className="bg-white rounded-xl py-2 px-4 shadow-lg flex items-center gap-4 shrink-0">
+              <Link to="/" className="shrink-0">
                 <img
                   src="/logo.png"
                   alt="IHWE"
@@ -292,11 +292,11 @@ const Footer = () => {
               <div className="w-[1px] h-8 bg-slate-500" />
               <div className="flex flex-col">
                 <p className="text-[7px] md:text-[7.5px] text-slate-500 font-bold uppercase tracking-[0.1em] leading-none mb-1">Organised By</p>
-                <a 
-                  href="https://namogangewellness.com/" 
-                  target="_blank" 
+                <a
+                  href="https://namogangewellness.com/"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase hover:text-[#F3B71B] transition-colors" 
+                  className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase hover:text-[#F3B71B] transition-colors"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
                   NAMO GANGE WELLNESS PVT. LTD.
