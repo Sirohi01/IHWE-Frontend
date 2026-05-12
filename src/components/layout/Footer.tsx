@@ -138,12 +138,12 @@ const Footer = () => {
     { label: "Book Your Stall", href: "/book-a-stand", newTab: true },
     { label: "Floor Plan Download", href: "/pdf1.pdf", newTab: true },
     { label: "Brochure Download", href: "/pdf.pdf", newTab: true },
-    { label: "Exhibitor List", href: "/exhibitors" },
+    { label: "Exhibitor List", href: "/exhibitors", newTab: true },
     { label: "Sponsorship Opportunities", href: "/contact", newTab: true },
     { label: "MSME PMS Scheme", href: "/msme-pms-scheme", newTab: true },
     { label: "Buyer Seller Meet", href: "/buyer-seller-meet", newTab: true },
     { label: "Travel & Stay", href: "/partners", newTab: true },
-    { label: "Arogya Sangosthi", href: "#" },
+    { label: "Arogya Sangosthi", href: "/conference", newTab: true },
   ];
 
   const highlights = [
@@ -291,9 +291,15 @@ const Footer = () => {
                 <div className="w-[1px] h-8 bg-slate-500" />
                 <div className="flex flex-col">
                   <p className="text-[7px] md:text-[7.5px] text-slate-500 font-bold uppercase tracking-[0.1em] leading-none mb-1">Organised By</p>
-                  <p className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <a 
+                    href="https://namogangewellness.com/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase hover:text-[#F3B71B] transition-colors" 
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
                     NAMO GANGE WELLNESS PVT. LTD.
-                  </p>
+                  </a>
                 </div>
               </div>
             </Link>
@@ -486,11 +492,13 @@ const Footer = () => {
                     Icon: Building2,
                     label: "Organised By",
                     value: "Namo Gange Wellness Pvt. Ltd.",
+                    link: "https://namogangewellness.com/",
                   },
                   {
                     Icon: Building2,
                     label: "Co-Organised By",
-                    value: "Namo Gange Wellness Trust",
+                    value: "Namo Gange Trust",
+                    link: "https://namogange.org/",
                   },
                 ].map(({ Icon, label, value, link, large }: any) => (
                   <div key={label} className="flex items-start gap-2.5">
@@ -510,8 +518,8 @@ const Footer = () => {
                         ) : (
                           <a
                             href={link}
-                            target={link.startsWith('mailto') ? "_blank" : undefined}
-                            rel={link.startsWith('mailto') ? "noopener noreferrer" : undefined}
+                            target={link.startsWith('http') || link.startsWith('mailto') ? "_blank" : undefined}
+                            rel={link.startsWith('http') || link.startsWith('mailto') ? "noopener noreferrer" : undefined}
                             className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
                           >
                             {value}
@@ -608,6 +616,7 @@ const Footer = () => {
             <Link
               key={p.label}
               to={p.href}
+              target="_blank"
               className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-3 border-r border-[#1E2A45] last:border-none"
             >
               {p.label}
