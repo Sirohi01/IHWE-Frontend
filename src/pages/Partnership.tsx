@@ -98,9 +98,6 @@ const Partnership = () => {
 
                 {/* MAIN IMAGE */}
                 <div className="w-full max-w-[620px]">
-
-                  
-
                   {/* FLOATING CARD */}
                   <div className="absolute top-10 right-6 bg-[#042a64] border-[4px] border-[#619941] rounded-[30px] p-6 w-[280px] shadow-2xl rotate-[6deg]">
 
@@ -202,27 +199,27 @@ const Partnership = () => {
                 {
                   title: "Direct Access",
                   desc: "Connect with 8,000+ industry leaders & Decision makers",
-                  image: "/images/access.png",
+                  image: "/images/partnership/visitor.png",
                 },
                 {
                   title: "Global Exposure",
                   desc: "Enhance your brand presence globally",
-                  image: "/images/exposure.png",
+                  image: "/images/partnership/global.png",
                 },
                 {
                   title: "Brand Visibility",
                   desc: "Showcase your brand across multiple channels before, during & after the event",
-                  image: "/images/visibility.png",
+                  image: "/images/partnership/social.png",
                 },
                 {
                   title: "Long-Term Growth",
                   desc: "Build long-term partnerships & open doors to new business opportunities",
-                  image: "/images/growth.png",
+                  image: "/images/partnership/grow.png",
                 },
                 {
                   title: "Business Growth",
                   desc: "Genrate quality leads, expand customer base & increase ROI",
-                  image: "/images/business-growth.png",
+                  image: "/images/partnership/businessgrow.png",
                 },
               ].map((item, idx) => (
                 <div
@@ -359,7 +356,7 @@ const Partnership = () => {
           title: "Printing & Branding",
           image: "/images/partnership/printing.png",
           color: "#ff7a00",
-          icon: "/images/partnership/print.jpg",
+          icon: "/images/partnership/print.png",
           points: [
             "Branding across event materials",
             "On-site branding opportunities",
@@ -534,160 +531,31 @@ const Partnership = () => {
 </section>
 {/* IMPACT PARTNERSHIP SECTION */}
 <section
-  className="relative overflow-hidden bg-no-repeat bg-top bg-contain"
+  className="relative overflow-hidden bg-no-repeat bg-top bg-contain mb-0"
   style={{
     backgroundImage: "url('/images/partnership/impact-bg.png')",
-    backgroundSize: "100% auto", // FULL IMAGE SHOW
+    backgroundSize:"100% auto",
+    minHeight: "490px",
   }}
 >
+  <div className="max-w-[1400px] mx-auto px-4 md:px-10 h-full">
+    
+    <div className="grid grid-cols-2 md:grid-cols-4 items-end h-[420px]">
+      
+      <div></div>
+      <div></div>
+      <div></div>
 
-  
-  <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 py-16">
-
-    {/* HEADING */}
-    <div className="text-center mb-16">
-
-      <div className="flex items-center justify-center gap-4 mb-4">
-
-        <div className="w-12 h-[2px] bg-[#6ab43b]" />
-
-        <h2 className="text-[24px] md:text-[44px] font-black uppercase tracking-tight text-[#13264b]">
-          Together, We Create{" "}
-          <span className="text-[#6ab43b]">
-            Impact
-          </span>
-        </h2>
-
-        <div className="w-12 h-[2px] bg-[#6ab43b]" />
-
-      </div>
-
-      <p className="text-[#475569] text-[15px] md:text-[17px] max-w-[900px] mx-auto leading-8">
-        Build meaningful collaborations and unlock growth opportunities with
-        strategic partnerships at IHWE 2026.
-      </p>
-
-    </div>
-
-    {/* ICON STEPS */}
-    <div className="relative mb-24 pt-10">
-
-      {/* LINE */}
-      <div className="hidden lg:block absolute top-[58px] left-0 w-full h-[2px] bg-[#bcd1ea]" />
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-6 relative z-10">
-
-        {[
-          {
-            title: "Access Global Audience",
-            color: "#67a92e",
-            icon: "/images/partnership/group.png",
-          },
-          {
-            title: "Increase Brand Reach",
-            color: "#0aa2c5",
-            icon: "/images/partnership/target.png",
-          },
-          {
-            title: "Drive Business Growth",
-            color: "#1f49c3",
-            icon: "/images/partnership/growth.png",
-          },
-          {
-            title: "Build Valuable Networks",
-            color: "#6e3fbc",
-            icon: "/images/partnership/network.png",
-          },
-          {
-            title: "Gain Recognition",
-            color: "#e72f81",
-            icon: "/images/partnership/award.png",
-          },
-          {
-            title: "Global Movement",
-            color: "#ff7800",
-            icon: "/images/partnership/global.png",
-          },
-        ].map((item, idx) => (
-          <div
-            key={idx}
-            className="relative flex flex-col items-center text-center group"
-          >
-
+      {/* BUTTON */}
+      <div className="flex justify-end relative bottom-[10px]">
+        <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
           
+          Register As Official Partner
 
-            {/* TITLE */}
-            <h3 className="mt-5 text-[#13264b] text-[15px] md:text-[16px] font-bold leading-6 max-w-[170px]">
-              {item.title}
-            </h3>
-
-          </div>
-        ))}
-
+        </button>
       </div>
 
     </div>
-
-    {/* CTA BOX */}
-    <div className="relative overflow-hidden rounded-[30px] bg-gradient-to-r from-[#03134b] to-[#001c68] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
-
-      {/* GLOW */}
-      <div className="absolute left-[-80px] top-[-50px] w-[260px] h-[260px] bg-cyan-400/20 blur-[120px]" />
-      <div className="absolute right-[-100px] bottom-[-100px] w-[280px] h-[280px] bg-green-500/20 blur-[120px]" />
-
-      <div className="relative z-10 grid lg:grid-cols-[220px_1fr_320px] gap-10 items-center px-6 md:px-10 lg:px-14 py-10">
-
-        {/* GLOBE */}
-        <div className="flex justify-center lg:justify-start">
-
-          <img
-            src="/images/partnership/globe.png"
-            alt=""
-            className="w-[170px] md:w-[200px] object-contain drop-shadow-[0_0_25px_rgba(0,180,255,0.5)]"
-          />
-
-        </div>
-
-        {/* TEXT */}
-        <div className="text-center lg:text-left">
-
-          <h3 className="text-white text-[28px] md:text-[42px] font-black uppercase leading-tight">
-
-            Ready To Partner
-            <br />
-
-            <span className="text-[#85db48]">
-              For A Healthier Future?
-            </span>
-
-          </h3>
-
-          <p className="text-white/80 text-[15px] md:text-[17px] leading-8 mt-5 max-w-[650px]">
-            Join hands with IHWE 2026 and grow your business with endless
-            networking, branding, and collaboration opportunities.
-          </p>
-
-        </div>
-
-        {/* BUTTON */}
-        <div className="flex justify-center lg:justify-end">
-
-          <button className="group h-[64px] px-10 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white font-black uppercase tracking-wide text-sm shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
-
-            Register As Official Partner
-
-            <span className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#5aad2b] text-xl group-hover:translate-x-1 transition-all">
-              →
-            </span>
-
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
   </div>
 </section>
     </div>
