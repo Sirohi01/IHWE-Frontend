@@ -42,11 +42,13 @@ const PrintingBranding = lazy(() => import("./pages/support/PrintingBranding"));
 const HospitalityDesk = lazy(() => import("./pages/support/HospitalityDesk"));
 const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
 const TravelPartner = lazy(() => import("./pages/TravelPartner"));
+const HotelStayPartner = lazy(() => import("./pages/HotelStayPartner"));
 const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
 const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
+const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -172,6 +174,7 @@ const App = () => {
                     <Route path="/partnership" element={<Partnership />} />
                     <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
 
+                    <Route path="/partner-registration" element={<PartnerRegistration />} />
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
                     <Route path="/support/travel-assistance" element={<TravelAssistance />} />
                     <Route path="/support/stall-design" element={<StallDesign />} />
@@ -195,6 +198,7 @@ const App = () => {
                     <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/travel-partner" element={<TravelPartner />} />
+                    <Route path="/hotel-stay-partner" element={<HotelStayPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />

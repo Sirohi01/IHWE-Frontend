@@ -3,7 +3,7 @@ import TravelPartnerPage from '@/components/travelpartner/TravelPartnerPage';
 
 const TravelPartner: React.FC = () => {
   return (
-    <main className="min-h-screen pt-0">
+    <main className="pt-0">
       <TravelPartnerPage />
     </main>
   );

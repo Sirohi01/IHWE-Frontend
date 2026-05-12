@@ -1,41 +1,41 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Globe, Calendar, Briefcase, TrendingUp } from 'lucide-react';
+import { Users, Globe, Calendar, Briefcase, BarChart3 } from 'lucide-react';
 
 const stats = [
   {
     icon: <Users className="w-5 h-5" />,
     value: "8,000+",
-    label: "Delegates &\nExhibitors",
-    color: "#6B46C1" // Purple from image
+    label: "Delegates &\nExhibitors Expected",
+    color: "#4E9F3D"
   },
   {
     icon: <Globe className="w-5 h-5" />,
     value: "50+",
     label: "Countries\nParticipating",
-    color: "#434190" // Indigo/Blue from image
+    color: "#4E9F3D"
   },
   {
     icon: <Calendar className="w-5 h-5" />,
     value: "3",
     label: "Power-Packed\nDays",
-    color: "#D53F8C" // Rose/Pink from image
+    color: "#4E9F3D"
   },
   {
     icon: <Briefcase className="w-5 h-5" />,
     value: "Unlimited",
     label: "Business\nOpportunities",
-    color: "#3182CE" // Blue from image
+    color: "#4E9F3D"
   },
   {
-    icon: <TrendingUp className="w-5 h-5" />,
+    icon: <BarChart3 className="w-5 h-5" />,
     value: "High",
     label: "Brand Visibility\n& Exposure",
-    color: "#553C9A" // Violet from image
+    color: "#4E9F3D"
   },
 ];
 
-const TravelStats: React.FC = () => {
+const HotelStats: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] shadow-[0_20px_50px_rgba(0,0,0,0.08)] p-[12px_20px] mx-auto max-w-[1200px]">
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0">
@@ -48,16 +48,15 @@ const TravelStats: React.FC = () => {
               className="flex items-center gap-[12px] px-4 group flex-1 justify-center md:justify-start"
             >
               <div 
-                className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 shadow-md"
-                style={{ backgroundColor: stat.color }}
+                className="w-[36px] h-[36px] rounded-full flex items-center justify-center text-[#4E9F3D] border-2 border-[#4E9F3D]/20 transition-all duration-300 group-hover:scale-110 shadow-sm"
               >
-                {stat.icon}
+                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-4 h-4" })}
               </div>
               <div className="flex flex-col">
-                <span className="text-[18px] font-black text-[#0B2C66] leading-none mb-0.5">
+                <span className="text-[16px] font-black text-[#0B2C66] leading-none mb-0.5">
                   {stat.value}
                 </span>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight leading-tight whitespace-pre-line">
+                <span className="text-[8.5px] font-bold text-gray-500 uppercase tracking-tight leading-tight whitespace-pre-line">
                   {stat.label}
                 </span>
               </div>
@@ -72,4 +71,4 @@ const TravelStats: React.FC = () => {
   );
 };
 
-export default TravelStats;
+export default HotelStats;
