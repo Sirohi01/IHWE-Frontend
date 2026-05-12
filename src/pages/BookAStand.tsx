@@ -311,18 +311,24 @@ const BookAStand = () => {
     // Fetch Stalls when Event changes
     useEffect(() => {
         if (selectedEventId) {
-            stallApi.getByEvent(selectedEventId).then(data => {
-                setAvailableStalls(data);
+            stallApi.getByEvent(selectedEventId).then((res: any) => {
+                let actualData: any[] = [];
+                if (Array.isArray(res)) actualData = res;
+                else if (res && Array.isArray(res.data)) actualData = res.data;
+                else if (res && Array.isArray(res.stalls)) actualData = res.stalls;
+
+                setAvailableStalls(actualData);
                 // Reset selected stall if not in new list
-                if (!data.find(s => s._id === formData.participation.stallNo)) {
+                if (!actualData.find((s: any) => String(s._id || s.id) === String(formData.participation.stallNo))) {
                     setFormData(prev => ({
                         ...prev,
                         participation: { ...prev.participation, stallNo: '' }
                     }));
                 }
             });
-            stallRateApi.getAllByEvent(selectedEventId).then(rates => {
-                setAllRates(rates);
+            stallRateApi.getAllByEvent(selectedEventId).then((res: any) => {
+                const actualRates = Array.isArray(res) ? res : (res.data || []);
+                setAllRates(actualRates);
             });
         }
     }, [selectedEventId, events]);
@@ -562,15 +568,15 @@ const BookAStand = () => {
     };
 
     const handleStallChange = (stallId: string) => {
-        const stall = availableStalls.find(s => s._id === stallId);
+        const stall = availableStalls.find(s => String(s._id || s.id) === stallId);
         if (stall) {
             setFormData(prev => ({
                 ...prev,
                 participation: {
                     ...prev.participation,
-                    stallNo: stall._id,
-                    stallFor: stall.stallNumber,
-                    stallSize: stall.area,
+                    stallNo: stall._id || stall.id,
+                    stallFor: stall.stallNumber || stall.stallName || stall.name || '',
+                    stallSize: stall.area || stall.size || 0,
                     dimension: `${stall.length}x${stall.width}m`,
                     stallScheme: stall.plScheme || 'One Side Open',
                     stallType: stall.stallType || prev.participation.stallType
@@ -1428,6 +1434,82 @@ const BookAStand = () => {
                                                     </div>
                                                 </div>
 
+                                                <div className="space-y-1.5 pt-2 ">
+                                                    <h3 className="text-xs pb-1 font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
+                                                        Exhibitor Category
+                                                    </h3>
+
+                                                    <div className="grid grid-cols-4 gap-4">
+                                                        <div>
+                                                            <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
+                                                            <Select
+                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
+                                                                value={formData.primaryCategory}
+                                                            >
+                                                                <SelectTrigger className={`${inputClasses}`}>
+                                                                    <SelectValue placeholder="Select Primary Category" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {PRIMARY_CATEGORIES.map(cat => (
+                                                                        <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></label>
+                                                            <Select
+                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
+                                                                value={formData.subCategory}
+                                                                disabled={!formData.primaryCategory}
+                                                            >
+                                                                <SelectTrigger className={`${inputClasses}`}>
+                                                                    <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
+                                                                        <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></label>
+                                                            <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="How did you hear about us?" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
+                                                                    <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
+                                                                    <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
+                                                                    <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
+                                                                    <SelectItem value="Others" className="text-xs">Others</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
+                                                            <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Staff Member" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {marketingStaff.map(s => (
+                                                                        <SelectItem key={s._id} value={s.username} className="text-xs">
+                                                                            {s.fullName ? `${s.fullName} (${s.username})` : s.username}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                    <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 {/* -- REGISTRANT TYPE + GST / PAN / AADHAAR -- */}
                                                 <div className="mt-3 p-3 border border-slate-300 rounded-sm bg-slate-50/60">
                                                     {/* Radio buttons */}
@@ -1654,14 +1736,18 @@ const BookAStand = () => {
                                                     <div className="grid grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-2">
                                                         <div className="space-y-1.5">
                                                             <label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></label>
-                                                            <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
+                                                            <Select onValueChange={(v) => handleStallChange(v)} value={formData?.participation?.stallNo ? String(formData.participation.stallNo) : undefined}>
                                                                 <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Stall" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
-                                                                    {availableStalls.map(s => (
-                                                                        <SelectItem key={s._id} value={s._id} className="text-xs">Stall {s.stallNumber}</SelectItem>
-                                                                    ))}
+                                                                    {availableStalls && availableStalls.length > 0 ? (
+                                                                        availableStalls.map((s: any) => (
+                                                                            <SelectItem key={s._id || s.id} value={String(s._id || s.id)} className="text-xs">Stall {s.stallNumber || s.stallName || s.name || s.id}</SelectItem>
+                                                                        ))
+                                                                    ) : (
+                                                                        <div className="text-xs p-2 text-slate-500 text-center">No stalls available</div>
+                                                                    )}
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
@@ -1684,22 +1770,26 @@ const BookAStand = () => {
                                                                     <SelectValue placeholder="Select Category" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
-                                                                    <SelectItem value="Shell Space" className="text-xs">Shell Space (Built-up)</SelectItem>
-                                                                    <SelectItem value="Raw Space" className="text-xs">Raw Space (Plot)</SelectItem>
+                                                                    <SelectItem value="Shell Space" className="text-xs">Shell Space </SelectItem>
+                                                                    <SelectItem value="Raw Space" className="text-xs">Raw Space </SelectItem>
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></label>
+                                                            <label className={labelClasses}>PL CHARGES <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.stallScheme || "N/A"} className={`${inputClasses}`} />
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.dimension} className={`${inputClasses} cursor-not-allowed`} />
                                                         </div>
-                                                        <div className="space-y-1.5">
+                                                        {/* <div className="space-y-1.5">
                                                             <label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.stallFor} className={`${inputClasses} cursor-not-allowed`} />
+                                                        </div> */}
+                                                        <div className="space-y-1.5">
+                                                            <label className={labelClasses}>RATE <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.rate} className={`${inputClasses}`} />
                                                         </div>
                                                     </div>
 
@@ -1727,16 +1817,16 @@ const BookAStand = () => {
                                                                 </div>
 
                                                                 {/* PL Increment */}
-                                                                {selectedStall?.incrementPercentage > 0 && (
-                                                                    <div className="flex-1 px-4 py-1">
-                                                                        <p className="text-[11px] font-medium text-orange-600 uppercase tracking-widest mb-0.5">
-                                                                            PL Increment ({selectedStall.incrementPercentage}%)
-                                                                        </p>
-                                                                        <p className="text-sm font-semibold text-orange-500">
-                                                                            + {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}
-                                                                        </p>
-                                                                    </div>
-                                                                )}
+                                                                {/* {selectedStall?.incrementPercentage > 0 && ( */}
+                                                                <div className="flex-1 px-4 py-1">
+                                                                    <p className="text-[11px] font-medium text-orange-600 uppercase tracking-widest mb-0.5">
+                                                                        PL Charges ({selectedStall?.incrementPercentage}% Extra)
+                                                                    </p>
+                                                                    <p className="text-sm font-semibold text-orange-500">
+                                                                        + {formData?.participation?.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData?.participation?.rate * formData?.participation?.stallSize * selectedStall?.incrementPercentage / 100)}
+                                                                    </p>
+                                                                </div>
+                                                                {/* )} */}
 
                                                                 {/* GST */}
                                                                 <div className="flex-1 px-4 py-1">
@@ -1763,81 +1853,7 @@ const BookAStand = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="space-y-1.5 pt-2 ">
-                                                <h3 className="text-xs pb-1 font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
-                                                    Exhibitor Category
-                                                </h3>
 
-                                                <div className="grid grid-cols-4 gap-4">
-                                                    <div>
-                                                        <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
-                                                        <Select
-                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
-                                                            value={formData.primaryCategory}
-                                                        >
-                                                            <SelectTrigger className={`${inputClasses}`}>
-                                                                <SelectValue placeholder="Select Primary Category" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {PRIMARY_CATEGORIES.map(cat => (
-                                                                    <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></label>
-                                                        <Select
-                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
-                                                            value={formData.subCategory}
-                                                            disabled={!formData.primaryCategory}
-                                                        >
-                                                            <SelectTrigger className={`${inputClasses}`}>
-                                                                <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
-                                                                    <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></label>
-                                                        <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="How did you hear about us?" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
-                                                                <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
-                                                                <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
-                                                                <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
-                                                                <SelectItem value="Others" className="text-xs">Others</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
-                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select Staff Member" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {marketingStaff.map(s => (
-                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">
-                                                                        {s.fullName ? `${s.fullName} (${s.username})` : s.username}
-                                                                    </SelectItem>
-                                                                ))}
-                                                                <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             {/* -- FINAL BOOKING CONTROL -- */}
                                             <div className="pt-1">
