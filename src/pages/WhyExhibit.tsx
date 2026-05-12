@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useInView, animate } from "framer-motion";
+import { motion, useInView, animate, AnimatePresence } from "framer-motion";
 import { 
   Users, Handshake, Globe, Mic, Calendar, MapPin, 
   ArrowRight, Download, CheckCircle2, Star, Award, 
@@ -13,6 +13,7 @@ import SectionContainer from "@/components/layout/SectionContainer";
 import { cn } from "@/lib/utils";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { exhibitorTestimonialsApi, SERVER_URL } from "@/lib/api";
 
 // Assets
 import exhibitBg from "@/assets/exhibitbg.png";
@@ -31,6 +32,7 @@ import band3 from "@/assets/band3.png";
 import band4 from "@/assets/band4.png";
 import band5 from "@/assets/band5.png";
 import applybg from "@/assets/applybg.png";
+import leftbg from "@/assets/leftbg.png";
 import top1 from "@/assets/top1.png";
 import top2 from "@/assets/top2.png";
 import top3 from "@/assets/top3.png";
@@ -45,6 +47,7 @@ import meet1 from "@/assets/meet1.png";
 import meet2 from "@/assets/meet2.png";
 import meet3 from "@/assets/meet3.png";
 import footbg from "@/assets/footbg.png";
+import leaf2 from "@/assets/leaf2.png";
 
 // ── Animated counter — counts up when scrolled into view ──
 const LocalStatCounter = ({ value }: { value: string }) => {
@@ -97,8 +100,11 @@ const Sparkle = ({ style, color = '#ffdd00', shadow = '#ffa500' }: { style?: Rea
   </span>
 );
 
-const ExhibitorTestimonialCard = ({ item }: { item: any }) => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+const ExhibitorTestimonialCard = ({ item, expandedCardId, setExpandedCardId, index }: { item: any; expandedCardId: number | null; setExpandedCardId: (id: number | null) => void; index: number }) => {
+  const isExpanded = expandedCardId === index;
+  const setIsExpanded = (val: boolean) => {
+    setExpandedCardId(val ? index : null);
+  };
   const CHAR_LIMIT = 155;
   const quoteText = item.quote || "";
   const isLong = quoteText.length > CHAR_LIMIT;
@@ -121,49 +127,95 @@ const ExhibitorTestimonialCard = ({ item }: { item: any }) => {
         style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px", height: '280px' }}
       >
         {/* Expanded Overlay */}
-        {isExpanded && (
-          <div
-            className="absolute inset-0 bg-white z-[60] flex flex-col rounded-[22px]"
-            style={{ boxShadow: "inset 0 0 0 2px #e2e8f0" }}
-          >
-            <div
-              className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0"
-              style={{ background: "linear-gradient(90deg, #f8fdf5 0%, #fff8f3 100%)" }}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.22 }}
+              className="absolute inset-0 bg-white z-[60] flex flex-col rounded-[22px]"
+              style={{ boxShadow: "inset 0 0 0 2px #e2e8f0" }}
             >
-              <div className="flex items-center gap-1.5">
-                <Quote className="w-4 h-4 text-[#1a6b3a] transform -scale-x-100" />
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Full Review</span>
-              </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
-                className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full transition-all duration-200"
-                style={{ color: '#071056', background: '#f0faf0', border: '1px solid #c6e6c6' }}
+              <div
+                className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0"
+                style={{ background: "linear-gradient(90deg, #f8fdf5 0%, #fff8f3 100%)" }}
               >
-                ✕ Close
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto px-4 py-3">
-              <p className="text-slate-800 text-[11.5px] font-medium leading-relaxed">{item.quote}</p>
-            </div>
-            <div className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0" style={{ background: "#fafafa" }}>
-              <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex-shrink-0">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <div className="flex items-center gap-1.5">
+                  <Quote className="w-4 h-4 text-[#1a6b3a] transform -scale-x-100" />
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Full Review</span>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                  className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full transition-all duration-200"
+                  style={{ color: '#071056', background: '#f0faf0', border: '1px solid #c6e6c6' }}
+                >
+                  ✕ Close
+                </button>
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="font-bold text-[10px] leading-tight text-[#071056]">{item.name}</div>
-                <div className="font-semibold text-[9px] leading-tight text-[#d26019] mt-0.5">{item.role}</div>
+              <div className="flex-1 overflow-y-auto px-4 py-3">
+                <p className="text-slate-800 text-[11.5px] font-medium leading-relaxed">{item.quote}</p>
               </div>
-            </div>
-          </div>
-        )}
+              <div className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0" style={{ background: "#fafafa" }}>
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex-shrink-0">
+                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[10px] leading-tight text-[#071056]">{item.companyName1}</div>
+                  {item.companyName2 && (
+                    <div className="font-semibold text-[9px] leading-tight text-[#d26019] mt-0.5">{item.companyName2}</div>
+                  )}
+                  <div className="flex items-center gap-1 text-slate-400 text-[8.5px] mt-1">
+                    <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
+                    {item.location}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Top: Name & Role */}
         <div className="pt-[52px] px-4 pb-0 text-center flex-shrink-0 min-h-[82px]">
+          {/* Company 1 Slot */}
           <div className="h-[16px] mb-0.5">
-            <h4 className="font-bold text-[11.5px] leading-tight text-[#071056]">{item.name}</h4>
+            <div className="font-bold text-[11.5px] leading-tight text-[#071056] px-1 flex items-center justify-center">
+              <span className={item.companyName1.length > 25 ? "truncate max-w-[190px]" : ""}>{item.companyName1}</span>
+              {item.companyName1.length > 25 && (
+                <span 
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                  className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                >
+                  ...
+                </span>
+              )}
+            </div>
           </div>
+          
+          {/* Company 2 / Title Slot */}
           <div className="h-[16px]">
-            <p className="font-bold text-[10.5px] leading-tight text-[#d26019] uppercase tracking-widest">{item.role}</p>
+            <div className="font-bold text-[10.5px] leading-tight text-[#d26019] uppercase tracking-widest px-1 opacity-90 flex items-center justify-center">
+              {item.companyName2 ? (
+                <>
+                  <span className={item.companyName2.length > 30 ? "truncate max-w-[190px]" : ""}>{item.companyName2}</span>
+                  {item.companyName2.length > 30 && (
+                    <span 
+                      onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                      className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                      style={{ fontSize: '14px', lineHeight: '10px' }}
+                    >
+                      ...
+                    </span>
+                  )}
+                </>
+              ) : ""}
+            </div>
+          </div>
+
+          {/* Location Slot */}
+          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-2">
+            <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
+            <span className="truncate max-w-[150px]">{item.location}</span>
           </div>
         </div>
 
@@ -200,10 +252,37 @@ const ExhibitorTestimonialCard = ({ item }: { item: any }) => {
 };
 
 const WhyExhibit = () => {
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonialHeading, setTestimonialHeading] = useState("What Our Exhibitors Say");
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
     window.scrollTo(0, 0);
+    loadTestimonials();
   }, []);
+
+  const loadTestimonials = async () => {
+    try {
+      const data = await exhibitorTestimonialsApi.get();
+      if (data) {
+        if (data.heading) setTestimonialHeading(data.heading);
+        if (data.cards && data.cards.length > 0) {
+          const mapped = data.cards.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)).map((c: any) => ({
+            id: c._id,
+            companyName1: c.companyName1,
+            companyName2: c.companyName2,
+            location: c.location,
+            quote: c.quote,
+            image: c.image ? (c.image.startsWith('http') ? c.image : `${SERVER_URL}${c.image}`) : null
+          }));
+          setTestimonials(mapped);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load testimonials:", error);
+    }
+  };
 
   const marqueeStyles = `
     @keyframes marqueeScrollTestimonials {
@@ -351,56 +430,8 @@ const WhyExhibit = () => {
     { icon: Plane, line1: "Medical Tourism &", line2: "Wellness Travel" },
   ];
 
-  const testimonials = [
-    {
-      name: "Rahul Mehta",
-      role: "CEO, NutriLife Pvt. Ltd.",
-      quote: "IHWE gave us the perfect platform\nto showcase our products and meet\nquality international buyers.",
-      image: "https://randomuser.me/api/portraits/men/32.jpg"
-    },
-    {
-      name: "Dr. Neha Sharma",
-      role: "Director, Herbalove Wellness",
-      quote: "Excellent organization, great footfall and high-quality B2B meetings. We will definitely exhibit again!",
-      image: "https://randomuser.me/api/portraits/women/44.jpg"
-    },
-    {
-      name: "Vikram Sood",
-      role: "Managing Director, WellnessKart",
-      quote: "A must-attend event for every business in the health & wellness industry.",
-      image: "https://randomuser.me/api/portraits/men/45.jpg"
-    },
-    {
-      name: "Anjali Gupta",
-      role: "Founder, PureVeda",
-      quote: "The quality of delegates was impressive. We closed three major distribution deals during the expo.",
-      image: "https://randomuser.me/api/portraits/women/65.jpg"
-    },
-    {
-      name: "Rajesh Khanna",
-      role: "VP Marketing, Global Healthcare",
-      quote: "Outstanding visibility for our new range of smart wellness devices. IHWE is the place to be.",
-      image: "https://randomuser.me/api/portraits/men/22.jpg"
-    },
-    {
-      name: "Sanjay Singhania",
-      role: "MD, Zenith Pharma",
-      quote: "Networking opportunities were second to none. We've already booked for 2027!",
-      image: "https://randomuser.me/api/portraits/men/85.jpg"
-    },
-    {
-      name: "Meera Reddy",
-      role: "CEO, AyurAura",
-      quote: "The support from the organizers was exceptional. A truly world-class exhibition experience.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
-    },
-    {
-      name: "David Wilson",
-      role: "Director, EuroMed Partners",
-      quote: "As international exhibitors, we found the Indian market potential huge. IHWE made entry easy.",
-      image: "https://randomuser.me/api/portraits/men/67.jpg"
-    }
-  ];
+  // Local testimonials removed - now fetched from API
+  // const testimonials = [...];
 
   return (
     <div className="bg-white min-h-screen overflow-x-hidden font-inter">
@@ -632,38 +663,37 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── STATS BAND ─── */}
-      <div className="relative z-20 -mt-6 md:-mt-10">
+      <div className="relative z-20 -mt-6 md:-mt-7">
         <SectionContainer>
           <div 
-            className="bg-white rounded-2xl border border-slate-100 p-1.5 md:p-2"
-            style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}
+            className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"
+            style={{ 
+              backgroundColor: '#134E8E',
+              boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
+            }}
           >
-          <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-0">
-            {stats.map((stat, i) => (
-              <React.Fragment key={i}>
-                <div className="flex flex-col items-center text-center group flex-1">
-                  <img src={stat.img} alt={stat.label} className="w-8 h-8 md:w-10 md:h-10 mb-0.5 object-contain" />
-                  <h4 className="text-lg md:text-xl font-extrabold text-[#050537] leading-none mb-0.5">
-                    <LocalStatCounter value={stat.val} />
-                  </h4>
-                  <p className="text-[8px] md:text-[10px] font-black text-[#d26019] uppercase tracking-widest mb-0.5">{stat.label}</p>
-                  <div className="text-[7px] md:text-[9px] text-black leading-tight font-bold px-1">
-                    <p>{stat.desc1}</p>
-                    <p>{stat.desc2}</p>
+            <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-0">
+              {stats.map((stat, i) => (
+                <React.Fragment key={i}>
+                  <div className="flex flex-col items-center text-center group flex-1">
+                    <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                    <h4 className="text-base md:text-lg font-bold text-white leading-none">
+                      <LocalStatCounter value={stat.val} />
+                    </h4>
+                    <p className="text-[7.5px] md:text-[9.5px] font-bold text-[#f5c842] uppercase tracking-widest leading-tight">{stat.label}</p>
                   </div>
-                </div>
-                {i < stats.length - 1 && (
-                  <div className="hidden md:block w-px h-20 bg-slate-200" />
-                )}
-              </React.Fragment>
-            ))}
+                  {i < stats.length - 1 && (
+                    <div className="hidden md:block w-px h-6 bg-white/20" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
-        </div>
-      </SectionContainer>
-    </div>
+        </SectionContainer>
+      </div>
 
       {/* ─── TOP REASONS SECTION ─── */}
-      <section className="mt-4 pt-4 pb-16 bg-slate-50">
+      <section className="mt-4 pt-4 pb-0 bg-slate-50">
         <SectionContainer>
           <div className="text-center mb-4" data-aos="fade-up">
             <div className="flex items-center justify-center gap-4 mb-4">
@@ -713,21 +743,105 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── GOVT PMS SCHEME BANNER ─── */}
-      <section className="py-0 overflow-hidden">
-        <SectionContainer className="max-w-none w-full px-4">
-          <img 
-            src={applybg} 
-            alt="Apply Under PMS Scheme" 
-            className="w-full h-[160px] md:h-[220px] object-cover rounded-[30px] mt-8"
-            style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px' }}
+      <section className="py-0 mt-4">
+        <SectionContainer>
+          <div
+            className="w-full rounded-[30px] flex flex-row items-stretch overflow-hidden relative"
+            style={{
+              boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+              background: '#fdf9ed',
+              minHeight: '160px'
+            }}
             data-aos="fade-up"
-          />
+          >
+            {/* Left Image */}
+            <div className="w-[44%] md:w-[38%] flex-shrink-0 relative overflow-hidden" style={{ minHeight: '160px' }}>
+              <img
+                src={leftbg}
+                alt="PMS Scheme"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+            </div>
+
+            {/* Right Text Content */}
+            <div className="flex-1 flex flex-col justify-center px-5 md:px-10 py-5 md:py-6 relative z-10">
+              {/* Heading */}
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
+                {/* <p className="text-[10px] md:text-[11px] font-black text-[#1a682d] uppercase tracking-widest">Government Scheme</p> */}
+              </div>
+              <h2 className="text-[15px] md:text-[22px] font-black text-[#00153c] leading-tight mb-1 uppercase">
+                Exhibit Under <br />
+                <span className="text-[#1a682d]">Government PMS Scheme</span>
+              </h2>
+              <p className="text-[10px] md:text-[12px] font-semibold mb-3 leading-relaxed max-w-md" style={{ color: '#070e48' }}>
+                Eligible MSMEs can get reimbursement support on <br />
+                participation expenses under the PMS Scheme.
+              </p>
+
+              {/* Feature items */}
+              <div className="flex items-center gap-0">
+                {[
+                  { img: band1, line1: 'Stall Cost', line2: 'Support' },
+                  { img: band2, line1: 'Travel', line2: 'Assistance' },
+                  { img: band3, line1: 'Global', line2: 'Exposure' },
+                ].map((item, i, arr) => (
+                  <div key={i} className="flex items-center">
+                    <div className="flex items-center gap-2 px-3">
+                      <img src={item.img} alt={item.line1} className="w-7 h-7 md:w-9 md:h-9 object-contain flex-shrink-0" />
+                      <div className="flex flex-col leading-none">
+                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line1}</span>
+                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line2}</span>
+                      </div>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="w-px h-8 bg-slate-300 flex-shrink-0" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA Button - Bottom Right, above leaf */}
+            <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end">
+              <div className="relative group/btn">
+                {/* Sparkles */}
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-12px', left: '40%', animationDelay: '0.5s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
+                <Link
+                  to="/msme-pms-scheme"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02]"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #5E0006 0%, #3D0004 100%)',
+                    boxShadow: '0 4px 14px rgba(94, 0, 6, 0.4)'
+                  }}
+                >
+                  Apply Under PMS Scheme <ArrowRight size={13} />
+                </Link>
+              </div>
+              <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1 mr-0.5">*T&amp;C Apply</p>
+            </div>
+
+            {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
+            <img
+              src={leaf2}
+              alt=""
+              aria-hidden="true"
+              className="absolute bottom-0 right-0 w-[140px] md:w-[210px] h-auto object-contain pointer-events-none select-none z-0"
+              style={{ opacity: 1 }}
+            />
+          </div>
         </SectionContainer>
       </section>
 
       {/* ─── INDUSTRIES WE SERVE ─── */}
       <section className="pt-4 pb-8 bg-white">
-        <SectionContainer className="max-w-7xl mx-auto px-4">
+        <SectionContainer>
           <div className="text-center mb-6" data-aos="fade-up">
             <div className="flex items-center justify-center gap-4 mb-4">
                <span className="w-12 h-[2px] bg-[#1a6b3a]" />
@@ -736,7 +850,7 @@ const WhyExhibit = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-1">
+          <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-3">
             {industries.map((item, i) => (
               <div 
                 key={i} 
@@ -768,7 +882,7 @@ const WhyExhibit = () => {
 
       {/* ─── BUYER & DECISION MAKERS SECTION ─── */}
       <section className="py-2 bg-[#e9f3fd] overflow-hidden relative">
-        <SectionContainer className="max-w-7xl mx-auto px-4">
+        <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 items-center">
             {/* Left Content */}
             <div className="lg:col-span-3" data-aos="fade-right">
@@ -811,7 +925,7 @@ const WhyExhibit = () => {
 
             {/* Right Skewed Images */}
             <div className="lg:col-span-7" data-aos="fade-left">
-              <div className="flex gap-2 h-[320px] md:h-[380px] -mr-20">
+              <div className="flex gap-2 h-[320px] md:h-[380px]">
                 {[meet1, meet2, meet3].map((img, idx) => (
                   <div 
                     key={idx}
@@ -831,7 +945,7 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── EXHIBITOR TESTIMONIALS ─── */}
-      <section className="pt-4 pb-12 bg-white relative overflow-hidden">
+      <section className="pt-4 pb-4 bg-white relative overflow-hidden">
         <style>{marqueeStyles}</style>
         <div className="absolute top-1/2 left-0 w-full h-px bg-slate-100 z-0" />
         
@@ -839,16 +953,21 @@ const WhyExhibit = () => {
           <div className="text-center mb-10" data-aos="fade-up">
             <div className="flex items-center justify-center gap-4">
               <span className="w-10 md:w-16 h-[2px] bg-[#1a6b3a] rounded-full" />
-              <h2 className="text-xl md:text-2xl font-bold text-[#071056] uppercase tracking-tight">What Our Exhibitors Say</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-[#071056] uppercase tracking-tight">{testimonialHeading}</h2>
               <span className="w-10 md:w-16 h-[2px] bg-[#1a6b3a] rounded-full" />
             </div>
           </div>
 
-          <div className="relative w-full overflow-hidden">
-            <div className="testimonials-marquee flex gap-10">
+          <div className="relative w-full overflow-hidden -mt-16">
+            <div className="testimonials-marquee flex gap-10 py-12">
               {[...testimonials, ...testimonials].map((item, i) => (
                 <div key={i}>
-                  <ExhibitorTestimonialCard item={item} />
+                  <ExhibitorTestimonialCard 
+                    item={item} 
+                    index={i}
+                    expandedCardId={expandedCardId}
+                    setExpandedCardId={setExpandedCardId}
+                  />
                 </div>
               ))}
             </div>
@@ -857,8 +976,8 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── FINAL IMAGE BANNER ─── */}
-      <section className="pb-12 pt-4">
-        {/* Heading above image */}
+      {/* <section className="pb-12 pt-0 -mt-12">
+ 
         <div className="flex items-center justify-center gap-4 mb-6 px-4" data-aos="fade-up">
           <span className="w-8 md:w-12 h-[2px] bg-[#1a6b3a] rounded-full" />
           <h2 className="text-xl md:text-3xl font-bold text-[#071056] uppercase tracking-tight text-center">
@@ -866,7 +985,7 @@ const WhyExhibit = () => {
           </h2>
           <span className="w-8 md:w-12 h-[2px] bg-[#1a6b3a] rounded-full" />
         </div>
-        {/* Full width image */}
+
         <div 
           className="w-full shadow-lg h-[200px] md:h-[260px]"
           style={{ 
@@ -875,7 +994,7 @@ const WhyExhibit = () => {
             backgroundPosition: 'center'
           }}
         />
-      </section>
+      </section> */}
     </div>
   );
 };

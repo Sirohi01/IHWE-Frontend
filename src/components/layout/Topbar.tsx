@@ -131,30 +131,56 @@ const Topbar = () => {
               animate={{ x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
-                duration: 80,
+                duration: 100,
                 ease: "linear",
-                delay: 0
               }}
               className="whitespace-nowrap font-bold uppercase tracking-[0.1em] text-[10px] marquee-golden-text flex items-center"
             >
-              {marqueeText}
-              <span className="sparkle-dot">✦</span>
-              {marqueeText}
-              <span className="sparkle-dot">✦</span>
+              <div className="flex items-center gap-1">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center">
+                    <span>{marqueeText}</span>
+                    <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-1">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center">
+                    <span>{marqueeText}</span>
+                    <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </div>
           </div>
 
         <div className="hidden md:flex flex-shrink-0 items-center gap-1.5">
-          <Link to="/exhibitor-login" className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
+          <Link 
+            to="/exhibitor-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block"
+          >
             Exhibitor Login
           </Link>
-          <Link to="/buyer-login" className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
+          <Link 
+            to="/buyer-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block"
+          >
             Buyer Login
           </Link>
-          <button className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105">
+          <Link 
+            to="/delegates-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block text-center"
+          >
             Delegates Login
-          </button>
+          </Link>
           <a
             href="https://admin.ihwe.in/login"
             target="_blank"

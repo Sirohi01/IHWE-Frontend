@@ -136,8 +136,9 @@ const BrochureDownloadPopup: React.FC = () => {
 
         const social = await socialMediaApi.get();
         if (social?.whatsappNumber) {
+          const cleanNumber = social.whatsappNumber.replace(/\D/g, "");
           const msg = encodeURIComponent(social.whatsappMessage || "Hello! I would like to know more about IHWE 2026.");
-          setWhatsappUrl(`https://wa.me/${social.whatsappNumber}?text=${msg}`);
+          setWhatsappUrl(`https://wa.me/${cleanNumber}?text=${msg}`);
         }
       } catch (error) { }
     };
@@ -175,10 +176,10 @@ const BrochureDownloadPopup: React.FC = () => {
       return;
     }
     const link = card.link;
-    if (link.startsWith("http") || link.startsWith("tel:") || link.startsWith("mailto:")) {
+    if (link.startsWith("tel:") || link.startsWith("mailto:")) {
       window.location.href = link;
     } else {
-      window.location.href = link;
+      window.open(link, "_blank");
     }
   };
 
@@ -518,8 +519,8 @@ const BrochureDownloadPopup: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-[150px]">
                     <p className="text-[7.5px] text-white/30 font-bold uppercase tracking-wider">Need Help?</p>
-                    <p className="text-[11px] font-bold tracking-tight text-white">+91 9654900525</p>
-                    <p className="text-[8px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5">info@ihwe.in</p>
+                    <a href="tel:+919654900525" className="text-[11px] font-bold tracking-tight text-white hover:text-blue-400 transition-colors block">+91 9654900525</a>
+                    <a href="mailto:info@ihwe.in" className="text-[11px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5 hover:text-white transition-colors block">info@ihwe.in</a>
                   </div>
                 </motion.div>
                 <motion.button

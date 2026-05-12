@@ -21,7 +21,8 @@ const WhatsAppFloat: React.FC = () => {
         fetchSocialData();
     }, []);
 
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+    const cleanPhoneNumber = phoneNumber.replace(/\D/g, "");
+    const whatsappUrl = `https://wa.me/${cleanPhoneNumber}?text=${encodeURIComponent(
         message
     )}`;
 

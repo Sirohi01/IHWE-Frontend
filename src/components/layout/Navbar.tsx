@@ -314,7 +314,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                               return item.to.startsWith("tel:") ? (
                                 <a href={item.to} {...commonProps}>{Content}</a>
                               ) : (
-                                <Link to={item.to} {...commonProps}>{Content}</Link>
+                                <Link to={item.to} target="_blank" rel="noopener noreferrer" {...commonProps}>{Content}</Link>
                               );
                             })}
                           </div>
@@ -503,7 +503,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     return opt.path.startsWith("tel:") ? (
                       <a href={opt.path} {...commonProps}>{Content}</a>
                     ) : (
-                      <Link to={opt.path} {...commonProps}>{Content}</Link>
+                      <Link to={opt.path} target="_blank" rel="noopener noreferrer" {...commonProps}>{Content}</Link>
                     );
                   })}
                 </div>
