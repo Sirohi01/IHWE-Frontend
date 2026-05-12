@@ -539,7 +539,7 @@ const InternationalBuyerRegistration = () => {
 
 
             <section className="py-4 relative bg-[#F8FAFC]">
-                <div className="container mx-auto px-4 max-w-[1400px]">
+                <div className="px-16">
                     <AnimatePresence mode="wait">
                         {submitted ? (
                             <motion.div
@@ -564,7 +564,6 @@ const InternationalBuyerRegistration = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-white border border-slate-200 shadow-2xl rounded-2xl overflow-hidden"
                             >
-                                Available Registration Passes
 
                                 <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
 
