@@ -16,13 +16,13 @@ const TravelHero: React.FC = () => {
         <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[30px]">
 
           <div className="flex items-center gap-[15px]">
-            <div className="w-[50px] h-[50px] flex-shrink-0">
+            {/* <div className="w-[50px] h-[50px] flex-shrink-0">
               <svg width="50" height="50" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 6C14 6 6 14 6 22C6 28 10 32 16 34L20 36L24 34C30 32 34 28 34 22C34 14 26 6 20 6Z" fill="#4E9F3D" opacity="0.3" />
                 <path d="M20 8C16 10 10 16 10 22C10 27 13 30 17 32L20 33.5L23 32C27 30 30 27 30 22C30 16 24 10 20 8Z" fill="#4E9F3D" />
                 <line x1="20" y1="8" x2="20" y2="34" stroke="white" strokeWidth="1.5" />
               </svg>
-            </div>
+            </div> */}
             <div>
               <h1 className="text-[#0B2C66] font-black text-[16px] leading-[1.1] uppercase">
                 International<br />

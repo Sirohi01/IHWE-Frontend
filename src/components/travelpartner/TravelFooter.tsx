@@ -10,26 +10,31 @@ import {
   QrCode,
   Plane,
 } from 'lucide-react';
+import footerImage from '../../assets/nishu.png'; // Adjust path if needed
 
 const TravelFooter: React.FC = () => {
   return (
-    <footer className="bg-[#F8FAFC] pt-1 px-">
-      <div className="mx-auto max-w-[1340px]">
-        <div className="bg-white rounded-[24px] border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
+    <footer className="bg-white pt-1">
+      <div className="mx-auto max-w-[1340px] bg-white">
+        <div className="bg-white rounded-[24px]  shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
 
-          {/* Left CTA: Dark Blue with Swirl */}
-          <div className="bg-[#0B2C66] p-[12px_25px] flex items-center gap-[15px] lg:min-w-[280px] relative overflow-hidden rounded-r-[60px] lg:rounded-r-[80px] z-10">
+          {/* Left CTA: Only Image - No Background Color */}
+          <div className="bgg-white relative p-[0px_25px] flex items-center gap-[15px] lg:min-w-[280px] overflow-hidden rounded-r-[60px] lg:rounded-r-[80px] z-10">
+            {/* Background Image - Full height and width */}
+            <div className="absolute inset-0 w-full h-full z-0 bg-white">
+              <img
+                src={footerImage}
+                alt="background"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
             {/* Airplane Swirl Path */}
-            <div className="absolute left-[-20px] top-[10px] w-[140px] h-[80px] opacity-20 pointer-events-none">
-              <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                <path d="M5 50 C 20 50, 40 45, 50 30 C 60 15, 80 10, 95 10" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                <path d="M10 55 C 30 55, 50 48, 60 32" stroke="white" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
-              </svg>
-            </div>
-            <div className="relative z-10 w-[40px] h-[40px] flex items-center justify-center flex-shrink-0">
-              <Plane className="w-[28px] h-[28px] text-white rotate-45 fill-white" />
-            </div>
-            <div className="relative z-10">
+
+
+
+
+            <div className="relative z-20 ml-20">
               <h3 className="text-white font-black text-[13px] uppercase leading-[1.2] tracking-tight">
                 Together, let's<br />
                 Connect the world to<br />
