@@ -19,32 +19,29 @@ const navLinks = [
     label: "About Us",
     dropdown: [
       { label: "About IHWE", path: "/about", icon: Info, description: "Learn about the mission and vision of IHWE" },
-      { label: "Our Partners", path: "/partners", icon: Handshake, description: "Explore our global network of collaborators" },
+      { label: "Support & Services", path: "/partners", icon: Handshake, description: "Explore our global network of collaborators" },
       { label: "Advisory Board Members", path: "/advisory-board", icon: Users, description: "Meet the experts behind the exhibition" },
       { label: "Media", path: "/media-registration", icon: Camera, description: "Latest updates, press releases and event coverage" },
       { label: "Blogs", path: "/blog", icon: Sparkles, description: "Latest news and insights from the wellness industry" },
-       { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
-      { label: "Media / Gallery", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
+      { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Glimpses of the Event", path: "/gallery", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
     ],
   },
   {
     label: "Participate",
     dropdown: [
-      { label: "Exhibit at IHWE?", path: "/why-exhibit", icon: HelpCircle, description: "Maximize your brand visibility and growth" },
+      { label: "Why Exhibit at IHWE?", path: "/why-exhibit", icon: HelpCircle, description: "Maximize your brand visibility and growth" },
       { label: "Exhibitor List", path: "/exhibitors", icon: FileCheck, description: "View the list of confirmed participating brands" },
-      { label: "Visit the Expo", path: "/book-a-stand", icon: Layout, description: "Secure your premium space at IHWE 2026" },
+      { label: "Why Visit IHWE", path: "/why-visit", icon: Layout, description: "Secure your premium space at IHWE 2026" },
       { label: "Buyer-Seller Meet", path: "/buyer-seller-meet", icon: Users, description: "Connect with buyers and sellers at IHWE" },
       { label: "MSME PMS Scheme", path: "/msme-pms-scheme", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
       { label: "Govt MSME PMS Scheme", path: "/government-msme-pms-schemes", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
     ],
   },
-  {
-    label: "Buyer-Seller Meet",
-    // dropdown: [
-     
-    //   { label: "Industry Segments", path: "/why-visit", icon: Sparkles, description: "Experience the latest in health & wellness" },
-    // ],
-  },
+
+
+  { label: "Buyer-Seller Meet", path: "/buyer-seller-meet" },
+
   {
     label: "Opportunities",
     dropdown: [
@@ -76,7 +73,7 @@ const registrationOptions = [
 
 const quickPills = [
   { label: "Advisory Board", path: "/advisory-board" },
-  { label: "Media / Gallery", path: "/buyer-registration" },
+  { label: "Media / Gallery", path: "/gallery" },
   { label: "Blogs", path: "/blog" },
   { label: "Exhibitor List", path: "/exhibitors" },
   { label: "Seller Reg.", path: "/seller-registration" },
@@ -143,11 +140,10 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
       {scrolled && <div className="h-[72px] xl:h-[80px] w-full" />}
 
       <motion.nav
-        className={`${
-          scrolled
+        className={`${scrolled
             ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60"
             : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
-        } transition-all duration-500`}
+          } transition-all duration-500`}
       >
         <div className="container mx-auto px-6 max-w-[1400px]">
 
@@ -194,9 +190,8 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                   <Link
                     to={link.path || "#"}
                     style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                    className={`px-2 py-2 text-[10.5px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${
-                      location.pathname === link.path ? "text-[#d26019]" : "text-slate-900"
-                    }`}
+                    className={`px-2 py-2 text-[10.5px] font-semibold tracking-[0.1em] uppercase transition-all duration-300 flex items-center gap-1 relative group whitespace-nowrap ${location.pathname === link.path ? "text-[#d26019]" : "text-slate-900"
+                      }`}
                   >
                     {link.label}
                     {link.dropdown && (
@@ -319,7 +314,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                               return item.to.startsWith("tel:") ? (
                                 <a href={item.to} {...commonProps}>{Content}</a>
                               ) : (
-                                <Link to={item.to} {...commonProps}>{Content}</Link>
+                                <Link to={item.to} target="_blank" rel="noopener noreferrer" {...commonProps}>{Content}</Link>
                               );
                             })}
                           </div>
@@ -352,17 +347,17 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
 
             <div className="flex items-center gap-1.5 sm:gap-3">
               <div className="flex flex-col items-center flex-shrink-0">
-                 {/* Mobile MSME Logo Loop */}
-                 {settings?.isMsmeLogoActive && settings?.msmeLogos?.filter(l => l.isActive).length > 0 && (
-                   <div className="flex flex-col items-center relative z-[110]">
-                      <span className="text-[6.5px] font-bold text-slate-500 uppercase tracking-tighter leading-none mb-1 whitespace-nowrap">Approved By</span>
-                      <img 
-                        src={`${SERVER_URL}${settings.msmeLogos.filter(l => l.isActive)[0].imageUrl}`} 
-                        alt="Approved By" 
-                        className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] rounded transition-all active:scale-110"
-                      />
-                   </div>
-                 )}
+                {/* Mobile MSME Logo Loop */}
+                {settings?.isMsmeLogoActive && settings?.msmeLogos?.filter(l => l.isActive).length > 0 && (
+                  <div className="flex flex-col items-center relative z-[110]">
+                    <span className="text-[6.5px] font-bold text-slate-500 uppercase tracking-tighter leading-none mb-1 whitespace-nowrap">Approved By</span>
+                    <img
+                      src={`${SERVER_URL}${settings.msmeLogos.filter(l => l.isActive)[0].imageUrl}`}
+                      alt="Approved By"
+                      className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] rounded transition-all active:scale-110"
+                    />
+                  </div>
+                )}
               </div>
 
               <button
@@ -470,7 +465,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     <div className="text-[12px] font-bold text-slate-900 leading-tight whitespace-nowrap">21 – 23 Aug 2026</div>
                   </div>
                 </div>
-                
+
                 <div className="h-8 w-[1px] bg-amber-200/50 mx-1" />
 
                 <div className="flex items-center gap-1.5 min-w-0">
@@ -508,7 +503,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     return opt.path.startsWith("tel:") ? (
                       <a href={opt.path} {...commonProps}>{Content}</a>
                     ) : (
-                      <Link to={opt.path} {...commonProps}>{Content}</Link>
+                      <Link to={opt.path} target="_blank" rel="noopener noreferrer" {...commonProps}>{Content}</Link>
                     );
                   })}
                 </div>

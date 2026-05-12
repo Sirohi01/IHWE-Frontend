@@ -16,17 +16,17 @@ const Day3FeaturedSpeakers: React.FC<Day3FeaturedSpeakersProps> = ({ data, dayNu
   const speakers = Array.isArray(data) ? data : [];
 
   return (
-    <div className="bg-white h-full flex flex-col">
+    <div className="bg-white h-full flex flex-col py-2 -mt-4" style={{ backgroundColor: '#F5F5F0' }}>
       {/* Header */}
-      <div className="flex items-start justify-between mb-5">
-        <h2 className="text-[14px] font-black text-[#0B2C66] uppercase tracking-tight leading-snug">
+      <div className="flex items-start justify-between mb-5 text-center justify-center items-center ">
+        <h2 className="text-[14px] font-black text-[#0B2C66] uppercase tracking-tight leading-snug mx-auto">
           FEATURED SPEAKERS —{" "}
           <span className="text-[#4E9F3D]">DAY {dayNumber || 3}</span>
         </h2>
       </div>
 
       {/* 2×3 Grid with vertical scroll */}
-      <div className="grid grid-cols-2 gap-x-4 gap-y-6 flex-1 max-h-[390px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="-mt-4  grid grid-cols-2 gap-x-4 gap-y-6 flex-1 max-h-[390px] overflow-y-auto pr-2 custom-scrollbar">
         {speakers.map((speaker, idx) => {
           const isKeynote = speaker.category?.toUpperCase().includes('KEYNOTE');
           const badgeColor = isKeynote ? "text-[#4E9F3D] border-[#4E9F3D]" : "text-[#5F6B7A] border-[#CBD5E0]";

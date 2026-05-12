@@ -40,10 +40,10 @@ const benefits = [
 const WhyAttend: React.FC = () => {
   return (
     <section className="py-8 bg-white">
-      <div className="container mx-auto px-6 max-w-[1320px]">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="container mx-auto px-6 max-w-[1400px]">
+        <div className="flex flex-col lg:flex-row gap-8 items-start ">
           {/* Left */}
-          <div className="lg:w-[38%] sticky top-24">
+          <div className="lg:w-[40%] sticky top-24 pl-5">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -67,7 +67,7 @@ const WhyAttend: React.FC = () => {
           </div>
 
           {/* Right benefits grid */}
-          <div className="lg:w-[62%] grid md:grid-cols-2 gap-x-12 gap-y-6">
+          <div className="lg:w-full grid md:grid-cols-2 gap-x-8 gap-y-3 lg:ml-auto lg:pl-32">
             {benefits.map((benefit, index) => (
               <motion.div
                 key={index}

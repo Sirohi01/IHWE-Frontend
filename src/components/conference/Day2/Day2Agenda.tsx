@@ -193,9 +193,6 @@ const Day2Agenda: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-left text-[11px] text-[#A0AEC0] font-bold uppercase tracking-widest mt-6">
-          * Agenda is subject to change
-        </p>
 
       </div>
     </section>

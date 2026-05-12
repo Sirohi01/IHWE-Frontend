@@ -1,229 +1,1002 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import * as LucideIcons from "lucide-react";
-import {
-    ChevronRight, ArrowRight, Users
-} from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { heroBackgroundApi, whyExhibitApi, SERVER_URL } from "@/lib/api";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import { motion, useInView, animate, AnimatePresence } from "framer-motion";
+import { 
+  Users, Handshake, Globe, Mic, Calendar, MapPin, 
+  ArrowRight, Download, CheckCircle2, Star, Award, 
+  TrendingUp, Search, Target, Megaphone, Zap, BarChart3,
+  Stethoscope, Pill, HeartPulse, Microscope, Building2, 
+  Activity, Sparkles, GraduationCap, Plane, Leaf, Quote,
+  Phone, Mail, Globe2, QrCode, PlayCircle, ShieldCheck, Heart, Check
+} from "lucide-react";
+import SectionContainer from "@/components/layout/SectionContainer";
+import { cn } from "@/lib/utils";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { exhibitorTestimonialsApi, SERVER_URL } from "@/lib/api";
 
-import whyHeroFallback from "../assets/exhi1.jpg";
-import ctaFallback from "../assets/confe.jpg";
+// Assets
+import exhibitBg from "@/assets/exhibitbg.png";
+import pragatiMaidan from "@/assets/Pragati-Maidan.jpg";
+import leafPng from "@/assets/leaf.png";
+import buyerImg1 from "@/assets/h1.png";
+import buyerImg2 from "@/assets/h2.png";
+import buyerImg3 from "@/assets/h3.png";
+import exhib1 from "@/assets/exhib1.png";
+import exhib2 from "@/assets/exhib2.png";
+import exhib3 from "@/assets/exhib3.png";
+import exhib4 from "@/assets/exhib4.png";
+import band1 from "@/assets/band1.png";
+import band2 from "@/assets/band2.png";
+import band3 from "@/assets/band3.png";
+import band4 from "@/assets/band4.png";
+import band5 from "@/assets/band5.png";
+import applybg from "@/assets/applybg.png";
+import leftbg from "@/assets/leftbg.png";
+import top1 from "@/assets/top1.png";
+import top2 from "@/assets/top2.png";
+import top3 from "@/assets/top3.png";
+import top4 from "@/assets/top4.png";
+import top6 from "@/assets/top6.png";
+import herbal1 from "@/assets/herbal1.png";
+import herbal2 from "@/assets/herbal2.png";
+import herbal3 from "@/assets/herbal3.png";
+import herbal5 from "@/assets/herbal5.png";
+import herbal6 from "@/assets/herbal6.png";
+import meet1 from "@/assets/meet1.png";
+import meet2 from "@/assets/meet2.png";
+import meet3 from "@/assets/meet3.png";
+import footbg from "@/assets/footbg.png";
+import leaf2 from "@/assets/leaf2.png";
+
+// ── Animated counter — counts up when scrolled into view ──
+const LocalStatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  // Handle non-numeric strings like "B2B"
+  if (!/^[\d,]+/.test(value)) return <span>{value}</span>;
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
+// Sparkle component for premium buttons
+const Sparkle = ({ style, color = '#ffdd00', shadow = '#ffa500' }: { style?: React.CSSProperties, color?: string, shadow?: string }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: color,
+      textShadow: `0 0 6px ${shadow}, 0 0 12px ${shadow}`,
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
+
+const ExhibitorTestimonialCard = ({ item, expandedCardId, setExpandedCardId, index }: { item: any; expandedCardId: number | null; setExpandedCardId: (id: number | null) => void; index: number }) => {
+  const isExpanded = expandedCardId === index;
+  const setIsExpanded = (val: boolean) => {
+    setExpandedCardId(val ? index : null);
+  };
+  const CHAR_LIMIT = 155;
+  const quoteText = item.quote || "";
+  const isLong = quoteText.length > CHAR_LIMIT;
+
+  return (
+    <div className="relative flex flex-col w-[250px] md:w-[230px] flex-shrink-0" style={{ paddingTop: '32px' }}>
+      {/* Floating Portrait Circle */}
+      <div className="absolute top-0 left-1/2 z-20 flex items-center justify-center" style={{ transform: 'translateX(-50%)' }}>
+        <div
+          className="w-16 h-16 rounded-full border-[3px] border-white flex items-center justify-center overflow-hidden bg-white"
+          style={{ boxShadow: "0 4px 18px rgba(0,0,0,0.15), 0 0 0 2px #e2e8f0" }}
+        >
+          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      {/* Card Body */}
+      <div
+        className="relative bg-white rounded-[22px] border border-slate-100 flex flex-col overflow-hidden group hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500"
+        style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px", height: '280px' }}
+      >
+        {/* Expanded Overlay */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.22 }}
+              className="absolute inset-0 bg-white z-[60] flex flex-col rounded-[22px]"
+              style={{ boxShadow: "inset 0 0 0 2px #e2e8f0" }}
+            >
+              <div
+                className="flex items-center justify-between px-4 py-3 border-b border-slate-100 flex-shrink-0"
+                style={{ background: "linear-gradient(90deg, #f8fdf5 0%, #fff8f3 100%)" }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Quote className="w-4 h-4 text-[#1a6b3a] transform -scale-x-100" />
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Full Review</span>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                  className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full transition-all duration-200"
+                  style={{ color: '#071056', background: '#f0faf0', border: '1px solid #c6e6c6' }}
+                >
+                  ✕ Close
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-4 py-3">
+                <p className="text-slate-800 text-[11.5px] font-medium leading-relaxed">{item.quote}</p>
+              </div>
+              <div className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0" style={{ background: "#fafafa" }}>
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex-shrink-0">
+                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[10px] leading-tight text-[#071056]">{item.companyName1}</div>
+                  {item.companyName2 && (
+                    <div className="font-semibold text-[9px] leading-tight text-[#d26019] mt-0.5">{item.companyName2}</div>
+                  )}
+                  <div className="flex items-center gap-1 text-slate-400 text-[8.5px] mt-1">
+                    <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
+                    {item.location}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Top: Name & Role */}
+        <div className="pt-[52px] px-4 pb-0 text-center flex-shrink-0 min-h-[82px]">
+          {/* Company 1 Slot */}
+          <div className="h-[16px] mb-0.5">
+            <div className="font-bold text-[11.5px] leading-tight text-[#071056] px-1 flex items-center justify-center">
+              <span className={item.companyName1.length > 25 ? "truncate max-w-[190px]" : ""}>{item.companyName1}</span>
+              {item.companyName1.length > 25 && (
+                <span 
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                  className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                >
+                  ...
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {/* Company 2 / Title Slot */}
+          <div className="h-[16px]">
+            <div className="font-bold text-[10.5px] leading-tight text-[#d26019] uppercase tracking-widest px-1 opacity-90 flex items-center justify-center">
+              {item.companyName2 ? (
+                <>
+                  <span className={item.companyName2.length > 30 ? "truncate max-w-[190px]" : ""}>{item.companyName2}</span>
+                  {item.companyName2.length > 30 && (
+                    <span 
+                      onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                      className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                      style={{ fontSize: '14px', lineHeight: '10px' }}
+                    >
+                      ...
+                    </span>
+                  )}
+                </>
+              ) : ""}
+            </div>
+          </div>
+
+          {/* Location Slot */}
+          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-2">
+            <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
+            <span className="truncate max-w-[150px]">{item.location}</span>
+          </div>
+        </div>
+
+        {/* Gradient Divider */}
+        <div
+          className="h-[1.5px] mx-4 mt-3 rounded-full flex-shrink-0"
+          style={{ background: "linear-gradient(90deg, #071056, #d26019)" }}
+        />
+
+        {/* Quote Section */}
+        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 relative min-h-0">
+          <Quote className="w-5 h-5 text-[#1a6b3a] transform -scale-x-100 opacity-70 mb-1.5 flex-shrink-0" />
+          <div className="flex-1 overflow-hidden">
+            <p className="text-slate-700 text-[11px] font-medium leading-relaxed whitespace-pre-line">
+              {isLong ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…` : quoteText}
+            </p>
+          </div>
+          {/* Read More */}
+          <div className="mt-auto pt-2 flex-shrink-0">
+            {isLong && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
+                style={{ color: '#071056', background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)', border: '1px solid #c6e6c6' }}
+              >
+                Read more <span style={{ fontSize: '8px' }}>→</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const WhyExhibit = () => {
-    const [heroData, setHeroData] = useState<any>(null);
-    const [pageData, setPageData] = useState<any>(null);
-    const parallaxRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: parallaxRef,
-        offset: ["start end", "end start"]
-    });
+  const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonialHeading, setTestimonialHeading] = useState("What Our Exhibitors Say");
 
-    useEffect(() => {
-        const fetchAllData = async () => {
-            try {
-                const [hero, page] = await Promise.all([
-                    heroBackgroundApi.getByPage("Exhibit / Why Exhibit?"),
-                    whyExhibitApi.get()
-                ]);
-                if (hero) setHeroData(hero);
-                if (page) setPageData(page);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchAllData();
-    }, []);
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+    window.scrollTo(0, 0);
+    loadTestimonials();
+  }, []);
 
-    const y1 = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
-    const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1]);
+  const loadTestimonials = async () => {
+    try {
+      const data = await exhibitorTestimonialsApi.get();
+      if (data) {
+        if (data.heading) setTestimonialHeading(data.heading);
+        if (data.cards && data.cards.length > 0) {
+          const mapped = data.cards.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)).map((c: any) => ({
+            id: c._id,
+            companyName1: c.companyName1,
+            companyName2: c.companyName2,
+            location: c.location,
+            quote: c.quote,
+            image: c.image ? (c.image.startsWith('http') ? c.image : `${SERVER_URL}${c.image}`) : null
+          }));
+          setTestimonials(mapped);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load testimonials:", error);
+    }
+  };
 
-    const renderDynamicIcon = (iconName: string, className: string, style?: any) => {
-        const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.Rocket;
-        return <IconComponent className={className} style={style} />;
-    };
+  const marqueeStyles = `
+    @keyframes marqueeScrollTestimonials {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .testimonials-marquee {
+      display: flex;
+      width: max-content;
+      animation: marqueeScrollTestimonials 40s linear infinite;
+    }
+    .testimonials-marquee:hover {
+      animation-play-state: paused;
+    }
+  `;
 
-    const highlightText = (text: string, highlight: string) => {
-        if (!highlight) return text;
-        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-        return parts.map((part, i) => 
-            part.toLowerCase() === highlight.toLowerCase() 
-                ? <span key={i} className="text-[#d26019]">{part}</span> 
-                : part
-        );
-    };
+  const stats = [
+    { 
+      img: band1, 
+      val: "8,000+", 
+      label: "VISITORS", 
+      desc1: "Qualified trade visitors",
+      desc2: "from India & across the globe"
+    },
+    { 
+      img: band2, 
+      val: "300+", 
+      label: "EXHIBITORS", 
+      desc1: "Leading brands &",
+      desc2: "organizations participating"
+    },
+    { 
+      img: band3, 
+      val: "25+", 
+      label: "COUNTRIES", 
+      desc1: "Global participation",
+      desc2: "& representation"
+    },
+    { 
+      img: band4, 
+      val: "100+", 
+      label: "SPEAKERS", 
+      desc1: "Industry experts",
+      desc2: "& thought leaders"
+    },
+    { 
+      img: band5, 
+      val: "B2B", 
+      label: "MEETINGS", 
+      desc1: "Pre-scheduled meetings",
+      desc2: "that drive real business"
+    },
+  ];
 
-    const highlightCTAText = (text: string, highlight: string) => {
-        if (!highlight) return text;
-        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-        return parts.map((part, i) => 
-            part.toLowerCase() === highlight.toLowerCase() 
-                ? <span key={i} className="text-orange-400">{part}</span> 
-                : part
-        );
-    };
+  const reasons = [
+    { 
+      title1: "GLOBAL", 
+      title2: "BUYER ACCESS",
+      img: top1, 
+      color: "#1a6b3a", 
+      descLines: [
+        "Meet thousands of",
+        "qualified buyers, importers,",
+        "distributors and decision-",
+        "makers from around the world."
+      ],
+      points: ["Access new global markets", "Connect with key buyers", "Increase international reach"]
+    },
+    { 
+      title1: "MAXIMUM BRAND", 
+      title2: "VISIBILITY",
+      img: top2, 
+      color: "#3b82f6", 
+      descLines: [
+        "Showcase your brand to a",
+        "highly targeted audience",
+        "and stand out in the",
+        "competitive market."
+      ],
+      points: ["High brand recall", "Media & PR exposure", "Digital promotions"]
+    },
+    { 
+      title1: "EXPAND YOUR", 
+      title2: "NETWORK",
+      img: top3, 
+      color: "#1a6b3a", 
+      descLines: [
+        "Build valuable connections",
+        "with industry leaders,",
+        "partners and potential",
+        "collaborators."
+      ],
+      points: ["New partnerships", "Business alliances", "Long-term relationships"]
+    },
+    { 
+      title1: "LAUNCH & SHOWCASE", 
+      title2: "INNOVATIONS",
+      img: top4, 
+      color: "#8b5cf6", 
+      descLines: [
+        "Introduce new products,",
+        "technologies and solutions",
+        "to the right audience."
+      ],
+      points: ["Product launches", "Live demonstrations", "Market validation"]
+    },
+    { 
+      title1: "B2B MATCHMAKING", 
+      title2: "& MEETINGS",
+      img: band5, 
+      color: "#f59e0b", 
+      descLines: [
+        "Pre-scheduled B2B",
+        "meetings to generate",
+        "quality leads and",
+        "new business."
+      ],
+      points: ["One-to-one meetings", "Targeted matchmaking", "Better conversions"]
+    },
+    { 
+      title1: "BOOST SALES &", 
+      title2: "BUSINESS GROWTH",
+      img: top6, 
+      color: "#10b981", 
+      descLines: [
+        "Explore new markets,",
+        "increase exports and",
+        "drive long-term",
+        "business growth."
+      ],
+      points: ["Increase revenue", "Expand customer base", "Sustainable growth"]
+    },
+  ];
 
-    return (
-        <div className="bg-white min-h-screen font-inter">
-            {/* HERO SECTION - Standardized 16:4 Sleek Style */}
-            <section
-                className="hero-background-standard"
-                style={{ 
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : whyHeroFallback})`
-                }}
-            >
+  const industries = [
+    { icon: herbal1, line1: "Ayush &", line2: "Herbal" },
+    { icon: herbal2, line1: "Pharmaceuticals", line2: "& Drugs" },
+    { icon: herbal3, line1: "Medical", line2: "Devices" },
+    { icon: herbal5, line1: "Nutraceuticals", line2: "& Supplements" },
+    { icon: herbal3, line1: "Hospital &", line2: "Diagnostics" },
+    { icon: herbal6, line1: "Fitness &", line2: "Wellness" },
+    { icon: Sparkles, line1: "Beauty &", line2: "Personal Care" },
+    { icon: Heart, line1: "Mental Health", line2: "& Well-being" },
+    { icon: Microscope, line1: "Health Tech &", line2: "Digital Health" },
+    { icon: Plane, line1: "Medical Tourism &", line2: "Wellness Travel" },
+  ];
 
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
+  // Local testimonials removed - now fetched from API
+  // const testimonials = [...];
 
-                <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || "Maximize Visibility & Growth"}
-                    </p>
-                    <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
-                        {heroData?.heading || "Why Exhibit?"}
-                    </h1>
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Join the most significant gathering of healthcare leaders and wellness innovators."}
-                    </p>
-                </div>
-            </section>
-
-            {/* STRATEGIC ADVANTAGES - Refined Headings & Sizes */}
-            <section className="pt-6 pb-24 bg-white relative overflow-hidden">
-                <div className="container mx-auto px-4 relative z-10">
-                    {/* Header - EXACT MATCH TO INDUSTRY ZONES STYLE */}
-                    <div className="text-center mb-16" data-aos="fade-up">
-                        <div className="flex items-center justify-center gap-3 mb-4">
-                            <div className="h-px w-8 bg-[#23471d]" />
-                            <span className="text-[12px] font-bold uppercase tracking-[0.3em] text-[#23471d]">
-                                {pageData?.subheading || "Empower Your Business"}
-                            </span>
-                            <div className="h-px w-8 bg-[#23471d]" />
-                        </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
-                            {highlightText(pageData?.heading || "Drive Growth & Innovation", pageData?.highlightText || "Growth & Innovation")}
-                        </h2>
-                        {pageData?.shortDescription && (
-                            <p className="mt-6 text-slate-500 max-w-2xl mx-auto text-base leading-relaxed">
-                                {pageData.shortDescription}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Grid - Dynamic Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                        {pageData?.benefits?.map((benefit: any, idx: number) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="group relative bg-white border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col h-full overflow-hidden"
-                            >
-                                {/* Image Part */}
-                                <div className="relative h-48 overflow-hidden">
-                                    <LazyLoadImage
-                                        src={`${SERVER_URL}${benefit.image}`}
-                                        alt={benefit.imageAlt || benefit.title}
-                                        effect="blur"
-                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                        wrapperClassName="w-full h-full"
-                                    />
-                                    <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300" />
-                                </div>
-
-                                {/* Icon Badge - Floating */}
-                                <div className="absolute left-6 top-[164px] z-20">
-                                    <div className="w-12 h-12 bg-white flex items-center justify-center rounded-none shadow-lg border-b-2" style={{ borderColor: benefit.accent }}>
-                                        {renderDynamicIcon(benefit.icon, "w-6 h-6", { color: benefit.accent })}
-                                    </div>
-                                </div>
-
-                                {/* Content Part */}
-                                <div className="p-6 pt-10 flex flex-col flex-1">
-                                    <h3 className="text-lg font-bold text-slate-900 mb-3 transition-colors duration-300 group-hover:text-[#23471d]">
-                                        {benefit.title}
-                                    </h3>
-                                    <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-1 font-light">
-                                        {benefit.description}
-                                    </p>
-
-                                    <Link 
-                                        to={benefit.buttonLink || "/contact"}
-                                        className="mt-auto flex items-center gap-2 text-[#d26019] text-[9px] font-bold uppercase tracking-widest transition-all duration-300"
-                                    >
-                                        {benefit.buttonName || "Learn More"} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                </div>
-
-                                {/* Bottom Accent Line */}
-                                <div className="h-1 w-full transition-all duration-500" style={{ backgroundColor: benefit.accent }} />
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA SECTION - PARALLAX EFFECT */}
-            <section
-                ref={parallaxRef}
-                className="relative h-[45vh] md:h-[50vh] overflow-hidden bg-slate-900 flex items-center justify-center"
-            >
-                {/* Parallax Background */}
-                <motion.div
-                    style={{ y: y1, scale, opacity }}
-                    className="absolute inset-0 w-full h-[140%] -top-[20%] z-0"
-                >
-                    <img
-                        src={pageData?.ctaImage ? `${SERVER_URL}${pageData.ctaImage}` : ctaFallback}
-                        alt={pageData?.ctaImageAlt || "Success at IHWE"}
-                        className="w-full h-full object-cover brightness-[0.6] contrast-110"
-                    />
-                </motion.div>
-
-                {/* Content Overlay */}
-                <div className="container mx-auto px-4 relative z-10 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="max-w-3xl mx-auto"
-                    >
-                        <h2 className="text-2xl md:text-4xl font-inter text-white mb-4 leading-tight">
-                            {highlightCTAText(pageData?.ctaTitle || "Ready to Scale Your Brand?", pageData?.ctaHighlightText || "Scale Your Brand?")}
-                        </h2>
-                        <p className="text-slate-300 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed font-light">
-                            {pageData?.ctaDescription || "Secure your premium space today and connect with thousands of decision-makers in the healthcare and wellness sector."}
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <Link
-                                to={pageData?.ctaButton1Link || "/book-a-stall"}
-                                className="px-6 py-2.5 bg-[#23471d] text-white rounded-none font-bold uppercase tracking-widest hover:bg-[#1a3a14] transition-all transform hover:scale-105 flex items-center gap-2 group shadow-2xl text-[10px]"
-                            >
-                                {pageData?.ctaButton1Name || "Book Your Stand Now"} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                            <Link
-                                to={pageData?.ctaButton2Link || "/visitor-registration"}
-                                className="px-6 py-2.5 bg-transparent border border-white/30 text-white rounded-none font-bold uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all flex items-center gap-2 text-[10px]"
-                            >
-                                {pageData?.ctaButton2Name || "Register as Visitor"} <Users className="w-4 h-4" />
-                            </Link>
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Decorative Floating Elements */}
-                <div className="absolute top-10 left-10 w-32 h-32 border border-white/5 rounded-full z-10 animate-pulse hidden lg:block" />
-                <div className="absolute bottom-10 right-10 w-48 h-48 border border-white/5 rounded-full z-10 animate-pulse delay-700 hidden lg:block" />
-            </section>
+  return (
+    <div className="bg-white min-h-screen overflow-x-hidden font-inter">
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+        }
+        .golden-btn-hero {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(255,200,0,0.3), 0 4px 15px rgba(255,165,0,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        @keyframes marqueeScrollTestimonials {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .testimonials-marquee {
+          display: flex;
+          width: max-content;
+          animation: marqueeScrollTestimonials 40s linear infinite;
+        }
+        .testimonials-marquee:hover {
+          animation-play-state: paused;
+        }
+        .golden-btn-hero::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+        .golden-btn-footer {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(255,200,0,0.3), 0 4px 15px rgba(255,165,0,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        .golden-btn-footer::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+        .blue-btn-hero {
+          background: linear-gradient(135deg, #28396C 0%, #3d528f 30%, #1e2a50 60%, #28396C 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(40,57,108,0.3), 0 4px 15px rgba(40,57,108,0.25);
+          position: relative;
+          overflow: hidden;
+        }
+        .blue-btn-hero::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
+      
+      {/* ─── HERO SECTION ─── */}
+      <section className="relative min-h-[360px] flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden">
+        {/* BG Image */}
+        <div className="absolute inset-0 z-0 w-full overflow-hidden pointer-events-none">
+          <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-[center_37%] max-w-full" />
         </div>
-    );
+
+        <SectionContainer className="relative z-10 py-1 md:py-2">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            
+            {/* Left Content */}
+            <div className="w-full lg:w-3/5 -mt-2 md:-mt-4" data-aos="fade-right">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="w-8 h-[2px] bg-[#d26019]" />
+                <p 
+                  className="text-[#d26019] text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em]"
+                  style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.3)' }}
+                >
+                  Why Exhibit at IHWE 2026
+                </p>
+              </div>
+              <h1 
+                className="text-2xl md:text-4xl font-black leading-[1.1] mb-3"
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.4)' }}
+              >
+                <span className="text-[#0e174f] text-xl md:text-3xl">SHOWCASE. CONNECT.</span> <br />
+                <span className="text-[#085006] text-[26px] md:text-[43px]">GROW GLOBALLY.</span>
+              </h1>
+              <p 
+                className="text-base md:text-lg font-bold text-[#0e174f] mb-0.5"
+                style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.2)' }}
+              >
+                Exhibit at IHWE 2026
+              </p>
+              <p 
+                className="text-[#131730] text-[13px] md:text-[15px] max-w-xl mb-5 font-semibold leading-relaxed"
+                style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
+              >
+                India's Leading International Platform for <br />
+                <span className="text-[#255428] font-bold">Health, Medical, Wellness & Well-being</span>
+              </p>
+
+              {/* Feature Highlights with Images & Dividers */}
+              <div className="flex flex-wrap items-center gap-1.5 md:gap-2.5 mb-8">
+                {[
+                  { main: "Global", sub: "Exposure", img: exhib1 },
+                  { main: "Quality", sub: "Connections", img: exhib2 },
+                  { main: "Business", sub: "Growth", img: exhib3 },
+                  { main: "Brand", sub: "Visibility", img: exhib4 }
+                ].map((item, i, arr) => (
+                  <React.Fragment key={i}>
+                    <div className="flex items-center gap-1">
+                      <img src={item.img} alt={item.main} className="w-5 md:w-7 h-auto shrink-0" />
+                      <div className="flex flex-col text-left">
+                        <span className="text-[10px] font-black text-[#020633] uppercase leading-none">{item.main}</span>
+                        <span className="text-[10px] font-bold text-[#d26019] uppercase tracking-tighter mt-0.5">{item.sub}</span>
+                      </div>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="h-6 w-[1px] bg-slate-300/40 hidden sm:block mx-0.5" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-3">
+                <div className="relative">
+                  <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-12px', left: '10%', animationDelay: '0s' }} />
+                  <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-15px', left: '50%', animationDelay: '0.4s' }} />
+                  <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-10px', right: '10%', animationDelay: '0.8s' }} />
+                  <Link 
+                    to="/book-a-stand" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="golden-btn-hero text-[#050A1A] px-6 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all active:scale-95 shadow-2xl relative z-10"
+                  >
+                    Book Your Stall <ArrowRight size={14} />
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-12px', left: '10%', animationDelay: '0.2s' }} />
+                  <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-15px', left: '50%', animationDelay: '0.6s' }} />
+                  <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-10px', right: '10%', animationDelay: '1s' }} />
+                  <a 
+                    href="/pdf.pdf" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="blue-btn-hero text-white px-6 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all active:scale-95 shadow-lg relative z-10"
+                  >
+                    Download Brochure <Download size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Card */}
+            <div className="w-full lg:w-[190px] ml-auto" data-aos="fade-left">
+              <div className="bg-white px-4 py-6 rounded-xl shadow-2xl border border-slate-100 flex flex-col gap-5">
+                
+                {/* Date */}
+                <div className="flex items-start gap-2.5">
+                  <Calendar className="text-[#0e174f] shrink-0" size={26} strokeWidth={1.5} />
+                  <div className="flex flex-col">
+                    <h3 className="text-lg md:text-xl font-black text-[#0e174f] leading-none">21 – 23</h3>
+                    <p className="text-[10px] font-bold text-[#0e174f] uppercase tracking-wide mt-0.5">AUGUST 2026</p>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="text-[#2f8f3a] shrink-0" size={26} strokeWidth={1.5} />
+                  <div className="flex flex-col">
+                    <h3 className="text-[12px] font-black text-[#0e174f] leading-tight uppercase">PRAGATI MAIDAN,</h3>
+                    <p className="text-[11px] font-bold text-[#0e174f] uppercase tracking-tight">NEW DELHI, INDIA</p>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="w-full h-px bg-slate-200" />
+
+                {/* Quote */}
+                <div className="text-center -mt-1">
+                  <p className="text-[#316234] font-black text-[11px] leading-tight">
+                    A Global Convergence
+                  </p>
+                  <p className="text-[#0e174f] font-black text-[11px] leading-tight">
+                    of Health & Wellness
+                  </p>
+                  <p className="text-[#0e174f] font-black text-[11px] leading-tight mt-0.5">
+                    Innovators
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── STATS BAND ─── */}
+      <div className="relative z-20 -mt-6 md:-mt-7">
+        <SectionContainer>
+          <div 
+            className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"
+            style={{ 
+              backgroundColor: '#134E8E',
+              boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
+            }}
+          >
+            <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-0">
+              {stats.map((stat, i) => (
+                <React.Fragment key={i}>
+                  <div className="flex flex-col items-center text-center group flex-1">
+                    <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                    <h4 className="text-base md:text-lg font-bold text-white leading-none">
+                      <LocalStatCounter value={stat.val} />
+                    </h4>
+                    <p className="text-[7.5px] md:text-[9.5px] font-bold text-[#f5c842] uppercase tracking-widest leading-tight">{stat.label}</p>
+                  </div>
+                  {i < stats.length - 1 && (
+                    <div className="hidden md:block w-px h-6 bg-white/20" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </SectionContainer>
+      </div>
+
+      {/* ─── TOP REASONS SECTION ─── */}
+      <section className="mt-4 pt-4 pb-0 bg-slate-50">
+        <SectionContainer>
+          <div className="text-center mb-4" data-aos="fade-up">
+            <div className="flex items-center justify-center gap-4 mb-4">
+               <span className="w-12 h-[2px] bg-[#1a6b3a]" />
+               <span className="text-[#0c0c3e] font-semibold text-lg md:text-xl uppercase tracking-[0.1em]">Top Reasons to Exhibit at IHWE 2026</span>
+               <span className="w-12 h-[2px] bg-[#1a6b3a]" />
+            </div>
+            {/* <h2 className="text-3xl md:text-4xl font-black text-[#00153c]">Why Your Brand Needs to be Here</h2> */}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            {reasons.map((reason, i) => (
+              <div 
+                key={i}
+                className="bg-white p-4 md:p-5 rounded-2xl border border-transparent flex flex-col items-center text-center group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset' }}
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+              >
+                <div className="mb-4 h-12 md:h-16 flex items-center justify-center transition-transform group-hover:scale-110">
+                  <img src={reason.img} alt="" className="w-12 md:w-16 h-full object-contain" />
+                </div>
+                
+                <h3 className="text-[11px] md:text-[12px] font-black text-[#0c0c3e] mb-3 tracking-tight leading-tight uppercase min-h-[40px] flex flex-col items-center justify-center">
+                  <span>{reason.title1}</span>
+                  <span>{reason.title2}</span>
+                </h3>
+                
+                <div className="text-slate-900 text-[9px] md:text-[10px] leading-tight mb-4 font-bold flex-1 flex flex-col items-center justify-center">
+                  {reason.descLines.map((line, idx) => (
+                    <p key={idx}>{line}</p>
+                  ))}
+                </div>
+                
+                <ul className="space-y-1.5 w-full text-left border-t border-slate-100 pt-4 mt-auto">
+                  {reason.points.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-1.5 text-[8px] md:text-[9px] font-bold text-slate-700">
+                      <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── GOVT PMS SCHEME BANNER ─── */}
+      <section className="py-0 mt-4">
+        <SectionContainer>
+          <div
+            className="w-full rounded-[30px] flex flex-row items-stretch overflow-hidden relative"
+            style={{
+              boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+              background: '#fdf9ed',
+              minHeight: '160px'
+            }}
+            data-aos="fade-up"
+          >
+            {/* Left Image */}
+            <div className="w-[44%] md:w-[38%] flex-shrink-0 relative overflow-hidden" style={{ minHeight: '160px' }}>
+              <img
+                src={leftbg}
+                alt="PMS Scheme"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+            </div>
+
+            {/* Right Text Content */}
+            <div className="flex-1 flex flex-col justify-center px-5 md:px-10 py-5 md:py-6 relative z-10">
+              {/* Heading */}
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
+                {/* <p className="text-[10px] md:text-[11px] font-black text-[#1a682d] uppercase tracking-widest">Government Scheme</p> */}
+              </div>
+              <h2 className="text-[15px] md:text-[22px] font-black text-[#00153c] leading-tight mb-1 uppercase">
+                Exhibit Under <br />
+                <span className="text-[#1a682d]">Government PMS Scheme</span>
+              </h2>
+              <p className="text-[10px] md:text-[12px] font-semibold mb-3 leading-relaxed max-w-md" style={{ color: '#070e48' }}>
+                Eligible MSMEs can get reimbursement support on <br />
+                participation expenses under the PMS Scheme.
+              </p>
+
+              {/* Feature items */}
+              <div className="flex items-center gap-0">
+                {[
+                  { img: band1, line1: 'Stall Cost', line2: 'Support' },
+                  { img: band2, line1: 'Travel', line2: 'Assistance' },
+                  { img: band3, line1: 'Global', line2: 'Exposure' },
+                ].map((item, i, arr) => (
+                  <div key={i} className="flex items-center">
+                    <div className="flex items-center gap-2 px-3">
+                      <img src={item.img} alt={item.line1} className="w-7 h-7 md:w-9 md:h-9 object-contain flex-shrink-0" />
+                      <div className="flex flex-col leading-none">
+                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line1}</span>
+                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line2}</span>
+                      </div>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="w-px h-8 bg-slate-300 flex-shrink-0" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA Button - Bottom Right, above leaf */}
+            <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end">
+              <div className="relative group/btn">
+                {/* Sparkles */}
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-12px', left: '40%', animationDelay: '0.5s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
+                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
+                <Link
+                  to="/msme-pms-scheme"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02]"
+                  style={{ 
+                    background: 'linear-gradient(135deg, #5E0006 0%, #3D0004 100%)',
+                    boxShadow: '0 4px 14px rgba(94, 0, 6, 0.4)'
+                  }}
+                >
+                  Apply Under PMS Scheme <ArrowRight size={13} />
+                </Link>
+              </div>
+              <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1 mr-0.5">*T&amp;C Apply</p>
+            </div>
+
+            {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
+            <img
+              src={leaf2}
+              alt=""
+              aria-hidden="true"
+              className="absolute bottom-0 right-0 w-[140px] md:w-[210px] h-auto object-contain pointer-events-none select-none z-0"
+              style={{ opacity: 1 }}
+            />
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── INDUSTRIES WE SERVE ─── */}
+      <section className="pt-4 pb-8 bg-white">
+        <SectionContainer>
+          <div className="text-center mb-6" data-aos="fade-up">
+            <div className="flex items-center justify-center gap-4 mb-4">
+               <span className="w-12 h-[2px] bg-[#1a6b3a]" />
+               <span className="text-[#0a092a] font-semibold text-lg md:text-xl uppercase tracking-[0.1em]">Industries We Serve</span>
+               <span className="w-12 h-[2px] bg-[#1a6b3a]" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-3">
+            {industries.map((item, i) => (
+              <div 
+                key={i} 
+                className="flex flex-col items-center text-center group px-0.5 py-4 rounded-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-[#d0d9e8] hover:shadow-[0_14px_30px_rgba(0,0,0,0.11)]"
+                style={{ 
+                  background: 'linear-gradient(145deg, #ffffff 0%, #e8f8f2 55%, #ddf0fa 100%)',
+                  boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+                  border: '1px solid #e8edf2'
+                }}
+                data-aos="zoom-in"
+                data-aos-delay={i * 50}
+              >
+                <div className="mb-3 transition-transform group-hover:scale-110">
+                  {typeof item.icon === 'string' ? (
+                    <img src={item.icon} alt={item.line1} className="w-8 h-8 object-contain" />
+                  ) : (
+                    <item.icon className="text-[#1a6b3a]" size={28} />
+                  )}
+                </div>
+                <div className="flex flex-col items-center justify-center min-h-[30px] w-full px-1">
+                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-nowrap">{item.line1}</span>
+                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-nowrap">{item.line2}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── BUYER & DECISION MAKERS SECTION ─── */}
+      <section className="py-2 bg-[#e9f3fd] overflow-hidden relative">
+        <SectionContainer>
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-3" data-aos="fade-right">
+              <h2 className="text-xl md:text-2xl font-black text-[#08083c] mb-1 leading-[1.1]">
+                MEET GENUINE BUYERS & <br />
+                DECISION MAKERS
+              </h2>
+              
+              <div className="space-y-2 mb-2">
+                {[
+                  "Hospitals, Clinics & Healthcare Providers",
+                  "Importers, Exporters & Distributors",
+                  "Pharmacies & Retail Chains",
+                  "Wellness Centres & Spa Chains",
+                  "E-commerce & Online Retailers",
+                  "Government & Institutional Buyers",
+                  "Investors & Business Partners",
+                  "Researchers & Academicians"
+                ].map((text, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#5e9439] flex items-center justify-center shrink-0 shadow-sm">
+                      <Check size={12} className="text-white" strokeWidth={4} />
+                    </div>
+                    <span className="text-[#08083c] font-semibold text-sm">{text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <Link to="/book-a-stand" className="golden-btn-footer text-[#050A1A] px-8 py-3 rounded-lg font-black text-[11px] uppercase tracking-wider flex items-center gap-2 w-fit hover:scale-[1.02] transition-all group">
+                <div className="absolute inset-0 pointer-events-none">
+                  <Sparkle style={{ top: '-4px', left: '10%', animationDelay: '0s' }} />
+                  <Sparkle style={{ top: '-6px', left: '40%', animationDelay: '0.4s' }} />
+                  <Sparkle style={{ top: '-2px', right: '15%', animationDelay: '0.8s' }} />
+                  <Sparkle style={{ bottom: '-4px', left: '25%', animationDelay: '0.2s' }} />
+                  <Sparkle style={{ bottom: '-6px', right: '30%', animationDelay: '0.6s' }} />
+                </div>
+                Book Your Stall <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform relative z-10" />
+              </Link>
+            </div>
+
+            {/* Right Skewed Images */}
+            <div className="lg:col-span-7" data-aos="fade-left">
+              <div className="flex gap-2 h-[320px] md:h-[380px]">
+                {[meet1, meet2, meet3].map((img, idx) => (
+                  <div 
+                    key={idx}
+                    className="flex-1 overflow-hidden border-[3px] border-white shadow-xl transform -skew-x-12 rounded-[20px]"
+                  >
+                    <img 
+                      src={img} 
+                      alt={`Meet ${idx + 1}`} 
+                      className="w-full h-full object-cover transform skew-x-12 scale-125" 
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── EXHIBITOR TESTIMONIALS ─── */}
+      <section className="pt-4 pb-4 bg-white relative overflow-hidden">
+        <style>{marqueeStyles}</style>
+        <div className="absolute top-1/2 left-0 w-full h-px bg-slate-100 z-0" />
+        
+        <SectionContainer className="relative z-10 !max-w-none px-0">
+          <div className="text-center mb-10" data-aos="fade-up">
+            <div className="flex items-center justify-center gap-4">
+              <span className="w-10 md:w-16 h-[2px] bg-[#1a6b3a] rounded-full" />
+              <h2 className="text-xl md:text-2xl font-bold text-[#071056] uppercase tracking-tight">{testimonialHeading}</h2>
+              <span className="w-10 md:w-16 h-[2px] bg-[#1a6b3a] rounded-full" />
+            </div>
+          </div>
+
+          <div className="relative w-full overflow-hidden -mt-16">
+            <div className="testimonials-marquee flex gap-10 py-12">
+              {[...testimonials, ...testimonials].map((item, i) => (
+                <div key={i}>
+                  <ExhibitorTestimonialCard 
+                    item={item} 
+                    index={i}
+                    expandedCardId={expandedCardId}
+                    setExpandedCardId={setExpandedCardId}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* ─── FINAL IMAGE BANNER ─── */}
+      {/* <section className="pb-12 pt-0 -mt-12">
+ 
+        <div className="flex items-center justify-center gap-4 mb-6 px-4" data-aos="fade-up">
+          <span className="w-8 md:w-12 h-[2px] bg-[#1a6b3a] rounded-full" />
+          <h2 className="text-xl md:text-3xl font-bold text-[#071056] uppercase tracking-tight text-center">
+            Why IHWE is Different?
+          </h2>
+          <span className="w-8 md:w-12 h-[2px] bg-[#1a6b3a] rounded-full" />
+        </div>
+
+        <div 
+          className="w-full shadow-lg h-[200px] md:h-[260px]"
+          style={{ 
+            backgroundImage: `url(${footbg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
+      </section> */}
+    </div>
+  );
 };
 
 export default WhyExhibit;

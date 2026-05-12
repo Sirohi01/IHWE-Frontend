@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, useInView, animate } from 'framer-motion';
 import {
   Users, Globe2, Store, Mic2, Handshake, Package, Camera, ChevronLeft, ChevronRight, Leaf, 
-  Building2, Mic, Sparkles, Globe
+  Building2, Mic, Sparkles, Globe, X, ZoomIn
 } from 'lucide-react';
+import { AnimatePresence } from 'framer-motion';
 import { glimpseApi, SERVER_URL } from '../../lib/api';
 import SectionContainer from '../layout/SectionContainer';
 
@@ -21,18 +22,45 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Camera: <Camera className="w-5 h-5" />,
 };
 
-const EventGlimpses = () => {
-  const [glimpseData, setGlimpseData] = useState<any>(null);
-  const [current, setCurrent] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(5);
+// ── Animated counter — counts up when scrolled into view ──
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
 
   useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
+const EventGlimpses = () => {
+  const [glimpseData, setGlimpseData] = useState<any>(null);
+  const [selectedImg, setSelectedImg] = useState<any>(null);
+
+  // No longer using visibleCount or resize listener for the carousel logic since it's a marquee now
+  // But we'll keep the resize hook for any potential mobile layout adjustments if needed
+  useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) setVisibleCount(1);
-      else if (window.innerWidth < 1024) setVisibleCount(3);
-      else setVisibleCount(5);
+      // Logic removed as marquee handles responsiveness via CSS
     };
-    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -51,31 +79,12 @@ const EventGlimpses = () => {
     fetchData();
   }, []);
 
-  const nextSlide = useCallback(() => {
-    if (!glimpseData?.images?.length) return;
-    const maxIndex = Math.max(0, glimpseData.images.length - visibleCount);
-    setCurrent(prev => (prev >= maxIndex ? 0 : prev + 1));
-  }, [glimpseData, visibleCount]);
-
-  const prevSlide = () => {
-    if (!glimpseData?.images?.length) return;
-    const maxIndex = Math.max(0, glimpseData.images.length - visibleCount);
-    setCurrent(prev => (prev <= 0 ? maxIndex : prev - 1));
-  };
-
-  useEffect(() => {
-    if (glimpseData?.images?.length > visibleCount) {
-      const timer = setInterval(nextSlide, 5000);
-      return () => clearInterval(timer);
-    }
-  }, [nextSlide, glimpseData, visibleCount]);
+  if (!glimpseData) return null;
 
   if (!glimpseData) return null;
 
   const images = glimpseData.images || [];
   const stats = glimpseData.counters || [];
-  const maxIndex = Math.max(0, images.length - visibleCount);
-  const GAP = visibleCount > 1 ? 2 : 0;
 
 
 
@@ -161,94 +170,86 @@ const EventGlimpses = () => {
           </div>
         </div>
 
-        {/* Carousel Area */}
-        <div className="relative mb-0 px-2 max-w-[1200px] mx-auto">
-          {/* Arrows */}
-          {images.length > visibleCount && (
-            <>
-              <button
-                onClick={prevSlide}
-                className="absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300 active:scale-95"
+        {/* Marquee Area */}
+        <div className="relative mb-0 overflow-hidden rounded-2xl shadow-xl bg-white/40 backdrop-blur-sm">
+          <style>{`
+            .glimpse-marquee-container {
+              display: flex;
+              width: max-content;
+              animation: scroll-glimpse 50s linear infinite;
+            }
+            @keyframes scroll-glimpse {
+              from { transform: translateX(0); }
+              to { transform: translateX(-50%); }
+            }
+            .glimpse-marquee-container:hover {
+              animation-play-state: paused;
+            }
+            .glimpse-card {
+              width: 280px;
+              height: 260px;
+              flex-shrink: 0;
+              margin-left: -40px;
+              clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+              cursor: pointer;
+              position: relative;
+              transition: all 0.5s ease;
+            }
+            .glimpse-card:first-child {
+              margin-left: 0;
+            }
+            @media (max-width: 768px) {
+              .glimpse-card {
+                width: 220px;
+                height: 200px;
+                margin-left: -30px;
+              }
+              @keyframes scroll-glimpse {
+                from { transform: translateX(0); }
+                to { transform: translateX(-50%); }
+              }
+            }
+          `}</style>
+          
+          <div className="glimpse-marquee-container">
+            {/* Double images for seamless loop */}
+            {[...images, ...images, ...images].map((img: any, idx: number) => (
+              <div
+                key={idx}
+                className="glimpse-card group/card"
+                onClick={() => setSelectedImg(img)}
               >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-[#2f8f3a] shadow-lg flex items-center justify-center text-white border border-[#2f8f3a] hover:bg-[#0b4d17] transition-all duration-300 active:scale-95"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </>
-          )}
-
-          {/* Slider */}
-          <div className="overflow-hidden rounded-2xl shadow-xl">
-            <motion.div
-              className="flex"
-              style={{ gap: `${GAP}px` }}
-              animate={{ x: `${-(current * (100 / visibleCount))}%` }}
-              transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-            >
-              {images.map((img: any, idx: number) => {
-                const isFirstVisible = idx === current;
-                const isLastVisible = idx === current + visibleCount - 1;
+                <img
+                  src={img.url.startsWith('http') ? img.url : `${SERVER_URL}${img.url}`}
+                  alt={img.title || 'Event Glimpse'}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+                />
                 
-                const itemWidth = `calc((100% + ${(visibleCount - 1) * (visibleCount > 1 ? 35 : 0)}px) / ${visibleCount})`;
-                const negativeMargin = visibleCount > 1 ? '-35px' : '0';
+                {/* Overlay with Zoom Icon */}
+                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/card:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+                    <ZoomIn className="text-white w-10 h-10 mb-2 transform scale-50 group-hover/card:scale-100 transition-transform duration-500" />
+                    <span className="text-white font-bold text-center text-[12px] uppercase tracking-wider">{img.title}</span>
+                </div>
 
-                return (
-                  <div
-                    key={idx}
-                    className={`relative flex-shrink-0 group/card overflow-hidden transition-all duration-700 
-                      ${isFirstVisible ? 'rounded-l-3xl' : ''} 
-                      ${isLastVisible ? 'rounded-r-3xl' : ''}`}
-                    style={{
-                      width: itemWidth,
-                      minWidth: itemWidth,
-                      marginLeft: idx === 0 ? '0' : negativeMargin,
-                      height: visibleCount > 1 ? '260px' : '320px',
-                      zIndex: isFirstVisible || isLastVisible ? 20 : 10,
-                      clipPath: visibleCount > 1 
-                        ? (isFirstVisible 
-                            ? 'polygon(0% 0%, 100% 0%, 85% 100%, 0% 100%)' 
-                            : isLastVisible
-                              ? 'polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%)'
-                              : 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)')
-                        : 'none',
-                    }}
-                  >
-                    <img
-                      src={img.url.startsWith('http') ? img.url : `${SERVER_URL}${img.url}`}
-                      alt={img.title || 'Event Glimpse'}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
-                    />
-                    
-                    {/* Bottom Green Overlay - Shorter & Subtle */}
-                    <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#0b4d17]/80 via-[#0b4d17]/30 to-transparent opacity-80" />
+                {/* Bottom Green Gradient Overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#0b4d17]/80 to-transparent opacity-60" />
 
-                    {/* Image Title on Hover */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center p-4">
-                        <span className="text-white font-bold text-center text-sm">{img.title}</span>
-                    </div>
-
-                    {/* Decorative Dots - On Every Image */}
-                    <div className="absolute bottom-6 right-4 opacity-40">
-                      <div className="grid grid-cols-3 gap-1">
-                        {[...Array(9)].map((_, i) => (
-                          <div key={i} className="w-1 h-1 bg-white rounded-full" />
-                        ))}
-                      </div>
-                    </div>
+                {/* Decorative Dots */}
+                <div className="absolute bottom-6 right-8 opacity-40">
+                  <div className="grid grid-cols-3 gap-1">
+                    {[...Array(9)].map((_, i) => (
+                      <div key={i} className="w-0.5 h-0.5 bg-white rounded-full" />
+                    ))}
                   </div>
-                );
-              })}
-            </motion.div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Stats Footer Bar */}
-        <div className="px-2 mt-2">
-          <div className="max-w-[1200px] mx-auto bg-[#041a0a] rounded-[24px] md:rounded-full p-2.5 flex flex-col md:flex-row items-stretch border border-white/10 shadow-2xl overflow-hidden gap-5 md:gap-0">
+        <div className="px-0 mt-3">
+          <div className="w-full bg-[#041a0a] rounded-[24px] md:rounded-full p-2.5 flex flex-col md:flex-row items-stretch border border-white/10 shadow-2xl overflow-hidden gap-5 md:gap-0">
             <div className="flex-1 w-full grid grid-cols-2 sm:grid-cols-3 md:flex md:items-center md:justify-start px-2 py-3 md:py-0 gap-y-6 md:gap-0">
               {stats.map((stat: any, idx: number) => (
                 <div key={idx} className="flex flex-col md:flex-row items-start md:items-center gap-2.5 md:gap-3 px-3 md:px-4 border-white/10 md:border-r last:border-r-0 flex-1">
@@ -256,7 +257,9 @@ const EventGlimpses = () => {
                     {ICON_MAP[stat.icon] || <Users size={16} />}
                   </div>
                   <div className="flex flex-col items-start text-left">
-                    <span className="text-[#2f8f3a] font-black text-[13px] md:text-[14px] leading-tight mb-0.5">{stat.number}</span>
+                    <span className="text-[#2f8f3a] font-black text-[13px] md:text-[14px] leading-tight mb-0.5">
+                      {/^[\d,]+/.test(stat.number) ? <StatCounter value={stat.number} /> : stat.number}
+                    </span>
                     <span className="text-white/70 text-[8px] md:text-[9px] uppercase tracking-[0.1em] font-bold leading-tight">{stat.label}</span>
                   </div>
                 </div>
@@ -282,6 +285,45 @@ const EventGlimpses = () => {
         </div>
 
       </SectionContainer>
+
+      {/* Lightbox / Zoom Modal */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 md:p-10"
+            onClick={() => setSelectedImg(null)}
+          >
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute top-6 right-6 text-white bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors"
+            >
+              <X size={32} />
+            </motion.button>
+            
+            <motion.div
+              initial={{ scale: 0.8, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.8, y: 50 }}
+              className="relative max-w-5xl w-full max-h-[80vh] flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={selectedImg.url.startsWith('http') ? selectedImg.url : `${SERVER_URL}${selectedImg.url}`}
+                alt={selectedImg.title}
+                className="w-full h-full object-contain rounded-xl shadow-2xl border border-white/10"
+              />
+              <div className="mt-6 text-center px-4">
+                <h3 className="text-white font-black text-2xl uppercase tracking-widest">{selectedImg.title}</h3>
+                <p className="text-white/60 text-sm mt-2">{glimpseData.counterText}</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

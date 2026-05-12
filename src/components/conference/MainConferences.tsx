@@ -8,8 +8,39 @@ import day1 from "../../assets/confrencetrack/day1.png";
 import day2 from "../../assets/confrencetrack/day2.png";
 import day3 from "../../assets/confrencetrack/day3.png";
 
+import { conferenceTrackApi, SERVER_URL } from "@/lib/api";
+
+const ICON_MAP: { [key: string]: React.ReactNode } = {
+  Lightbulb: <Lightbulb className="w-10 h-10 text-white" />,
+  Sprout: <Sprout className="w-10 h-10 text-white" />,
+  ShieldPlus: <ShieldPlus className="w-10 h-10 text-white" />,
+};
+
 const MainConferences: React.FC = () => {
-  const mainConferences = [
+  const [tracks, setTracks] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchTracks = async () => {
+      try {
+        const result = await conferenceTrackApi.get();
+        if (result && result.length > 0) {
+          setTracks(result);
+        }
+      } catch (error) {
+        console.error("Error fetching conference tracks:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTracks();
+  }, []);
+
+  const mainConferences = tracks.length > 0 ? tracks.map(track => ({
+    ...track,
+    image: track.image ? `${SERVER_URL}${track.image}` : (track.day === "DAY 1" ? day1 : track.day === "DAY 2" ? day2 : day3),
+    icon: ICON_MAP[track.iconName] || <Lightbulb className="w-10 h-10 text-white" />
+  })) : [
     {
       day: "DAY 1",
       date: "21 AUGUST 2026",
@@ -63,7 +94,7 @@ const MainConferences: React.FC = () => {
 
   return (
     <section className="py-8 bg-white">
-      <div className="container mx-auto px-6 max-w-[1400px]">
+      <div className="mx-auto max-w-[1330px] pl-6 lg:pl-2">
 
 
         <div className="text-center mb-6">

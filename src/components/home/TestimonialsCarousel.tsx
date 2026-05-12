@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 import {
-  Quote, ChevronLeft, ChevronRight, MapPin, Play,
+  Quote, ChevronLeft, ChevronRight, MapPin, Play, ArrowRight,
   Globe, Users, Handshake, Mic2, Leaf, Building2, PlayCircle, Store
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import SectionContainer from '../layout/SectionContainer';
 import { cn } from "@/lib/utils";
 import testImg from '../../assets/test11.jpeg';
 import leafPng from '../../assets/leaf.png';
@@ -33,6 +35,25 @@ const Sparkle = ({ style }: { style?: React.CSSProperties }) => (
   </span>
 );
 
+// ─── Sparkle component for teal button ───
+const TealSparkle = ({ style }: { style?: React.CSSProperties }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: '#5ef5e0',
+      textShadow: '0 0 6px #0A7C6E, 0 0 12px #0fe8d0',
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
+
 // ─── Logo Box ───
 const LogoBox = ({ text, color }: { text: string; color: string }) => (
   <div
@@ -43,6 +64,35 @@ const LogoBox = ({ text, color }: { text: string; color: string }) => (
   </div>
 );
 
+// ── Animated counter — counts up when scrolled into view ──
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
 const STATS = [
   { icon: Globe, value: "1000+", label: "Global Buyers", color: "#005c22ff" },
   { icon: Users, value: "8000+", label: "Visitors/Delegates", color: "#004ac2ff" },
@@ -51,8 +101,11 @@ const STATS = [
 ];
 
 // ─── Testimonial Card ───
-const TestimonialCard = ({ item }: { item: any }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const TestimonialCard = ({ item, expandedCardId, setExpandedCardId }: { item: any; expandedCardId: string | null; setExpandedCardId: (id: string | null) => void }) => {
+  const isExpanded = expandedCardId === item._id;
+  const setIsExpanded = (val: boolean) => {
+    setExpandedCardId(val ? item._id : null);
+  };
   const CHAR_LIMIT = 155;
   const quoteText = item.quote || "";
   const isLong = quoteText.length > CHAR_LIMIT;
@@ -75,7 +128,7 @@ const TestimonialCard = ({ item }: { item: any }) => {
             <img
               src={`${SERVER_URL}${item.logo}`}
               alt="logo"
-              className="w-full h-full object-contain p-1.5"
+              className="w-full h-full object-contain p-0.5 transform scale-110"
             />
           </div>
         ) : (
@@ -91,7 +144,7 @@ const TestimonialCard = ({ item }: { item: any }) => {
         className="relative bg-white rounded-[22px] border border-slate-100 flex flex-col overflow-hidden group hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] transition-all duration-500"
         style={{
           boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
-          minHeight: '240px',
+          height: '280px',
         }}
       >
         {/* ── Expanded Full-Text Overlay ── */}
@@ -134,25 +187,30 @@ const TestimonialCard = ({ item }: { item: any }) => {
                 </p>
               </div>
 
-              {/* Company info footer */}
+              {/* Company info footer - UPDATED to show full name */}
               <div
                 className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0"
                 style={{ background: "#fafafa" }}
               >
                 {item.logo ? (
-                  <div className="w-7 h-7 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
-                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0.5" />
+                  <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
+                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0 transform scale-110" />
                   </div>
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
                     {item.company1?.substring(0, 2)}
                   </div>
                 )}
-                <div className="min-w-0">
-                  <div className="font-bold text-[10px] truncate" style={{ color: item.color || '#23471d' }}>
-                    {item.company1}{item.company2 ? ` ${item.company2}` : ''}
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-[10px] leading-tight" style={{ color: item.color || '#23471d' }}>
+                    {item.company1}
                   </div>
-                  <div className="flex items-center gap-1 text-slate-400 text-[9px]">
+                  {item.company2 && (
+                    <div className="font-semibold text-[9px] leading-tight opacity-80 mt-0.5" style={{ color: item.color || '#23471d' }}>
+                      {item.company2}
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 text-slate-400 text-[8.5px] mt-1">
                     <MapPin className="w-2.5 h-2.5 text-[#d26019] flex-shrink-0" />
                     {item.location}
                   </div>
@@ -163,14 +221,45 @@ const TestimonialCard = ({ item }: { item: any }) => {
         </AnimatePresence>
 
         {/* ── Top: Company Info (below floating logo) ── */}
-        <div className="pt-10 px-4 pb-0 text-center flex-shrink-0">
-          <div className="font-bold text-[12px] leading-tight" style={{ color: item.color || '#23471d' }}>
-            {item.company1}
-            {item.company2 && <><br />{item.company2}</>}
+        <div className="pt-[52px] px-4 pb-0 text-center flex-shrink-0 min-h-[82px]">
+          {/* Company 1 Slot */}
+          <div className="h-[16px] mb-0.5">
+            <div className="font-bold text-[11.5px] leading-tight px-1 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              <span className={item.company1.length > 25 ? "truncate max-w-[190px]" : ""}>{item.company1}</span>
+              {item.company1.length > 25 && (
+                <span 
+                  onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                  className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                >
+                  ...
+                </span>
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-1">
+          
+          {/* Company 2 / Title Slot */}
+          <div className="h-[16px]">
+            <div className="font-bold text-[10.5px] leading-tight px-1 opacity-90 flex items-center justify-center" style={{ color: item.color || '#23471d' }}>
+              {item.company2 ? (
+                <>
+                  <span className={item.company2.length > 30 ? "truncate max-w-[190px]" : ""}>{item.company2}</span>
+                  {item.company2.length > 30 && (
+                    <span 
+                      onClick={(e) => { e.stopPropagation(); setIsExpanded(true); }}
+                      className="text-red-600 font-black cursor-pointer hover:underline ml-0.5"
+                    >
+                      ...
+                    </span>
+                  )}
+                </>
+              ) : ""}
+            </div>
+          </div>
+
+          {/* Location Slot */}
+          <div className="flex items-center justify-center gap-1 text-slate-500 text-[9.5px] mt-2">
             <MapPin className="w-2.5 h-2.5 flex-shrink-0 text-[#d26019]" />
-            {item.location}
+            <span className="truncate max-w-[150px]">{item.location}</span>
           </div>
         </div>
 
@@ -181,34 +270,38 @@ const TestimonialCard = ({ item }: { item: any }) => {
         />
 
         {/* ── Quote Section ── */}
-        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 min-h-0 relative">
+        <div className="flex flex-col flex-1 px-4 pt-3 pb-3 relative min-h-0">
           <Quote className="w-5 h-5 text-[#458a16] transform -scale-x-100 opacity-70 mb-1.5 flex-shrink-0" />
 
-          <p className="text-slate-700 text-[11px] font-medium leading-relaxed flex-1">
-            {isLong
-              ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…`
-              : quoteText
-            }
-          </p>
+          <div className="flex-1 overflow-hidden">
+            <p className="text-slate-700 text-[11px] font-medium leading-relaxed">
+              {isLong
+                ? `${quoteText.substring(0, CHAR_LIMIT).trim()}…`
+                : quoteText
+              }
+            </p>
+          </div>
 
           {/* ── "Read More" Button ── */}
-          {isLong && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsExpanded(true);
-              }}
-              className="mt-1.5 flex items-center gap-0.5 self-start text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
-              style={{
-                color: '#23471d',
-                background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)',
-                border: '1px solid #c6e6c6',
-              }}
-            >
-              Read more
-              <span style={{ fontSize: '8px' }}>→</span>
-            </button>
-          )}
+          <div className="mt-auto pt-2 flex-shrink-0">
+            {isLong && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded(true);
+                }}
+                className="flex items-center gap-0.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full transition-all duration-200 hover:gap-1"
+                style={{
+                  color: '#23471d',
+                  background: 'linear-gradient(90deg, #eaf5e2 0%, #fff6ee 100%)',
+                  border: '1px solid #c6e6c6',
+                }}
+              >
+                Read more
+                <span style={{ fontSize: '8px' }}>→</span>
+              </button>
+            )}
+          </div>
 
           {/* Bottom decorative image */}
           {item.bottomImage && (
@@ -331,6 +424,7 @@ const TestimonialsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -420,16 +514,49 @@ const TestimonialsCarousel = () => {
           animation: shimmer 2s infinite;
         }
         @keyframes marqueeScroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        @keyframes marqueeScrollRight {
+          0% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        .marquee-wrapper-cards {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: marqueeScrollRight 50s linear infinite;
+        }
+        .marquee-wrapper-cards:hover {
+          animation-play-state: paused;
         }
         .marquee-wrapper-videos {
           display: flex;
           width: max-content;
+          will-change: transform;
           animation: marqueeScroll 30s linear infinite;
         }
         .marquee-wrapper-videos:hover {
           animation-play-state: paused;
+        }
+        .teal-btn {
+          background: linear-gradient(135deg, #0A7C6E 0%, #0db39e 40%, #0A7C6E 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 0 16px 4px rgba(10,124,110,0.45), 0 4px 20px rgba(13,179,158,0.35);
+          position: relative;
+          overflow: hidden;
+        }
+        .teal-btn::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
         }
       `}</style>
 
@@ -480,7 +607,9 @@ const TestimonialsCarousel = () => {
                       <s.icon className="w-7 h-7" style={{ color: s.color }} />
                     </div>
                     <div>
-                      <div className="font-black text-[16px] leading-none" style={valStyle}>{s.value}</div>
+                      <div className="font-black text-[16px] leading-none" style={valStyle}>
+                        {/^[\d,]+/.test(s.value) ? <StatCounter value={s.value} /> : s.value}
+                      </div>
                       <div className="text-slate-900 text-[11px] font-medium mt-1">{s.label}</div>
                     </div>
                   </div>
@@ -494,72 +623,53 @@ const TestimonialsCarousel = () => {
       {/* ─── SECTION HEADER ─── */}
       <SectionDivider text={settings.dividerText} />
 
-      {/* ─── TESTIMONIAL CARDS CAROUSEL ─── */}
-      <div
-        className="relative px-6 md:px-16 pb-4"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <button
-          onClick={prev}
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
-        >
-          <ChevronLeft className="w-6 h-6 md:w-7 md:h-7" />
-        </button>
-
-        <div className="flex gap-4 justify-center overflow-hidden max-w-[1400px] mx-auto pt-5 pb-10 -mb-10">
-          <AnimatePresence mode="popLayout">
-            {visibleCards.map((item, i) => (
-              <motion.div
-                key={`${item._id}-${activeIndex}-${i}`}
-                initial={{ opacity: 0, x: 50, scale: 0.96 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -50, scale: 0.96 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-              >
-                <TestimonialCard item={item} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-
-        <button
-          onClick={next}
-          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-xl border border-slate-100 flex items-center justify-center text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300"
-        >
-          <ChevronRight className="w-6 h-6 md:w-7 md:h-7" />
-        </button>
-      </div>
-
-      {/* Pagination Dots */}
-      <div className="flex justify-center gap-2 py-2">
-        {(data.cards || []).map((_: any, i: number) => (
-          <button
-            key={i}
-            onClick={() => setActiveIndex(i)}
-            className={cn(
-              "h-1.5 rounded-full transition-all duration-300",
-              activeIndex === i ? "w-8 bg-[#23471d]" : "w-1.5 bg-slate-200 hover:bg-slate-300"
-            )}
-          />
-        ))}
+      {/* ─── TESTIMONIAL CARDS MARQUEE (Right Scrolling) ─── */}
+      <div className="relative pt-10 pb-8">
+        <SectionContainer className="relative z-10">
+          <div className="w-full overflow-hidden">
+            <div className="marquee-wrapper-cards gap-6">
+              {/* Create multiple sets for seamless infinite loop */}
+              {[1, 2, 3].map((set) => (
+                <div key={set} className="flex gap-6">
+                  {(data.cards || []).map((item: any, i: number) => (
+                    <div key={`${set}-${i}`} className="flex-shrink-0">
+                      <TestimonialCard 
+                        item={item} 
+                        expandedCardId={expandedCardId}
+                        setExpandedCardId={setExpandedCardId}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </SectionContainer>
       </div>
 
       {/* ─── VIDEO SECTION ─── */}
-      <div className="relative px-6 md:px-16 pt-6 pb-0 md:pb-2">
+      <div className="relative pt-6 pb-0 md:pb-2">
         <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-20 pointer-events-none rotate-45 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
-        <div className="relative z-10 max-w-[1400px] mx-auto overflow-hidden">
-          <div className="marquee-wrapper-videos flex gap-4">
-            {[...(data.videos || []), ...(data.videos || []), ...(data.videos || [])].map((v: any, i: number) => (
-              <div key={i} className="w-[280px] md:w-[320px] flex-shrink-0">
-                <VideoCard item={v} />
+        <SectionContainer className="relative z-10">
+          <div className="flex flex-col md:flex-row items-stretch">
+            <div className="w-full overflow-hidden">
+              <div className="marquee-wrapper-videos gap-4">
+                {[1, 2, 3].map((set) => (
+                  <div key={set} className="flex gap-4">
+                    {(data.videos || []).map((v: any, i: number) => (
+                      <div key={`${set}-${i}`} className="w-[280px] md:w-[320px] flex-shrink-0">
+                        <VideoCard item={v} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        </SectionContainer>
 
         <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-20 pointer-events-none -rotate-12 select-none z-0">
           <img src={leafPng} alt="" className="w-full h-full object-contain" />
@@ -646,13 +756,27 @@ const TestimonialsCarousel = () => {
                   </button>
                 </div>
 
-                <button
-                  onClick={() => settings.ctaButton2Path && window.open(settings.ctaButton2Path, '_blank')}
-                  className="flex items-center justify-center gap-2 font-black text-[12px] md:text-[10px] w-full sm:w-auto px-8 py-3.5 md:px-4 md:py-2 rounded-xl md:rounded-lg transition-all duration-300 whitespace-nowrap"
-                  style={{ background: "rgba(255,255,255,0.15)", border: "1.2px solid rgba(255,255,255,0.3)", color: "white", boxShadow: "rgba(0,0,0,0.2) 0 4px 10px" }}
-                >
-                  {settings.ctaButton2Name || "Apply Now"} <ChevronRight className="w-3 h-3 md:w-2.5 md:h-2.5" />
-                </button>
+                <Link to="/visitor-registration" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto flex justify-center">
+                  <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                    {/* Sparkles around button */}
+                    <TealSparkle style={{ top: '-10px', left: '10%', animationDelay: '0s' }} />
+                    <TealSparkle style={{ top: '-8px', left: '40%', animationDelay: '0.4s' }} />
+                    <TealSparkle style={{ top: '-12px', right: '15%', animationDelay: '0.8s' }} />
+                    <TealSparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.2s' }} />
+                    <TealSparkle style={{ bottom: '-8px', right: '30%', animationDelay: '0.6s' }} />
+
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="teal-btn text-white px-8 md:px-6 py-3 md:py-2 rounded-xl md:rounded-lg font-black text-[12px] md:text-[10px] flex items-center justify-center gap-2.5 whitespace-nowrap transition-all w-full"
+                    >
+                      REGISTER AS VISITOR!
+                      <div className="w-5 h-5 md:w-4 md:h-4 bg-white rounded-full flex items-center justify-center z-10 relative">
+                        <ArrowRight className="w-3.5 h-3.5 md:w-3 md:h-3 text-[#0A7C6E]" />
+                      </div>
+                    </motion.button>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
