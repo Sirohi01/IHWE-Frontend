@@ -9,20 +9,20 @@ const TravelHero: React.FC = () => {
       className="relative h-[350px] bg-white bg-cover bg-top bg-no-repeat overflow-hidden flex flex-col"
       style={{ backgroundImage: `url(${heroBg})` }}
     >
-      {/* Container for precise alignment based on the reference image */}
+
       <div className="relative z-10 mx-auto max-w-[1400px] w-full h-full px-6 md:px-12 flex flex-col justify-start pt-0 pb-10">
 
-        {/* Top Header: Align Start Logo + Slogan */}
+
         <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[30px]">
-          {/* Logo Section */}
+
           <div className="flex items-center gap-[15px]">
-            <div className="w-[50px] h-[50px] flex-shrink-0">
+            {/* <div className="w-[50px] h-[50px] flex-shrink-0">
               <svg width="50" height="50" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 6C14 6 6 14 6 22C6 28 10 32 16 34L20 36L24 34C30 32 34 28 34 22C34 14 26 6 20 6Z" fill="#4E9F3D" opacity="0.3" />
                 <path d="M20 8C16 10 10 16 10 22C10 27 13 30 17 32L20 33.5L23 32C27 30 30 27 30 22C30 16 24 10 20 8Z" fill="#4E9F3D" />
                 <line x1="20" y1="8" x2="20" y2="34" stroke="white" strokeWidth="1.5" />
               </svg>
-            </div>
+            </div> */}
             <div>
               <h1 className="text-[#0B2C66] font-black text-[16px] leading-[1.1] uppercase">
                 International<br />
@@ -50,6 +50,27 @@ const TravelHero: React.FC = () => {
 
         {/* Main Content Area */}
         <div className="relative flex items-end justify-between flex-1 mt-0">
+
+          {/* ===== CENTER: OFFICIAL TRAVEL PARTNER Badge ===== */}
+          <div className="absolute left-[596px] -translate-x-1/2 top-0 z-20 flex items-start justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="relative w-[130px] h-[130px]  flex flex-col items-center justify-center text-center "
+            >
+              <p className="text-white font-black text-[20px] uppercase tracking-[2px] leading-none mb-[4px]">
+                Official
+              </p>
+              <p className="pb-1 text-white font-[900] text-[21px] leading-none uppercase tracking-tight">
+                Travel
+              </p>
+              <p className="text-white font-[900] text-[21px] leading-none uppercase tracking-tight mb-[14px]">
+                Partner
+              </p>
+
+            </motion.div>
+          </div>
           {/* Left Text: Partner Details - FIXED (Not to be touched) */}
           <div className="flex flex-col items-start pb-4">
             <p className="text-[#0B2C66] font-black text-[22px] uppercase tracking-[1px] mb-0">
