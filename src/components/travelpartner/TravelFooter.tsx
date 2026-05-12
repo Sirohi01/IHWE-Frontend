@@ -36,7 +36,7 @@ const TravelFooter: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 flex justify-between items-center p-[5px_20px] bg-gray-50/50">
+          <div className="flex-1 flex justify-center items-center p-[5px_100px] bg-gray-50/50">
             {[
               { icon: <Users />, label: "Global Audience Access", color: "#4B49AC" },
               { icon: <Megaphone />, label: "High Brand Exposure", color: "#0B2C66" },
@@ -45,7 +45,7 @@ const TravelFooter: React.FC = () => {
               { icon: <Globe />, label: "Positive Global Impact", color: "#008891" },
             ].map((item, i) => (
               <React.Fragment key={i}>
-                <div className="flex flex-col items-center text-center gap-1.5 flex-1 group">
+                <div className="flex flex-col items-center text-center gap-1 flex-1 group">
                   <div
                     className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110"
                     style={{ backgroundColor: item.color }}
@@ -57,7 +57,7 @@ const TravelFooter: React.FC = () => {
                   </p>
                 </div>
 
-                {i < 4 && <div className="w-[1px] h-[35px] bg-gray-300 mx-2 flex-shrink-0" />}
+                {i < 4 && <div className="w-[1px] h-[30px] bg-gray-300 mx-0.5 flex-shrink-0" />}
               </React.Fragment>
             ))}
           </div>

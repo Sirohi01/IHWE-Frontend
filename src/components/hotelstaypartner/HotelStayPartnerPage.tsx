@@ -22,13 +22,13 @@ const HotelStayPartnerPage: React.FC = () => {
           <div className="lg:col-span-9 -mt-4">
             <HotelBenefits />
           </div>
-          <div className="lg:col-span-3 -mt-20 pb-2 ">
+          <div className="lg:col-span-3 -mt-20 pb-0 ">
             <HotelPackages />
           </div>
         </div>
       </div>
 
-      <div className="mb-0">
+      <div className="mt-2">
         <HotelFooter /></div>
     </div>
   );
