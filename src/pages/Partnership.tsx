@@ -32,10 +32,10 @@ const Partnership = () => {
   return (
     <div className="bg-[#f5f5f5] overflow-hidden">
 
-      {/* HERO SECTION */}
+
       <section className="relative overflow-hidden">
 
-        {/* BG */}
+
         <div
           className="relative min-h-[580px] bg-cover bg-center"
           style={{
@@ -44,12 +44,11 @@ const Partnership = () => {
         >
 
 
-          {/* CONTENT */}
           <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 pt-16">
 
             <div className="grid lg:grid-cols-[1fr_0.9fr] gap-10 items-center">
 
-              {/* LEFT */}
+
               <div>
                 <p className="uppercase tracking-[4px] text-white font-bold text-sm mb-3">
                   Be a Catalyst For
@@ -74,7 +73,6 @@ const Partnership = () => {
 
                 </p>
 
-                {/* BUTTONS */}
                 <div className="flex flex-wrap gap-3 mt-4">
 
                   <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
@@ -93,12 +91,11 @@ const Partnership = () => {
 
               </div>
 
-              {/* RIGHT */}
               <div className="flex">
 
-                {/* MAIN IMAGE */}
+
                 <div className="w-full max-w-[620px]">
-                  {/* FLOATING CARD */}
+
                   <div className="absolute top-10 right-6 bg-[#042a64] border-[4px] border-[#619941] rounded-[30px] p-6 w-[280px] shadow-2xl rotate-[6deg]">
 
                     {[
@@ -168,7 +165,6 @@ const Partnership = () => {
 
           </div>
 
-          {/* CURVE */}
           <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
 
             <svg
@@ -186,7 +182,6 @@ const Partnership = () => {
 
         </div>
 
-        {/* WHY PARTNER */}
         <div className="relative z-20 -mt-16 px-4 md:px-10 lg:px-16 xl:px-24">
 
           <div className="max-w-[1450px] mx-auto bg-white rounded-[30px] shadow-[0_15px_60px_rgba(0,0,0,0.08)] overflow-hidden border border-[#ececec]">
@@ -256,12 +251,12 @@ const Partnership = () => {
 
       </section>
 
-      {/* PARTNER CATEGORIES */}
+
       <section className="py-8 px-4 md:px-10 lg:px-16 xl:px-24">
 
         <div className="max-w-[1450px] mx-auto">
 
-          {/* HEADING */}
+
           <div className="text-center mb-10">
 
             <div className="flex items-center justify-center gap-3 mb-2">
@@ -291,7 +286,7 @@ const Partnership = () => {
 
           </div>
 
-          {/* CARDS */}
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
             {[
@@ -390,7 +385,7 @@ const Partnership = () => {
                 }}
               >
 
-                {/* TOP NUMBER */}
+
                 <div
                   className="absolute top-0 left-0 z-20 w-[72px] h-[72px] rounded-br-[28px] flex items-center justify-center"
                   style={{
@@ -404,7 +399,7 @@ const Partnership = () => {
 
                 </div>
 
-                {/* DOTS */}
+
                 <div className="absolute top-5 right-5 z-20">
 
                   <div className="grid grid-cols-4 gap-[3px]">
@@ -423,7 +418,7 @@ const Partnership = () => {
 
                 </div>
 
-                {/* IMAGE */}
+
                 <div
                   className="h-[200px] bg-cover bg-center relative"
                   style={{
@@ -435,10 +430,10 @@ const Partnership = () => {
 
                 </div>
 
-                {/* CONTENT */}
+
                 <div className="relative px-6 pb-6 pt-5">
 
-                  {/* ICON */}
+
                   <div
                     className="absolute -top-10 left-6 w-20 h-20 rounded-full flex items-center justify-center border-white"
 
@@ -452,7 +447,7 @@ const Partnership = () => {
 
                   </div>
 
-                  {/* TITLE */}
+
                   <div className="pl-24">
 
                     <h3
@@ -466,7 +461,7 @@ const Partnership = () => {
 
                   </div>
 
-                  {/* LIST */}
+
                   <ul className="space-y-3 mt-8">
 
                     {item.points.map((point, i) => (
@@ -500,7 +495,7 @@ const Partnership = () => {
 
                   </ul>
 
-                  {/* BUTTON */}
+
                   <button
                     className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
                     style={{
@@ -531,7 +526,6 @@ const Partnership = () => {
         </div>
 
       </section>
-      {/* IMPACT PARTNERSHIP SECTION */}
       <section
         className="relative overflow-hidden bg-no-repeat bg-top bg-contain mb-0"
         style={{
@@ -548,7 +542,6 @@ const Partnership = () => {
             <div></div>
             <div></div>
 
-            {/* BUTTON */}
             <div className="flex justify-end relative bottom-[10px]">
               <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
 
