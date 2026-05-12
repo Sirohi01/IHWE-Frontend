@@ -7,7 +7,7 @@ import TravelFooter from './TravelFooter';
 
 const TravelPartnerPage: React.FC = () => {
   return (
-    <div className="bg-[#F8FAFC]  font-sans">
+    <div className="bg-[#F8FAFC] font-sans">
       {/* Hero Section */}
       <TravelHero />
 

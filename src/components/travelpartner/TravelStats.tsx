@@ -7,31 +7,31 @@ const stats = [
     icon: <Users className="w-5 h-5" />,
     value: "8,000+",
     label: "Delegates &\nExhibitors",
-    color: "#0B2C66"
+    color: "#6B46C1" // Purple from image
   },
   {
     icon: <Globe className="w-5 h-5" />,
     value: "50+",
     label: "Countries\nParticipating",
-    color: "#4E9F3D"
+    color: "#434190" // Indigo/Blue from image
   },
   {
     icon: <Calendar className="w-5 h-5" />,
     value: "3",
     label: "Power-Packed\nDays",
-    color: "#0B2C66"
+    color: "#D53F8C" // Rose/Pink from image
   },
   {
     icon: <Briefcase className="w-5 h-5" />,
     value: "Unlimited",
     label: "Business\nOpportunities",
-    color: "#4E9F3D"
+    color: "#3182CE" // Blue from image
   },
   {
     icon: <TrendingUp className="w-5 h-5" />,
     value: "High",
     label: "Brand Visibility\n& Exposure",
-    color: "#0B2C66"
+    color: "#553C9A" // Violet from image
   },
 ];
 
@@ -63,7 +63,7 @@ const TravelStats: React.FC = () => {
               </div>
             </motion.div>
             {index < stats.length - 1 && (
-              <div className="hidden md:block w-[1px] h-[35px] bg-gray-100" />
+              <div className="hidden md:block w-[1px] h-[35px] bg-gray-200" />
             )}
           </React.Fragment>
         ))}
