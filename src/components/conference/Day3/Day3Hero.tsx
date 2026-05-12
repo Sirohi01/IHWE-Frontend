@@ -44,18 +44,24 @@ const Day3Hero: React.FC<Day3HeroProps> = ({ data, defaultImage }) => {
 
   return (
     <section className="relative min-h-[750px] lg:min-h-[680px] flex items-center overflow-hidden font-sans">
+      <div className="absolute inset-0 "></div>
+
       <div
-        className="absolute inset-0 z-0 w-full h-full"
+        className="absolute inset-0 w-full h-full"
         style={{
           backgroundImage: `url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "top-left",
           backgroundRepeat: "no-repeat",
+          opacity: 0.85,
         }}
       ></div>
 
+
+      <div className="absolute left-0 top-0 h-full w-[55%] bg-gradient-to-r from-[#9fd2dd]/80 via-[#caf0f8]/20 to-transparent"></div>
+
       <div className="container mx-auto px-6 max-w-[1380px] relative z-10">
-        <div className="max-w-[750px] relative left-[20px]">
+        <div className="max-w-[750px] relative left-[20px]" >
 
           <div className="flex items-center gap-2 text-[14px] text-[#5F6B7A] font-black mb-6">
             <Home className="w-4 h-4 text-[#4E9F3D]" />
@@ -81,11 +87,11 @@ const Day3Hero: React.FC<Day3HeroProps> = ({ data, defaultImage }) => {
             className="mb-3"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[54px] font-semibold font-sans leading-tight tracking-tight">
-              <span 
+              <span
                 className="text-[#0B2C66] block uppercase mb-0.5"
                 dangerouslySetInnerHTML={{ __html: heroData.title.replace(/\n/g, '<br />') }}
               />
-              <span 
+              <span
                 className="text-[#4E9F3D] block uppercase"
                 dangerouslySetInnerHTML={{ __html: heroData.subtitle.replace(/\n/g, '<br />') }}
               />
@@ -141,5 +147,3 @@ const Day3Hero: React.FC<Day3HeroProps> = ({ data, defaultImage }) => {
 };
 
 export default Day3Hero;
-
-

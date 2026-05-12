@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { msmePmsSchemeApi } from "@/lib/api";
+import { msmePmsSchemeApi, verifyApi } from "@/lib/api";
 
 const DEFAULT_PAGE_DATA = {
   heroSubTitle: "GOVERNMENT SUPPORT TO GROW YOUR BUSINESS",
@@ -132,6 +132,131 @@ const MsmePmsScheme = () => {
     companyBrief: ''
   });
 
+  // Verification State
+  const [emailOtp, setEmailOtp] = useState("");
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [emailOtpSent, setEmailOtpSent] = useState(false);
+  const [phoneOtpSent, setPhoneOtpSent] = useState(false);
+  const [verifyingEmail, setVerifyingEmail] = useState(false);
+  const [verifyingPhone, setVerifyingPhone] = useState(false);
+  const [sendingEmailOtp, setSendingEmailOtp] = useState(false);
+  const [sendingPhoneOtp, setSendingPhoneOtp] = useState(false);
+  const [emailResendTimer, setEmailResendTimer] = useState(0);
+  const [phoneResendTimer, setPhoneResendTimer] = useState(0);
+
+  // Timer logic for OTP resend
+  useEffect(() => {
+    let emailInterval: any;
+    let phoneInterval: any;
+
+    if (emailResendTimer > 0) {
+      emailInterval = setInterval(() => {
+        setEmailResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    if (phoneResendTimer > 0) {
+      phoneInterval = setInterval(() => {
+        setPhoneResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(emailInterval);
+      clearInterval(phoneInterval);
+    };
+  }, [emailResendTimer, phoneResendTimer]);
+
+  const sendEmailOtp = async () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailId)) {
+      toast({ title: "Validation Error", description: "Please enter a valid email address first.", variant: "destructive" });
+      return;
+    }
+    if (emailResendTimer > 0) return;
+
+    setSendingEmailOtp(true);
+    try {
+      const res = await verifyApi.sendEmailOtp(formData.emailId);
+      if (res.success) {
+        setEmailOtpSent(true);
+        setEmailResendTimer(60);
+        toast({ title: "OTP Sent", description: "Email OTP sent successfully!" });
+      } else {
+        toast({ title: "Error", description: res.message || "Failed to send OTP.", variant: "destructive" });
+      }
+    } catch (error: any) {
+      console.error("Error sending email OTP:", error);
+      toast({ title: "Error", description: error.message || "Failed to send OTP.", variant: "destructive" });
+    } finally {
+      setSendingEmailOtp(false);
+    }
+  };
+
+  const confirmEmailOtp = async () => {
+    if (!emailOtp) return;
+    setVerifyingEmail(true);
+    try {
+      const res = await verifyApi.verifyEmailOtp(formData.emailId, emailOtp);
+      if (res.success) {
+        setEmailVerified(true);
+        setEmailOtpSent(false);
+        toast({ title: "Verified", description: "Email address verified successfully!" });
+      } else {
+        toast({ title: "Error", description: res.message || "Invalid OTP.", variant: "destructive" });
+      }
+    } catch (error) {
+      console.error("Error verifying email OTP:", error);
+    } finally {
+      setVerifyingEmail(false);
+    }
+  };
+
+  const sendPhoneOtp = async () => {
+    if (!/^[0-9]{10,15}$/.test(formData.mobileNumber.replace(/[^0-9]/g, ""))) {
+      toast({ title: "Validation Error", description: "Please enter a valid 10-15 digit mobile number first.", variant: "destructive" });
+      return;
+    }
+    if (phoneResendTimer > 0) return;
+
+    setSendingPhoneOtp(true);
+    try {
+      const res = await verifyApi.sendPhoneOtp(formData.mobileNumber);
+      if (res.success) {
+        setPhoneOtpSent(true);
+        setPhoneResendTimer(60);
+        toast({ title: "OTP Sent", description: "Mobile OTP sent successfully via WhatsApp!" });
+      } else {
+        toast({ title: "Error", description: res.message || "Failed to send OTP.", variant: "destructive" });
+      }
+    } catch (error: any) {
+      console.error("Error sending phone OTP:", error);
+      toast({ title: "Error", description: error.message || "Failed to send OTP.", variant: "destructive" });
+    } finally {
+      setSendingPhoneOtp(false);
+    }
+  };
+
+  const confirmPhoneOtp = async () => {
+    if (!phoneOtp) return;
+    setVerifyingPhone(true);
+    try {
+      const res = await verifyApi.verifyPhoneOtp(formData.mobileNumber, phoneOtp);
+      if (res.success) {
+        setPhoneVerified(true);
+        setPhoneOtpSent(false);
+        toast({ title: "Verified", description: "Mobile number verified successfully!" });
+      } else {
+        toast({ title: "Error", description: res.message || "Invalid OTP.", variant: "destructive" });
+      }
+    } catch (error) {
+      console.error("Error verifying phone OTP:", error);
+    } finally {
+      setVerifyingPhone(false);
+    }
+  };
+
   useEffect(() => {
     const fetchPageContent = async () => {
       try {
@@ -170,6 +295,10 @@ const MsmePmsScheme = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!emailVerified || !phoneVerified) {
+      toast({ title: "Verification Required", description: "Please verify both your email and mobile number first.", variant: "destructive" });
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -197,6 +326,8 @@ const MsmePmsScheme = () => {
           companyBrief: ''
         });
         setSelectedFiles([]);
+        setEmailVerified(false);
+        setPhoneVerified(false);
       } else {
         toast({ title: "Error", description: response.message || "Failed to submit application", variant: "destructive" });
       }
@@ -229,24 +360,24 @@ const MsmePmsScheme = () => {
           {/* Main Banner Container */}
           <div className="flex flex-col lg:flex-row min-h-[450px]">
             {/* Left Side: Content */}
-            <div className="lg:w-[50%] pt-40 sm:pt-4 pb-0 relative z-20 bg-white flex flex-col justify-end">
+            <div className="lg:w-[58%] xl:w-[50%] pt-28 sm:pt-4 pb-0 relative z-20 bg-white flex flex-col justify-end">
 
               {/* Gold Ribbon - Fixed position with refined spacing */}
-              <div className="absolute top-3 left-4 sm:top-8 lg:left-0 z-30">
-                <div className="relative w-28 h-36 lg:w-32 lg:h-44 flex items-center justify-center">
+              <div className="absolute top-3 left-2 sm:top-8 lg:left-0 z-30">
+                <div className="relative w-24 h-32 sm:w-28 sm:h-36 lg:w-32 lg:h-44 flex items-center justify-center">
                   <img src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-col items-start lg:pl-40">
-                <div className="text-[#1a3615] text-[13px] font-black uppercase tracking-[0.25em] mb-2 opacity-70">
+              <div className="mt-4 flex flex-col items-start pl-28 sm:pl-36 lg:pl-40">
+                <div className="text-[#1a3615] text-[11px] sm:text-[13px] font-black uppercase tracking-[0.25em] mb-2 opacity-70">
                   {pageData.heroSubTitle}
                 </div>
-                <h1 className="text-[30px] md:text-[38px] lg:text-[44px] font-extrabold text-[#1a3615] leading-[1.1] mb-4 tracking-[-0.03em] uppercase">
-                  <span className="block whitespace-nowrap">{pageData.heroTitle}</span>
-                  <span className="text-slate-900 font-extrabold tracking-[-0.04em] block whitespace-nowrap">{pageData.heroSubTitle2}</span>
+                <h1 className="text-[24px] sm:text-[30px] md:text-[38px] lg:text-[44px] font-extrabold text-[#1a3615] leading-[1.1] mb-4 tracking-[-0.03em] uppercase">
+                  <span className="block md:whitespace-nowrap">{pageData.heroTitle}</span>
+                  <span className="text-slate-900 font-extrabold tracking-[-0.04em] block md:whitespace-nowrap">{pageData.heroSubTitle2}</span>
                 </h1>
-                <p className="text-[15px] md:text-[16px] text-slate-600 mb-6 max-w-2xl font-bold leading-tight">
+                <p className="text-[13px] sm:text-[15px] md:text-[16px] text-slate-600 mb-6 max-w-2xl font-bold leading-tight">
                   {pageData.heroDescription}
                 </p>
 
@@ -309,7 +440,7 @@ const MsmePmsScheme = () => {
         </div>
 
         {/* Right Side: Image Banner - Bleeding to edge */}
-        <div className="hidden lg:block absolute top-0 right-0 bottom-0 w-[50%] overflow-hidden">
+        <div className="hidden lg:block absolute top-0 right-0 bottom-0 lg:w-[42%] xl:w-[50%] overflow-hidden">
           <img
             src={pageData.heroBannerImg}
             alt="MSME Exhibition"
@@ -363,20 +494,20 @@ const MsmePmsScheme = () => {
       {/* Stats Bar (Rounded Card Style) */}
       < div className="relative z-40" >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="bg-white rounded-[12px] shadow-[0_8px_28px_rgba(0,0,0,0.035)] border border-slate-100 py-4 px-3">
+          <div className="bg-[#23471d] rounded-[12px] shadow-[0_12px_32px_rgba(11,43,15,0.25)] border border-white/10 py-4 px-3">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
               {(pageData.stats && pageData.stats.length > 0 ? pageData.stats : DEFAULT_PAGE_DATA.stats).map((stat: any, i: number) => (
-                <div key={i} className={`flex items-center justify-center gap-3 md:gap-4 px-2 sm:px-4 min-h-[64px] ${i !== (pageData.stats && pageData.stats.length > 0 ? pageData.stats : DEFAULT_PAGE_DATA.stats).length - 1 ? "lg:border-r border-slate-200/60" : ""} group`}>
+                <div key={i} className={`flex items-center justify-center gap-3 md:gap-4 px-2 sm:px-4 min-h-[64px] ${i !== (pageData.stats && pageData.stats.length > 0 ? pageData.stats : DEFAULT_PAGE_DATA.stats).length - 1 ? "lg:border-r border-white/10" : ""} group`}>
                   <div className="flex items-center justify-center shrink-0 w-10 h-12 md:w-[60px] md:h-[60px] transition-transform group-hover:scale-105">
                     <img
                       src={stat.img}
                       alt={stat.label}
-                      className={`object-contain w-[75%] h-[75%]`}
+                      className={`object-contain w-[75%] h-[75%] ${stat.val == 'MULTIPLE' ? 'brightness-0 invert' : ''}`}
                     />
                   </div>
                   <div className="flex flex-col justify-center">
-                    <span className="text-[16px] md:text-[18px] font-black text-slate-900 leading-none mb-0.5">{stat.val}</span>
-                    <span className="text-[8px] md:text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">{stat.label}</span>
+                    <span className="text-[16px] md:text-[18px] font-black text-white leading-none mb-0.5">{stat.val}</span>
+                    <span className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase tracking-widest leading-tight">{stat.label}</span>
                   </div>
                 </div>
               ))}
@@ -443,7 +574,7 @@ const MsmePmsScheme = () => {
         </section >
 
         {/* Detailed Guidelines Grid */}
-        < section className="py-2 bg-white" >
+        < section className="py-2 bg-[#f3fbf2] border-y border-[#d3eed1]" >
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Left: Imagery Collage */}
@@ -514,7 +645,10 @@ const MsmePmsScheme = () => {
                 </div>
               </div>
             </div>
-
+          </div>
+        </section >
+        < section className="pb-4 bg-white border-y border-[#d3eed1]" >
+          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             {/* Bottom Grid: Documents & How to Apply */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
               {/* Documents Required */}
@@ -609,7 +743,7 @@ const MsmePmsScheme = () => {
         </section >
 
         {/* Application Form Section - High Density Compact UI */}
-        < section id="apply-form" >
+        < section id="apply-form" className="py-4 bg-[#f3fbf2] border-t border-[#d3eed1]" >
           <div className="max-w-[1400px] mx-auto px-6 md:px-12">
             <div className="bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100 p-5 lg:p-7">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -654,15 +788,115 @@ const MsmePmsScheme = () => {
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
                         <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1 relative">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
-                        <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleInputChange} required type="tel" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter mobile number" />
+                        <div className="relative flex items-center">
+                          <Input
+                            name="mobileNumber"
+                            value={formData.mobileNumber}
+                            onChange={handleInputChange}
+                            required
+                            type="tel"
+                            disabled={phoneVerified || phoneOtpSent}
+                            className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${phoneVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
+                            placeholder="Enter mobile number"
+                          />
+                          {!phoneVerified && (
+                            <button
+                              type="button"
+                              onClick={sendPhoneOtp}
+                              disabled={sendingPhoneOtp || !formData.mobileNumber || phoneResendTimer > 0}
+                              className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
+                            >
+                              {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `${phoneResendTimer}s` : phoneOtpSent ? "Resend" : "Send OTP"}
+                            </button>
+                          )}
+                          {phoneVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
+                        </div>
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1 relative">
                         <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
-                        <Input name="emailId" value={formData.emailId} onChange={handleInputChange} required type="email" className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter email address" />
+                        <div className="relative flex items-center">
+                          <Input
+                            name="emailId"
+                            value={formData.emailId}
+                            onChange={handleInputChange}
+                            required
+                            type="email"
+                            disabled={emailVerified || emailOtpSent}
+                            className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${emailVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
+                            placeholder="Enter email address"
+                          />
+                          {!emailVerified && (
+                            <button
+                              type="button"
+                              onClick={sendEmailOtp}
+                              disabled={sendingEmailOtp || !formData.emailId || emailResendTimer > 0}
+                              className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
+                            >
+                              {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `${emailResendTimer}s` : emailOtpSent ? "Resend" : "Send OTP"}
+                            </button>
+                          )}
+                          {emailVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
+                        </div>
                       </div>
                     </div>
+
+                    {/* OTP Inputs Row */}
+                    {((phoneOtpSent || sendingPhoneOtp) && !phoneVerified || (emailOtpSent || sendingEmailOtp) && !emailVerified) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-orange-50/30 border border-orange-100 rounded-md">
+                        <div>
+                          {(phoneOtpSent || sendingPhoneOtp) && !phoneVerified ? (
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Mobile OTP <span className="text-red-500">*</span></label>
+                              <div className="flex gap-2">
+                                <Input
+                                  type="text"
+                                  placeholder="WhatsApp OTP"
+                                  value={phoneOtp}
+                                  onChange={(e) => setPhoneOtp(e.target.value)}
+                                  className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
+                                  maxLength={6}
+                                />
+                                <Button
+                                  type="button"
+                                  onClick={confirmPhoneOtp}
+                                  disabled={verifyingPhone || !phoneOtp}
+                                  className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
+                                >
+                                  {verifyingPhone ? "Verifying..." : "Verify"}
+                                </Button>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                        <div>
+                          {(emailOtpSent || sendingEmailOtp) && !emailVerified ? (
+                            <div className="space-y-1">
+                              <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Email OTP <span className="text-red-500">*</span></label>
+                              <div className="flex gap-2">
+                                <Input
+                                  type="text"
+                                  placeholder="Email OTP"
+                                  value={emailOtp}
+                                  onChange={(e) => setEmailOtp(e.target.value)}
+                                  className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
+                                  maxLength={6}
+                                />
+                                <Button
+                                  type="button"
+                                  onClick={confirmEmailOtp}
+                                  disabled={verifyingEmail || !emailOtp}
+                                  className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
+                                >
+                                  {verifyingEmail ? "Verifying..." : "Verify"}
+                                </Button>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Row 2: Udyam, GST, Category */}
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
@@ -746,8 +980,8 @@ const MsmePmsScheme = () => {
                             <p className="text-[9px] text-white/50 font-bold mb-3 uppercase tracking-tighter">{pageData.helpSubTitle || "Our team is here to assist you"}</p>
 
                             <div className="space-y-0.5 mb-3">
-                              <p className="text-[10px] font-black text-white">{pageData.helpPhone || "+91 9654900525"}</p>
-                              <p className="text-[8px] font-bold text-white/60 truncate w-full">{pageData.helpEmail || "info@ihwe.in"}</p>
+                              <p className="text-[14px] font-black text-white">{pageData.helpPhone || "+91 9654900525"}</p>
+                              <p className="text-[14px] font-bold text-white/60 truncate w-full">{pageData.helpEmail || "info@ihwe.in"}</p>
                             </div>
 
                             <Link to="/contact" className="w-full">

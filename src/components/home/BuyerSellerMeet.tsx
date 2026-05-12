@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   UserCheck,
@@ -12,6 +12,7 @@ import {
   MapPin
 } from 'lucide-react';
 import SectionContainer from '../layout/SectionContainer';
+import { useInView, animate } from 'framer-motion';
 import rightImageBg from '@/assets/rightimage1.jpeg';
 
 import buy1 from '@/assets/h1.png';
@@ -37,6 +38,35 @@ const MaroonSparkle = ({ style }: { style?: React.CSSProperties }) => (
     ✦
   </span>
 );
+
+// ── Animated counter — counts up when scrolled into view ──
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const BuyerSellerMeet = () => {
   return (
@@ -190,7 +220,7 @@ const BuyerSellerMeet = () => {
 
           {/* ── RIGHT CONTENT: Feature Box ── */}
           <div
-            className="bg-[#FFFBF1] rounded-xl py-8 pl-2 pr-2 lg:max-w-fit flex flex-row items-stretch justify-start gap-0"
+            className="bg-[#FFFBF1] rounded-xl py-6 px-3 lg:py-8 lg:pl-2 lg:pr-2 lg:max-w-fit w-full flex flex-wrap lg:flex-nowrap items-start justify-center gap-y-5 lg:gap-0 lg:-mt-12"
             style={{ boxShadow: '4px -4px 12px rgba(0, 0, 0, 0.08)' }}
           >
             {[
@@ -227,7 +257,7 @@ const BuyerSellerMeet = () => {
               },
             ].map((item, idx, arr) => (
               <React.Fragment key={idx}>
-                <div className="w-[115px] flex flex-col items-center text-center px-1 shrink-0">
+                <div className="w-[47%] lg:w-[115px] flex flex-col items-center text-center px-1 lg:shrink-0">
                   <div className={`w-full h-20 flex items-center justify-center mb-0.5 ${item.customImg ? '' : 'rounded-full border-[2px] border-[#519a27] bg-white w-14 h-14'}`}>
                     {item.customImg ? (
                       <img src={item.customImg} alt={item.title} className="w-20 h-20 object-contain" />
@@ -245,7 +275,7 @@ const BuyerSellerMeet = () => {
                   </p>
                 </div>
                 {idx < arr.length - 1 && (
-                  <div className="w-px bg-slate-300 my-2" />
+                  <div className="hidden lg:block w-px bg-slate-300 my-2" />
                 )}
               </React.Fragment>
             ))}
@@ -253,7 +283,7 @@ const BuyerSellerMeet = () => {
         </div>
 
         {/* ── STATS BAND ── */}
-        <div className="mt-6 mb-4 bg-white/30 backdrop-blur-sm rounded-full py-2 px-8 shadow-xl border border-white/40 flex flex-wrap items-center justify-start gap-6 md:gap-10 max-w-fit">
+        <div className="mt-6 mb-4 bg-white/30 backdrop-blur-sm rounded-2xl md:rounded-full py-2 px-5 md:px-8 shadow-xl border border-white/40 flex flex-wrap items-center justify-start gap-4 md:gap-10 w-full md:max-w-fit">
           {[
             { icon: Users, val: '8,000+', label: 'VISITORS / DELEGATES' },
             { icon: Handshake, val: '150+', label: 'EXHIBITORS', valColor: '#00153c', iconBg: '#00153c' },
@@ -270,7 +300,7 @@ const BuyerSellerMeet = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-black leading-none text-[18px]" style={{ color: stat.valColor || '#1a682d' }}>
-                    {stat.val}
+                    {/^[\d,]+/.test(stat.val) ? <StatCounter value={stat.val} /> : stat.val}
                   </span>
                   <span className="font-bold text-[#00153c] uppercase tracking-widest text-[8.5px] mt-1">
                     {stat.label}
@@ -291,7 +321,7 @@ const BuyerSellerMeet = () => {
           <div className="flex items-center gap-2 text-white">
             <Calendar size={14} className="text-[#4ade80]" />
             <span className="font-bold tracking-wider text-[11px] md:text-[11.5px] whitespace-nowrap">
-              20 – 22 MARCH 2026
+              21 – 23 AUGUST 2026
             </span>
           </div>
           <div className="w-px h-5 bg-white/20" />
@@ -318,6 +348,8 @@ const BuyerSellerMeet = () => {
 
             <Link 
               to="/buyer-registration" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="b2b-maroon-btn flex items-center gap-3 px-7 h-9 rounded-xl no-underline"
             >
               <CalendarClock className="btn-icon w-4 h-4" />

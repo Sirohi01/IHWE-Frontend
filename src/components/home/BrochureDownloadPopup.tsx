@@ -9,6 +9,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { settingsApi, socialMediaApi, SERVER_URL, brochureLeadApi } from "@/lib/api";
 import { toast } from "sonner";
+import BrochurePopUp from "./BrochurePopUp";
 
 const participationCards = [
   {
@@ -120,6 +121,9 @@ const BrochureDownloadPopup: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [showSecondModal, setShowSecondModal] = useState(false);
+  const [showPopUpConfig, setShowPopUpConfig] = useState(true);
+  const [popUpDelayConfig, setPopUpDelayConfig] = useState(7);
   const location = useLocation();
 
   useEffect(() => {
@@ -127,11 +131,14 @@ const BrochureDownloadPopup: React.FC = () => {
       try {
         const settings = await settingsApi.get();
         if (settings?.logo) setLogoUrl(`${SERVER_URL}${settings.logo}`);
+        if (settings?.showBrochurePopUp !== undefined) setShowPopUpConfig(settings.showBrochurePopUp);
+        if (settings?.brochurePopUpDelay !== undefined) setPopUpDelayConfig(settings.brochurePopUpDelay);
 
         const social = await socialMediaApi.get();
         if (social?.whatsappNumber) {
+          const cleanNumber = social.whatsappNumber.replace(/\D/g, "");
           const msg = encodeURIComponent(social.whatsappMessage || "Hello! I would like to know more about IHWE 2026.");
-          setWhatsappUrl(`https://wa.me/${social.whatsappNumber}?text=${msg}`);
+          setWhatsappUrl(`https://wa.me/${cleanNumber}?text=${msg}`);
         }
       } catch (error) { }
     };
@@ -142,7 +149,7 @@ const BrochureDownloadPopup: React.FC = () => {
     if (location.pathname === "/" || location.pathname === "/home") {
       const timer = setTimeout(() => {
         setIsOpen(true);
-      }, 500);
+      }, 7000);
       return () => clearTimeout(timer);
     } else {
       setIsOpen(false);
@@ -151,11 +158,15 @@ const BrochureDownloadPopup: React.FC = () => {
 
   const handleClose = () => {
     setIsOpen(false);
-    setTimeout(() => {
-      setShowForm(false);
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", phone: "" });
-    }, 500);
+    // After first modal closes, check if second modal is enabled and use configured delay
+    if (showPopUpConfig) {
+      setTimeout(() => {
+        setShowSecondModal(true);
+        setShowForm(false);
+        setIsSubmitted(false);
+        setFormData({ name: "", email: "", phone: "" });
+      }, popUpDelayConfig * 1000); 
+    }
   };
 
   const handleAction = (card: any) => {
@@ -165,10 +176,10 @@ const BrochureDownloadPopup: React.FC = () => {
       return;
     }
     const link = card.link;
-    if (link.startsWith("http") || link.startsWith("tel:") || link.startsWith("mailto:")) {
+    if (link.startsWith("tel:") || link.startsWith("mailto:")) {
       window.location.href = link;
     } else {
-      window.location.href = link;
+      window.open(link, "_blank");
     }
   };
 
@@ -195,7 +206,8 @@ const BrochureDownloadPopup: React.FC = () => {
   };
 
   return (
-    <AnimatePresence>
+    <>
+      <AnimatePresence>
       {isOpen && (
         <motion.div
           variants={overlayVariants}
@@ -507,8 +519,8 @@ const BrochureDownloadPopup: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-[150px]">
                     <p className="text-[7.5px] text-white/30 font-bold uppercase tracking-wider">Need Help?</p>
-                    <p className="text-[11px] font-bold tracking-tight text-white">+91 9654900525</p>
-                    <p className="text-[8px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5">INFO@NAMOGANGEWELLNESS.COM</p>
+                    <a href="tel:+919654900525" className="text-[11px] font-bold tracking-tight text-white hover:text-blue-400 transition-colors block">+91 9654900525</a>
+                    <a href="mailto:info@ihwe.in" className="text-[11px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5 hover:text-white transition-colors block">info@ihwe.in</a>
                   </div>
                 </motion.div>
                 <motion.button
@@ -525,7 +537,14 @@ const BrochureDownloadPopup: React.FC = () => {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+
+      <BrochurePopUp 
+        isOpen={showSecondModal} 
+        onClose={() => setShowSecondModal(false)} 
+        logoUrl={logoUrl}
+      />
+    </>
   );
 };
 

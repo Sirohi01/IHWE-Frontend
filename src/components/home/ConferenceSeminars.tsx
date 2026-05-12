@@ -200,7 +200,7 @@ const ConferenceSeminars = () => {
           {/* Event Info Stack */}
           <div className="hidden lg:flex flex-col gap-6 pl-2">
             {[
-              { icon: Calendar, title: '20 – 22',          sub: 'MARCH 2026' },
+              { icon: Calendar, title: '21 – 23',          sub: 'AUGUST 2026' },
               { icon: MapPin,   title: 'PRAGATI MAIDAN',   sub: 'NEW DELHI'  },
               { icon: Users,    title: 'INSIGHTS. IDEAS.', sub: 'IMPACT.'    },
             ].map((item, i) => (

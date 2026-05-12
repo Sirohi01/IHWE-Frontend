@@ -14,7 +14,7 @@ const sponsorBenefits = [
 const SponsorSection: React.FC = () => {
   return (
     <section className="">
-      <div className="mx-auto max-w-[1320px] px-4">
+      <div className="mx-auto max-w-[1340px] pl-8 lg:pl-3">
         <div className="rounded-[24px] border border-[#E2E8F0] p-2" style={{ backgroundColor: '#F5F5F0' }}>
           <div className="flex flex-col lg:flex-row items-center gap-3">
             {/* LEFT CONTENT WITH PADDING LEFT */}
