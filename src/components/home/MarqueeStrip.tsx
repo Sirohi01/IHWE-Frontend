@@ -69,7 +69,10 @@ const MarqueeStrip = () => {
         }
       `}</style>
       <div className="flex whitespace-nowrap">
-        <div className="marquee-container">
+        <div 
+          className="marquee-container"
+          style={{ animationDuration: `${Math.max(data.text.length * 0.7, 30)}s` }}
+        >
           {/* Create two identical sets for perfect loop */}
           {[1, 2].map((set) => (
             <div key={set} className="flex">
