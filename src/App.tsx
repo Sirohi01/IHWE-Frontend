@@ -45,7 +45,6 @@ const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePm
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
-const WhyVisit = lazy(() => import("./pages/WhyVisit"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
@@ -122,6 +121,7 @@ import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
 import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
+import WhyVisit from "@/pages/why_visit/WhyVisit";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
@@ -187,11 +187,11 @@ const App = () => {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/gallery" element={<Gallery />} />
                     <Route path="/buyer-seller-meet" element={<BuyerSellerMeet />} />
+                    <Route path="/why-visit" element={<WhyVisit />} />
                     <Route path="/msme-pms-scheme" element={<MsmePmsScheme />} />
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
                     <Route path="/download-badge" element={<DownloadBadge />} />
-                    <Route path="/why-visit" element={<WhyVisit />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
@@ -264,7 +264,6 @@ const App = () => {
                   </Route>
                   <Route path="/visitor" element={<VisitorScan />} />
                   <Route path="/buyer-scan" element={<BuyerScan />} />
-
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />
                     <Route path="profile" element={<BuyerProfilePage />} />

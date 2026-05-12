@@ -32,8 +32,8 @@ const navLinks = [
     dropdown: [
       { label: "Why Exhibit at IHWE?", path: "/why-exhibit", icon: HelpCircle, description: "Maximize your brand visibility and growth" },
       { label: "Exhibitor List", path: "/exhibitors", icon: FileCheck, description: "View the list of confirmed participating brands" },
-      { label: "Visit the Expo", path: "/book-a-stand", icon: Layout, description: "Secure your premium space at IHWE 2026" },
-      // { label: "Buyer-Seller Meet", path: "/buyer-seller-meet", icon: Users, description: "Connect with buyers and sellers at IHWE" },
+      { label: "Why Visit IHWE", path: "/why-visit", icon: Layout, description: "Secure your premium space at IHWE 2026" },
+      { label: "Buyer-Seller Meet", path: "/buyer-seller-meet", icon: Users, description: "Connect with buyers and sellers at IHWE" },
       { label: "MSME PMS Scheme", path: "/msme-pms-scheme", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
       { label: "Govt MSME PMS Scheme", path: "/government-msme-pms-schemes", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
     ],
