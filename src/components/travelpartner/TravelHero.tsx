@@ -60,14 +60,15 @@ const TravelHero: React.FC = () => {
               <span className="text-[#4E9F3D]">PARTNER</span>
             </h2>
 
+            {/* Gradient Fading Divider Lines */}
             <div className="flex items-center gap-4 w-full max-w-[500px] my-1">
-              <div className="h-[2px] flex-1 bg-gray-300" />
+              <div className="h-[1.5px] flex-1 bg-gradient-to-l from-gray-300 to-transparent" />
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#0B2C66">
                 <path d="M21 16L15 12L21 8V16ZM3 12L9 16V8L3 12Z" fill="#0B2C66" opacity="0.3" />
                 <path d="M22 12L2 12" stroke="#0B2C66" strokeWidth="2.5" strokeLinecap="round" />
                 <path d="M12 4L9 12L12 20L15 12L12 4Z" fill="#0B2C66" />
               </svg>
-              <div className="h-[2px] flex-1 bg-gray-300" />
+              <div className="h-[1.5px] flex-1 bg-gradient-to-r from-gray-300 to-transparent" />
             </div>
 
             <p className="text-[#0B2C66] text-[18px] font-bold leading-[1.4] max-w-[500px] opacity-90 mt-1">

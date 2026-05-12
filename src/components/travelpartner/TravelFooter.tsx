@@ -13,7 +13,7 @@ import {
 
 const TravelFooter: React.FC = () => {
   return (
-    <footer className="bg-[#F8FAFC] pb-4 pt-2 px-6">
+    <footer className="bg-[#F8FAFC] pt-1 px-">
       <div className="mx-auto max-w-[1340px]">
         <div className="bg-white rounded-[24px] border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
 
