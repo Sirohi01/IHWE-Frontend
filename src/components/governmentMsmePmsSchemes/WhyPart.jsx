@@ -1,7 +1,7 @@
 import React from "react";
 import { FileText } from "lucide-react";
 
-const WhyPart = () => {
+const WhyPart = ({ onApplyClick }) => {
     const benefits = [
         {
             label: 'Significant reduction\nin exhibition cost',
@@ -42,10 +42,10 @@ const WhyPart = () => {
     ];
 
     return (
-        <div className="px-16">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12">
 
             {/* ── SECTION ONE: WHY PARTICIPATE ── */}
-            <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl mt-4 mb-4'>                {/* Heading */}
+            {/* <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl mt-4 mb-4'>
                 <div className="text-center mb-4">
                     <h2 className="text-lg font-medium text-gray-900 uppercase tracking-wide">
                         Why Participate Under PMS Scheme?
@@ -53,12 +53,10 @@ const WhyPart = () => {
                     <div className="w-10 h-0.5 bg-[#1e5c1e] mx-auto mt-2 rounded-full" />
                 </div>
 
-                {/* Benefits Row */}
                 <div className="flex items-start">
                     {benefits.map((item, i) => (
                         <div key={i} className="flex items-stretch flex-1">
 
-                            {/* Card */}
                             <div className="flex-1 flex flex-col items-center justify-start gap-3 px-1 py-1 text-center">
                                 <div className="flex items-center justify-center h-14">
                                     {item.icon}
@@ -68,7 +66,6 @@ const WhyPart = () => {
                                 </p>
                             </div>
 
-                            {/* Vertical divider — not after last */}
                             {i < benefits.length - 1 && (
                                 <div className="w-px bg-gray-200 self-stretch mx-1" />
                             )}
@@ -76,44 +73,22 @@ const WhyPart = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
 
-            {/* ── SECTION TWO: DOCUMENTS + HOW IT WORKS ── */}
-            <div className="w-full flex gap-3">
+            {/* ── SECTION TWO: HOW IT WORKS + DOCUMENTS ── */}
+            <div className="w-full flex flex-col lg:flex-row gap-4 mt-4">
 
-                {/* ── LEFT: DOCUMENTS REQUIRED ── */}
-                <div className="w-[25%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl  ">
-                    <h2 className="text-base font-medium text-green-900 uppercase tracking-wide mb-4">
-                        Documents Required
-                    </h2>
-                    <div className="flex flex-col gap-3">
-                        {[
-                            'Udyam Registration Certificate',
-                            'PAN Card',
-                            'GST Certificate',
-                            'Company Profile',
-                            'Product / Service Details',
-                            'Bank Account Details',
-                        ].map((doc, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <FileText size={20} color="#1e5c1e" strokeWidth={1.8} className="shrink-0" />
-                                <span className="text-sm text-gray-700">{doc}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ── RIGHT: HOW IT WORKS ── */}
-                <div className="w-[75%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl ">
-                    <h2 className="text-lg font-medium text-gray-900 px-2 uppercase tracking-wide mb-2">
+                {/* ── LEFT: HOW IT WORKS ── */}
+                <div className="flex-[62] bg-white px-6 py-5 border border-[#e2e8f0] shadow-sm rounded-2xl flex flex-col group hover:shadow-md transition-all duration-300">
+                    <h2 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide mb-6">
                         How It Works?
                     </h2>
 
-                    {/* Steps Row */}
-                    <div className="flex items-start justify-between relative">
+                    {/* Steps Row - responsive grid on small, flex row on medium+ */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:flex items-start justify-between relative gap-y-6 md:gap-y-0">
 
-                        {/* Connecting line */}
-                        <div className="absolute top-[54px] left-[8%] right-[8%] h-px border-t-2 border-dashed border-gray-300 z-0" />
+                        {/* Connecting line - hidden when steps are stacked into a grid */}
+                        <div className="hidden md:block absolute top-[54px] left-[8%] right-[8%] h-px border-t-2 border-dashed border-gray-300 z-0" />
 
                         {[
                             {
@@ -196,13 +171,49 @@ const WhyPart = () => {
                     </div>
                 </div>
 
+                {/* ── RIGHT: DOCUMENTS REQUIRED ── */}
+                <div className="flex-[38] bg-white px-6 py-5 border border-[#e2e8f0] shadow-sm rounded-2xl relative overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col">
+
+                    {/* The floating Checklist Illustration - dimmed on mobile for readability */}
+                    <div className="absolute bottom-2 -right-4 w-[140px] h-[140px] pointer-events-none z-0 opacity-10 sm:opacity-90 scale-100 group-hover:scale-105 transition-transform duration-700">
+                        <img src="/msmepmsscheme/approved.png" className="w-full h-full object-contain" alt="" />
+                    </div>
+
+                    <div className="relative z-10 pr-4 sm:pr-[110px] flex-1 flex flex-col">
+                        <h2 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide mb-5">
+                            Documents Required
+                        </h2>
+
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-3 items-start flex-1 mt-1">
+                            {[
+                                'Udyam Registration Certificate',
+                                'PAN Card',
+                                'GST Certificate',
+                                'Company Profile',
+                                'Product / Service Details',
+                                'Bank Account Details',
+                                'Stall Booking Invoice',
+                                'Product / Service Brochure',
+                                'Other documents as may be required'
+                            ].map((doc, i) => (
+                                <div key={i} className="flex items-start gap-2 group/item">
+                                    <div className="w-5 h-5 rounded bg-[#f0f9f0] border border-green-100 flex items-center justify-center shrink-0 mt-0.5 group-hover/item:bg-green-100 transition-colors">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#166534" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="m9 15 2 2 4-4"></path></svg>
+                                    </div>
+                                    <span className="text-[10px] font-bold text-[#051d40] leading-tight tracking-tight pt-[2px]">{doc}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            {/* SECTION THREE */}
-            <div className="w-full mb-4 mt-6 rounded-2xl bg-[#1e4d1e] flex items-end gap-6 px-6 relative">
+            {/* SECTION THREE - Responsive CTA strip */}
+            <div className="w-full mb-4 mt-6 rounded-2xl bg-[#1e4d1e] flex flex-col md:flex-row items-center md:items-end gap-4 md:gap-6 px-4 md:px-6 relative pt-5 md:pt-0 pb-5 md:pb-0">
 
-                {/* Trophy Image — upar se bahar nikle */}
-                <div className="shrink-0 z-10" style={{ marginBottom: 0, marginTop: '-44px' }}>
+                {/* Trophy Image — HIDDEN ON MOBILE to prevent messy overlapping */}
+                <div className="hidden md:block shrink-0 z-10" style={{ marginBottom: 0, marginTop: '-44px' }}>
                     <img
                         src="/mpscheme/trofi1.png"
                         alt="Trophy"
@@ -211,23 +222,25 @@ const WhyPart = () => {
                 </div>
 
                 {/* Text */}
-                <div className="flex-1 z-10 py-2 mr-6">
-                    <p className="text-base font-semibold text-white leading-snug">
+                <div className="flex-1 z-10 md:py-2 text-center md:text-left">
+                    <p className="text-sm sm:text-base font-semibold text-white leading-snug">
                         Don't Miss This{' '}
                         <span className="text-[#f5a623]">Government-Supported Opportunity!</span>
                     </p>
-                    <p className="text-sm text-gray-200 mt-1 leading-relaxed">
-                        Exhibit at IHWE 2026 and take your business to the next level<br />
-                        with financial support under the MSME PMS Scheme.
+                    <p className="text-xs sm:text-sm text-gray-200 mt-1 leading-relaxed">
+                        Exhibit at IHWE 2026 and take your business to the next level with financial support under the MSME PMS Scheme.
                     </p>
                 </div>
 
-                {/* Buttons */}
-                <div className="flex items-center gap-6 shrink-0 z-10 py-5">
-                    <button className="bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap">
+                {/* Buttons - Full width stack on mobile */}
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 shrink-0 z-10 py-2 md:py-5 w-full md:w-auto">
+                    <button className="w-full sm:w-auto text-center justify-center flex bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap" onClick={onApplyClick}>
                         Apply for PMS Scheme →
                     </button>
-                    <button className="bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap">
+                    <button
+                        onClick={() => window.open('/book-a-stand', '_blank')}
+                        className="w-full sm:w-auto text-center justify-center flex bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap"
+                    >
                         Book Your Stall →
                     </button>
                 </div>

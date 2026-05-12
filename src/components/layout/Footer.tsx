@@ -286,7 +286,7 @@ const Footer = () => {
                 <img
                   src="/logo.png"
                   alt="IHWE"
-                  className="h-10 md:h-11 w-auto object-contain"
+                  className="h-10 md:h-11 w-auto object-contain hover:opacity-90 transition-opacity"
                 />
               </Link>
               <div className="w-[1px] h-8 bg-slate-500" />
