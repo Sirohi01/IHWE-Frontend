@@ -4,12 +4,12 @@ import { CheckCircle2, TrendingUp, Globe, Landmark, Calendar, MapPin, ArrowRight
 const MPSchemeHero = ({ onApplyClick }) => {
     return (
         <div
-            className="w-full relative min-h-[400px] lg:min-h-[480px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
+            className="w-full relative min-h-[400px] lg:min-h-[450px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
         >
             <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row relative z-10 h-full py-8 lg:py-0">
 
                 {/* ── LEFT CONTENT PANEL ── */}
-                <div className="flex-1 flex flex-col justify-center pt-6 pb-8 lg:pt-8 lg:pb-16 w-full lg:max-w-[520px] relative z-20">
+                <div className="flex-1 flex flex-col justify-center pt-6 pb-2 lg:pt-8 lg:pb-4 w-full lg:max-w-[520px] relative z-20">
 
                     {/* Badge Tag */}
                     <div className="inline-flex items-center bg-[#166534] text-white text-xs sm:text-sm font-medium uppercase tracking-[0.8px] px-3 py-1.5 rounded w-fit shadow-sm mb-4">
@@ -58,52 +58,52 @@ const MPSchemeHero = ({ onApplyClick }) => {
                 </div>
 
                 {/* ── RIGHT CTA & INFO COLUMN ── */}
-                <div className="flex-1 relative w-full h-full min-h-0 lg:min-h-[450px] flex flex-col items-center lg:items-end justify-center mt-8 lg:mt-0 z-10">
+                <div className="flex-1 relative w-full h-full min-h-0 lg:min-h-[400px] flex flex-col items-center lg:items-end justify-center mt-8 lg:mt-0 z-10">
 
                     {/* Info Pillar - Relative stack on mobile, Absolute float on desktop */}
-                    <div className="relative lg:absolute lg:top-4 lg:bottom-4 lg:right-0 w-full max-w-[280px] h-[380px] lg:h-auto lg:w-[270px] bg-[#001933] rounded-xl shadow-2xl border border-white/10 overflow-hidden flex flex-col z-20 mb-8 lg:mb-0">
+                    <div className="relative lg:absolute lg:top-4 lg:bottom-4 lg:right-0 w-full max-w-[250px] h-[350px] lg:h-auto lg:w-[240px] bg-[#001933] rounded-xl shadow-2xl border border-white/10 overflow-hidden flex flex-col z-20 mb-8 lg:mb-0">
 
-                        <div className="p-5 lg:p-6 flex-1 flex flex-col justify-between">
+                        <div className="p-4 lg:p-4 flex-1 flex flex-col justify-start gap-3 lg:gap-5">
                             {/* Top Data Block */}
-                            <div className="flex flex-col gap-5 lg:gap-6 mt-1 lg:mt-2">
+                            <div className="flex flex-col gap-3 lg:gap-3.5 mt-0 lg:mt-0.5">
                                 {/* Date Block */}
-                                <div className="flex items-center gap-3 text-white">
+                                <div className="flex items-center gap-2.5 text-white">
                                     <div className="p-1.5 rounded-lg bg-white/5 border border-white/10">
-                                        <Calendar size={24} className="text-[#8cc63f] shrink-0" strokeWidth={2} />
+                                        <Calendar size={20} className="text-[#8cc63f] shrink-0" strokeWidth={2} />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-[22px] lg:text-[24px] font-black text-white leading-none">21 – 23</span>
-                                        <span className="text-[10px] lg:text-[11px] font-bold tracking-widest text-[#fbbf24] uppercase mt-0.5">August 2026</span>
+                                        <span className="text-[20px] lg:text-[22px] font-black text-white leading-none">21 – 23</span>
+                                        <span className="text-[9px] lg:text-[10px] font-bold tracking-widest text-[#fbbf24] uppercase mt-0.5">August 2026</span>
                                     </div>
                                 </div>
 
                                 {/* Location Block */}
-                                <div className="flex items-start gap-3 text-white">
+                                <div className="flex items-start gap-2.5 text-white">
                                     <div className="p-1.5 rounded-lg bg-white/5 border border-white/10">
-                                        <MapPin size={24} className="text-[#8cc63f] shrink-0" strokeWidth={2} />
+                                        <MapPin size={20} className="text-[#8cc63f] shrink-0" strokeWidth={2} />
                                     </div>
                                     <div className="flex flex-col pt-0.5">
-                                        <span className="text-[10px] lg:text-[11px] font-black tracking-wider uppercase text-white leading-tight">PRAGATI MAIDAN,</span>
-                                        <span className="text-[10px] lg:text-[11px] font-black tracking-wider uppercase text-white leading-tight">NEW DELHI, INDIA</span>
+                                        <span className="text-[9px] lg:text-[10px] font-black tracking-wider uppercase text-white leading-tight">PRAGATI MAIDAN,</span>
+                                        <span className="text-[9px] lg:text-[10px] font-black tracking-wider uppercase text-white leading-tight">NEW DELHI, INDIA</span>
                                     </div>
                                 </div>
 
                                 {/* Catchphrase */}
-                                <div className="border-t border-white/10 pt-3 mt-1">
-                                    <p className="text-[11px] lg:text-[12px] font-bold text-white/90 leading-snug italic">
+                                <div className="border-t border-white/10 pt-1.5 mt-0">
+                                    <p className="text-[10px] lg:text-[11px] font-bold text-white/90 leading-snug italic">
                                         A Global Convergence of Health & Wellness Innovators
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Subsidy Badge */}
-                            <div className="flex justify-center items-center py-3 lg:py-4">
-                                <div className="w-24 h-24 lg:w-28 lg:h-28 rounded-full border-4 border-white/10 flex flex-col items-center justify-center bg-[#166534] shadow-xl relative overflow-hidden">
-                                    <span className="text-[9px] font-medium text-[#fbbf24] tracking-wider">★</span>
-                                    <h3 className="text-[16px] lg:text-[18px] font-medium text-white leading-none">80% <span className="text-[10px] opacity-80 font-normal">TO</span></h3>
-                                    <h3 className=" Subsidy Badgetext-[18px] lg:text-[20px] font-medium text-white leading-none -mt-0.5">100%</h3>
-                                    <span className="text-[7px] lg:text-[8px] font-medium text-white/80 uppercase tracking-widest mt-1">Subsidy</span>
-                                    <span className="text-[7px] lg:text-[8px] font-medium text-white/80 uppercase tracking-widest -mt-0.5">Available</span>
+                            {/* Subsidy Badge - Further tightened padding */}
+                            <div className="flex justify-center items-center py-1 lg:py-1.5 mt-0.5">
+                                <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-full border-4 border-white/10 flex flex-col items-center justify-center bg-[#166534] shadow-xl relative overflow-hidden">
+                                    <span className="text-[10px] lg:text-[11px] font-medium text-[#fbbf24] tracking-wider">★</span>
+                                    <h3 className="text-[18px] lg:text-[20px] font-medium text-white leading-none">80% <span className="text-[11px] opacity-80 font-normal">TO</span></h3>
+                                    <h3 className="text-[20px] lg:text-[24px] font-medium text-white leading-none -mt-0.5">100%</h3>
+                                    <span className="text-[8px] lg:text-[9px] font-medium text-white/80 uppercase tracking-widest mt-1">Subsidy</span>
+                                    <span className="text-[8px] lg:text-[9px] font-medium text-white/80 uppercase tracking-widest -mt-0.5">Available</span>
                                 </div>
                             </div>
                         </div>
