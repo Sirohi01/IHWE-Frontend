@@ -40,6 +40,7 @@ import {
 } from "@/lib/api";
 import Swal from 'sweetalert2';
 import PaymentProcessingModal from '@/components/PaymentProcessingModal';
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || "";
 
@@ -232,7 +233,7 @@ const BookAStand = () => {
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
     const formRef = useRef<HTMLDivElement>(null);
-    const [isComingSoon, setIsComingSoon] = useState(true);
+    const [isComingSoon, setIsComingSoon] = useState(false);
 
     // Scroll to form when exhibitorType changes
     useEffect(() => {
@@ -607,15 +608,10 @@ const BookAStand = () => {
             paymentMode: 'online'
         }));
         if (type === 'international') {
-
-            if (!isComingSoon) {
-                fetch(`${API_URL}/exchange-rate/usd-to-inr`)
-                    .then(r => r.json())
-                    .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
-                    .catch(() => { });
-            } else {
-                setIsComingSoon(true)
-            }
+            fetch(`${API_URL}/exchange-rate/usd-to-inr`)
+                .then(r => r.json())
+                .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
+                .catch(() => { });
         }
     };
 
@@ -965,430 +961,434 @@ const BookAStand = () => {
                     fontFamily: "'Barlow', sans-serif",
                 }}
             >
-                <div className="w-full">
-                    <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[60%]">
+                <SectionContainer>
+                    <div className="w-full">
+                        <div className="relative z-10  py-2 flex flex-col gap-2 w-[60%]">
 
-                        {/* Register as a Buyer */}
-                        <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
-                            Exhibition stall booking
-                        </div>
+                            {/* Register as a Buyer */}
+                            <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
+                                Exhibition stall booking
+                            </div>
 
-                        {/* Main Heading */}
-                        <div>
-                            <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                Book Your
-                            </h1>
-                            <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                Exhibition <span className="text-[#a8d060]"  >Stand</span>
-                            </h1>
-                        </div>
+                            {/* Main Heading */}
+                            <div>
+                                <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                    Book Your
+                                </h1>
+                                <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                    Exhibition <span className="text-[#a8d060]"  >Stand</span>
+                                </h1>
+                            </div>
 
-                        {/* Description */}
-                        <p className="text-white/90 text-lg leading-relaxed max-w-lg">
-                            Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
-                        </p>
+                            {/* Description */}
+                            <p className="text-white/90 text-lg leading-relaxed max-w-lg">
+                                Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
+                            </p>
 
-                        {/* Stats Row */}
-                        <div className="flex items-center mt-2 gap-2">
-                            {[
-                                {
-                                    num: '', label: '8,000+\nHealthcare\nProfessionals',
-                                    icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
-                                },
-                                {
-                                    num: '', label: 'Custom\nStall\nSolutions',
-                                    icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                                {
-                                    num: '', label: 'Maximum\nBrand\nVisibility',
-                                    icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                                {
-                                    num: '', label: 'High-Value\nBusiness\nConnections',
-                                    icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                            ].map((stat, i) => (
-                                <React.Fragment key={i}>
-                                    <div className="flex flex-col items-center text-center px-1.5">
-                                        <div>{stat.icon}</div>
-                                        {stat.num && (
-                                            <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
-                                                {stat.num}
+                            {/* Stats Row */}
+                            <div className="flex items-center mt-2 gap-2">
+                                {[
+                                    {
+                                        num: '', label: '8,000+\nHealthcare\nProfessionals',
+                                        icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
+                                    },
+                                    {
+                                        num: '', label: 'Custom\nStall\nSolutions',
+                                        icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                    {
+                                        num: '', label: 'Maximum\nBrand\nVisibility',
+                                        icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                    {
+                                        num: '', label: 'High-Value\nBusiness\nConnections',
+                                        icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                ].map((stat, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="flex flex-col items-center text-center px-1.5">
+                                            <div>{stat.icon}</div>
+                                            {stat.num && (
+                                                <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                                    {stat.num}
+                                                </div>
+                                            )}
+                                            <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
+                                                {stat.label}
                                             </div>
-                                        )}
-                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
-                                            {stat.label}
                                         </div>
-                                    </div>
-                                    {i < 3 && (
-                                        <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
-                                    )}
-                                </React.Fragment>
-                            ))}
+                                        {i < 3 && (
+                                            <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+
+                            <div className="mt-4">
+                                <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
+                                    Book Your Stall Now
+                                    <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
                         </div>
 
-                        <div className="mt-4">
-                            <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
-                                Book Your Stall Now
-                                <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
+                        <div className="w-[40%]">
+                            {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
                         </div>
-
                     </div>
-
-                    <div className="w-[40%]">
-                        {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
-                    </div>
-                </div>
+                </SectionContainer>
             </section>
 
             {/* bannar section  */}
-            <section className="flex items-center justify-between mx-12 my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
-                {[
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
-                        title: 'Global Platform',
-                        desc: 'Uniting healthcare, wellness, and sustainable industries',
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
-                        title: 'Trusted Brands',
-                        desc: "Connect with India's most trusted brands & manufacturers",
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
-                        title: 'Targeted Audience',
-                        desc: 'Engage with qualified buyers, Investors & decision makers',
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
-                        title: 'Business Growth',
-                        desc: 'Expand your market & accelerate your growth',
-                    },
-                ].map((item, i) => (
-                    <React.Fragment key={i}>
-                        <div className="flex items-start gap-3 flex-1 px-4 ">
-                            {/* Icon Circle */}
-                            <div className="w-16 h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
-                                {item.icon}
+            <SectionContainer>
+                <section className="flex items-center justify-between  my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                    {[
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
+                            title: 'Global Platform',
+                            desc: 'Uniting healthcare, wellness, and sustainable industries',
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
+                            title: 'Trusted Brands',
+                            desc: "Connect with India's most trusted brands & manufacturers",
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
+                            title: 'Targeted Audience',
+                            desc: 'Engage with qualified buyers, Investors & decision makers',
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
+                            title: 'Business Growth',
+                            desc: 'Expand your market & accelerate your growth',
+                        },
+                    ].map((item, i) => (
+                        <React.Fragment key={i}>
+                            <div className="flex items-start gap-3 flex-1 px-4 ">
+                                {/* Icon Circle */}
+                                <div className="w-16 h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
+                                    {item.icon}
+                                </div>
+                                {/* Text */}
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</p>
+                                    <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                                </div>
                             </div>
-                            {/* Text */}
-                            <div>
-                                <p className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</p>
-                                <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
-                            </div>
-                        </div>
-                        {/* Divider */}
-                        {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
-                    </React.Fragment>
-                ))}
-            </section>
-
+                            {/* Divider */}
+                            {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
+                        </React.Fragment>
+                    ))}
+                </section>
+            </SectionContainer>
             {/* button section */}
-            <section className="bg-white border border-gray-100 mx-12 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
+            <SectionContainer>
+                <section className="bg-white border border-gray-100 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
 
-                {/* Left Side */}
-                <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                        <p className="text-gray-900 text-xl font-medium mb-1">9th Edition of</p>
-                        <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
-                            International Health & Wellness Expo 2026<br />(IHWE Global Edition)
-                        </h2>
-                        <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                            Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH,
-                            organic, and sustainable industries under one roof. Whether you are a visitor
-                            discovering innovations or a corporate buyer seeking meaningful business
-                            connections, IHWE offers a high-value, curated experience with India's most
-                            trusted brands and manufacturers.
-                        </p>
-                        <p className="text-gray-600 text-sm">
-                            Register now and be part of a powerful global movement in{' '}
-                            <span className="text-[#4a8f2f] font-semibold">health & wellness.</span>
-                        </p>
-                    </div>
-                </div>
-
-                {/* Divider */}
-                <div className="w-px bg-gray-200 self-stretch" />
-
-                {/* Right Side */}
-                <div className="flex-1">
-                    <h3 className="text-gray-900 text-xl font-medium mb-1">Choose Exhibitor Category</h3>
-                    <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
-
-                    <div className="grid grid-cols-2 gap-4">
-
-                        {/* Domestic Exhibitor */}
-                        <div
-                            onClick={() => handleExhibitorTypeChange('domestic')}
-                            className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'domestic' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
-                        >
-                            <div className="flex items-center justify-center">
-                                <img src="/exhibition/dom.png" alt="Domestic" className="w-18 h-20 object-contain" />
-                            </div>
-                            <div>
-                                <p className="text-gray-800 font-bold text-base mb-1">Domestic Exhibitor</p>
-                                <p className="text-gray-700 text-xs">For exhibitors based in India</p>
-                            </div>
-                            <button
-                                type="button"
-                                className={`flex gap-2 items-center text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'domestic' ? 'bg-[#1a4d1a]' : 'bg-[#23471d] hover:bg-[#1a4d1a]'}`}
-                            >
-                                {exhibitorType === 'domestic' ? 'Selected' : 'Register Now'}
-                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg className={`w-3 h-3 ${exhibitorType === 'domestic' ? 'text-[#1a4d1a]' : 'text-[#23471d]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
+                    {/* Left Side */}
+                    <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                            <p className="text-gray-900 text-xl font-medium mb-1">9th Edition of</p>
+                            <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
+                                International Health & Wellness Expo 2026<br />(IHWE Global Edition)
+                            </h2>
+                            <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
+                            <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                                Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH,
+                                organic, and sustainable industries under one roof. Whether you are a visitor
+                                discovering innovations or a corporate buyer seeking meaningful business
+                                connections, IHWE offers a high-value, curated experience with India's most
+                                trusted brands and manufacturers.
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                Register now and be part of a powerful global movement in{' '}
+                                <span className="text-[#4a8f2f] font-semibold">health & wellness.</span>
+                            </p>
                         </div>
-
-                        {/* International Exhibitor */}
-                        <div
-                            onClick={() => handleExhibitorTypeChange('international')}
-                            className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'international' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
-                        >
-                            <div className="flex items-center justify-center">
-                                <img src="/exhibition/int.png" alt="International" className="w-18 h-20 object-contain" />
-                            </div>
-                            <div>
-                                <p className="text-gray-800 font-bold text-base mb-1">International Exhibitor</p>
-                                <p className="text-gray-700 text-xs">For exhibitors based outside India</p>
-                            </div>
-                            <button
-                                type="button"
-                                className={`flex items-center gap-2 text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'international' ? 'bg-[#c96a18]' : 'bg-[#e07820] hover:bg-[#c96a18]'}`}
-                            >
-                                {exhibitorType === 'international' ? 'Selected' : 'Register Now'}
-                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg className={`w-3 h-3 ${exhibitorType === 'international' ? 'text-[#c96a18]' : 'text-[#e07820]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
-                        </div>
-
                     </div>
-                </div>
 
-            </section>
+                    {/* Divider */}
+                    <div className="w-px bg-gray-200 self-stretch" />
 
+                    {/* Right Side */}
+                    <div className="flex-1">
+                        <h3 className="text-gray-900 text-xl font-medium mb-1">Choose Exhibitor Category</h3>
+                        <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
+
+                        <div className="grid grid-cols-2 gap-4">
+
+                            {/* Domestic Exhibitor */}
+                            <div
+                                onClick={() => handleExhibitorTypeChange('domestic')}
+                                className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'domestic' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
+                            >
+                                <div className="flex items-center justify-center">
+                                    <img src="/exhibition/dom.png" alt="Domestic" className="w-18 h-20 object-contain" />
+                                </div>
+                                <div>
+                                    <p className="text-gray-800 font-bold text-base mb-1">Domestic Exhibitor</p>
+                                    <p className="text-gray-700 text-xs">For exhibitors based in India</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={`flex gap-2 items-center text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'domestic' ? 'bg-[#1a4d1a]' : 'bg-[#23471d] hover:bg-[#1a4d1a]'}`}
+                                >
+                                    {exhibitorType === 'domestic' ? 'Selected' : 'Register Now'}
+                                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg className={`w-3 h-3 ${exhibitorType === 'domestic' ? 'text-[#1a4d1a]' : 'text-[#23471d]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                            {/* International Exhibitor */}
+                            <div
+                                onClick={() => handleExhibitorTypeChange('international')}
+                                className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'international' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
+                            >
+                                <div className="flex items-center justify-center">
+                                    <img src="/exhibition/int.png" alt="International" className="w-18 h-20 object-contain" />
+                                </div>
+                                <div>
+                                    <p className="text-gray-800 font-bold text-base mb-1">International Exhibitor</p>
+                                    <p className="text-gray-700 text-xs">For exhibitors based outside India</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={`flex items-center gap-2 text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'international' ? 'bg-[#c96a18]' : 'bg-[#e07820] hover:bg-[#c96a18]'}`}
+                                >
+                                    {exhibitorType === 'international' ? 'Selected' : 'Register Now'}
+                                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg className={`w-3 h-3 ${exhibitorType === 'international' ? 'text-[#c96a18]' : 'text-[#e07820]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+            </SectionContainer>
             {/* -- MAIN CONTENT -- */}
             <section className="pt-4 pb-12 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                    <div className="space-y-4">
-                        {/* -- REGISTRATION FLOW -- */}
-                        <div className="w-full">
+
+                <div className="space-y-4">
+                    {/* -- REGISTRATION FLOW -- */}
+                    <SectionContainer className="w-full">
 
 
-                            <div ref={formRef} className="scroll-mt-10">
-                                <AnimatePresence mode="wait">
-                                    {!exhibitorType ? null : submitted ? (
-                                        <motion.div
-                                            key="success"
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            className="min-h-[500px] flex flex-col items-center justify-center text-center p-8 bg-white border border-slate-200 shadow-2xl relative overflow-hidden rounded-xl"
-                                        >
-                                            {/* Decorative Background Elements */}
-                                            <div className="absolute top-0 right-0 w-64 h-64 bg-[#23471d]/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-                                            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#d26019]/5 rounded-full -ml-32 -mb-32 blur-3xl" />
+                        <div ref={formRef} className="scroll-mt-10">
+                            <AnimatePresence mode="wait">
+                                {!exhibitorType ? null : submitted ? (
+                                    <motion.div
+                                        key="success"
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="min-h-[500px] flex flex-col items-center justify-center text-center p-8 bg-white border border-slate-200 shadow-2xl relative overflow-hidden rounded-xl"
+                                    >
+                                        {/* Decorative Background Elements */}
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#23471d]/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+                                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#d26019]/5 rounded-full -ml-32 -mb-32 blur-3xl" />
 
-                                            <div className="relative z-10 space-y-6 max-w-lg">
-                                                <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100 shadow-inner">
-                                                    <CheckCircle className="text-[#23471d]" size={40} />
+                                        <div className="relative z-10 space-y-6 max-w-lg">
+                                            <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100 shadow-inner">
+                                                <CheckCircle className="text-[#23471d]" size={40} />
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <h2 className="text-4xl font-inter font-bold text-slate-900">Application Received!</h2>
+                                                <p className="text-[#d26019] font-bold text-[10px] uppercase tracking-[0.3em]">Exhibitor Registration Protocol Complete</p>
+                                            </div>
+
+                                            <p className="text-slate-500 text-sm leading-relaxed font-medium">
+                                                Thank you for choosing to exhibit at IHWE 2026. Your stall booking application for <span className="font-bold text-slate-900">Stall #{formData.participation.stallFor}</span> has been successfully submitted.
+                                            </p>
+
+                                            <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-3">
+                                                <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                                    <span>Transaction Status</span>
+                                                    <span className="text-green-600">Verification Success</span>
                                                 </div>
-
-                                                <div className="space-y-2">
-                                                    <h2 className="text-4xl font-inter font-bold text-slate-900">Application Received!</h2>
-                                                    <p className="text-[#d26019] font-bold text-[10px] uppercase tracking-[0.3em]">Exhibitor Registration Protocol Complete</p>
-                                                </div>
-
-                                                <p className="text-slate-500 text-sm leading-relaxed font-medium">
-                                                    Thank you for choosing to exhibit at IHWE 2026. Your stall booking application for <span className="font-bold text-slate-900">Stall #{formData.participation.stallFor}</span> has been successfully submitted.
-                                                </p>
-
-                                                <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-3">
-                                                    <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                                        <span>Transaction Status</span>
-                                                        <span className="text-green-600">Verification Success</span>
-                                                    </div>
-                                                    <div className="h-px bg-slate-200" />
-                                                    <p className="text-[11px] text-slate-600 font-medium">
-                                                        A confirmation email has been sent to <span className="text-slate-900 font-bold">{formData.contact1.email}</span> with your registration details and invoice.
-                                                    </p>
-                                                </div>
-
-                                                <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                                                    <Link to="/">
-                                                        <Button className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-black text-[11px] font-bold uppercase tracking-widest w-full">
-                                                            Return to Home
-                                                        </Button>
-                                                    </Link>
-                                                </div>
-
-                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pt-4">
-                                                    Official IHWE 2026 Exhibitor Portal
+                                                <div className="h-px bg-slate-200" />
+                                                <p className="text-[11px] text-slate-600 font-medium">
+                                                    A confirmation email has been sent to <span className="text-slate-900 font-bold">{formData.contact1.email}</span> with your registration details and invoice.
                                                 </p>
                                             </div>
-                                        </motion.div>
-                                    ) : (
-                                        <motion.div
-                                            key="form"
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="bg-white border border-slate-500 shadow-2xl overflow-hidden rounded-sm"
-                                        >
-                                            <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
-                                                <div>
-                                                    <h2 className="text-base font-medium uppercase tracking-wider text-white">
-                                                        {exhibitorType === 'domestic' ? 'Domestic Exhibitor Registration' : 'International Exhibitor Registration'}
-                                                    </h2>
-                                                    <p className="text-xs text-[#a8d060] uppercase tracking-[0.3em] font-semibold mb-1">
-                                                        9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
-                                                    </p>
-                                                </div>
-                                                <ShieldCheck className="text-[#a8d060]" size={22} />
+
+                                            <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+                                                <Link to="/">
+                                                    <Button className="h-11 px-8 rounded-xl bg-slate-900 hover:bg-black text-[11px] font-bold uppercase tracking-widest w-full">
+                                                        Return to Home
+                                                    </Button>
+                                                </Link>
                                             </div>
-                                            <form onSubmit={handleSubmit} className="px-8 pt-4 pb-8 space-y-4 font-inter bg-white">
-                                                <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
-                                                    <table className="w-full text-left border-collapse">
-                                                        <thead>
-                                                            <tr className="bg-[#0091d5] text-white">
-                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
-                                                                {exhibitorType === 'domestic' && (
-                                                                    <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
-                                                                )}
-                                                                {exhibitorType === 'international' && (
-                                                                    <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
-                                                                )}
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody className="text-slate-700">
-                                                            {allRates.length > 0 ? (
-                                                                [...new Set(allRates.map(r => r.stallType))].map((type, idx) => {
-                                                                    const inrRate = allRates.find(r => r.stallType === type && r.currency === 'INR');
-                                                                    const usdRate = allRates.find(r => r.stallType === type && r.currency === 'USD');
-                                                                    return (
-                                                                        <tr key={type} className={`border-b border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                                            <td className="py-2 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '9' : '9'} sq m.)</td>
-                                                                            {exhibitorType === 'domestic' && (
-                                                                                <td className="py-2 px-6 text-[12px] font-medium uppercase">
-                                                                                    {inrRate ? `INR ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
-                                                                                </td>
-                                                                            )}
-                                                                            {exhibitorType === 'international' && (
-                                                                                <td className="py-2 px-6 text-[12px] font-medium uppercase">
-                                                                                    {usdRate ? `USD ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
-                                                                                </td>
-                                                                            )}
-                                                                        </tr>
-                                                                    );
-                                                                })
-                                                            ) : (
-                                                                <tr>
-                                                                    <td colSpan={2} className="py-8 text-center text-[11px] text-slate-400">No stall rates available for this event</td>
-                                                                </tr>
+
+                                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pt-4">
+                                                Official IHWE 2026 Exhibitor Portal
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="form"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-white border border-slate-500 shadow-2xl overflow-hidden rounded-sm"
+                                    >
+                                        <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
+                                            <div>
+                                                <h2 className="text-base font-medium uppercase tracking-wider text-white">
+                                                    {exhibitorType === 'domestic' ? 'Domestic Exhibitor Registration' : 'International Exhibitor Registration'}
+                                                </h2>
+                                                <p className="text-xs text-[#a8d060] uppercase tracking-[0.3em] font-semibold mb-1">
+                                                    9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
+                                                </p>
+                                            </div>
+                                            <ShieldCheck className="text-[#a8d060]" size={22} />
+                                        </div>
+                                        <form onSubmit={handleSubmit} className="px-8 pt-4 pb-8 space-y-4 font-inter bg-white">
+                                            <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
+                                                <table className="w-full text-left border-collapse">
+                                                    <thead>
+                                                        <tr className="bg-[#0091d5] text-white">
+                                                            <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
+                                                            {exhibitorType === 'domestic' && (
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
                                                             )}
-                                                        </tbody>
-                                                    </table>
+                                                            {exhibitorType === 'international' && (
+                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
+                                                            )}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="text-slate-700">
+                                                        {allRates.length > 0 ? (
+                                                            [...new Set(allRates.map(r => r.stallType))].map((type, idx) => {
+                                                                const inrRate = allRates.find(r => r.stallType === type && r.currency === 'INR');
+                                                                const usdRate = allRates.find(r => r.stallType === type && r.currency === 'USD');
+                                                                return (
+                                                                    <tr key={type} className={`border-b border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                                                                        <td className="py-2 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '9' : '9'} sq m.)</td>
+                                                                        {exhibitorType === 'domestic' && (
+                                                                            <td className="py-2 px-6 text-[12px] font-medium uppercase">
+                                                                                {inrRate ? `INR ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
+                                                                            </td>
+                                                                        )}
+                                                                        {exhibitorType === 'international' && (
+                                                                            <td className="py-2 px-6 text-[12px] font-medium uppercase">
+                                                                                {usdRate ? `USD ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
+                                                                            </td>
+                                                                        )}
+                                                                    </tr>
+                                                                );
+                                                            })
+                                                        ) : (
+                                                            <tr>
+                                                                <td colSpan={2} className="py-8 text-center text-[11px] text-slate-400">No stall rates available for this event</td>
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            {/* -- EXHIBITOR DETAILS SECTION -- */}
+                                            <div className="space-y-1.5 pt-0.5">
+                                                <div className="pb-1 border-b border-slate-500">
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Details</h3>
                                                 </div>
 
-                                                {/* -- EXHIBITOR DETAILS SECTION -- */}
-                                                <div className="space-y-1.5 pt-0.5">
-                                                    <div className="pb-1 border-b border-slate-500">
-                                                        <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Details</h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-2">
+                                                    <div>
+                                                        <Label className={labelClasses}>COMPANY NAME <span className="text-red-500">*</span></Label>
+                                                        <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Here" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {BUSINESS_TYPES.map(type => (
+                                                                    <SelectItem key={type} value={type} className="text-xs">{type}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Here" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {PRIMARY_CATEGORIES.map(s => (
+                                                                    <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>WEBSITE <span className="text-red-500">*</span></Label>
+                                                        <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
 
-                                                    <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-2">
-                                                        <div>
-                                                            <Label className={labelClasses}>COMPANY NAME <span className="text-red-500">*</span></Label>
-                                                            <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Here" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {BUSINESS_TYPES.map(type => (
-                                                                        <SelectItem key={type} value={type} className="text-xs">{type}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Here" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {PRIMARY_CATEGORIES.map(s => (
-                                                                        <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>WEBSITE <span className="text-red-500">*</span></Label>
-                                                            <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                        </div>
-
-                                                        <div>
-                                                            <Label className={labelClasses}>EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
-                                                            <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>COUNTRY <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Here" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {countries
-                                                                        .filter(c => exhibitorType === 'domestic' ? c.name.toLowerCase() === 'india' : c.name.toLowerCase() !== 'india')
-                                                                        .map(c => (
-                                                                            <SelectItem key={c._id} value={c.name} className="text-xs">{c.name}</SelectItem>
-                                                                        ))
-                                                                    }
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Here" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {filteredStates.map(s => (
-                                                                        <SelectItem key={s._id} value={s.name} className="text-xs">{s.name}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>CITY <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Here" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {filteredCities.map(c => (
+                                                    <div>
+                                                        <Label className={labelClasses}>EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
+                                                        <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>COUNTRY <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Here" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {countries
+                                                                    .filter(c => exhibitorType === 'domestic' ? c.name.toLowerCase() === 'india' : c.name.toLowerCase() !== 'india')
+                                                                    .map(c => (
                                                                         <SelectItem key={c._id} value={c.name} className="text-xs">{c.name}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                                    ))
+                                                                }
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Here" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {filteredStates.map(s => (
+                                                                    <SelectItem key={s._id} value={s.name} className="text-xs">{s.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>CITY <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Here" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {filteredCities.map(c => (
+                                                                    <SelectItem key={c._id} value={c.name} className="text-xs">{c.name}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
 
-                                                        {/* <div>
+                                                    {/* <div>
                                                         <Label className={labelClasses}>NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
                                                             <SelectTrigger className={inputClasses}>
@@ -1401,605 +1401,605 @@ const BookAStand = () => {
                                                             </SelectContent>
                                                         </Select>
                                                     </div> */}
-                                                        <div>
-                                                            <Label className={labelClasses}>PINCODE/Postal Code <span className="text-red-500">*</span></Label>
-                                                            <Input required name="pincode" value={formData.pincode} onChange={(e) => setFormData(prev => ({ ...prev, pincode: e.target.value.replace(/\D/g, '') }))} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
-                                                        </div>
-                                                        <div>
-                                                            <Label className={labelClasses}>LANDLINE NO.</Label>
-                                                            <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
-                                                        </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>PINCODE/Postal Code <span className="text-red-500">*</span></Label>
+                                                        <Input required name="pincode" value={formData.pincode} onChange={(e) => setFormData(prev => ({ ...prev, pincode: e.target.value.replace(/\D/g, '') }))} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
+                                                    </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>LANDLINE NO.</Label>
+                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
+                                                    </div>
+                                                </div>
+
+                                                {/* -- REGISTRANT TYPE + GST / PAN / AADHAAR -- */}
+                                                <div className="mt-3 p-3 border border-slate-300 rounded-sm bg-slate-50/60">
+                                                    {/* Radio buttons */}
+                                                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2">Exhibitor Registration Type <span className="text-red-500">*</span></p>
+                                                    <div className="flex gap-6 mb-3">
+                                                        <label className="flex items-center gap-2 cursor-pointer group">
+                                                            <input
+                                                                type="radio"
+                                                                name="registrantType"
+                                                                value="registered"
+                                                                checked={formData.registrantType === 'registered'}
+                                                                onChange={() => setFormData(prev => ({ ...prev, registrantType: 'registered', panNo: '', aadhaarNo: '' }))}
+                                                                className="accent-[#23471d] w-4 h-4"
+                                                            />
+                                                            <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#23471d] transition-colors">
+                                                                Registered Exhibitor
+                                                                <span className="ml-1.5 text-[9px] font-black text-[#23471d] bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">GST Required</span>
+                                                            </span>
+                                                        </label>
+                                                        <label className="flex items-center gap-2 cursor-pointer group">
+                                                            <input
+                                                                type="radio"
+                                                                name="registrantType"
+                                                                value="unregistered"
+                                                                checked={formData.registrantType === 'unregistered'}
+                                                                onChange={() => setFormData(prev => ({ ...prev, registrantType: 'unregistered', gstNo: '' }))}
+                                                                className="accent-[#d26019] w-4 h-4"
+                                                            />
+                                                            <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#d26019] transition-colors">
+                                                                Unregistered Buyer
+                                                                <span className="ml-1.5 text-[9px] font-black text-[#d26019] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">PAN + Aadhaar Required</span>
+                                                            </span>
+                                                        </label>
                                                     </div>
 
-                                                    {/* -- REGISTRANT TYPE + GST / PAN / AADHAAR -- */}
-                                                    <div className="mt-3 p-3 border border-slate-300 rounded-sm bg-slate-50/60">
-                                                        {/* Radio buttons */}
-                                                        <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2">Exhibitor Registration Type <span className="text-red-500">*</span></p>
-                                                        <div className="flex gap-6 mb-3">
-                                                            <label className="flex items-center gap-2 cursor-pointer group">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="registrantType"
-                                                                    value="registered"
-                                                                    checked={formData.registrantType === 'registered'}
-                                                                    onChange={() => setFormData(prev => ({ ...prev, registrantType: 'registered', panNo: '', aadhaarNo: '' }))}
-                                                                    className="accent-[#23471d] w-4 h-4"
-                                                                />
-                                                                <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#23471d] transition-colors">
-                                                                    Registered Exhibitor
-                                                                    <span className="ml-1.5 text-[9px] font-black text-[#23471d] bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">GST Required</span>
-                                                                </span>
-                                                            </label>
-                                                            <label className="flex items-center gap-2 cursor-pointer group">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="registrantType"
-                                                                    value="unregistered"
-                                                                    checked={formData.registrantType === 'unregistered'}
-                                                                    onChange={() => setFormData(prev => ({ ...prev, registrantType: 'unregistered', gstNo: '' }))}
-                                                                    className="accent-[#d26019] w-4 h-4"
-                                                                />
-                                                                <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#d26019] transition-colors">
-                                                                    Unregistered Buyer
-                                                                    <span className="ml-1.5 text-[9px] font-black text-[#d26019] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">PAN + Aadhaar Required</span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
+                                                    {/* Conditional fields */}
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-2">
+                                                        {formData.registrantType === 'registered' ? (
+                                                            <>
+                                                                <div>
+                                                                    <Label className={labelClasses}>GST NO. (GSTIN) <span className="text-red-500">*</span></Label>
+                                                                    <Input
+                                                                        required
+                                                                        name="gstNo"
+                                                                        value={formData.gstNo}
+                                                                        onChange={(e) => setFormData(prev => ({ ...prev, gstNo: e.target.value.toUpperCase() }))}
+                                                                        placeholder="e.g. 07AABCU9603R1ZX"
+                                                                        maxLength={15}
+                                                                        className={inputClasses}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
+                                                                    <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <div>
+                                                                    <Label className={labelClasses}>PAN CARD NO. <span className="text-red-500">*</span></Label>
+                                                                    <Input
+                                                                        required
+                                                                        name="panNo"
+                                                                        value={formData.panNo}
+                                                                        onChange={(e) => setFormData(prev => ({ ...prev, panNo: e.target.value.toUpperCase() }))}
+                                                                        placeholder="e.g. ABCDE1234F"
+                                                                        maxLength={10}
+                                                                        className={inputClasses}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>AADHAAR CARD NO. <span className="text-red-500">*</span></Label>
+                                                                    <Input
+                                                                        required
+                                                                        name="aadhaarNo"
+                                                                        value={formData.aadhaarNo}
+                                                                        onChange={(e) => setFormData(prev => ({ ...prev, aadhaarNo: e.target.value.replace(/\D/g, '').slice(0, 12) }))}
+                                                                        placeholder="12-digit Aadhaar number"
+                                                                        maxLength={12}
+                                                                        inputMode="numeric"
+                                                                        className={inputClasses}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
+                                                                    <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                        {/* Conditional fields */}
-                                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-2">
-                                                            {formData.registrantType === 'registered' ? (
-                                                                <>
-                                                                    <div>
-                                                                        <Label className={labelClasses}>GST NO. (GSTIN) <span className="text-red-500">*</span></Label>
-                                                                        <Input
-                                                                            required
-                                                                            name="gstNo"
-                                                                            value={formData.gstNo}
-                                                                            onChange={(e) => setFormData(prev => ({ ...prev, gstNo: e.target.value.toUpperCase() }))}
-                                                                            placeholder="e.g. 07AABCU9603R1ZX"
-                                                                            maxLength={15}
-                                                                            className={inputClasses}
-                                                                        />
+                                            {/* -- EXHIBITOR CONTACT DETAILS -- */}
+                                            <div className="space-y-1.5 pt-0.5">
+                                                <div className="pb-1 border-b border-slate-500">
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Contact Details</h3>
+                                                </div>
+
+                                                {/* First Contact Person */}
+                                                <div className="space-y-4">
+                                                    <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
+                                                        <div>
+                                                            <Label className={labelClasses}>TITLE <span className="text-red-500">*</span></Label>
+                                                            <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Here" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="Mr.">Mr.</SelectItem>
+                                                                    <SelectItem value="Ms.">Ms.</SelectItem>
+                                                                    <SelectItem value="Mrs.">Mrs.</SelectItem>
+                                                                    <SelectItem value="Dr.">Dr.</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div>
+                                                            <Label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        </div>
+                                                        <div>
+                                                            <Label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        </div>
+                                                        <div>
+                                                            <Label className={labelClasses}>EMAIL <span className="text-red-500">*</span></Label>
+                                                            <div className="flex gap-1">
+                                                                <Input
+                                                                    required
+                                                                    type="email"
+                                                                    name="contact1.email"
+                                                                    value={formData.contact1.email}
+                                                                    onChange={handleInputChange}
+                                                                    placeholder="Official Email"
+                                                                    className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${emailVerified ? 'border-green-500' : ''}`}
+                                                                    readOnly={emailVerified}
+                                                                />
+                                                                {!emailVerified && (
+                                                                    <Button type="button" onClick={handleSendEmailOtp} disabled={isEmailLoading || emailTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
+                                                                        {emailTimer > 0 ? `Resend ${emailTimer}s` : 'Get OTP'}
+                                                                    </Button>
+                                                                )}
+                                                                {emailVerified && (
+                                                                    <div className="h-8 px-3 bg-green-50 border border-green-200 rounded-[2px] flex items-center justify-center">
+                                                                        <CheckCircle className="text-green-600" size={14} />
                                                                     </div>
-                                                                    <div>
-                                                                        <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
-                                                                        <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
-                                                                    </div>
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <div>
-                                                                        <Label className={labelClasses}>PAN CARD NO. <span className="text-red-500">*</span></Label>
-                                                                        <Input
-                                                                            required
-                                                                            name="panNo"
-                                                                            value={formData.panNo}
-                                                                            onChange={(e) => setFormData(prev => ({ ...prev, panNo: e.target.value.toUpperCase() }))}
-                                                                            placeholder="e.g. ABCDE1234F"
-                                                                            maxLength={10}
-                                                                            className={inputClasses}
-                                                                        />
-                                                                    </div>
-                                                                    <div>
-                                                                        <Label className={labelClasses}>AADHAAR CARD NO. <span className="text-red-500">*</span></Label>
-                                                                        <Input
-                                                                            required
-                                                                            name="aadhaarNo"
-                                                                            value={formData.aadhaarNo}
-                                                                            onChange={(e) => setFormData(prev => ({ ...prev, aadhaarNo: e.target.value.replace(/\D/g, '').slice(0, 12) }))}
-                                                                            placeholder="12-digit Aadhaar number"
-                                                                            maxLength={12}
-                                                                            inputMode="numeric"
-                                                                            className={inputClasses}
-                                                                        />
-                                                                    </div>
-                                                                    <div>
-                                                                        <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
-                                                                        <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
-                                                                    </div>
-                                                                </>
+                                                                )}
+                                                            </div>
+                                                            {!emailVerified && emailTimer > 0 && (
+                                                                <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
+                                                                    <Input
+                                                                        value={emailOtp}
+                                                                        onChange={(e) => setEmailOtp(e.target.value)}
+                                                                        placeholder="6-Digit OTP"
+                                                                        maxLength={6}
+                                                                        className="h-8 border-[#23471d] text-xs font-bold text-center tracking-[0.5em] focus:ring-0 rounded-[2px]"
+                                                                    />
+                                                                    <Button type="button" onClick={handleVerifyEmailOtp} disabled={isEmailLoading} className="h-8 bg-[#23471d] text-[10px] font-bold uppercase rounded-[2px]">Verify</Button>
+                                                                </div>
                                                             )}
                                                         </div>
-                                                    </div>
-                                                </div>
 
-                                                {/* -- EXHIBITOR CONTACT DETAILS -- */}
-                                                <div className="space-y-1.5 pt-0.5">
-                                                    <div className="pb-1 border-b border-slate-500">
-                                                        <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Contact Details</h3>
-                                                    </div>
-
-                                                    {/* First Contact Person */}
-                                                    <div className="space-y-4">
-                                                        <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
-                                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
-                                                            <div>
-                                                                <Label className={labelClasses}>TITLE <span className="text-red-500">*</span></Label>
-                                                                <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
-                                                                    <SelectTrigger className={inputClasses}>
-                                                                        <SelectValue placeholder="Select Here" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="Mr.">Mr.</SelectItem>
-                                                                        <SelectItem value="Ms.">Ms.</SelectItem>
-                                                                        <SelectItem value="Mrs.">Mrs.</SelectItem>
-                                                                        <SelectItem value="Dr.">Dr.</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></Label>
-                                                                <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></Label>
-                                                                <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>EMAIL <span className="text-red-500">*</span></Label>
-                                                                <div className="flex gap-1">
-                                                                    <Input
-                                                                        required
-                                                                        type="email"
-                                                                        name="contact1.email"
-                                                                        value={formData.contact1.email}
-                                                                        onChange={handleInputChange}
-                                                                        placeholder="Official Email"
-                                                                        className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${emailVerified ? 'border-green-500' : ''}`}
-                                                                        readOnly={emailVerified}
-                                                                    />
-                                                                    {!emailVerified && (
-                                                                        <Button type="button" onClick={handleSendEmailOtp} disabled={isEmailLoading || emailTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
-                                                                            {emailTimer > 0 ? `Resend ${emailTimer}s` : 'Get OTP'}
-                                                                        </Button>
-                                                                    )}
-                                                                    {emailVerified && (
-                                                                        <div className="h-8 px-3 bg-green-50 border border-green-200 rounded-[2px] flex items-center justify-center">
-                                                                            <CheckCircle className="text-green-600" size={14} />
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                {!emailVerified && emailTimer > 0 && (
-                                                                    <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
-                                                                        <Input
-                                                                            value={emailOtp}
-                                                                            onChange={(e) => setEmailOtp(e.target.value)}
-                                                                            placeholder="6-Digit OTP"
-                                                                            maxLength={6}
-                                                                            className="h-8 border-[#23471d] text-xs font-bold text-center tracking-[0.5em] focus:ring-0 rounded-[2px]"
-                                                                        />
-                                                                        <Button type="button" onClick={handleVerifyEmailOtp} disabled={isEmailLoading} className="h-8 bg-[#23471d] text-[10px] font-bold uppercase rounded-[2px]">Verify</Button>
+                                                        <div>
+                                                            <Label className={labelClasses}>DESIGNATION <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        </div>
+                                                        <div>
+                                                            <Label className={labelClasses}>MOBILE <span className="text-red-500">*</span></Label>
+                                                            <div className="flex gap-1">
+                                                                <Input
+                                                                    required
+                                                                    name="contact1.mobile"
+                                                                    value={formData.contact1.mobile}
+                                                                    onChange={handleInputChange}
+                                                                    placeholder={exhibitorType === 'domestic' ? "10-digit number" : "WhatsApp Number"}
+                                                                    inputMode={exhibitorType === 'domestic' ? 'numeric' : 'tel'}
+                                                                    maxLength={exhibitorType === 'domestic' ? 10 : undefined}
+                                                                    className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${phoneVerified ? 'border-green-500' : ''}`}
+                                                                    readOnly={phoneVerified}
+                                                                />
+                                                                {!phoneVerified && (
+                                                                    <Button type="button" onClick={handleSendPhoneOtp} disabled={isPhoneLoading || phoneTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
+                                                                        {phoneTimer > 0 ? `${phoneTimer}s` : 'Get OTP'}
+                                                                    </Button>
+                                                                )}
+                                                                {phoneVerified && (
+                                                                    <div className="h-8 px-3 bg-green-50 border border-green-200 rounded-[2px] flex items-center justify-center">
+                                                                        <CheckCircle className="text-green-600" size={14} />
                                                                     </div>
                                                                 )}
                                                             </div>
-
-                                                            <div>
-                                                                <Label className={labelClasses}>DESIGNATION <span className="text-red-500">*</span></Label>
-                                                                <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>MOBILE <span className="text-red-500">*</span></Label>
-                                                                <div className="flex gap-1">
+                                                            {!phoneVerified && phoneTimer > 0 && (
+                                                                <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
                                                                     <Input
-                                                                        required
-                                                                        name="contact1.mobile"
-                                                                        value={formData.contact1.mobile}
-                                                                        onChange={handleInputChange}
-                                                                        placeholder={exhibitorType === 'domestic' ? "10-digit number" : "WhatsApp Number"}
-                                                                        inputMode={exhibitorType === 'domestic' ? 'numeric' : 'tel'}
-                                                                        maxLength={exhibitorType === 'domestic' ? 10 : undefined}
-                                                                        className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${phoneVerified ? 'border-green-500' : ''}`}
-                                                                        readOnly={phoneVerified}
+                                                                        value={phoneOtp}
+                                                                        onChange={(e) => setPhoneOtp(e.target.value)}
+                                                                        placeholder="6-Digit OTP"
+                                                                        maxLength={6}
+                                                                        className="h-8 border-[#25D366] text-xs font-bold text-center tracking-[0.5em] focus:ring-0 rounded-[2px]"
                                                                     />
-                                                                    {!phoneVerified && (
-                                                                        <Button type="button" onClick={handleSendPhoneOtp} disabled={isPhoneLoading || phoneTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
-                                                                            {phoneTimer > 0 ? `${phoneTimer}s` : 'Get OTP'}
-                                                                        </Button>
-                                                                    )}
-                                                                    {phoneVerified && (
-                                                                        <div className="h-8 px-3 bg-green-50 border border-green-200 rounded-[2px] flex items-center justify-center">
-                                                                            <CheckCircle className="text-green-600" size={14} />
-                                                                        </div>
-                                                                    )}
+                                                                    <Button type="button" onClick={handleVerifyPhoneOtp} disabled={isPhoneLoading} className="h-8 bg-[#25D366] text-white text-[10px] font-bold uppercase rounded-[2px]">Verify</Button>
                                                                 </div>
-                                                                {!phoneVerified && phoneTimer > 0 && (
-                                                                    <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
-                                                                        <Input
-                                                                            value={phoneOtp}
-                                                                            onChange={(e) => setPhoneOtp(e.target.value)}
-                                                                            placeholder="6-Digit OTP"
-                                                                            maxLength={6}
-                                                                            className="h-8 border-[#25D366] text-xs font-bold text-center tracking-[0.5em] focus:ring-0 rounded-[2px]"
-                                                                        />
-                                                                        <Button type="button" onClick={handleVerifyPhoneOtp} disabled={isPhoneLoading} className="h-8 bg-[#25D366] text-white text-[10px] font-bold uppercase rounded-[2px]">Verify</Button>
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <Label className={labelClasses}>ALTERNATE NO. <span className="text-red-500">*</span></Label>
+                                                            <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className={inputClasses} inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            {/* -- PARTICIPATION DETAILS SECTION -- */}
+                                            <div className="space-y-1.5 pt-2 border-t border-slate-500">
+                                                <div className="pb-1 border-b border-slate-500">
+                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Participation Details</h3>
+                                                </div>
+
+                                                <div className="space-y-4">
+                                                    {/* Selection Controls */}
+                                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></Label>
+                                                            <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Stall" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {availableStalls.map(s => (
+                                                                        <SelectItem key={s._id} value={s._id} className="text-xs">Stall {s.stallNumber}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>STALL SIZE <span className="text-red-500">*</span></Label>
+                                                            <Input readOnly value={formData.participation.stallSize} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>STALL CATEGORY <span className="text-red-500">*</span></Label>
+                                                            <Select
+                                                                onValueChange={(v) => {
+                                                                    setFormData(prev => ({
+                                                                        ...prev,
+                                                                        participation: { ...prev.participation, stallType: v }
+                                                                    }));
+                                                                }}
+                                                                value={formData.participation.stallType}
+                                                            >
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Category" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="Shell Space" className="text-xs">Shell Space (Built-up)</SelectItem>
+                                                                    <SelectItem value="Raw Space" className="text-xs">Raw Space (Plot)</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></Label>
+                                                            <Input readOnly value={formData.participation.stallScheme || "N/A"} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></Label>
+                                                            <Input readOnly value={formData.participation.dimension} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <Label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></Label>
+                                                            <Input readOnly value={formData.participation.stallFor} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Cost Breakdown box (full width below fields) */}
+                                                    <div className="w-full">
+                                                        <div className="p-4 bg-[#f8fafc] border border-slate-200 rounded-sm shadow-sm relative overflow-hidden group">
+                                                            {/* Accent Decoration */}
+                                                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#23471d]/5 rounded-full -mr-12 -mt-12 blur-2xl" />
+
+                                                            <div className="flex items-center gap-2 mb-3">
+                                                                <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
+                                                                <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.15em] block">Cost Breakdown</Label>
+                                                            </div>
+
+                                                            <div className="flex flex-wrap gap-6 relative z-10 items-end">
+                                                                <div className="flex flex-col gap-1 min-w-[160px]">
+                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Space Area ({formData.participation.stallSize} sqm)</span>
+                                                                    <span className="text-lg font-bold text-slate-900">
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
+                                                                    </span>
+                                                                </div>
+                                                                {selectedStall?.incrementPercentage > 0 && (
+                                                                    <div className="flex flex-col gap-1 min-w-[160px] text-orange-600">
+                                                                        <span className="text-[10px] font-bold uppercase tracking-widest">PL Increment ({selectedStall.incrementPercentage}%)</span>
+                                                                        <span className="text-lg font-bold">+ {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
                                                                     </div>
                                                                 )}
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>ALTERNATE NO. <span className="text-red-500">*</span></Label>
-                                                                <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className={inputClasses} inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-
-                                                {/* -- PARTICIPATION DETAILS SECTION -- */}
-                                                <div className="space-y-1.5 pt-2 border-t border-slate-500">
-                                                    <div className="pb-1 border-b border-slate-500">
-                                                        <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Participation Details</h3>
-                                                    </div>
-
-                                                    <div className="space-y-4">
-                                                        {/* Selection Controls */}
-                                                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></Label>
-                                                                <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
-                                                                    <SelectTrigger className={inputClasses}>
-                                                                        <SelectValue placeholder="Select Stall" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        {availableStalls.map(s => (
-                                                                            <SelectItem key={s._id} value={s._id} className="text-xs">Stall {s.stallNumber}</SelectItem>
-                                                                        ))}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>STALL SIZE <span className="text-red-500">*</span></Label>
-                                                                <Input readOnly value={formData.participation.stallSize} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>STALL CATEGORY <span className="text-red-500">*</span></Label>
-                                                                <Select
-                                                                    onValueChange={(v) => {
-                                                                        setFormData(prev => ({
-                                                                            ...prev,
-                                                                            participation: { ...prev.participation, stallType: v }
-                                                                        }));
-                                                                    }}
-                                                                    value={formData.participation.stallType}
-                                                                >
-                                                                    <SelectTrigger className={inputClasses}>
-                                                                        <SelectValue placeholder="Select Category" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="Shell Space" className="text-xs">Shell Space (Built-up)</SelectItem>
-                                                                        <SelectItem value="Raw Space" className="text-xs">Raw Space (Plot)</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></Label>
-                                                                <Input readOnly value={formData.participation.stallScheme || "N/A"} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></Label>
-                                                                <Input readOnly value={formData.participation.dimension} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
-                                                            </div>
-                                                            <div className="space-y-1.5">
-                                                                <Label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></Label>
-                                                                <Input readOnly value={formData.participation.stallFor} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Cost Breakdown box (full width below fields) */}
-                                                        <div className="w-full">
-                                                            <div className="p-4 bg-[#f8fafc] border border-slate-200 rounded-sm shadow-sm relative overflow-hidden group">
-                                                                {/* Accent Decoration */}
-                                                                <div className="absolute top-0 right-0 w-24 h-24 bg-[#23471d]/5 rounded-full -mr-12 -mt-12 blur-2xl" />
-
-                                                                <div className="flex items-center gap-2 mb-3">
-                                                                    <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
-                                                                    <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.15em] block">Cost Breakdown</Label>
+                                                                <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4">
+                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">GST (18%)</span>
+                                                                    <span className="text-lg font-bold text-slate-900">
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
+                                                                    </span>
                                                                 </div>
-
-                                                                <div className="flex flex-wrap gap-6 relative z-10 items-end">
-                                                                    <div className="flex flex-col gap-1 min-w-[160px]">
-                                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Space Area ({formData.participation.stallSize} sqm)</span>
-                                                                        <span className="text-lg font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
-                                                                        </span>
-                                                                    </div>
-                                                                    {selectedStall?.incrementPercentage > 0 && (
-                                                                        <div className="flex flex-col gap-1 min-w-[160px] text-orange-600">
-                                                                            <span className="text-[10px] font-bold uppercase tracking-widest">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                            <span className="text-lg font-bold">+ {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
-                                                                        </div>
-                                                                    )}
-                                                                    <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4">
-                                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">GST (18%)</span>
-                                                                        <span className="text-lg font-bold text-slate-900">
-                                                                            {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4 ml-auto">
-                                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Grand Total <span className="text-[8px] normal-case text-slate-500 ml-1">Tax Included</span></span>
-                                                                        <span className="text-2xl font-bold text-[#23471d]">
-                                                                            {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total)}
-                                                                        </span>
-                                                                    </div>
+                                                                <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4 ml-auto">
+                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Grand Total <span className="text-[8px] normal-case text-slate-500 ml-1">Tax Included</span></span>
+                                                                    <span className="text-2xl font-bold text-[#23471d]">
+                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total)}
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="space-y-1.5 pt-2 border-t border-slate-500">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500 pb-1 mb-2">
-                                                        Exhibitor Category
-                                                    </h3>
+                                            </div>
+                                            <div className="space-y-1.5 pt-2 border-t border-slate-500">
+                                                <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500 pb-1 mb-2">
+                                                    Exhibitor Category
+                                                </h3>
 
-                                                    <div className="grid grid-cols-4 gap-4">
-                                                        <div>
-                                                            <Label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
-                                                            <Select
-                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
-                                                                value={formData.primaryCategory}
-                                                            >
-                                                                <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
-                                                                    <SelectValue placeholder="Select Primary Category" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {PRIMARY_CATEGORIES.map(cat => (
-                                                                        <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                <div className="grid grid-cols-4 gap-4">
+                                                    <div>
+                                                        <Label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <Select
+                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
+                                                            value={formData.primaryCategory}
+                                                        >
+                                                            <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                                <SelectValue placeholder="Select Primary Category" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {PRIMARY_CATEGORIES.map(cat => (
+                                                                    <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
 
-                                                        <div>
-                                                            <Label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></Label>
-                                                            <Select
-                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
-                                                                value={formData.subCategory}
-                                                                disabled={!formData.primaryCategory}
-                                                            >
-                                                                <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 disabled:opacity-50">
-                                                                    <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
-                                                                        <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
-                                                                    ))}
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <Select
+                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
+                                                            value={formData.subCategory}
+                                                            disabled={!formData.primaryCategory}
+                                                        >
+                                                            <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 disabled:opacity-50">
+                                                                <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
+                                                                    <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
 
-                                                        <div>
-                                                            <Label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="How did you hear about us?" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
-                                                                    <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
-                                                                    <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
-                                                                    <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
-                                                                    <SelectItem value="Others" className="text-xs">Others</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="How did you hear about us?" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
+                                                                <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
+                                                                <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
+                                                                <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
+                                                                <SelectItem value="Others" className="text-xs">Others</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
 
-                                                        <div>
-                                                            <Label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></Label>
-                                                            <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                                <SelectTrigger className={inputClasses}>
-                                                                    <SelectValue placeholder="Select Staff Member" />
-                                                                </SelectTrigger>
-                                                                <SelectContent>
-                                                                    {marketingStaff.map(s => (
-                                                                        <SelectItem key={s._id} value={s.username} className="text-xs">
-                                                                            {s.fullName ? `${s.fullName} (${s.username})` : s.username}
-                                                                        </SelectItem>
-                                                                    ))}
-                                                                    <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
+                                                    <div>
+                                                        <Label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></Label>
+                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                            <SelectTrigger className={inputClasses}>
+                                                                <SelectValue placeholder="Select Staff Member" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                {marketingStaff.map(s => (
+                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">
+                                                                        {s.fullName ? `${s.fullName} (${s.username})` : s.username}
+                                                                    </SelectItem>
+                                                                ))}
+                                                                <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                {/* -- FINAL BOOKING CONTROL -- */}
-                                                <div className="pt-2 border-t border-slate-500">
-                                                    <div className="flex flex-col gap-4">
-                                                        <div className="space-y-3">
-                                                            <div className="space-y-2">
-                                                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
-                                                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
-                                                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
-                                                                        I hereby confirm that the information provided is accurate. I have read and agree to the <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
-                                                                    </span>
-                                                                </label>
-                                                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
-                                                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
-                                                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
-                                                                        I have read and agree to the <Link to="/refund-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Refund & Cancellation Policy</Link> for IHWE Stand Booking.
-                                                                    </span>
-                                                                </label>
-                                                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
-                                                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
-                                                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
-                                                                        I have read and agree to the <Link to="/privacy-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Privacy Policy</Link> of IHWE.
-                                                                    </span>
-                                                                </label>
-                                                            </div>
+                                            {/* -- FINAL BOOKING CONTROL -- */}
+                                            <div className="pt-2 border-t border-slate-500">
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="space-y-3">
+                                                        <div className="space-y-2">
+                                                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                                                    I hereby confirm that the information provided is accurate. I have read and agree to the <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
+                                                                </span>
+                                                            </label>
+                                                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                                                    I have read and agree to the <Link to="/refund-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Refund & Cancellation Policy</Link> for IHWE Stand Booking.
+                                                                </span>
+                                                            </label>
+                                                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                                                    I have read and agree to the <Link to="/privacy-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Privacy Policy</Link> of IHWE.
+                                                                </span>
+                                                            </label>
                                                         </div>
+                                                    </div>
 
-                                                        {/* Right: Summary Card */}
-                                                        <div className="w-full">
-                                                            <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
-                                                                <div className="flex justify-between items-center mb-4">
-                                                                    <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Financial Breakdown</h3>
-                                                                    <div className="flex gap-3 items-end">
-                                                                        {/* Payment Plan Buttons — only 2 choices: Full or Installment */}
-                                                                        <div className="flex flex-col gap-1">
-                                                                            <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
-                                                                            <div className="flex gap-1">
-                                                                                {(() => {
-                                                                                    const ev = events.find((e: any) => e._id === selectedEventId);
-                                                                                    const plans = ev?.paymentPlans || [];
-                                                                                    const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
-                                                                                    // First installment phase (lowest %)
-                                                                                    const firstInstallPlan = plans
-                                                                                        .filter((p: any) => Number(p.percentage) < 100)
-                                                                                        .sort((a: any, b: any) => Number(a.percentage) - Number(b.percentage))[0];
-                                                                                    const isFullSelected = formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id;
-                                                                                    return (
-                                                                                        <>
-                                                                                            {/* Full Payment */}
+                                                    {/* Right: Summary Card */}
+                                                    <div className="w-full">
+                                                        <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
+                                                            <div className="flex justify-between items-center mb-4">
+                                                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Financial Breakdown</h3>
+                                                                <div className="flex gap-3 items-end">
+                                                                    {/* Payment Plan Buttons — only 2 choices: Full or Installment */}
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
+                                                                        <div className="flex gap-1">
+                                                                            {(() => {
+                                                                                const ev = events.find((e: any) => e._id === selectedEventId);
+                                                                                const plans = ev?.paymentPlans || [];
+                                                                                const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
+                                                                                // First installment phase (lowest %)
+                                                                                const firstInstallPlan = plans
+                                                                                    .filter((p: any) => Number(p.percentage) < 100)
+                                                                                    .sort((a: any, b: any) => Number(a.percentage) - Number(b.percentage))[0];
+                                                                                const isFullSelected = formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id;
+                                                                                return (
+                                                                                    <>
+                                                                                        {/* Full Payment */}
+                                                                                        <button type="button"
+                                                                                            onClick={() => setFormData(prev => ({
+                                                                                                ...prev,
+                                                                                                paymentPlanType: fullPlan?.id || 'full',
+                                                                                                paymentPlanLabel: fullPlan?.label || 'Full Payment'
+                                                                                            }))}
+                                                                                            className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${isFullSelected ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#23471d]'}`}>
+                                                                                            Full Payment{settings?.fullPaymentDiscount > 0 ? ` (-${settings.fullPaymentDiscount}%)` : ''}
+                                                                                        </button>
+                                                                                        {/* Installment — sets Phase 1 automatically */}
+                                                                                        {firstInstallPlan && (
                                                                                             <button type="button"
                                                                                                 onClick={() => setFormData(prev => ({
                                                                                                     ...prev,
-                                                                                                    paymentPlanType: fullPlan?.id || 'full',
-                                                                                                    paymentPlanLabel: fullPlan?.label || 'Full Payment'
+                                                                                                    paymentPlanType: firstInstallPlan.id,
+                                                                                                    paymentPlanLabel: firstInstallPlan.label
                                                                                                 }))}
-                                                                                                className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${isFullSelected ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#23471d]'}`}>
-                                                                                                Full Payment{settings?.fullPaymentDiscount > 0 ? ` (-${settings.fullPaymentDiscount}%)` : ''}
+                                                                                                className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${!isFullSelected ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
+                                                                                                Installment ({firstInstallPlan.percentage}% Now)
                                                                                             </button>
-                                                                                            {/* Installment — sets Phase 1 automatically */}
-                                                                                            {firstInstallPlan && (
-                                                                                                <button type="button"
-                                                                                                    onClick={() => setFormData(prev => ({
-                                                                                                        ...prev,
-                                                                                                        paymentPlanType: firstInstallPlan.id,
-                                                                                                        paymentPlanLabel: firstInstallPlan.label
-                                                                                                    }))}
-                                                                                                    className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${!isFullSelected ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
-                                                                                                    Installment ({firstInstallPlan.percentage}% Now)
-                                                                                                </button>
-                                                                                            )}
-                                                                                        </>
-                                                                                    );
-                                                                                })()}
-                                                                            </div>
-                                                                        </div>
-                                                                        {/* TDS on right */}
-                                                                        <div className="flex flex-col gap-1">
-                                                                            <span className="text-[9px] font-bold text-slate-400 uppercase">TDS (%)</span>
-                                                                            <select
-                                                                                value={formData.chosenTdsPercent}
-                                                                                onChange={(e) => setFormData(prev => ({ ...prev, chosenTdsPercent: Number(e.target.value) }))}
-                                                                                className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
-                                                                            >
-                                                                                <option value={0}>0%</option>
-                                                                                <option value={1}>1%</option>
-                                                                                <option value={2}>2%</option>
-                                                                                <option value={10}>10%</option>
-                                                                            </select>
+                                                                                        )}
+                                                                                    </>
+                                                                                );
+                                                                            })()}
                                                                         </div>
                                                                     </div>
-                                                                </div>
-
-                                                                <div className="space-y-2 text-xs border-t border-slate-100 pt-3">
-                                                                    <div className="flex justify-between items-center">
-                                                                        <span className="text-slate-500 font-medium">Gross Cost (Space + PL)</span>
-                                                                        <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
-                                                                    </div>
-
-                                                                    {formData.financeBreakdown.stallDiscountAmount > 0 && (
-                                                                        <div className="flex justify-between items-center text-green-600 bg-green-50 px-2 py-1 rounded-sm border border-green-100 italic">
-                                                                            <span className="text-[10px] font-bold">Stall Discount ({formData.financeBreakdown.stallDiscountPercent}%)</span>
-                                                                            <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
-                                                                        </div>
-                                                                    )}
-
-                                                                    {formData.financeBreakdown.discountAmount > 0 && (
-                                                                        <div className="flex justify-between items-center text-[#d26019] bg-orange-50 px-2 py-1 rounded-sm border border-orange-100 italic">
-                                                                            <span className="text-[10px] font-bold">Full Payment Discount ({formData.financeBreakdown.discountPercent}%)</span>
-                                                                            <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
-                                                                        </div>
-                                                                    )}
-
-                                                                    <div className="flex justify-between items-center border-t border-slate-100 pt-1 text-slate-400">
-                                                                        <span className="text-[10px] uppercase font-bold">Net Taxable Value</span>
-                                                                        <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
-                                                                    </div>
-
-                                                                    <div className="flex justify-between items-center">
-                                                                        <span className="text-slate-500 font-medium text-[11px]">GST (18%)</span>
-                                                                        <span className="font-bold text-slate-900">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
-                                                                    </div>
-
-                                                                    {formData.financeBreakdown.tdsAmount > 0 && (
-                                                                        <div className="flex justify-between items-center text-red-600 font-medium">
-                                                                            <span className="text-[11px]">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
-                                                                            <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
-                                                                        </div>
-                                                                    )}
-
-                                                                    <div className="flex justify-between items-center border-t border-slate-200 pt-2 bg-slate-50 px-2 py-1.5 rounded-sm">
-                                                                        <span className="font-black text-slate-700 uppercase tracking-tighter text-[11px]">Total Net Payable</span>
-                                                                        <span className="font-black text-[15px] text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
-                                                                    </div>
-
-                                                                    {formData.balanceAmount > 0 && (
-                                                                        <div className="flex justify-between items-center text-[#d26019] bg-orange-50/50 px-2 py-1 rounded-sm">
-                                                                            <span className="font-bold uppercase text-[9px]">Balance Payment Later</span>
-                                                                            <span className="font-bold text-[11px]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                                <div className="mt-4 p-3 bg-[#23471d] rounded-sm text-white shadow-lg">
-                                                                    <div className="flex justify-between items-center">
-                                                                        <div>
-                                                                            <p className="text-[10px] font-bold uppercase opacity-80">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
-                                                                            <p className="text-[8px] font-medium uppercase opacity-60">Verified Transaction</p>
-                                                                        </div>
-                                                                        <div className="text-right">
-                                                                            <p className="text-2xl font-black leading-none">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
-                                                                        <div className="mt-3 pt-2 border-t border-white/20 space-y-1.5">
-                                                                            <div className="flex justify-between items-center opacity-75">
-                                                                                <p className="text-[9px] font-bold uppercase">+ 2.5% Razorpay Gateway Fee</p>
-                                                                                <p className="text-[10px] font-bold">
-                                                                                    {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}
-                                                                                </p>
-                                                                            </div>
-                                                                            <div className="flex justify-between items-center border-t border-white/40 pt-1.5 text-yellow-300">
-                                                                                <div>
-                                                                                    <p className="text-[10px] font-black uppercase tracking-wider">Total Charged by Gateway</p>
-                                                                                    <p className="text-[8px] opacity-60 font-medium">(Our invoice: {formData.participation.currency === 'INR' ? '₹' : '$'}{fmtAmt(formData.amountPaid)} — 2.5% fee goes to Razorpay)</p>
-                                                                                </div>
-                                                                                <p className="text-[14px] font-black">
-                                                                                    {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    )}
-                                                                    <div className="pt-4 flex flex-col items-center">
-                                                                        <button
-                                                                            type="submit"
-                                                                            disabled={isLoading || !formData.participation.stallNo}
-                                                                            className="w-full max-w-56 h-12 rounded-sm bg-[#a3510f] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                                                    {/* TDS on right */}
+                                                                    <div className="flex flex-col gap-1">
+                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">TDS (%)</span>
+                                                                        <select
+                                                                            value={formData.chosenTdsPercent}
+                                                                            onChange={(e) => setFormData(prev => ({ ...prev, chosenTdsPercent: Number(e.target.value) }))}
+                                                                            className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
                                                                         >
-                                                                            {isLoading ? (
-                                                                                <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>PROCESSING...</span></>
-                                                                            ) : (
-                                                                                <>PROCEED FOR PAYMENT <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
-                                                                            )}
-                                                                        </button>
+                                                                            <option value={0}>0%</option>
+                                                                            <option value={1}>1%</option>
+                                                                            <option value={2}>2%</option>
+                                                                            <option value={10}>10%</option>
+                                                                        </select>
                                                                     </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-2 text-xs border-t border-slate-100 pt-3">
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="text-slate-500 font-medium">Gross Cost (Space + PL)</span>
+                                                                    <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
+                                                                </div>
+
+                                                                {formData.financeBreakdown.stallDiscountAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-green-600 bg-green-50 px-2 py-1 rounded-sm border border-green-100 italic">
+                                                                        <span className="text-[10px] font-bold">Stall Discount ({formData.financeBreakdown.stallDiscountPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
+                                                                    </div>
+                                                                )}
+
+                                                                {formData.financeBreakdown.discountAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50 px-2 py-1 rounded-sm border border-orange-100 italic">
+                                                                        <span className="text-[10px] font-bold">Full Payment Discount ({formData.financeBreakdown.discountPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="flex justify-between items-center border-t border-slate-100 pt-1 text-slate-400">
+                                                                    <span className="text-[10px] uppercase font-bold">Net Taxable Value</span>
+                                                                    <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
+                                                                </div>
+
+                                                                <div className="flex justify-between items-center">
+                                                                    <span className="text-slate-500 font-medium text-[11px]">GST (18%)</span>
+                                                                    <span className="font-bold text-slate-900">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
+                                                                </div>
+
+                                                                {formData.financeBreakdown.tdsAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-red-600 font-medium">
+                                                                        <span className="text-[11px]">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
+                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="flex justify-between items-center border-t border-slate-200 pt-2 bg-slate-50 px-2 py-1.5 rounded-sm">
+                                                                    <span className="font-black text-slate-700 uppercase tracking-tighter text-[11px]">Total Net Payable</span>
+                                                                    <span className="font-black text-[15px] text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
+                                                                </div>
+
+                                                                {formData.balanceAmount > 0 && (
+                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50/50 px-2 py-1 rounded-sm">
+                                                                        <span className="font-bold uppercase text-[9px]">Balance Payment Later</span>
+                                                                        <span className="font-bold text-[11px]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            <div className="mt-4 p-3 bg-[#23471d] rounded-sm text-white shadow-lg">
+                                                                <div className="flex justify-between items-center">
+                                                                    <div>
+                                                                        <p className="text-[10px] font-bold uppercase opacity-80">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
+                                                                        <p className="text-[8px] font-medium uppercase opacity-60">Verified Transaction</p>
+                                                                    </div>
+                                                                    <div className="text-right">
+                                                                        <p className="text-2xl font-black leading-none">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
+                                                                    <div className="mt-3 pt-2 border-t border-white/20 space-y-1.5">
+                                                                        <div className="flex justify-between items-center opacity-75">
+                                                                            <p className="text-[9px] font-bold uppercase">+ 2.5% Razorpay Gateway Fee</p>
+                                                                            <p className="text-[10px] font-bold">
+                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex justify-between items-center border-t border-white/40 pt-1.5 text-yellow-300">
+                                                                            <div>
+                                                                                <p className="text-[10px] font-black uppercase tracking-wider">Total Charged by Gateway</p>
+                                                                                <p className="text-[8px] opacity-60 font-medium">(Our invoice: {formData.participation.currency === 'INR' ? '₹' : '$'}{fmtAmt(formData.amountPaid)} — 2.5% fee goes to Razorpay)</p>
+                                                                            </div>
+                                                                            <p className="text-[14px] font-black">
+                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                <div className="pt-4 flex flex-col items-center">
+                                                                    <button
+                                                                        type="submit"
+                                                                        disabled={isLoading || !formData.participation.stallNo}
+                                                                        className="w-full max-w-56 h-12 rounded-sm bg-[#a3510f] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                                                    >
+                                                                        {isLoading ? (
+                                                                            <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>PROCESSING...</span></>
+                                                                        ) : (
+                                                                            <>PROCEED FOR PAYMENT <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                                                        )}
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+                                            </div>
+                                        </form>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
-                    </div>
+                    </SectionContainer>
                 </div>
+
             </section>
         </div>
     );
