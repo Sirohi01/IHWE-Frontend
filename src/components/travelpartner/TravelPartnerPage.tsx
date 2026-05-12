@@ -23,14 +23,14 @@ const TravelPartnerPage: React.FC = () => {
           <div className="lg:col-span-9 -mt-4">
             <TravelBenefits />
           </div>
-          <div className="lg:col-span-3 -mt-20">
+          <div className="lg:col-span-3 -mt-20 ">
             <TravelPackages />
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <TravelFooter />
+      <div className="mb-2">
+        <TravelFooter /></div>
     </div>
   );
 };
