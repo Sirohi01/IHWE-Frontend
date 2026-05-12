@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   heroBackgroundApi,
@@ -77,11 +78,11 @@ const Partnership = () => {
                 {/* BUTTONS */}
                 <div className="flex flex-wrap gap-3 mt-4">
 
-                  <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
-
-                    Register As Partner
-
-                  </button>
+                  <Link to="/partner-registration">
+                    <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
+                      Register As Partner
+                    </button>
+                  </Link>
 
                   <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-4 py-2 rounded-[20px]">
 
@@ -550,11 +551,13 @@ const Partnership = () => {
 
             {/* BUTTON */}
             <div className="flex justify-end relative bottom-[10px]">
-              <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
+              <Link to="/partner-registration">
+                <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
 
-                Register As Official Partner
+                  Register As Official Partner
 
-              </button>
+                </button>
+              </Link>
             </div>
 
           </div>
