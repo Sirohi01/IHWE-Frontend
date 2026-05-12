@@ -504,9 +504,16 @@ const Partnership = () => {
                       color: item.color,
                     }}
                     onClick={() => {
-                      if (item.title === "Travel Partner") {
-                        window.location.href = "/travel-partner";
-                      }
+                      const pathMap: Record<string, string> = {
+                        "Hotel & Stay Partner": "/hotel-stay-partner",
+                        "Travel Partner": "/travel-partner",
+                        "Stall Design & Fabrication": "/stall-design-fabrication",
+                        "Logistics Partner": "/logistics-partner",
+                        "Printing & Branding": "/printing-branding-partner",
+                        "Hospitality Partner": "/hospitality-partner",
+                      };
+
+                      window.location.href = pathMap[item.title];
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = item.color;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Plane,
+  Hotel,
   Users2,
   Megaphone,
   Tag,
@@ -15,10 +15,10 @@ import {
   UserCheck,
   Gift,
   Percent,
-  Armchair,
+  Bed,
 } from 'lucide-react';
 
-const TravelBenefits: React.FC = () => {
+const HotelBenefits: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Card 1: Your Company - Icons in white circles with green borders */}
@@ -36,9 +36,9 @@ const TravelBenefits: React.FC = () => {
         <div className="p-[14px_16px] flex flex-col gap-[12px]">
           {[
             { icon: <Star />, text: "Direct access to 8,000+ high-value delegates, speakers & exhibitors" },
-            { icon: <Users2 />, text: "Increased flight bookings during the event period" },
+            { icon: <Users2 />, text: "Increased room bookings during the event period" },
             { icon: <Megaphone />, text: "Brand visibility across IHWE 2026 platforms (website, app, emails, social media)" },
-            { icon: <Tag />, text: "Promotion of exclusive travel offers to a global audience" },
+            { icon: <Tag />, text: "Promotion of exclusive stay offers to a global audience" },
             { icon: <Handshake />, text: "Networking with global brands, associations & decision makers" },
             { icon: <Star />, text: "Association with a prestigious international health & wellness event" },
           ].map((item, i) => (
@@ -66,9 +66,9 @@ const TravelBenefits: React.FC = () => {
         </div>
         <div className="p-[14px_16px] flex flex-col gap-[12px]">
           {[
-            { icon: <Users />, text: "Preferred travel options for delegates, speakers & exhibitors" },
-            { icon: <Plane />, text: "Competitive flight fares & seamless travel experience" },
-            { icon: <ShieldCheck />, text: "Reliable travel support ensuring smooth event participation" },
+            { icon: <Users />, text: "Preferred stay options for delegates, speakers & exhibitors" },
+            { icon: <Hotel />, text: "Competitive room tariffs & seamless hospitality experience" },
+            { icon: <ShieldCheck />, text: "Reliable accommodation support ensuring smooth event participation" },
             { icon: <Zap />, text: "Value-added services enhancing delegate satisfaction" },
             { icon: <Globe />, text: "Strengthening global connectivity & participation in the event" },
           ].map((item, i) => (
@@ -103,11 +103,11 @@ const TravelBenefits: React.FC = () => {
           <div className="grid grid-cols-3 gap-y-10 relative z-10">
             {[
               { icon: <Globe />, label: "Logo Visibility on all IHWE 2026 platforms" },
-              { icon: <Ticket />, label: "Co-branded Flight Offers" },
-              { icon: <UserCheck />, label: "Priority Access for Delegates" },
+              { icon: <Ticket />, label: "Co-branded Stay Offers" },
+              { icon: <UserCheck />, label: "Priority Check-in for Delegates" },
               { icon: <Gift />, label: "Welcome Kit Inclusion" },
               { icon: <Percent />, label: "Special Delegate Discounts" },
-              { icon: <Armchair />, label: "Lounge Branding Opportunities" },
+              { icon: <Bed />, label: "Hospitality Branding Opportunities" },
             ].map((perk, i) => (
               <div key={i} className="flex flex-col items-center text-center px-1">
                 <div className="w-[42px] h-[42px] rounded-full border border-[#4E9F3D] flex items-center justify-center text-[#4E9F3D] mb-2 bg-white">
@@ -125,4 +125,4 @@ const TravelBenefits: React.FC = () => {
   );
 };
 
-export default TravelBenefits;
+export default HotelBenefits;
