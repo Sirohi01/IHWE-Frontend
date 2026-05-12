@@ -96,7 +96,7 @@ const HotelHero: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute -top-[105px] right-0 bg-[#0B2C66]/95 backdrop-blur-md rounded-[20px] p-[24px_22px] w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10"
+              className="absolute -top-[105px] left-[15px] right-0 bg-[#0B2C66]/95 backdrop-blur-md rounded-[20px] p-[24px_22px] w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10"
             >
               <h3 className="text-white font-black text-[17px] leading-tight mb-6 uppercase tracking-tight">
                 Why Partner<br />

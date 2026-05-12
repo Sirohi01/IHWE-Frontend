@@ -1,60 +1,58 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  Bed,
-  Users,
+  Hotel,
+  Users2,
   Megaphone,
-  TrendingUp,
+  Tag,
   Handshake,
   Star,
-  UserCheck,
-  Building2,
-  UserPlus,
-  CalendarDays,
+  Users,
+  ShieldCheck,
+  Zap,
   Globe,
-  CreditCard,
-  DoorOpen,
+  Ticket,
+  UserCheck,
   Gift,
   Percent,
-  Bus,
+  Bed,
 } from 'lucide-react';
 
 const HotelBenefits: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      
-      {/* Card 1: WHAT'S IN IT FOR YOUR HOTEL? */}
+      {/* Card 1: Your Company - Icons in white circles with green borders */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="bg-white rounded-[20px] overflow-hidden shadow-sm border border-[#E2E8F0]"
+        className="bg-white rounded-[20px] ml-3 overflow-hidden shadow-sm border border-[#E2E8F0]"
       >
         <div className="bg-[#4E9F3D] px-[16px] py-[10px]">
           <h3 className="text-white font-[900] text-[11px] uppercase tracking-wide text-center">
-            What's in it for your hotel?
+            What's in it for your company?
           </h3>
         </div>
         <div className="p-[14px_16px] flex flex-col gap-[12px]">
           {[
-            { icon: <Bed />, text: "Direct access to 8,000+ high-value delegates, speakers & exhibitors" },
-            { icon: <Users />, text: "High occupancy & increased bookings during the event period" },
-            { icon: <Megaphone />, text: "Premium brand visibility across IHWE 2026 platforms (website, app, social media, emails)" },
-            { icon: <TrendingUp />, text: "Revenue boost through extended stays, group bookings & repeat guests" },
+            { icon: <Star />, text: "Direct access to 8,000+ high-value delegates, speakers & exhibitors" },
+            { icon: <Users2 />, text: "Increased room bookings during the event period" },
+            { icon: <Megaphone />, text: "Brand visibility across IHWE 2026 platforms (website, app, emails, social media)" },
+            { icon: <Tag />, text: "Promotion of exclusive stay offers to a global audience" },
             { icon: <Handshake />, text: "Networking with global brands, associations & decision makers" },
             { icon: <Star />, text: "Association with a prestigious international health & wellness event" },
           ].map((item, i) => (
-            <div key={i} className="flex gap-[12px] items-start">
+            <div key={i} className="flex gap-[12px] items-center">
               <div className="flex-shrink-0 w-[28px] h-[28px] rounded-full border border-[#4E9F3D] flex items-center justify-center text-[#4E9F3D]">
                 {React.cloneElement(item.icon as React.ReactElement, { className: "w-[14px] h-[14px]" })}
               </div>
-              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3] mt-1">{item.text}</p>
+              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
             </div>
           ))}
         </div>
       </motion.div>
 
-      {/* Card 2: WHAT'S IN IT FOR IHWE 2026? */}
+      {/* Card 2: For IHWE - White icons in solid blue circles */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -68,35 +66,36 @@ const HotelBenefits: React.FC = () => {
         </div>
         <div className="p-[14px_16px] flex flex-col gap-[12px]">
           {[
-            { icon: <UserCheck />, text: "Trusted hospitality partner for our global delegates & guests" },
-            { icon: <Building2 />, text: "Quality accommodation ensuring a seamless delegate experience" },
-            { icon: <UserPlus />, text: "Strategic support in strengthening event success & reputation" },
-            { icon: <CalendarDays />, text: "Long-term partnership for future editions & global collaborations" },
-            { icon: <Star />, text: "Value-added stay experiences for our community" },
+            { icon: <Users />, text: "Preferred stay options for delegates, speakers & exhibitors" },
+            { icon: <Hotel />, text: "Competitive room tariffs & seamless hospitality experience" },
+            { icon: <ShieldCheck />, text: "Reliable accommodation support ensuring smooth event participation" },
+            { icon: <Zap />, text: "Value-added services enhancing delegate satisfaction" },
+            { icon: <Globe />, text: "Strengthening global connectivity & participation in the event" },
           ].map((item, i) => (
-            <div key={i} className="flex gap-[12px] items-start">
+            <div key={i} className="flex gap-[12px] items-center">
               <div className="flex-shrink-0 w-[28px] h-[28px] rounded-full bg-[#0B2C66] text-white flex items-center justify-center">
                 {React.cloneElement(item.icon as React.ReactElement, { className: "w-[14px] h-[14px]" })}
               </div>
-              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3] mt-1">{item.text}</p>
+              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
             </div>
           ))}
         </div>
       </motion.div>
 
-      {/* Card 3: PARTNER PERKS */}
+      {/* Card 3: Partner Perks - Grid with lines and bordered icons */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         className="bg-white rounded-[20px] overflow-hidden shadow-sm border border-[#E2E8F0]"
       >
-        <div className="bg-[#1e3a24] px-[16px] py-[10px]">
+        <div className="bg-[#4E9F3D] px-[16px] py-[10px]">
           <h3 className="text-white font-[900] text-[11px] uppercase tracking-wide text-center">
             Partner Perks
           </h3>
         </div>
         <div className="relative p-[20px_10px]">
+          {/* Grid Lines */}
           <div className="absolute top-[50%] left-0 w-full h-[1px] bg-gray-100" />
           <div className="absolute top-0 left-[33.3%] w-[1px] h-full bg-gray-100" />
           <div className="absolute top-0 left-[66.6%] w-[1px] h-full bg-gray-100" />
@@ -104,11 +103,11 @@ const HotelBenefits: React.FC = () => {
           <div className="grid grid-cols-3 gap-y-10 relative z-10">
             {[
               { icon: <Globe />, label: "Logo Visibility on all IHWE 2026 platforms" },
-              { icon: <CreditCard />, label: "Co-branded Room Key Cards" },
-              { icon: <DoorOpen />, label: "In-room Branding" },
+              { icon: <Ticket />, label: "Co-branded Stay Offers" },
+              { icon: <UserCheck />, label: "Priority Check-in for Delegates" },
               { icon: <Gift />, label: "Welcome Kit Inclusion" },
               { icon: <Percent />, label: "Special Delegate Discounts" },
-              { icon: <Bus />, label: "Shuttle Branding & Hospitality Lounge Access" },
+              { icon: <Bed />, label: "Hospitality Branding Opportunities" },
             ].map((perk, i) => (
               <div key={i} className="flex flex-col items-center text-center px-1">
                 <div className="w-[42px] h-[42px] rounded-full border border-[#4E9F3D] flex items-center justify-center text-[#4E9F3D] mb-2 bg-white">

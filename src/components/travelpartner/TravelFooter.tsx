@@ -15,8 +15,8 @@ import footerImage from '../../assets/nishu.png';
 const TravelFooter: React.FC = () => {
   return (
     <footer className="bg-white pt-1">
-      <div className="mx-auto max-w-[1340px] bg-white">
-        <div className="bg-white rounded-[24px]  shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
+      <div className="mx-auto  bg-white">
+        <div className="bg-white rounded-[px]  shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
 
           <div className="bgg-white relative p-[0px_25px] flex items-center gap-[15px] lg:min-w-[280px] overflow-hidden rounded-r-[60px] lg:rounded-r-[80px] z-10">
 

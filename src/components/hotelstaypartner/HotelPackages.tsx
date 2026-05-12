@@ -34,13 +34,13 @@ const HotelPackages: React.FC = () => {
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-500/30 via-transparent to-transparent"></div>
         <div className="relative z-10 flex flex-col items-center justify-center">
           <div className="flex items-center gap-2">
-             <div className="h-[1px] w-4 bg-gradient-to-l from-[#D4AF37] to-transparent"></div>
-             <Star className="w-2.5 h-2.5 fill-[#D4AF37] text-[#D4AF37]" />
-             <h3 className="text-white font-[900] text-[11px] uppercase tracking-[1.2px] leading-tight">
-               PARTNERSHIP PACKAGES
-             </h3>
-             <Star className="w-2.5 h-2.5 fill-[#D4AF37] text-[#D4AF37]" />
-             <div className="h-[1px] w-4 bg-gradient-to-r from-[#D4AF37] to-transparent"></div>
+            <div className="h-[1px] w-4 bg-gradient-to-l from-[#D4AF37] to-transparent"></div>
+            <Star className="w-2.5 h-2.5 fill-[#D4AF37] text-[#D4AF37]" />
+            <h3 className="text-white font-[900] text-[11px] uppercase tracking-[1.2px] leading-tight">
+              PARTNERSHIP PACKAGES
+            </h3>
+            <Star className="w-2.5 h-2.5 fill-[#D4AF37] text-[#D4AF37]" />
+            <div className="h-[1px] w-4 bg-gradient-to-r from-[#D4AF37] to-transparent"></div>
           </div>
           <h3 className="text-white font-[900] text-[11px] uppercase tracking-[1.2px] leading-none mt-0.5">
             &amp; INVESTMENT
@@ -49,7 +49,7 @@ const HotelPackages: React.FC = () => {
       </div>
 
       {/* Package Items (Exact Image Match Styling) */}
-      <div className="p-2 flex flex-col gap-2 flex-1">
+      <div className="p-2 flex flex-col gap-2 flex-1 ">
         {packages.map((pkg, index) => (
           <motion.div
             key={index}
@@ -59,7 +59,7 @@ const HotelPackages: React.FC = () => {
             className="bg-white rounded-[10px] overflow-hidden flex items-stretch h-[55px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] border border-white/10"
           >
             {/* Left Icon Block with Glow Effect */}
-            <div 
+            <div
               className="w-[55px] flex items-center justify-center text-white relative"
               style={{ backgroundColor: pkg.color }}
             >
@@ -68,10 +68,10 @@ const HotelPackages: React.FC = () => {
                 {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-5 h-5" })}
               </div>
             </div>
-            
+
             {/* Right Content Block */}
             <div className="flex-1 flex flex-col justify-center px-4">
-              <h4 
+              <h4
                 className="text-[10px] font-[900] uppercase tracking-tight"
                 style={{ color: pkg.titleColor }}
               >
