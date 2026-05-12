@@ -11,9 +11,9 @@ const StatsBand = () => {
   ];
 
   return (
-    <div className="px-16 w-full -mt-10 relative z-20 font-['Barlow',sans-serif]">
+    <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 -mt-4 relative z-20 font-['Barlow',sans-serif]">
       <div
-        className="rounded-2xl shadow-2xl border border-white/10 flex items-stretch py-5 px-4 overflow-hidden relative"
+        className="rounded-2xl shadow-2xl border border-white/10 grid grid-cols-2 md:flex items-stretch py-5 px-3 md:px-4 overflow-hidden relative gap-y-6 md:gap-y-0"
         style={{
           background: 'linear-gradient(160deg, #001635 0%, #01204e 50%, #001635 100%)',
           boxShadow: 'rgba(0, 22, 53, 0.5) 0px 20px 40px -10px, inset 0 0 40px rgba(0, 102, 255, 0.1)'
@@ -25,33 +25,33 @@ const StatsBand = () => {
 
         {stats.map((item, i) => (
           <React.Fragment key={i}>
-            <div className="flex-1 flex flex-col items-center text-center cursor-default px-2">
+            <div className={`flex-1 flex flex-col items-center text-center cursor-default px-2 ${i === 4 ? 'col-span-2 md:col-span-1' : ''}`}>
 
               {/* TOP: Icon & Text Row */}
               <div className="flex items-center justify-center gap-3 mb-3.5">
                 <div className="shrink-0 transition-transform duration-300 hover:scale-110" style={{ color: item.color }}>
-                  <item.icon strokeWidth={1.8} size={34} />
+                  <item.icon strokeWidth={1.8} size={30} className="md:w-[34px] md:h-[34px]" />
                 </div>
                 <div className="flex flex-col items-start text-left min-w-0">
-                  <span className="text-[20px] font-extrabold text-white leading-none tracking-tight">
+                  <span className="text-[18px] md:text-[20px] font-extrabold text-white leading-none tracking-tight">
                     {item.val}
                   </span>
-                  <span className="text-[10px] font-black text-white tracking-widest uppercase mt-0.5 opacity-90">
+                  <span className="text-[9px] md:text-[10px] font-black text-white tracking-widest uppercase mt-0.5 opacity-90">
                     {item.label}
                   </span>
                 </div>
               </div>
 
               {/* BOTTOM: Description centered */}
-              <p className="text-[12px] font-medium text-gray-300 leading-tight px-1 text-center max-w-[180px] opacity-90">
+              <p className="text-[11px] md:text-[12px] font-medium text-gray-300 leading-tight px-1 text-center max-w-[180px] opacity-90">
                 {item.desc}
               </p>
 
             </div>
 
-            {/* Separator line */}
+            {/* Separator line - HIDDEN ON MOBILE */}
             {i < stats.length - 1 && (
-              <div className="w-[1px] bg-white/15 self-stretch mx-2" />
+              <div className="hidden md:block w-[1px] bg-white/15 self-stretch mx-2" />
             )}
           </React.Fragment>
         ))}

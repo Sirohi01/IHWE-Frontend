@@ -59,7 +59,7 @@ const VerifyCheck = () => {
     };
 
     return (
-        <div className="px-16 w-full mt-8 space-y-8 font-['Barlow',sans-serif]">
+        <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 mt-8 space-y-8 font-['Barlow',sans-serif]">
 
             {/* ── QUICK ACCESS ROW ── */}
             <div>
@@ -83,7 +83,7 @@ const VerifyCheck = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-5 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
                     {accessCards.map((card, i) => {
                         const clr = colorMap[card.color];
                         return (
@@ -96,7 +96,7 @@ const VerifyCheck = () => {
                                         src={card.img}
                                         alt={card.title}
                                         className="w-full h-full object-cover object-center opacity-90 saturate-[0.85]"
-                                        onError={(e) => { e.target.src = "https://via.placeholder.com/300x200?text=Image"; }}
+                                        onError={(e) => { e.target.src = "https://placehold.co/300x200?text=Image"; }}
                                     />
                                     {/* White Overlap Mask Area */}
                                     <div className="absolute top-0 left-0 w-[85px] h-[85px] bg-white/90 backdrop-blur-[2px] rounded-br-[3.5rem] shadow-[4px_4px_15px_rgba(0,0,0,0.08)] flex items-start justify-start p-2 z-10">
@@ -132,10 +132,10 @@ const VerifyCheck = () => {
             </div>
 
             {/* ── SUBSIDY + ELIGIBILITY ROW ── */}
-            <div className="flex gap-6">
-                
+            <div className="flex flex-col lg:flex-row gap-6">
+
                 {/* ── LEFT: SUBSIDY STRUCTURE ── */}
-                <div className="w-[28%] bg-[#f0f4f9] border border-[#e2e8f0] rounded-2xl p-4 shadow-sm flex flex-col font-['Barlow',sans-serif]">
+                <div className="w-full lg:w-[30%] xl:w-[25%] bg-[#f0f4f9] border border-[#e2e8f0] rounded-2xl p-4 shadow-sm flex flex-col font-['Barlow',sans-serif]">
                     <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide">Subsidy Structure</h3>
                     <p className="text-[10px] text-slate-600 font-medium mt-0.5">Get financial support up to</p>
                     <h2 className="text-[24px] font-black text-[#1e5c1e] leading-none mt-1.5 mb-4">₹1,50,000*</h2>
@@ -153,20 +153,20 @@ const VerifyCheck = () => {
                             </div>
                             <div className="flex flex-col justify-center">
                                 <div className="text-[12px] font-black text-[#d97706] leading-tight uppercase">Up To 80%</div>
-                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For General Category <br/>of MSMEs</p>
+                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For General Category <br />of MSMEs</p>
                             </div>
                         </div>
 
                         {/* Sub-Card 2 */}
                         <div className="flex-1 bg-[#f0fdf4] border border-[#dcfce7] rounded-xl p-2.5 flex items-center gap-2">
-                             <div className="shrink-0 w-8 h-8 text-[#1e5c1e] opacity-90 flex items-center justify-center">
+                            <div className="shrink-0 w-8 h-8 text-[#1e5c1e] opacity-90 flex items-center justify-center">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7">
                                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                 </svg>
                             </div>
                             <div className="flex flex-col justify-center">
                                 <div className="text-[12px] font-black text-[#16a34a] leading-tight uppercase">Up To 100%</div>
-                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For Special Category <br/>of MSMEs</p>
+                                <p className="text-[8px] font-bold text-slate-700 leading-snug uppercase mt-0.5">For Special Category <br />of MSMEs</p>
                             </div>
                         </div>
                     </div>
@@ -179,27 +179,27 @@ const VerifyCheck = () => {
                         </div>
                         <div className="flex items-start gap-2">
                             <CheckCircle size={12} className="text-[#1e5c1e] mt-0.5 shrink-0" strokeWidth={3} />
-                            <span className="text-[10px] font-bold text-slate-700 leading-[1.4]">Reimbursement is processed after successful participation & approval by MSME.</span>
+                            <span className="text-[10px] font-bold text-slate-700 leading-[1.4]">Reimbursement is processed after successful <br />participation & approval by MSME.</span>
                         </div>
                     </div>
                 </div>
 
                 {/* ── RIGHT: ELIGIBILITY CRITERIA ── */}
                 <div className="flex-1 bg-white border border-[#e2e8f0] rounded-2xl shadow-sm flex relative overflow-hidden font-['Barlow',sans-serif]">
-                    
-                    <div className="p-4 flex flex-col flex-1 z-10 relative pr-[28%]">
+
+                    <div className="p-4 flex flex-col flex-1 z-10 relative pr-4 lg:pr-[28%]">
                         <h3 className="text-[14px] font-black text-[#051d40] uppercase tracking-wide mb-3">Eligibility Criteria – 80% to 100% Subsidy</h3>
 
-                        <div className="grid grid-cols-2 gap-6 flex-1 mb-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 flex-1 mb-4">
                             {/* Left Column */}
                             <div className="space-y-3">
-                                <h4 className="text-[10px] font-black text-[#d9480f] uppercase tracking-wider mb-1">You Get Up To 80% If:</h4>
+                                <h4 className="text-sm font-black text-[#d9480f] uppercase tracking-wider mb-1">You Get Up To 80% If:</h4>
                                 {[
-                                    "You are a registered MSME with valid Udyam Certificate",
-                                    "First-time or limited participation in international / national exhibitions",
-                                    "You belong to the general category of businesses",
-                                    "You are eligible under PMS Scheme guidelines",
-                                    "Stall booked under an approved event like IHWE 2026"
+                                    <>You are a registered MSME with<br />valid Udyam Certificate</>,
+                                    <>First-time or limited participation<br />in international / national exhibitions</>,
+                                    <>You belong to the general<br />category of businesses</>,
+                                    <>You are eligible under PMS Scheme<br />guidelines</>,
+                                    <>Stall booked under an approved<br />event like IHWE 2026</>
                                 ].map((text, i) => (
                                     <div key={i} className="flex items-start gap-2">
                                         <div className="shrink-0 w-4 h-4 rounded-full border border-[#d9480f] flex items-center justify-center mt-0.5">
@@ -212,14 +212,14 @@ const VerifyCheck = () => {
 
                             {/* Right Column */}
                             <div className="space-y-3 border-l border-slate-100 pl-4">
-                                <h4 className="text-[10px] font-black text-[#166534] uppercase tracking-wider mb-1">You Can Get Up To 100% If You Belong To:</h4>
+                                <h4 className="text-sm font-black text-[#166534] uppercase tracking-wider mb-1">You Can Get Up To 100% If You Belong To:</h4>
                                 {[
                                     "Women Entrepreneurs",
                                     "SC / ST Entrepreneurs",
                                     "Startups recognized by DPIIT / MSME",
                                     "Businesses from North-East Region",
-                                    "Businesses from Aspirational Districts / Backward Areas",
-                                    "First-time participants in international exhibitions with valid criteria"
+                                    <>Businesses from Aspirational Districts /<br />Backward Areas</>,
+                                    <>First-time participants in international<br />exhibitions with valid criteria</>
                                 ].map((text, i) => (
                                     <div key={i} className="flex items-start gap-2">
                                         <div className="shrink-0 w-4 h-4 rounded-full border border-[#166534] flex items-center justify-center mt-0.5">
@@ -240,31 +240,31 @@ const VerifyCheck = () => {
                         </div>
                     </div>
 
-                    {/* RIGHT FEATURED GRAPHIC BOX */}
-                    <div className="absolute top-0 right-[-5%] bottom-0 w-[35%] overflow-hidden">
+                    {/* RIGHT FEATURED GRAPHIC BOX - HIDDEN ON MOBILE TO SAVE SPACE */}
+                    <div className="hidden lg:block absolute top-0 right-[-5%] bottom-0 w-[35%] overflow-hidden">
                         {/* Diagonal Clip/Mask container */}
-                        <div 
-                            className="absolute inset-0 bg-cover bg-center z-0 border-l-[6px] border-[#22c55e]" 
-                            style={{ 
+                        <div
+                            className="absolute inset-0 bg-cover bg-center z-0 border-l-[6px] border-[#22c55e]"
+                            style={{
                                 backgroundImage: 'url("https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80")',
-                                clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)' 
+                                clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
                             }}
                         >
                             <div className="absolute inset-0 bg-black/20"></div>
                         </div>
-                        
+
                         {/* Floating Money Bag image overlap for depth */}
                         <div className="absolute inset-0 flex items-center justify-center z-10 translate-x-4">
-                             <div className="relative w-[80%] h-[80%] rounded-3xl overflow-hidden border-[4px] border-[#22c55e] shadow-2xl rotate-[-3deg]">
-                                <img 
-                                    src="/msmepmsscheme/mony-bag.png" 
-                                    className="w-full h-full object-cover rotate-[3deg] scale-110" 
+                            <div className="relative w-[80%] h-[80%] rounded-3xl overflow-hidden border-[4px] border-[#22c55e] shadow-2xl rotate-[-3deg]">
+                                <img
+                                    src="/msmepmsscheme/mony-bag.png"
+                                    className="w-full h-full object-cover rotate-[3deg] scale-110"
                                     alt=""
                                     onError={(e) => { e.target.style.display = 'none'; }}
                                 />
                                 {/* Green tint overlay gradient */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 to-transparent mix-blend-overlay" />
-                             </div>
+                            </div>
                         </div>
                     </div>
 
