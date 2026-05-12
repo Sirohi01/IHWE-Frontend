@@ -627,7 +627,10 @@ const TestimonialsCarousel = () => {
       <div className="relative pt-10 pb-8">
         <SectionContainer className="relative z-10">
           <div className="w-full overflow-hidden">
-            <div className="marquee-wrapper-cards gap-6">
+            <div 
+              className="marquee-wrapper-cards gap-6"
+              style={{ animationDuration: `${Math.max(total * 10, 20)}s` }}
+            >
               {/* Create multiple sets for seamless infinite loop */}
               {[1, 2, 3].map((set) => (
                 <div key={set} className="flex gap-6">
@@ -656,7 +659,10 @@ const TestimonialsCarousel = () => {
         <SectionContainer className="relative z-10">
           <div className="flex flex-col md:flex-row items-stretch">
             <div className="w-full overflow-hidden">
-              <div className="marquee-wrapper-videos gap-4">
+              <div 
+                className="marquee-wrapper-videos gap-4"
+                style={{ animationDuration: `${Math.max(totalVideos * 10, 20)}s` }}
+              >
                 {[1, 2, 3].map((set) => (
                   <div key={set} className="flex gap-4">
                     {(data.videos || []).map((v: any, i: number) => (

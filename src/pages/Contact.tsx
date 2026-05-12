@@ -5,6 +5,7 @@ import {
   MapPin, Mail, Phone, Clock, Send, CheckCircle, Loader2,
 } from "lucide-react";
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
+import contactBg from "@/assets/contactbg.png";
 
 
 const Contact = () => {
@@ -97,25 +98,29 @@ const Contact = () => {
 
   const contactInfo = [
     {
+      icon: MapPin,
+      label: "OFFICE LOCATION",
+      title: settings?.addresses?.[0]?.title || "Head Office",
+      value: settings?.addresses?.[0]?.street || "Namo Gange Wellness Pvt Ltd 12/2B, Site-II, Sunrise Industrial Area, Mohan Nagar, Ghaziabad, Uttar Pradesh - 201007",
+      isHtml: true,
+    },
+    {
       icon: Phone,
-      label: "Call Us",
-      values: contactPhones.map((p: any) => ({ text: p.phone, href: `tel:${p.phone}` })),
+      label: "CALL US",
+      value: contactPhones[0]?.phone || "+91-9654900525",
       sub: "Mon – Sat, 9:00 AM – 6:00 PM (GST)",
-      accent: "#d26019",
     },
     {
       icon: Mail,
-      label: "Email Us",
-      values: contactEmails.map((e: any) => ({ text: e.email, href: `mailto:${e.email}` })),
+      label: "EMAIL US",
+      value: contactEmails[0]?.email || "info@ihwe.in",
       sub: "We'll respond within 24 hours",
-      accent: "#d26019",
     },
     {
       icon: Clock,
-      label: "Working Hours",
-      values: [{ text: "Mon – Sat: 9:00 AM – 6:00 PM", href: null }],
+      label: "WORKING HOURS",
+      value: "Mon – Sat: 9:00 AM – 6:00 PM",
       sub: "Sunday: Closed",
-      accent: "#d26019",
     },
   ];
 
@@ -253,195 +258,213 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-[#f9fafb] min-h-screen font-inter">
-      {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
+    <div className="bg-[#f3f4f6] min-h-screen font-inter overflow-hidden">
+      {/* ── HERO SECTION ── */}
       <section
-        className="hero-background-standard"
+        className="relative min-h-[500px] md:min-h-[600px] flex items-center pt-20 pb-32 md:pb-40"
         style={{ 
-          backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/images/contact.jpg"})`
+          backgroundImage: `url(${contactBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
-
-        <div className="absolute inset-0 bg-black/40" />
-        <div
-          className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
-          style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }}
-        />
-
-        <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
-          <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-            {heroData?.title || "Reach Out"}
-          </p>
-          <h1 className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight">
-            {heroData?.heading || "Contact Us"}
-          </h1>
-          <p className="text-white/70 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-            {heroData?.shortDescription || "Have questions about the expo, exhibiting, or partnerships? We'd love to hear from you."}
-          </p>
-        </div>
-      </section>
-
-
-      {/* CONTACT FORM + INFO */}
-      <section className="py-12 bg-[#fafafa] border-t border-slate-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14" data-aos="fade-up">
-            <div className="flex items-center justify-center gap-3 mb-3">
-              <div className="h-px w-8 bg-[#23471d]" />
-              <span className="text-xs font-bold uppercase tracking-[0.4em] text-[#23471d]">Get In Touch</span>
-              <div className="h-px w-8 bg-[#23471d]" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-inter text-slate-900">
-              Send Us a <span className="text-[#23471d]">Message</span>
-            </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-5 gap-12 max-w-6xl mx-auto">
-            {/* LEFT: info */}
-            <div className="lg:col-span-2 space-y-5" data-aos="fade-right">
-              {/* Added Office Cards here */}
-              <div className="grid grid-cols-1 gap-4 mb-6">
-                {officeCards.map((office, i) => (
-                  <div
-                    key={`${office.city}-${i}`}
-                    className="group border border-slate-100 p-5 hover:border-[#23471d]/30 hover:shadow-md transition-all duration-300 bg-white"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="w-11 h-11 bg-[#23471d]/10 flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300">
-                        <MapPin className="w-5 h-5 text-[#23471d] group-hover:text-white transition-colors duration-300" />
-                      </div>
-                      <div>
-                        <div className="text-[11px] font-bold uppercase tracking-widest text-[#23471d] mb-1">Office Location</div>
-                        <h3 className="text-sm font-bold text-slate-800 mb-1">{office.city}</h3>
-                        <div 
-                          className="text-xs text-slate-500 leading-relaxed rich-address-content"
-                          dangerouslySetInnerHTML={{ __html: office.addressHtml }}
-                        />
-                      </div>
+        <div className="absolute inset-0 bg-black/60" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Content */}
+            <div className="lg:col-span-8 text-white" data-aos="fade-right">
+              <div className="inline-flex items-center gap-2 bg-[#23471d]/20 border border-[#23471d] px-3 py-1 mb-6">
+                <Mail className="w-4 h-4 text-[#8cc63f]" />
+                <span className="text-xs font-bold uppercase tracking-widest text-[#8cc63f]">CONTACT US</span>
+                <div className="w-8 h-[1px] bg-[#8cc63f]" />
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                WE'RE HERE <br />
+                <span className="text-[#8cc63f]">TO HELP YOU!</span>
+              </h1>
+              
+              <p className="text-gray-300 text-lg mb-10 max-w-xl leading-relaxed">
+                Have questions about the expo, exhibiting, partnerships or anything else? 
+                Our team is just a message away.
+              </p>
+              
+              <div className="grid sm:grid-cols-3 gap-6">
+                {[
+                  { icon: Clock, label: "QUICK RESPONSE", sub: "We reply within 24 hrs" },
+                  { icon: CheckCircle, label: "EXPERT SUPPORT", sub: "Dedicated team to help" },
+                  { icon: Send, label: "RELIABLE ASSISTANCE", sub: "We're just a message away" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#8cc63f] flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-white tracking-wider leading-none mb-1">{item.label}</p>
+                      <p className="text-[10px] text-gray-400">{item.sub}</p>
                     </div>
                   </div>
                 ))}
               </div>
-
-              {contactInfo.map((info) => (
-                <div key={info.label} className="group flex items-start gap-4 p-5 bg-white border border-slate-100 hover:border-[#23471d]/30 hover:shadow-md transition-all duration-300">
-                  <div className="w-11 h-11 rounded-none bg-[#23471d]/10 flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300">
-                    <info.icon className="w-5 h-5 text-[#23471d] group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1">{info.label}</div>
-                    <div className="space-y-1">
-                      {info.values.map((val: any, i: number) => (
-                        val.href ? (
-                          <a
-                            key={`val-${i}`}
-                            href={val.href}
-                            className="block text-gray-700 font-semibold hover:text-[#d26019] transition-colors"
-                          >
-                            {val.text}
-                          </a>
-                        ) : (
-                          <p key={`val-${i}`} className="text-gray-700 font-semibold">
-                            {val.text}
-                          </p>
-                        )
-                      ))}
-                    </div>
-                    <div className="text-xs text-slate-600 mt-0.5">{info.sub}</div>
-                  </div>
+            </div>
+            
+            {/* Right: Floating Card */}
+            <div className="lg:col-span-4 hidden lg:block" data-aos="fade-left">
+              <div className="bg-white rounded-2xl p-8 shadow-2xl relative">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#8cc63f] rounded-xl flex items-center justify-center shadow-lg">
+                  <Clock className="w-6 h-6 text-white" />
                 </div>
-              ))}
+                <div className="text-center pt-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 uppercase tracking-tight">WE VALUE <br />YOUR TIME</h3>
+                  <div className="w-12 h-1 bg-[#8cc63f] mx-auto mb-4" />
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    Reach out to us and we'll get back to you promptly!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="p-5 bg-[#23471d] text-white">
-                <h4 className="font-bold text-sm uppercase tracking-wide mb-2">International Support Desk</h4>
-                <p className="text-white/90 text-sm leading-relaxed text-justify mb-4">
-                  {supportDeskText}
-                </p>
+      {/* ── OVERLAPPING CARDS SECTION ── */}
+      <section className="relative z-20 -mt-24 md:-mt-32 pb-20">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-12 gap-8 items-stretch">
+            
+            {/* Left: Office Location */}
+            <div className="lg:col-span-4 bg-white rounded-xl shadow-xl p-8 border border-gray-100 flex flex-col relative overflow-hidden" data-aos="fade-up">
+              {/* Background building illustration (optional, but requested via image) */}
+              <div className="absolute bottom-0 right-0 opacity-5 pointer-events-none">
+                <MapPin size={200} />
+              </div>
+
+              <div className="space-y-8 relative z-10">
+                {contactInfo.map((info, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#23471d] flex items-center justify-center shrink-0 shadow-md">
+                      <info.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 tracking-[0.2em] mb-1">{info.label}</p>
+                      {info.title && <h4 className="text-sm font-bold text-gray-900 mb-1">{info.title}</h4>}
+                      {info.isHtml ? (
+                        <div 
+                          className="text-xs text-gray-600 leading-relaxed font-medium"
+                          dangerouslySetInnerHTML={{ __html: info.value }}
+                        />
+                      ) : (
+                        <p className="text-sm font-bold text-gray-800">{info.value}</p>
+                      )}
+                      {info.sub && <p className="text-[11px] text-gray-500 mt-1">{info.sub}</p>}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* RIGHT: form */}
-            <div className="lg:col-span-3" data-aos="fade-left">
+            {/* Right: Contact Form */}
+            <div className="lg:col-span-8 bg-white rounded-xl shadow-xl p-8 md:p-10 border border-gray-100 relative" data-aos="fade-up" data-aos-delay="100">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 rounded-full bg-[#e8f5e9] flex items-center justify-center">
+                  <Send className="w-7 h-7 text-[#23471d]" />
+                </div>
+                <div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                    SEND US A <span className="text-[#23471d]">MESSAGE</span>
+                  </h2>
+                  <p className="text-gray-500 text-sm">Share your query and we'll get back to you.</p>
+                </div>
+                <div className="ml-auto hidden md:block">
+                  <Send className="w-12 h-12 text-[#23471d]/10 transform -rotate-12" />
+                </div>
+              </div>
+
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="bg-white border border-green-300 p-14 flex flex-col items-center justify-center min-h-[480px] shadow-sm"
+                    className="flex flex-col items-center justify-center py-12 text-center"
                   >
-                    <CheckCircle className="w-20 h-20 text-green-500 mb-6" />
-                    <h3 className="text-2xl font-bold text-slate-900 mb-3 text-center">Message Sent!</h3>
-                    <p className="text-slate-500 text-center text-sm max-w-sm mb-6">Thank you for reaching out. Our team will respond within 24 hours.</p>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
-                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                      Form will reset automatically...
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                      <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Thank You!</h3>
+                    <p className="text-gray-600">Your message has been sent successfully. <br />We'll get back to you shortly.</p>
                   </motion.div>
                 ) : (
-                  <motion.div 
-                    key="form"
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    exit={{ opacity: 0 }}
-                    className="bg-white border border-slate-100 p-8 shadow-sm"
-                  >
-                    <div className="space-y-6">
-                      {/* Row 1: Name & Phone */}
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <input
-                            type="text" name="name" placeholder="Full Name *" value={formData.name} onChange={handleChange}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.name ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"}`}
-                          />
-                          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                  <div className="space-y-6">
+                    {/* Row 1: Name & Phone */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#23471d] transition-colors">
+                          <CheckCircle className="w-4 h-4" />
                         </div>
-                        
-                        <div className="relative flex items-center group">
-                          <input
-                            type="tel" name="phone" placeholder="Phone Number *" value={formData.phone} onChange={handleChange}
-                            disabled={phoneVerified || phoneOtpSent}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.phone ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"} ${phoneVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""} ${phoneOtpSent && !phoneVerified ? "border-orange-200" : ""}`}
-                          />
-                          {!phoneVerified && (
-                            <button
-                              onClick={sendPhoneOtp}
-                              disabled={sendingPhoneOtp || !formData.phone || phoneResendTimer > 0}
-                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-200 transition-all shadow-sm active:scale-95 ${phoneResendTimer > 0 ? "bg-slate-300" : ""}`}
-                            >
-                              {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `Resend in ${phoneResendTimer}s` : phoneOtpSent ? "Resend OTP" : "Send OTP"}
-                            </button>
-                          )}
-                          {phoneVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}
-                          {errors.phone && <p className="absolute -bottom-5 left-0 text-red-500 text-xs">{errors.phone}</p>}
+                        <input
+                          type="text" name="name" placeholder="Full Name *" value={formData.name} onChange={handleChange}
+                          className={`w-full pl-11 pr-4 py-4 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.name ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"}`}
+                        />
+                        {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.name}</p>}
+                      </div>
+                      
+                      <div className="relative group flex items-center">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#23471d] transition-colors z-10">
+                          <Phone className="w-4 h-4" />
                         </div>
+                        <input
+                          type="tel" name="phone" placeholder="Phone Number *" value={formData.phone} onChange={handleChange}
+                          disabled={phoneVerified || phoneOtpSent}
+                          className={`w-full pl-11 pr-24 py-4 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.phone ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"} ${phoneVerified ? "bg-green-50 border-green-200" : ""}`}
+                        />
+                        {!phoneVerified && (
+                          <button
+                            onClick={sendPhoneOtp}
+                            disabled={sendingPhoneOtp || !formData.phone || phoneResendTimer > 0}
+                            className="absolute right-2 px-3 py-1.5 bg-white border border-[#23471d] text-[#23471d] text-[10px] font-bold uppercase rounded-md hover:bg-[#23471d] hover:text-white transition-all disabled:opacity-50"
+                          >
+                            {sendingPhoneOtp ? "..." : phoneResendTimer > 0 ? `${phoneResendTimer}s` : "SEND OTP"}
+                          </button>
+                        )}
+                        {phoneVerified && <CheckCircle size={18} className="absolute right-3 text-green-500" />}
+                        {errors.phone && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px]">{errors.phone}</p>}
+                      </div>
+                    </div>
+
+                    {/* Row 2: Email & Service */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="relative group flex items-center">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#23471d] transition-colors z-10">
+                          <Mail className="w-4 h-4" />
+                        </div>
+                        <input
+                          type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange}
+                          disabled={emailVerified || emailOtpSent}
+                          className={`w-full pl-11 pr-24 py-4 bg-gray-50 border rounded-lg text-sm outline-none transition-all ${errors.email ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"} ${emailVerified ? "bg-green-50 border-green-200" : ""}`}
+                        />
+                        {!emailVerified && (
+                          <button
+                            onClick={sendEmailOtp}
+                            disabled={sendingEmailOtp || !formData.email || emailResendTimer > 0}
+                            className="absolute right-2 px-3 py-1.5 bg-white border border-[#23471d] text-[#23471d] text-[10px] font-bold uppercase rounded-md hover:bg-[#23471d] hover:text-white transition-all disabled:opacity-50"
+                          >
+                            {sendingEmailOtp ? "..." : emailResendTimer > 0 ? `${emailResendTimer}s` : "SEND OTP"}
+                          </button>
+                        )}
+                        {emailVerified && <CheckCircle size={18} className="absolute right-3 text-green-500" />}
+                        {errors.email && <p className="absolute -bottom-5 left-0 text-red-500 text-[10px]">{errors.email}</p>}
                       </div>
 
-                      {/* Row 2: Email & Service */}
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="relative flex items-center group">
-                          <input
-                            type="email" name="email" placeholder="Email Address *" value={formData.email} onChange={handleChange}
-                            disabled={emailVerified || emailOtpSent}
-                            className={`w-full px-4 py-3.5 border-2 text-sm outline-none transition-all ${errors.email ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"} ${emailVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""} ${emailOtpSent && !emailVerified ? "border-orange-200" : ""}`}
-                          />
-                          {!emailVerified && (
-                            <button
-                              onClick={sendEmailOtp}
-                              disabled={sendingEmailOtp || !formData.email || emailResendTimer > 0}
-                              className={`absolute right-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all shadow-sm active:scale-95 ${emailResendTimer > 0 ? "bg-slate-300" : ""}`}
-                            >
-                              {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `Resend in ${emailResendTimer}s` : emailOtpSent ? "Resend OTP" : "Send OTP"}
-                            </button>
-                          )}
-                          {emailVerified && <CheckCircle size={18} className="absolute right-3 text-green-500 animate-in zoom-in duration-300" />}
-                          {errors.email && <p className="absolute -bottom-5 left-0 text-red-500 text-xs">{errors.email}</p>}
+                      <div className="relative group">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#23471d] transition-colors z-10">
+                          <CheckCircle className="w-4 h-4" />
                         </div>
-
                         <select
                           name="service" value={formData.service} onChange={handleChange}
-                          className="w-full px-4 py-[13px] border-2 border-slate-200 focus:border-[#23471d] text-sm outline-none transition-colors bg-white text-slate-500 h-[52px]"
+                          className="w-full pl-11 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:border-[#23471d] focus:bg-white transition-all appearance-none"
                         >
                           <option value="">Select Inquiry Type...</option>
                           <option value="exhibition">Exhibition & Stands</option>
@@ -452,76 +475,67 @@ const Contact = () => {
                           <option value="other">Other</option>
                         </select>
                       </div>
+                    </div>
 
-                      {/* Row 3: Combined OTPs (Shared space) */}
-                      {( (phoneOtpSent || sendingPhoneOtp) && !phoneVerified || (emailOtpSent || sendingEmailOtp) && !emailVerified ) && (
-                        <div className="grid md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-4 duration-500 ease-out">
-                          {/* WhatsApp OTP Column */}
-                          <div>
-                            { (phoneOtpSent || sendingPhoneOtp) && !phoneVerified ? (
-                              <div className="flex gap-2">
-                                <input
-                                  type="text" 
-                                  placeholder={sendingPhoneOtp ? "Sending..." : "WhatsApp OTP"} 
-                                  value={phoneOtp} 
-                                  onChange={(e) => setPhoneOtp(e.target.value)}
-                                  disabled={sendingPhoneOtp}
-                                  className={`flex-1 px-4 py-2.5 border-2 border-[#d26019]/30 text-xs outline-none focus:border-[#d26019] bg-orange-50/50 placeholder:text-orange-300 font-medium tracking-widest text-center ${sendingPhoneOtp ? "opacity-50 cursor-not-allowed" : ""}`}
-                                  maxLength={6}
-                                />
-                                <button
-                                  onClick={confirmPhoneOtp}
-                                  disabled={verifyingPhone || !phoneOtp || sendingPhoneOtp}
-                                  className="px-4 py-2.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] transition-all shadow-md active:scale-95"
-                                >
-                                  {verifyingPhone ? "..." : "Verify"}
-                                </button>
-                              </div>
-                            ) : <div className="hidden md:block h-10" />}
+                    {/* OTP Inputs */}
+                    {((phoneOtpSent && !phoneVerified) || (emailOtpSent && !emailVerified)) && (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        {phoneOtpSent && !phoneVerified && (
+                          <div className="flex gap-2">
+                            <input
+                              type="text" placeholder="Phone OTP" value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)}
+                              className="flex-1 px-4 py-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-center tracking-widest font-bold outline-none"
+                              maxLength={6}
+                            />
+                            <button onClick={confirmPhoneOtp} disabled={verifyingPhone} className="px-6 py-3 bg-[#23471d] text-white text-xs font-bold rounded-lg hover:bg-[#1a3a14]">
+                              {verifyingPhone ? "..." : "VERIFY"}
+                            </button>
                           </div>
-
-                          {/* Email OTP Column */}
-                          <div>
-                            { (emailOtpSent || sendingEmailOtp) && !emailVerified ? (
-                              <div className="flex gap-2">
-                                <input
-                                  type="text" 
-                                  placeholder={sendingEmailOtp ? "Sending..." : "Email OTP"} 
-                                  value={emailOtp} 
-                                  onChange={(e) => setEmailOtp(e.target.value)}
-                                  disabled={sendingEmailOtp}
-                                  className={`flex-1 px-4 py-2.5 border-2 border-[#d26019]/30 text-xs outline-none focus:border-[#d26019] bg-orange-50/50 placeholder:text-orange-300 font-medium tracking-widest text-center ${sendingEmailOtp ? "opacity-50 cursor-not-allowed" : ""}`}
-                                  maxLength={6}
-                                />
-                                <button
-                                  onClick={confirmEmailOtp}
-                                  disabled={verifyingEmail || !emailOtp || sendingEmailOtp}
-                                  className="px-4 py-2.5 bg-[#23471d] text-white text-[10px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] transition-all shadow-md active:scale-95"
-                                >
-                                  {verifyingEmail ? "..." : "Verify"}
-                                </button>
-                              </div>
-                            ) : <div className="hidden md:block h-10" />}
+                        )}
+                        {emailOtpSent && !emailVerified && (
+                          <div className="flex gap-2">
+                            <input
+                              type="text" placeholder="Email OTP" value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)}
+                              className="flex-1 px-4 py-3 bg-orange-50 border border-orange-200 rounded-lg text-sm text-center tracking-widest font-bold outline-none"
+                              maxLength={6}
+                            />
+                            <button onClick={confirmEmailOtp} disabled={verifyingEmail} className="px-6 py-3 bg-[#23471d] text-white text-xs font-bold rounded-lg hover:bg-[#1a3a14]">
+                              {verifyingEmail ? "..." : "VERIFY"}
+                            </button>
                           </div>
-                        </div>
-                      )}
-
-                      <div>
-                        <textarea
-                          name="message" placeholder="Tell us more about your inquiry..." value={formData.message} onChange={handleChange} rows={5}
-                          className={`w-full px-4 py-3 border-2 text-sm outline-none transition-colors resize-none ${errors.message ? "border-red-400" : "border-slate-200 focus:border-[#23471d]"}`}
-                        />
-                        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                        )}
                       </div>
+                    )}
 
+                    <div className="relative group">
+                      <textarea
+                        name="message" placeholder="Tell us more about your inquiry..." value={formData.message} onChange={handleChange} rows={4}
+                        className={`w-full px-4 py-4 bg-gray-50 border rounded-lg text-sm outline-none transition-all resize-none ${errors.message ? "border-red-400" : "border-gray-200 focus:border-[#23471d] focus:bg-white"}`}
+                      />
+                      {errors.message && <p className="text-red-500 text-[10px] mt-1">{errors.message}</p>}
+                    </div>
+
+                    <div className="relative">
                       <button
                         onClick={handleSubmit} disabled={submitting}
-                        className="w-full bg-[#23471d] hover:bg-[#1a3a14] disabled:bg-slate-300 text-white font-bold py-4 px-6 uppercase tracking-widest text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-[#23471d] to-[#1a3a14] hover:from-[#1a3a14] hover:to-[#0f240c] text-white font-bold py-5 px-8 rounded-lg uppercase tracking-widest text-sm transition-all shadow-lg flex items-center justify-center gap-3 active:scale-[0.98]"
                       >
-                        {submitting ? (<><Loader2 className="w-4 h-4 animate-spin" />Sending...</>) : (<>Send Message <Send className="w-4 h-4" /></>)}
+                        {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <>SEND MESSAGE <Send className="w-4 h-4" /></>}
                       </button>
+
+                      {/* Yellow corner tag */}
+                      <div className="absolute -bottom-6 -right-6 hidden md:block">
+                        <div className="bg-[#fbc02d] text-[#23471d] px-6 py-4 rounded-tl-3xl shadow-xl transform rotate-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                              <CheckCircle size={18} />
+                            </div>
+                            <p className="text-[11px] font-bold leading-tight">We'll get back <br />to you shortly!</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </AnimatePresence>
             </div>
@@ -529,11 +543,35 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* ── TRUST BAND ── */}
+      <section className="bg-white py-10 border-y border-gray-100">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { icon: CheckCircle, top: "100% SECURE", bot: "Your information is safe with us" },
+              { icon: Send, top: "DEDICATED TEAM", bot: "We are here to help" },
+              { icon: Clock, top: "QUICK RESPONSE", bot: "We reply within 24 hrs" },
+              { icon: MapPin, top: "TRUSTED SUPPORT", bot: "Your satisfaction is our priority" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-4 border-r last:border-none border-gray-100 pr-4">
+                <div className="w-12 h-12 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                  <item.icon className="w-6 h-6 text-[#23471d]" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-gray-900 leading-tight">{item.top}</p>
+                  <p className="text-[10px] text-gray-500 leading-tight">{item.bot}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* MAP */}
       {settings?.mapIframe && (
-        <section className="py-16 bg-white border-t border-slate-100">
+        <section className="py-16 bg-[#f3f4f6]">
           <div className="container mx-auto px-4" data-aos="fade-up">
-            <div className="overflow-hidden shadow-lg border border-slate-100 min-h-[420px] flex items-center justify-center bg-slate-50">
+            <div className="overflow-hidden rounded-2xl shadow-xl border border-white min-h-[420px] flex items-center justify-center bg-white">
               {settings.mapIframe.includes("<iframe") ? (
                 <div
                   dangerouslySetInnerHTML={{ __html: settings.mapIframe }}
