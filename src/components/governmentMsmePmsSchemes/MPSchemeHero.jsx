@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle2, TrendingUp, Globe, Landmark } from 'lucide-react';
 
-const MPSchemeHero = () => {
+const MPSchemeHero = ({ onApplyClick }) => {
     return (
         <div
             className="w-full relative flex items-stretch px-16 bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat min-h-[440px] font-['Barlow',sans-serif]"
@@ -78,7 +78,7 @@ const MPSchemeHero = () => {
             {/* ── BOTTOM RIGHT BUTTONS ── */}
             <div className="absolute bottom-8 right-11 z-10 flex gap-[14px] items-center">
                 <button
-                    onClick={() => navigate('/msme-application')}
+                    onClick={onApplyClick}
                     className="bg-green-800 text-white flex items-center gap-2 px-5 py-2 text-sm font-medium uppercase rounded-lg font-normal shadow hover:bg-green-900 transition"
                 >
                     Apply for PMS Scheme →

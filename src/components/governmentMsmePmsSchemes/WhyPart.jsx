@@ -1,237 +1,107 @@
 import React from "react";
-import { FileText } from "lucide-react";
+import { FileText, ChevronRight } from "lucide-react";
 
-const WhyPart = () => {
-    const benefits = [
-        {
-            label: 'Significant reduction\nin exhibition cost',
-            icon: (
-                <img src="/mpscheme/why1.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
-        {
-            label: 'Access to national &\nInternational buyers',
-            icon: (
-                <img src="/mpscheme/why2.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
-        {
-            label: 'Government-supported\ncredibility',
-            icon: (
-                <img src="/mpscheme/why3.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
-        {
-            label: 'Increase brand\nvisibility',
-            icon: (
-                <img src="/mpscheme/why4.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
-        {
-            label: 'Expand your\nbusiness network',
-            icon: (
-                <img src="/mpscheme/why5.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
-        {
-            label: 'Boost sales &\ndistribution',
-            icon: (
-                <img src="/mpscheme/why6.png" alt="" className="w-20 h-20 object-contain" />
-            ),
-        },
+const WhyPart = ({ onApplyClick }) => {
+    const steps = [
+        { num: 1, title: 'Apply Online', desc: 'Fill the PMS application form', img: '/mpscheme/how1.png' },
+        { num: 2, title: 'Upload Docs', desc: 'Submit required docs online', img: '/mpscheme/how2.png' },
+        { num: 3, title: 'Verification', desc: 'Docs verified by MSME', img: '/mpscheme/how3.png' },
+        { num: 4, title: 'Stall Allocated', desc: 'Stall allocation notification', img: '/mpscheme/how4.png' },
+        { num: 5, title: 'Exhibit at IHWE', desc: 'Participate in IHWE 2026', img: '/mpscheme/how5.png' },
+        { num: 6, title: 'Claim Refund', desc: 'Get reimbursement', img: '/mpscheme/how6.png' },
     ];
 
     return (
-        <div className="px-16">
+        <div className="px-16 w-full mt-6 font-['Barlow',sans-serif]">
+            
+            <div className="flex gap-6" id="how-works">
+                
+                {/* HOW IT WORKS */}
+                <div className="flex-1 bg-white border border-[#e0e8d8] rounded-2xl p-5 shadow-sm flex flex-col">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest">How It Works?</h2>
+                        <div className="h-[1px] bg-gray-200 flex-1 ml-4"></div>
+                    </div>
 
-            {/* ── SECTION ONE: WHY PARTICIPATE ── */}
-            <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl mt-4 mb-4'>                {/* Heading */}
-                <div className="text-center mb-4">
-                    <h2 className="text-lg font-medium text-gray-900 uppercase tracking-wide">
-                        Why Participate Under PMS Scheme?
-                    </h2>
-                    <div className="w-10 h-0.5 bg-[#1e5c1e] mx-auto mt-2 rounded-full" />
-                </div>
+                    <div className="relative flex items-center justify-between px-2">
+                        {/* Connecting Dashed Line */}
+                        <div className="absolute top-[30px] left-[8%] right-[8%] h-[1px] border-t border-dashed border-gray-300 pointer-events-none z-0" />
 
-                {/* Benefits Row */}
-                <div className="flex items-start">
-                    {benefits.map((item, i) => (
-                        <div key={i} className="flex items-stretch flex-1">
-
-                            {/* Card */}
-                            <div className="flex-1 flex flex-col items-center justify-start gap-3 px-1 py-1 text-center">
-                                <div className="flex items-center justify-center h-14">
-                                    {item.icon}
+                        {steps.map((s, i) => (
+                            <div key={i} className="relative z-10 flex flex-col items-center text-center w-[15%] group">
+                                <div className="relative mb-3">
+                                    <div className="w-14 h-14 rounded-full bg-[#f8fbf6] border border-[#dce6d5] shadow-sm flex items-center justify-center group-hover:border-green-700 transition-colors duration-300">
+                                        <img src={s.img} alt="" className="w-7 h-7 object-contain group-hover:scale-110 transition-transform" />
+                                    </div>
+                                    <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-green-800 text-white text-[10px] font-bold flex items-center justify-center shadow-md border border-white">
+                                        {s.num}
+                                    </div>
                                 </div>
-                                <p className="text-sm font-normal text-gray-600 leading-snug whitespace-pre-line">
-                                    {item.label}
-                                </p>
+                                <h4 className="text-[11px] font-bold text-gray-800 leading-tight mb-1">{s.title}</h4>
+                                <p className="text-[9px] text-gray-500 font-medium leading-tight px-1">{s.desc}</p>
                             </div>
-
-                            {/* Vertical divider — not after last */}
-                            {i < benefits.length - 1 && (
-                                <div className="w-px bg-gray-200 self-stretch mx-1" />
-                            )}
-
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            {/* ── SECTION TWO: DOCUMENTS + HOW IT WORKS ── */}
-            <div className="w-full flex gap-3">
-
-                {/* ── LEFT: DOCUMENTS REQUIRED ── */}
-                <div className="w-[25%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl  ">
-                    <h2 className="text-base font-medium text-green-900 uppercase tracking-wide mb-4">
-                        Documents Required
-                    </h2>
-                    <div className="flex flex-col gap-3">
+                {/* DOCUMENTS REQUIRED */}
+                <div className="w-[28%] bg-white border border-[#e0e8d8] rounded-2xl p-5 shadow-sm">
+                    <h2 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-4">Documents Required</h2>
+                    <div className="flex flex-col gap-2.5">
                         {[
                             'Udyam Registration Certificate',
-                            'PAN Card',
-                            'GST Certificate',
+                            'PAN Card & GST Certificate',
                             'Company Profile',
                             'Product / Service Details',
                             'Bank Account Details',
                         ].map((doc, i) => (
-                            <div key={i} className="flex items-center gap-3">
-                                <FileText size={20} color="#1e5c1e" strokeWidth={1.8} className="shrink-0" />
-                                <span className="text-sm text-gray-700">{doc}</span>
+                            <div key={i} className="flex items-center gap-3 bg-gray-50 border border-gray-100 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div className="shrink-0 w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+                                    <FileText size={12} className="text-green-800" />
+                                </div>
+                                <span className="text-[11px] font-bold text-gray-700 tracking-tight">{doc}</span>
                             </div>
                         ))}
                     </div>
                 </div>
-
-                {/* ── RIGHT: HOW IT WORKS ── */}
-                <div className="w-[75%] bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl ">
-                    <h2 className="text-lg font-medium text-gray-900 px-2 uppercase tracking-wide mb-2">
-                        How It Works?
-                    </h2>
-
-                    {/* Steps Row */}
-                    <div className="flex items-start justify-between relative">
-
-                        {/* Connecting line */}
-                        <div className="absolute top-[54px] left-[8%] right-[8%] h-px border-t-2 border-dashed border-gray-300 z-0" />
-
-                        {[
-                            {
-                                num: 1,
-                                title: 'Apply Online',
-                                desc: 'Fill the PMS application form',
-                                icon: (
-                                    <img src="/mpscheme/how1.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                            {
-                                num: 2,
-                                title: 'Upload Documents',
-                                desc: 'Submit all required documents online',
-                                icon: (
-                                    <img src="/mpscheme/how2.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                            {
-                                num: 3,
-                                title: 'MSME Verification',
-                                desc: 'Documents verified by MSME',
-                                icon: (
-                                    <img src="/mpscheme/how3.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                            {
-                                num: 4,
-                                title: 'Stall Allocation',
-                                desc: 'Stall will be allocated',
-                                icon: (
-                                    <img src="/mpscheme/how4.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                            {
-                                num: 5,
-                                title: 'Exhibit at IHWE',
-                                desc: 'Participate in IHWE 2026',
-                                icon: (
-                                    <img src="/mpscheme/how5.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                            {
-                                num: 6,
-                                title: 'Claim Reimbursement',
-                                desc: 'Get reimbursement after approval',
-                                icon: (
-                                    <img src="/mpscheme/how6.png" alt="" className="h-18 w-18 object-contain" />
-                                ),
-                            },
-                        ].map((step, i) => (
-                            <div key={i} className="flex flex-col items-center relative z-10 flex-1">
-
-                                <div className="relative mt-3">
-
-                                    {/* Number badge — top right corner pe */}
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-[#1e5c1e] text-white text-xs font-medium flex items-center justify-center z-10 shadow">
-                                        {step.num}
-                                    </div>
-
-                                    {/* Circle with icon */}
-                                    <div className="w-20 h-20 rounded-full bg-[#f0f5ec] border border-[#d0e4c0] flex items-center justify-center mt-0">
-                                        {step.icon}
-                                    </div>
-
-                                </div>
-
-                                {/* Title */}
-                                <div className="text-sm font-base text-gray-900 text-center leading-snug mt-1">
-                                    {step.title}
-                                </div>
-
-                                {/* Desc */}
-                                <div className="text-xs text-gray-700 text-center leading-snug mt-2">
-                                    {step.desc}
-                                </div>
-
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
             </div>
 
-            {/* SECTION THREE */}
-            <div className="w-full mb-4 mt-6 rounded-2xl bg-[#1e4d1e] flex items-end gap-6 px-6 relative">
+            {/* BOTTOM CTA BANNER */}
+            <div className="mt-8 mb-8 relative rounded-3xl bg-[#0c3019] border border-[#1a4a2b] overflow-hidden flex items-center justify-between px-8 py-6 shadow-xl" style={{ background: 'linear-gradient(135deg, #0b3118 0%, #05160b 100%)' }}>
+                
+                {/* Abstract green graphic blobs in BG */}
+                <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-green-700/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute right-10 top-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl pointer-events-none" />
 
-                {/* Trophy Image — upar se bahar nikle */}
-                <div className="shrink-0 z-10" style={{ marginBottom: 0, marginTop: '-44px' }}>
-                    <img
-                        src="/mpscheme/trofi1.png"
-                        alt="Trophy"
-                        className="w-28 h-36 object-contain object-bottom block"
-                    />
+                <div className="flex items-center gap-6 relative z-10">
+                    {/* Trophy/Badge Image provided in mpscheme directory */}
+                    <div className="relative w-20 h-20 flex-shrink-0 transform -translate-y-2">
+                        <img src="/mpscheme/trofi1.png" className="w-full h-full object-contain drop-shadow-2xl scale-125" alt="Success" />
+                    </div>
+                    <div>
+                        <h2 className="text-lg md:text-xl font-black text-white tracking-tight uppercase mb-1 flex items-center gap-2">
+                            Don't Miss This <span className="text-[#f3b71b]">Government-Supported Opportunity!</span>
+                        </h2>
+                        <p className="text-[12px] text-gray-300 font-medium max-w-xl">
+                            Exhibit at IHWE 2026 and take your business to the next level with financial support under the MSME PMS Scheme.
+                        </p>
+                    </div>
                 </div>
 
-                {/* Text */}
-                <div className="flex-1 z-10 py-2 mr-6">
-                    <p className="text-base font-semibold text-white leading-snug">
-                        Don't Miss This{' '}
-                        <span className="text-[#f5a623]">Government-Supported Opportunity!</span>
-                    </p>
-                    <p className="text-sm text-gray-200 mt-1 leading-relaxed">
-                        Exhibit at IHWE 2026 and take your business to the next level<br />
-                        with financial support under the MSME PMS Scheme.
-                    </p>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex items-center gap-6 shrink-0 z-10 py-5">
-                    <button className="bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap">
-                        Apply for PMS Scheme →
+                <div className="flex items-center gap-4 relative z-10 shrink-0">
+                    <button
+                        onClick={onApplyClick}
+                        className="bg-[#f3b71b] hover:bg-[#eab000] text-[#0c3019] px-6 py-2.5 rounded-lg font-black text-[11px] tracking-widest uppercase flex items-center gap-2 shadow-lg transition-all active:scale-95"
+                    >
+                        Apply Now <ChevronRight size={14} strokeWidth={3} />
                     </button>
-                    <button className="bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap">
-                        Book Your Stall →
+                    <button
+                        onClick={() => window.open('/book-a-stand', '_blank')}
+                        className="border-2 border-white text-white hover:bg-white/10 px-6 py-2.5 rounded-lg font-black text-[11px] tracking-widest uppercase flex items-center gap-2 transition-all"
+                    >
+                        Book Stall
                     </button>
                 </div>
-
             </div>
 
         </div>
