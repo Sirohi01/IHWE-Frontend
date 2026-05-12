@@ -1717,43 +1717,43 @@ const BookAStand = () => {
                                                             <div className="flex items-center divide-x divide-slate-100">
 
                                                                 {/* Space Area */}
-                                                                <div className="flex-1 px-4 py-1.5">
+                                                                <div className="flex-1 px-4 py-1">
                                                                     <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-0.5">
                                                                         Space ({formData.participation.stallSize} sqm)
                                                                     </p>
-                                                                    <p className="text-sm font-black text-slate-800">
+                                                                    <p className="text-sm font-semibold text-slate-800">
                                                                         {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
                                                                     </p>
                                                                 </div>
 
                                                                 {/* PL Increment */}
                                                                 {selectedStall?.incrementPercentage > 0 && (
-                                                                    <div className="flex-1 px-4 py-3">
-                                                                        <p className="text-[11px] font-medium text-orange-400 uppercase tracking-widest mb-0.5">
+                                                                    <div className="flex-1 px-4 py-1">
+                                                                        <p className="text-[11px] font-medium text-orange-600 uppercase tracking-widest mb-0.5">
                                                                             PL Increment ({selectedStall.incrementPercentage}%)
                                                                         </p>
-                                                                        <p className="text-sm font-black text-orange-500">
+                                                                        <p className="text-sm font-semibold text-orange-500">
                                                                             + {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}
                                                                         </p>
                                                                     </div>
                                                                 )}
 
                                                                 {/* GST */}
-                                                                <div className="flex-1 px-4 py-3">
-                                                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-widest mb-0.5">
+                                                                <div className="flex-1 px-4 py-1">
+                                                                    <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-0.5">
                                                                         GST (18%)
                                                                     </p>
-                                                                    <p className="text-sm font-black text-slate-800">
+                                                                    <p className="text-sm font-semibold text-slate-800">
                                                                         {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
                                                                     </p>
                                                                 </div>
 
                                                                 {/* Grand Total */}
-                                                                <div className="flex-1 px-4 py-3 bg-[#f0f7e6]">
-                                                                    <p className="text-[9px] font-bold text-[#23471d]/60 uppercase tracking-widest mb-0.5">
+                                                                <div className="flex-1 px-4 py-1 bg-[#f0f7e6]">
+                                                                    <p className="text-[11px] font-medium text-[#23471d]/60 uppercase  mb-0.5">
                                                                         Grand Total <span className="normal-case font-normal">(incl. tax)</span>
                                                                     </p>
-                                                                    <p className="text-base font-black text-[#23471d]">
+                                                                    <p className="text-sm font-semibold text-[#23471d]">
                                                                         {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total)}
                                                                     </p>
                                                                 </div>
@@ -1764,7 +1764,7 @@ const BookAStand = () => {
                                                 </div>
                                             </div>
                                             <div className="space-y-1.5 pt-2 ">
-                                                <h3 className="text-xs font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
+                                                <h3 className="text-xs pb-1 font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
                                                     Exhibitor Category
                                                 </h3>
 
@@ -1775,7 +1775,7 @@ const BookAStand = () => {
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
                                                             value={formData.primaryCategory}
                                                         >
-                                                            <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900">
+                                                            <SelectTrigger className={`${inputClasses}`}>
                                                                 <SelectValue placeholder="Select Primary Category" />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1793,7 +1793,7 @@ const BookAStand = () => {
                                                             value={formData.subCategory}
                                                             disabled={!formData.primaryCategory}
                                                         >
-                                                            <SelectTrigger className="h-8 w-full border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 disabled:opacity-50">
+                                                            <SelectTrigger className={`${inputClasses}`}>
                                                                 <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
                                                             </SelectTrigger>
                                                             <SelectContent>
@@ -1840,14 +1840,14 @@ const BookAStand = () => {
                                             </div>
 
                                             {/* -- FINAL BOOKING CONTROL -- */}
-                                            <div className="pt-2 border-t border-slate-500">
+                                            <div className="pt-1">
                                                 <div className="flex flex-col gap-4">
-                                                    <div className="space-y-3">
-                                                        <div className="space-y-2">
+                                                    <div className="flex gap-4 justify-between">
+                                                        <div className="w-[75%] space-y-2">
                                                             <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
                                                                 <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
                                                                 <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
-                                                                    I hereby confirm that the information provided is accurate. I have read and agree to the <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
+                                                                    I hereby confirm that the information provided is accurate. I have read and agree to the  <Link to={`/terms-of-service?page=exhibitor-registration&eventId=${selectedEventId}`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
                                                                 </span>
                                                             </label>
                                                             <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
@@ -1863,166 +1863,159 @@ const BookAStand = () => {
                                                                 </span>
                                                             </label>
                                                         </div>
+
+                                                        <div className="w-[25%] flex justify-end items-end">
+                                                            <img src="/bookStand/books.png" alt="Payment Partners" className="w-full h-[160px] object-contain" />
+                                                        </div>
                                                     </div>
 
                                                     {/* Right: Summary Card */}
-                                                    <div className="w-full">
-                                                        <div className="bg-white border border-slate-200 p-4 rounded-sm shadow-sm">
-                                                            <div className="flex justify-between items-center mb-4">
-                                                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Financial Breakdown</h3>
-                                                                <div className="flex gap-3 items-end">
-                                                                    {/* Payment Plan Buttons — only 2 choices: Full or Installment */}
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">Payment Plan</span>
-                                                                        <div className="flex gap-1">
-                                                                            {(() => {
-                                                                                const ev = events.find((e: any) => e._id === selectedEventId);
-                                                                                const plans = ev?.paymentPlans || [];
-                                                                                const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
-                                                                                // First installment phase (lowest %)
-                                                                                const firstInstallPlan = plans
-                                                                                    .filter((p: any) => Number(p.percentage) < 100)
-                                                                                    .sort((a: any, b: any) => Number(a.percentage) - Number(b.percentage))[0];
-                                                                                const isFullSelected = formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id;
-                                                                                return (
-                                                                                    <>
-                                                                                        {/* Full Payment */}
-                                                                                        <button type="button"
-                                                                                            onClick={() => setFormData(prev => ({
-                                                                                                ...prev,
-                                                                                                paymentPlanType: fullPlan?.id || 'full',
-                                                                                                paymentPlanLabel: fullPlan?.label || 'Full Payment'
-                                                                                            }))}
-                                                                                            className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${isFullSelected ? 'bg-[#23471d] text-white border-[#23471d]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#23471d]'}`}>
-                                                                                            Full Payment{settings?.fullPaymentDiscount > 0 ? ` (-${settings.fullPaymentDiscount}%)` : ''}
-                                                                                        </button>
-                                                                                        {/* Installment — sets Phase 1 automatically */}
-                                                                                        {firstInstallPlan && (
-                                                                                            <button type="button"
-                                                                                                onClick={() => setFormData(prev => ({
-                                                                                                    ...prev,
-                                                                                                    paymentPlanType: firstInstallPlan.id,
-                                                                                                    paymentPlanLabel: firstInstallPlan.label
-                                                                                                }))}
-                                                                                                className={`px-3 py-1.5 text-[10px] font-black rounded-[2px] border transition-all ${!isFullSelected ? 'bg-[#1a3a6b] text-white border-[#1a3a6b]' : 'bg-white text-slate-600 border-slate-300 hover:border-[#1a3a6b]'}`}>
-                                                                                                Installment ({firstInstallPlan.percentage}% Now)
-                                                                                            </button>
-                                                                                        )}
-                                                                                    </>
-                                                                                );
-                                                                            })()}
+                                                    <div className="w-full bg-white border border-slate-200 rounded-xl overflow-hidden">
+
+                                                        {/* Header */}
+                                                        <div className="flex items-center justify-between px-5 py-1.5 border-b border-slate-100">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-[3px] h-4 bg-[#27500A] rounded-full" />
+                                                                <span className="text-[12px] font-semibold uppercase tracking-widest text-slate-700">Financial Breakdown</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                {(() => {
+                                                                    const ev = events.find((e: any) => e._id === selectedEventId);
+                                                                    const plans = ev?.paymentPlans || [];
+                                                                    const fullPlan = plans.find((p: any) => Number(p.percentage) === 100 || p.id === 'full');
+                                                                    const firstInstallPlan = plans.filter((p: any) => Number(p.percentage) < 100).sort((a: any, b: any) => Number(a.percentage) - Number(b.percentage))[0];
+                                                                    const isFullSelected = formData.paymentPlanType === 'full' || formData.paymentPlanType === fullPlan?.id;
+                                                                    return (
+                                                                        <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-0.5">
+                                                                            <button type="button"
+                                                                                onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: fullPlan?.id || 'full', paymentPlanLabel: fullPlan?.label || 'Full Payment' }))}
+                                                                                className={`px-3.5 py-1.5 text-[11px] text-gray-600 font-medium rounded-md transition-all ${isFullSelected ? 'bg-[#23471d] text-white' : 'text-gray-600 hover:text-gray-700'}`}>
+                                                                                Full {settings?.fullPaymentDiscount > 0 ? `(−${settings.fullPaymentDiscount}%)` : ''}
+                                                                            </button>
+                                                                            {firstInstallPlan && (
+                                                                                <button type="button"
+                                                                                    onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: firstInstallPlan.id, paymentPlanLabel: firstInstallPlan.label }))}
+                                                                                    className={`px-3.5 py-1.5 text-[11px] text-gray-600 font-medium rounded-md transition-all ${!isFullSelected ? 'bg-[#185FA5] text-white' : 'text-gray-500 hover:text-gray-700'}`}>
+                                                                                    Advance ({firstInstallPlan.percentage}%)
+                                                                                </button>
+                                                                            )}
                                                                         </div>
-                                                                    </div>
-                                                                    {/* TDS on right */}
-                                                                    <div className="flex flex-col gap-1">
-                                                                        <span className="text-[9px] font-bold text-slate-400 uppercase">TDS (%)</span>
-                                                                        <select
-                                                                            value={formData.chosenTdsPercent}
-                                                                            onChange={(e) => setFormData(prev => ({ ...prev, chosenTdsPercent: Number(e.target.value) }))}
-                                                                            className="h-7 px-2 border border-slate-300 rounded-[2px] text-[11px] font-bold text-slate-900 bg-white outline-none focus:border-[#23471d]"
-                                                                        >
-                                                                            <option value={0}>0%</option>
-                                                                            <option value={1}>1%</option>
-                                                                            <option value={2}>2%</option>
-                                                                            <option value={10}>10%</option>
-                                                                        </select>
-                                                                    </div>
+                                                                    );
+                                                                })()}
+                                                                <div className="flex items-center gap-1.5 border border-gray-200 rounded-lg px-3 py-1.5">
+                                                                    <span className="text-[10px] text-gray-600 font-medium">TDS</span>
+                                                                    <select value={formData.chosenTdsPercent} onChange={(e) => setFormData(prev => ({ ...prev, chosenTdsPercent: Number(e.target.value) }))}
+                                                                        className="text-[11px] font-medium text-gray-600 bg-transparent outline-none cursor-pointer">
+                                                                        <option value={0}>0%</option>
+                                                                        <option value={1}>1%</option>
+                                                                        <option value={2}>2%</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
+                                                        </div>
 
-                                                            <div className="space-y-2 text-xs border-t border-slate-100 pt-3">
-                                                                <div className="flex justify-between items-center">
-                                                                    <span className="text-slate-500 font-medium">Gross Cost (Space + PL)</span>
-                                                                    <span className="font-bold text-slate-900">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
-                                                                </div>
-
-                                                                {formData.financeBreakdown.stallDiscountAmount > 0 && (
-                                                                    <div className="flex justify-between items-center text-green-600 bg-green-50 px-2 py-1 rounded-sm border border-green-100 italic">
-                                                                        <span className="text-[10px] font-bold">Stall Discount ({formData.financeBreakdown.stallDiscountPercent}%)</span>
-                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
-                                                                    </div>
-                                                                )}
-
-                                                                {formData.financeBreakdown.discountAmount > 0 && (
-                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50 px-2 py-1 rounded-sm border border-orange-100 italic">
-                                                                        <span className="text-[10px] font-bold">Full Payment Discount ({formData.financeBreakdown.discountPercent}%)</span>
-                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
-                                                                    </div>
-                                                                )}
-
-                                                                <div className="flex justify-between items-center border-t border-slate-100 pt-1 text-slate-400">
-                                                                    <span className="text-[10px] uppercase font-bold">Net Taxable Value</span>
-                                                                    <span className="font-bold">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
-                                                                </div>
-
-                                                                <div className="flex justify-between items-center">
-                                                                    <span className="text-slate-500 font-medium text-[11px]">GST (18%)</span>
-                                                                    <span className="font-bold text-slate-900">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
-                                                                </div>
-
-                                                                {formData.financeBreakdown.tdsAmount > 0 && (
-                                                                    <div className="flex justify-between items-center text-red-600 font-medium">
-                                                                        <span className="text-[11px]">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
-                                                                        <span className="font-bold">- {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
-                                                                    </div>
-                                                                )}
-
-                                                                <div className="flex justify-between items-center border-t border-slate-200 pt-2 bg-slate-50 px-2 py-1.5 rounded-sm">
-                                                                    <span className="font-black text-slate-700 uppercase tracking-tighter text-[11px]">Total Net Payable</span>
-                                                                    <span className="font-black text-[15px] text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
-                                                                </div>
-
-                                                                {formData.balanceAmount > 0 && (
-                                                                    <div className="flex justify-between items-center text-[#d26019] bg-orange-50/50 px-2 py-1 rounded-sm">
-                                                                        <span className="font-bold uppercase text-[9px]">Balance Payment Later</span>
-                                                                        <span className="font-bold text-[11px]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
-                                                                    </div>
-                                                                )}
+                                                        {/* Rows */}
+                                                        <div className="divide-y divide-gray-100">
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <span className="text-[12px] text-gray-600 font-medium">Gross Cost (Space + PL)</span>
+                                                                <span className="text-[13px] font-medium text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
                                                             </div>
 
-                                                            <div className="mt-4 p-3 bg-[#23471d] rounded-sm text-white shadow-lg">
-                                                                <div className="flex justify-between items-center">
-                                                                    <div>
-                                                                        <p className="text-[10px] font-bold uppercase opacity-80">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
-                                                                        <p className="text-[8px] font-medium uppercase opacity-60">Verified Transaction</p>
-                                                                    </div>
-                                                                    <div className="text-right">
-                                                                        <p className="text-2xl font-black leading-none">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
-                                                                    </div>
+                                                            {formData.financeBreakdown.stallDiscountAmount > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-2.5 bg-[#EAF3DE]">
+                                                                    <span className="text-[11px] font-medium text-[#27500A]">
+                                                                        Stall Discount
+                                                                        <span className="ml-2 text-[10px] bg-[#C0DD97] text-[#27500A] px-2 py-0.5 rounded font-medium">{formData.financeBreakdown.stallDiscountPercent}%</span>
+                                                                    </span>
+                                                                    <span className="text-[12px] font-medium text-[#3B6D11]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
                                                                 </div>
+                                                            )}
 
-                                                                {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
-                                                                    <div className="mt-3 pt-2 border-t border-white/20 space-y-1.5">
-                                                                        <div className="flex justify-between items-center opacity-75">
-                                                                            <p className="text-[9px] font-bold uppercase">+ 2.5% Razorpay Gateway Fee</p>
-                                                                            <p className="text-[10px] font-bold">
-                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex justify-between items-center border-t border-white/40 pt-1.5 text-yellow-300">
-                                                                            <div>
-                                                                                <p className="text-[10px] font-black uppercase tracking-wider">Total Charged by Gateway</p>
-                                                                                <p className="text-[8px] opacity-60 font-medium">(Our invoice: {formData.participation.currency === 'INR' ? '₹' : '$'}{fmtAmt(formData.amountPaid)} — 2.5% fee goes to Razorpay)</p>
-                                                                            </div>
-                                                                            <p className="text-[14px] font-black">
-                                                                                {formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                )}
-                                                                <div className="pt-4 flex flex-col items-center">
-                                                                    <button
-                                                                        type="submit"
-                                                                        disabled={isLoading || !formData.participation.stallNo}
-                                                                        className="w-full max-w-56 h-12 rounded-sm bg-[#a3510f] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
-                                                                    >
-                                                                        {isLoading ? (
-                                                                            <><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /><span>PROCESSING...</span></>
-                                                                        ) : (
-                                                                            <>PROCEED FOR PAYMENT <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
-                                                                        )}
-                                                                    </button>
+                                                            {formData.financeBreakdown.discountAmount > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-1.5 bg-[#FAEEDA]">
+                                                                    <span className="text-[11px] font-medium text-[#633806]">
+                                                                        Full Payment Discount
+                                                                        <span className="ml-2 text-[10px] bg-[#FAC775] text-[#633806] px-2 py-0.5 rounded font-medium">{formData.financeBreakdown.discountPercent}%</span>
+                                                                    </span>
+                                                                    <span className="text-[12px] font-medium text-[#854F0B]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
                                                                 </div>
+                                                            )}
+
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <span className="text-[11px] uppercase tracking-wider text-gray-600 font-medium">Net Taxable Value</span>
+                                                                <span className="text-[12px] font-medium text-gray-600">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
+                                                            </div>
+
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <span className="text-[12px] text-gray-600">GST (18%)</span>
+                                                                <span className="text-[13px] font-medium text-gray-600">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
+                                                            </div>
+
+                                                            {formData.financeBreakdown.tdsAmount > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-1.5">
+                                                                    <span className="text-[12px] text-red-400">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
+                                                                    <span className="text-[13px] font-medium text-red-500">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Total */}
+                                                        <div className="flex justify-between items-center px-5 py-1.5 bg-[#EAF3DE] border-y border-[#C0DD97]">
+                                                            <span className="text-[12px] font-semibold uppercase tracking-wider text-[#27500A]">Total Net Payable</span>
+                                                            <span className="text-[14px] font-semibold text-[#173404]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
+                                                        </div>
+
+                                                        {formData.balanceAmount > 0 && (
+                                                            <div className="flex justify-between items-center px-5 py-1.5 bg-[#FAEEDA] border-b border-[#FAC775]">
+                                                                <span className="text-[11px] font-medium uppercase tracking-wider text-[#633806]">Balance Payment Later</span>
+                                                                <span className="text-[12px] font-medium text-[#854F0B]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Footer */}
+                                                        <div className="px-5 py-2 bg-slate-50">
+                                                            <div className="flex justify-between items-center mb-2">
+                                                                <div>
+                                                                    <p className="text-[11px] uppercase tracking-wider text-gray-600 font-medium">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
+                                                                    <p className="text-[10px] text-gray-600 mt-0.5">Verified transaction</p>
+                                                                </div>
+                                                                <p className="text-[18px] font-medium text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                            </div>
+
+                                                            {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
+                                                                <div className="mb-3 p-3 bg-amber-50 border border-amber-100 rounded-lg space-y-1.5">
+                                                                    <div className="flex justify-between">
+                                                                        <span className="text-[10px] text-amber-500 font-medium">+ 2.5% Razorpay Gateway Fee</span>
+                                                                        <span className="text-[11px] font-medium text-amber-600">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}</span>
+                                                                    </div>
+                                                                    <div className="flex justify-between pt-1.5 border-t border-amber-100">
+                                                                        <span className="text-[11px] font-semibold text-amber-700">Total Charged by Gateway</span>
+                                                                        <span className="text-[12px] font-semibold text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}</span>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            <div className="flex justify-center">
+                                                                <button
+                                                                    type="submit"
+                                                                    disabled={isLoading || !formData.participation.stallNo}
+                                                                    className="flex items-center gap-3 px-6 py-2 rounded-xl text-white font-black text-[11px] uppercase tracking-widest transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-[#23471d] hover:bg-[#1c3d17] relative overflow-hidden group"
+                                                                >
+                                                                    {isLoading ? (
+                                                                        <>
+                                                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                                            <span className="text-white/80">Processing...</span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <span>Proceed for Payment</span>
+                                                                            <span className="flex items-center gap-1 bg-[#a8d060] text-[#1a3d14] text-[10px] font-black px-2.5 py-1 rounded-full">
+                                                                                <Send size={10} />
+                                                                                Pay
+                                                                            </span>
+                                                                        </>
+                                                                    )}
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
