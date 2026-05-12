@@ -233,7 +233,7 @@ const BookAStand = () => {
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
     const formRef = useRef<HTMLDivElement>(null);
-    const [isComingSoon, setIsComingSoon] = useState(true);
+    const [isComingSoon, setIsComingSoon] = useState(false);
 
     // Scroll to form when exhibitorType changes
     useEffect(() => {
@@ -608,15 +608,10 @@ const BookAStand = () => {
             paymentMode: 'online'
         }));
         if (type === 'international') {
-
-            if (!isComingSoon) {
-                fetch(`${API_URL}/exchange-rate/usd-to-inr`)
-                    .then(r => r.json())
-                    .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
-                    .catch(() => { });
-            } else {
-                setIsComingSoon(true)
-            }
+            fetch(`${API_URL}/exchange-rate/usd-to-inr`)
+                .then(r => r.json())
+                .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
+                .catch(() => { });
         }
     };
 
