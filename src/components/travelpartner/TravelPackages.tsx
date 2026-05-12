@@ -18,7 +18,7 @@ const packages = [
   {
     name: "Preferred Partner",
     price: "₹2,00,000 + GST",
-    color: "#1E88E5",
+    color: "#0B2C66",
     bgColor: "bg-[#EFF6FF]",
     icon: <Plane className="w-7 h-7" />,
     features: [
@@ -43,16 +43,16 @@ const packages = [
 
 const TravelPackages: React.FC = () => {
   return (
-    <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col">
-      {/* Header */}
-      <div className="bg-[#0B2C66] px-[16px] py-[8px]">
-        <h3 className="text-white font-black text-[9px] uppercase tracking-wider text-center">
+    <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm">
+      {/* Header - Reduced Height */}
+      <div className="bg-[#0B2C66] px-[16px] py-[7px]">
+        <h3 className="text-white font-[900] text-[9.5px] uppercase tracking-wider text-center">
           Partnership Packages &amp; Investment
         </h3>
       </div>
 
-      {/* Package Items */}
-      <div className="p-[6px_6px_2px] flex flex-col gap-[2px] flex-1">
+      {/* Package Items - Tightened Gap */}
+      <div className="p-[6px] flex flex-col gap-[3px] flex-1">
         {packages.map((pkg, index) => (
           <motion.div
             key={index}
@@ -60,9 +60,9 @@ const TravelPackages: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[4px_10px] relative overflow-hidden`}
+            className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[4px_10px] relative overflow-hidden group`}
           >
-            {/* Ribbon */}
+            {/* Ribbon Badge */}
             <div
               className="absolute top-0 right-[10px] flex flex-col items-center"
               style={{ color: pkg.color }}
@@ -71,19 +71,19 @@ const TravelPackages: React.FC = () => {
                 className="w-[18px] h-[22px] flex items-center justify-center text-white text-[9px]"
                 style={{ backgroundColor: pkg.color }}
               >
-                <Star className="w-[8px] h-[8px] fill-white text-white" />
+                <Star className="w-[9px] h-[9px] fill-white text-white" />
               </div>
               <div
                 className="w-0 h-0"
                 style={{
                   borderLeft: '9px solid transparent',
                   borderRight: '9px solid transparent',
-                  borderTop: `6px solid ${pkg.color}`,
+                  borderTop: `7px solid ${pkg.color}`,
                 }}
               />
             </div>
 
-            <div className="flex gap-[10px]">
+            <div className="flex gap-[10px] items-center">
               <div
                 className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center text-white flex-shrink-0"
                 style={{ backgroundColor: pkg.color }}
@@ -97,14 +97,14 @@ const TravelPackages: React.FC = () => {
                 >
                   {pkg.name}
                 </h4>
-                <p className="text-[13px] font-[900] text-[#0B2C66] mt-[1px] mb-[2px]">
+                <p className="text-[13px] font-[900] text-[#0B2C66] mt-[0px] mb-[1px]">
                   {pkg.price}
                 </p>
                 <ul className="flex flex-col gap-[1px]">
                   {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-[4px] text-[8px] font-bold text-[#4A5568]">
+                    <li key={i} className="flex items-start gap-[4px] text-[8px] font-bold text-[#4A5568] leading-tight">
                       <span
-                        className="w-[3px] h-[3px] rounded-full flex-shrink-0"
+                        className="w-[3px] h-[3px] rounded-full flex-shrink-0 mt-[4px]"
                         style={{ backgroundColor: pkg.color }}
                       />
                       {feature}
@@ -117,18 +117,18 @@ const TravelPackages: React.FC = () => {
         ))}
       </div>
 
-      {/* Footer Notes */}
+      {/* Footer Notes - Reduced Height */}
       <div className="bg-[#0B2C66] px-[14px] py-[10px] mt-auto">
         {[
           "Custom packages available on request",
           "GST as applicable",
           "Stay vouchers valid during event period",
         ].map((note, i) => (
-          <div key={i} className="flex items-center gap-[6px] mb-[5px] last:mb-0">
-            <div className="w-[16px] h-[16px] bg-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
+          <div key={i} className="flex items-center gap-[6px] mb-[4px] last:mb-0">
+            <div className="w-[16px] h-[16px] bg-[#4E9F3D] rounded-full flex-center flex items-center justify-center flex-shrink-0">
               <Check className="w-[9px] h-[9px] text-white" strokeWidth={4} />
             </div>
-            <p className="text-white text-[9px] font-bold uppercase tracking-tight">{note}</p>
+            <p className="text-white text-[9px] font-bold uppercase tracking-tight opacity-90">{note}</p>
           </div>
         ))}
       </div>

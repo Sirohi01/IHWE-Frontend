@@ -15,7 +15,7 @@ const TravelHero: React.FC = () => {
         {/* Top Header: Align Start Logo + Slogan */}
         <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[30px]">
           {/* Logo Section */}
-          <div className="flex items-center gap-[15px] ">
+          <div className="flex items-center gap-[15px]">
             <div className="w-[50px] h-[50px] flex-shrink-0">
               <svg width="50" height="50" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 6C14 6 6 14 6 22C6 28 10 32 16 34L20 36L24 34C30 32 34 28 34 22C34 14 26 6 20 6Z" fill="#4E9F3D" opacity="0.3" />
@@ -24,7 +24,7 @@ const TravelHero: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-[#0B2C66] font-black text-[13px] leading-[1.1] uppercase">
+              <h1 className="text-[#0B2C66] font-black text-[16px] leading-[1.1] uppercase">
                 International<br />
                 <span className="text-[#4E9F3D]">Health &amp; Wellness</span><br />
                 Expo 2026
@@ -36,11 +36,11 @@ const TravelHero: React.FC = () => {
           </div>
 
           {/* Vertical Divider */}
-          <div className="w-[1px] h-[60px] bg-gray-200 hidden md:block " />
+          <div className="w-[1px] h-[70px] bg-gray-200 hidden md:block" />
 
           {/* Top Slogan */}
-          <div className="hidden md:block ">
-            <p className="text-[#0B2C66] font-bold text-[18px] leading-[1.2] tracking-tight">
+          <div className="hidden md:block">
+            <p className="text-[#0B2C66] font-bold text-[20px] leading-[1.2] tracking-tight">
               Collaborate.<br />
               Connect.<br />
               <span className="text-[#4E9F3D]">Grow Together.</span>
@@ -48,9 +48,9 @@ const TravelHero: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content Area - Fixed mt-0 for left side stability */}
-        <div className="flex items-end justify-between flex-1 mt-0">
-          {/* Left Text: Partner Details - Kept stable at bottom */}
+        {/* Main Content Area */}
+        <div className="relative flex items-end justify-between flex-1 mt-0">
+          {/* Left Text: Partner Details - FIXED (Not to be touched) */}
           <div className="flex flex-col items-start pb-4">
             <p className="text-[#0B2C66] font-black text-[22px] uppercase tracking-[1px] mb-0">
               Partner with us as a
@@ -60,7 +60,6 @@ const TravelHero: React.FC = () => {
               <span className="text-[#4E9F3D]">PARTNER</span>
             </h2>
 
-            {/* Centered Airplane Divider exactly as in image */}
             <div className="flex items-center gap-4 w-full max-w-[500px] my-1">
               <div className="h-[2px] flex-1 bg-gray-300" />
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#0B2C66">
@@ -77,12 +76,12 @@ const TravelHero: React.FC = () => {
             </p>
           </div>
 
-          {/* Right Section: Why Partner Card - ONLY THIS moves down */}
-          <div className="-mt-[100px] pr-[10px]">
+          {/* Right Section: Why Partner Card - Shifted DOWN independently */}
+          <div className="pr-[10px] relative min-w-[260px] h-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#0B2C66]/95 backdrop-blur-md rounded-[20px] p-[24px_22px] w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.3)] relative overflow-hidden border border-white/10"
+              className="absolute -top-[105px] right-0 bg-[#0B2C66]/95 backdrop-blur-md rounded-[20px] p-[24px_22px] w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10"
             >
               <h3 className="text-white font-black text-[17px] leading-tight mb-6 uppercase tracking-tight">
                 Why Partner<br />
@@ -111,7 +110,7 @@ const TravelHero: React.FC = () => {
           </div>
         </div>
       </div>
-    </section >
+    </section>
   );
 };
 
