@@ -124,26 +124,26 @@ const Footer = () => {
 
   const quickLinks = [
     { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
+    { label: "About Us", href: "/about", newTab: true },
     { label: "Exhibition", href: "/exhibition" },
-    { label: "Conference", href: "/conference" },
-    { label: "Awards", href: "/awards" },
+    { label: "Conference", href: "/conference", newTab: true },
+    { label: "Awards", href: "/awards", newTab: true },
     // { label: "B2B Meet", href: "/b2b-meet" },
-    { label: "Visitor Registration", href: "/visitor-registration" },
-    { label: "Buyer Registration", href: "/buyer-registration" },
-    { label: "Contact Us", href: "/contact" },
+    { label: "Visitor Registration", href: "/visitor-registration", newTab: true },
+    { label: "Buyer Registration", href: "/buyer-registration", newTab: true },
+    { label: "Contact Us", href: "/contact", newTab: true },
   ];
 
   const exhibitorLinks = [
-    { label: "Book Your Stall", href: "/book-a-stand" },
-    { label: "Floor Plan Download", href: "/floor-plan" },
-    { label: "Brochure Download", href: "/brochure" },
-    { label: "Exhibitor List", href: "/exhibitors" },
-    { label: "Sponsorship Opportunities", href: "/sponsorship" },
-    { label: "MSME PMS Scheme", href: "/msme-pms-scheme" },
-    { label: "Hosted Buyer Program", href: "/hosted-buyer" },
-    { label: "Travel & Stay", href: "/travel" },
-    { label: "FAQs", href: "/faq" },
+    { label: "Book Your Stall", href: "/book-a-stand", newTab: true },
+    { label: "Floor Plan Download", href: "/pdf1.pdf", newTab: true },
+    { label: "Brochure Download", href: "/pdf.pdf", newTab: true },
+    { label: "Exhibitor List", href: "/exhibitors", newTab: true },
+    { label: "Sponsorship Opportunities", href: "/contact", newTab: true },
+    { label: "MSME PMS Scheme", href: "/msme-pms-scheme", newTab: true },
+    { label: "Buyer Seller Meet", href: "/buyer-seller-meet", newTab: true },
+    { label: "Travel & Stay", href: "/partners", newTab: true },
+    { label: "Arogya Sangosthi", href: "/conference", newTab: true },
   ];
 
   const highlights = [
@@ -291,9 +291,15 @@ const Footer = () => {
                 <div className="w-[1px] h-8 bg-slate-500" />
                 <div className="flex flex-col">
                   <p className="text-[7px] md:text-[7.5px] text-slate-500 font-bold uppercase tracking-[0.1em] leading-none mb-1">Organised By</p>
-                  <p className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  <a 
+                    href="https://namogangewellness.com/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[10px] md:text-[11.5px] text-slate-900 font-semibold leading-tight tracking-tight uppercase hover:text-[#F3B71B] transition-colors" 
+                    style={{ fontFamily: "'Inter', sans-serif" }}
+                  >
                     NAMO GANGE WELLNESS PVT. LTD.
-                  </p>
+                  </a>
                 </div>
               </div>
             </Link>
@@ -314,6 +320,8 @@ const Footer = () => {
                 )}
                 <Link
                   to={btn.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3.5 py-2 md:py-2 rounded-lg transition-all relative z-10 w-full justify-center ${btn.primary
                     ? "golden-btn-footer hover:scale-[1.02]"
                     : "bg-transparent border border-[#F3B71B] hover:bg-[#F3B71B]/10 hover:scale-[1.02]"
@@ -416,10 +424,12 @@ const Footer = () => {
             </p>
             <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
             <div className="flex flex-col gap-1.5">
-              {quickLinks.map((l) => (
+              {quickLinks.map((l: any) => (
                 <Link
                   key={l.label}
                   to={l.href}
+                  target={l.newTab ? "_blank" : undefined}
+                  rel={l.newTab ? "noopener noreferrer" : undefined}
                   className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
                 >
                   <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
@@ -436,10 +446,12 @@ const Footer = () => {
             </p>
             <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
             <div className="flex flex-col gap-1.5">
-              {exhibitorLinks.map((l) => (
+              {exhibitorLinks.map((l: any) => (
                 <Link
                   key={l.label}
                   to={l.href}
+                  target={l.newTab ? "_blank" : undefined}
+                  rel={l.newTab ? "noopener noreferrer" : undefined}
                   className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
                 >
                   <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
@@ -456,51 +468,71 @@ const Footer = () => {
             </p>
             <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
             <div className="flex flex-col gap-3">
-              {[
-                {
-                  Icon: Phone,
-                  label: "Call for Stall Booking",
-                  value: contactPhone,
-                  large: true,
-                  gold: false,
-                },
-                {
-                  Icon: Mail,
-                  label: "Email",
-                  value: contactEmail,
-                  large: false,
-                  gold: false,
-                },
-                {
-                  Icon: Globe,
-                  label: "Official Website",
-                  value: "www.ihwe.in",
-                  gold: true,
-                  large: false,
-                },
-                {
-                  Icon: Building2,
-                  label: "Organised By",
-                  value: "Namo Gange Wellness Pvt. Ltd.",
-                  large: false,
-                  gold: false,
-                },
-              ].map(({ Icon, label, value, gold, large }) => (
-                <div key={label} className="flex items-start gap-2.5">
-                  <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
-                    <Icon className="w-3 h-3 text-[#F3B71B]" />
+                {[
+                  {
+                    Icon: Phone,
+                    label: "Call for Stall Booking",
+                    value: contactPhone,
+                    link: `tel:${contactPhone.replace(/\s+/g, '')}`,
+                    large: true,
+                  },
+                  {
+                    Icon: Mail,
+                    label: "Email",
+                    value: "info@ihwe.in",
+                    link: "mailto:info@ihwe.in",
+                  },
+                  {
+                    Icon: Globe,
+                    label: "Official Website",
+                    value: "www.ihwe.in",
+                    link: "/",
+                  },
+                  {
+                    Icon: Building2,
+                    label: "Organised By",
+                    value: "Namo Gange Wellness Pvt. Ltd.",
+                    link: "https://namogangewellness.com/",
+                  },
+                  {
+                    Icon: Building2,
+                    label: "Co-Organised By",
+                    value: "Namo Gange Trust",
+                    link: "https://namogange.org/",
+                  },
+                ].map(({ Icon, label, value, link, large }: any) => (
+                  <div key={label} className="flex items-start gap-2.5">
+                    <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
+                      <Icon className="w-3 h-3 text-[#F3B71B]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
+                      {link ? (
+                        link.startsWith('/') ? (
+                          <Link
+                            to={link}
+                            className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
+                          >
+                            {value}
+                          </Link>
+                        ) : (
+                          <a
+                            href={link}
+                            target={link.startsWith('http') || link.startsWith('mailto') ? "_blank" : undefined}
+                            rel={link.startsWith('http') || link.startsWith('mailto') ? "noopener noreferrer" : undefined}
+                            className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
+                          >
+                            {value}
+                          </a>
+                        )
+                      ) : (
+                        <p className={`font-semibold leading-tight text-[#CBD5E1] ${large ? "text-[13px]" : "text-[11px]"}`}>
+                          {value}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
-                    <p
-                      className={`font-semibold leading-tight ${gold ? "text-[#cbd5e1]" : "text-[#CBD5E1]"
-                        } ${large ? "text-[13px]" : "text-[11px]"}`}
-                    >
-                      {value}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -584,6 +616,7 @@ const Footer = () => {
             <Link
               key={p.label}
               to={p.href}
+              target="_blank"
               className="text-[10.5px] text-slate-500 hover:text-[#F3B71B] cursor-pointer transition-colors px-3 border-r border-[#1E2A45] last:border-none"
             >
               {p.label}

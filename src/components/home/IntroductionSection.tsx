@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import SectionContainer from "../layout/SectionContainer";
 import { 
@@ -93,21 +93,14 @@ const StatCounter = ({ value }: { value: string }) => {
 
   useEffect(() => {
     if (isInView) {
-      let start = 0;
-      const end = numericValue;
-      const duration = 2000;
-      const increment = end / (duration / 16);
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setDisplayValue(end);
-          clearInterval(timer);
-        } else {
-          setDisplayValue(Math.floor(start));
-        }
-      }, 16);
-      return () => clearInterval(timer);
+      const controls = animate(0, numericValue, {
+        duration: 3.5,
+        ease: "easeOut",
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
     }
   }, [isInView, numericValue]);
 

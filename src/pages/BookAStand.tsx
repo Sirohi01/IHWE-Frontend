@@ -40,6 +40,7 @@ import {
 } from "@/lib/api";
 import Swal from 'sweetalert2';
 import PaymentProcessingModal from '@/components/PaymentProcessingModal';
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || "";
 
@@ -231,7 +232,15 @@ const BookAStand = () => {
     const [verificationError, setVerificationError] = useState<string | null>(null);
     const emailTimerRef = useRef<number | null>(null);
     const phoneTimerRef = useRef<number | null>(null);
-    const [isComingSoon, setIsComingSoon] = useState(true);
+    const formRef = useRef<HTMLDivElement>(null);
+    const [isComingSoon, setIsComingSoon] = useState(false);
+
+    // Scroll to form when exhibitorType changes
+    useEffect(() => {
+        if (exhibitorType && formRef.current) {
+            formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [exhibitorType]);
 
     // Optimized Data Fetch - Priority Loading (Removed Promise.all for better performance)
     useEffect(() => {
@@ -599,15 +608,10 @@ const BookAStand = () => {
             paymentMode: 'online'
         }));
         if (type === 'international') {
-
-            if (!isComingSoon) {
-                fetch(`${API_URL}/exchange-rate/usd-to-inr`)
-                    .then(r => r.json())
-                    .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
-                    .catch(() => { });
-            } else {
-                setIsComingSoon(true)
-            }
+            fetch(`${API_URL}/exchange-rate/usd-to-inr`)
+                .then(r => r.json())
+                .then(res => { if (res.success && res.rate) setUsdToInrRate(res.rate); })
+                .catch(() => { });
         }
     };
 
@@ -844,9 +848,9 @@ const BookAStand = () => {
     };
 
     const inputClasses =
-        "rounded-[2px] border-slate-400 h-8 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-3 w-full text-left";
+        "rounded border border-slate-400 h-7 focus:border-[#23471d] focus:ring-[#23471d]/10 transition-all text-[12px] bg-white placeholder:text-slate-400 text-slate-900 font-normal shadow-none outline-none px-3 w-full text-left";
     const labelClasses =
-        "text-[10px] font-bold uppercase tracking-[0.05em] text-slate-800 mb-1 block";
+        "text-[11px] font-medium uppercase text-slate-800 mb-1 block";
     const fmtAmt = (n: number) => Math.round(n).toLocaleString('en-IN');
     const formatDateRange = (start?: string, end?: string) => {
         if (!start || !end) return "";
@@ -945,34 +949,7 @@ const BookAStand = () => {
                 onClose={() => { setPaymentModal(null); setIsLoading(false); }}
             />
             {/* -- HERO SECTION - Registration Standard 16:5 -- */}
-            {/* <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : ""})`,
-                    backgroundColor: "#1a3516"
-                }}
-            >
-                <div className="absolute inset-0 bg-black/45" />
 
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || ""}
-                    </p>
-
-                    <h1
-                        className="text-[60px] font-inter font-bold mb-6 leading-[1.1]"
-                    >
-                        {heroData?.heading || "Book Your Exhibition Stand"}
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Showcase your innovations to 8,000+ top healthcare professionals. Fill out the form and our team will tailor the perfect space for your brand."}
-                    </p>
-                </div>
-            </section> */}
             {/* bg section  */}
             <section
                 className="hero-background-registration relative overflow-hidden "
@@ -984,286 +961,232 @@ const BookAStand = () => {
                     fontFamily: "'Barlow', sans-serif",
                 }}
             >
-                <div className="w-full">
-                    <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[60%]">
+                <SectionContainer>
+                    <div className="w-full">
+                        <div className="relative z-10  py-2 flex flex-col gap-2 w-[60%]">
 
-                        {/* Register as a Buyer */}
-                        <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
-                            Exhibition stall booking
-                        </div>
+                            {/* Register as a Buyer */}
+                            <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
+                                Exhibition stall booking
+                            </div>
 
-                        {/* Main Heading */}
-                        <div>
-                            <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                Book Your
-                            </h1>
-                            <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                Exhibition <span className="text-[#a8d060]"  >Stand</span>
-                            </h1>
-                        </div>
+                            {/* Main Heading */}
+                            <div>
+                                <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                    Book Your
+                                </h1>
+                                <h1 className="text-5xl font-semibold text-white  leading-tight">
+                                    Exhibition <span className="text-[#a8d060]"  >Stand</span>
+                                </h1>
+                            </div>
 
-                        {/* Description */}
-                        <p className="text-white/90 text-lg leading-relaxed max-w-lg">
-                            Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
-                        </p>
+                            {/* Description */}
+                            <p className="text-white/90 text-lg leading-relaxed max-w-lg">
+                                Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
+                            </p>
 
-                        {/* Stats Row */}
-                        <div className="flex items-center mt-2 gap-2">
-                            {[
-                                {
-                                    num: '', label: '8,000+\nHealthcare\nProfessionals',
-                                    icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
-                                },
-                                {
-                                    num: '', label: 'Custom\nStall\nSolutions',
-                                    icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                                {
-                                    num: '', label: 'Maximum\nBrand\nVisibility',
-                                    icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                                {
-                                    num: '', label: 'High-Value\nBusiness\nConnections',
-                                    icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
-                                },
-                            ].map((stat, i) => (
-                                <React.Fragment key={i}>
-                                    <div className="flex flex-col items-center text-center px-1.5">
-                                        <div>{stat.icon}</div>
-                                        {stat.num && (
-                                            <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
-                                                {stat.num}
+                            {/* Stats Row */}
+                            <div className="flex items-center mt-2 gap-2">
+                                {[
+                                    {
+                                        num: '', label: '8,000+\nHealthcare\nProfessionals',
+                                        icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
+                                    },
+                                    {
+                                        num: '', label: 'Custom\nStall\nSolutions',
+                                        icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                    {
+                                        num: '', label: 'Maximum\nBrand\nVisibility',
+                                        icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                    {
+                                        num: '', label: 'High-Value\nBusiness\nConnections',
+                                        icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
+                                    },
+                                ].map((stat, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="flex flex-col items-center text-center px-1.5">
+                                            <div>{stat.icon}</div>
+                                            {stat.num && (
+                                                <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                                    {stat.num}
+                                                </div>
+                                            )}
+                                            <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
+                                                {stat.label}
                                             </div>
-                                        )}
-                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
-                                            {stat.label}
                                         </div>
-                                    </div>
-                                    {i < 3 && (
-                                        <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
-                                    )}
-                                </React.Fragment>
-                            ))}
+                                        {i < 3 && (
+                                            <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+
+                            <div className="mt-4">
+                                <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
+                                    Book Your Stall Now
+                                    <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
                         </div>
 
-                        <div className="mt-4">
-                            <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
-                                Book Your Stall Now
-                                <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
+                        <div className="w-[40%]">
+                            {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
                         </div>
-
                     </div>
-
-                    <div className="w-[40%]">
-                        {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
-                    </div>
-                </div>
+                </SectionContainer>
             </section>
 
             {/* bannar section  */}
-            <section className="flex items-center justify-between mx-12 my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
-                {[
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
-                        title: 'Global Platform',
-                        desc: 'Uniting healthcare, wellness, and sustainable industries',
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
-                        title: 'Trusted Brands',
-                        desc: "Connect with India's most trusted brands & manufacturers",
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
-                        title: 'Targeted Audience',
-                        desc: 'Engage with qualified buyers, Investors & decision makers',
-                    },
-                    {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
-                        title: 'Business Growth',
-                        desc: 'Expand your market & accelerate your growth',
-                    },
-                ].map((item, i) => (
-                    <React.Fragment key={i}>
-                        <div className="flex items-start gap-3 flex-1 px-4 ">
-                            {/* Icon Circle */}
-                            <div className="w-11 h-11 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
-                                {item.icon}
+            <SectionContainer>
+                <section className="flex items-center justify-between  my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                    {[
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
+                            title: 'Global Platform',
+                            desc: 'Uniting healthcare, wellness, and sustainable industries',
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
+                            title: 'Trusted Brands',
+                            desc: "Connect with India's most trusted brands & manufacturers",
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
+                            title: 'Targeted Audience',
+                            desc: 'Engage with qualified buyers, Investors & decision makers',
+                        },
+                        {
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
+                            title: 'Business Growth',
+                            desc: 'Expand your market & accelerate your growth',
+                        },
+                    ].map((item, i) => (
+                        <React.Fragment key={i}>
+                            <div className="flex items-start gap-3 flex-1 px-4 ">
+                                {/* Icon Circle */}
+                                <div className="w-16 h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
+                                    {item.icon}
+                                </div>
+                                {/* Text */}
+                                <div>
+                                    <p className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</p>
+                                    <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                                </div>
                             </div>
-                            {/* Text */}
-                            <div>
-                                <p className="text-sm font-semibold text-gray-900 mb-0.5">{item.title}</p>
-                                <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
-                            </div>
-                        </div>
-                        {/* Divider */}
-                        {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
-                    </React.Fragment>
-                ))}
-            </section>
-
+                            {/* Divider */}
+                            {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
+                        </React.Fragment>
+                    ))}
+                </section>
+            </SectionContainer>
             {/* button section */}
-            <section className="bg-white border border-gray-100 mx-12 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
+            <SectionContainer>
+                <section className="bg-white border border-gray-100 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
 
-                {/* Left Side */}
-                <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                        <p className="text-gray-900 text-xl font-semibold mb-1">9th Edition of</p>
-                        <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
-                            International Health & Wellness Expo 2026<br />(IHWE Global Edition)
-                        </h2>
-                        <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                            Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH,
-                            organic, and sustainable industries under one roof. Whether you are a visitor
-                            discovering innovations or a corporate buyer seeking meaningful business
-                            connections, IHWE offers a high-value, curated experience with India's most
-                            trusted brands and manufacturers.
-                        </p>
-                        <p className="text-gray-600 text-sm">
-                            Register now and be part of a powerful global movement in{' '}
-                            <span className="text-[#4a8f2f] font-semibold">health & wellness.</span>
-                        </p>
-                    </div>
-                </div>
-
-                {/* Divider */}
-                <div className="w-px bg-gray-200 self-stretch" />
-
-                {/* Right Side */}
-                <div className="flex-1">
-                    <h3 className="text-gray-800 font-semibold text-base mb-1">Choose Exhibitor Category</h3>
-                    <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
-
-                    <div className="grid grid-cols-2 gap-4">
-
-                        {/* Domestic Exhibitor */}
-                        <div className="bg-[#f0f7e6] border border-[#c8e6a0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
-                            <div className="w-14 h-14 rounded-full bg-[#d6edb8] flex items-center justify-center">
-                                <img src="/icons/domestic.png" alt="Domestic" className="w-7 h-7 object-contain" />
-                            </div>
-                            <div>
-                                <p className="text-[#1a4d1a] font-bold text-sm mb-1">Domestic Exhibitor</p>
-                                <p className="text-gray-400 text-xs">For exhibitors based in India</p>
-                            </div>
-                            <button className="flex items-center gap-2 bg-[#1a4d1a] hover:bg-[#163d16] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
-                                Register Now
-                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg className="w-3 h-3 text-[#1a4d1a]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
+                    {/* Left Side */}
+                    <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                            <p className="text-gray-900 text-xl font-medium mb-1">9th Edition of</p>
+                            <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
+                                International Health & Wellness Expo 2026<br />(IHWE Global Edition)
+                            </h2>
+                            <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
+                            <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                                Step into IHWE 2026, a leading global platform uniting healthcare, wellness, AYUSH,
+                                organic, and sustainable industries under one roof. Whether you are a visitor
+                                discovering innovations or a corporate buyer seeking meaningful business
+                                connections, IHWE offers a high-value, curated experience with India's most
+                                trusted brands and manufacturers.
+                            </p>
+                            <p className="text-gray-600 text-sm">
+                                Register now and be part of a powerful global movement in{' '}
+                                <span className="text-[#4a8f2f] font-semibold">health & wellness.</span>
+                            </p>
                         </div>
-
-                        {/* International Exhibitor */}
-                        <div className="bg-[#fff7f0] border border-[#f5d5b0] rounded-xl p-5 flex flex-col items-center text-center gap-3">
-                            <div className="w-14 h-14 rounded-full bg-[#fde8cc] flex items-center justify-center">
-                                <img src="/icons/international.png" alt="International" className="w-7 h-7 object-contain" />
-                            </div>
-                            <div>
-                                <p className="text-[#7a3a00] font-bold text-sm mb-1">International Exhibitor</p>
-                                <p className="text-gray-400 text-xs">For exhibitors based outside India</p>
-                            </div>
-                            <button className="flex items-center gap-2 bg-[#e07820] hover:bg-[#c96a18] text-white text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-colors">
-                                Register Now
-                                <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
-                                    <svg className="w-3 h-3 text-[#e07820]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M5 12h14M13 6l6 6-6 6" />
-                                    </svg>
-                                </span>
-                            </button>
-                        </div>
-
                     </div>
-                </div>
 
-            </section>
+                    {/* Divider */}
+                    <div className="w-px bg-gray-200 self-stretch" />
 
+                    {/* Right Side */}
+                    <div className="flex-1">
+                        <h3 className="text-gray-900 text-xl font-medium mb-1">Choose Exhibitor Category</h3>
+                        <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
+
+                        <div className="grid grid-cols-2 gap-4">
+
+                            {/* Domestic Exhibitor */}
+                            <div
+                                onClick={() => handleExhibitorTypeChange('domestic')}
+                                className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'domestic' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
+                            >
+                                <div className="flex items-center justify-center">
+                                    <img src="/exhibition/dom.png" alt="Domestic" className="w-18 h-20 object-contain" />
+                                </div>
+                                <div>
+                                    <p className="text-gray-800 font-bold text-base mb-1">Domestic Exhibitor</p>
+                                    <p className="text-gray-700 text-xs">For exhibitors based in India</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={`flex gap-2 items-center text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'domestic' ? 'bg-[#1a4d1a]' : 'bg-[#23471d] hover:bg-[#1a4d1a]'}`}
+                                >
+                                    {exhibitorType === 'domestic' ? 'Selected' : 'Register Now'}
+                                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg className={`w-3 h-3 ${exhibitorType === 'domestic' ? 'text-[#1a4d1a]' : 'text-[#23471d]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                            {/* International Exhibitor */}
+                            <div
+                                onClick={() => handleExhibitorTypeChange('international')}
+                                className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'international' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
+                            >
+                                <div className="flex items-center justify-center">
+                                    <img src="/exhibition/int.png" alt="International" className="w-18 h-20 object-contain" />
+                                </div>
+                                <div>
+                                    <p className="text-gray-800 font-bold text-base mb-1">International Exhibitor</p>
+                                    <p className="text-gray-700 text-xs">For exhibitors based outside India</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={`flex items-center gap-2 text-white text-xs font-medium uppercase tracking-widest px-5 py-2 rounded-lg transition-colors ${exhibitorType === 'international' ? 'bg-[#c96a18]' : 'bg-[#e07820] hover:bg-[#c96a18]'}`}
+                                >
+                                    {exhibitorType === 'international' ? 'Selected' : 'Register Now'}
+                                    <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg className={`w-3 h-3 ${exhibitorType === 'international' ? 'text-[#c96a18]' : 'text-[#e07820]'}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M5 12h14M13 6l6 6-6 6" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+            </SectionContainer>
             {/* -- MAIN CONTENT -- */}
             <section className="pt-4 pb-12 relative overflow-hidden">
-                <div className="container mx-auto px-6 max-w-[1400px]">
-                    <div className="space-y-4">
-                        {/* -- REGISTRATION FLOW -- */}
-                        <div className="w-full">
-                            {/* -- WELCOME SECTION - only when no type selected -- */}
-                            {!exhibitorType && (
-                                <div className="bg-white border border-slate-500 shadow-xl overflow-hidden mb-4">
-                                    <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
-                                        {(() => {
-                                            const selEvent = events.find(e => e._id === selectedEventId) || events[0];
-                                            return (
-                                                <>
-                                                    <h3 className="text-[22px] mb-2 font-semibold text-[#d26019]">
-                                                        {selEvent?.name || 'Exhibitor Registration'}
-                                                    </h3>
-                                                    <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.15em] mb-3">Exhibitor Registration - Booking Form</p>
-                                                    {selEvent?.description && (
-                                                        <p className="mb-2">{selEvent.description}</p>
-                                                    )}
-                                                </>
-                                            );
-                                        })()}
-                                    </div>
-                                    <div className="text-center py-12 space-y-6">
-                                        <h2 className="text-2xl font-bold text-slate-800">
-                                            Choose Exhibitor Category
-                                        </h2>
-                                        <div className="flex justify-center gap-6">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleExhibitorTypeChange('domestic')}
-                                                className="px-4 py-2 bg-[#23471d] text-white font-semibold shadow hover:scale-105 transition-all"
-                                            >
-                                                Domestic Exhibitor
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleExhibitorTypeChange('international')}
-                                                className="px-4 py-2 bg-[#d26019] text-white font-semibold shadow hover:scale-105 transition-all"
-                                            >
-                                                International Exhibitor
-                                            </button>
-                                        </div>
 
-                                        {/* Registration Form Downloads */}
-                                        {(settings?.domesticRegistrationFormPdf?.trim() || settings?.internationalRegistrationFormPdf?.trim()) && (
-                                            <div className="flex justify-center gap-4 pt-2">
-                                                {settings?.domesticRegistrationFormPdf?.trim() && (
-                                                    <a
-                                                        href={settings.domesticRegistrationFormPdf.startsWith('http') ? settings.domesticRegistrationFormPdf : `${SERVER_URL}${settings.domesticRegistrationFormPdf}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        download
-                                                        className="flex items-center gap-2 px-4 py-2 border border-[#23471d] text-[#23471d] text-[11px] font-bold hover:bg-[#23471d] hover:text-white transition-all"
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-                                                        Domestic Registration Form
-                                                    </a>
-                                                )}
-                                                {settings?.internationalRegistrationFormPdf?.trim() && (
-                                                    <a
-                                                        href={settings.internationalRegistrationFormPdf.startsWith('http') ? settings.internationalRegistrationFormPdf : `${SERVER_URL}${settings.internationalRegistrationFormPdf}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        download
-                                                        className="flex items-center gap-2 px-4 py-2 border border-[#d26019] text-[#d26019] text-[11px] font-bold hover:bg-[#d26019] hover:text-white transition-all"
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
-                                                        International Registration Form
-                                                    </a>
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
+                <div className="space-y-4">
+                    {/* -- REGISTRATION FLOW -- */}
+                    <SectionContainer className="w-full">
 
+
+                        <div ref={formRef} className="scroll-mt-10">
                             <AnimatePresence mode="wait">
                                 {!exhibitorType ? null : submitted ? (
                                     <motion.div
@@ -1321,28 +1244,32 @@ const BookAStand = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         className="bg-white border border-slate-500 shadow-2xl overflow-hidden rounded-sm"
                                     >
-                                        <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4 flex justify-between items-center">
+                                        <div className="bg-green-800 px-6 py-1 text-white flex justify-between items-center border-b-2 border-[#a8d060]">
                                             <div>
-                                                <h2 className="text-xl font-bold text-slate-900 uppercase" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                                <h2 className="text-sm font-medium uppercase tracking-wider text-white">
                                                     {exhibitorType === 'domestic' ? 'Domestic Exhibitor Registration' : 'International Exhibitor Registration'}
                                                 </h2>
-                                                <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mt-0.5 font-bold">
+                                                <p className="text-xs text-[#a8d060] uppercase tracking-[0.3em] font-semibold mb-1">
                                                     9th Edition of International Health & Wellness Expo 2026 (IHWE Global Edition)
                                                 </p>
                                             </div>
+                                            <ShieldCheck className="text-[#a8d060]" size={22} />
                                         </div>
-                                        <form onSubmit={handleSubmit} className="px-8 pt-4 pb-8 space-y-4 font-inter bg-white">
-                                            <div className="overflow-x-auto border border-slate-200 shadow-sm" data-aos="fade-up">
+                                        <form onSubmit={handleSubmit} className="px-4 pt-4 pb-8 space-y-2 bg-white">
+
+                                            <div className="overflow-x-auto rounded-lg border border-slate-200 shadow-sm" data-aos="fade-up">
                                                 <table className="w-full text-left border-collapse">
                                                     <thead>
                                                         <tr className="bg-[#0091d5] text-white">
-                                                            <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider border-r border-[#ffffff33] w-1/2">Stand Type</th>
-                                                            {exhibitorType === 'domestic' && (
-                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in Indian Rupees ₹)</th>
-                                                            )}
-                                                            {exhibitorType === 'international' && (
-                                                                <th className="py-3 px-6 text-xs font-bold uppercase tracking-wider">Cost (in USD $)</th>
-                                                            )}
+                                                            <th className="py-2 px-6 text-xs font-medium uppercase tracking-wider border-r border-white/20">
+                                                                Stand Type
+                                                            </th>
+                                                            <th className="py-2 px-6 text-xs font-medium uppercase tracking-wider border-r border-white/20">
+                                                                {exhibitorType === 'international' ? 'Cost (USD $)' : 'Cost (INR ₹)'}
+                                                            </th>
+                                                            <th className="py-2 px-6 text-xs font-medium uppercase tracking-wider">
+                                                                GST
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="text-slate-700">
@@ -1350,25 +1277,39 @@ const BookAStand = () => {
                                                             [...new Set(allRates.map(r => r.stallType))].map((type, idx) => {
                                                                 const inrRate = allRates.find(r => r.stallType === type && r.currency === 'INR');
                                                                 const usdRate = allRates.find(r => r.stallType === type && r.currency === 'USD');
+                                                                const isRaw = type?.toLowerCase().includes('raw');
                                                                 return (
-                                                                    <tr key={type} className={`border-b border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                                                                        <td className="py-2 px-6 text-[12px] font-medium border-r border-slate-200 uppercase">{type} (min. {type?.toLowerCase().includes('raw') ? '9' : '9'} sq m.)</td>
-                                                                        {exhibitorType === 'domestic' && (
-                                                                            <td className="py-2 px-6 text-[12px] font-medium uppercase">
-                                                                                {inrRate ? `INR ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
-                                                                            </td>
-                                                                        )}
-                                                                        {exhibitorType === 'international' && (
-                                                                            <td className="py-2 px-6 text-[12px] font-medium uppercase">
-                                                                                {usdRate ? `USD ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A'}
-                                                                            </td>
-                                                                        )}
+                                                                    <tr
+                                                                        key={type}
+                                                                        className={`border-b border-slate-100 transition-colors hover:bg-blue-50/40 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
+                                                                    >
+                                                                        <td className="py-2 px-6 text-[12px] font-semibold border-r border-slate-100 uppercase text-slate-800">
+                                                                            <div className="flex flex-row items-center gap-2">
+                                                                                <span className="text-xs font-normal">{type}</span>
+                                                                                <span className="text-[10px] font-normal text-slate-400 normal-case">
+                                                                                    ({isRaw ? 'Min. 9' : 'Min. 9'} sq m.)
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td className="py-2 px-6 text-[12px] font-medium border-r border-slate-100 text-[#0091d5]">
+                                                                            {exhibitorType === 'international'
+                                                                                ? (usdRate ? `$ ${usdRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A')
+                                                                                : (inrRate ? `₹ ${inrRate.ratePerSqm.toLocaleString()} / sq m.` : 'N/A')
+                                                                            }
+                                                                        </td>
+                                                                        <td className="py-2 px-6 text-[12px] font-semibold">
+                                                                            <span className="bg-orange-50 text-orange-600 border border-orange-200 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                                                                18% GST
+                                                                            </span>
+                                                                        </td>
                                                                     </tr>
                                                                 );
                                                             })
                                                         ) : (
                                                             <tr>
-                                                                <td colSpan={2} className="py-8 text-center text-[11px] text-slate-400">No stall rates available for this event</td>
+                                                                <td colSpan={3} className="py-10 text-center text-[12px] text-slate-400">
+                                                                    No stall rates available for this event
+                                                                </td>
                                                             </tr>
                                                         )}
                                                     </tbody>
@@ -1376,18 +1317,18 @@ const BookAStand = () => {
                                             </div>
 
                                             {/* -- EXHIBITOR DETAILS SECTION -- */}
-                                            <div className="space-y-1.5 pt-0.5">
+                                            <div className="space-y-1.5">
                                                 <div className="pb-1 border-b border-slate-500">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Details</h3>
+                                                    <h3 className="text-xs font-medium text-[#d26019] uppercase tracking-[0.05em]" >Exhibitor Details</h3>
                                                 </div>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-2">
                                                     <div>
-                                                        <Label className={labelClasses}>COMPANY NAME <span className="text-red-500">*</span></Label>
-                                                        <Input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        <label className={labelClasses}>COMPANY NAME <span className="text-red-500">*</span></label>
+                                                        <input required name="exhibitorName" value={formData.exhibitorName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>TYPE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>TYPE OF BUSINESS <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('typeOfBusiness', v)} value={formData.typeOfBusiness}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1400,7 +1341,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>INDUSTRY/SECTOR <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>INDUSTRY/SECTOR <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('industrySector', v)} value={formData.industrySector}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1413,16 +1354,16 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>WEBSITE <span className="text-red-500">*</span></Label>
-                                                        <Input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        <label className={labelClasses}>WEBSITE <span className="text-red-500">*</span></label>
+                                                        <input required name="website" value={formData.website} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>EXHIBITOR ADDRESS <span className="text-red-500">*</span></Label>
-                                                        <Input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                        <label className={labelClasses}>EXHIBITOR ADDRESS <span className="text-red-500">*</span></label>
+                                                        <input required name="address" value={formData.address} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>COUNTRY <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>COUNTRY <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('country', v)} value={formData.country}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1438,7 +1379,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>{exhibitorType === 'domestic' ? 'STATE' : 'STATE/PROVINCE'} <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('state', v)} value={formData.state} disabled={!formData.country}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1451,7 +1392,7 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>CITY <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>CITY <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('city', v)} value={formData.city} disabled={!formData.state}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1465,7 +1406,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     {/* <div>
-                                                        <Label className={labelClasses}>NATURE OF BUSINESS <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>NATURE OF BUSINESS <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('natureOfBusiness', v)} value={formData.natureOfBusiness}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Here" />
@@ -1478,19 +1419,19 @@ const BookAStand = () => {
                                                         </Select>
                                                     </div> */}
                                                     <div>
-                                                        <Label className={labelClasses}>PINCODE/Postal Code <span className="text-red-500">*</span></Label>
-                                                        <Input required name="pincode" value={formData.pincode} onChange={(e) => setFormData(prev => ({ ...prev, pincode: e.target.value.replace(/\D/g, '') }))} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
+                                                        <label className={labelClasses}>PINCODE/Postal Code <span className="text-red-500">*</span></label>
+                                                        <input required name="pincode" value={formData.pincode} onChange={(e) => setFormData(prev => ({ ...prev, pincode: e.target.value.replace(/\D/g, '') }))} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
                                                     </div>
                                                     <div>
-                                                        <Label className={labelClasses}>LANDLINE NO.</Label>
-                                                        <Input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
+                                                        <label className={labelClasses}>LANDLINE NO.</label>
+                                                        <input name="landlineNo" value={formData.landlineNo} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} inputMode="numeric" />
                                                     </div>
                                                 </div>
 
                                                 {/* -- REGISTRANT TYPE + GST / PAN / AADHAAR -- */}
                                                 <div className="mt-3 p-3 border border-slate-300 rounded-sm bg-slate-50/60">
                                                     {/* Radio buttons */}
-                                                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2">Exhibitor Registration Type <span className="text-red-500">*</span></p>
+                                                    <p className="text-xs font-semibold text-slate-800 uppercase tracking-widest mb-2">Exhibitor Registration Type <span className="text-red-500">*</span></p>
                                                     <div className="flex gap-6 mb-3">
                                                         <label className="flex items-center gap-2 cursor-pointer group">
                                                             <input
@@ -1501,9 +1442,9 @@ const BookAStand = () => {
                                                                 onChange={() => setFormData(prev => ({ ...prev, registrantType: 'registered', panNo: '', aadhaarNo: '' }))}
                                                                 className="accent-[#23471d] w-4 h-4"
                                                             />
-                                                            <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#23471d] transition-colors">
+                                                            <span className="text-sm font-normal text-slate-800 group-hover:text-[#23471d] transition-colors">
                                                                 Registered Exhibitor
-                                                                <span className="ml-1.5 text-[9px] font-black text-[#23471d] bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">GST Required</span>
+                                                                <span className="ml-1.5 text-xs font-medium text-[#23471d] bg-green-50 border border-green-200 px-1.5 py-0.5 rounded uppercase ">GST Required</span>
                                                             </span>
                                                         </label>
                                                         <label className="flex items-center gap-2 cursor-pointer group">
@@ -1515,9 +1456,9 @@ const BookAStand = () => {
                                                                 onChange={() => setFormData(prev => ({ ...prev, registrantType: 'unregistered', gstNo: '' }))}
                                                                 className="accent-[#d26019] w-4 h-4"
                                                             />
-                                                            <span className="text-[11px] font-bold text-slate-800 group-hover:text-[#d26019] transition-colors">
+                                                            <span className="text-sm font-normal text-slate-800 group-hover:text-[#d26019] transition-colors">
                                                                 Unregistered Buyer
-                                                                <span className="ml-1.5 text-[9px] font-black text-[#d26019] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded-[2px] uppercase tracking-wider">PAN + Aadhaar Required</span>
+                                                                <span className="ml-1.5 text-xs font-medium text-[#d26019] bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded uppercase ">PAN + Aadhaar Required</span>
                                                             </span>
                                                         </label>
                                                     </div>
@@ -1527,8 +1468,8 @@ const BookAStand = () => {
                                                         {formData.registrantType === 'registered' ? (
                                                             <>
                                                                 <div>
-                                                                    <Label className={labelClasses}>GST NO. (GSTIN) <span className="text-red-500">*</span></Label>
-                                                                    <Input
+                                                                    <label className={labelClasses}>GST NO. (GSTIN) <span className="text-red-500">*</span></label>
+                                                                    <input
                                                                         required
                                                                         name="gstNo"
                                                                         value={formData.gstNo}
@@ -1539,15 +1480,15 @@ const BookAStand = () => {
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
-                                                                    <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
+                                                                    <label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></label>
+                                                                    <input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
                                                                 </div>
                                                             </>
                                                         ) : (
                                                             <>
                                                                 <div>
-                                                                    <Label className={labelClasses}>PAN CARD NO. <span className="text-red-500">*</span></Label>
-                                                                    <Input
+                                                                    <label className={labelClasses}>PAN CARD NO. <span className="text-red-500">*</span></label>
+                                                                    <input
                                                                         required
                                                                         name="panNo"
                                                                         value={formData.panNo}
@@ -1558,8 +1499,8 @@ const BookAStand = () => {
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <Label className={labelClasses}>AADHAAR CARD NO. <span className="text-red-500">*</span></Label>
-                                                                    <Input
+                                                                    <label className={labelClasses}>AADHAAR CARD NO. <span className="text-red-500">*</span></label>
+                                                                    <input
                                                                         required
                                                                         name="aadhaarNo"
                                                                         value={formData.aadhaarNo}
@@ -1571,8 +1512,8 @@ const BookAStand = () => {
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <Label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></Label>
-                                                                    <Input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
+                                                                    <label className={labelClasses}>FASCIA NAME <span className="text-red-500">*</span></label>
+                                                                    <input required name="fasciaName" value={formData.fasciaName} onChange={handleInputChange} placeholder="Name on stall board" className={inputClasses} />
                                                                 </div>
                                                             </>
                                                         )}
@@ -1581,17 +1522,17 @@ const BookAStand = () => {
                                             </div>
 
                                             {/* -- EXHIBITOR CONTACT DETAILS -- */}
-                                            <div className="space-y-1.5 pt-0.5">
+                                            <div className="space-y-1.5">
                                                 <div className="pb-1 border-b border-slate-500">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Exhibitor Contact Details</h3>
+                                                    <h3 className="text-xs font-medium text-[#d26019] uppercase tracking-[0.05em]" >Exhibitor Contact Details</h3>
                                                 </div>
 
                                                 {/* First Contact Person */}
-                                                <div className="space-y-4">
-                                                    <h4 className="text-[13px] font-bold text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
+                                                <div className="space-y-2">
+                                                    <h4 className="text-[13px] font-medium text-slate-900 border-l-4 border-[#23471d] pl-3 uppercase tracking-wider">First Contact Person Details</h4>
                                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
                                                         <div>
-                                                            <Label className={labelClasses}>TITLE <span className="text-red-500">*</span></Label>
+                                                            <label className={labelClasses}>TITLE <span className="text-red-500">*</span></label>
                                                             <Select onValueChange={(v) => handleSelectChange('contact1.title', v)} value={formData.contact1.title}>
                                                                 <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Here" />
@@ -1605,28 +1546,28 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div>
-                                                            <Label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                            <label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></label>
+                                                            <input required name="contact1.firstName" value={formData.contact1.firstName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                            <label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></label>
+                                                            <input required name="contact1.lastName" value={formData.contact1.lastName} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className={labelClasses}>EMAIL <span className="text-red-500">*</span></Label>
+                                                            <label className={labelClasses}>EMAIL <span className="text-red-500">*</span></label>
                                                             <div className="flex gap-1">
-                                                                <Input
+                                                                <input
                                                                     required
                                                                     type="email"
                                                                     name="contact1.email"
                                                                     value={formData.contact1.email}
                                                                     onChange={handleInputChange}
                                                                     placeholder="Official Email"
-                                                                    className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${emailVerified ? 'border-green-500' : ''}`}
+                                                                    className={` ${inputClasses} flex-1 ${emailVerified ? 'border-green-500' : ''}`}
                                                                     readOnly={emailVerified}
                                                                 />
                                                                 {!emailVerified && (
-                                                                    <Button type="button" onClick={handleSendEmailOtp} disabled={isEmailLoading || emailTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
+                                                                    <Button type="button" onClick={handleSendEmailOtp} disabled={isEmailLoading || emailTimer > 0} className="h-7 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
                                                                         {emailTimer > 0 ? `Resend ${emailTimer}s` : 'Get OTP'}
                                                                     </Button>
                                                                 )}
@@ -1638,7 +1579,7 @@ const BookAStand = () => {
                                                             </div>
                                                             {!emailVerified && emailTimer > 0 && (
                                                                 <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
-                                                                    <Input
+                                                                    <input
                                                                         value={emailOtp}
                                                                         onChange={(e) => setEmailOtp(e.target.value)}
                                                                         placeholder="6-Digit OTP"
@@ -1651,13 +1592,13 @@ const BookAStand = () => {
                                                         </div>
 
                                                         <div>
-                                                            <Label className={labelClasses}>DESIGNATION <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
+                                                            <label className={labelClasses}>DESIGNATION <span className="text-red-500">*</span></label>
+                                                            <input required name="contact1.designation" value={formData.contact1.designation} onChange={handleInputChange} placeholder="Write Here.." className={inputClasses} />
                                                         </div>
                                                         <div>
-                                                            <Label className={labelClasses}>MOBILE <span className="text-red-500">*</span></Label>
+                                                            <label className={labelClasses}>MOBILE <span className="text-red-500">*</span></label>
                                                             <div className="flex gap-1">
-                                                                <Input
+                                                                <input
                                                                     required
                                                                     name="contact1.mobile"
                                                                     value={formData.contact1.mobile}
@@ -1665,11 +1606,11 @@ const BookAStand = () => {
                                                                     placeholder={exhibitorType === 'domestic' ? "10-digit number" : "WhatsApp Number"}
                                                                     inputMode={exhibitorType === 'domestic' ? 'numeric' : 'tel'}
                                                                     maxLength={exhibitorType === 'domestic' ? 10 : undefined}
-                                                                    className={`h-8 border-slate-400 rounded-[2px] bg-white text-[12px] font-medium text-slate-900 flex-1 ${phoneVerified ? 'border-green-500' : ''}`}
+                                                                    className={`${inputClasses} flex-1 ${phoneVerified ? 'border-green-500' : ''}`}
                                                                     readOnly={phoneVerified}
                                                                 />
                                                                 {!phoneVerified && (
-                                                                    <Button type="button" onClick={handleSendPhoneOtp} disabled={isPhoneLoading || phoneTimer > 0} className="h-8 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
+                                                                    <Button type="button" onClick={handleSendPhoneOtp} disabled={isPhoneLoading || phoneTimer > 0} className="h-7 bg-slate-800 text-[10px] font-bold uppercase rounded-[2px] px-3">
                                                                         {phoneTimer > 0 ? `${phoneTimer}s` : 'Get OTP'}
                                                                     </Button>
                                                                 )}
@@ -1681,7 +1622,7 @@ const BookAStand = () => {
                                                             </div>
                                                             {!phoneVerified && phoneTimer > 0 && (
                                                                 <div className="flex gap-1 mt-2 animate-in fade-in slide-in-from-top-1">
-                                                                    <Input
+                                                                    <input
                                                                         value={phoneOtp}
                                                                         onChange={(e) => setPhoneOtp(e.target.value)}
                                                                         placeholder="6-Digit OTP"
@@ -1693,8 +1634,8 @@ const BookAStand = () => {
                                                             )}
                                                         </div>
                                                         <div>
-                                                            <Label className={labelClasses}>ALTERNATE NO. <span className="text-red-500">*</span></Label>
-                                                            <Input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className={inputClasses} inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
+                                                            <label className={labelClasses}>ALTERNATE NO. <span className="text-red-500">*</span></label>
+                                                            <input required name="contact1.alternateNo" value={formData.contact1.alternateNo} onChange={handleInputChange} placeholder={exhibitorType === 'domestic' ? "10-digit number" : "Write Here.."} className={inputClasses} inputMode={exhibitorType === 'domestic' ? 'numeric' : 'text'} maxLength={exhibitorType === 'domestic' ? 10 : undefined} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1703,16 +1644,16 @@ const BookAStand = () => {
                                             </div>
 
                                             {/* -- PARTICIPATION DETAILS SECTION -- */}
-                                            <div className="space-y-1.5 pt-2 border-t border-slate-500">
+                                            <div className="space-y-1.5 border-slate-500">
                                                 <div className="pb-1 border-b border-slate-500">
-                                                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Participation Details</h3>
+                                                    <h3 className="text-xs font-medium text-[#d26019] uppercase tracking-[0.05em]" >Participation Details</h3>
                                                 </div>
 
                                                 <div className="space-y-4">
                                                     {/* Selection Controls */}
-                                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-2">
+                                                    <div className="grid grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-2">
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></Label>
+                                                            <label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></label>
                                                             <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
                                                                 <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Stall" />
@@ -1725,11 +1666,11 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>STALL SIZE <span className="text-red-500">*</span></Label>
-                                                            <Input readOnly value={formData.participation.stallSize} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                            <label className={labelClasses}>STALL SIZE <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.stallSize} className={`${inputClasses}`} />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>STALL CATEGORY <span className="text-red-500">*</span></Label>
+                                                            <label className={labelClasses}>STALL CATEGORY <span className="text-red-500">*</span></label>
                                                             <Select
                                                                 onValueChange={(v) => {
                                                                     setFormData(prev => ({
@@ -1749,68 +1690,87 @@ const BookAStand = () => {
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></Label>
-                                                            <Input readOnly value={formData.participation.stallScheme || "N/A"} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                            <label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.stallScheme || "N/A"} className={`${inputClasses}`} />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></Label>
-                                                            <Input readOnly value={formData.participation.dimension} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                            <label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.dimension} className={`${inputClasses} cursor-not-allowed`} />
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <Label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></Label>
-                                                            <Input readOnly value={formData.participation.stallFor} className="h-8 border-slate-400 rounded-[2px] bg-slate-50 text-[12px] font-bold text-slate-900" />
+                                                            <label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.stallFor} className={`${inputClasses} cursor-not-allowed`} />
                                                         </div>
                                                     </div>
 
                                                     {/* Cost Breakdown box (full width below fields) */}
                                                     <div className="w-full">
-                                                        <div className="p-4 bg-[#f8fafc] border border-slate-200 rounded-sm shadow-sm relative overflow-hidden group">
-                                                            {/* Accent Decoration */}
-                                                            <div className="absolute top-0 right-0 w-24 h-24 bg-[#23471d]/5 rounded-full -mr-12 -mt-12 blur-2xl" />
+                                                        <div className="bg-white border border-slate-200 rounded overflow-hidden shadow-sm">
 
-                                                            <div className="flex items-center gap-2 mb-3">
-                                                                <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
-                                                                <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.15em] block">Cost Breakdown</Label>
+                                                            {/* Header */}
+                                                            <div className="flex items-center gap-2 px-4 py-1.5 bg-[#23471d]">
+                                                                <div className="w-1 h-3 bg-[#a8d060] rounded-full" />
+                                                                <span className="text-[13px] font-medium text-white uppercase">Cost Breakdown</span>
                                                             </div>
 
-                                                            <div className="flex flex-wrap gap-6 relative z-10 items-end">
-                                                                <div className="flex flex-col gap-1 min-w-[160px]">
-                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Space Area ({formData.participation.stallSize} sqm)</span>
-                                                                    <span className="text-lg font-bold text-slate-900">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
-                                                                    </span>
+                                                            {/* All items in one row */}
+                                                            <div className="flex items-center divide-x divide-slate-100">
+
+                                                                {/* Space Area */}
+                                                                <div className="flex-1 px-4 py-1.5">
+                                                                    <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-0.5">
+                                                                        Space ({formData.participation.stallSize} sqm)
+                                                                    </p>
+                                                                    <p className="text-sm font-black text-slate-800">
+                                                                        {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
+                                                                    </p>
                                                                 </div>
+
+                                                                {/* PL Increment */}
                                                                 {selectedStall?.incrementPercentage > 0 && (
-                                                                    <div className="flex flex-col gap-1 min-w-[160px] text-orange-600">
-                                                                        <span className="text-[10px] font-bold uppercase tracking-widest">PL Increment ({selectedStall.incrementPercentage}%)</span>
-                                                                        <span className="text-lg font-bold">+ {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}</span>
+                                                                    <div className="flex-1 px-4 py-3">
+                                                                        <p className="text-[11px] font-medium text-orange-400 uppercase tracking-widest mb-0.5">
+                                                                            PL Increment ({selectedStall.incrementPercentage}%)
+                                                                        </p>
+                                                                        <p className="text-sm font-black text-orange-500">
+                                                                            + {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}
+                                                                        </p>
                                                                     </div>
                                                                 )}
-                                                                <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4">
-                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">GST (18%)</span>
-                                                                    <span className="text-lg font-bold text-slate-900">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
-                                                                    </span>
+
+                                                                {/* GST */}
+                                                                <div className="flex-1 px-4 py-3">
+                                                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-widest mb-0.5">
+                                                                        GST (18%)
+                                                                    </p>
+                                                                    <p className="text-sm font-black text-slate-800">
+                                                                        {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total - formData.participation.amount)}
+                                                                    </p>
                                                                 </div>
-                                                                <div className="flex flex-col gap-1 min-w-[160px] border-l border-slate-200 pl-4 ml-auto">
-                                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Grand Total <span className="text-[8px] normal-case text-slate-500 ml-1">Tax Included</span></span>
-                                                                    <span className="text-2xl font-bold text-[#23471d]">
-                                                                        {formData.participation.currency === 'INR' ? '\u20b9' : '\$'} {fmtAmt(formData.participation.total)}
-                                                                    </span>
+
+                                                                {/* Grand Total */}
+                                                                <div className="flex-1 px-4 py-3 bg-[#f0f7e6]">
+                                                                    <p className="text-[9px] font-bold text-[#23471d]/60 uppercase tracking-widest mb-0.5">
+                                                                        Grand Total <span className="normal-case font-normal">(incl. tax)</span>
+                                                                    </p>
+                                                                    <p className="text-base font-black text-[#23471d]">
+                                                                        {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.total)}
+                                                                    </p>
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="space-y-1.5 pt-2 border-t border-slate-500">
-                                                <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500 pb-1 mb-2">
+                                            <div className="space-y-1.5 pt-2 ">
+                                                <h3 className="text-xs font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
                                                     Exhibitor Category
                                                 </h3>
 
                                                 <div className="grid grid-cols-4 gap-4">
                                                     <div>
-                                                        <Label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
                                                             value={formData.primaryCategory}
@@ -1827,7 +1787,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></label>
                                                         <Select
                                                             onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
                                                             value={formData.subCategory}
@@ -1845,7 +1805,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="How did you hear about us?" />
@@ -1861,7 +1821,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     <div>
-                                                        <Label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></Label>
+                                                        <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
                                                         <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
                                                             <SelectTrigger className={inputClasses}>
                                                                 <SelectValue placeholder="Select Staff Member" />
@@ -2073,8 +2033,9 @@ const BookAStand = () => {
                                 )}
                             </AnimatePresence>
                         </div>
-                    </div>
+                    </SectionContainer>
                 </div>
+
             </section>
         </div>
     );
