@@ -51,7 +51,7 @@ const LogisticFooter: React.FC = () => {
               <Phone className="w-[16px] h-[16px]" />
             </div>
             <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
-              +91 11 4958 8555
+              +91 9654900525
             </a>
           </div>
 
