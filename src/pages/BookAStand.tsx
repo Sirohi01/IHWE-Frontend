@@ -1931,6 +1931,30 @@ const BookAStand = () => {
 
                                                         {/* Rows */}
                                                         <div className="divide-y divide-gray-100">
+
+
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <p className="text-[11px] font-semibold text-gray-800 uppercase tracking-widest mb-0.5">
+                                                                    Space ({formData.participation.stallSize} sqm)
+                                                                </p>
+                                                                <p className="text-sm font-semibold text-gray-800">
+                                                                    {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
+                                                                </p>
+                                                            </div>
+
+
+                                                            {selectedStall?.incrementPercentage > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-1.5">
+                                                                    <span className="text-xs text-gray-800 font-semibold">
+                                                                        PL Charges ({selectedStall?.incrementPercentage}% Extra)
+                                                                    </span>
+                                                                    <span className="text-xs font-semibold text-gray-800">
+                                                                        + {formData?.participation?.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData?.participation?.rate * formData?.participation?.stallSize * selectedStall?.incrementPercentage / 100)}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+
+
                                                             <div className="flex justify-between items-center px-5 py-1.5">
                                                                 <span className="text-xs text-gray-800 font-semibold">Gross Cost (Space + PL)</span>
                                                                 <span className="text-xs font-semibold text-gray-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
@@ -1947,7 +1971,7 @@ const BookAStand = () => {
                                                             )}
 
                                                             {formData.financeBreakdown.discountAmount > 0 && (
-                                                                <div className="flex justify-between items-center px-5 py-1.5 bg-[#FAEEDA]">
+                                                                <div className="flex justify-between items-center px-5 py-1.5">
                                                                     <span className="text-xs font-semibold text-[#633806]">
                                                                         Full Payment Discount
                                                                         <span className="ml-2 text-xs bg-[#FAC775] text-[#633806] px-2 py-0.5 rounded font-semibold">{formData.financeBreakdown.discountPercent}%</span>
@@ -1960,24 +1984,24 @@ const BookAStand = () => {
                                                                 <span className="text-xs tracking-wider text-gray-700 font-semibold">Net Taxable Value</span>
                                                                 <span className="text-xs font-semibold text-gray-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
                                                             </div>
-
-                                                            <div className="flex justify-between items-center px-5 py-1.5">
-                                                                <span className="text-xs text-gray-700 font-semibold">GST (18%)</span>
-                                                                <span className="text-xs font-semibold text-gray-700">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
-                                                            </div>
-
                                                             {formData.financeBreakdown.tdsAmount > 0 && (
-                                                                <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <div className="flex justify-between items-center px-5 py-1.5 border-y border-gray-200">
                                                                     <span className="text-xs text-red-400 font-semibold">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
                                                                     <span className="text-xs font-semibold text-red-500">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
                                                                 </div>
                                                             )}
+                                                            <div className="flex justify-between items-center px-5 py-1.5 border-y border-gray-200">
+                                                                <span className="text-xs text-gray-700 font-semibold">GST (18%)</span>
+                                                                <span className="text-xs font-semibold text-gray-700">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
+                                                            </div>
+
+
                                                         </div>
 
                                                         {/* Total */}
-                                                        <div className="flex justify-between items-center px-5 py-1.5 bg-[#EAF3DE] border-y border-[#C0DD97]">
+                                                        <div className="flex justify-between items-center px-5 py-1.5 border-t ">
                                                             <span className="text-xs font-semibold uppercase text-gray-700">Total Net Payable</span>
-                                                            <span className="text-xs font-semibold text-gray-700   ">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
+                                                            <span className="text-xs font-semibold text-gray-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
                                                         </div>
 
                                                         {formData.balanceAmount > 0 && (
@@ -2000,8 +2024,8 @@ const BookAStand = () => {
                                                             {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
                                                                 <div className="mb-3 py-3 px-5 bg-amber-50 border border-amber-200 rounded-lg space-y-1.5">
                                                                     <div className="flex justify-between">
-                                                                        <span className="text-xs text-amber-600 font-medium">+ 2.5% Razorpay Gateway Fee</span>
-                                                                        <span className="text-xs font-medium text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}</span>
+                                                                        <span className="text-xs text-amber-600 font-semibold">+ 2.5% Razorpay Gateway Fee</span>
+                                                                        <span className="text-xs font-semibold text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}</span>
                                                                     </div>
                                                                     <div className="flex justify-between pt-1.5 border-t border-amber-200">
                                                                         <span className="text-xs font-semibold text-amber-700">Total Charged by Gateway</span>
