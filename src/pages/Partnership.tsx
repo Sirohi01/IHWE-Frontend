@@ -8,7 +8,6 @@ import {
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
 import partnersHeroFallback from "../assets/cara14.jpg";
 
 const Partnership = () => {
@@ -45,7 +44,9 @@ const Partnership = () => {
         >
 
 
-          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 pt-16">
+
+          {/* CONTENT */}
+          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-22 pt-16">
 
             <div className="grid lg:grid-cols-[1fr_0.9fr] gap-10 items-center">
 
@@ -273,12 +274,10 @@ const Partnership = () => {
             </div>
 
             <h3 className="text-[18px] md:text-[24px] font-black text-[#102040] uppercase leading-tight">
-
               Our Partner Categories
               <span className="text-[#619941]">
                 {" "} & Benefits
               </span>
-
             </h3>
 
             <p className="text-[#555] text-sm md:text-base mt-2">
@@ -296,6 +295,7 @@ const Partnership = () => {
                 title: "Hotel & Stay Partner",
                 image: "/images/partnership/3.png",
                 color: "#619941",
+                link: "/hotel-stay-partner",
                 icon: "/images/partnership/bed.png",
                 points: [
                   "Brand visibility on official platforms",
@@ -310,6 +310,7 @@ const Partnership = () => {
                 title: "Travel Partner",
                 image: "/images/partnership/2.png",
                 color: "#2f68c5",
+                link: "/travel-partner",
                 icon: "/images/partnership/aeroplan.png",
                 points: [
                   "Featured as official travel partner",
@@ -324,6 +325,7 @@ const Partnership = () => {
                 title: "Stall Design & Fabrication",
                 image: "/images/partnership/1.png",
                 color: "#11a7b8",
+                link: "/fabrication-partner",
                 icon: "/images/partnership/home.png",
                 points: [
                   "Official branding on event collaterals",
@@ -338,6 +340,7 @@ const Partnership = () => {
                 title: "Logistics Partner",
                 image: "/images/partnership/Logistics.png",
                 color: "#7b43c9",
+                link: "/logistics-partner",
                 icon: "/images/partnership/delivery.png",
                 points: [
                   "Listed as official logistics partner",
@@ -352,6 +355,7 @@ const Partnership = () => {
                 title: "Printing & Branding",
                 image: "/images/partnership/printing.png",
                 color: "#ff7a00",
+                link: "/printing-branding-partner",
                 icon: "/images/partnership/print.png",
                 points: [
                   "Branding across event materials",
@@ -366,6 +370,7 @@ const Partnership = () => {
                 title: "Hospitality Partner",
                 image: "/images/partnership/hospitality.jpg",
                 color: "#e93d8b",
+                link: "/hospitality-partner",
                 icon: "/images/partnership/bell.png",
                 points: [
                   "Recognition as hospitality partner",
@@ -380,7 +385,7 @@ const Partnership = () => {
                 key={idx}
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
-                className="relative bg-white rounded-[24px] border overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+                className="relative bg-white rounded-[24px] border overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col"
                 style={{
                   borderColor: `${item.color}50`,
                 }}
@@ -432,24 +437,24 @@ const Partnership = () => {
                 </div>
 
 
-                <div className="relative px-6 pb-6 pt-5">
+                <div className="relative px-6 pb-6 pt-5 flex-1 flex flex-col">
 
 
                   <div
-                    className="absolute -top-10 left-6 w-20 h-20 rounded-full flex items-center justify-center border-white"
+                    className="absolute -top-10 left-6 w-20 h-20 rounded-full flex items-center justify-center bg-white shadow-md border-white"
 
                   >
 
                     <img
                       src={item.icon}
                       alt=""
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain p-4"
                     />
 
                   </div>
 
 
-                  <div className="pl-24">
+                  <div className="pl-24 mb-6">
 
                     <h3
                       className="text-[18px] font-black uppercase leading-tight"
@@ -463,67 +468,61 @@ const Partnership = () => {
                   </div>
 
 
-                  <ul className="space-y-3 mt-8">
-
+                  <ul className="space-y-3 flex-1">
                     {item.points.map((point, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-3"
-                      >
-
+                      <li key={i} className="flex items-start gap-3">
                         <div
                           className="w-5 h-5 rounded-full mt-[2px] flex items-center justify-center shrink-0"
                           style={{
                             backgroundColor: `${item.color}15`,
                           }}
                         >
-
                           <div
                             className="w-2 h-2 rounded-full"
                             style={{
                               backgroundColor: item.color,
                             }}
                           />
-
                         </div>
-
-                        <span className="text-[#444] text-[14px] leading-6">
+                        <span className="text-[#444] text-[14px] leading-tight">
                           {point}
                         </span>
-
                       </li>
                     ))}
-
                   </ul>
 
-
-                  <button
-                    className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
-                    style={{
-                      borderColor: item.color,
-                      color: item.color,
-                    }}
-                    onClick={() => {
-                      const pathMap: Record<string, string> = {
-                        "Hotel & Stay Partner": "/hotel-stay-partner",
-                        "Travel Partner": "/travel-partner",
-                        "Stall Design & Fabrication": "/stall-design-fabrication",
-                        "Logistics Partner": "/logistics-partner",
-                        "Printing & Branding": "/printing-branding-partner",
-                        "Hospitality Partner": "/hospitality-partner",
-                      };
-
-                      window.location.href = pathMap[item.title];
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = item.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                  >
-                    View Benefits →
-                  </button>
+                  <div className="mt-8 w-full">
+                    {item.link ? (
+                      <Link to={item.link} className="block w-full">
+                        <button
+                          className="w-full h-[46px] rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white flex items-center justify-center"
+                          style={{
+                            borderColor: item.color,
+                            color: item.color,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = item.color;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                          }}
+                        >
+                          View Benefits →
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full h-[46px] rounded-full border-2 font-black uppercase text-sm opacity-50 cursor-not-allowed flex items-center justify-center"
+                        style={{
+                          borderColor: item.color,
+                          color: item.color,
+                        }}
+                      >
+                        Coming Soon
+                      </button>
+                    )}
+                  </div>
                 </div>
 
               </motion.div>

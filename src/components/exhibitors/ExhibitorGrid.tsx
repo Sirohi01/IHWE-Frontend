@@ -36,7 +36,7 @@ const ExhibitorGrid: React.FC<Props> = ({ exhibitors }) => {
                                     className="max-w-[92%] max-h-[92%] object-contain group-hover:scale-110 transition-transform duration-500"
                                     onError={(e) => {
                                         // Fallback if image fails to load
-                                        e.currentTarget.src = 'https://via.placeholder.com/150?text=Logo';
+                                        e.currentTarget.src = 'https://placehold.co/150?text=Logo';
                                     }}
                                 />
                             </div>
