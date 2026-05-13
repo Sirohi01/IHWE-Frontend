@@ -157,12 +157,12 @@ const WhyPart = ({ onApplyClick }) => {
                                 </div>
 
                                 {/* Title */}
-                                <div className="text-sm font-base text-gray-900 text-center leading-snug mt-1">
+                                <div className="text-sm font-base text-gray-900 text-center leading-snug mt-1 h-10 flex items-start justify-center w-full px-1">
                                     {step.title}
                                 </div>
 
                                 {/* Desc */}
-                                <div className="text-xs text-gray-700 text-center leading-snug mt-2">
+                                <div className="text-xs text-gray-700 text-center leading-snug mt-2 min-h-[48px] flex items-start justify-center w-full px-1">
                                     {step.desc}
                                 </div>
 

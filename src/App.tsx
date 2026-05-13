@@ -47,7 +47,7 @@ const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePm
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
-const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
+const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -71,6 +71,7 @@ const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEvents
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
 const ExhibitorEPromotion = lazy(() => import("./pages/exhibitor/ExhibitorEPromotion"));
+const EEPromotion = lazy(() => import("./components/dashboard/exhibitor/EPromotion"));
 const ExhibitorSellerRegistrationPage = lazy(() => import("@/pages/exhibitor/ExhibitorSellerRegistrationPage"));
 const SellerPortal = lazy(() => import("@/pages/SellerPortal"));
 const SellerDashboardHome = lazy(() => import("@/pages/exhibitor/seller/SellerDashboardHome"));
@@ -172,7 +173,7 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/partnership" element={<Partnership />} />
-                    <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
+                    <Route path="/fabrication-partner" element={<Fabricationpartner />} />
 
                     <Route path="/partner-registration" element={<PartnerRegistration />} />
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
@@ -210,6 +211,7 @@ const App = () => {
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
+                    <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
