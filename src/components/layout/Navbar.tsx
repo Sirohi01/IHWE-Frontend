@@ -23,7 +23,7 @@ const navLinks = [
       { label: "Advisory Board Members", path: "/advisory-board", icon: Users, description: "Meet the experts behind the exhibition" },
       { label: "Media", path: "/media-registration", icon: Camera, description: "Latest updates, press releases and event coverage" },
       { label: "Blogs", path: "/blog", icon: Sparkles, description: "Latest news and insights from the wellness industry" },
-      { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Event Highlights", path: "/event-highlights", icon: FileCheck, description: "Get your complimentary visitor pass today" },
       { label: "Glimpses of the Event", path: "/gallery", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
     ],
   },
@@ -45,7 +45,7 @@ const navLinks = [
   {
     label: "Opportunities",
     dropdown: [
-      { label: "Sponsorship", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Sponsorship", path: "/sponsorship", icon: FileCheck, description: "Get your complimentary visitor pass today" },
       { label: "Branding Opportunities", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
       { label: "Partnership / Collaboration", path: "/why-visit", icon: Sparkles, description: "Experience the latest in health & wellness" },
     ],

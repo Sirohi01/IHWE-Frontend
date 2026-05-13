@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { 
   FileText, 
   Download, 
@@ -249,11 +250,16 @@ const RefundPolicy = () => {
                   <Sparkle color="#a78bfa" shadow="#1E104E" style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                   <Sparkle color="#a78bfa" shadow="#1E104E" style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
                 </div>
-                <button className="purple-btn-refund flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]">
+                <Link 
+                  to="/contact" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="purple-btn-refund flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]"
+                >
                   <MessageCircle className="w-4 h-4 text-white" />
                   <span className="text-white font-black text-[10px] uppercase tracking-wider">CONTACT SUPPORT</span>
                   <ArrowRight size={13} className="text-white ml-1 opacity-70" />
-                </button>
+                </Link>
               </div>
 
               {/* Download Policy Button - Red Style */}
