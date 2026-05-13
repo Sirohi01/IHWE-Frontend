@@ -1,4 +1,5 @@
 import React from 'react'
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const steps = [
     {
@@ -60,8 +61,8 @@ const industries = [
 
 const HowIT = () => {
     return (
-        <div className="py-4 px-16">
-            <div className='flex flex-row items-stretch gap-4'>
+        <div className="py-4">
+            <div className={`flex flex-row items-stretch gap-4 ${SectionContainer}`}>
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
                 <div className='w-[63%] flex flex-col'>

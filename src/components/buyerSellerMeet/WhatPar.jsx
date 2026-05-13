@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { api } from '../../lib/api';
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const WhatPar = () => {
     const [testimonials, setTestimonials] = useState([]);
@@ -42,8 +43,8 @@ const WhatPar = () => {
     };
 
     return (
-        <div className="bg-[#FAF9F2] py-8 px-16 font-['Barlow',sans-serif]">
-            <div className='flex justify-between w-full gap-4'>
+        <div className="bg-[#FAF9F2] py-6 font-['Barlow',sans-serif]">
+            <div className={`flex justify-between w-full gap-4 ${SectionContainer}`}>
 
                 {/* ── LEFT: IMPACT BOX ── */}
                 <div

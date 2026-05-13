@@ -43,6 +43,7 @@ import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
 import { toast } from "sonner";
 import { useRef, useEffect as useEffectDropdown } from "react";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 
 interface MultiSelectDropdownProps {
@@ -1036,7 +1037,7 @@ const BuyerRegistration = () => {
         <div className="min-h-screen bg-[#FDFDFD] ">
 
             <section className="py-4 relative bg-[#F8FAFC]">
-                <div className="px-16">
+                <SectionContainer className="">
                     <AnimatePresence mode="wait">
                         {submitted ? (
                             <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-white border border-slate-200 p-12 flex flex-col items-center text-center space-y-5 shadow-2xl rounded-xl">
@@ -1815,7 +1816,7 @@ const BuyerRegistration = () => {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
+                </SectionContainer>
             </section >
 
             <AnimatePresence>
