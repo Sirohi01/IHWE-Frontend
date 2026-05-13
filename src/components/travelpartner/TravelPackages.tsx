@@ -44,14 +44,14 @@ const packages = [
 const TravelPackages: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm">
-      {/* Header - Reduced Height */}
+
       <div className="bg-[#0B2C66] px-[16px] py-[4px]">
         <h3 className="text-white font-[900] text-[12px] uppercase tracking-wider text-center">
           Partnership Packages &amp; Investment
         </h3>
       </div>
 
-      {/* Package Items - Tightened Gap */}
+
       <div className="p-[4px] flex flex-col gap-[2px] flex-1">
         {packages.map((pkg, index) => (
           <motion.div
@@ -62,7 +62,7 @@ const TravelPackages: React.FC = () => {
             transition={{ delay: index * 0.1 }}
             className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[2px_10px] relative overflow-hidden group`}
           >
-            {/* Ribbon Badge */}
+
             <div
               className="absolute top-0 right-[10px] flex flex-col items-center"
               style={{ color: pkg.color }}
@@ -117,7 +117,7 @@ const TravelPackages: React.FC = () => {
         ))}
       </div>
 
-      {/* Footer Notes - Reduced Height */}
+
       <div className="bg-[#0B2C66] px-[14px] py-[6px] mt-auto">
         {[
           "Custom packages available on request",
