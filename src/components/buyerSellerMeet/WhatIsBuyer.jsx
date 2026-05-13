@@ -1,4 +1,5 @@
 import React from 'react'
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const features = [
     {
@@ -40,9 +41,9 @@ const features = [
 
 const WhatIsBuyer = () => {
     return (
-        <div className="relative overflow-hidden py-4 px-8 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className="relative overflow-hidden py-2 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
 
-            <div className='flex justify-between w-full'>
+            <div className={`flex justify-between w-full ${SectionContainer}`}>
                 {/* text  data  */}
                 <div className='w-[35%]'>
                     {/* Heading */}

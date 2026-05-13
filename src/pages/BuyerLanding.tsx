@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import BuyerRegistration from "./buyer/BuyerRegistration";
 import InternationalBuyerRegistration from "./buyer/InternationalBuyerRegistration";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const BuyerLanding = () => {
     const isComingSoon = false;
@@ -118,8 +119,7 @@ const BuyerLanding = () => {
                     fontFamily: "'Barlow', sans-serif",
                 }}
             >
-
-                <div className="w-full px-16 py-4">
+                <SectionContainer className="w-full py-4">
                     <div className="relative z-10  flex flex-col gap-2 w-[70%]">
 
                         {/* Register as a Buyer */}
@@ -203,7 +203,7 @@ const BuyerLanding = () => {
                     <div className="w-[30%]">
                         {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
                     </div>
-                </div>
+                </SectionContainer>
             </section>
 
             {/* button section  */}
