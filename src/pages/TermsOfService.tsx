@@ -388,24 +388,35 @@ const TermsOfService: React.FC = () => {
                   </div>
 
                   <div className="flex-1 flex flex-col md:flex-row items-center justify-between px-6 py-4 md:py-0 terms-contact-items">
-                    <div className="flex items-center gap-2.5 md:h-full py-2 md:py-0">
+                    <a 
+                      href="mailto:info@namogangewellness.com" 
+                      className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
+                    >
                       <Mail className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
                       <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">info@namogangewellness.com</span>
-                    </div>
+                    </a>
 
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
 
-                    <div className="flex items-center gap-2.5 md:h-full py-2 md:py-0">
+                    <a 
+                      href="tel:+919654900525" 
+                      className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
+                    >
                       <Phone className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
                       <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">9654900525</span>
-                    </div>
+                    </a>
 
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
 
-                    <div className="flex items-center gap-2.5 md:h-full py-2 md:py-0">
+                    <a 
+                      href="https://namogangewellness.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
+                    >
                       <Globe className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
                       <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">namogangewellness.com</span>
-                    </div>
+                    </a>
                   </div>
                 </div>
               </div>
