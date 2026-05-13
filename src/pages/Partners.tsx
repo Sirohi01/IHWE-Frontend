@@ -67,14 +67,14 @@ const GoldSparkle = ({ style, color = "#fff176" }: { style?: React.CSSProperties
 const Partners = () => {
   const [partnerGroups, setPartnerGroups] = useState<any[]>([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [initialService, setInitialService] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Automatically open popup after a small delay
-    const timer = setTimeout(() => {
-      setIsPopupOpen(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  const openServicePopup = (serviceId: string) => {
+    setInitialService(serviceId);
+    setIsPopupOpen(true);
+  };
+
+  // Removed auto-popup timer
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -90,6 +90,7 @@ const Partners = () => {
 
   const serviceCards = [
     {
+      id: "hotel",
       title: "HOTEL & STAY",
       icon: part11,
       desc: <>Handpicked hotels at exclusive<br />rates for exhibitors, buyers<br />and delegates.</>,
@@ -98,6 +99,7 @@ const Partners = () => {
       path: "/support/hotel-stay"
     },
     {
+      id: "travel",
       title: "TRAVEL ASSISTANCE",
       icon: part22,
       desc: <>Flight bookings, airport transfers,<br />local transport and complete<br />travel arrangements.</>,
@@ -106,6 +108,7 @@ const Partners = () => {
       path: "/support/travel-assistance"
     },
     {
+      id: "stall",
       title: "STALL DESIGN & FABRICATION",
       icon: part33,
       desc: <>Creative stall design, fabrication<br />and installation to make your<br />brand stand out.</>,
@@ -114,6 +117,7 @@ const Partners = () => {
       path: "/support/stall-design"
     },
     {
+      id: "logistics",
       title: "LOGISTICS SUPPORT",
       icon: part44,
       desc: <>Freight forwarding, customs<br />clearance, storage and material<br />handling support.</>,
@@ -122,6 +126,7 @@ const Partners = () => {
       path: "/support/logistics-support"
     },
     {
+      id: "printing",
       title: "PRINTING & BRANDING",
       icon: part55,
       desc: <>High-quality printing, signage<br />and branding solutions for<br />maximum visibility.</>,
@@ -130,6 +135,7 @@ const Partners = () => {
       path: "/support/printing-branding"
     },
     {
+      id: "hospitality",
       title: "HOSPITALITY DESK",
       icon: part66,
       desc: <>On-ground assistance for all<br />your queries to ensure a smooth<br />and pleasant experience.</>,
@@ -385,14 +391,13 @@ const Partners = () => {
                   </div>
 
                   {/* Learn More */}
-                  <Link to={card.path || "#"}>
-                    <button
-                      className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
-                      style={{ color: "#24660a" }}
-                    >
-                      Learn More <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </Link>
+                  <button
+                    onClick={() => openServicePopup(card.id)}
+                    className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
+                    style={{ color: "#24660a" }}
+                  >
+                    Learn More <ArrowRight className="w-3 h-3" />
+                  </button>
                 </div>
 
                 {/* RIGHT — image */}
@@ -502,10 +507,10 @@ const Partners = () => {
       {/* ══════════════════════════════════════
           OUR HOTEL PARTNERS
       ══════════════════════════════════════ */}
-      <section className="pt-0 pb-4 bg-white">
+      {/* <section className="pt-0 pb-4 bg-white">
         <div className="container mx-auto px-4 lg:pl-12 lg:pr-8">
           <div className="bg-[#011635] pt-2 pb-4 md:pt-3 md:pb-6 px-8 md:px-10 rounded-3xl shadow-2xl relative overflow-hidden max-w-[1220px]">
-            {/* Inner Heading */}
+          
             <div className="flex items-center justify-center gap-3 mb-2">
               <div className="h-px w-14 bg-[#2e7d32]" />
               <span className="text-[18px] font-bold text-white uppercase tracking-[0.28em]">Our Hotel Partners</span>
@@ -530,7 +535,7 @@ const Partners = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ══════════════════════════════════════
           WHY CHOOSE OUR SUPPORT SERVICES
@@ -691,7 +696,11 @@ const Partners = () => {
         </div>
       </div>
 
-      <PartnershipPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+      <PartnershipPopup 
+        isOpen={isPopupOpen} 
+        onClose={() => setIsPopupOpen(false)} 
+        initialService={initialService}
+      />
     </div>
   );
 };
