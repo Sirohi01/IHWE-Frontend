@@ -1,106 +1,85 @@
 import React from 'react';
 import {
-  Users,
-  Megaphone,
-  TrendingUp,
-  Handshake,
-  Globe,
   Mail,
   Phone,
+  Globe,
   QrCode,
   Truck,
 } from 'lucide-react';
-import footerImage from '../../assets/nishu.png';
 
 const LogisticFooter: React.FC = () => {
   return (
-    <footer className="bg-white pt-1">
-      <div className="mx-auto  bg-white">
-        <div className="bg-white rounded-[px]  shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
+    <footer className="bg-[#001D3D] py-1 px-6 md:px-12 mt-2">
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
+        
+        {/* Left Section: Branding & Slogan */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:block">
+            <Truck className="w-[45px] h-[45px] text-[#3B82F6] opacity-60" strokeWidth={1} />
+          </div>
+          <div className="flex flex-col">
+            <h3 className="text-white font-black text-[14px] uppercase leading-tight whitespace-nowrap">
+              LET'S MOVE SUCCESS <span className="text-[#4E9F3D]">TOGETHER!</span>
+            </h3>
+            <p className="text-white text-[8.5px] font-medium opacity-80 mt-0 max-w-[280px]">
+              Partner with IHWE 2026 and deliver excellence at every step.
+            </p>
+          </div>
+        </div>
 
-          <div className="bgg-white relative p-[0px_25px] flex items-center gap-[15px] lg:min-w-[280px] overflow-hidden rounded-r-[60px] lg:rounded-r-[80px] z-10">
-
-            <div className="absolute inset-0 w-full h-full z-0 bg-white">
-              <img
-                src={footerImage}
-                alt="background"
-                className="w-full h-full object-cover"
-              />
+        {/* Middle Section: Contact Info with Dividers */}
+        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
+          
+          {/* Email */}
+          <div className="flex items-center gap-2.5 group">
+            <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
+              <Mail className="w-[16px] h-[16px]" />
             </div>
-            <div className="relative z-20 ml-20">
-              <h3 className="text-white font-black text-[13px] uppercase leading-[1.2] tracking-tight">
-                LET'S MOVE SUCCESS<br />
-                TOGETHER!<br />
-                <span className="text-[#4E9F3D] text-[10px] lowercase font-bold normal-case">Partner with IHWE 2026 and deliver excellence at every step.</span>
-              </h3>
-            </div>
+            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              partner@ihwe.in
+            </a>
           </div>
 
-          <div className="flex-1 flex justify-center items-center p-[5px_100px] bg-gray-50/50">
-            {[
-              { icon: <Users />, label: "Global Audience Access", color: "#4B49AC" },
-              { icon: <Megaphone />, label: "High Brand Exposure", color: "#0B2C66" },
-              { icon: <TrendingUp />, label: "Business Growth", color: "#4E9F3D" },
-              { icon: <Handshake />, label: "Long-term Partnership", color: "#4B49AC" },
-              { icon: <Globe />, label: "Positive Global Impact", color: "#008891" },
-            ].map((item, i) => (
-              <React.Fragment key={i}>
-                <div className="flex flex-col items-center text-center gap-1 flex-1 group">
-                  <div
-                    className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: item.color }}
-                  >
-                    {React.cloneElement(item.icon as React.ReactElement, { className: "w-[16px] h-[16px]" })}
-                  </div>
-                  <p className="text-[7.5px] font-bold text-[#1e293b] uppercase leading-tight max-w-[65px]">
-                    {item.label}
-                  </p>
-                </div>
+          <div className="hidden lg:block w-[1px] h-[25px] bg-white/10" />
 
-                {i < 4 && <div className="w-[1px] h-[30px] bg-gray-300 mx-0.5 flex-shrink-0" />}
-              </React.Fragment>
-            ))}
+          {/* Phone */}
+          <div className="flex items-center gap-2.5 group">
+            <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
+              <Phone className="w-[16px] h-[16px]" />
+            </div>
+            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              +91 11 4958 8555
+            </a>
           </div>
 
+          <div className="hidden lg:block w-[1px] h-[25px] bg-white/10" />
 
-          <div className="flex items-stretch">
-
-            <div className="p-[8px_15px] flex flex-col justify-center min-w-[210px] border-l border-[#E2E8F0]">
-              <div className="bg-[#2D6A4F] rounded-[8px_8px_2px_2px] px-[10px] py-[4px] text-center mb-1">
-                <h4 className="text-white font-black text-[9px] uppercase tracking-wider">
-                  Let's Grow Together!
-                </h4>
-              </div>
-              <div className="border border-[#E2E8F0] border-t-0 rounded-[0_0_8px_8px] p-[6px_8px] flex flex-col gap-1.5 bg-white">
-                <a
-                  href="mailto:partner@ihwe.in"
-                  className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
-                >
-                  <Mail className="w-[11px] h-[11px] text-[#2D6A4F]" />
-                  <span className="font-bold text-[10.5px] group-hover:underline">partner@ihwe.in</span>
-                </a>
-                <a
-                  href="tel:+911149588555"
-                  className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
-                >
-                  <Phone className="w-[11px] h-[11px] text-[#2D6A4F]" />
-                  <span className="font-bold text-[10.5px] group-hover:underline">+91 11 4958 8555</span>
-                </a>
-              </div>
+          {/* Website */}
+          <div className="flex items-center gap-2.5 group">
+            <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
+              <Globe className="w-[16px] h-[16px]" />
             </div>
-
-
-            <div className="bg-[#0B2C66] p-[8px_15px] flex flex-col items-center justify-center gap-1.5 min-w-[90px]">
-              <div className="bg-white p-[3px] rounded-[5px] shadow-sm">
-                <QrCode className="w-[40px] h-[40px] text-[#0B2C66]" />
-              </div>
-              <p className="text-white font-black text-[7px] uppercase text-center leading-tight tracking-wider">
-                Scan To<br />Partner
-              </p>
-            </div>
+            <a href="https://www.ihwe.in" target="_blank" rel="noreferrer" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              www.ihwe.in
+            </a>
           </div>
 
         </div>
+
+        {/* Right Section: QR Code & Button */}
+        <div className="flex items-center gap-3 bg-black/10 p-1.5 pr-3 rounded-[10px] border border-white/5">
+          <div className="bg-white p-0.5 rounded-[6px] shadow-lg">
+            <QrCode className="w-[34px] h-[34px] text-[#001D3D]" />
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="bg-[#4E9F3D] px-3 py-1 rounded-[6px] shadow-sm hover:bg-[#458b36] transition-colors cursor-pointer">
+              <span className="text-white font-black text-[10px] uppercase tracking-wider">
+                SCAN TO<br />PARTNER
+              </span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </footer>
   );

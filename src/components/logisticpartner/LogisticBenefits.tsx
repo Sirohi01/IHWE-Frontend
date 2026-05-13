@@ -76,7 +76,7 @@ const LogisticBenefits: React.FC = () => {
             className="bg-white rounded-[12px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
             {/* Colored Header */}
-            <div 
+            <div
               className="w-full py-2 px-3 text-center"
               style={{ backgroundColor: benefit.color }}
             >
@@ -84,24 +84,25 @@ const LogisticBenefits: React.FC = () => {
                 {benefit.title}
               </h4>
             </div>
-            
+
             {/* Content */}
             <div className="p-4 flex flex-col items-center flex-1">
-              <div 
+              <div
                 className="w-12 h-12 rounded-full flex items-center justify-center text-white mb-3 shadow-sm"
                 style={{ backgroundColor: benefit.color }}
               >
                 {benefit.icon}
               </div>
-              <p className="text-[9.5px] font-bold text-[#4A5568] leading-snug text-center">
+              <p className="text-[11px] font-bold text-[#4A5568] leading-snug text-center">
                 {benefit.text}
               </p>
+
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Additional Advantages Section */}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -111,11 +112,12 @@ const LogisticBenefits: React.FC = () => {
 
 
         {/* Sidebar Title */}
-        <div className="bg-[#0B2C66] p-[15px_20px] flex items-center justify-center min-w-[140px]">
-          <h3 className="text-white font-black text-[11px] uppercase tracking-wider text-center leading-tight">
+        <div className="bg-[#dddddd] p-[15px_20px] flex items-center justify-center min-w-[140px]">
+          <h3 className="text-[#0B2C66] font-black text-[14px] uppercase tracking-wider text-center leading-tight">
             ADDITIONAL<br />ADVANTAGES
           </h3>
         </div>
+
 
         {/* Advantages List */}
         <div className="flex-1 p-[12px_20px] flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
@@ -127,10 +129,11 @@ const LogisticBenefits: React.FC = () => {
                 </div>
 
 
-                <p className="text-[8.5px] font-bold text-[#1e293b] leading-tight">
+                <p className="text-[8.5px] font-black text-black leading-tight uppercase">
                   {item.text}
                 </p>
               </div>
+
               {i < additionalAdvantages.length - 1 && (
                 <div className="hidden lg:block w-[1px] h-[40px] bg-gray-200 flex-shrink-0" />
               )}

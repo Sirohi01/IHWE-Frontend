@@ -99,24 +99,27 @@ const LogisticPackages: React.FC = () => {
                 >
                   {pkg.name}
                 </h4>
-                <p className="text-[13px] font-[900] text-[#0B2C66] mt-[0px] mb-[1px]">
+                <p className="text-[15px] font-[900] text-[#0B2C66] mt-[1px] mb-[2px]">
                   {pkg.price}
                 </p>
-                <ul className="flex flex-col gap-[2px]">
+                <ul className="flex flex-col gap-[3px]">
                   {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-[6px] text-[8.2px] font-bold text-[#4A5568] leading-tight">
-                      <div className="w-[11px] h-[11px] rounded-full flex items-center justify-center bg-white border shadow-xs" style={{ borderColor: pkg.color }}>
-                        <Check className="w-[6.5px] h-[6.5px]" style={{ color: pkg.color }} strokeWidth={4} />
+                    <li key={i} className="flex items-center gap-[7px] text-[10px] font-bold text-[#4A5568] leading-tight">
+                      <div className="w-[12px] h-[12px] rounded-full flex items-center justify-center bg-white border shadow-xs flex-shrink-0" style={{ borderColor: pkg.color }}>
+                        <Check className="w-[7px] h-[7px]" style={{ color: pkg.color }} strokeWidth={4} />
                       </div>
                       {feature}
                     </li>
                   ))}
                 </ul>
+
               </div>
             </div>
           </motion.div>
         ))}
       </div>
+
+
 
       {/* Footer Notes */}
       <div className="bg-[#0B2C66] px-[16px] py-[8px] mt-auto">
