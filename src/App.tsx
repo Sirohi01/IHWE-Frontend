@@ -49,7 +49,9 @@ const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
 const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
+const LogisticPartner = lazy(() => import("./pages/LogisticPartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
@@ -110,6 +112,7 @@ const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
 const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
+const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -200,7 +203,9 @@ const App = () => {
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/travel-partner" element={<TravelPartner />} />
                     <Route path="/hotel-stay-partner" element={<HotelStayPartner />} />
+                    <Route path="/logistic-partner" element={<LogisticPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
+
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
@@ -211,6 +216,7 @@ const App = () => {
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
+                    <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
