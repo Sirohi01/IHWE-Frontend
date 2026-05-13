@@ -402,11 +402,11 @@ const TermsOfService: React.FC = () => {
 
                   <div className="flex-1 flex flex-col md:flex-row items-center justify-between px-6 py-4 md:py-0 terms-contact-items">
                     <a
-                      href="mailto:info@namogangewellness.com"
+                      href="mailto:info@ihwe.in"
                       className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
                     >
                       <Mail className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
-                      <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">info@namogangewellness.com</span>
+                      <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">info@ihwe.in</span>
                     </a>
 
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
@@ -422,13 +422,13 @@ const TermsOfService: React.FC = () => {
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
 
                     <a
-                      href="https://namogangewellness.com"
+                      href="https://ihwe.in"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
                     >
                       <Globe className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
-                      <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">namogangewellness.com</span>
+                      <span className="text-[13px] md:text-[14px] font-[700] text-slate-600">ihwe.in</span>
                     </a>
                   </div>
                 </div>
