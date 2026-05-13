@@ -38,6 +38,7 @@ import HeroBg from "@/assets/buyer.jpg";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi, internationalBuyerApi } from "@/lib/api";
 import { toast } from "sonner";
 import { useEffect as useEffectDropdown } from "react";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 
 interface MultiSelectDropdownProps {
@@ -539,7 +540,7 @@ const InternationalBuyerRegistration = () => {
 
 
             <section className="py-4 relative bg-[#F8FAFC]">
-                <div className="px-16">
+                <SectionContainer>
                     <AnimatePresence mode="wait">
                         {submitted ? (
                             <motion.div
@@ -1205,7 +1206,7 @@ const InternationalBuyerRegistration = () => {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                </div>
+                </SectionContainer>
             </section >
 
             {/* Terms Modal with Integrated Declaration */}

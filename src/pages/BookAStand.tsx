@@ -311,18 +311,24 @@ const BookAStand = () => {
     // Fetch Stalls when Event changes
     useEffect(() => {
         if (selectedEventId) {
-            stallApi.getByEvent(selectedEventId).then(data => {
-                setAvailableStalls(data);
+            stallApi.getByEvent(selectedEventId).then((res: any) => {
+                let actualData: any[] = [];
+                if (Array.isArray(res)) actualData = res;
+                else if (res && Array.isArray(res.data)) actualData = res.data;
+                else if (res && Array.isArray(res.stalls)) actualData = res.stalls;
+
+                setAvailableStalls(actualData);
                 // Reset selected stall if not in new list
-                if (!data.find(s => s._id === formData.participation.stallNo)) {
+                if (!actualData.find((s: any) => String(s._id || s.id) === String(formData.participation.stallNo))) {
                     setFormData(prev => ({
                         ...prev,
                         participation: { ...prev.participation, stallNo: '' }
                     }));
                 }
             });
-            stallRateApi.getAllByEvent(selectedEventId).then(rates => {
-                setAllRates(rates);
+            stallRateApi.getAllByEvent(selectedEventId).then((res: any) => {
+                const actualRates = Array.isArray(res) ? res : (res.data || []);
+                setAllRates(actualRates);
             });
         }
     }, [selectedEventId, events]);
@@ -562,15 +568,15 @@ const BookAStand = () => {
     };
 
     const handleStallChange = (stallId: string) => {
-        const stall = availableStalls.find(s => s._id === stallId);
+        const stall = availableStalls.find(s => String(s._id || s.id) === stallId);
         if (stall) {
             setFormData(prev => ({
                 ...prev,
                 participation: {
                     ...prev.participation,
-                    stallNo: stall._id,
-                    stallFor: stall.stallNumber,
-                    stallSize: stall.area,
+                    stallNo: stall._id || stall.id,
+                    stallFor: stall.stallNumber || stall.stallName || stall.name || '',
+                    stallSize: stall.area || stall.size || 0,
                     dimension: `${stall.length}x${stall.width}m`,
                     stallScheme: stall.plScheme || 'One Side Open',
                     stallType: stall.stallType || prev.participation.stallType
@@ -1428,6 +1434,82 @@ const BookAStand = () => {
                                                     </div>
                                                 </div>
 
+                                                <div className="space-y-1.5 pt-2 ">
+                                                    <h3 className="text-xs pb-1 font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
+                                                        Exhibitor Category
+                                                    </h3>
+
+                                                    <div className="grid grid-cols-4 gap-4">
+                                                        <div>
+                                                            <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
+                                                            <Select
+                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
+                                                                value={formData.primaryCategory}
+                                                            >
+                                                                <SelectTrigger className={`${inputClasses}`}>
+                                                                    <SelectValue placeholder="Select Primary Category" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {PRIMARY_CATEGORIES.map(cat => (
+                                                                        <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></label>
+                                                            <Select
+                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
+                                                                value={formData.subCategory}
+                                                                disabled={!formData.primaryCategory}
+                                                            >
+                                                                <SelectTrigger className={`${inputClasses}`}>
+                                                                    <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
+                                                                        <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></label>
+                                                            <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="How did you hear about us?" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
+                                                                    <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
+                                                                    <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
+                                                                    <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
+                                                                    <SelectItem value="Others" className="text-xs">Others</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
+                                                            <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
+                                                                <SelectTrigger className={inputClasses}>
+                                                                    <SelectValue placeholder="Select Staff Member" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    {marketingStaff.map(s => (
+                                                                        <SelectItem key={s._id} value={s.username} className="text-xs">
+                                                                            {s.fullName ? `${s.fullName} (${s.username})` : s.username}
+                                                                        </SelectItem>
+                                                                    ))}
+                                                                    <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 {/* -- REGISTRANT TYPE + GST / PAN / AADHAAR -- */}
                                                 <div className="mt-3 p-3 border border-slate-300 rounded-sm bg-slate-50/60">
                                                     {/* Radio buttons */}
@@ -1464,7 +1546,7 @@ const BookAStand = () => {
                                                     </div>
 
                                                     {/* Conditional fields */}
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-2">
+                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
                                                         {formData.registrantType === 'registered' ? (
                                                             <>
                                                                 <div>
@@ -1654,14 +1736,18 @@ const BookAStand = () => {
                                                     <div className="grid grid-cols-4 lg:grid-cols-6 gap-x-3 gap-y-2">
                                                         <div className="space-y-1.5">
                                                             <label className={labelClasses}>STALL FOR <span className="text-red-500">*</span></label>
-                                                            <Select onValueChange={(v) => handleStallChange(v)} value={formData.participation.stallNo}>
+                                                            <Select onValueChange={(v) => handleStallChange(v)} value={formData?.participation?.stallNo ? String(formData.participation.stallNo) : undefined}>
                                                                 <SelectTrigger className={inputClasses}>
                                                                     <SelectValue placeholder="Select Stall" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
-                                                                    {availableStalls.map(s => (
-                                                                        <SelectItem key={s._id} value={s._id} className="text-xs">Stall {s.stallNumber}</SelectItem>
-                                                                    ))}
+                                                                    {availableStalls && availableStalls.length > 0 ? (
+                                                                        availableStalls.map((s: any) => (
+                                                                            <SelectItem key={s._id || s.id} value={String(s._id || s.id)} className="text-xs">Stall {s.stallNumber || s.stallName || s.name || s.id}</SelectItem>
+                                                                        ))
+                                                                    ) : (
+                                                                        <div className="text-xs p-2 text-slate-500 text-center">No stalls available</div>
+                                                                    )}
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
@@ -1684,39 +1770,42 @@ const BookAStand = () => {
                                                                     <SelectValue placeholder="Select Category" />
                                                                 </SelectTrigger>
                                                                 <SelectContent>
-                                                                    <SelectItem value="Shell Space" className="text-xs">Shell Space (Built-up)</SelectItem>
-                                                                    <SelectItem value="Raw Space" className="text-xs">Raw Space (Plot)</SelectItem>
+                                                                    <SelectItem value="Shell Space" className="text-xs">Shell Space </SelectItem>
+                                                                    <SelectItem value="Raw Space" className="text-xs">Raw Space </SelectItem>
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className={labelClasses}>PL SCHEME <span className="text-red-500">*</span></label>
+                                                            <label className={labelClasses}>PL CHARGES <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.stallScheme || "N/A"} className={`${inputClasses}`} />
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <label className={labelClasses}>DIMENSION <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.dimension} className={`${inputClasses} cursor-not-allowed`} />
                                                         </div>
-                                                        <div className="space-y-1.5">
+                                                        {/* <div className="space-y-1.5">
                                                             <label className={labelClasses}>STALL NO. <span className="text-red-500">*</span></label>
                                                             <input readOnly value={formData.participation.stallFor} className={`${inputClasses} cursor-not-allowed`} />
+                                                        </div> */}
+                                                        <div className="space-y-1.5">
+                                                            <label className={labelClasses}>RATE <span className="text-red-500">*</span></label>
+                                                            <input readOnly value={formData.participation.rate} className={`${inputClasses}`} />
                                                         </div>
                                                     </div>
 
                                                     {/* Cost Breakdown box (full width below fields) */}
-                                                    <div className="w-full">
+                                                    {/* <div className="w-full">
                                                         <div className="bg-white border border-slate-200 rounded overflow-hidden shadow-sm">
 
-                                                            {/* Header */}
                                                             <div className="flex items-center gap-2 px-4 py-1.5 bg-[#23471d]">
                                                                 <div className="w-1 h-3 bg-[#a8d060] rounded-full" />
                                                                 <span className="text-[13px] font-medium text-white uppercase">Cost Breakdown</span>
                                                             </div>
 
-                                                            {/* All items in one row */}
+
                                                             <div className="flex items-center divide-x divide-slate-100">
 
-                                                                {/* Space Area */}
+
                                                                 <div className="flex-1 px-4 py-1">
                                                                     <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-0.5">
                                                                         Space ({formData.participation.stallSize} sqm)
@@ -1726,19 +1815,19 @@ const BookAStand = () => {
                                                                     </p>
                                                                 </div>
 
-                                                                {/* PL Increment */}
+
                                                                 {selectedStall?.incrementPercentage > 0 && (
                                                                     <div className="flex-1 px-4 py-1">
                                                                         <p className="text-[11px] font-medium text-orange-600 uppercase tracking-widest mb-0.5">
-                                                                            PL Increment ({selectedStall.incrementPercentage}%)
+                                                                            PL Charges ({selectedStall?.incrementPercentage}% Extra)
                                                                         </p>
                                                                         <p className="text-sm font-semibold text-orange-500">
-                                                                            + {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize * selectedStall.incrementPercentage / 100)}
+                                                                            + {formData?.participation?.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData?.participation?.rate * formData?.participation?.stallSize * selectedStall?.incrementPercentage / 100)}
                                                                         </p>
                                                                     </div>
                                                                 )}
 
-                                                                {/* GST */}
+
                                                                 <div className="flex-1 px-4 py-1">
                                                                     <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-0.5">
                                                                         GST (18%)
@@ -1748,7 +1837,7 @@ const BookAStand = () => {
                                                                     </p>
                                                                 </div>
 
-                                                                {/* Grand Total */}
+
                                                                 <div className="flex-1 px-4 py-1 bg-[#f0f7e6]">
                                                                     <p className="text-[11px] font-medium text-[#23471d]/60 uppercase  mb-0.5">
                                                                         Grand Total <span className="normal-case font-normal">(incl. tax)</span>
@@ -1760,84 +1849,10 @@ const BookAStand = () => {
 
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
-                                            <div className="space-y-1.5 pt-2 ">
-                                                <h3 className="text-xs pb-1 font-medium text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-500" >
-                                                    Exhibitor Category
-                                                </h3>
 
-                                                <div className="grid grid-cols-4 gap-4">
-                                                    <div>
-                                                        <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
-                                                        <Select
-                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, primaryCategory: v, subCategory: '' }))}
-                                                            value={formData.primaryCategory}
-                                                        >
-                                                            <SelectTrigger className={`${inputClasses}`}>
-                                                                <SelectValue placeholder="Select Primary Category" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {PRIMARY_CATEGORIES.map(cat => (
-                                                                    <SelectItem key={cat} value={cat} className="text-xs">{cat}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>SUB-CATEGORY <span className="text-red-500">*</span></label>
-                                                        <Select
-                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, subCategory: v }))}
-                                                            value={formData.subCategory}
-                                                            disabled={!formData.primaryCategory}
-                                                        >
-                                                            <SelectTrigger className={`${inputClasses}`}>
-                                                                <SelectValue placeholder={formData.primaryCategory ? "Select Sub-Category" : "Select Primary Category first"} />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {(SUB_CATEGORIES[formData.primaryCategory] || []).map(sub => (
-                                                                    <SelectItem key={sub} value={sub} className="text-xs">{sub}</SelectItem>
-                                                                ))}
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>REFERRAL CHANNEL <span className="text-red-500">*</span></label>
-                                                        <Select onValueChange={(v) => handleSelectChange('referredBy', v)} value={formData.referredBy}>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="How did you hear about us?" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="Direct Website" className="text-xs">Direct Website</SelectItem>
-                                                                <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
-                                                                <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
-                                                                <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
-                                                                <SelectItem value="Others" className="text-xs">Others</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
-                                                        <Select onValueChange={(v) => handleSelectChange('spokenWith', v)} value={formData.spokenWith}>
-                                                            <SelectTrigger className={inputClasses}>
-                                                                <SelectValue placeholder="Select Staff Member" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                {marketingStaff.map(s => (
-                                                                    <SelectItem key={s._id} value={s.username} className="text-xs">
-                                                                        {s.fullName ? `${s.fullName} (${s.username})` : s.username}
-                                                                    </SelectItem>
-                                                                ))}
-                                                                <SelectItem value="Direct" className="text-xs underline font-bold">No One (Directly Booking)</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             {/* -- FINAL BOOKING CONTROL -- */}
                                             <div className="pt-1">
@@ -1916,81 +1931,105 @@ const BookAStand = () => {
 
                                                         {/* Rows */}
                                                         <div className="divide-y divide-gray-100">
+
+
                                                             <div className="flex justify-between items-center px-5 py-1.5">
-                                                                <span className="text-[12px] text-gray-600 font-medium">Gross Cost (Space + PL)</span>
-                                                                <span className="text-[13px] font-medium text-slate-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
+                                                                <p className="text-[11px] font-semibold text-gray-800 uppercase tracking-widest mb-0.5">
+                                                                    Space ({formData.participation.stallSize} sqm)
+                                                                </p>
+                                                                <p className="text-sm font-semibold text-gray-800">
+                                                                    {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.participation.rate * formData.participation.stallSize)}
+                                                                </p>
+                                                            </div>
+
+
+                                                            {selectedStall?.incrementPercentage > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-1.5">
+                                                                    <span className="text-xs text-gray-800 font-semibold">
+                                                                        PL Charges ({selectedStall?.incrementPercentage}% Extra)
+                                                                    </span>
+                                                                    <span className="text-xs font-semibold text-gray-800">
+                                                                        + {formData?.participation?.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData?.participation?.rate * formData?.participation?.stallSize * selectedStall?.incrementPercentage / 100)}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+
+
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <span className="text-xs text-gray-800 font-semibold">Gross Cost (Space + PL)</span>
+                                                                <span className="text-xs font-semibold text-gray-800">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.grossAmount)}</span>
                                                             </div>
 
                                                             {formData.financeBreakdown.stallDiscountAmount > 0 && (
                                                                 <div className="flex justify-between items-center px-5 py-2.5 bg-[#EAF3DE]">
-                                                                    <span className="text-[11px] font-medium text-[#27500A]">
+                                                                    <span className="text-xs font-semibold text-[#27500A]">
                                                                         Stall Discount
-                                                                        <span className="ml-2 text-[10px] bg-[#C0DD97] text-[#27500A] px-2 py-0.5 rounded font-medium">{formData.financeBreakdown.stallDiscountPercent}%</span>
+                                                                        <span className="ml-2 text-xs bg-[#C0DD97] text-[#27500A] px-2 py-0.5 rounded font-semibold">{formData.financeBreakdown.stallDiscountPercent}%</span>
                                                                     </span>
-                                                                    <span className="text-[12px] font-medium text-[#3B6D11]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
+                                                                    <span className="text-xs font-semibold text-[#3B6D11]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.stallDiscountAmount)}</span>
                                                                 </div>
                                                             )}
 
                                                             {formData.financeBreakdown.discountAmount > 0 && (
-                                                                <div className="flex justify-between items-center px-5 py-1.5 bg-[#FAEEDA]">
-                                                                    <span className="text-[11px] font-medium text-[#633806]">
-                                                                        Full Payment Discount
-                                                                        <span className="ml-2 text-[10px] bg-[#FAC775] text-[#633806] px-2 py-0.5 rounded font-medium">{formData.financeBreakdown.discountPercent}%</span>
-                                                                    </span>
-                                                                    <span className="text-[12px] font-medium text-[#854F0B]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
-                                                                </div>
-                                                            )}
-
-                                                            <div className="flex justify-between items-center px-5 py-1.5">
-                                                                <span className="text-[11px] uppercase tracking-wider text-gray-600 font-medium">Net Taxable Value</span>
-                                                                <span className="text-[12px] font-medium text-gray-600">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
-                                                            </div>
-
-                                                            <div className="flex justify-between items-center px-5 py-1.5">
-                                                                <span className="text-[12px] text-gray-600">GST (18%)</span>
-                                                                <span className="text-[13px] font-medium text-gray-600">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
-                                                            </div>
-
-                                                            {formData.financeBreakdown.tdsAmount > 0 && (
                                                                 <div className="flex justify-between items-center px-5 py-1.5">
-                                                                    <span className="text-[12px] text-red-400">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
-                                                                    <span className="text-[13px] font-medium text-red-500">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
+                                                                    <span className="text-xs font-semibold text-[#633806]">
+                                                                        Full Payment Discount
+                                                                        <span className="ml-2 text-xs bg-[#FAC775] text-[#633806] px-2 py-0.5 rounded font-semibold">{formData.financeBreakdown.discountPercent}%</span>
+                                                                    </span>
+                                                                    <span className="text-xs font-semibold text-[#854F0B]">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.discountAmount)}</span>
                                                                 </div>
                                                             )}
+
+                                                            <div className="flex justify-between items-center px-5 py-1.5">
+                                                                <span className="text-xs tracking-wider text-gray-700 font-semibold">Net Taxable Value</span>
+                                                                <span className="text-xs font-semibold text-gray-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.subtotal)}</span>
+                                                            </div>
+                                                            {formData.financeBreakdown.tdsAmount > 0 && (
+                                                                <div className="flex justify-between items-center px-5 py-1.5 border-y border-gray-200">
+                                                                    <span className="text-xs text-red-400 font-semibold">TDS Deduction ({formData.financeBreakdown.tdsPercent}%)</span>
+                                                                    <span className="text-xs font-semibold text-red-500">− {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.tdsAmount)}</span>
+                                                                </div>
+                                                            )}
+                                                            <div className="flex justify-between items-center px-5 py-1.5 border-y border-gray-200">
+                                                                <span className="text-xs text-gray-700 font-semibold">GST (18%)</span>
+                                                                <span className="text-xs font-semibold text-gray-700">+ {formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.gstAmount)}</span>
+                                                            </div>
+
+
                                                         </div>
 
                                                         {/* Total */}
-                                                        <div className="flex justify-between items-center px-5 py-1.5 bg-[#EAF3DE] border-y border-[#C0DD97]">
-                                                            <span className="text-[12px] font-semibold uppercase tracking-wider text-[#27500A]">Total Net Payable</span>
-                                                            <span className="text-[14px] font-semibold text-[#173404]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
+                                                        <div className="flex justify-between items-center px-5 py-1.5 border-t ">
+                                                            <span className="text-xs font-semibold uppercase text-gray-700">Total Net Payable</span>
+                                                            <span className="text-xs font-semibold text-gray-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.financeBreakdown.netPayable)}</span>
                                                         </div>
 
                                                         {formData.balanceAmount > 0 && (
                                                             <div className="flex justify-between items-center px-5 py-1.5 bg-[#FAEEDA] border-b border-[#FAC775]">
-                                                                <span className="text-[11px] font-medium uppercase tracking-wider text-[#633806]">Balance Payment Later</span>
-                                                                <span className="text-[12px] font-medium text-[#854F0B]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
+                                                                <span className="text-xs font-semibold uppercase tracking-wider text-[#633806]">Balance Payment Later</span>
+                                                                <span className="text-xs font-semibold text-[#854F0B]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.balanceAmount)}</span>
                                                             </div>
                                                         )}
 
                                                         {/* Footer */}
-                                                        <div className="px-5 py-2 bg-slate-50">
-                                                            <div className="flex justify-between items-center mb-2">
+                                                        <div className=" py-2 bg-slate-50">
+                                                            <div className="flex justify-between items-center mb-2 px-5">
                                                                 <div>
-                                                                    <p className="text-[11px] uppercase tracking-wider text-gray-600 font-medium">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
-                                                                    <p className="text-[10px] text-gray-600 mt-0.5">Verified transaction</p>
+                                                                    <p className="text-xs uppercase tracking-wider text-gray-700 font-semibold">{formData.balanceAmount === 0 ? 'Net Due Now' : 'Advance Due Now'}</p>
+                                                                    <p className="text-xs text-gray-700 font-semibold mt-0.5">Verified transaction</p>
                                                                 </div>
-                                                                <p className="text-[18px] font-medium text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
+                                                                <p className="text-[13px] font-semibold text-[#23471d]">{formData.participation.currency === 'INR' ? '₹' : '$'} {fmtAmt(formData.amountPaid)}</p>
                                                             </div>
 
                                                             {formData.paymentMode === 'online' && formData.amountPaid > 0 && (
-                                                                <div className="mb-3 p-3 bg-amber-50 border border-amber-100 rounded-lg space-y-1.5">
+                                                                <div className="mb-3 py-3 px-5 bg-amber-50 border border-amber-200 rounded-lg space-y-1.5">
                                                                     <div className="flex justify-between">
-                                                                        <span className="text-[10px] text-amber-500 font-medium">+ 2.5% Razorpay Gateway Fee</span>
-                                                                        <span className="text-[11px] font-medium text-amber-600">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}</span>
+                                                                        <span className="text-xs text-amber-600 font-semibold">+ 2.5% Razorpay Gateway Fee</span>
+                                                                        <span className="text-xs font-semibold text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 0.025).toLocaleString()}</span>
                                                                     </div>
-                                                                    <div className="flex justify-between pt-1.5 border-t border-amber-100">
-                                                                        <span className="text-[11px] font-semibold text-amber-700">Total Charged by Gateway</span>
-                                                                        <span className="text-[12px] font-semibold text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}</span>
+                                                                    <div className="flex justify-between pt-1.5 border-t border-amber-200">
+                                                                        <span className="text-xs font-semibold text-amber-700">Total Charged by Gateway</span>
+                                                                        <span className="text-xs font-semibold text-amber-700">{formData.participation.currency === 'INR' ? '₹' : '$'} {Math.round(formData.amountPaid * 1.025).toLocaleString()}</span>
                                                                     </div>
                                                                 </div>
                                                             )}

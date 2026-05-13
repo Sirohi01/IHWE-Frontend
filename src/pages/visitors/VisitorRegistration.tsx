@@ -545,7 +545,7 @@ const VisitorRegistration = () => {
             <section
                 className="hero-background-registration relative overflow-hidden pt-[80px] pb-0"
                 style={{
-                    backgroundImage: "linear-gradient(to right, rgba(0, 40, 15, 0.96) 0%, rgba(0, 40, 15, 0.85) 35%, rgba(0, 40, 15, 0.4) 65%, rgba(0, 40, 15, 0.1) 100%), url('/visitor/visitor-reg.png')",
+                    backgroundImage: `linear-gradient(to right, rgba(0, 40, 15, 0.96) 0%, rgba(0, 40, 15, 0.85) 35%, rgba(0, 40, 15, 0.4) 65%, rgba(0, 40, 15, 0.1) 100%), url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : '/visitor/visitor-reg.png'})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center right',
                     backgroundRepeat: 'no-repeat',
@@ -560,22 +560,22 @@ const VisitorRegistration = () => {
                                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-[#C7DF36] flex items-center justify-center shrink-0 shadow-inner">
                                     <User className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#C7DF36] fill-current" />
                                 </div>
-                                Visitor Registration
+                                {heroData?.subtitle || "Visitor Registration"}
                             </div>
 
                             {/* Main Heading */}
                             <div className="mb-3 text-center lg:text-left">
                                 <h1 className="text-[28px] sm:text-[38px] lg:text-[42px] font-extrabold text-white leading-[1.1] tracking-tight">
-                                    Your Pass to
+                                    {heroData?.title || "Your Pass to"}
                                 </h1>
                                 <h1 className="text-[26px] sm:text-[36px] lg:text-[42px] font-extrabold text-[#C7DF36] leading-[1.1] tracking-tight mt-1">
-                                    Health & Wellness Excellence!
+                                    {heroData?.title2 || "Health & Wellness Excellence!"}
                                 </h1>
                             </div>
 
                             {/* Description */}
                             <p className="text-white text-[13px] sm:text-[14px] font-medium leading-relaxed max-w-xl mb-5 opacity-95 drop-shadow-sm lg:px-0">
-                                Register as a visitor and unlock access to innovations, global experts, live sessions and endless networking opportunities.
+                                {heroData?.shortDescription || "Register as a visitor and unlock access to innovations, global experts, live sessions and endless networking opportunities."}
                             </p>
 
                             {/* Stats Row with separators */}
