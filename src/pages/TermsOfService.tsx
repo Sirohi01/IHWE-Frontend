@@ -20,49 +20,62 @@ const getIconForTitle = (title: string) => {
   if (t.includes("fail") || t.includes("dispute")) return AlertTriangle;
   if (t.includes("chargeback") || t.includes("fraud")) return Shield;
   if (t.includes("role") || t.includes("partner")) return Users;
-  if (t.includes("indemnity")) return Shield;
+  if (t.includes("liability") || t.includes("limitat")) return AlertTriangle;
+  if (t.includes("indemnity")) return ShieldCheck;
   if (t.includes("force majeure")) return Globe;
   if (t.includes("govern") || t.includes("jurisdiction")) return Scale;
   return Shield;
 };
 const parseContent = (htmlContent: string) => {
   if (!htmlContent) return null;
-  const regex = /<(h[1-4]|strong|b)[^>]*>(.*?)<\/\1>/gis;
-  const matches = Array.from(htmlContent.matchAll(regex));
-  const validMatches = matches.filter(m => {
-    const text = m[2].replace(/<[^>]*>?/gm, "").trim();
-    return text.length > 0 && text.length < 100;
-  });
+  const regex = /<(h[1-4]|strong|b|u)[^>]*>(.*?)<\/\1>|(?:\r?\n|^)\s*([A-Z][^<.\n\r]{2,80})(?:\r?\n|$)|<p[^>]*>\s*<(strong|b|u|h[1-4])[^>]*>(.*?)<\/\4>\s*<\/p>/gim;
 
-  if (validMatches.length === 0) {
+  const rawMatches = Array.from(htmlContent.matchAll(regex));
+  const uniqueMatches: any[] = [];
+  const seenIndices = new Set<number>();
+
+  rawMatches.forEach(m => {
+    const titleText = (m[2] || m[3] || m[5] || "")
+      .replace(/<[^>]*>?/gm, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .trim();
+    const cleanTitle = titleText.replace(/^\d+[\s.)-]+\s*/, "").trim();
+    if (cleanTitle.length > 2 && cleanTitle.length < 100 && !cleanTitle.endsWith('.') && !seenIndices.has(m.index)) {
+      uniqueMatches.push({
+        index: m.index,
+        length: m[0].length,
+        title: cleanTitle
+      });
+      seenIndices.add(m.index);
+    }
+  });
+  uniqueMatches.sort((a, b) => a.index - b.index);
+
+  if (uniqueMatches.length === 0) {
     return {
       preamble: "",
       terms: [{ id: 1, title: "Terms of Service", content: htmlContent }]
     };
   }
 
-  const preamble = htmlContent.substring(0, validMatches[0].index).trim();
+  const preamble = htmlContent.substring(0, uniqueMatches[0].index).trim();
   const terms = [];
 
-  for (let i = 0; i < validMatches.length; i++) {
-    const currentMatch = validMatches[i];
-    const nextMatch = validMatches[i + 1];
+  for (let i = 0; i < uniqueMatches.length; i++) {
+    const current = uniqueMatches[i];
+    const next = uniqueMatches[i + 1];
 
-    const title = currentMatch[2]
-      .replace(/<[^>]*>?/gm, "")
-      .replace(/&nbsp;/g, " ")
-      .replace(/&amp;/g, "&")
-      .trim();
-
-    const contentStart = currentMatch.index + currentMatch[0].length;
-    const contentEnd = nextMatch ? nextMatch.index : htmlContent.length;
+    const contentStart = current.index + current.length;
+    const contentEnd = next ? next.index : htmlContent.length;
     const content = htmlContent.substring(contentStart, contentEnd).trim();
 
-    if (title) {
+    if (current.title) {
       terms.push({
-        id: terms.length + 1,
-        title,
-        content
+        id: i + 1,
+        title: current.title,
+        content: content
       });
     }
   }
@@ -388,8 +401,8 @@ const TermsOfService: React.FC = () => {
                   </div>
 
                   <div className="flex-1 flex flex-col md:flex-row items-center justify-between px-6 py-4 md:py-0 terms-contact-items">
-                    <a 
-                      href="mailto:info@namogangewellness.com" 
+                    <a
+                      href="mailto:info@namogangewellness.com"
                       className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
                     >
                       <Mail className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
@@ -398,8 +411,8 @@ const TermsOfService: React.FC = () => {
 
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
 
-                    <a 
-                      href="tel:+919654900525" 
+                    <a
+                      href="tel:+919654900525"
                       className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
                     >
                       <Phone className="w-5 h-5 text-[#0c3120] fill-[#0c3120]/10" strokeWidth={1.5} />
@@ -408,9 +421,9 @@ const TermsOfService: React.FC = () => {
 
                     <div className="hidden md:block w-px h-6 bg-gray-200"></div>
 
-                    <a 
-                      href="https://namogangewellness.com" 
-                      target="_blank" 
+                    <a
+                      href="https://namogangewellness.com"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2.5 md:h-full py-2 md:py-0 hover:text-[#115d33] transition-colors"
                     >
