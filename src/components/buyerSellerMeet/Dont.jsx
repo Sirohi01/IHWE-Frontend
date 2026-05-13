@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const Dont = () => {
     const navigate = useNavigate();
     return (
         <div
-            className="relative overflow-hidden rounded-xl px-10 py-3"
+            className={`relative overflow-hidden rounded-xl py-3 ${SectionContainer}`}
             style={{
                 backgroundImage: "url('/bsmeet/dontBg.png')",
                 backgroundSize: 'cover',

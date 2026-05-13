@@ -71,10 +71,10 @@ const sponsorPlans = [
 
 const Day3Sponsors: React.FC = () => {
   return (
-    <section className="py-4 bg-white max-w-[1340px] mx-auto" style={{ backgroundColor: "#e2f1d0ff" }}>
+    <section className="py-4 bg-white max-w-[1340px] mx-auto" style={{ backgroundColor: '#F5F5F0' }}>
       <div className="container mx-auto px-6 ">
 
-        {/* Section Header */}
+
         <div className="text-center mb-1 flex flex-col items-center">
           <div className="flex items-center gap-4 mb-2">
             <div className="h-[2px] w-12 bg-[#4E9F3D]" />
@@ -86,7 +86,7 @@ const Day3Sponsors: React.FC = () => {
 
         </div>
 
-        {/* Pricing Grid */}
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">
           {sponsorPlans.map((plan, idx) => (
             <motion.div
@@ -97,12 +97,12 @@ const Day3Sponsors: React.FC = () => {
               transition={{ delay: idx * 0.05 }}
               className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col group hover:shadow-xl transition-all duration-300"
             >
-              {/* Plan Header */}
+
               <div
                 className="py-2 px-3 text-center"
                 style={{ backgroundColor: plan.color }}
               >
-                <h3 className="text-[16px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
+                <h3 className="text-[12px] font-black text-white uppercase tracking-wider">{plan.type}</h3>
               </div>
 
               <div className="p-3 flex flex-col h-full -mt-2">
@@ -123,7 +123,7 @@ const Day3Sponsors: React.FC = () => {
                 </ul>
 
                 <button
-                  className="mt-auto py-2 px-4 rounded-full text-[15px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
+                  className="mt-auto py-2 px-4 rounded-sm text-[11px] font-black uppercase tracking-widest text-white transition-all shadow-md active:scale-95"
                   style={{ backgroundColor: plan.color }}
                 >
                   CHOOSE PLAN

@@ -1,5 +1,6 @@
 import { FaCalendarAlt, FaMapMarkerAlt, FaUserTie, FaStore } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const BSMeetHero = () => {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ const BSMeetHero = () => {
             {/* GREEN OVERLAY */}
             <div className="absolute inset-0 bg-green-500/10"></div>
 
-            <div className="relative z-10 py-1 px-6 md:px-16">
+            <div className={`relative z-10 py-1 ${SectionContainer}`}>
                 <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}

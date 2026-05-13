@@ -1,0 +1,112 @@
+import React from 'react';
+import {
+  Users,
+  BarChart3,
+  Handshake,
+  Award,
+  Globe,
+  Mail,
+  Phone,
+  QrCode,
+} from 'lucide-react';
+import footerBadge from '../../assets/hotel/hotelfoterimage.png';
+
+const HotelFooter: React.FC = () => {
+  return (
+    <footer className="bg-[#051124] py-1 px-4 relative overflow-hidden">
+      {/* Background Green Circle */}
+      <div className="absolute -left-10 -top-10 w-40 h-40 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
+      <div className="absolute -left-5 -top-5 w-24 h-24 bg-[#4E9F3D]/15 rounded-full z-0"></div>
+
+      <div className="mx-auto max-w-[1400px] flex items-center justify-between relative z-10">
+
+        {/* Left Side: Branding */}
+        <div className="flex items-center gap-2 min-w-[320px]">
+          {/* Image Badge */}
+          <div className="relative w-20 h-20 flex-shrink-0">
+            <img
+              src={footerBadge}
+              alt="IHWE Footer Badge"
+              className="w-full h-full object-contain"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight">
+              Together, let's create
+            </p>
+            <p className="text-white font-black text-[16px] uppercase leading-tight tracking-tight">
+              Memorable Experiences
+            </p>
+            <p className="text-[#D4AF37] font-serif italic text-[14px] leading-none">
+              for a Healthier Tomorrow
+            </p>
+          </div>
+        </div>
+
+        {/* Middle Side: Stats/Icons */}
+        <div className="flex items-center gap-0 flex-1 justify-center px-2">
+          {[
+            { icon: <Users />, label: "Global Audience Access" },
+            { icon: <BarChart3 />, label: "Brand Exposure" },
+            { icon: <Handshake />, label: "Business Growth" },
+            { icon: <Award />, label: "Long-term Partnership" },
+            { icon: <Globe />, label: "Positive Global Impact" },
+          ].map((item, i) => (
+            <React.Fragment key={i}>
+              <div className="flex flex-col items-center text-center px-3 group">
+                <div className="w-8 h-8 rounded-full bg-[#0B2C66] border border-white/20 flex items-center justify-center text-white mb-0.5 shadow-inner group-hover:bg-[#4E9F3D] transition-colors duration-300">
+                  {React.cloneElement(item.icon as React.ReactElement, { className: "w-4 h-4" })}
+                </div>
+                <p className="text-white text-[7px] font-bold uppercase tracking-tight leading-tight max-w-[55px]">
+                  {item.label}
+                </p>
+              </div>
+              {i < 4 && <div className="h-6 w-[1px] bg-white/10" />}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Right Side: Contact Box */}
+        <div className="flex items-center gap-2">
+          <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10">
+            <div className="bg-[#4E9F3D] py-0.5 px-2 text-center">
+              <h4 className="text-white font-black text-[9px] uppercase tracking-wider">
+                Let's Grow Together!
+              </h4>
+            </div>
+            <div className="p-1 px-3 flex flex-col gap-0.5">
+              <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">partner@ihwe.in</span>
+              </a>
+              <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">+91 9654900525</span>
+              </a>
+            </div>
+          </div>
+
+          {/* QR Code */}
+          <div className="bg-transparent border border-[#D4AF37] rounded-md p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px]">
+            <div className="bg-white p-0.5 rounded-sm">
+              <QrCode className="w-6 h-6 text-[#051124]" />
+            </div>
+            <p className="text-white font-black text-[6px] uppercase text-center leading-tight tracking-widest mt-0.5">
+              Scan to<br />Partner
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
+};
+
+const Star = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+  </svg>
+);
+
+export default HotelFooter;

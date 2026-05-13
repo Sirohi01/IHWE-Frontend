@@ -24,7 +24,7 @@ const ConferenceHero: React.FC = () => {
       </div>
 
 
-      <div className="container mx-auto px-8 lg:px-16 relative z-20">
+      <div className="container mx-auto px-8 lg:px-11 relative z-20">
         <div className="max-w-[600px]">
 
 
@@ -145,7 +145,7 @@ const ConferenceHero: React.FC = () => {
             className="flex flex-col sm:flex-row gap-3 sm:gap-4"
             style={{ marginTop: '8px' }}
           >
-            <Link to="/delegate-registration">
+            <Link to="/delegate-registration" target="_blank" rel="noopener noreferrer">
               <button
                 className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#4E9F3D] text-white text-[10px] sm:text-[11px] uppercase tracking-wide flex items-center justify-center gap-2 transition-all whitespace-nowrap"
                 style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400 }}
@@ -154,12 +154,12 @@ const ConferenceHero: React.FC = () => {
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </Link>
-            <Link to="/speaker-registration">
+            <Link to="/speaker-registration" target="_blank" rel="noopener noreferrer">
               <button
-                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-white text-[#0B2C66] text-[10px] sm:text-[11px] uppercase tracking-wide border border-[#E6ECF3] flex items-center justify-center gap-2 transition-all w-full sm:w-auto"
+                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-blue text-white text-[10px] sm:text-[11px] uppercase tracking-wide border border-[#E6ECF3] flex items-center justify-center gap-2 transition-all w-full sm:w-auto"
                 style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400 }}
               >
-                <Mic className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#4E9F3D]" />
+                <Mic className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                 BECOME A SPEAKER
               </button>
             </Link>

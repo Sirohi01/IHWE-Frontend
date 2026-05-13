@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import BuyerRegistration from "./buyer/BuyerRegistration";
 import InternationalBuyerRegistration from "./buyer/InternationalBuyerRegistration";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const BuyerLanding = () => {
     const isComingSoon = false;
@@ -118,9 +119,8 @@ const BuyerLanding = () => {
                     fontFamily: "'Barlow', sans-serif",
                 }}
             >
-
-                <div className="w-full">
-                    <div className="relative z-10 px-14 py-2 flex flex-col gap-2 w-[70%]">
+                <SectionContainer className="w-full py-4">
+                    <div className="relative z-10  flex flex-col gap-2 w-[70%]">
 
                         {/* Register as a Buyer */}
                         <div className="inline-block mt-6 w-fit">
@@ -159,7 +159,7 @@ const BuyerLanding = () => {
                         </p>
 
                         {/* Stats Row */}
-                        <div className="flex items-center mt-4 gap-2">
+                        <div className="flex items-center mt-1 gap-2">
                             {[
                                 {
                                     num: '1,000+', label: 'Buyers',
@@ -203,7 +203,7 @@ const BuyerLanding = () => {
                     <div className="w-[30%]">
                         {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
                     </div>
-                </div>
+                </SectionContainer>
             </section>
 
             {/* button section  */}
@@ -222,7 +222,7 @@ const BuyerLanding = () => {
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto ">
 
                     {/* Domestic Buyer */}
                     <div

@@ -29,7 +29,7 @@ const awardCategories = [
 
 const stats = [
   { number: "10+", label: "Years of Legacy", icon: icon11 },
-  { number: "100+", label: "Exhibitors", icon: icon12 },
+  { number: "150+", label: "Exhibitors", icon: icon12 },
   { number: "8000+", label: "Visitors/Delegates", icon: icon13 },
   { number: "150+", label: "Speakers & Experts", icon: icon14 },
 ];

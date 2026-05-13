@@ -48,7 +48,7 @@ const detailsData = [
 
 const Day3Details: React.FC = () => {
   return (
-    <section className="py-2 bg-white max-w-[1340px] mx-auto -mt-6" style={{ backgroundColor: "#e2f1d0ff" }}>
+    <section className="py-2 bg-white max-w-[1340px] mx-auto -mt-6" style={{ backgroundColor: '#F5F5F0' }}>
       <div className="container mx-auto px-6 ">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {detailsData.map((section, idx) => (
@@ -83,11 +83,11 @@ const Day3Details: React.FC = () => {
                   <p className="text-[13px] font-medium text-[#5F6B7A] leading-relaxed">
                     {section.description}
                   </p>
-                  {section.linkText && (
+                  {/* {section.linkText && (
                     <button className="mt-auto pt-6 text-[12px] font-black text-[#4E9F3D] flex items-center gap-2 hover:translate-x-1 transition-transform uppercase tracking-widest">
                       {section.linkText} <span className="text-[18px]">→</span>
                     </button>
-                  )}
+                  )} */}
                 </div>
               )}
             </motion.div>
