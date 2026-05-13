@@ -73,6 +73,7 @@ const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEvents
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
 const ExhibitorEPromotion = lazy(() => import("./pages/exhibitor/ExhibitorEPromotion"));
+const EEPromotion = lazy(() => import("./components/dashboard/exhibitor/EPromotion"));
 const ExhibitorSellerRegistrationPage = lazy(() => import("@/pages/exhibitor/ExhibitorSellerRegistrationPage"));
 const SellerPortal = lazy(() => import("@/pages/SellerPortal"));
 const SellerDashboardHome = lazy(() => import("@/pages/exhibitor/seller/SellerDashboardHome"));
@@ -216,6 +217,7 @@ const App = () => {
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
                     <Route path="/hospitality-partner" element={<HospitalityPartner />} />
+                    <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
