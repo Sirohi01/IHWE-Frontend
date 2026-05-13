@@ -48,9 +48,11 @@ const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePm
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
-const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
+const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
+const LogisticPartner = lazy(() => import("./pages/LogisticPartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
@@ -72,6 +74,7 @@ const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEvents
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
 const ExhibitorEPromotion = lazy(() => import("./pages/exhibitor/ExhibitorEPromotion"));
+const EEPromotion = lazy(() => import("./components/dashboard/exhibitor/EPromotion"));
 const ExhibitorSellerRegistrationPage = lazy(() => import("@/pages/exhibitor/ExhibitorSellerRegistrationPage"));
 const SellerPortal = lazy(() => import("@/pages/SellerPortal"));
 const SellerDashboardHome = lazy(() => import("@/pages/exhibitor/seller/SellerDashboardHome"));
@@ -110,6 +113,7 @@ const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
 const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
+const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -173,7 +177,7 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/partnership" element={<Partnership />} />
-                    <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
+                    <Route path="/fabrication-partner" element={<Fabricationpartner />} />
 
                     <Route path="/partner-registration" element={<PartnerRegistration />} />
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
@@ -201,7 +205,9 @@ const App = () => {
                     <Route path="/travel-partner" element={<TravelPartner />} />
                     <Route path="/hotel-stay-partner" element={<HotelStayPartner />} />
                     <Route path="/printing-branding-partner" element={<PrintingBrandingPartner />} />
+                    <Route path="/logistic-partner" element={<LogisticPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
+
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
@@ -212,6 +218,8 @@ const App = () => {
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
+                    <Route path="/hospitality-partner" element={<HospitalityPartner />} />
+                    <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 

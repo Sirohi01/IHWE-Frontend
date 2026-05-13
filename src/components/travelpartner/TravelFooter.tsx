@@ -84,7 +84,7 @@ const TravelFooter: React.FC = () => {
                   className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
                 >
                   <Phone className="w-[11px] h-[11px] text-[#2D6A4F]" />
-                  <span className="font-bold text-[10.5px] group-hover:underline">+91 11 4958 8555</span>
+                  <span className="font-bold text-[10.5px] group-hover:underline">+91 9654900525</span>
                 </a>
               </div>
             </div>
