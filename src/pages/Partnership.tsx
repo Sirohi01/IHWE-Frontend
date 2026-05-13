@@ -5,10 +5,8 @@ import {
   heroBackgroundApi,
   SERVER_URL,
 } from "@/lib/api";
-
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import { Link } from "react-router-dom";
 import partnersHeroFallback from "../assets/cara14.jpg";
 
 const Partnership = () => {
@@ -45,7 +43,7 @@ const Partnership = () => {
         >
 
 
-          
+
           {/* CONTENT */}
           <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-22 pt-16">
 
@@ -274,113 +272,8 @@ const Partnership = () => {
 
             </div>
 
-            <h3 className="text-[18px] md:text-[24px] font-black text-[#102040] uppercase leading-tight">
-
-    {/* CARDS */}
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-      {[
-        {
-          no: "01",
-          title: "Hotel & Stay Partner",
-          image: "/images/partnership/3.png",
-          color: "#619941",
-          link: "",
-          icon: "/images/partnership/bed.png",
-          points: [
-            "Brand visibility on official platforms",
-            "Direct access to exhibitors & delegates",
-            "Priority partner listing",
-            "Business inquiries & repeat bookings",
-            "Exclusive partner rates",
-          ],
-        },
-        {
-          no: "02",
-          title: "Travel Partner",
-          image: "/images/partnership/2.png",
-          color: "#2f68c5",
-          link: "",
-          icon: "/images/partnership/aeroplan.png",
-          points: [
-            "Featured as official travel partner",
-            "Exposure to global exhibitors & buyers",
-            "Lead generation opportunities",
-            "Association with premium event",
-            "Referral business opportunities",
-          ],
-        },
-        {
-          no: "03",
-          title: "Stall Design & Fabrication",
-          image: "/images/partnership/1.png",
-          color: "#11a7b8",
-          link: "/fabrication-partner",
-          icon: "/images/partnership/home.png",
-          points: [
-            "Official branding on event collaterals",
-            "High visibility at venue",
-            "Access to exhibitors for stall needs",
-            "Repeat business potential",
-            "Showcase portfolio to global brands",
-          ],
-        },
-        {
-          no: "04",
-          title: "Logistics Partner",
-          image: "/images/partnership/Logistics.png",
-          color: "#7b43c9",
-          link: "",
-          icon: "/images/partnership/delivery.png",
-          points: [
-            "Listed as official logistics partner",
-            "International partner recognition",
-            "Continuous business opportunities",
-            "Access to exhibitors logistics needs",
-            "Long-term contracts",
-          ],
-        },
-        {
-          no: "05",
-          title: "Printing & Branding",
-          image: "/images/partnership/printing.png",
-          color: "#ff7a00",
-          link: "",
-          icon: "/images/partnership/print.png",
-          points: [
-            "Branding across event materials",
-            "On-site branding opportunities",
-            "High footfall audience visibility",
-            "Year-round referrals",
-            "Association with globally recognized event",
-          ],
-        },
-        {
-          no: "06",
-          title: "Hospitality Partner",
-          image: "/images/partnership/hospitality.jpg",
-          color: "#e93d8b",
-          link: "",
-          icon: "/images/partnership/bell.png",
-          points: [
-            "Recognition as hospitality partner",
-            "Networking with delegates & exhibitors",
-            "Brand exposure at venue",
-            "Long-term collaboration opportunities",
-            "Enhance brand credibility",
-          ],
-        },
-      ].map((item, idx) => (
-        <motion.div
-          key={idx}
-          whileHover={{ y: -6 }}
-          transition={{ duration: 0.3 }}
-          className="relative bg-white rounded-[24px] border overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
-          style={{
-            borderColor: `${item.color}50`,
-          }}
-        >
-
+            <h3 className="text-[18px] md:text-[24px] font-black text-[#102040] uppercase leading-tight mt-4">
+              Unlock Exclusive Benefits & Grow with Us
             </h3>
 
             <p className="text-[#555] text-sm md:text-base mt-2">
@@ -399,6 +292,7 @@ const Partnership = () => {
                 image: "/images/partnership/3.png",
                 color: "#619941",
                 icon: "/images/partnership/bed.png",
+                link: "/hotel-stay-partner",
                 points: [
                   "Brand visibility on official platforms",
                   "Direct access to exhibitors & delegates",
@@ -413,6 +307,7 @@ const Partnership = () => {
                 image: "/images/partnership/2.png",
                 color: "#2f68c5",
                 icon: "/images/partnership/aeroplan.png",
+                link: "/travel-partner",
                 points: [
                   "Featured as official travel partner",
                   "Exposure to global exhibitors & buyers",
@@ -427,6 +322,7 @@ const Partnership = () => {
                 image: "/images/partnership/1.png",
                 color: "#11a7b8",
                 icon: "/images/partnership/home.png",
+                link: "/fabrication-partner",
                 points: [
                   "Official branding on event collaterals",
                   "High visibility at venue",
@@ -441,6 +337,8 @@ const Partnership = () => {
                 image: "/images/partnership/Logistics.png",
                 color: "#7b43c9",
                 icon: "/images/partnership/delivery.png",
+                link: "/logistic-partner",
+
                 points: [
                   "Listed as official logistics partner",
                   "International partner recognition",
@@ -455,6 +353,7 @@ const Partnership = () => {
                 image: "/images/partnership/printing.png",
                 color: "#ff7a00",
                 icon: "/images/partnership/print.png",
+                link: "/support/printing-branding",
                 points: [
                   "Branding across event materials",
                   "On-site branding opportunities",
@@ -469,6 +368,7 @@ const Partnership = () => {
                 image: "/images/partnership/hospitality.jpg",
                 color: "#e93d8b",
                 icon: "/images/partnership/bell.png",
+                link: "/support/hospitality-desk",
                 points: [
                   "Recognition as hospitality partner",
                   "Networking with delegates & exhibitors",
@@ -566,73 +466,31 @@ const Partnership = () => {
 
 
                   <ul className="space-y-3 mt-8">
-
-            </ul>
-
-            {/* BUTTON */}
-          {/* BUTTON */}
-              {item.link ? (
-                <Link to={item.link}>
-                  <button
-                    className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
-                    style={{
-                      borderColor: item.color,
-                      color: item.color,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = item.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                  >
-                    View Benefits →
-                  </button>
-                </Link>
-              ) : (
-                <button
-                  disabled
-                  className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm opacity-50 cursor-not-allowed"
-                  style={{
-                    borderColor: item.color,
-                    color: item.color,
-                  }}
-                >
-                  Coming Soon
-                </button>
-              )}
-          </div>
-
+                    {item.points.map((point, pIdx) => (
+                      <li key={pIdx} className="flex items-start gap-3 text-[#555] text-sm">
+                        <span className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+                        {point}
+                      </li>
+                    ))}
                   </ul>
 
-
-                  <button
-                    className="mt-8 h-[46px] px-8 rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
-                    style={{
-                      borderColor: item.color,
-                      color: item.color,
-                    }}
-                    onClick={() => {
-                      const pathMap: Record<string, string> = {
-                        "Hotel & Stay Partner": "/hotel-stay-partner",
-                        "Travel Partner": "/travel-partner",
-                        "Stall Design & Fabrication": "/stall-design-fabrication",
-                        "Logistics Partner": "/logistics-partner",
-                        "Printing & Branding": "/printing-branding-partner",
-                        "Hospitality Partner": "/hospitality-partner",
-                      };
-
-                      window.location.href = pathMap[item.title];
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = item.color;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }}
-                  >
-                    View Benefits →
-                  </button>
+                  <Link to={item.link}>
+                    <button
+                      className="mt-8 w-full h-[46px] rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white"
+                      style={{
+                        borderColor: item.color,
+                        color: item.color,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = item.color;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }}
+                    >
+                      View Benefits →
+                    </button>
+                  </Link>
                 </div>
 
               </motion.div>

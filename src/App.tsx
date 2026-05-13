@@ -49,7 +49,9 @@ const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
 const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
+const LogisticPartner = lazy(() => import("./pages/LogisticPartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
@@ -199,7 +201,9 @@ const App = () => {
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/travel-partner" element={<TravelPartner />} />
                     <Route path="/hotel-stay-partner" element={<HotelStayPartner />} />
+                    <Route path="/logistic-partner" element={<LogisticPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
+
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
