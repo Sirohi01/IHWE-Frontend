@@ -7,29 +7,29 @@ const packages = [
     name: "ASSOCIATE PARTNER",
     price: "₹1,00,000 + GST",
     icon: <Globe className="w-6 h-6" />,
-    color: "#0B3931", // Image matched Green
+    color: "#0B3931",
     titleColor: "#0B2C66"
   },
   {
     name: "PREFERRED PARTNER",
     price: "₹2,00,000 + GST",
     icon: <Star className="w-6 h-6 fill-current" />,
-    color: "#050A1A", // Image matched Black/Dark
-    titleColor: "#A67C00" // Image matched Gold/Brown
+    color: "#050A1A",
+    titleColor: "#A67C00"
   },
   {
     name: "PREMIER PARTNER",
     price: "₹3,50,000 + GST",
     icon: <Crown className="w-6 h-6 fill-current" />,
-    color: "#050A1A", // Image matched Black/Dark
-    titleColor: "#D4AF37" // Image matched Gold
+    color: "#050A1A",
+    titleColor: "#D4AF37"
   },
 ];
 
 const HotelPackages: React.FC = () => {
   return (
     <div className="bg-[#051124] rounded-[20px] border-2 border-[#D4AF37]/30 overflow-hidden flex flex-col shadow-2xl h-full">
-      {/* Header with Stars and Glow (Exact Image Match) */}
+
       <div className="relative pt-3 pb-2 px-4 text-center">
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-500/30 via-transparent to-transparent"></div>
         <div className="relative z-10 flex flex-col items-center justify-center">
@@ -48,7 +48,7 @@ const HotelPackages: React.FC = () => {
         </div>
       </div>
 
-      {/* Package Items (Exact Image Match Styling) */}
+
       <div className="p-2 flex flex-col gap-2 flex-1 ">
         {packages.map((pkg, index) => (
           <motion.div
@@ -58,7 +58,7 @@ const HotelPackages: React.FC = () => {
             viewport={{ once: true }}
             className="bg-white rounded-[10px] overflow-hidden flex items-stretch h-[55px] shadow-[0_5px_15px_rgba(0,0,0,0.3)] border border-white/10"
           >
-            {/* Left Icon Block with Glow Effect */}
+
             <div
               className="w-[55px] flex items-center justify-center text-white relative"
               style={{ backgroundColor: pkg.color }}
@@ -69,7 +69,7 @@ const HotelPackages: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Content Block */}
+
             <div className="flex-1 flex flex-col justify-center px-4">
               <h4
                 className="text-[10px] font-[900] uppercase tracking-tight"
@@ -85,7 +85,6 @@ const HotelPackages: React.FC = () => {
         ))}
       </div>
 
-      {/* Footer Notes (Exact Image Match) */}
       <div className="px-4 py-3 mt-auto">
         <div className="h-[1px] w-full bg-white/10 mb-3"></div>
         <div className="grid grid-cols-1 gap-2">

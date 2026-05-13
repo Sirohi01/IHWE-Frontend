@@ -5,7 +5,6 @@ import {
   heroBackgroundApi,
   SERVER_URL,
 } from "@/lib/api";
-
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import partnersHeroFallback from "../assets/cara14.jpg";
@@ -297,6 +296,7 @@ const Partnership = () => {
                 color: "#619941",
                 link: "/hotel-stay-partner",
                 icon: "/images/partnership/bed.png",
+                link: "/hotel-stay-partner",
                 points: [
                   "Brand visibility on official platforms",
                   "Direct access to exhibitors & delegates",
@@ -312,6 +312,7 @@ const Partnership = () => {
                 color: "#2f68c5",
                 link: "/travel-partner",
                 icon: "/images/partnership/aeroplan.png",
+                link: "/travel-partner",
                 points: [
                   "Featured as official travel partner",
                   "Exposure to global exhibitors & buyers",
@@ -327,6 +328,7 @@ const Partnership = () => {
                 color: "#11a7b8",
                 link: "/fabrication-partner",
                 icon: "/images/partnership/home.png",
+                link: "/fabrication-partner",
                 points: [
                   "Official branding on event collaterals",
                   "High visibility at venue",
@@ -342,6 +344,8 @@ const Partnership = () => {
                 color: "#7b43c9",
                 link: "/logistics-partner",
                 icon: "/images/partnership/delivery.png",
+                link: "/logistic-partner",
+
                 points: [
                   "Listed as official logistics partner",
                   "International partner recognition",
@@ -357,6 +361,7 @@ const Partnership = () => {
                 color: "#ff7a00",
                 link: "/printing-branding-partner",
                 icon: "/images/partnership/print.png",
+                link: "/support/printing-branding",
                 points: [
                   "Branding across event materials",
                   "On-site branding opportunities",
@@ -372,6 +377,7 @@ const Partnership = () => {
                 color: "#e93d8b",
                 link: "/hospitality-partner",
                 icon: "/images/partnership/bell.png",
+                link: "/support/hospitality-desk",
                 points: [
                   "Recognition as hospitality partner",
                   "Networking with delegates & exhibitors",

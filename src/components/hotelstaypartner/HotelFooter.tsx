@@ -24,13 +24,13 @@ const HotelFooter: React.FC = () => {
         <div className="flex items-center gap-2 min-w-[320px]">
           {/* Image Badge */}
           <div className="relative w-20 h-20 flex-shrink-0">
-             <img 
-               src={footerBadge} 
-               alt="IHWE Footer Badge" 
-               className="w-full h-full object-contain"
-             />
+            <img
+              src={footerBadge}
+              alt="IHWE Footer Badge"
+              className="w-full h-full object-contain"
+            />
           </div>
-          
+
           <div className="flex flex-col">
             <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight">
               Together, let's create
@@ -76,14 +76,14 @@ const HotelFooter: React.FC = () => {
               </h4>
             </div>
             <div className="p-1 px-3 flex flex-col gap-0.5">
-               <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                  <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                  <span className="font-black text-[11px]">partner@ihwe.in</span>
-               </a>
-               <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                  <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                  <span className="font-black text-[11px]">+91 11 4958 8555</span>
-               </a>
+              <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">partner@ihwe.in</span>
+              </a>
+              <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">+91 9654900525</span>
+              </a>
             </div>
           </div>
 
