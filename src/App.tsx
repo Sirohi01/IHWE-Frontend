@@ -47,7 +47,7 @@ const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePm
 const NotFound = lazy(() => import("./pages/NotFound"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
-const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
+const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
 const LogisticPartner = lazy(() => import("./pages/LogisticPartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
@@ -111,6 +111,7 @@ const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
 const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
+const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -174,7 +175,7 @@ const App = () => {
                     <Route path="/why-exhibit" element={<WhyExhibit />} />
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/partnership" element={<Partnership />} />
-                    <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
+                    <Route path="/fabrication-partner" element={<Fabricationpartner />} />
 
                     <Route path="/partner-registration" element={<PartnerRegistration />} />
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
@@ -214,6 +215,7 @@ const App = () => {
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
+                    <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
