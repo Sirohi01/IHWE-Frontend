@@ -197,7 +197,7 @@ const Footer = () => {
       primary: true,
     },
 
-       
+
     {
       icon: <User className="w-5 h-5" />,
       line1: "REGISTER",
@@ -206,7 +206,7 @@ const Footer = () => {
       primary: false,
     },
 
-      {
+    {
       icon: <Plane className="w-5 h-5" />,
       line1: "REGISTER ",
       line2: "AS DELEGATE",
@@ -222,9 +222,9 @@ const Footer = () => {
       href: "/buyer-registration",
       primary: false,
     },
-    
- 
-  
+
+
+
   ];
 
   return (
@@ -468,71 +468,71 @@ const Footer = () => {
             </p>
             <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
             <div className="flex flex-col gap-3">
-                {[
-                  {
-                    Icon: Phone,
-                    label: "Call for Stall Booking",
-                    value: contactPhone,
-                    link: `tel:${contactPhone.replace(/\s+/g, '')}`,
-                    large: true,
-                  },
-                  {
-                    Icon: Mail,
-                    label: "Email",
-                    value: "info@ihwe.in",
-                    link: "mailto:info@ihwe.in",
-                  },
-                  {
-                    Icon: Globe,
-                    label: "Official Website",
-                    value: "www.ihwe.in",
-                    link: "/",
-                  },
-                  {
-                    Icon: Building2,
-                    label: "Organised By",
-                    value: "Namo Gange Wellness Pvt. Ltd.",
-                    link: "https://namogangewellness.com/",
-                  },
-                  {
-                    Icon: Building2,
-                    label: "Co-Organised By",
-                    value: "Namo Gange Trust",
-                    link: "https://namogange.org/",
-                  },
-                ].map(({ Icon, label, value, link, large }: any) => (
-                  <div key={label} className="flex items-start gap-2.5">
-                    <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
-                      <Icon className="w-3 h-3 text-[#F3B71B]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
-                      {link ? (
-                        link.startsWith('/') ? (
-                          <Link
-                            to={link}
-                            className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
-                          >
-                            {value}
-                          </Link>
-                        ) : (
-                          <a
-                            href={link}
-                            target={link.startsWith('http') || link.startsWith('mailto') ? "_blank" : undefined}
-                            rel={link.startsWith('http') || link.startsWith('mailto') ? "noopener noreferrer" : undefined}
-                            className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
-                          >
-                            {value}
-                          </a>
-                        )
-                      ) : (
-                        <p className={`font-semibold leading-tight text-[#CBD5E1] ${large ? "text-[13px]" : "text-[11px]"}`}>
-                          {value}
-                        </p>
-                      )}
-                    </div>
+              {[
+                {
+                  Icon: Phone,
+                  label: "Call for Stall Booking",
+                  value: contactPhone,
+                  link: `tel:${contactPhone.replace(/\s+/g, '')}`,
+                  large: true,
+                },
+                {
+                  Icon: Mail,
+                  label: "Email",
+                  value: "info@ihwe.in",
+                  link: "mailto:info@ihwe.in",
+                },
+                {
+                  Icon: Globe,
+                  label: "Official Website",
+                  value: "www.ihwe.in",
+                  link: "/",
+                },
+                {
+                  Icon: Building2,
+                  label: "Organised By",
+                  value: "Namo Gange Wellness Pvt. Ltd.",
+                  link: "https://namogangewellness.com/",
+                },
+                {
+                  Icon: Building2,
+                  label: "Co-Organised By",
+                  value: "Namo Gange Trust",
+                  link: "https://namogange.org/",
+                },
+              ].map(({ Icon, label, value, link, large }: any) => (
+                <div key={label} className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-full border border-[#F3B71B] flex items-center justify-center shrink-0">
+                    <Icon className="w-3 h-3 text-[#F3B71B]" />
                   </div>
-                ))}
+                  <div>
+                    <p className="text-[10px] text-[#CBD5E1] mb-0.5">{label}</p>
+                    {link ? (
+                      link.startsWith('/') ? (
+                        <Link
+                          to={link}
+                          className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
+                        >
+                          {value}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link}
+                          target={link.startsWith('http') || link.startsWith('mailto') ? "_blank" : undefined}
+                          rel={link.startsWith('http') || link.startsWith('mailto') ? "noopener noreferrer" : undefined}
+                          className={`font-semibold leading-tight text-[#CBD5E1] hover:text-[#F3B71B] transition-colors ${large ? "text-[13px]" : "text-[11px]"}`}
+                        >
+                          {value}
+                        </a>
+                      )
+                    ) : (
+                      <p className={`font-semibold leading-tight text-[#CBD5E1] ${large ? "text-[13px]" : "text-[11px]"}`}>
+                        {value}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -610,8 +610,8 @@ const Footer = () => {
             { label: "Privacy Policy", href: "/privacy-policy" },
             { label: "Terms & Conditions", href: "/terms-of-service" },
             { label: "Refund Policy", href: "/refund-policy" },
-            { label: "Payment Policy", href: "/payment-policy" },
-            { label: "Cancellation Policy", href: "/cancellation-policy" },
+            // { label: "Payment Policy", href: "/payment-policy" },
+            // { label: "Cancellation Policy", href: "/cancellation-policy" },
           ].map((p, i) => (
             <Link
               key={p.label}
