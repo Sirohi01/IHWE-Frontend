@@ -80,7 +80,7 @@ const LogisticBenefits: React.FC = () => {
               className="w-full py-2 px-3 text-center"
               style={{ backgroundColor: benefit.color }}
             >
-              <h4 className="text-white text-[9px] font-black uppercase tracking-tight">
+              <h4 className="text-white text-[11px] font-black uppercase tracking-tight">
                 {benefit.title}
               </h4>
             </div>
