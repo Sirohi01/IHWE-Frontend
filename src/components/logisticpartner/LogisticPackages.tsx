@@ -44,7 +44,7 @@ const packages = [
 const LogisticPackages: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm h-full">
-      {/* Header */}
+
       <div className="bg-gradient-to-r from-[#4E9F3D] to-[#0B2C66] px-[16px] py-[8px]">
         <h3 className="text-white font-[900] text-[15px] uppercase tracking-wider text-center">
           PARTNERSHIP PACKAGES
@@ -52,7 +52,7 @@ const LogisticPackages: React.FC = () => {
       </div>
 
 
-      {/* Package Items */}
+
       <div className="p-[4px] flex flex-col gap-[3px] flex-1">
         {packages.map((pkg, index) => (
           <motion.div
@@ -65,7 +65,7 @@ const LogisticPackages: React.FC = () => {
           >
 
 
-            {/* Ribbon Badge */}
+
             <div
               className="absolute top-0 right-[15px] flex flex-col items-center"
               style={{ color: pkg.color }}
@@ -119,9 +119,6 @@ const LogisticPackages: React.FC = () => {
         ))}
       </div>
 
-
-
-      {/* Footer Notes */}
       <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[7px] mt-auto flex justify-between items-center">
         {[
           { text: "Custom packages available on request", icon: <Check /> },
@@ -133,7 +130,7 @@ const LogisticPackages: React.FC = () => {
               <Check className="w-[7px] h-[7px] text-[#4E9F3D]" strokeWidth={4} />
             </div>
             <p className="text-white text-[7.5px] font-bold uppercase tracking-tight opacity-90 leading-none">
-              {note.text.split(' ').slice(0, 2).join(' ')}<br/>{note.text.split(' ').slice(2).join(' ')}
+              {note.text.split(' ').slice(0, 2).join(' ')}<br />{note.text.split(' ').slice(2).join(' ')}
             </p>
           </div>
         ))}
