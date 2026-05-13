@@ -13,7 +13,7 @@ const TravelPartnerPage: React.FC = () => {
 
       <div className="mx-auto max-w-[1400px] px-6 md:px-8 -mt-2 relative z-20">
         {/* Stats Bar - Width slightly increased and left-aligned */}
-        <div className="max-w-[950px] ml-3">
+        <div className="max-w-[985px] ml-3">
           <TravelStats />
         </div>
 

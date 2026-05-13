@@ -129,7 +129,7 @@ const LogisticBenefits: React.FC = () => {
                 </div>
 
 
-                <p className="text-[8.5px] font-black text-black leading-tight uppercase">
+                <p className="text-[10px] font-bold text-[#4A5568] leading-snug text-center">
                   {item.text}
                 </p>
               </div>

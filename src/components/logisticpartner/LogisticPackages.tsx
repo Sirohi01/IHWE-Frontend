@@ -45,11 +45,12 @@ const LogisticPackages: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm h-full">
       {/* Header */}
-      <div className="bg-[#0B2C66] px-[16px] py-[8px]">
-        <h3 className="text-white font-[900] text-[9.5px] uppercase tracking-wider text-center">
-          Partnership Packages &amp; Investment
+      <div className="bg-gradient-to-r from-[#4E9F3D] to-[#0B2C66] px-[16px] py-[8px]">
+        <h3 className="text-white font-[900] text-[15px] uppercase tracking-wider text-center">
+          PARTNERSHIP PACKAGES
         </h3>
       </div>
+
 
       {/* Package Items */}
       <div className="p-[4px] flex flex-col gap-[3px] flex-1">
@@ -60,20 +61,20 @@ const LogisticPackages: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[4px_8px] relative overflow-hidden group`}
+            className={`rounded-[14px] border-b border-slate-100 bg-white p-[4px_10px] relative overflow-hidden group`}
           >
 
 
             {/* Ribbon Badge */}
             <div
-              className="absolute top-0 right-[10px] flex flex-col items-center"
+              className="absolute top-0 right-[15px] flex flex-col items-center"
               style={{ color: pkg.color }}
             >
               <div
-                className="w-[18px] h-[22px] flex items-center justify-center text-white text-[9px]"
+                className="w-[18px] h-[25px] flex items-center justify-center text-white text-[9px]"
                 style={{ backgroundColor: pkg.color }}
               >
-                <Star className="w-[9px] h-[9px] fill-white text-white" />
+                <Star className="w-[10px] h-[10px] fill-white text-white" />
               </div>
               <div
                 className="w-0 h-0"
@@ -85,29 +86,28 @@ const LogisticPackages: React.FC = () => {
               />
             </div>
 
-            <div className="flex gap-[10px] items-center">
+            <div className="flex gap-[12px] items-center">
               <div
-                className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center text-white flex-shrink-0"
-                style={{ backgroundColor: pkg.color }}
+                className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-white flex-shrink-0 bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8]"
+                style={{ background: pkg.name === "Preferred Partner" ? 'linear-gradient(to bottom right, #4E9F3D, #3d7a30)' : undefined }}
               >
-                {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-4 h-4" })}
+                {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-5 h-5" })}
               </div>
               <div className="flex-1">
                 <h4
-                  className="text-[9px] font-[900] uppercase tracking-tight"
-                  style={{ color: pkg.color }}
+                  className="text-[14px] font-[900] uppercase tracking-tight"
+                  style={{ color: pkg.name === "Preferred Partner" ? '#4E9F3D' : '#0B2C66' }}
                 >
                   {pkg.name}
                 </h4>
-                <p className="text-[15px] font-[900] text-[#0B2C66] mt-[1px] mb-[2px]">
-                  {pkg.price}
+                <p className="text-[18px] font-[900] text-black mt-[0px] mb-[0px]">
+                  {pkg.price.split(' ')[0]} <span className="text-[12px] text-gray-500 font-bold">+ GST</span>
                 </p>
-                <ul className="flex flex-col gap-[3px]">
+
+                <ul className="flex flex-col gap-[1px]">
                   {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-[7px] text-[10px] font-bold text-[#4A5568] leading-tight">
-                      <div className="w-[12px] h-[12px] rounded-full flex items-center justify-center bg-white border shadow-xs flex-shrink-0" style={{ borderColor: pkg.color }}>
-                        <Check className="w-[7px] h-[7px]" style={{ color: pkg.color }} strokeWidth={4} />
-                      </div>
+                    <li key={i} className="flex items-center gap-[6px] text-[11px] font-bold text-[#4A5568] leading-tight">
+                      <div className="w-[3.5px] h-[3.5px] rounded-full bg-gray-400" />
                       {feature}
                     </li>
                   ))}
@@ -122,20 +122,24 @@ const LogisticPackages: React.FC = () => {
 
 
       {/* Footer Notes */}
-      <div className="bg-[#0B2C66] px-[16px] py-[8px] mt-auto">
+      <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[7px] mt-auto flex justify-between items-center">
         {[
-          "Custom packages available on request",
-          "GST as applicable",
-          "Shipping vouchers valid during event period",
+          { text: "Custom packages available on request", icon: <Check /> },
+          { text: "GST as applicable", icon: <Check /> },
+          { text: "Stay vouchers valid during event period", icon: <Check /> },
         ].map((note, i) => (
-          <div key={i} className="flex items-center gap-[7px] mb-[4px] last:mb-0">
-            <div className="w-[16px] h-[16px] bg-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
-              <Check className="w-[9px] h-[9px] text-white" strokeWidth={4} />
+          <div key={i} className="flex items-center gap-[6px]">
+            <div className="w-[12px] h-[12px] border border-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="w-[7px] h-[7px] text-[#4E9F3D]" strokeWidth={4} />
             </div>
-            <p className="text-white text-[9px] font-bold uppercase tracking-tight opacity-90">{note}</p>
+            <p className="text-white text-[7.5px] font-bold uppercase tracking-tight opacity-90 leading-none">
+              {note.text.split(' ').slice(0, 2).join(' ')}<br/>{note.text.split(' ').slice(2).join(' ')}
+            </p>
           </div>
         ))}
       </div>
+
+
     </div>
   );
 };

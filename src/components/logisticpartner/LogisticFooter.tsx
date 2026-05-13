@@ -7,16 +7,19 @@ import {
   Truck,
 } from 'lucide-react';
 
+import busAndTruck from '../../assets/logistic/raman.png';
+
 const LogisticFooter: React.FC = () => {
   return (
-    <footer className="bg-[#001D3D] py-1 px-6 md:px-12 mt-2">
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
-        
-        {/* Left Section: Branding & Slogan */}
+    <footer className="bg-[#001D3D] py-0.5 mt-2">
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="hidden sm:block">
-            <Truck className="w-[45px] h-[45px] text-[#3B82F6] opacity-60" strokeWidth={1} />
+            <img src={busAndTruck} alt="Logistics" className="w-auto h-[60px] object-contain" />
           </div>
+
+
+
           <div className="flex flex-col">
             <h3 className="text-white font-black text-[14px] uppercase leading-tight whitespace-nowrap">
               LET'S MOVE SUCCESS <span className="text-[#4E9F3D]">TOGETHER!</span>
@@ -29,7 +32,7 @@ const LogisticFooter: React.FC = () => {
 
         {/* Middle Section: Contact Info with Dividers */}
         <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
-          
+
           {/* Email */}
           <div className="flex items-center gap-2.5 group">
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
@@ -73,9 +76,10 @@ const LogisticFooter: React.FC = () => {
           </div>
           <div className="flex flex-col items-center">
             <div className="bg-[#4E9F3D] px-3 py-1 rounded-[6px] shadow-sm hover:bg-[#458b36] transition-colors cursor-pointer">
-              <span className="text-white font-black text-[10px] uppercase tracking-wider">
-                SCAN TO<br />PARTNER
+              <span className="text-white font-black text-[10px] uppercase tracking-wider leading-[0.9]">
+                SCAN TO PARTNER
               </span>
+
             </div>
           </div>
         </div>
