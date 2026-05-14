@@ -1,6 +1,19 @@
 import React from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 import media_registration_bg from "@/assets/media_registration.webp";
+import ani from "@/assets/media/ani.jpeg";
+import assocham from "@/assets/media/assocham.jpeg";
+import big from "@/assets/media/big.jpeg";
+import business_standard from "@/assets/media/business_standard.jpeg";
+import bw_wellbeing from "@/assets/media/bw_wellbeing.jpeg";
+import ficci from "@/assets/media/ficci.jpeg";
+import healthworld from "@/assets/media/healthworld.jpeg";
+import ht from "@/assets/media/ht.jpeg";
+import india_today from "@/assets/media/india_today.jpeg";
+import medical_dialogues from "@/assets/media/medical_dialogues.jpeg";  
+import outlook from "@/assets/media/outlook.jpeg";
+import the_print from "@/assets/media/the_print.jpeg";
+import zee_business from "@/assets/media/zee_business.jpeg";
 import {
     Globe,
     Newspaper,
@@ -9,15 +22,15 @@ import {
 } from "lucide-react";
 
 const mediaLogos = [
-    "ANI",
-    "Business Standard",
-    "India Today",
-    "Zee Business",
-    "Healthworld",
-    "ThePrint",
-    "Outlook",
-    "HT",
-    "Medical Dialogues",
+    ani,
+    business_standard,
+    india_today,
+    zee_business,
+    healthworld,
+    the_print,
+    outlook,
+    ht,
+    medical_dialogues,
 ];
 const MediaBanner = () => {
   return (
@@ -256,9 +269,7 @@ const MediaBanner = () => {
                                     }}
                                     className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300"
                                 >
-                                    <span className="text-sm font-semibold text-gray-700 text-center px-2">
-                                        {logo}
-                                    </span>
+                                    <img src={logo} alt={`Media Logo ${index + 1}`} className="max-h-10 object-contain" />                                                                                                                                                  
                                 </motion.div>
                             ))}
                         </div>
