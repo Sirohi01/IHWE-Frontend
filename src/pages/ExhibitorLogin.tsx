@@ -119,7 +119,7 @@ const ExhibitorLogin = () => {
 
     return (
         <div className="min-h-screen bg-[#f3f4f6] font-inter flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-[1100px] w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row mt-4">
+            <div className="max-w-[1100px] w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row mt-0">
 
                 {/* LEFT SIDE: Brand & Info */}
                 <div className="w-full lg:w-[55%] flex flex-col">
