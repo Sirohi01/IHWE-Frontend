@@ -23,7 +23,7 @@ const navLinks = [
       { label: "Advisory Board Members", path: "/advisory-board", icon: Users, description: "Meet the experts behind the exhibition" },
       { label: "Media", path: "/media-registration", icon: Camera, description: "Latest updates, press releases and event coverage" },
       { label: "Blogs", path: "/blog", icon: Sparkles, description: "Latest news and insights from the wellness industry" },
-      { label: "Event Highlights", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Event Highlights", path: "/event-highlights", icon: FileCheck, description: "Get your complimentary visitor pass today" },
       { label: "Glimpses of the Event", path: "/gallery", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
     ],
   },
@@ -33,9 +33,9 @@ const navLinks = [
       { label: "Why Exhibit at IHWE?", path: "/why-exhibit", icon: HelpCircle, description: "Maximize your brand visibility and growth" },
       { label: "Exhibitor List", path: "/exhibitors", icon: FileCheck, description: "View the list of confirmed participating brands" },
       { label: "Why Visit IHWE", path: "/why-visit", icon: Layout, description: "Secure your premium space at IHWE 2026" },
-      { label: "Buyer-Seller Meet", path: "/buyer-seller-meet", icon: Users, description: "Connect with buyers and sellers at IHWE" },
-      { label: "MSME PMS Scheme", path: "/msme-pms-scheme", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
-      { label: "Govt MSME PMS Scheme", path: "/government-msme-pms-schemes", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
+      // { label: "Buyer-Seller Meet", path: "/buyer-seller-meet", icon: Users, description: "Connect with buyers and sellers at IHWE" },
+      // { label: "MSME PMS Scheme", path: "/msme-pms-scheme", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
+      { label: "MSME PMS Scheme", path: "/government-msme-pms-schemes", icon: ShieldCheck, description: "Government subsidy for MSME exhibitors" },
     ],
   },
 
@@ -46,7 +46,7 @@ const navLinks = [
     label: "Opportunities",
     dropdown: [
       { label: "Sponsorship", path: "/sponsership", icon: FileCheck, description: "Get your complimentary visitor pass today" },
-      { label: "Branding Opportunities", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
+      { label: "Branding Opportunities", path: "/e-promotion-web", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
       { label: "Partnership / Collaboration", path: "/partnership", icon: Sparkles, description: "Experience the latest in health & wellness" },
     ],
   },
@@ -137,12 +137,12 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
 
   return (
     <>
-      {scrolled && <div className="h-[72px] xl:h-[80px] w-full" />}
+      {scrolled && <div className="h-[72px] xl:h-[80px] w-full print-hidden" />}
 
       <motion.nav
         className={`${scrolled
-            ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60"
-            : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
+          ? "fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md shadow-md py-0.5 border-b border-slate-200/60"
+          : "relative z-[100] bg-white border-b border-slate-200 py-1 shadow-sm"
           } transition-all duration-500`}
       >
         <div className="container mx-auto px-6 max-w-[1400px]">

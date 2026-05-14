@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import heroImg from "../../assets/arogyasangostiimageform/name.jpg.jpeg";
-import arogyaLogo from "../../assets/arogyasangosti.png";
+import arogyaLogo from "../../assets/arogyasangostilogo/compressed_arogyasangosti.webp";
 
 import { HeroSection } from "./ArogyaSanghosti/Hero";
 import {
@@ -337,63 +337,11 @@ export default function ArogyaSanghostiForm() {
                                 setConsent1={(val: boolean) => set("consent1")(val)}
                                 consent2={form.consent2}
                                 setConsent2={(val: boolean) => set("consent2")(val)}
+                                onSubmit={handleSubmit}
+                                isSubmitting={isSubmitting}
                             />
 
-                            {/* ── SUBMIT BUTTON ── */}
-                            <div style={{ marginTop: "30px", marginBottom: "30px", display: "flex", justifyContent: "center" }}>
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitting}
-                                    style={{
-                                        width: "auto",
-                                        minWidth: "250px",
-                                        padding: "12px 24px",
-                                        background: isSubmitting
-                                            ? "linear-gradient(135deg, #94a3b8 0%, #64748b 100%)"
-                                            : "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                                        color: "white",
-                                        border: "none",
-                                        borderRadius: "10px",
-                                        fontSize: "16px",
-                                        fontWeight: "600",
-                                        cursor: isSubmitting ? "not-allowed" : "pointer",
-                                        boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)",
-                                        transition: "all 0.3s ease",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        gap: "10px"
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        if (!isSubmitting) {
-                                            e.currentTarget.style.transform = "translateY(-2px)";
-                                            e.currentTarget.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
-                                        }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = "translateY(0)";
-                                        e.currentTarget.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
-                                    }}
-                                >
-                                    {isSubmitting ? (
-                                        <>
-                                            <span style={{
-                                                width: "20px",
-                                                height: "20px",
-                                                border: "3px solid white",
-                                                borderTopColor: "transparent",
-                                                borderRadius: "50%",
-                                                animation: "spin 1s linear infinite"
-                                            }} />
-                                            Submitting...
-                                        </>
-                                    ) : (
-                                        <>
-                                            📝 Submit Application
-                                        </>
-                                    )}
-                                </button>
-                            </div>
+                            {/* Submit button moved to Footer */}
                         </div>
                     </div>
 

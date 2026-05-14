@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Lightbulb, Sprout, ShieldPlus } from "lucide-react";
 
-import day1 from "../../assets/confrencetrack/day1.png";
-import day2 from "../../assets/confrencetrack/day2.png";
-import day3 from "../../assets/confrencetrack/day3.png";
+import day1 from "../../assets/confrencetrack/compressed_day1.webp";
+import day2 from "../../assets/confrencetrack/compressed_day2.webp";
+import day3 from "../../assets/confrencetrack/compressed_day3.webp";
 
 import { conferenceTrackApi, SERVER_URL } from "@/lib/api";
 

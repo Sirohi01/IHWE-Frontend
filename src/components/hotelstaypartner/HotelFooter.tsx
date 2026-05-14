@@ -15,22 +15,22 @@ const HotelFooter: React.FC = () => {
   return (
     <footer className="bg-[#051124] py-1 px-4 relative overflow-hidden">
       {/* Background Green Circle */}
-      <div className="absolute -left-10 -top-10 w-40 h-40 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
-      <div className="absolute -left-5 -top-5 w-24 h-24 bg-[#4E9F3D]/15 rounded-full z-0"></div>
+      <div className="absolute -left-10 -top-10 w-80 h-80 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
+      <div className="absolute -left-5 -top-5 w-40 h-40 bg-[#4E9F3D]/15 rounded-full z-0"></div>
 
-      <div className="mx-auto max-w-[1400px] flex items-center justify-between relative z-10">
+      <div className="mx-auto max-w-[1330px] flex items-center justify-between relative z-10">
 
         {/* Left Side: Branding */}
         <div className="flex items-center gap-2 min-w-[320px]">
           {/* Image Badge */}
           <div className="relative w-20 h-20 flex-shrink-0">
-             <img 
-               src={footerBadge} 
-               alt="IHWE Footer Badge" 
-               className="w-full h-full object-contain"
-             />
+            <img
+              src={footerBadge}
+              alt="IHWE Footer Badge"
+              className="w-full h-full object-contain"
+            />
           </div>
-          
+
           <div className="flex flex-col">
             <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight">
               Together, let's create
@@ -76,14 +76,14 @@ const HotelFooter: React.FC = () => {
               </h4>
             </div>
             <div className="p-1 px-3 flex flex-col gap-0.5">
-               <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                  <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                  <span className="font-black text-[11px]">partner@ihwe.in</span>
-               </a>
-               <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                  <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                  <span className="font-black text-[11px]">+91 11 4958 8555</span>
-               </a>
+              <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">partner@ihwe.in</span>
+              </a>
+              <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">+91 9654900525</span>
+              </a>
             </div>
           </div>
 

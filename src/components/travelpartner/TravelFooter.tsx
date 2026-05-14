@@ -14,8 +14,8 @@ import footerImage from '../../assets/nishu.png';
 
 const TravelFooter: React.FC = () => {
   return (
-    <footer className="bg-white pt-1">
-      <div className="mx-auto  bg-white">
+    <footer className="bg-white pt-1 ml-2">
+      <div className="max-w-[1320px] mx-auto bg-white">
         <div className="bg-white rounded-[px]  shadow-sm overflow-hidden flex flex-col lg:flex-row items-stretch min-h-[70px]">
 
           <div className="bgg-white relative p-[0px_25px] flex items-center gap-[15px] lg:min-w-[280px] overflow-hidden rounded-r-[60px] lg:rounded-r-[80px] z-10">
@@ -84,13 +84,13 @@ const TravelFooter: React.FC = () => {
                   className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
                 >
                   <Phone className="w-[11px] h-[11px] text-[#2D6A4F]" />
-                  <span className="font-bold text-[10.5px] group-hover:underline">+91 11 4958 8555</span>
+                  <span className="font-bold text-[10.5px] group-hover:underline">+91 9654900525</span>
                 </a>
               </div>
             </div>
 
 
-            <div className="bg-[#0B2C66] p-[8px_15px] flex flex-col items-center justify-center gap-1.5 min-w-[90px]">
+            <div className="bg-[#0B2C66] p-[8px_15px] flex flex-col items-center justify-center gap-1.5 min-w-[100px]">
               <div className="bg-white p-[3px] rounded-[5px] shadow-sm">
                 <QrCode className="w-[40px] h-[40px] text-[#0B2C66]" />
               </div>

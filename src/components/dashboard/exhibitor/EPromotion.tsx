@@ -16,7 +16,7 @@ const testimonials = [
   },
 ];
 
-export default function EPromotion({ data }) {
+export default function EPromotion({ data }: any) {
   const [active, setActive] = useState(0);
   const [packages, setPackages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -202,8 +202,8 @@ export default function EPromotion({ data }) {
             <div className="col-span-3 text-center py-10">Loading packages...</div>
           ) : (
             packages.map((pkg, index) => (
-              <div 
-                key={pkg._id || index} 
+              <div
+                key={pkg._id || index}
                 className={`bg-white rounded-2xl shadow-sm overflow-hidden border flex flex-col relative`}
                 style={{ borderColor: pkg.borderColor }}
               >
@@ -243,13 +243,12 @@ export default function EPromotion({ data }) {
                     ))}
                   </ul>
 
-                  <button className={`mt-6 w-full py-2 rounded-lg font-semibold transition ${
-                    pkg.title.includes("GROWTH") 
-                      ? "bg-orange-500 text-white hover:bg-orange-600" 
-                      : pkg.title.includes("PREMIUM") 
+                  <button className={`mt-6 w-full py-2 rounded-lg font-semibold transition ${pkg.title.includes("GROWTH")
+                      ? "bg-orange-500 text-white hover:bg-orange-600"
+                      : pkg.title.includes("PREMIUM")
                         ? "bg-green-800 text-white hover:bg-green-700"
                         : "border border-green-700 text-green-700 hover:bg-green-700 hover:text-white"
-                  }`}>
+                    }`}>
                     {pkg.buttonText}
                   </button>
                 </div>

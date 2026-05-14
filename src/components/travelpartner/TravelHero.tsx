@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Megaphone, Globe, Handshake, Award } from 'lucide-react';
-import heroBg from '../../assets/newherologo.jpeg';
+import heroBg from '../../assets/travels/newherologo.webp';
 
 const TravelHero: React.FC = () => {
   return (
@@ -35,10 +35,10 @@ const TravelHero: React.FC = () => {
             </div>
           </div>
 
-          {/* Vertical Divider */}
+
           <div className="w-[1px] h-[70px] bg-gray-200 hidden md:block" />
 
-          {/* Top Slogan */}
+
           <div className="hidden md:block">
             <p className="text-[#0B2C66] font-bold text-[20px] leading-[1.2] tracking-tight">
               Collaborate.<br />
@@ -48,10 +48,10 @@ const TravelHero: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content Area */}
+
         <div className="relative flex items-end justify-between flex-1 mt-0">
 
-          {/* ===== CENTER: OFFICIAL TRAVEL PARTNER Badge ===== */}
+
           <div className="absolute left-[596px] -translate-x-1/2 top-0 z-20 flex items-start justify-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.85 }}
@@ -71,7 +71,7 @@ const TravelHero: React.FC = () => {
 
             </motion.div>
           </div>
-          {/* Left Text: Partner Details - FIXED (Not to be touched) */}
+
           <div className="flex flex-col items-start pb-4">
             <p className="text-[#0B2C66] font-black text-[22px] uppercase tracking-[1px] mb-0">
               Partner with us as a
@@ -81,7 +81,7 @@ const TravelHero: React.FC = () => {
               <span className="text-[#4E9F3D]">PARTNER</span>
             </h2>
 
-            {/* Gradient Fading Divider Lines */}
+
             <div className="flex items-center gap-4 w-full max-w-[500px] my-1">
               <div className="h-[1.5px] flex-1 bg-gradient-to-l from-gray-300 to-transparent" />
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#0B2C66">
@@ -98,7 +98,7 @@ const TravelHero: React.FC = () => {
             </p>
           </div>
 
-          {/* Right Section: Why Partner Card - Shifted DOWN independently */}
+
           <div className="pr-[10px] relative min-w-[260px] h-full">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { cloneElement } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp, Award } from "lucide-react";
 import StatsCounter from "@/components/home/StatsCounter";
 import ExhibitorLogos from "@/components/home/ExhibitorLogos";
 import GlobalPlatform from "@/components/sections/GlobalPlatform";
@@ -18,8 +18,34 @@ import InternationalImg from "@/assets/international.png";
 import ConferenceImg from "@/assets/conference.png";
 import B2BImg from "@/assets/b2b.png";
 import AwardImg from "@/assets/global.png";
+import About12 from "@/assets/about12.png";
+import LeafImg from "@/assets/leaf.png";
+import G1 from "@/assets/G1.png";
+import G2 from "@/assets/G2.png";
+import G3 from "@/assets/G3.png";
+import G4 from "@/assets/G4.png";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Store } from "lucide-react";
+
+// Sparkle component
+const Sparkle = ({ style, color = '#5ef5e0', shadowColor = '#0A7C6E' }: { style?: React.CSSProperties, color?: string, shadowColor?: string }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '16px',
+      color: color,
+      textShadow: `0 0 8px ${shadowColor}, 0 0 15px ${color}, 0 0 25px ${color}`,
+      animation: 'sparkleAnim 1.8s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 
 const CounterItem = ({ icon, number, sup, label, sub, prefix }: any) => {
   const [count, setCount] = useState(0);
@@ -306,131 +332,236 @@ const About = () => {
   const heroHeading = heroData?.heading || "";
 
   return (
-    <div className="bg-white font-inter">
-      {/* PROFESSIONAL HERO SECTION */}
-      <section
-        className="hero-background-about"
-        style={heroStyles}
-      >
+    <div className="bg-white font-inter overflow-x-hidden">
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+          0%   { left: -75%; }
+          100% { left: 150%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          50%  { opacity: 1; transform: scale(1.5) translateY(-15px); }
+          100% { opacity: 0; transform: scale(0.8) translateY(-30px); }
+        }
+        .golden-btn-about {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5), 0 0 20px rgba(255,200,0,0.2);
+          position: relative;
+          overflow: hidden;
+        }
+        .golden-btn-about::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+        .teal-btn-about {
+          background: linear-gradient(135deg, #0A7C6E 0%, #0db39e 40%, #0A7C6E 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5), 0 0 20px rgba(10,124,110,0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        .teal-btn-about::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+          transform: skewX(-20deg);
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
+      {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
+      <section className="relative min-h-[480px] md:h-[580px] flex items-center pt-16 md:pt-14 pb-8 overflow-hidden bg-white">
+        
+        {/* Full Width Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={About12} 
+            alt="Hero Background" 
+            className="w-full h-full object-cover object-center md:object-right"
+          />
+        </div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-transparent" />
+        {/* Mobile Background */}
+        <div className="absolute inset-0 z-0 md:hidden">
+          <img 
+            src={About12} 
+            alt="Hero Background" 
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-        <div className="container mx-auto px-5 md:px-8 text-left text-white relative z-10 flex flex-col justify-center min-h-[300px] md:h-full pt-24 md:pt-16 pb-6" data-aos="fade-up">
-          <div>
-            {heroSubtitle && (
-              <div className="mb-1.5">
-                <div
-                  className="subtitle-underline uppercase tracking-tight opacity-90 font-medium [&_a]:text-white [&_a]:no-underline [&_a]:pointer-events-none [&_*]:!bg-transparent [&_p]:!bg-transparent [&_*]:!text-white inline-block"
-                  style={{ fontSize: `clamp(8.5px, 3vw, ${subtitleFontSize}px)`, fontFamily: "'Poppins', sans-serif", color: 'white' }}
-                  dangerouslySetInnerHTML={{ __html: heroSubtitle.replace(/<a[^>]*>/gi, '<span>').replace(/<\/a>/gi, '</span>') }}
-                />
-              </div>
-            )}
-            {heroTitle && (
-              <h1
-                className="font-semibold mb-0 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
-                style={{ fontSize: `clamp(14px, 7vw, ${titleFontSize}px)`, fontFamily: "'Inter', sans-serif", lineHeight: 1.1, display: 'block' }}
-                dangerouslySetInnerHTML={{ __html: heroTitle }}
-              />
-            )}
-            {heroHeading && (
-              <h2
-                className="font-bold mb-1 tracking-tight text-white/90"
-                style={{ fontSize: 'clamp(11px, 4.5vw, 24px)', fontFamily: "'Inter', sans-serif", lineHeight: 1.2, marginTop: '6px' }}
-                dangerouslySetInnerHTML={{ __html: heroHeading }}
-              />
-            )}
-            {heroTitle2 && (
-              <h2
-                className="font-semibold mb-2 tracking-tight [&_*]:!bg-transparent [&_p]:mb-0 [&_p]:leading-none"
-                style={{ fontSize: `clamp(13px, 6vw, ${title2FontSize}px)`, fontFamily: "'Inter', sans-serif", lineHeight: 1.1, display: 'block', marginTop: 1 }}
-                dangerouslySetInnerHTML={{ __html: heroTitle2 }}
-              />
-            )}
-            {heroDesc && (
-              <div
-                className="text-white/90 mb-2 max-w-2xl font-light leading-relaxed [&_*]:!bg-transparent"
-                style={{ fontSize: `clamp(10px, 4vw, ${descriptionFontSize}px)`, fontFamily: "'Inter', sans-serif" }}
-                dangerouslySetInnerHTML={{ __html: heroDesc }}
-              />
-            )}
-          </div>
-          <div className="pb-6">
-            {/* INFO BAR - above buttons */}
-            {(infoBar1 || infoBar2 || infoBar3) && (
-              <div className="flex flex-wrap items-stretch w-fit mb-3 bg-black/40 backdrop-blur-sm">
-                {infoBar1 && (
-                  <div className="flex items-center gap-2 py-2 px-4 border-r border-white/20">
-                    <Calendar className="w-3.5 h-3.5 text-[#d26019] shrink-0" strokeWidth={1.5} />
-                    <div className="text-white text-[10px] font-bold uppercase tracking-wider leading-tight [&_*]:text-white" dangerouslySetInnerHTML={{ __html: infoBar1 }} />
-                  </div>
-                )}
-                {infoBar2 && (
-                  <div className="flex items-center gap-2 py-2 px-4 border-r border-white/20">
-                    <MapPin className="w-3.5 h-3.5 text-[#d26019] shrink-0" strokeWidth={1.5} />
-                    <div className="text-white text-[10px] font-bold uppercase tracking-wider leading-tight [&_*]:text-white" dangerouslySetInnerHTML={{ __html: infoBar2 }} />
-                  </div>
-                )}
-                {infoBar3 && (
-                  <div className="flex items-center gap-2 py-2 px-4">
-                    <Globe className="w-3.5 h-3.5 text-[#d26019] shrink-0" strokeWidth={1.5} />
-                    <div className="text-white text-[10px] font-bold uppercase tracking-wider leading-tight [&_*]:text-white" dangerouslySetInnerHTML={{ __html: infoBar3 }} />
-                  </div>
-                )}
-              </div>
-            )}
+        {/* Decorative Leaf Element */}
+        <img 
+          src={LeafImg} 
+          alt="decoration" 
+          className="absolute -top-10 -left-10 w-40 h-40 opacity-10 pointer-events-none rotate-45"
+        />
 
-            {/* CTA Buttons */}
-            {(button1Text || button2Text) && (
-              <div className="flex flex-wrap gap-3 mt-6">
-                {button1Text && button1Link && (
-                  button1Link.startsWith('http') ? (
-                    <a
-                      href={button1Link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-2 px-4 py-2 bg-[#d26019] hover:bg-[#b8521a] text-white uppercase tracking-[0.12em] text-[9px] font-black transition-all duration-300 shrink-0"
-                    >
-                      {button1Text}
-                      <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={button1Link}
-                      className="group flex items-center gap-2 px-4 py-2 bg-[#d26019] hover:bg-[#b8521a] text-white uppercase tracking-[0.12em] text-[9px] font-black transition-all duration-300 shrink-0"
-                    >
-                      {button1Text}
-                      <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  )
-                )}
-                {button2Text && button2Link && (
-                  button2Link.startsWith('http') ? (
-                    <a
-                      href={button2Link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-2 px-4 py-2 bg-white text-[#23471d] hover:bg-gray-100 uppercase tracking-[0.12em] text-[9px] font-black transition-all duration-300 shrink-0"
-                    >
-                      {button2Text}
-                    </a>
-                  ) : (
-                    <Link
-                      to={button2Link}
-                      className="group flex items-center gap-2 px-4 py-2 bg-white text-[#23471d] hover:bg-gray-100 uppercase tracking-[0.12em] text-[9px] font-black transition-all duration-300 shrink-0"
-                    >
-                      {button2Text}
-                    </Link>
-                  )
-                )}
+        <div className="container mx-auto px-5 md:px-12 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Content */}
+            <div data-aos="fade-right">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-[2px] w-8 bg-[#d26019]" />
+                <p 
+                  className="font-extrabold text-[10px] md:text-[12px] uppercase tracking-[0.25em]" 
+                  style={{ color: '#3b7243', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
+                >
+                  INDIA'S LEADING GLOBAL PLATFORM FOR
+                </p>
               </div>
-            )}
+
+              <h1 
+                className="text-[#051c4b] font-black text-2xl md:text-3xl lg:text-[38px] leading-[1.1] mb-4 uppercase tracking-tight"
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.15)' }}
+              >
+                HEALTH, WELLNESS & <br />
+                <span className="block mt-2" style={{ color: '#0b471c' }}>INNOVATION</span>
+              </h1>
+
+              <div 
+                className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-4 text-black font-bold text-[9px] uppercase tracking-[0.15em]"
+                style={{ textShadow: 'none' }}
+              >
+                <div className="flex items-center gap-2">
+                  <Calendar size={14} className="text-[#d26019]" strokeWidth={2.5} />
+                  <span>21-23 August 2026</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-[#d26019]" strokeWidth={2.5} />
+                  <span>Pragati Maidan, New Delhi</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-[2px] w-12 bg-[#d26019]" />
+                <p 
+                  className="font-extrabold text-sm md:text-base uppercase tracking-[0.15em]" 
+                  style={{ color: '#081834', textShadow: 'none' }}
+                >
+                  ABOUT IHWE - GLOBAL EDITION
+                </p>
+              </div>
+
+              <p 
+                className="text-black/80 text-sm md:text-base leading-relaxed mb-8 max-w-xl font-medium"
+              >
+                Uniting the world's leading healthcare brands, innovators,<br />
+                and professionals to collaborate, showcase solutions,<br />
+                and shape a healthier tomorrow.
+              </p>
+
+              {/* Feature Icons Row */}
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-4 mb-10 mt-8 py-4 border-t border-gray-100">
+                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                  <img src={G1} alt="Global Exposure" className="w-8 h-8 object-contain" />
+                  <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
+                    GLOBAL<br />EXPOSURE
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                  <img src={G2} alt="Quality Connections" className="w-8 h-8 object-contain" />
+                  <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
+                    QUALITY<br />CONNECTIONS
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                  <img src={G3} alt="Business Growth" className="w-8 h-8 object-contain" />
+                  <span 
+                    className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
+                    style={{ color: '#081e4a', textShadow: 'none' }}
+                  >
+                    BUSINESS<br />GROWTH
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                  <img src={G4} alt="Brand Visibility" className="w-8 h-8 object-contain" />
+                  <span 
+                    className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
+                    style={{ color: '#081e4a', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
+                  >
+                    BRAND<br />VISIBILITY
+                  </span>
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex flex-wrap gap-4">
+                <div className="relative group/btn">
+                  <div className="hidden md:block">
+                    <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
+                    <Sparkle style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
+                    <Sparkle style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
+                    <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
+                    <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
+                  </div>
+                  <Link 
+                    to="/book-a-stand"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="golden-btn-about flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]"
+                  >
+                    <Store className="w-5 h-5 text-[#050A1A]" />
+                    <span className="text-[#050A1A] font-black text-[11px] uppercase tracking-wider">BOOK YOUR STALL</span>
+                    <ArrowRight size={14} className="text-[#050A1A] ml-2" />
+                  </Link>
+                </div>
+                
+                <div className="relative group/btn">
+                  <div className="hidden md:block">
+                    <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
+                    <Sparkle style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
+                    <Sparkle style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
+                    <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
+                    <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
+                  </div>
+                  <Link 
+                    to="/buyer-registration"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="teal-btn-about flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]"
+                  >
+                    <Users className="w-5 h-5 text-white" />
+                    <span className="text-white font-black text-[11px] uppercase tracking-wider">REGISTER AS BUYER</span>
+                    <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center ml-2">
+                      <ArrowRight size={14} className="text-[#0A7C6E]" />
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Empty as badges removed */}
+            <div className="relative hidden md:block">
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* STATS COUNTER BAR - overlapping hero */}
-      <StatsCounter variant="hero" />
+      {/* STATS COUNTER BAR - OVERLAPPING */}
+      <div className="relative z-20">
+        <StatsCounter variant="hero" />
+      </div>
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
 

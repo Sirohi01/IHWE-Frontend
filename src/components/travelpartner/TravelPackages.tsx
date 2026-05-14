@@ -44,15 +44,15 @@ const packages = [
 const TravelPackages: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm">
-      {/* Header - Reduced Height */}
-      <div className="bg-[#0B2C66] px-[16px] py-[7px]">
-        <h3 className="text-white font-[900] text-[9.5px] uppercase tracking-wider text-center">
+
+      <div className="bg-[#0B2C66] px-[16px] py-[4px]">
+        <h3 className="text-white font-[900] text-[12px] uppercase tracking-wider text-center">
           Partnership Packages &amp; Investment
         </h3>
       </div>
 
-      {/* Package Items - Tightened Gap */}
-      <div className="p-[6px] flex flex-col gap-[3px] flex-1">
+
+      <div className="p-[4px] flex flex-col gap-[2px] flex-1">
         {packages.map((pkg, index) => (
           <motion.div
             key={index}
@@ -60,9 +60,9 @@ const TravelPackages: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[4px_10px] relative overflow-hidden group`}
+            className={`rounded-[14px] border border-slate-100 ${pkg.bgColor} p-[2px_10px] relative overflow-hidden group`}
           >
-            {/* Ribbon Badge */}
+
             <div
               className="absolute top-0 right-[10px] flex flex-col items-center"
               style={{ color: pkg.color }}
@@ -85,24 +85,24 @@ const TravelPackages: React.FC = () => {
 
             <div className="flex gap-[10px] items-center">
               <div
-                className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center text-white flex-shrink-0"
+                className="w-[32px] h-[32px] rounded-[8px] flex items-center justify-center text-white flex-shrink-0"
                 style={{ backgroundColor: pkg.color }}
               >
-                {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-4 h-4" })}
+                {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-3.5 h-3.5" })}
               </div>
               <div className="flex-1">
                 <h4
-                  className="text-[9px] font-[900] uppercase tracking-tight"
+                  className="text-[12px] font-[900] uppercase tracking-tight"
                   style={{ color: pkg.color }}
                 >
                   {pkg.name}
                 </h4>
-                <p className="text-[13px] font-[900] text-[#0B2C66] mt-[0px] mb-[1px]">
-                  {pkg.price}
+                <p className="text-[15px] font-[900] text-[#0B2C66] mt-[0px] mb-[0px]">
+                  {pkg.price.split(' ')[0]} <span className="text-[10px] text-gray-500 font-bold">+ GST</span>
                 </p>
                 <ul className="flex flex-col gap-[1px]">
                   {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-[4px] text-[8px] font-bold text-[#4A5568] leading-tight">
+                    <li key={i} className="flex items-start gap-[4px] text-[9.5px] font-bold text-[#4A5568] leading-tight">
                       <span
                         className="w-[3px] h-[3px] rounded-full flex-shrink-0 mt-[4px]"
                         style={{ backgroundColor: pkg.color }}
@@ -117,16 +117,16 @@ const TravelPackages: React.FC = () => {
         ))}
       </div>
 
-      {/* Footer Notes - Reduced Height */}
-      <div className="bg-[#0B2C66] px-[14px] py-[10px] mt-auto">
+
+      <div className="bg-[#0B2C66] px-[14px] py-[6px] mt-auto">
         {[
           "Custom packages available on request",
           "GST as applicable",
           "Stay vouchers valid during event period",
         ].map((note, i) => (
-          <div key={i} className="flex items-center gap-[6px] mb-[4px] last:mb-0">
-            <div className="w-[16px] h-[16px] bg-[#4E9F3D] rounded-full flex-center flex items-center justify-center flex-shrink-0">
-              <Check className="w-[9px] h-[9px] text-white" strokeWidth={4} />
+          <div key={i} className="flex items-center gap-[6px] mb-[2px] last:mb-0">
+            <div className="w-[14px] h-[14px] bg-[#4E9F3D] rounded-full flex-center flex items-center justify-center flex-shrink-0">
+              <Check className="w-[8px] h-[8px] text-white" strokeWidth={4} />
             </div>
             <p className="text-white text-[9px] font-bold uppercase tracking-tight opacity-90">{note}</p>
           </div>

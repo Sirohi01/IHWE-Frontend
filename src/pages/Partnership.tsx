@@ -5,7 +5,6 @@ import {
   heroBackgroundApi,
   SERVER_URL,
 } from "@/lib/api";
-
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import partnersHeroFallback from "../assets/cara14.jpg";
@@ -340,8 +339,9 @@ const Partnership = () => {
                 title: "Logistics Partner",
                 image: "/images/partnership/Logistics.png",
                 color: "#7b43c9",
-                link: "/logistics-partner",
+                link: "/logistic-partner",
                 icon: "/images/partnership/delivery.png",
+
                 points: [
                   "Listed as official logistics partner",
                   "International partner recognition",

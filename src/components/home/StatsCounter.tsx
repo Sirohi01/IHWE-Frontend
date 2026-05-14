@@ -182,32 +182,38 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
 
         return (
             <div className="relative z-30 w-full px-4 md:px-6 -mt-3">
-                <div className="max-w-6xl mx-auto bg-white shadow-[0_8px_30px_rgba(0,0,0,0.10)] rounded-xl overflow-hidden border border-gray-100/50">
-                    <div ref={sectionRef} className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div 
+                    className="max-w-6xl mx-auto rounded-xl overflow-hidden shadow-2xl border border-white/10"
+                    style={{ backgroundColor: '#134E8E' }}
+                >
+                    <div ref={sectionRef} className="grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10">
                         {heroStats.map((s, index) => (
                             <div
                                 key={index}
-                                className="flex items-center gap-3 px-5 py-2.5 group hover:bg-slate-50 transition-colors duration-300"
+                                className="flex items-center gap-3 px-5 py-3 group hover:bg-white/5 transition-colors duration-300"
                             >
-                                <div className="w-8 h-8 rounded-lg bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white shadow-sm">
+                                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#f5c842] transition-colors duration-300 text-white group-hover:text-[#134E8E] shadow-sm">
                                     {s.icon}
                                 </div>
                                 <div className="flex flex-col justify-center">
                                     <div className="flex items-baseline leading-none mb-0.5 gap-0.5">
                                         {s.prefix && (
-                                            <span className="text-[#d26019] font-black text-base">
+                                            <span className="text-white font-black text-base">
                                                 {s.prefix}
                                             </span>
                                         )}
-                                        <span className="text-[#d26019] font-black text-xl tabular-nums tracking-tight">
+                                        <span className="text-white font-black text-xl tabular-nums tracking-tight">
                                             <CounterNumber end={s.number} started={visible} delay={index * 100} />
                                         </span>
-                                        <span className="text-[#23471d] font-bold text-xs">{s.sup}</span>
+                                        <span className="text-white/80 font-bold text-xs">{s.sup}</span>
                                     </div>
-                                    <p className="text-[#23471d] font-bold text-[8.5px] uppercase tracking-[0.15em] leading-tight">
+                                    <p 
+                                        className="font-bold text-[8.5px] uppercase tracking-[0.15em] leading-tight"
+                                        style={{ color: '#f5c842' }}
+                                    >
                                         {s.label}
                                     </p>
-                                    <p className="text-slate-500 text-[8px] mt-0.5 leading-tight">{s.sub}</p>
+                                    <p className="text-white/60 text-[8px] mt-0.5 leading-tight">{s.sub}</p>
                                 </div>
                             </div>
                         ))}

@@ -8,6 +8,7 @@ import Layout from "@/components/layout/Layout";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
+const Advisory = lazy(() => import("./pages/Advisory"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
@@ -35,6 +36,7 @@ const ConferenceDay2 = lazy(() => import("./pages/ConferenceDay2"));
 const ConferenceDay3 = lazy(() => import("./pages/ConferenceDay3"));
 // const MsmePmsScheme = lazy(() => import("./pages/MsmePmsScheme"));
 const HotelStay = lazy(() => import("./pages/support/HotelStay"));
+const PrintingBrandingPartner = lazy(() => import("./pages/support/PrintingBrandingPartner"));
 const TravelAssistance = lazy(() => import("./pages/support/TravelAssistance"));
 const StallDesign = lazy(() => import("./pages/support/StallDesign"));
 const LogisticsSupport = lazy(() => import("./pages/support/LogisticsSupport"));
@@ -48,9 +50,11 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const Sponsership = lazy(()=> import("./pages/Sponsership"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
-const Fabricationpartner = lazy(()=> import("./pages/Fabricationpartner"));
+const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
 const PartnerRegistration = lazy(() => import("./pages/PartnerRegistration"));
+const LogisticPartner = lazy(() => import("./pages/LogisticPartner"));
 const DownloadBadge = lazy(() => import("./pages/DownloadBadge"));
+
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
@@ -72,6 +76,7 @@ const ExhibitorEventsPage = lazy(() => import("./pages/exhibitor/ExhibitorEvents
 const ExhibitorDocumentsPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentsPage"));
 const ExhibitorPaymentPage = lazy(() => import("./pages/exhibitor/ExhibitorPaymentPage"));
 const ExhibitorEPromotion = lazy(() => import("./pages/exhibitor/ExhibitorEPromotion"));
+const EEPromotion = lazy(() => import("./components/dashboard/exhibitor/EPromotion"));
 const ExhibitorSellerRegistrationPage = lazy(() => import("@/pages/exhibitor/ExhibitorSellerRegistrationPage"));
 const SellerPortal = lazy(() => import("@/pages/SellerPortal"));
 const SellerDashboardHome = lazy(() => import("@/pages/exhibitor/seller/SellerDashboardHome"));
@@ -110,6 +115,7 @@ const BuyerBSMPage = lazy(() => import("./pages/buyer/tabs/BuyerBSMPage"));
 const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPage"));
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
+const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -127,11 +133,13 @@ import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 import WhyVisit from "@/pages/why_visit/WhyVisit";
+import EPromotionWeb from "./pages/e_promotion_webPage/EPromotionWeb";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
+
 
 
 const queryClient = new QueryClient();
@@ -160,6 +168,7 @@ const App = () => {
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/awards/nomination" element={<NominationFormPage />} />
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
+                    <Route path="/advisory" element={<Advisory />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
@@ -174,7 +183,7 @@ const App = () => {
                     <Route path="/partners" element={<Partners />} />
                     <Route path="/sponsership" element={<Sponsership />} />
                     <Route path="/partnership" element={<Partnership />} />
-                    <Route path="/fabrication-partner" element={<Fabricationpartner/>}/>
+                    <Route path="/fabrication-partner" element={<Fabricationpartner />} />
 
                     <Route path="/partner-registration" element={<PartnerRegistration />} />
                     <Route path="/support/hotel-stay" element={<HotelStay />} />
@@ -201,7 +210,10 @@ const App = () => {
                     <Route path="/travel-accommodation" element={<TravelAccommodation />} />
                     <Route path="/travel-partner" element={<TravelPartner />} />
                     <Route path="/hotel-stay-partner" element={<HotelStayPartner />} />
+                    <Route path="/printing-branding-partner" element={<PrintingBrandingPartner />} />
+                    <Route path="/logistic-partner" element={<LogisticPartner />} />
                     <Route path="/e-promotion" element={<EPromotion />} />
+
                     <Route path="/download-badge" element={<DownloadBadge />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="/terms-of-service" element={<TermsOfService />} />
@@ -212,6 +224,9 @@ const App = () => {
                     <Route path="/buyer-registration-form" element={<BuyerRegistration />} />
                     <Route path="/international-buyer-registration" element={<InternationalBuyerRegistration />} />
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
+                    <Route path="/hospitality-partner" element={<HospitalityPartner />} />
+                    <Route path="/epromotion" element={<EEPromotion />} />
+                    <Route path="/e-promotion-web" element={<EPromotionWeb />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
@@ -285,6 +300,7 @@ const App = () => {
                     <Route path="notifications" element={<BuyerNotificationsPage />} />
                     <Route path="documentation" element={<BuyerDocumentationPage />} />
                     <Route path="feedback" element={<BuyerFeedbackForm />} />
+
                   </Route>
                 </Routes>
               </Suspense>
