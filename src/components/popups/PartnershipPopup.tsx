@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import pop1 from "../../assets/pop1.png";
 import leaf2 from "../../assets/leaf2.png";
@@ -9,7 +9,7 @@ import t3 from "../../assets/t3.png";
 import t4 from "../../assets/t4.png";
 import t5 from "../../assets/t5.png";
 
-// ── Sparkle Component ──
+
 const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
   <span
     style={{
@@ -31,50 +31,59 @@ const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, co
 const serviceOptions = [
   {
     id: "hotel", label: "Hotel Booking",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="14" width="28" height="22" rx="2"/><path d="M12 36V28h6v8M22 28h6v8M6 22h28M14 14V10a6 6 0 0112 0v4"/><rect x="16" y="20" width="8" height="5" rx="1"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="14" width="28" height="22" rx="2" /><path d="M12 36V28h6v8M22 28h6v8M6 22h28M14 14V10a6 6 0 0112 0v4" /><rect x="16" y="20" width="8" height="5" rx="1" /></svg>
   },
   {
     id: "travel", label: "Travel Assistance",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M8 30l4-14 4 7 6-12 4 8 5-7 4 7" strokeLinejoin="round"/><ellipse cx="20" cy="22" rx="11" ry="5"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M8 30l4-14 4 7 6-12 4 8 5-7 4 7" strokeLinejoin="round" /><ellipse cx="20" cy="22" rx="11" ry="5" /></svg>
   },
   {
     id: "stall", label: "Stall Design & Fabrication",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="16" width="28" height="20" rx="1"/><path d="M6 16l4-8h20l4 8M14 36V26h12v10"/><path d="M10 20h4v6h-4zM26 20h4v6h-4z"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="16" width="28" height="20" rx="1" /><path d="M6 16l4-8h20l4 8M14 36V26h12v10" /><path d="M10 20h4v6h-4zM26 20h4v6h-4z" /></svg>
   },
   {
     id: "logistics", label: "Logistics Support",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="4" y="14" width="22" height="16" rx="2"/><path d="M26 20h6l4 6v4h-10V20z"/><circle cx="11" cy="32" r="3"/><circle cx="29" cy="32" r="3"/><path d="M4 22h22"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="4" y="14" width="22" height="16" rx="2" /><path d="M26 20h6l4 6v4h-10V20z" /><circle cx="11" cy="32" r="3" /><circle cx="29" cy="32" r="3" /><path d="M4 22h22" /></svg>
   },
   {
     id: "printing", label: "Printing & Branding",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="8" y="6" width="24" height="16" rx="2"/><path d="M12 22v12h16V22M8 14h24M16 28h8M16 32h6"/><circle cx="12" cy="17" r="1.5" fill="#2d6a2d"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="8" y="6" width="24" height="16" rx="2" /><path d="M12 22v12h16V22M8 14h24M16 28h8M16 32h6" /><circle cx="12" cy="17" r="1.5" fill="#2d6a2d" /></svg>
   },
   {
     id: "hospitality", label: "Hospitality Services",
-    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M10 28a10 6 0 0020 0"/><path d="M8 28h24M20 10v6M14 16a6 4 0 0012 0"/><circle cx="20" cy="8" r="2"/><path d="M16 34h8"/></svg>
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M10 28a10 6 0 0020 0" /><path d="M8 28h24M20 10v6M14 16a6 4 0 0012 0" /><circle cx="20" cy="8" r="2" /><path d="M16 34h8" /></svg>
   },
 ];
 
 const whyChoose = [
-  { id: 1, title: "Verified & Trusted", desc: "All partners are verified and experienced",
+  {
+    id: 1, title: "Verified & Trusted", desc: "All partners are verified and experienced",
     icon: <img src={t1} alt="verified" className="w-[34px] h-[34px] object-contain" />
   },
-  { id: 2, title: "Best Pricing", desc: "Competitive rates and best value",
+  {
+    id: 2, title: "Best Pricing", desc: "Competitive rates and best value",
     icon: <img src={t2} alt="pricing" className="w-[34px] h-[34px] object-contain" />
   },
-  { id: 3, title: "Faster Coordination", desc: "Quick response and smooth execution",
+  {
+    id: 3, title: "Faster Coordination", desc: "Quick response and smooth execution",
     icon: <img src={t3} alt="coordination" className="w-[34px] h-[34px] object-contain" />
   },
-  { id: 4, title: "Expo-Specific Support", desc: "Solutions tailored for IHWE exhibitors",
+  {
+    id: 4, title: "Expo-Specific Support", desc: "Solutions tailored for IHWE exhibitors",
     icon: <img src={t4} alt="support" className="w-[34px] h-[34px] object-contain" />
   },
-  { id: 5, title: "Trusted Network", desc: "Backed by IHWE's reliable partner network",
+  {
+    id: 5, title: "Trusted Network", desc: "Backed by IHWE's reliable partner network",
     icon: <img src={t5} alt="network" className="w-[34px] h-[34px] object-contain" />
   },
 ];
 
-export default function ExpoSupportPopup() {
-  const [isOpen, setIsOpen] = useState(true);
+interface PartnershipPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function PartnershipPopup({ isOpen, onClose }: PartnershipPopupProps) {
   const [formData, setFormData] = useState({ fullName: "", companyName: "", mobile: "", email: "", stallSize: "", message: "" });
   const [selectedServices, setSelectedServices] = useState([]);
   const [charCount, setCharCount] = useState(0);
@@ -89,7 +98,7 @@ export default function ExpoSupportPopup() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
+        <motion.div
           className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-md p-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -138,29 +147,29 @@ export default function ExpoSupportPopup() {
           <motion.div
             className="relative bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex mt-6"
             style={{ width: '100%', maxWidth: 800, height: 'auto', maxHeight: 'min(94vh, 820px)' }}
-            initial={{ 
-              opacity: 0, 
-              scale: 0.85, 
-              rotateX: 15, 
+            initial={{
+              opacity: 0,
+              scale: 0.85,
+              rotateX: 15,
               y: 60,
-              perspective: 1000 
+              perspective: 1000
             }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
-              rotateX: 0, 
-              y: 0 
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotateX: 0,
+              y: 0
             }}
-            exit={{ 
-              opacity: 0, 
-              scale: 0.9, 
-              y: 40, 
+            exit={{
+              opacity: 0,
+              scale: 0.9,
+              y: 40,
               rotateX: -10,
               transition: { duration: 0.3, ease: "easeInOut" }
             }}
-            transition={{ 
-              type: "spring", 
-              damping: 18, 
+            transition={{
+              type: "spring",
+              damping: 18,
               stiffness: 100,
               mass: 1,
               duration: 0.6
@@ -168,17 +177,17 @@ export default function ExpoSupportPopup() {
           >
             {/* Close */}
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={onClose}
               className="absolute top-4 right-4 z-50 w-8 h-8 bg-black/10 hover:bg-red-600 text-black hover:text-white rounded-full flex items-center justify-center transition-all shadow-sm backdrop-blur-sm"
             >
-              <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4l12 12M16 4L4 16" strokeLinecap="round"/></svg>
+              <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" /></svg>
             </button>
 
             {/* ── LEFT PANEL ── */}
             <div className="flex-1 flex flex-col p-8 overflow-hidden">
 
               {/* Header */}
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-4 mb-6 flex-shrink-0"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -212,15 +221,15 @@ export default function ExpoSupportPopup() {
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
                     <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3"/><path d="M3 18a7 7 0 0114 0" strokeLinecap="round"/></svg></span>
-                      <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3" /><path d="M3 18a7 7 0 0114 0" strokeLinecap="round" /></svg></span>
+                      <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Company Name *</label>
                     <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1"/><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round"/></svg></span>
-                      <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1" /><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round" /></svg></span>
+                      <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                     </div>
                   </div>
                 </div>
@@ -230,15 +239,15 @@ export default function ExpoSupportPopup() {
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Mobile Number *</label>
                     <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2"/><circle cx="10" cy="15" r="0.7" fill="currentColor"/></svg></span>
-                      <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2" /><circle cx="10" cy="15" r="0.7" fill="currentColor" /></svg></span>
+                      <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Email Address *</label>
                     <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2"/><path d="M2 7l8 5 8-5" strokeLinecap="round"/></svg></span>
-                      <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2" /><path d="M2 7l8 5 8-5" strokeLinecap="round" /></svg></span>
+                      <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                     </div>
                   </div>
                 </div>
@@ -255,7 +264,7 @@ export default function ExpoSupportPopup() {
                             ${checked ? "border-[#2d6a2d] bg-[#f0f7ee]" : "border-gray-200 bg-white hover:border-[#a5d6a7]"}`}>
                           <div className={`absolute top-1 right-1 w-3.5 h-3.5 border-2 rounded flex items-center justify-center
                             ${checked ? "border-[#2d6a2d] bg-[#2d6a2d]" : "border-gray-300 bg-white"}`}>
-                            {checked && <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="white" strokeWidth="2.5"><path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                            {checked && <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="white" strokeWidth="2.5"><path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                           </div>
                           {s.icon}
                           <span className="text-[9.5px] font-semibold text-gray-700 leading-tight text-center">{s.label}</span>
@@ -270,15 +279,15 @@ export default function ExpoSupportPopup() {
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Stall Size / Requirement</label>
                     <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 17L7 13M17 3l-4 4M3 3l4 4M17 17l-4-4M3 3h4M3 3v4M17 17h-4M17 17v-4" strokeLinecap="round"/></svg></span>
-                      <input type="text" name="stallSize" placeholder="Stall size" value={formData.stallSize} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 17L7 13M17 3l-4 4M3 3l4 4M17 17l-4-4M3 3h4M3 3v4M17 17h-4M17 17v-4" strokeLinecap="round" /></svg></span>
+                      <input type="text" name="stallSize" placeholder="Stall size" value={formData.stallSize} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
                     <div className="relative max-w-[280px]">
                       <textarea name="message" placeholder="Message..." value={formData.message} onChange={handleChange} maxLength={300} rows={1}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none"/>
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none" />
                       <span className="absolute bottom-1 right-2 text-[8.5px] text-gray-400">{charCount}/300</span>
                     </div>
                   </div>
@@ -286,7 +295,7 @@ export default function ExpoSupportPopup() {
               </motion.div>
 
               {/* Action Buttons */}
-              <motion.div 
+              <motion.div
                 className="flex gap-3 mt-8 mb-4 px-2 flex-shrink-0"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -301,18 +310,18 @@ export default function ExpoSupportPopup() {
 
                   <button type="button" className="blue-btn-pp w-full text-white font-black text-[11px] tracking-widest uppercase py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02] shadow-lg">
                     SUBMIT REQUIREMENT
-                    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
                 </div>
                 <button type="button" className="flex-1 border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[11px] tracking-widest uppercase py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02]">
-                  <svg viewBox="0 0 20 20" className="w-4 h-4" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z"/></svg>
+                  <svg viewBox="0 0 20 20" className="w-4 h-4" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
                   WHATSAPP
                 </button>
               </motion.div>
 
               {/* Privacy Disclaimer */}
               <div className="flex items-center justify-center gap-2 text-gray-800 text-[9px] flex-shrink-0 mt-auto opacity-70">
-                <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="7" width="10" height="8" rx="1"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>
+                <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="7" width="10" height="8" rx="1" /><path d="M5 7V5a3 3 0 016 0v2" /></svg>
                 Your information is safe. We never share your details.
               </div>
             </div>
@@ -335,14 +344,14 @@ export default function ExpoSupportPopup() {
                 <div className="text-left mb-6 px-1">
                   <p className="text-black text-[13px] font-medium uppercase tracking-wider">Why Choose</p>
                   <h3 className="text-[17px] font-extrabold text-[#2d6a2d]">IHWE Partners?</h3>
-                  <div className="w-8 h-0.5 bg-[#2d6a2d] mt-1.5 rounded-full"/>
+                  <div className="w-8 h-0.5 bg-[#2d6a2d] mt-1.5 rounded-full" />
                 </div>
               </motion.div>
 
               {/* Items List */}
               <div className="relative z-10 space-y-1">
                 {whyChoose.map((item, i) => (
-                  <motion.div 
+                  <motion.div
                     key={item.id}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -357,13 +366,13 @@ export default function ExpoSupportPopup() {
                         <p className="text-[10.5px] text-gray-900 leading-snug">{item.desc}</p>
                       </div>
                     </div>
-                    {i < whyChoose.length - 1 && <div className="h-px bg-gray-300/50"/>}
+                    {i < whyChoose.length - 1 && <div className="h-px bg-gray-300/50" />}
                   </motion.div>
                 ))}
               </div>
 
               {/* Branded Leaf Decoration */}
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-8 -right-8 w-56 h-56 pointer-events-none transform -rotate-12"
                 initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
                 animate={{ opacity: 1, scale: 1, rotate: -12 }}

@@ -45,7 +45,7 @@ import stay3 from "../assets/stay3.png";
 import stay4 from "../assets/stay4.png";
 import stay5 from "../assets/stay5.png";
 
-// ── Gold Sparkle component ──
+
 const GoldSparkle = ({ style, color = "#fff176" }: { style?: React.CSSProperties; color?: string }) => (
   <span
     style={{
@@ -69,7 +69,7 @@ const Partners = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
-    // Automatically open popup after a small delay
+
     const timer = setTimeout(() => {
       setIsPopupOpen(true);
     }, 2000);
@@ -229,14 +229,10 @@ const Partners = () => {
       `}</style>
 
 
-      {/* ══════════════════════════════════════
-          HERO SECTION
-      ══════════════════════════════════════ */}
       <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden bg-white py-12 lg:py-0">
         <div className="container mx-auto px-4 lg:pl-12 relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
-            {/* LEFT — Text Content */}
             <div className="w-full lg:w-[45%] space-y-3 text-left pt-2 lg:pt-0 pb-6 lg:pb-8 lg:mt-14">
               <motion.p
                 initial={{ opacity: 0, x: -20 }}
@@ -285,7 +281,7 @@ const Partners = () => {
                 smooth, productive and stress-free.
               </motion.p>
 
-              {/* 4 mini feature items */}
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -331,13 +327,9 @@ const Partners = () => {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          OUR SUPPORT SERVICES
-      ══════════════════════════════════════ */}
       <section className="pt-8 pb-10 bg-white">
         <div className="container mx-auto px-4 lg:pl-12 lg:pr-8">
 
-          {/* Heading */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-3">
               <div className="h-px w-10 bg-[#0b1126]" />
@@ -349,7 +341,6 @@ const Partners = () => {
             </p>
           </div>
 
-          {/* ── 6 Cards — 3 columns, each card: left text (whitish) + right image ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[1220px]">
             {serviceCards.map((card, i) => (
               <motion.div
@@ -363,12 +354,12 @@ const Partners = () => {
                   boxShadow: "rgba(20, 26, 52, 0.12) 0px 4px 12px, rgba(20, 26, 52, 0.08) 0px 1px 4px"
                 }}
               >
-                {/* LEFT — whitish bg, icon + title + desc + learn more */}
+
                 <div
                   className="flex flex-col justify-between pl-4 pr-0 py-4 flex-1 min-w-0"
                   style={{ background: '#ffffff' }}
                 >
-                  {/* Icon circle */}
+
                   <div>
                     <div className="w-16 h-16  mb-3">
                       <img src={card.icon} alt={card.title} className="w-full h-full object-contain" />
@@ -384,7 +375,6 @@ const Partners = () => {
                     </p>
                   </div>
 
-                  {/* Learn More */}
                   <Link to={card.path || "#"}>
                     <button
                       className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
@@ -395,14 +385,14 @@ const Partners = () => {
                   </Link>
                 </div>
 
-                {/* RIGHT — image */}
+
                 <div className="w-[180px] shrink-0 overflow-hidden relative">
                   <img
                     src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* subtle dark left-fade so text side blends */}
+
                   <div
                     className="absolute inset-y-0 left-0 w-24 pointer-events-none"
                     style={{ background: 'linear-gradient(to right, #ffffff 15%, rgba(255,255,255,0.8) 40%, transparent 100%)' }}
@@ -419,7 +409,7 @@ const Partners = () => {
       ══════════════════════════════════════ */}
       <section className="pt-4 pb-4 bg-white">
         <div className="container mx-auto px-4 lg:pl-12 lg:pr-8">
-          <div 
+          <div
             className="bg-[#eaf0ec] rounded-3xl overflow-hidden max-w-[1220px]"
             style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset" }}
           >
@@ -472,13 +462,13 @@ const Partners = () => {
                   <div className="flex flex-col items-center lg:items-start gap-4 w-full">
                     <div className="relative group/btn w-full lg:max-w-[340px]">
                       {/* Gold Sparkles */}
-                      <GoldSparkle style={{ top: '-10px', left: '8%',   animationDelay: '0s'    }} />
-                      <GoldSparkle style={{ top: '-12px', left: '30%',  animationDelay: '0.3s'  }} />
-                      <GoldSparkle style={{ top: '-10px', left: '55%',  animationDelay: '0.6s'  }} />
+                      <GoldSparkle style={{ top: '-10px', left: '8%', animationDelay: '0s' }} />
+                      <GoldSparkle style={{ top: '-12px', left: '30%', animationDelay: '0.3s' }} />
+                      <GoldSparkle style={{ top: '-10px', left: '55%', animationDelay: '0.6s' }} />
                       <GoldSparkle style={{ top: '-12px', right: '12%', animationDelay: '0.15s' }} />
-                      <GoldSparkle style={{ bottom: '-10px', left: '18%',  animationDelay: '0.45s' }} />
-                      <GoldSparkle style={{ bottom: '-12px', left: '42%',  animationDelay: '0.75s' }} />
-                      <GoldSparkle style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s'  }} />
+                      <GoldSparkle style={{ bottom: '-10px', left: '18%', animationDelay: '0.45s' }} />
+                      <GoldSparkle style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
+                      <GoldSparkle style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
 
                       <button className="vendor-green-btn flex items-center justify-center gap-3 text-white w-full py-4 rounded-xl font-black text-[13px] uppercase tracking-wider shadow-lg transition-all group">
                         <Users className="w-5 h-5" />
@@ -572,7 +562,7 @@ const Partners = () => {
         <div className="bg-[#001c27] rounded-3xl md:rounded-full pt-6 pb-4 md:pt-8 md:pb-6 md:px-14 relative overflow-hidden shadow-2xl border-b-4 border-[#2e7d32]/30">
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
-            
+
             {/* Left: Text */}
             <div className="text-left w-full lg:w-auto">
               <h2 className="text-[20px] md:text-[26px] font-black text-white leading-[1.1]">
@@ -643,7 +633,7 @@ const Partners = () => {
       <div className="bg-white border-y border-slate-300 py-6 mb-12 mt-[-1rem] relative z-20">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
-            
+
             {/* 1. Date */}
             <div className="flex items-center gap-3">
               <Calendar className="w-9 h-9 text-[#2e7d32]" strokeWidth={1.5} />
