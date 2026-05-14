@@ -9,13 +9,13 @@ const BSMeetHero = () => {
         <div
             className="w-full bg-cover relative bg-no-repeat bg-center"
             style={{
-                backgroundImage: "url('/bsmeet/bg3.png')"
+                backgroundImage: "url('/bsmeet/bg4.png')"
             }}
         >
             {/* GREEN OVERLAY */}
             {/* <div className="absolute inset-0 bg-green-200/10"></div> */}
 
-            <div className={`relative z-10 py-1 ${SectionContainer}`}>
+            <div className={`relative z-10 py-14 ${SectionContainer}`}>
                 <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
