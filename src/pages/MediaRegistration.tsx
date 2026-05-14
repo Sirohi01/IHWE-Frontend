@@ -3,13 +3,9 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     CheckCircle,
-    Send, ChevronRight,
     ShieldCheck,
-    Camera,
-    Building2,
-    Globe,
-    FileText
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +13,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { heroBackgroundApi, SERVER_URL, crmApi } from "@/lib/api";
 import HeroBg from "@/assets/media.jpg";
+import FeaturedMediaCoverage from "@/components/mediaRegistration/FeaturedMediaCarousel";
+import MediaSection from "@/components/mediaRegistration/MediaSection";
+import MediaBanner from "@/components/mediaRegistration/MediaBanner";
+import { Global } from "recharts";
+import GlobalMediaStats from "@/components/mediaRegistration/GlobalMediaStats";
+import MediaPartners from "@/components/mediaRegistration/MediaPartners";
 
 
 
@@ -29,6 +31,8 @@ const MEDIA_CATEGORIES = [
     "Freelance Journalist",
     "Others"
 ];
+
+
 
 const MediaRegistration = () => {
     const [submitted, setSubmitted] = useState(false);
@@ -109,7 +113,7 @@ const MediaRegistration = () => {
 
     const handleInputChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
-        
+
         if (field === "country") {
             setFormData(prev => ({ ...prev, state: "", city: "" }));
             setStates([]);
@@ -135,34 +139,11 @@ const MediaRegistration = () => {
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
             {/* ── HERO SECTION - Registration Standard 16:5 ── */}
-            <section
-                className="hero-background-registration"
-                style={{
-                    backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : HeroBg})`
-                }}
-            >
-                <div className="absolute inset-0 bg-black/45" />
-
-                <div
-                    className="container mx-auto px-4 text-center text-white relative z-10"
-                    data-aos="fade-up"
-                >
-                    <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
-                        {heroData?.title || "Press & Partnership"}
-                    </p>
-
-                    <h1 
-                        className="text-4xl md:text-6xl font-inter font-semibold mb-6 tracking-tight"
-                    >
-                        {heroData?.heading || "Cover the Future of Wellness"}
-                    </h1>
-
-                    <p className="text-white/70 text-base md:text-lg mb-8 max-w-xl mx-auto font-light leading-relaxed">
-                        {heroData?.shortDescription || "Accreditation for journalists, bloggers, and influencers to cover IHWE 2026."}
-                    </p>
-                </div>
-            </section>
-
+          <MediaBanner/>
+            <FeaturedMediaCoverage />
+            <MediaSection />
+            <GlobalMediaStats />
+            <MediaPartners />
             {/* ── MAIN CONTENT ── */}
             <section className="pt-8 pb-24 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">
@@ -179,14 +160,14 @@ const MediaRegistration = () => {
                                         <CheckCircle size={40} />
                                     </div>
                                     <div className="space-y-2">
-                                        <h2 
+                                        <h2
                                             className="text-3xl font-bold text-slate-900"
                                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                         >
                                             Application Submitted!
                                         </h2>
                                         <p className="text-slate-600 text-base max-w-md mx-auto leading-relaxed font-inter">
-                                            Your media accreditation request is being processed. 
+                                            Your media accreditation request is being processed.
                                             Our team will review your credentials and get back to you shortly.
                                         </p>
                                     </div>
@@ -206,7 +187,7 @@ const MediaRegistration = () => {
                                     className="bg-white border border-slate-300 shadow-2xl overflow-hidden"
                                 >
                                     <div className="bg-slate-50/80 border-b border-slate-200 px-8 py-4">
-                                        <h2 
+                                        <h2
                                             className="text-xl font-bold text-slate-900 uppercase"
                                             style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                         >
@@ -218,7 +199,7 @@ const MediaRegistration = () => {
                                     <form onSubmit={handleSubmit} className="p-8 space-y-8 font-inter">
                                         {/* ── PERSONAL DETAILS ── */}
                                         <div className="space-y-6">
-                                            <h3 
+                                            <h3
                                                 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5"
                                                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                             >
@@ -259,7 +240,7 @@ const MediaRegistration = () => {
 
                                         {/* ── PROFESSIONAL DETAILS ── */}
                                         <div className="space-y-6">
-                                            <h3 
+                                            <h3
                                                 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-100 pb-1.5"
                                                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                                             >
@@ -280,7 +261,7 @@ const MediaRegistration = () => {
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>COUNTRY *</Label>
-                                                    <Select 
+                                                    <Select
                                                         required
                                                         value={formData.country}
                                                         onValueChange={(val) => handleInputChange("country", val)}
@@ -297,7 +278,7 @@ const MediaRegistration = () => {
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>STATE *</Label>
-                                                    <Select 
+                                                    <Select
                                                         required
                                                         disabled={!formData.country || loadingStates}
                                                         value={formData.state}
@@ -315,7 +296,7 @@ const MediaRegistration = () => {
                                                 </div>
                                                 <div>
                                                     <Label className={labelClasses}>CITY *</Label>
-                                                    <Select 
+                                                    <Select
                                                         required
                                                         disabled={!formData.state || loadingCities}
                                                         value={formData.city}
