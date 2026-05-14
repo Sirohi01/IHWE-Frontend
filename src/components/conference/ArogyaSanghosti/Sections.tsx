@@ -315,9 +315,9 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
 
 // ─── Section 07: Expectations ─────────────────────────────────────────────────
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '70px', height: "220px", display: "flex", flexDirection: "column" }}>
+    <SectionBox style={{ width: "90%", marginLeft: '70px', minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
-        <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", flex: 1, marginTop: "8px" }}>
             <div style={{ flex: 1, paddingBottom: 10, alignSelf: "flex-start" }}>
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 20px" }}>
@@ -333,17 +333,17 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
                     ))}
                 </div>
             </div>
-            <img src={expectationImg} alt="Expectations" style={{ width: 180, objectFit: "contain", marginRight: "-15px", marginBottom: "-15px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
+            <img src={expectationImg} alt="Expectations" style={{ width: 110, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
         </div>
     </SectionBox>
 );
 
 // ─── Section 08: Consent ──────────────────────────────────────────────────────
-export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '30px', height: "220px", display: "flex", flexDirection: "column" }}>
+export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2, onSubmit, isSubmitting }: any) => (
+    <SectionBox style={{ width: "90%", marginLeft: '30px', minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
         <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 18, paddingBottom: 10, flex: 1, alignSelf: "flex-start" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 10, flex: 1, alignSelf: "flex-start" }}>
                 {[
                     { state: consent1, set: setConsent1, label: "I confirm that the above information is correct" },
                     { state: consent2, set: setConsent2, label: "I agree to be contacted by the organizing team" },
@@ -353,8 +353,55 @@ export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2 }:
                         {c.label}
                     </label>
                 ))}
+                
+                <div style={{ marginTop: 10 }}>
+                    <button
+                        style={{
+                            background: GOLD,
+                            color: "white",
+                            border: "none",
+                            borderRadius: 6,
+                            padding: "10px 24px",
+                            fontSize: 14,
+                            fontWeight: 700,
+                            cursor: isSubmitting ? "not-allowed" : "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            fontFamily: "'Segoe UI', sans-serif",
+                            letterSpacing: 0.5,
+                            boxShadow: "0 4px 15px rgba(234, 179, 8, 0.3)",
+                            transition: "transform 0.2s ease",
+                        }}
+                        onClick={onSubmit}
+                        disabled={isSubmitting}
+                        onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.transform = "translateY(-2px)")}
+                        onMouseLeave={(e) => !isSubmitting && (e.currentTarget.style.transform = "translateY(0)")}
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <span style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "2px solid white",
+                                    borderTopColor: "transparent",
+                                    borderRadius: "50%",
+                                    animation: "spin 1s linear infinite"
+                                }} />
+                                Submitting...
+                            </>
+                        ) : (
+                            <>
+                                SUBMIT APPLICATION
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                                </svg>
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
-            <img src={consentImg} alt="Consent" style={{ width: 250, objectFit: "contain", marginRight: "-20px", marginBottom: "-20px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
+            <img src={consentImg} alt="Consent" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
         </div>
     </SectionBox>
 );

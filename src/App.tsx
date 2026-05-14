@@ -8,6 +8,7 @@ import Layout from "@/components/layout/Layout";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
+const Advisory = lazy(() => import("./pages/Advisory"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
@@ -139,6 +140,7 @@ const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
 
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -165,6 +167,7 @@ const App = () => {
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/awards/nomination" element={<NominationFormPage />} />
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
+                    <Route path="/advisory" element={<Advisory />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
@@ -295,6 +298,7 @@ const App = () => {
                     <Route path="notifications" element={<BuyerNotificationsPage />} />
                     <Route path="documentation" element={<BuyerDocumentationPage />} />
                     <Route path="feedback" element={<BuyerFeedbackForm />} />
+
                   </Route>
                 </Routes>
               </Suspense>

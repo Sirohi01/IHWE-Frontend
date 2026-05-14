@@ -12,7 +12,7 @@ import busAndTruck from '../../assets/logistic/raman.png';
 const LogisticFooter: React.FC = () => {
   return (
     <footer className="bg-[#001D3D] py-0.5 mt-2">
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+      <div className="max-w-[1350px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="hidden sm:block">
             <img src={busAndTruck} alt="Logistics" className="w-auto h-[60px] object-contain" />
