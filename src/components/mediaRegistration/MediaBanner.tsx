@@ -21,7 +21,7 @@ const mediaLogos = [
 ];
 const MediaBanner = () => {
   return (
-    <section className="relative w-full overflow-hidden bg-[#f4f7fb] pb-28">
+    <section className="relative w-full overflow-hidden pb-15">
                 {/* FULL WIDTH BANNER */}
                 <div className="w-full" style={{ backgroundImage: `url(${media_registration_bg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
                     <div className="relative mx-auto px-4 max-w-[1400px] lg:px-8 py-16 lg:py-24">

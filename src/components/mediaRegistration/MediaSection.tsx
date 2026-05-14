@@ -96,7 +96,7 @@ export default function MediaSection() {
     }, [emblaApi]);
 
     return (
-        <section className="w-full bg-[#f5f7fb] py-10 px-4">
+        <section className="w-full bg-[#f5f7fb] py-4 px-4">
             <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
 
                 {/* PRESS RELEASES */}

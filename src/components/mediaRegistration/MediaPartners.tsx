@@ -49,7 +49,7 @@ const partners = [
 
 export default function MediaPartners() {
     return (
-        <section className="w-full bg-[#f5f7fb] px-4 py-8">
+        <section className="w-full bg-[#f5f7fb] px-4 py-4">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}

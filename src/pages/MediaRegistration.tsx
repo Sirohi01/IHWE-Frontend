@@ -19,6 +19,8 @@ import MediaBanner from "@/components/mediaRegistration/MediaBanner";
 import { Global } from "recharts";
 import GlobalMediaStats from "@/components/mediaRegistration/GlobalMediaStats";
 import MediaPartners from "@/components/mediaRegistration/MediaPartners";
+import MediaKitComponent from "@/components/mediaRegistration/MediaKitComponent";
+import MediaContact from "@/components/mediaRegistration/MediaContact";
 
 
 
@@ -144,6 +146,8 @@ const MediaRegistration = () => {
             <MediaSection />
             <GlobalMediaStats />
             <MediaPartners />
+            <MediaKitComponent/>
+            <MediaContact />
             {/* ── MAIN CONTENT ── */}
             <section className="pt-8 pb-24 relative overflow-hidden">
                 <div className="container mx-auto px-6 max-w-[1400px]">

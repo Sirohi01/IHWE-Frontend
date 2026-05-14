@@ -144,7 +144,7 @@ export default function FeaturedMediaCoverage() {
     }, [emblaApi]);
 
     return (
-        <section className="w-full bg-[#f5f7fb] py-10 px-4">
+        <section className="w-full py-4 px-4">
             <div className="max-w-[1400px] mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
