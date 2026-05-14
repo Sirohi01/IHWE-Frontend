@@ -138,6 +138,7 @@ const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
 
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -293,6 +294,7 @@ const App = () => {
                     <Route path="notifications" element={<BuyerNotificationsPage />} />
                     <Route path="documentation" element={<BuyerDocumentationPage />} />
                     <Route path="feedback" element={<BuyerFeedbackForm />} />
+
                   </Route>
                 </Routes>
               </Suspense>
