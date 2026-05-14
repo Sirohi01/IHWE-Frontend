@@ -19,7 +19,7 @@ const experiences = [
     {
         title: "BUSINESS\nOPPORTUNITIES",
         desc: "Generate leads, explore dealership opportunities & build strategic partnerships.",
-        icon: <img src="/whyVisit/business.svg" alt="Business" className="w-10 h-10 object-contain" />,
+        icon: <img src="/whyVisit/business.png" alt="Business" className="w-10 h-10 object-contain" />,
         color: "bg-[#4a7729]",
         borderColor: "border-[#4a7729]"
     },
@@ -61,7 +61,7 @@ const ExperienceSection = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img src="/whyVisit/leaf.svg" alt="Leaf" className="h-4 object-contain" />
+                        <img src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 

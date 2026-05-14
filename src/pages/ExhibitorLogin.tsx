@@ -119,25 +119,26 @@ const ExhibitorLogin = () => {
 
     return (
         <div className="min-h-screen bg-[#f3f4f6] font-inter flex items-center justify-center py-6 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-[1100px] w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row mt-4">
+            <div className="max-w-[1100px] w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row mt-4">
 
                 {/* LEFT SIDE: Brand & Info */}
-                <div className="w-full lg:w-[50%] flex flex-col">
+                <div className="w-full lg:w-[55%] flex flex-col">
                     <div
                         className="flex-1 p-8 md:p-10 relative overflow-hidden flex flex-col"
                         style={{
-                            backgroundImage: "url('/exhibitor-login-booth.png')",
+                            backgroundImage: "url('/exhibitor-login-booth.webp')",
                             backgroundPosition: "center",
                             backgroundRepeat: "no-repeat",
                             backgroundSize: "cover"
                         }}
                     >
                         <div className="relative z-10 flex-1 flex flex-col">
-                            <div className="mb-6">
+                            <div className="mb-0">
                                 <img
-                                    src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"}
+                                    // src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/android-chrome-512x512.png"}
+                                    src="/logo.png"
                                     alt="IHWE Logo"
-                                    className="h-24 w-auto object-contain -ml-2"
+                                    className="h-20 w-auto object-contain -ml-2"
                                 />
                             </div>
 
@@ -156,13 +157,13 @@ const ExhibitorLogin = () => {
                                 <p className="text-[#357a38] text-xl mb-1 italic" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
                                     Welcome!
                                 </p>
-                                <h1 className="text-[28px] md:text-[32px] font-black text-slate-900 leading-[1.1] mb-2">
+                                <h1 className="text-[28px] md:text-[30px] font-black text-slate-900 leading-[1.1] mb-2">
                                     Your brand.<br />
                                     Your booth.<br />
                                     <span className="text-[#357a38]">Your impact.</span>
                                 </h1>
-                                <p className="text-slate-600 text-[12px] leading-relaxed max-w-[280px]">
-                                    Manage your booth, products, leads, and meetings – all in one powerful platform.
+                                <p className="text-slate-600 text-[14px] leading-relaxed max-w-[280px]">
+                                    Manage your booth, products, <br />leads, and meetings – all in <br />one powerful platform.
                                 </p>
                             </div>
                         </div>
@@ -211,20 +212,21 @@ const ExhibitorLogin = () => {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 className="w-full max-w-[420px] mx-auto"
-                            >                                <div className="text-center mb-6">
-                                    <div className="w-12 h-12 bg-[#f0fdf4] rounded-full flex items-center justify-center mx-auto mb-3">
+                            >
+                                <div className="text-center mb-4">
+                                    <div className="w-12 h-12 bg-[#f0fdf4] rounded-full flex items-center justify-center mx-auto mb-2">
                                         <Store className="w-6 h-6 text-[#357a38]" />
                                     </div>
-                                    <h2 className="text-[22px] font-black text-slate-800 mb-1">Exhibitor Login</h2>
-                                    <p className="text-slate-500 text-[12px]">Please enter your credentials to continue</p>
+                                    <h2 className="text-[20px] font-black text-slate-800 mb-1">Exhibitor Login</h2>
+                                    <p className="text-slate-500 text-[11px]">Please enter your credentials to continue</p>
                                 </div>
 
-                                <div className="flex bg-slate-100 p-1 rounded-md mb-6 max-w-[240px] mx-auto border border-slate-200">
+                                <div className="flex bg-slate-100 p-1 rounded-md mb-4 max-w-[240px] mx-auto border border-slate-200">
                                     <button type="button" onClick={() => setLoginMode('email')} className={`flex-1 text-[10px] font-bold py-1.5 uppercase rounded-sm transition-all ${loginMode === 'email' ? 'bg-white text-[#357a38] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Email</button>
                                     <button type="button" onClick={() => setLoginMode('mobile')} className={`flex-1 text-[10px] font-bold py-1.5 uppercase rounded-sm transition-all ${loginMode === 'mobile' ? 'bg-white text-[#357a38] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>Mobile</button>
                                 </div>
 
-                                <form onSubmit={handleLogin} className="space-y-4">
+                                <form onSubmit={handleLogin} className="space-y-3">
                                     {loginMode === 'email' ? (
                                         <>
                                             <div className="space-y-1.5">
@@ -305,7 +307,7 @@ const ExhibitorLogin = () => {
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="w-full bg-[#357a38] hover:bg-[#2e6b31] text-white font-bold py-2.5 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide text-[11px] shadow-sm mt-4 disabled:opacity-50"
+                                        className="w-full bg-[#357a38] hover:bg-[#2e6b31] text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide text-[11px] shadow-sm mt-3 disabled:opacity-50"
                                     >
                                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                                             <>
@@ -316,18 +318,18 @@ const ExhibitorLogin = () => {
                                     </button>
                                 </form>
 
-                                <div className="mt-6 relative">
+                                <div className="mt-4 relative">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-slate-200"></div>
                                     </div>
                                     <div className="relative flex justify-center text-sm">
-                                        <span className="px-4 bg-white text-slate-700 font-bold text-[11px]">New to IHWE Expo?</span>
+                                        <span className="px-4 bg-white text-slate-700 font-bold text-[10px]">New to IHWE Expo?</span>
                                     </div>
                                 </div>
 
                                 <button
-                                    onClick={() => navigate('/book-a-stand')}
-                                    className="w-full mt-4 bg-white border border-[#357a38] text-[#357a38] hover:bg-[#f0fdf4] font-bold py-2.5 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide text-[11px]"
+                                    onClick={() => window.open('/book-a-stand', '_blank')}
+                                    className="w-full mt-3 bg-white border border-[#357a38] text-[#357a38] hover:bg-[#f0fdf4] font-bold py-2 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wide text-[11px]"
                                 >
                                     <UserPlus size={16} />
                                     <span>REGISTER AS EXHIBITOR</span>
@@ -385,7 +387,7 @@ const ExhibitorLogin = () => {
                     </AnimatePresence>
 
                     {/* Footer Infos */}
-                    <div className="w-full max-w-[420px] mx-auto mt-6 space-y-3">
+                    <div className="w-full max-w-[420px] mx-auto mt-4 space-y-3">
                         <div className="flex items-center gap-3 py-1">
                             <div className="w-8 h-8 rounded-full bg-[#f0fdf4] flex items-center justify-center shrink-0">
                                 <Headset className="w-4 h-4 text-[#357a38]" />
@@ -393,7 +395,7 @@ const ExhibitorLogin = () => {
                             <div>
                                 <h4 className="text-[11px] font-bold text-slate-800">Need Help?</h4>
                                 <p className="text-[10px] text-slate-500 mt-0.5">
-                                    Email: exhibitor.support@ihwe.in <span className="mx-1 text-slate-300">|</span> Phone: +91-9654900525
+                                    Email: info@ihwe.in <span className="mx-1 text-slate-300">|</span> Phone: +91-9654900525
                                 </p>
                             </div>
                         </div>
