@@ -9,17 +9,17 @@ const BSMeetHero = () => {
         <div
             className="w-full bg-cover relative bg-no-repeat bg-center"
             style={{
-                backgroundImage: "url('/bsmeet/bg2.png')"
+                backgroundImage: "url('/bsmeet/bg3.png')"
             }}
         >
             {/* GREEN OVERLAY */}
-            <div className="absolute inset-0 bg-green-500/10"></div>
+            {/* <div className="absolute inset-0 bg-green-200/10"></div> */}
 
             <div className={`relative z-10 py-1 ${SectionContainer}`}>
                 <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
-                    <div className="w-[55%]">
+                    <div className="w-[50%]">
                         <h2 className="text-2xl md:text-4xl mt-4 font-bold text-green-900 leading-tight">
                             IHWE 2026
 
@@ -79,10 +79,10 @@ const BSMeetHero = () => {
                     </div>
 
                     {/* RIGHT SIDE EMPTY (optional ya kuch aur add kar sakte ho) */}
-                    <div className="relative w-[45%]">
-                        {/* Base Image */}
+                    {/* <div className="relative w-[45%]">
+                   
                         <img src="/bsmeet/bsmeetRight3.png" alt="Buyer Seller Meet" className="mix-blend-multiply bg-transparent object-contain w-full h-auto" />
-                        {/* Overlapping WhatsApp Button Image */}
+                        
                         <a
                             href="https://wa.me/919220408160"
                             target="_blank"
@@ -91,7 +91,7 @@ const BSMeetHero = () => {
                         >
                             <img src="/bsmeet/bsherob.png" alt="WhatsApp Chat" className="w-24 h-24 object-contain" />
                         </a>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
