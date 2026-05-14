@@ -1,4 +1,5 @@
 import { useState } from "react";
+import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.jpeg";
 
 const AdvisoryForm = () => {
     const [formData, setFormData] = useState({
@@ -47,64 +48,10 @@ const AdvisoryForm = () => {
     return (
         <div className="w-[1380px] mx-auto  font-sans">
             {/* ── BANNER ── */}
-            <div className="w-[1320px] ml-9  h-[400px]  relative  flex items-start flex-shrink-0">
-                {/* Green diagonal background layers */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5e9] via-[#c8e6c9] via-[#a5d6a7] to-[#81c784]" />
-
-
-
-
-                {/* Globe SVG */}
-                <div className="absolute right-[320px] top-5 w-[340px] h-[340px] opacity-35">
-                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="100" r="90" fill="none" stroke="#2e7d32" strokeWidth="1.5" />
-                        <ellipse cx="100" cy="100" rx="40" ry="90" fill="none" stroke="#2e7d32" strokeWidth="1.5" />
-                        <ellipse cx="100" cy="100" rx="75" ry="90" fill="none" stroke="#2e7d32" strokeWidth="1" />
-                        <line x1="10" y1="100" x2="190" y2="100" stroke="#2e7d32" strokeWidth="1" />
-                        <line x1="10" y1="65" x2="190" y2="65" stroke="#2e7d32" strokeWidth="0.8" />
-                        <line x1="10" y1="135" x2="190" y2="135" stroke="#2e7d32" strokeWidth="0.8" />
-                    </svg>
-                </div>
-
-                {/* Meditation silhouette */}
-                <div className="absolute right-[400px] bottom-0 w-[200px] h-[280px]">
-                    <svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="50" cy="18" r="10" fill="#1a5c2a" />
-                        <ellipse cx="50" cy="50" rx="18" ry="22" fill="#1a5c2a" />
-                        <path d="M32 45 Q10 55 5 75" stroke="#1a5c2a" strokeWidth="8" fill="none" strokeLinecap="round" />
-                        <path d="M68 45 Q90 55 95 75" stroke="#1a5c2a" strokeWidth="8" fill="none" strokeLinecap="round" />
-                        <path d="M35 70 Q25 95 15 110 Q30 115 50 110" stroke="#1a5c2a" strokeWidth="8" fill="none" strokeLinecap="round" />
-                        <path d="M65 70 Q75 95 85 110 Q70 115 50 110" stroke="#1a5c2a" strokeWidth="8" fill="none" strokeLinecap="round" />
-                        <ellipse cx="50" cy="130" rx="35" ry="6" fill="#2e7d32" opacity="0.3" />
-                    </svg>
-                </div>
-
-                {/* Hexagon icons */}
-                <div className="absolute top-5 right-[60px]">
-                    <svg width="80" height="90" viewBox="0 0 80 90">
-                        <polygon points="40,5 75,22 75,67 40,84 5,67 5,22" fill="none" stroke="#2e7d32" strokeWidth="2" />
-                        <text x="40" y="52" textAnchor="middle" fontSize="24" fill="#2e7d32">♥</text>
-                    </svg>
-                </div>
-                <div className="absolute top-[90px] right-[130px]">
-                    <svg width="70" height="80" viewBox="0 0 70 80">
-                        <polygon points="35,5 65,20 65,60 35,75 5,60 5,20" fill="none" stroke="#2e7d32" strokeWidth="2" />
-                        <circle cx="35" cy="28" r="8" fill="none" stroke="#2e7d32" strokeWidth="2" />
-                        <path d="M20 55 Q20 42 35 42 Q50 42 50 55" fill="none" stroke="#2e7d32" strokeWidth="2" />
-                    </svg>
-                </div>
-                <div className="absolute top-[160px] right-[50px]">
-                    <svg width="70" height="80" viewBox="0 0 70 80">
-                        <polygon points="35,5 65,20 65,60 35,75 5,60 5,20" fill="none" stroke="#2e7d32" strokeWidth="2" />
-                        <text x="35" y="47" textAnchor="middle" fontSize="22" fill="#2e7d32">🌿</text>
-                    </svg>
-                </div>
-
-                {/* Leaves decorations */}
-                <div className="absolute bottom-0 right-[200px] text-[60px] opacity-60">🌿</div>
-                <div className="absolute bottom-[30px] right-[140px] text-[40px] opacity-50 -rotate-[30deg]">🍃</div>
-
-                {/* Logo area */}
+            <div
+                className="w-[1320px] ml-9 h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${advisoryHeroImage})` }}
+            >
                 <div className="absolute top-[28px] left-9 flex items-center gap-3.5">
                     <div className="w-20 h-20 rounded-full bg-[#1a5c2a] flex items-center justify-center shrink-0 border-3 border-[#f5a623]">
                         <span className="text-white text-[42px] font-black leading-none font-serif">9</span>
