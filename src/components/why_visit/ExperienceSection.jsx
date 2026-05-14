@@ -54,9 +54,9 @@ const ExperienceSection = () => {
                 <div className="flex flex-col items-center justify-center mb-4">
                     <div className="flex items-center gap-4 w-full justify-center">
                         <div className="h-[1.5px] bg-gradient-to-r from-transparent to-gray-400 w-16 md:w-32"></div>
-                        <h2 className="text-lg md:text-xl font-bold text-[#011630] uppercase text-center tracking-wide">
+                        <h4 className="text-xl md:text-2xl font-bold text-[#011630] uppercase text-center tracking-wide">
                             Experience the Future of Health & Wellness
-                        </h2>
+                        </h4>
                         <div className="h-[1.5px] bg-gradient-to-l from-transparent to-gray-400 w-16 md:w-32"></div>
                     </div>
                     {/* Small Leaf below title */}
