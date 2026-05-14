@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Mic } from "lucide-react";
-import amanImage from "../../assets/bhiya.png";
+import amanImage from "../../assets/confrenehero/newheroconfrerceimage.webp";
 import arogyaLogo from "../../assets/arogyasangosti.png";
 
 const ConferenceHero: React.FC = () => {
