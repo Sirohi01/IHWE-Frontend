@@ -15,10 +15,10 @@ const HotelFooter: React.FC = () => {
   return (
     <footer className="bg-[#051124] py-1 px-4 relative overflow-hidden">
       {/* Background Green Circle */}
-      <div className="absolute -left-10 -top-10 w-40 h-40 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
-      <div className="absolute -left-5 -top-5 w-24 h-24 bg-[#4E9F3D]/15 rounded-full z-0"></div>
+      <div className="absolute -left-10 -top-10 w-80 h-80 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
+      <div className="absolute -left-5 -top-5 w-40 h-40 bg-[#4E9F3D]/15 rounded-full z-0"></div>
 
-      <div className="mx-auto max-w-[1400px] flex items-center justify-between relative z-10">
+      <div className="mx-auto max-w-[1330px] flex items-center justify-between relative z-10">
 
         {/* Left Side: Branding */}
         <div className="flex items-center gap-2 min-w-[320px]">

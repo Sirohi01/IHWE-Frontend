@@ -2,8 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Mic } from "lucide-react";
-import amanImage from "../../assets/bhiya.png";
-import arogyaLogo from "../../assets/arogyasangosti.png";
+import amanImage from "../../assets/confrenehero/newheroconfrerceimage.webp";
+import arogyaLogo from "../../assets/arogyasangostilogo/compressed_arogyasangosti.webp";
 
 const ConferenceHero: React.FC = () => {
   const darkYellow = "#C9A227";

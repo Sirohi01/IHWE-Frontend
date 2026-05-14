@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Headphones, Phone, Mail, Globe, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
-import logo from "@/assets/arogyasangosti.png";
+import logo from "@/assets/arogyasangostilogo/compressed_arogyasangosti.webp";
 import { socialMediaApi } from "@/lib/api";
 
 const DelegateFooter: React.FC = () => {

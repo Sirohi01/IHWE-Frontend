@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, User, ChevronRight, Loader2, Calendar } from "lucide-react";
-import amconImage from "../../assets/amanconfre.png";
+import amconImage from "../../assets/confrerceagenda/compressed_amanconfre.webp";
 import { agendaApi } from "../../lib/api";
 
 interface Session {
