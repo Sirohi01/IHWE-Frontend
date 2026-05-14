@@ -45,7 +45,7 @@ const navLinks = [
   {
     label: "Opportunities",
     dropdown: [
-      { label: "Sponsorship", path: "/visitor-registration", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      { label: "Sponsorship", path: "/sponsership", icon: FileCheck, description: "Get your complimentary visitor pass today" },
       { label: "Branding Opportunities", path: "/buyer-registration", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
       { label: "Partnership / Collaboration", path: "/partnership", icon: Sparkles, description: "Experience the latest in health & wellness" },
     ],
