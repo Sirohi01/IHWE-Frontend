@@ -52,20 +52,15 @@ const AdvisoryForm = () => {
                 className="w-[1320px] ml-9 h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center"
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
-                <div className="absolute top-[28px] left-9 flex items-center gap-3.5">
-                    <div className="w-20 h-20 rounded-full bg-[#1a5c2a] flex items-center justify-center shrink-0 border-3 border-[#f5a623]">
-                        <span className="text-white text-[42px] font-black leading-none font-serif">9</span>
+                <div className="absolute top-[28px] left-9 flex flex-col gap-3">
+                    <img 
+                        src="/logo.png" 
+                        alt="IHWE Logo" 
+                        className="w-[380px] h-auto object-contain drop-shadow-md" 
+                    />
+                    <div className="text-[#1a5c2a] text-lg font-bold tracking-wide pl-2">
+                        Global Platform. &nbsp; Limitless Possibilities.
                     </div>
-                    <div>
-                        <div className="text-[#1a5c2a] text-[15px] font-bold tracking-[1.5px] leading-tight uppercase">INTERNATIONAL</div>
-                        <div className="text-[#1a5c2a] text-[15px] font-bold tracking-[1.5px] leading-tight uppercase">HEALTH & WELLNESS</div>
-                        <div className="text-[#f5a623] text-2xl font-black tracking-wider leading-[1.1] uppercase">EXPO 2026</div>
-                    </div>
-                </div>
-
-                {/* Tagline */}
-                <div className="absolute bottom-7 left-9 text-[#1a5c2a] text-base font-semibold tracking-wide">
-                    Global Platform. &nbsp; Limitless Possibilities.
                 </div>
 
                 {/* City skyline */}
