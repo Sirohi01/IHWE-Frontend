@@ -375,7 +375,7 @@ const TermsOfService: React.FC = () => {
                       className="red-btn-terms flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02] active:scale-95 text-white font-[800] text-[12px] uppercase tracking-wider shadow-lg"
                     >
                       <Printer className="w-4 h-4" strokeWidth={2.5} />
-                      <span>Print Document</span>
+                      <span>Print Terms & Conditions</span>
                     </button>
                   </div>
                 </div>

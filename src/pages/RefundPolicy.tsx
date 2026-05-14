@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { 
-  FileText, 
-  Download, 
-  MessageCircle, 
-  Mail, 
-  Phone, 
-  Globe, 
-  Calendar, 
-  ShieldCheck, 
-  AlertCircle, 
-  Clock, 
-  Users, 
-  CreditCard, 
-  RotateCcw, 
-  Ban, 
-  Scale, 
-  Zap, 
+import {
+  FileText,
+  Download,
+  MessageCircle,
+  Mail,
+  Phone,
+  Globe,
+  Calendar,
+  ShieldCheck,
+  AlertCircle,
+  Clock,
+  Users,
+  CreditCard,
+  RotateCcw,
+  Ban,
+  Scale,
+  Zap,
   MapPin,
   CheckCircle2,
   Building2,
@@ -25,7 +25,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import SectionContainer from "@/components/layout/SectionContainer";
-import refundBg from "@/assets/refundbg.jpeg";
+import refundBg from "@/assets/termPage.jpeg";
 import footerBand from "@/assets/footerband.png";
 
 // Sparkle component
@@ -189,29 +189,148 @@ const RefundPolicy = () => {
           animation: shimmer 2s infinite;
         }
         @media print {
-          .no-print { display: none !important; }
-          nav, footer { display: none !important; }
-          .print-container { width: 100% !important; margin: 0 !important; padding: 20px !important; }
-          .bg-white { background: white !important; }
-          .shadow-md { shadow: none !important; }
-          .border-b { border-bottom: 1px solid #eee !important; }
-          body { color: black !important; background: white !important; }
+          /* Hide only the print button */
+          .print-hidden, .no-print, nav, footer, header, aside, .xl\\:hidden, [class*="fixed"], [class*="z-[100]"], [class*="z-[90]"], [class*="bg-[#002511]"] { 
+            display: none !important; 
+          }
+
+          /* Force background colors and images */
+          body, * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Reset margins for full banner printing */
+          @page {
+            margin: 10mm 3mm !important;
+            size: auto;
+          }
+
+          @page :first {
+            margin: 0 !important;
+          }
+
+          html, body { 
+            background-color: white !important; 
+            padding: 0 !important;
+            margin: 0 !important;
+            height: auto !important;
+          }
+
+          #root, main, .bg-[#fcfdfc], [class*="min-h-screen"] {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+            display: block !important;
+            position: static !important;
+          }
+
+          section:first-of-type {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+          }
+
+          /* Reduce Banner Height in Print */
+          section.relative.min-h-\[400px\] {
+            min-height: 180px !important;
+            height: 180px !important;
+            padding-top: 0 !important;
+          }
+
+          .bg-[#fcfdfc] { background-color: white !important; }
+          .bg-white { background-color: white !important; }
+          
+          /* Preserve the layout as much as possible */
+          .rounded-3xl, .rounded-[20px], .rounded-2xl { 
+            border-radius: 12px !important; 
+            border: 1px solid #f1f5f9 !important;
+          }
+
+          /* Force single column for print readability */
+          .grid-cols-1.md\\:grid-cols-2 { 
+            grid-template-columns: 1fr !important; 
+            display: block !important;
+          }
+
+          .md\\:border-r { 
+            border-right: none !important; 
+            border-bottom: 1px solid #f1f5f9 !important; 
+          }
+
+          /* Prevent individual term cards from cutting between pages */
+          .grid-cols-1.md\\:grid-cols-2 > div { 
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+            display: block !important;
+            padding: 10px 15px !important;
+          }
+
+          /* Tighten vertical spacing to fit 2 pages */
+          section { 
+            margin-bottom: 4px !important;
+            padding: 0 !important;
+          }
+
+          /* Reduce Font Sizes further to fit 2 pages */
+          h1 {
+            font-size: 24px !important;
+            line-height: 1 !important;
+            margin-bottom: 4px !important;
+          }
+          
+          h3 {
+            font-size: 13px !important;
+          }
+
+          p, span, .text-sm {
+            font-size: 10.5px !important;
+            line-height: 1.3 !important;
+          }
+
+          /* Tighten overlap and paddings */
+          .container.-mt-12.md\\:-mt-24 {
+            margin-top: -30px !important;
+          }
+
+          .p-5, .md\\:p-6, .p-8 {
+            padding: 10px !important;
+          }
+
+          /* Tighten Info Bar */
+          .grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4 {
+            gap: 10px !important;
+          }
+
+          .lg\\:border-r {
+            border-right: none !important;
+          }
+
+          /* Highlight Intro Text in Print */
+          section.relative.min-h-\[400px\] p {
+            color: #115d33 !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+          }
+
+          .text-center.mb-12.py-10 {
+            padding: 15px !important;
+            margin-bottom: 10px !important;
+          }
         }
       `}</style>
-      
+
       {/* ─── HERO SECTION ─── */}
       <section className="relative min-h-[400px] md:h-[480px] flex items-center pt-24 md:pt-32 pb-16 overflow-hidden no-print">
         {/* BG Image with Gradient Overlay */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src={refundBg} 
-            alt="Refund Policy BG" 
+          <img
+            src={refundBg}
+            alt="Refund Policy BG"
             className="w-full h-full object-cover object-center"
           />
         </div>
 
         <SectionContainer className="relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -250,9 +369,9 @@ const RefundPolicy = () => {
                   <Sparkle color="#a78bfa" shadow="#1E104E" style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                   <Sparkle color="#a78bfa" shadow="#1E104E" style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
                 </div>
-                <Link 
-                  to="/contact" 
-                  target="_blank" 
+                <Link
+                  to="/contact"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="purple-btn-refund flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]"
                 >
@@ -271,12 +390,12 @@ const RefundPolicy = () => {
                   <Sparkle color="#fca5a5" shadow="#5E0006" style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                   <Sparkle color="#fca5a5" shadow="#5E0006" style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
                 </div>
-                <button 
+                <button
                   onClick={() => window.print()}
                   className="red-btn-refund flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02]"
                 >
                   <Download className="w-4 h-4 text-white" />
-                  <span className="text-white font-black text-[10px] uppercase tracking-wider">DOWNLOAD POLICY PDF</span>
+                  <span className="text-white font-black text-[10px] uppercase tracking-wider">PRINT REFUND POLICY</span>
                   <ArrowRight size={13} className="text-white ml-1 opacity-70" />
                 </button>
               </div>
@@ -287,14 +406,14 @@ const RefundPolicy = () => {
 
       {/* ─── INFO BAR CARD ─── */}
       <div className="container mx-auto px-4 md:px-12 relative z-20 -mt-12 md:-mt-24 no-print">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-slate-100 p-5 md:p-6"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            
+
             {/* Column 1 */}
             <div className="flex items-start gap-4 pr-6 lg:border-r border-slate-300 last:border-r-0">
               <div className="w-11 h-11 rounded-xl bg-[#0a4d2c] flex items-center justify-center shrink-0">
@@ -361,9 +480,9 @@ const RefundPolicy = () => {
       </div>
 
       <section className="pt-8 md:pt-12 pb-8 md:pb-12">
-        <div 
-          className="text-center mb-12 py-10 px-6 relative overflow-hidden w-full" 
-          style={{ 
+        <div
+          className="text-center mb-12 py-10 px-6 relative overflow-hidden w-full"
+          style={{
             backgroundImage: `url(${footerBand})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -390,7 +509,7 @@ const RefundPolicy = () => {
         <SectionContainer>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-0 gap-y-0 border-t border-slate-200">
             {policySections.map((item, index) => (
-              <motion.div 
+              <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
