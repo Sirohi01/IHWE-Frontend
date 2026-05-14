@@ -29,7 +29,7 @@ const passColumns = [
 ];
 
 const stats = [
-    { value: "150+", label: "Exhibitors", icon: "/whyVisit/stat_exhibitors.svg", color: "text-[#4a7729]" },
+    { value: "150+", label: "Exhibitors", icon: "/whyVisit/exhibitors.png", color: "text-[#4a7729]" },
     { value: "8,000+", label: "Visitors/ Delegates", icon: "/whyVisit/stat_visitors.svg", color: "text-[#0f3b73]" },
     { value: "1,000+", label: "GLOBAL BUYERS", icon: "/whyVisit/stat_globe.svg", color: "text-[#4a7729]" },
     { value: "3 Days", label: "of Networking", icon: "/whyVisit/stat_calendar.svg", color: "text-[#0f3b73]" }

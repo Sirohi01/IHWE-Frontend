@@ -5,44 +5,38 @@ const experiences = [
     {
         title: "INNOVATION\nSHOWCASE",
         desc: "Discover cutting-edge products in healthcare, wellness, AYUSH, fitness, nutraceuticals & organic industries.",
-        icon: <img src="/whyVisit/innovation.svg" alt="Innovation" className="w-10 h-10 object-contain" />,
-        color: "bg-[#4a7729]",
-        borderColor: "border-[#4a7729]"
+        icon: "/whyVisit/innovation.png",
+        alt: "Innovation"
     },
     {
         title: "GLOBAL\nNETWORKING",
         desc: "Meet manufacturers, importers, distributors, hospitals, wellness brands & investors from around the world.",
-        icon: <img src="/whyVisit/networking.svg" alt="Networking" className="w-10 h-10 object-contain" />,
-        color: "bg-[#0f3b73]",
-        borderColor: "border-[#0f3b73]"
+        icon: "/whyVisit/globalnetworkw.png",
+        alt: "Networking"
     },
     {
         title: "BUSINESS\nOPPORTUNITIES",
         desc: "Generate leads, explore dealership opportunities & build strategic partnerships.",
-        icon: <img src="/whyVisit/business.png" alt="Business" className="w-10 h-10 object-contain" />,
-        color: "bg-[#4a7729]",
-        borderColor: "border-[#4a7729]"
+        icon: "/whyVisit/businessOpp.png",
+        alt: "Business"
     },
     {
         title: "CONFERENCES &\nLIVE SESSIONS",
         desc: "Attend expert-led conferences, startup showcases, wellness seminars & industry discussions.",
-        icon: <img src="/whyVisit/conferences.svg" alt="Conferences" className="w-10 h-10 object-contain" />,
-        color: "bg-[#0f3b73]",
-        borderColor: "border-[#0f3b73]"
+        icon: "/whyVisit/conference.png",
+        alt: "Conferences"
     },
     {
         title: "WELLNESS\nEXPERIENCES",
         desc: "Experience live wellness demos, Ayurveda therapies, fitness innovations & organic lifestyle solutions.",
-        icon: <img src="/whyVisit/wellness.svg" alt="Wellness" className="w-10 h-10 object-contain" />,
-        color: "bg-[#4a7729]",
-        borderColor: "border-[#4a7729]"
+        icon: "/whyVisit/wellnessExp.png",
+        alt: "Wellness"
     },
     {
         title: "PRODUCT\nLAUNCHES",
         desc: "Witness exclusive launches from emerging and established international brands.",
-        icon: <img src="/whyVisit/products.svg" alt="Products" className="w-10 h-10 object-contain" />,
-        color: "bg-[#0f3b73]",
-        borderColor: "border-[#0f3b73]"
+        icon: "/whyVisit/produceLonch.png",
+        alt: "Products"
     }
 ];
 
@@ -70,11 +64,11 @@ const ExperienceSection = () => {
                     {experiences.map((item, index) => (
                         <div
                             key={index}
-                            className={`flex flex-col items-center bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-b-[6px] ${item.borderColor} p-3 text-center hover:shadow-lg transition-shadow duration-300`}
+                            className="flex flex-col items-center bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] p-5 text-center hover:shadow-lg transition-shadow duration-300"
                         >
-                            {/* Icon Circle */}
-                            <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white mb-3 shadow-inner ${item.color}`}>
-                                {item.icon}
+                            {/* Icon container */}
+                            <div className="w-20 h-20 flex items-center justify-center">
+                                <img src={item.icon} alt={item.alt} className="w-16 h-16 object-contain" />
                             </div>
 
                             {/* Title */}
