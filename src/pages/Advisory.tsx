@@ -45,22 +45,14 @@ const AdvisoryForm = () => {
     const requiredStar = <span className="text-red-600">*</span>;
 
     return (
-        <div className="w-[1380px] mx-auto bg-[#f5f5f5] font-sans">
+        <div className="w-[1380px] mx-auto  font-sans">
             {/* ── BANNER ── */}
-            <div className="w-[1350px]  h-[400px] bg-[#e8f5e9] relative overflow-hidden flex items-start flex-shrink-0">
+            <div className="w-[1320px] ml-9  h-[400px]  relative  flex items-start flex-shrink-0">
                 {/* Green diagonal background layers */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5e9] via-[#c8e6c9] via-[#a5d6a7] to-[#81c784]" />
 
-                {/* Top-right dark green triangle */}
-                <div
-                    className="absolute top-0 right-0 w-0 h-0 border-solid border-r-[420px] border-b-[420px] border-transparent border-r-[#1a5c2a]"
-                />
 
-                {/* Yellow diagonal stripe */}
-                <div className="absolute top-[60px] -right-[30px] w-[500px] h-[55px] bg-[#f5a623] -rotate-[15deg] opacity-85" />
 
-                {/* Second yellow stripe */}
-                <div className="absolute top-[120px] -right-[60px] w-[500px] h-[30px] bg-[#f5a623] -rotate-[15deg] opacity-50" />
 
                 {/* Globe SVG */}
                 <div className="absolute right-[320px] top-5 w-[340px] h-[340px] opacity-35">
