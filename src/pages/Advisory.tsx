@@ -11,88 +11,92 @@ const styles = `
 
   body, #root {
     font-family: 'Open Sans', sans-serif;
-    background: #f5f5f5;
+    background: #f0f2f0;
+    min-width: 1400px;
   }
 
   .page-wrapper {
-    max-width: 900px;
+    width: 1400px;
     margin: 0 auto;
     background: #fff;
     font-family: 'Open Sans', sans-serif;
+    box-shadow: 0 0 40px rgba(0,0,0,0.10);
   }
 
   /* ── HERO BANNER ── */
   .hero {
-    background: linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 30%, #4a8a3a 55%, #6aaa4a 75%, #c8d840 100%);
-    padding: 22px 28px 18px 28px;
+    background: linear-gradient(120deg, #12280f 0%, #1e4a1a 18%, #2e6e28 38%, #4a9038 56%, #78b830 74%, #b8d430 88%, #d8e840 100%);
+    padding: 28px 56px 24px 48px;
     position: relative;
     overflow: hidden;
-    min-height: 120px;
+    min-height: 140px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .hero::before {
+  .hero::after {
     content: '';
     position: absolute;
-    top: -20px; right: -20px;
-    width: 260px; height: 260px;
-    background: radial-gradient(circle, rgba(255,220,50,0.18) 0%, transparent 70%);
+    top: -30px; right: 200px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(255,230,60,0.13) 0%, transparent 68%);
     border-radius: 50%;
+    pointer-events: none;
   }
 
   .hero-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     z-index: 2;
+    flex-shrink: 0;
   }
 
   .logo-circle {
-    width: 68px; height: 68px;
+    width: 78px; height: 78px;
     border-radius: 50%;
     background: linear-gradient(145deg, #c8d840, #8ab820);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
-    font-size: 34px;
+    font-size: 38px;
     font-weight: 900;
     color: #1a3a1a;
     flex-shrink: 0;
-    border: 3px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    border: 3px solid rgba(255,255,255,0.32);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.28);
   }
 
   .logo-text { z-index: 2; }
 
   .logo-text .title-top {
     font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    color: #e8f5e8;
-    letter-spacing: 2px;
+    color: #dff0d8;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    line-height: 1.2;
+    line-height: 1.3;
   }
 
   .logo-text .title-main {
     font-family: 'Montserrat', sans-serif;
-    font-size: 26px;
+    font-size: 30px;
     font-weight: 900;
     color: #f5e535;
-    letter-spacing: 1px;
-    line-height: 1;
+    letter-spacing: 1.5px;
+    line-height: 1.05;
   }
 
   .hero-tagline {
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    color: #c8e8b0;
+    color: #c2e2a0;
     letter-spacing: 0.5px;
-    margin-top: 4px;
+    margin-top: 5px;
   }
 
   .hero-center {
@@ -104,203 +108,188 @@ const styles = `
     position: relative;
   }
 
-  .hero-figure {
-    width: 70px; height: 90px;
-    position: relative;
-  }
-
   .hero-figure-svg {
-    width: 70px; height: 90px;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
-  }
-
-  .hero-globe {
-    position: absolute;
-    right: -40px; top: -10px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, rgba(180,220,255,0.5) 0%, rgba(80,160,80,0.3) 50%, transparent 80%);
-    border: 1px solid rgba(255,255,255,0.2);
+    width: 86px; height: 110px;
+    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.32));
   }
 
   .hero-right {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 8px;
+    gap: 10px;
     z-index: 2;
+    flex-shrink: 0;
   }
 
   .hex-icons {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
   }
 
   .hex-icon {
-    width: 44px; height: 50px;
-    background: rgba(255,255,255,0.12);
-    border: 1.5px solid rgba(255,255,255,0.25);
-    border-radius: 8px;
+    width: 52px; height: 58px;
+    background: rgba(255,255,255,0.13);
+    border: 1.5px solid rgba(255,255,255,0.28);
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 22px;
   }
 
   /* ── BODY LAYOUT ── */
   .body-layout {
     display: flex;
-    gap: 0;
+    align-items: flex-start;
   }
 
   /* ── SIDEBAR ── */
   .sidebar {
-    width: 220px;
+    width: 290px;
     flex-shrink: 0;
-    padding: 28px 20px 24px 24px;
+    padding: 36px 26px 32px 32px;
     background: #fff;
-    border-right: 1px solid #f0f0f0;
+    border-right: 1.5px solid #efefef;
   }
 
   .sidebar-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 900;
     color: #1a3a1a;
-    line-height: 1.15;
-    margin-bottom: 4px;
+    line-height: 1.18;
+    margin-bottom: 5px;
   }
 
   .sidebar-subtitle {
     font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: #333;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
   }
 
   .sidebar-divider {
-    width: 40px; height: 3px;
+    width: 44px; height: 3.5px;
     background: #f5a623;
     border-radius: 2px;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
 
   .sidebar-desc {
-    font-size: 11.5px;
+    font-size: 12.5px;
     color: #555;
-    line-height: 1.65;
-    margin-bottom: 28px;
+    line-height: 1.7;
+    margin-bottom: 32px;
   }
 
   .why-nominate-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 800;
     color: #1a3a1a;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
+    letter-spacing: 1.2px;
+    margin-bottom: 4px;
   }
 
   .why-divider {
-    width: 30px; height: 2.5px;
+    width: 32px; height: 3px;
     background: #f5a623;
     border-radius: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   .why-item {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
+    margin-bottom: 18px;
   }
 
   .why-icon {
-    width: 34px; height: 34px;
+    width: 38px; height: 38px;
     border-radius: 50%;
     background: #f0f8f0;
-    border: 1.5px solid #c8e0c0;
+    border: 1.5px solid #c0dcc0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
     flex-shrink: 0;
     margin-top: 1px;
   }
 
   .why-text h4 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #1a3a1a;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
   }
 
   .why-text p {
-    font-size: 10.5px;
+    font-size: 11.5px;
     color: #666;
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
   .help-box {
     background: #1a3a1a;
-    border-radius: 10px;
-    padding: 16px;
-    margin-top: 24px;
-    color: #fff;
+    border-radius: 12px;
+    padding: 20px 18px;
+    margin-top: 28px;
   }
 
   .help-box-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 14px;
   }
 
   .help-icon {
-    width: 30px; height: 30px;
+    width: 34px; height: 34px;
     border-radius: 50%;
     background: rgba(255,255,255,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .help-box-header span {
     font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
+    color: #fff;
     letter-spacing: 0.5px;
   }
 
   .help-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    color: #c8e8b0;
-    margin-bottom: 8px;
+    gap: 9px;
+    font-size: 12px;
+    color: #b8e0a0;
+    margin-bottom: 9px;
   }
-
-  .help-item .icon { font-size: 12px; }
 
   .help-divider {
     height: 1px;
     background: rgba(255,255,255,0.15);
-    margin: 10px 0;
+    margin: 12px 0;
   }
 
   .help-assist {
     font-family: 'Montserrat', sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.65);
     text-align: center;
     margin-top: 4px;
   }
@@ -308,49 +297,48 @@ const styles = `
   /* ── MAIN FORM ── */
   .form-area {
     flex: 1;
-    padding: 28px 28px 28px 28px;
-    background: #f9f9f9;
+    padding: 36px 40px 40px 36px;
+    background: #f7f8f7;
+    min-width: 0;
   }
 
   .section-block {
     background: #fff;
-    border-radius: 8px;
-    border: 1px solid #e8e8e8;
-    padding: 22px 22px 20px 22px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #e4e8e4;
+    padding: 28px 28px 26px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   }
 
   .section-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
-    border-bottom: 1.5px solid #e8e8e8;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid #e8ebe8;
   }
 
   .section-num {
-    width: 28px; height: 28px;
+    width: 30px; height: 30px;
     background: #1a3a1a;
-    border-radius: 6px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
     color: #fff;
     flex-shrink: 0;
   }
 
-  .section-icon {
-    font-size: 18px;
-    color: #2d7a2d;
-  }
+  .section-icon { font-size: 20px; flex-shrink: 0; }
 
   .section-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 800;
     color: #1a3a1a;
     letter-spacing: 1px;
@@ -360,65 +348,58 @@ const styles = `
   .section-line {
     flex: 1;
     height: 1.5px;
-    background: #e0e0e0;
-    margin-left: 4px;
+    background: #e0e4e0;
+    margin-left: 6px;
   }
 
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 24px;
+    margin-bottom: 20px;
   }
 
-  .form-row.single {
-    grid-template-columns: 1fr;
-  }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-row:last-child { margin-bottom: 0; }
 
   .form-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
   }
 
   .form-label {
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 600;
-    color: #333;
+    color: #2a2a2a;
     display: flex;
     align-items: center;
     gap: 3px;
   }
 
-  .form-label .req {
-    color: #e53935;
-    font-size: 12px;
-    margin-left: 1px;
-  }
+  .form-label .req { color: #e53935; font-size: 13px; }
 
   .form-input {
-    height: 38px;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    padding: 0 11px;
-    font-size: 12px;
+    height: 42px;
+    border: 1px solid #d4d8d4;
+    border-radius: 7px;
+    padding: 0 13px;
+    font-size: 13px;
     font-family: 'Open Sans', sans-serif;
     color: #333;
     background: #fff;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    width: 100%;
   }
 
   .form-input:focus {
     border-color: #2d7a2d;
-    box-shadow: 0 0 0 2px rgba(45,122,45,0.1);
+    box-shadow: 0 0 0 3px rgba(45,122,45,0.10);
   }
 
-  .form-input::placeholder { color: #bbb; }
-
-  .form-input.with-icon {
-    padding-left: 32px;
-  }
+  .form-input::placeholder { color: #c0c4c0; font-size: 12.5px; }
+  .form-input.with-icon { padding-left: 36px; }
 
   .input-wrapper {
     position: relative;
@@ -428,156 +409,146 @@ const styles = `
 
   .input-icon {
     position: absolute;
-    left: 10px;
-    font-size: 13px;
+    left: 11px;
+    font-size: 14px;
     color: #aaa;
     pointer-events: none;
     z-index: 1;
   }
 
   .form-select {
-    height: 38px;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    padding: 0 32px 0 11px;
-    font-size: 12px;
+    height: 42px;
+    border: 1px solid #d4d8d4;
+    border-radius: 7px;
+    padding: 0 36px 0 13px;
+    font-size: 13px;
     font-family: 'Open Sans', sans-serif;
-    color: #bbb;
-    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;
+    color: #c0c4c0;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 12px center;
     appearance: none;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.18s, box-shadow 0.18s;
     cursor: pointer;
     width: 100%;
   }
 
   .form-select:focus {
     border-color: #2d7a2d;
-    box-shadow: 0 0 0 2px rgba(45,122,45,0.1);
+    box-shadow: 0 0 0 3px rgba(45,122,45,0.10);
   }
 
   .form-select.selected { color: #333; }
 
   .form-textarea {
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    padding: 10px 11px;
-    font-size: 12px;
+    border: 1px solid #d4d8d4;
+    border-radius: 7px;
+    padding: 12px 13px;
+    font-size: 13px;
     font-family: 'Open Sans', sans-serif;
     color: #333;
     background: #fff;
     outline: none;
     resize: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.18s, box-shadow 0.18s;
     width: 100%;
-    min-height: 80px;
+    line-height: 1.6;
   }
 
   .form-textarea:focus {
     border-color: #2d7a2d;
-    box-shadow: 0 0 0 2px rgba(45,122,45,0.1);
+    box-shadow: 0 0 0 3px rgba(45,122,45,0.10);
   }
 
-  .form-textarea::placeholder { color: #bbb; font-size: 11.5px; }
+  .form-textarea::placeholder { color: #c0c4c0; font-size: 12.5px; }
 
   .char-count {
     text-align: right;
-    font-size: 10.5px;
+    font-size: 11px;
     color: #bbb;
-    margin-top: 3px;
+    margin-top: 4px;
   }
 
   .phone-row {
     display: flex;
-    gap: 0;
     align-items: center;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
+    border: 1px solid #d4d8d4;
+    border-radius: 7px;
     overflow: hidden;
     background: #fff;
-    transition: border-color 0.2s;
+    height: 42px;
+    transition: border-color 0.18s, box-shadow 0.18s;
   }
 
   .phone-row:focus-within {
     border-color: #2d7a2d;
-    box-shadow: 0 0 0 2px rgba(45,122,45,0.1);
+    box-shadow: 0 0 0 3px rgba(45,122,45,0.10);
   }
 
   .phone-prefix {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 0 10px;
-    border-right: 1px solid #e0e0e0;
-    font-size: 12px;
+    gap: 6px;
+    padding: 0 12px;
+    border-right: 1px solid #e0e4e0;
+    font-size: 13px;
     color: #333;
-    background: #fafafa;
-    height: 38px;
+    background: #f8faf8;
+    height: 100%;
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
   }
 
-  .flag { font-size: 16px; }
-
-  .phone-arrow {
-    font-size: 9px;
-    color: #999;
-  }
+  .flag { font-size: 17px; }
+  .phone-arrow { font-size: 9px; color: #888; }
 
   .phone-input {
     flex: 1;
-    height: 38px;
+    height: 100%;
     border: none;
-    padding: 0 10px;
-    font-size: 12px;
+    padding: 0 12px;
+    font-size: 13px;
     font-family: 'Open Sans', sans-serif;
     color: #333;
     outline: none;
     background: transparent;
+    min-width: 0;
   }
 
-  .phone-input::placeholder { color: #bbb; }
+  .phone-input::placeholder { color: #c0c4c0; font-size: 12.5px; }
 
   .info-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 14px; height: 14px;
+    width: 15px; height: 15px;
     border-radius: 50%;
-    border: 1.5px solid #999;
+    border: 1.5px solid #aaa;
     font-size: 9px;
-    color: #999;
+    color: #888;
     font-style: italic;
     font-family: serif;
     font-weight: 700;
     cursor: pointer;
-    margin-left: 4px;
+    margin-left: 5px;
   }
 
-  .textarea-wrap {
-    position: relative;
-  }
+  .textarea-wrap { display: flex; flex-direction: column; }
 
-  /* Upload area */
   .upload-row {
     display: flex;
-    align-items: stretch;
-    gap: 16px;
+    align-items: center;
+    gap: 24px;
   }
 
-  .upload-label-block {
-    flex: 1;
-  }
-
-  .upload-label-block .form-label {
-    margin-bottom: 3px;
-  }
+  .upload-label-block { flex: 1; }
+  .upload-label-block .form-label { margin-bottom: 4px; }
 
   .upload-hint {
-    font-size: 10.5px;
+    font-size: 11.5px;
     color: #999;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .upload-box {
@@ -585,43 +556,41 @@ const styles = `
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 4px;
-    border: 1.5px dashed #b0c8b0;
-    border-radius: 8px;
-    padding: 14px 20px;
-    background: #f5fbf5;
+    gap: 5px;
+    border: 2px dashed #a8c8a8;
+    border-radius: 10px;
+    padding: 18px 40px;
+    background: #f4fbf4;
     cursor: pointer;
-    min-width: 180px;
-    transition: border-color 0.2s;
+    min-width: 240px;
+    transition: border-color 0.2s, background 0.2s;
   }
 
-  .upload-box:hover { border-color: #2d7a2d; }
-
-  .upload-box .upload-icon { font-size: 22px; color: #2d7a2d; }
+  .upload-box:hover { border-color: #2d7a2d; background: #edf7ed; }
+  .upload-icon { font-size: 26px; }
 
   .upload-box-text {
-    font-size: 11.5px;
+    font-size: 13px;
     font-weight: 600;
     color: #2d7a2d;
     text-align: center;
   }
 
   .upload-box-sub {
-    font-size: 10.5px;
+    font-size: 11.5px;
     color: #888;
     text-align: center;
   }
 
-  /* Checkbox row */
   .checkbox-row {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    margin-top: 6px;
+    gap: 12px;
+    margin-top: 8px;
   }
 
   .form-checkbox {
-    width: 15px; height: 15px;
+    width: 16px; height: 16px;
     margin-top: 1px;
     accent-color: #2d7a2d;
     cursor: pointer;
@@ -629,54 +598,51 @@ const styles = `
   }
 
   .checkbox-label {
-    font-size: 11px;
+    font-size: 12px;
     color: #444;
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
   .checkbox-label .req { color: #e53935; }
 
-  /* Submit button */
   .submit-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    height: 50px;
+    height: 54px;
     background: #1a3a1a;
     border: none;
-    border-radius: 8px;
+    border-radius: 9px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     color: #fff;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
     cursor: pointer;
-    margin-top: 18px;
+    margin-top: 22px;
     transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 16px rgba(26,58,26,0.18);
   }
 
-  .submit-btn:hover { background: #2d5a2d; }
-  .submit-btn:active { transform: scale(0.99); }
-  .submit-btn svg { font-size: 16px; }
+  .submit-btn:hover { background: #264a26; }
+  .submit-btn:active { transform: scale(0.993); }
 
   .security-note {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    font-size: 10.5px;
+    gap: 6px;
+    font-size: 11.5px;
     color: #888;
-    margin-top: 10px;
+    margin-top: 12px;
     text-align: center;
   }
-
-  .security-note .lock { font-size: 11px; }
 `;
 
-const injectStyles = () => {
+(() => {
     const existing = document.getElementById("advisory-styles");
     if (!existing) {
         const tag = document.createElement("style");
@@ -684,19 +650,9 @@ const injectStyles = () => {
         tag.textContent = styles;
         document.head.appendChild(tag);
     }
-};
+})();
 
-injectStyles();
-
-const SectionHeader = ({
-    num,
-    icon,
-    title,
-}: {
-    num: string;
-    icon: string;
-    title: string;
-}) => (
+const SectionHeader = ({ num, icon, title }: { num: string; icon: string; title: string }) => (
     <div className="section-header">
         <div className="section-num">{num}</div>
         <span className="section-icon">{icon}</span>
@@ -707,24 +663,11 @@ const SectionHeader = ({
 
 export default function Advisory() {
     const [formData, setFormData] = useState({
-        fullName: "",
-        designation: "",
-        organization: "",
-        industry: "",
-        email: "",
-        phone: "",
-        linkedin: "",
-        expertise: "",
-        years: "",
-        summary: "",
-        whyRecommend: "",
-        contribution: "",
-        nominatorName: "",
-        nominatorDesig: "",
-        nominatorOrg: "",
-        nominatorEmail: "",
-        nominatorPhone: "",
-        relationship: "",
+        fullName: "", designation: "", organization: "", industry: "",
+        email: "", phone: "", linkedin: "", expertise: "", years: "",
+        summary: "", whyRecommend: "", contribution: "",
+        nominatorName: "", nominatorDesig: "", nominatorOrg: "",
+        nominatorEmail: "", nominatorPhone: "", relationship: "",
         consent: false,
     });
 
@@ -733,29 +676,27 @@ export default function Advisory() {
 
     return (
         <div className="page-wrapper">
-            {/* ── HERO ── */}
+
+            {/* HERO */}
             <div className="hero">
                 <div className="hero-left">
                     <div className="logo-circle">9</div>
                     <div className="logo-text">
                         <div className="title-top">International Health &amp; Wellness</div>
                         <div className="title-main">EXPO 2026</div>
-                        <div className="hero-tagline">Global Platform. &nbsp; Limitless Possibilities.</div>
+                        <div className="hero-tagline">Global Platform.&nbsp;&nbsp;&nbsp;Limitless Possibilities.</div>
                     </div>
                 </div>
 
                 <div className="hero-center">
-                    {/* Meditating figure SVG */}
-                    <svg className="hero-figure-svg" viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        {/* glow behind */}
-                        <circle cx="35" cy="45" r="38" fill="rgba(100,180,80,0.18)" />
-                        {/* body silhouette */}
-                        <ellipse cx="35" cy="28" rx="9" ry="9" fill="#2d6a2d" opacity="0.9" />
-                        <path d="M26 42 Q35 36 44 42 L46 68 Q35 72 24 68 Z" fill="#2d6a2d" opacity="0.9" />
-                        <path d="M26 44 Q18 52 15 62 Q20 65 24 58 Z" fill="#2d6a2d" opacity="0.9" />
-                        <path d="M44 44 Q52 52 55 62 Q50 65 46 58 Z" fill="#2d6a2d" opacity="0.9" />
-                        <path d="M27 68 Q24 76 22 82 Q28 84 30 78 Z" fill="#2d6a2d" opacity="0.9" />
-                        <path d="M43 68 Q46 76 48 82 Q42 84 40 78 Z" fill="#2d6a2d" opacity="0.9" />
+                    <svg className="hero-figure-svg" viewBox="0 0 86 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="43" cy="55" r="46" fill="rgba(100,180,80,0.15)" />
+                        <ellipse cx="43" cy="28" rx="11" ry="11" fill="#2d6a2d" opacity="0.92" />
+                        <path d="M31 46 Q43 38 55 46 L58 84 Q43 90 28 84 Z" fill="#2d6a2d" opacity="0.92" />
+                        <path d="M31 48 Q21 58 18 72 Q24 76 29 68 Z" fill="#2d6a2d" opacity="0.92" />
+                        <path d="M55 48 Q65 58 68 72 Q62 76 57 68 Z" fill="#2d6a2d" opacity="0.92" />
+                        <path d="M32 84 Q29 94 27 102 Q34 105 37 97 Z" fill="#2d6a2d" opacity="0.92" />
+                        <path d="M54 84 Q57 94 59 102 Q52 105 49 97 Z" fill="#2d6a2d" opacity="0.92" />
                     </svg>
                 </div>
 
@@ -769,8 +710,9 @@ export default function Advisory() {
                 </div>
             </div>
 
-            {/* ── BODY ── */}
+            {/* BODY */}
             <div className="body-layout">
+
                 {/* SIDEBAR */}
                 <div className="sidebar">
                     <div className="sidebar-title">ADVISORY<br />BOARD<br />MEMBERS</div>
@@ -803,8 +745,8 @@ export default function Advisory() {
                             <div className="help-icon">🎧</div>
                             <span>NEED HELP?</span>
                         </div>
-                        <div className="help-item"><span className="icon">✉️</span> support@ihwe.in</div>
-                        <div className="help-item"><span className="icon">📞</span> +91 98765 43210</div>
+                        <div className="help-item"><span>✉️</span> support@ihwe.in</div>
+                        <div className="help-item"><span>📞</span> +91 98765 43210</div>
                         <div className="help-divider" />
                         <div className="help-assist">We're here to assist you!</div>
                     </div>
@@ -812,6 +754,7 @@ export default function Advisory() {
 
                 {/* FORM AREA */}
                 <div className="form-area">
+
                     {/* Section 01 */}
                     <div className="section-block">
                         <SectionHeader num="01" icon="👤" title="NOMINEE INFORMATION" />
@@ -819,11 +762,13 @@ export default function Advisory() {
                         <div className="form-row">
                             <div className="form-group">
                                 <label className="form-label">Full Name of Nominee <span className="req">*</span></label>
-                                <input className="form-input" placeholder="Enter full name" value={formData.fullName} onChange={(e) => update("fullName", e.target.value)} />
+                                <input className="form-input" placeholder="Enter full name"
+                                    value={formData.fullName} onChange={(e) => update("fullName", e.target.value)} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Designation / Title <span className="req">*</span></label>
-                                <input className="form-input" placeholder="Enter designation" value={formData.designation} onChange={(e) => update("designation", e.target.value)} />
+                                <input className="form-input" placeholder="Enter designation"
+                                    value={formData.designation} onChange={(e) => update("designation", e.target.value)} />
                             </div>
                         </div>
 
@@ -832,22 +777,19 @@ export default function Advisory() {
                                 <label className="form-label">Organization / Institution <span className="req">*</span></label>
                                 <div className="input-wrapper">
                                     <span className="input-icon">🏢</span>
-                                    <input className="form-input with-icon" style={{ width: "100%" }} placeholder="Enter organization / institution" value={formData.organization} onChange={(e) => update("organization", e.target.value)} />
+                                    <input className="form-input with-icon" placeholder="Enter organization / institution"
+                                        value={formData.organization} onChange={(e) => update("organization", e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Industry / Sector <span className="req">*</span></label>
-                                <select className={`form-select ${formData.industry ? "selected" : ""}`} value={formData.industry} onChange={(e) => update("industry", e.target.value)}>
+                                <select className={`form-select${formData.industry ? " selected" : ""}`}
+                                    value={formData.industry} onChange={(e) => update("industry", e.target.value)}>
                                     <option value="">Select industry / sector</option>
-                                    <option value="healthcare">Healthcare</option>
-                                    <option value="wellness">Wellness</option>
-                                    <option value="pharma">Pharmaceuticals</option>
-                                    <option value="nutrition">Nutrition</option>
-                                    <option value="fitness">Fitness</option>
-                                    <option value="technology">Technology</option>
-                                    <option value="research">Research</option>
-                                    <option value="education">Education</option>
-                                    <option value="other">Other</option>
+                                    <option>Healthcare</option><option>Wellness</option>
+                                    <option>Pharmaceuticals</option><option>Nutrition</option>
+                                    <option>Fitness</option><option>Technology</option>
+                                    <option>Research</option><option>Education</option><option>Other</option>
                                 </select>
                             </div>
                         </div>
@@ -857,7 +799,8 @@ export default function Advisory() {
                                 <label className="form-label">Email Address <span className="req">*</span></label>
                                 <div className="input-wrapper">
                                     <span className="input-icon">✉️</span>
-                                    <input className="form-input with-icon" style={{ width: "100%" }} type="email" placeholder="Enter email address" value={formData.email} onChange={(e) => update("email", e.target.value)} />
+                                    <input className="form-input with-icon" type="email" placeholder="Enter email address"
+                                        value={formData.email} onChange={(e) => update("email", e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
@@ -865,10 +808,11 @@ export default function Advisory() {
                                 <div className="phone-row">
                                     <div className="phone-prefix">
                                         <span className="flag">🇮🇳</span>
-                                        <span style={{ fontSize: 12, color: "#333" }}>+91</span>
+                                        <span>+91</span>
                                         <span className="phone-arrow">▼</span>
                                     </div>
-                                    <input className="phone-input" type="tel" placeholder="Enter phone number" value={formData.phone} onChange={(e) => update("phone", e.target.value)} />
+                                    <input className="phone-input" type="tel" placeholder="Enter phone number"
+                                        value={formData.phone} onChange={(e) => update("phone", e.target.value)} />
                                 </div>
                             </div>
                         </div>
@@ -877,8 +821,9 @@ export default function Advisory() {
                             <div className="form-group">
                                 <label className="form-label">LinkedIn Profile (if available)</label>
                                 <div className="input-wrapper">
-                                    <span className="input-icon" style={{ fontSize: 15, color: "#0077b5" }}>in</span>
-                                    <input className="form-input with-icon" style={{ width: "100%" }} placeholder="https://www.linkedin.com/in/yourprofile" value={formData.linkedin} onChange={(e) => update("linkedin", e.target.value)} />
+                                    <span className="input-icon" style={{ fontFamily: "sans-serif", fontWeight: 700, fontSize: 13, color: "#0077b5" }}>in</span>
+                                    <input className="form-input with-icon" placeholder="https://www.linkedin.com/in/yourprofile"
+                                        value={formData.linkedin} onChange={(e) => update("linkedin", e.target.value)} />
                                 </div>
                             </div>
                         </div>
@@ -891,23 +836,20 @@ export default function Advisory() {
                         <div className="form-row">
                             <div className="form-group">
                                 <label className="form-label">Areas of Expertise <span className="req">*</span></label>
-                                <select className={`form-select ${formData.expertise ? "selected" : ""}`} value={formData.expertise} onChange={(e) => update("expertise", e.target.value)}>
+                                <select className={`form-select${formData.expertise ? " selected" : ""}`}
+                                    value={formData.expertise} onChange={(e) => update("expertise", e.target.value)}>
                                     <option value="">Select one or more areas</option>
-                                    <option value="clinical">Clinical Medicine</option>
-                                    <option value="public-health">Public Health</option>
-                                    <option value="nutrition">Nutrition & Dietetics</option>
-                                    <option value="mental-health">Mental Health</option>
-                                    <option value="holistic">Holistic Wellness</option>
-                                    <option value="research">Medical Research</option>
-                                    <option value="policy">Health Policy</option>
-                                    <option value="technology">Health Technology</option>
-                                    <option value="fitness">Sports & Fitness</option>
-                                    <option value="other">Other</option>
+                                    <option>Clinical Medicine</option><option>Public Health</option>
+                                    <option>Nutrition &amp; Dietetics</option><option>Mental Health</option>
+                                    <option>Holistic Wellness</option><option>Medical Research</option>
+                                    <option>Health Policy</option><option>Health Technology</option>
+                                    <option>Sports &amp; Fitness</option><option>Other</option>
                                 </select>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Years of Experience <span className="req">*</span></label>
-                                <input className="form-input" type="number" placeholder="Enter total years of experience" value={formData.years} onChange={(e) => update("years", e.target.value)} />
+                                <input className="form-input" type="number" placeholder="Enter total years of experience"
+                                    value={formData.years} onChange={(e) => update("years", e.target.value)} />
                             </div>
                         </div>
 
@@ -918,14 +860,10 @@ export default function Advisory() {
                                     <span className="info-icon">i</span>
                                 </label>
                                 <div className="textarea-wrap">
-                                    <textarea
-                                        className="form-textarea"
-                                        style={{ minHeight: 90 }}
+                                    <textarea className="form-textarea" style={{ minHeight: 96 }}
                                         placeholder="Briefly describe the nominee's professional background, key achievements and contributions."
-                                        maxLength={1000}
-                                        value={formData.summary}
-                                        onChange={(e) => update("summary", e.target.value)}
-                                    />
+                                        maxLength={1000} value={formData.summary}
+                                        onChange={(e) => update("summary", e.target.value)} />
                                     <div className="char-count">{formData.summary.length} / 1000</div>
                                 </div>
                             </div>
@@ -943,14 +881,10 @@ export default function Advisory() {
                                     <span className="info-icon">i</span>
                                 </label>
                                 <div className="textarea-wrap">
-                                    <textarea
-                                        className="form-textarea"
-                                        style={{ minHeight: 80 }}
+                                    <textarea className="form-textarea" style={{ minHeight: 88 }}
                                         placeholder="Share your reasons and how their expertise will add value to IHWE Expo 2026."
-                                        maxLength={1000}
-                                        value={formData.whyRecommend}
-                                        onChange={(e) => update("whyRecommend", e.target.value)}
-                                    />
+                                        maxLength={1000} value={formData.whyRecommend}
+                                        onChange={(e) => update("whyRecommend", e.target.value)} />
                                     <div className="char-count">{formData.whyRecommend.length} / 1000</div>
                                 </div>
                             </div>
@@ -963,14 +897,10 @@ export default function Advisory() {
                                     <span className="info-icon">i</span>
                                 </label>
                                 <div className="textarea-wrap">
-                                    <textarea
-                                        className="form-textarea"
-                                        style={{ minHeight: 80 }}
+                                    <textarea className="form-textarea" style={{ minHeight: 88 }}
                                         placeholder="Describe the potential impact and value the nominee will bring."
-                                        maxLength={1000}
-                                        value={formData.contribution}
-                                        onChange={(e) => update("contribution", e.target.value)}
-                                    />
+                                        maxLength={1000} value={formData.contribution}
+                                        onChange={(e) => update("contribution", e.target.value)} />
                                     <div className="char-count">{formData.contribution.length} / 1000</div>
                                 </div>
                             </div>
@@ -984,11 +914,13 @@ export default function Advisory() {
                         <div className="form-row">
                             <div className="form-group">
                                 <label className="form-label">Your Full Name <span className="req">*</span></label>
-                                <input className="form-input" placeholder="Enter your full name" value={formData.nominatorName} onChange={(e) => update("nominatorName", e.target.value)} />
+                                <input className="form-input" placeholder="Enter your full name"
+                                    value={formData.nominatorName} onChange={(e) => update("nominatorName", e.target.value)} />
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Designation / Title <span className="req">*</span></label>
-                                <input className="form-input" placeholder="Enter designation" value={formData.nominatorDesig} onChange={(e) => update("nominatorDesig", e.target.value)} />
+                                <input className="form-input" placeholder="Enter designation"
+                                    value={formData.nominatorDesig} onChange={(e) => update("nominatorDesig", e.target.value)} />
                             </div>
                         </div>
 
@@ -997,14 +929,16 @@ export default function Advisory() {
                                 <label className="form-label">Organization / Institution <span className="req">*</span></label>
                                 <div className="input-wrapper">
                                     <span className="input-icon">🏢</span>
-                                    <input className="form-input with-icon" style={{ width: "100%" }} placeholder="Enter organization" value={formData.nominatorOrg} onChange={(e) => update("nominatorOrg", e.target.value)} />
+                                    <input className="form-input with-icon" placeholder="Enter organization"
+                                        value={formData.nominatorOrg} onChange={(e) => update("nominatorOrg", e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Email Address <span className="req">*</span></label>
                                 <div className="input-wrapper">
                                     <span className="input-icon">✉️</span>
-                                    <input className="form-input with-icon" style={{ width: "100%" }} type="email" placeholder="Enter email address" value={formData.nominatorEmail} onChange={(e) => update("nominatorEmail", e.target.value)} />
+                                    <input className="form-input with-icon" type="email" placeholder="Enter email address"
+                                        value={formData.nominatorEmail} onChange={(e) => update("nominatorEmail", e.target.value)} />
                                 </div>
                             </div>
                         </div>
@@ -1015,22 +949,21 @@ export default function Advisory() {
                                 <div className="phone-row">
                                     <div className="phone-prefix">
                                         <span className="flag">🇮🇳</span>
-                                        <span style={{ fontSize: 12, color: "#333" }}>+91</span>
+                                        <span>+91</span>
                                         <span className="phone-arrow">▼</span>
                                     </div>
-                                    <input className="phone-input" type="tel" placeholder="Enter phone number" value={formData.nominatorPhone} onChange={(e) => update("nominatorPhone", e.target.value)} />
+                                    <input className="phone-input" type="tel" placeholder="Enter phone number"
+                                        value={formData.nominatorPhone} onChange={(e) => update("nominatorPhone", e.target.value)} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Relationship with Nominee <span className="req">*</span></label>
-                                <select className={`form-select ${formData.relationship ? "selected" : ""}`} value={formData.relationship} onChange={(e) => update("relationship", e.target.value)}>
+                                <select className={`form-select${formData.relationship ? " selected" : ""}`}
+                                    value={formData.relationship} onChange={(e) => update("relationship", e.target.value)}>
                                     <option value="">Select relationship</option>
-                                    <option value="colleague">Colleague</option>
-                                    <option value="supervisor">Supervisor / Manager</option>
-                                    <option value="mentor">Mentor</option>
-                                    <option value="peer">Industry Peer</option>
-                                    <option value="collaborator">Research Collaborator</option>
-                                    <option value="other">Other</option>
+                                    <option>Colleague</option><option>Supervisor / Manager</option>
+                                    <option>Mentor</option><option>Industry Peer</option>
+                                    <option>Research Collaborator</option><option>Other</option>
                                 </select>
                             </div>
                         </div>
@@ -1042,26 +975,25 @@ export default function Advisory() {
 
                         <div className="upload-row">
                             <div className="upload-label-block">
-                                <label className="form-label">Upload Nominee's CV / Profile <span style={{ color: "#888", fontWeight: 400 }}>(Optional)</span></label>
+                                <label className="form-label">
+                                    Upload Nominee's CV / Profile&nbsp;
+                                    <span style={{ color: "#888", fontWeight: 400 }}>(Optional)</span>
+                                </label>
                                 <div className="upload-hint">PDF, DOC, or DOCX (Max. 5MB)</div>
                             </div>
-                            <div className="upload-box" onClick={() => { }}>
+                            <div className="upload-box">
                                 <span className="upload-icon">☁️</span>
                                 <div className="upload-box-text">Click to upload</div>
                                 <div className="upload-box-sub">or drag and drop file here</div>
                             </div>
                         </div>
 
-                        <div className="checkbox-row" style={{ marginTop: 18 }}>
-                            <input
-                                type="checkbox"
-                                className="form-checkbox"
-                                id="consent-check"
-                                checked={formData.consent}
-                                onChange={(e) => update("consent", e.target.checked)}
-                            />
+                        <div className="checkbox-row" style={{ marginTop: 22 }}>
+                            <input type="checkbox" className="form-checkbox" id="consent-check"
+                                checked={formData.consent} onChange={(e) => update("consent", e.target.checked)} />
                             <label htmlFor="consent-check" className="checkbox-label">
-                                I confirm that the information provided is accurate and I have the nominee's consent to submit this nomination. <span className="req">*</span>
+                                I confirm that the information provided is accurate and I have the nominee's consent to submit this nomination.{" "}
+                                <span className="req">*</span>
                             </label>
                         </div>
 
@@ -1074,10 +1006,10 @@ export default function Advisory() {
                         </button>
 
                         <div className="security-note">
-                            <span className="lock">🔒</span>
-                            Your information is secure and will be used only for IHWE Expo 2026 Advisory Board selection.
+                            🔒&nbsp; Your information is secure and will be used only for IHWE Expo 2026 Advisory Board selection.
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
