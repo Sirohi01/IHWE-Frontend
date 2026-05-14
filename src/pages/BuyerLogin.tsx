@@ -347,6 +347,7 @@ const BuyerLogin = () => {
                         </motion.div>
                     </div>
                 </div>
+
             </section>
         </div>
     );

@@ -131,6 +131,7 @@ import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 import WhyVisit from "@/pages/why_visit/WhyVisit";
+import EPromotionWeb from "./pages/e_promotion_webPage/EPromotionWeb";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
@@ -220,6 +221,7 @@ const App = () => {
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
                     <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="/epromotion" element={<EEPromotion />} />
+                    <Route path="/e-promotion-web" element={<EPromotionWeb />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
