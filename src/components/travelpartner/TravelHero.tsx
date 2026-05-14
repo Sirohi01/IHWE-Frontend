@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Megaphone, Globe, Handshake, Award } from 'lucide-react';
-import heroBg from '../../assets/newherologo.jpeg';
+import heroBg from '../../assets/travels/newherologo.webp';
 
 const TravelHero: React.FC = () => {
   return (
