@@ -1,48 +1,60 @@
 "use client";
 
 import { motion } from "framer-motion";
-
+import ani from "@/assets/media/ani.jpeg";
+import assocham from "@/assets/media/assocham.jpeg";
+import big from "@/assets/media/big.jpeg";
+import business_standard from "@/assets/media/business_standard.jpeg";
+import bw_wellbeing from "@/assets/media/bw_wellbeing.jpeg";
+import ficci from "@/assets/media/ficci.jpeg";
+import healthworld from "@/assets/media/health_world.jpeg";
+import ht from "@/assets/media/ht.jpeg";
+import india_today from "@/assets/media/india_today.jpeg";
+import medical_dialogues from "@/assets/media/medical_dialagues.jpeg";  
+import outlook from "@/assets/media/outlook.jpeg";
+import the_print from "@/assets/media/the_print.jpeg";
+import zee_business from "@/assets/media/zee_business.jpeg";
 const partners = [
     {
         category: "TV PARTNERS",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/commons/0/0b/Zee_Business_logo.png",
-            "https://upload.wikimedia.org/wikipedia/commons/7/7b/News18_India.png",
+            zee_business,
+            ht,
         ],
     },
     {
         category: "DIGITAL PARTNERS",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/commons/2/2e/ET_Healthworld.png",
-            "https://upload.wikimedia.org/wikipedia/commons/0/0e/ThePrintLogo.png",
+            healthworld,
+            the_print,
         ],
     },
     {
         category: "HEALTHCARE MEDIA",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/commons/4/44/Medical_Dialogues_logo.png",
-            "https://upload.wikimedia.org/wikipedia/commons/2/2f/Healthcare_Radius_logo.png",
+            medical_dialogues,
+            bw_wellbeing,
         ],
     },
     {
         category: "MAGAZINE PARTNERS",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/commons/f/fc/Outlook_Logo.png",
-            "https://bwhealthcareworld.com/assets/images/logo.png",
+            outlook,
+            bw_wellbeing,
         ],
     },
     {
         category: "RADIO PARTNERS",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/commons/2/24/Big_FM_92.7_logo.png",
-            "https://upload.wikimedia.org/wikipedia/commons/5/57/Radio_City_Logo.png",
+            big,
+            assocham,
         ],
     },
     {
         category: "COMMUNITY PARTNERS",
         logos: [
-            "https://upload.wikimedia.org/wikipedia/en/0/06/FICCI_logo.png",
-            "https://upload.wikimedia.org/wikipedia/en/5/5b/ASSOCHAM_Logo.png",
+            ficci,
+            assocham,
         ],
     },
 ];

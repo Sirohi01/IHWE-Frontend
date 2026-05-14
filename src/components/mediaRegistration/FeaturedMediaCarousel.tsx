@@ -4,6 +4,19 @@ import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import ani from "@/assets/media/ani.jpeg";
+import assocham from "@/assets/media/assocham.jpeg";
+import big from "@/assets/media/big.jpeg";
+import business_standard from "@/assets/media/business_standard.jpeg";
+import bw_wellbeing from "@/assets/media/bw_wellbeing.jpeg";
+import ficci from "@/assets/media/ficci.jpeg";
+import healthworld from "@/assets/media/health_world.jpeg";
+import ht from "@/assets/media/ht.jpeg";
+import india_today from "@/assets/media/india_today.jpeg";
+import medical_dialogues from "@/assets/media/medical_dialagues.jpeg";  
+import outlook from "@/assets/media/outlook.jpeg";
+import the_print from "@/assets/media/the_print.jpeg";
+import zee_business from "@/assets/media/zee_business.jpeg";
 
 const mediaCoverage = [
     {
@@ -11,7 +24,7 @@ const mediaCoverage = [
             "IHWE 2026 to Become India's Largest Wellness & Healthcare Gathering",
         image:
             "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
-        logo: "Business Standard",
+        logo: business_standard,
         date: "May 20, 2024",
     },
     {
@@ -19,7 +32,7 @@ const mediaCoverage = [
             "IHWE 2026 Unveils Global Platform for Innovation in Healthcare & Wellness",
         image:
             "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop",
-        logo: "Healthworld",
+        logo: healthworld,
         date: "May 18, 2024",
     },
     {
@@ -27,7 +40,7 @@ const mediaCoverage = [
             "IHWE 2026 Aims to Bring Together Global Leaders in Health & Wellness",
         image:
             "https://images.unsplash.com/photo-1551818255-e6e10975bc17?q=80&w=1200&auto=format&fit=crop",
-        logo: "ANI",
+        logo: ani,
         date: "May 17, 2024",
     },
     {
@@ -35,7 +48,7 @@ const mediaCoverage = [
             "International Participation Grows Strong for IHWE 2026",
         image:
             "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop",
-        logo: "India Today",
+        logo: india_today,
         date: "May 16, 2024",
     },
     {
@@ -51,7 +64,7 @@ const mediaCoverage = [
             "IHWE 2026 to Become India's Largest Wellness & Healthcare Gathering",
         image:
             "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
-        logo: "Business Standard",
+        logo: business_standard,
         date: "May 20, 2024",
     },
     {
@@ -59,7 +72,7 @@ const mediaCoverage = [
             "IHWE 2026 Unveils Global Platform for Innovation in Healthcare & Wellness",
         image:
             "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop",
-        logo: "Healthworld",
+        logo: healthworld,
         date: "May 18, 2024",
     },
     {
@@ -67,7 +80,7 @@ const mediaCoverage = [
             "IHWE 2026 Aims to Bring Together Global Leaders in Health & Wellness",
         image:
             "https://images.unsplash.com/photo-1551818255-e6e10975bc17?q=80&w=1200&auto=format&fit=crop",
-        logo: "ANI",
+        logo: ani,
         date: "May 17, 2024",
     },
     {
@@ -75,7 +88,7 @@ const mediaCoverage = [
             "International Participation Grows Strong for IHWE 2026",
         image:
             "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop",
-        logo: "India Today",
+        logo: india_today,
         date: "May 16, 2024",
     },
     {
@@ -83,7 +96,7 @@ const mediaCoverage = [
             "IHWE 2026 Set to Showcase Future of Healthcare, Wellness & AYUSH",
         image:
             "https://images.unsplash.com/photo-1515169067868-5387ec356754?q=80&w=1200&auto=format&fit=crop",
-        logo: "ThePrint",
+        logo: the_print,
         date: "May 16, 2024",
     },
       {
@@ -91,7 +104,7 @@ const mediaCoverage = [
             "IHWE 2026 to Become India's Largest Wellness & Healthcare Gathering",
         image:
             "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
-        logo: "Business Standard",
+        logo: business_standard,
         date: "May 20, 2024",
     },
     {
@@ -99,7 +112,7 @@ const mediaCoverage = [
             "IHWE 2026 Unveils Global Platform for Innovation in Healthcare & Wellness",
         image:
             "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop",
-        logo: "Healthworld",
+        logo: healthworld,
         date: "May 18, 2024",
     },
     {
@@ -107,7 +120,7 @@ const mediaCoverage = [
             "IHWE 2026 Aims to Bring Together Global Leaders in Health & Wellness",
         image:
             "https://images.unsplash.com/photo-1551818255-e6e10975bc17?q=80&w=1200&auto=format&fit=crop",
-        logo: "ANI",
+        logo: ani,
         date: "May 17, 2024",
     },
     {
@@ -115,7 +128,7 @@ const mediaCoverage = [
             "International Participation Grows Strong for IHWE 2026",
         image:
             "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop",
-        logo: "India Today",
+        logo: india_today,
         date: "May 16, 2024",
     },
     {
@@ -123,7 +136,7 @@ const mediaCoverage = [
             "IHWE 2026 Set to Showcase Future of Healthcare, Wellness & AYUSH",
         image:
             "https://images.unsplash.com/photo-1515169067868-5387ec356754?q=80&w=1200&auto=format&fit=crop",
-        logo: "ThePrint",
+        logo: the_print,
         date: "May 16, 2024",
     },
 ];
@@ -190,7 +203,7 @@ export default function FeaturedMediaCoverage() {
                                     {/* LOGO */}
                                     <div className="h-[56px] flex items-center justify-center border-b border-gray-100 bg-white px-3">
                                         <span className="text-[18px] font-semibold text-gray-800 text-center">
-                                            {item.logo}
+                                            <img src={item.logo} alt={`Media Logo ${index + 1}`} className="max-h-6 object-contain" />
                                         </span>
                                     </div>
 
