@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import exhibitorBg from '../../assets/exhibitor.png';
+import exhibitorBg from '../../assets/exhibitor.webp';
 import h1 from '../../assets/h1.png';
 import h2 from '../../assets/h2.png';
 import h3 from '../../assets/h3.png';

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
 
-import heroBg from "../../assets/hero.png";
+import heroBg from "../../assets/heroA.webp";
 import awardsLogo from "../../assets/new.png";
 
 const AwardsHero = () => {

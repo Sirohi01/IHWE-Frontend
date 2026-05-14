@@ -8,6 +8,24 @@ import { policyApi } from "@/lib/api";
 import termBanner from "@/assets/termPage.jpeg";
 import team1Icon from "@/assets/team1.png";
 import doc22Icon from "@/assets/doc22.png";
+
+// Sparkle component
+const Sparkle = ({ style, color = "#fca5a5", shadow = "#5E0006" }: { style?: React.CSSProperties, color?: string, shadow?: string }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '16px',
+      color: color,
+      textShadow: `0 0 8px ${shadow}, 0 0 15px ${color}, 0 0 25px ${color}`,
+      animation: 'sparkleAnim 1.8s ease-in-out infinite',
+      opacity: 0,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
 const getIconForTitle = (title: string) => {
   const t = title.toLowerCase();
   if (t.includes("acceptance")) return Shield;
@@ -121,18 +139,36 @@ const TermsOfService: React.FC = () => {
 
           /* Reset margins for full banner printing */
           @page {
+            margin: 10mm 3mm !important;
+            size: auto;
+          }
+
+          @page :first {
             margin: 0 !important;
           }
 
-          body { 
+          html, body { 
             background-color: white !important; 
             padding: 0 !important;
             margin: 0 !important;
+            height: auto !important;
           }
 
-          #root, main, .bg-[#f8f9fa] {
+          #root, main, .bg-[#f8f9fa], [class*="min-h-screen"] {
             padding-top: 0 !important;
             margin-top: 0 !important;
+            display: block !important;
+            position: static !important;
+          }
+
+          section:first-of-type {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+          }
+
+          /* Reduce Banner Height in Print */
+          .relative.h-\[280px\].sm\:h-\[330px\].md\:h-\[380px\].lg\:h-\[430px\] {
+            height: 180px !important;
           }
 
           /* Keep Hero and Info Bar but adjust for paper */
@@ -144,11 +180,6 @@ const TermsOfService: React.FC = () => {
           .rounded-3xl, .rounded-[20px] { 
             border-radius: 12px !important; 
             border: 1px solid #f1f5f9 !important;
-          }
-
-          .shadow-[0_2px_20px_rgb(0,0,0,0.03)], 
-          .shadow-[0_8px_30px_rgb(0,0,0,0.05)] { 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important; 
           }
 
           /* Force single column for print readability */
@@ -167,23 +198,13 @@ const TermsOfService: React.FC = () => {
             flex-direction: row !important;
             flex-wrap: nowrap !important;
             width: 100% !important;
+            padding: 4px 0 !important;
           }
-          .terms-contact-bar > div:first-child {
-            width: auto !important;
-            padding-right: 20px !important;
-          }
+
           .terms-contact-items {
             flex-direction: row !important;
             justify-content: space-between !important;
             flex: 1 !important;
-            padding: 0 10px !important;
-          }
-          .terms-contact-items > div {
-            padding: 0 !important;
-            margin: 0 !important;
-          }
-          .terms-contact-items .hidden.md\\:block {
-            display: block !important;
           }
 
           /* Hide floating global elements only */
@@ -196,59 +217,122 @@ const TermsOfService: React.FC = () => {
             display: none !important;
           }
 
-          /* Section spacing */
+          /* Prevent individual term cards from cutting between pages */
+          .grid-cols-1.lg\\:grid-cols-2 > div { 
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+            display: block !important;
+          }
+
+          /* Tighten vertical spacing to fit 2 pages */
           section { 
-            page-break-inside: auto;
-            margin-bottom: 8px !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
+            margin-bottom: 4px !important;
+            padding: 0 !important;
+          }
+
+          /* Reduce Font Sizes further to fit 2 pages */
+          h1 {
+            font-size: 24px !important;
+            line-height: 1 !important;
+            margin-bottom: 4px !important;
+          }
+          
+          h3 {
+            font-size: 13px !important;
+          }
+
+          p, span, .text-\[12\.5px\], .text-sm {
+            font-size: 10.5px !important;
+            line-height: 1.3 !important;
+          }
+
+          .prose li, .prose p {
+            font-size: 10px !important;
+            margin-bottom: 1px !important;
           }
 
           /* Tighten overlap and paddings */
           .relative.z-10.w-full.mx-auto.px-6.md\\:px-12.max-w-\\[1400px\\].-mt-6.md\\:-mt-8 {
-            margin-top: -15px !important;
+            margin-top: -30px !important;
+          }
+
+          .p-4.md\\:p-0 {
+            padding: 0 !important;
           }
 
           .p-4, .md\\:p-6 {
-            padding: 12px !important;
+            padding: 6px 10px !important;
           }
 
           /* Tighten term card content */
           .flex.items-start.gap-4 {
-            gap: 12px !important;
-          }
-          
-          .prose {
-            max-width: 100% !important;
+            gap: 10px !important;
           }
 
-          .prose p, .prose ul {
-            margin-bottom: 4px !important;
+          .w-12.h-12.md\\:w-\[60px\].md\\:h-\[60px\] {
+            width: 45px !important;
+            height: 45px !important;
           }
 
-          .mt-1 {
-            margin-top: 2px !important;
+          .w-12.h-12.md\\:w-\[60px\].md\\:h-\[60px\] svg {
+            width: 22px !important;
+            height: 22px !important;
           }
 
-          .mt-4 {
-            margin-top: 4px !important;
+          /* Tighten Info Bar */
+          .px-6.py-3.md\\:px-8.md\\:py-3.5 {
+            padding: 4px 8px !important;
           }
 
-          /* Banner Text Adjustments */
-          h1 {
-            font-size: 32px !important;
-            line-height: 1.2 !important;
-            margin-bottom: 10px !important;
-            display: block !important;
+          .gap-6.lg\\:gap-8 {
+            gap: 10px !important;
           }
-          h1 br {
-            display: block !important;
-            content: "" !important;
-            margin-top: 5px !important;
+
+          /* Highlight Intro Text in Print */
+          .relative.h-\[180px\] p, 
+          .bg-\[\#eef5f0\] p {
+            color: #115d33 !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
           }
-          h1 span {
-            display: inline-block !important;
-          }
+        }
+
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shimmerBtn {
+          0%   { left: -75%; }
+          100% { left: 125%; }
+        }
+
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          50%  { opacity: 1; transform: scale(1.5) translateY(-15px); }
+          100% { opacity: 0; transform: scale(0.8) translateY(-30px); }
+        }
+
+        .red-btn-terms {
+          background: linear-gradient(135deg, #5E0006 0%, #8b000a 40%, #5E0006 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          box-shadow: 0 10px 30px -5px rgba(0,0,0,0.3), 0 0 20px rgba(94,0,6,0.3);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .red-btn-terms::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -75%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: skewX(-20deg);
+          animation: shimmerBtn 2s infinite;
         }
       ` }} />
 
@@ -278,14 +362,22 @@ const TermsOfService: React.FC = () => {
                 </p>
 
                 <div className="mt-6 md:mt-8 print-hidden">
-                  <button
-                    onClick={() => window.print()}
-                    className="group flex items-center gap-2.5 px-6 py-3 bg-[#115d33] hover:bg-[#0c3120] text-white rounded-xl shadow-lg transition-all duration-300 font-[800] text-[12px] uppercase tracking-wider hover:scale-[1.02] active:scale-95"
-                  >
-                    <Printer className="w-4 h-4" strokeWidth={2.5} />
-                    <span>Print Document</span>
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/40 animate-pulse ml-1" />
-                  </button>
+                  <div className="relative group/btn inline-block">
+                    <div className="hidden md:block">
+                      <Sparkle color="#fca5a5" shadow="#5E0006" style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
+                      <Sparkle color="#fca5a5" shadow="#5E0006" style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
+                      <Sparkle color="#fca5a5" shadow="#5E0006" style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
+                      <Sparkle color="#fca5a5" shadow="#5E0006" style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
+                      <Sparkle color="#fca5a5" shadow="#5E0006" style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
+                    </div>
+                    <button
+                      onClick={() => window.print()}
+                      className="red-btn-terms flex items-center gap-2.5 px-7 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.02] active:scale-95 text-white font-[800] text-[12px] uppercase tracking-wider shadow-lg"
+                    >
+                      <Printer className="w-4 h-4" strokeWidth={2.5} />
+                      <span>Print Document</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

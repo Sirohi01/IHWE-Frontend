@@ -137,7 +137,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
 
   return (
     <>
-      {scrolled && <div className="h-[72px] xl:h-[80px] w-full" />}
+      {scrolled && <div className="h-[72px] xl:h-[80px] w-full print-hidden" />}
 
       <motion.nav
         className={`${scrolled
