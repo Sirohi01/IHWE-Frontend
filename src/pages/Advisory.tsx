@@ -186,7 +186,7 @@ const AdvisoryForm = () => {
                     {/* RIGHT FORM */}
                     <div className="flex-1">
                         {/* ── SECTION 01 ── */}
-                        <div className="flex items-center gap-3 mb-4 mt-2">
+                        <div className="flex items-center gap-3 mb-2 mt-2">
                             <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
                                 01
                             </div>
@@ -198,7 +198,7 @@ const AdvisoryForm = () => {
                             </div>
                             <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
                             <div className="grid grid-cols-4 gap-3 mb-2.5">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Full Name of Nominee {requiredStar}</label>
@@ -265,7 +265,7 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 02 ── */}
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3 mb-2">
                             <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
                                 02
                             </div>
@@ -277,7 +277,7 @@ const AdvisoryForm = () => {
                             </div>
                             <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
                             <div className="grid grid-cols-3 gap-3">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Areas of Expertise {requiredStar}</label>
@@ -308,7 +308,7 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 03 ── */}
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3 mb-2">
                             <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
                                 03
                             </div>
@@ -320,7 +320,7 @@ const AdvisoryForm = () => {
                             </div>
                             <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Why do you recommend this nominee? {requiredStar} <span className="text-[11px] text-gray-500 cursor-pointer">ℹ</span></label>
@@ -340,7 +340,7 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 04 ── */}
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3 mb-2">
                             <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
                                 04
                             </div>
@@ -352,7 +352,7 @@ const AdvisoryForm = () => {
                             </div>
                             <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
                             <div className="grid grid-cols-4 gap-3 mb-2.5">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Your Full Name {requiredStar}</label>
@@ -410,7 +410,7 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 05 ── */}
-                        <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center gap-3 mb-2">
                             <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
                                 05
                             </div>
