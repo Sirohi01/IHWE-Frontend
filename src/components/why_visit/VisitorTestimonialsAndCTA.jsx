@@ -33,7 +33,7 @@ const VisitorTestimonialsAndCTA = () => {
     };
 
     const handleContact = () => {
-        window.open('/contact-us', '_blank');
+        window.open('/contact', '_blank');
     };
 
     return (
