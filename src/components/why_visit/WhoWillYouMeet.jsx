@@ -49,7 +49,7 @@ const WhoWillYouMeet = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img src="/whyVisit/leaf.svg" alt="Leaf" className="h-3 object-contain" />
+                        <img src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 

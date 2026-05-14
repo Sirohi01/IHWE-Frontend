@@ -8,6 +8,7 @@ import Layout from "@/components/layout/Layout";
 const Index = lazy(() => import("./pages/Index"));
 const About = lazy(() => import("./pages/About"));
 const AdvisoryBoard = lazy(() => import("./pages/AdvisoryBoard"));
+const Advisory = lazy(() => import("./pages/Advisory"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
@@ -131,11 +132,13 @@ import ExProfile from "@/pages/navbar_page/ExProfile";
 import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
 import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
 import WhyVisit from "@/pages/why_visit/WhyVisit";
+import EPromotionWeb from "./pages/e_promotion_webPage/EPromotionWeb";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
+
 
 
 const queryClient = new QueryClient();
@@ -164,6 +167,7 @@ const App = () => {
                     <Route path="/awards" element={<Awards />} />
                     <Route path="/awards/nomination" element={<NominationFormPage />} />
                     <Route path="/advisory-board" element={<AdvisoryBoard />} />
+                    <Route path="/advisory" element={<Advisory />} />
                     <Route path="/exhibitor-profile" element={<ExhibitorProfile />} />
                     <Route path="/book-a-stand" element={<BookAStand />} />
                     <Route path="/visitor-registration" element={<VisitorRegistration />} />
@@ -220,6 +224,7 @@ const App = () => {
                     <Route path="/industry-zone/:id" element={<IndustryZoneDetail />} />
                     <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="/epromotion" element={<EEPromotion />} />
+                    <Route path="/e-promotion-web" element={<EPromotionWeb />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 
@@ -293,6 +298,7 @@ const App = () => {
                     <Route path="notifications" element={<BuyerNotificationsPage />} />
                     <Route path="documentation" element={<BuyerDocumentationPage />} />
                     <Route path="feedback" element={<BuyerFeedbackForm />} />
+
                   </Route>
                 </Routes>
               </Suspense>

@@ -16,11 +16,11 @@ export const BottomTagline = () => (
         style={{
             background: "#FFFFFF",
             borderRadius: 8,
-            padding: "10px 20px",
+            padding: "6px 16px",
             display: "flex",
             alignItems: "center",
-            gap: 16,
-            marginTop: 30,
+            gap: 12,
+            marginTop: 20,
             marginBottom: 0,
             marginLeft: 70,
             marginRight: 70,
@@ -44,24 +44,24 @@ export const BottomTagline = () => (
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        gap: 8,
-                        fontSize: 10,
+                        gap: 2,
+                        fontSize: 11,
                         color: TEXT_DARK,
                         textAlign: "center",
-                        lineHeight: 1.2,
+                        lineHeight: 1.1,
                         fontWeight: 700,
                         flex: 1
                     }}
                 >
                     <div style={{
-                        width: 70,
-                        height: 70,
+                        width: 40,
+                        height: 40,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        marginBottom: 4
+                        marginBottom: 2
                     }}>
-                        <img src={item.img} alt={item.label} style={{ width: 64, height: 64, objectFit: "contain" }} />
+                        <img src={item.img} alt={item.label} style={{ width: 32, height: 32, objectFit: "contain" }} />
                     </div>
                     {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
                 </div>
@@ -75,89 +75,70 @@ export const Footer = () => (
         <div
             style={{
                 background: `linear-gradient(135deg, ${TEAL} 0%, #0F3D3C 100%)`,
-                padding: "16px 80px",
+                padding: "6px 80px",
                 display: "flex",
                 alignItems: "center",
-                gap: 24,
+                justifyContent: "space-between",
+                gap: 16,
             }}
         >
-            {/* Submit nomination */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500 }}>
-                    SUBMIT YOUR NOMINATION
-                </div>
-                <button
-                    style={{
-                        background: GOLD,
-                        color: "white",
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "10px 22px",
-                        fontSize: 14,
-                        fontWeight: 700,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        fontFamily: "'Segoe UI', sans-serif",
-                        letterSpacing: 0.5,
-                    }}
-                    onClick={() => alert("Nomination submitted!")}
-                >
-                    SUBMIT NOMINATION
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-                    </svg>
-                </button>
-            </div>
 
-            {/* Last date */}
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 10,
-                    padding: "10px 18px",
-                    border: "1.5px solid rgba(255,255,255,0.3)",
-                    borderRadius: 8,
+                    gap: 8,
                 }}
             >
-                <IconCalendar size={20} color="white" />
+                <IconCalendar size={18} color="white" />
                 <div>
-                    <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 11 }}>LAST DATE TO APPLY</div>
-                    <div style={{ color: "white", fontWeight: 800, fontSize: 16 }}>30 JUNE 2026</div>
+                    <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 10 }}>LAST DATE TO APPLY</div>
+                    <div style={{ color: "white", fontWeight: 800, fontSize: 14 }}>30 JUNE 2026</div>
                 </div>
             </div>
 
-            {/* Contact */}
-            <div style={{ flex: 1, fontSize: 12, color: "rgba(255,255,255,0.85)", lineHeight: 1.6 }}>
-                <div style={{ fontWeight: 800, fontSize: 12, color: "white", marginBottom: 6, letterSpacing: "0.5px" }}>FOR QUERIES, CONTACT US</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-                    <IconEmail size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>info@ihwe.in</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-                    <IconMobile size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>+91-9654900525</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <IconLocation size={14} color={GOLD} /> <span style={{ opacity: 0.9 }}>www.ihwe.in</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "6px 18px", borderRadius: 8 }}>
+                <div style={{ fontWeight: 800, fontSize: 12, color: "white", letterSpacing: "0.5px" }}>FOR QUERIES:</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 13, color: "rgba(255,255,255,0.9)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <IconEmail size={16} color={GOLD} />
+                        </div>
+                        <span>info@ihwe.in</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <IconMobile size={16} color={GOLD} />
+                        </div>
+                        <span>+91-9654900525</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <IconLocation size={16} color={GOLD} />
+                        </div>
+                        <span>www.ihwe.in</span>
+                    </div>
                 </div>
             </div>
 
-            {/* QR placeholder */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, textAlign: "right", lineHeight: 1.1 }}>
+                    SCAN TO APPLY
+                </div>
                 <div
                     style={{
-                        width: 64,
-                        height: 64,
+                        width: 32,
+                        height: 32,
                         background: "white",
-                        borderRadius: 6,
+                        borderRadius: 4,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         overflow: "hidden",
                     }}
                 >
-                    <svg width="50" height="50" viewBox="0 0 50 50">
+                    <svg width="24" height="24" viewBox="0 0 50 50">
                         {[0, 1, 2, 3, 4, 5, 6].map((r) =>
                             [0, 1, 2, 3, 4, 5, 6].map((c) => {
                                 const on =
@@ -166,19 +147,16 @@ export const Footer = () => (
                                     (r > 3 && c < 3) ||
                                     ((r + c) % 2 === 0 && r > 2 && c > 2);
                                 return on ? (
-                                    <rect key={`${r}-${c}`} x={c * 7 + 1} y={r * 7 + 1} width={6} height={6} fill={TEAL} />
+                                    <rect key={`${r}-${c}`} x={c * 7 + 1} y={r * 7 + 1} width={5} height={5} fill={TEAL} />
                                 ) : null;
                             })
                         )}
                     </svg>
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 10, textAlign: "center" }}>
-                    SCAN TO<br />NOMINATE
-                </div>
             </div>
         </div>
 
-        {/* Disclaimer & Organised By */}
+
         <div
             style={{
                 background: LIGHT_TEAL_BG,
@@ -204,8 +182,12 @@ export const Footer = () => (
                 </div>
 
                 <div style={{ display: "flex", gap: 10 }}>
-                    <button style={{ background: "white", color: TEAL, border: `1px solid ${TEAL}`, borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>BOOK YOUR STALL</button>
-                    <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 4, padding: "4px 12px", fontSize: 10, fontWeight: 800, cursor: "pointer" }}>REGISTER AS BUYER</button>
+                    <a href="/book-a-stand" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                        <button style={{ background: "white", color: TEAL, border: `1px solid ${TEAL}`, borderRadius: 5, padding: "7px 18px", fontSize: 13, fontWeight: 800, cursor: "pointer", width: "100%", height: "100%", letterSpacing: 0.3 }}>BOOK YOUR STALL</button>
+                    </a>
+                    <a href="/buyer-registration" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                        <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 5, padding: "7px 18px", fontSize: 13, fontWeight: 800, cursor: "pointer", width: "100%", height: "100%", letterSpacing: 0.3 }}>REGISTER AS BUYER</button>
+                    </a>
                 </div>
             </div>
         </div>

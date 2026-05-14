@@ -86,9 +86,9 @@ const VisitorTestimonialsAndCTA = () => {
                                     </div>
 
                                     {/* Right Column: Round Avatar */}
-                                    <div className="w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50 self-center ml-1">
+                                    {/* <div className="w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50 self-center ml-1">
                                         <img src={item.avatar} alt={item.author} className="w-full h-full object-cover" />
-                                    </div>
+                                    </div> */}
                                 </div>
                             ))}
                         </div>
