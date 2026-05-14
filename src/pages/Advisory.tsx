@@ -186,13 +186,19 @@ const AdvisoryForm = () => {
                     {/* RIGHT FORM */}
                     <div className="flex-1">
                         {/* ── SECTION 01 ── */}
-                        <div className="flex items-center gap-2.5 bg-[#1a5c2a] text-white py-1.5 px-3 rounded-t-md text-[13px] font-bold tracking-wider uppercase">
-                            <div className="bg-white text-[#1a5c2a] rounded-[4px] w-5.5 h-5.5 flex items-center justify-center font-black text-xs shrink-0">01</div>
-                            <span className="text-base">👤</span>
-                            <span>NOMINEE INFORMATION</span>
-                            <div className="flex-1 h-[1px] bg-white/30 ml-2" />
+                        <div className="flex items-center gap-3 mb-4 mt-2">
+                            <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
+                                01
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                NOMINEE INFORMATION
+                            </div>
+                            <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-300 border-t-0 rounded-b-md p-3 px-4 bg-white mb-3">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
                             <div className="grid grid-cols-4 gap-3 mb-2.5">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Full Name of Nominee {requiredStar}</label>
@@ -259,13 +265,19 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 02 ── */}
-                        <div className="flex items-center gap-2.5 bg-[#1a5c2a] text-white py-1.5 px-3 rounded-t-md text-[13px] font-bold tracking-wider uppercase">
-                            <div className="bg-white text-[#1a5c2a] rounded-[4px] w-5.5 h-5.5 flex items-center justify-center font-black text-xs shrink-0">02</div>
-                            <span className="text-base">💼</span>
-                            <span>NOMINEE'S EXPERTISE & BACKGROUND</span>
-                            <div className="flex-1 h-[1px] bg-white/30 ml-2" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
+                                02
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                            </div>
+                            <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                NOMINEE'S EXPERTISE & BACKGROUND
+                            </div>
+                            <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-300 border-t-0 rounded-b-md p-3 px-4 bg-white mb-3">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
                             <div className="grid grid-cols-3 gap-3">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Areas of Expertise {requiredStar}</label>
@@ -296,13 +308,19 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 03 ── */}
-                        <div className="flex items-center gap-2.5 bg-[#1a5c2a] text-white py-1.5 px-3 rounded-t-md text-[13px] font-bold tracking-wider uppercase">
-                            <div className="bg-white text-[#1a5c2a] rounded-[4px] w-5.5 h-5.5 flex items-center justify-center font-black text-xs shrink-0">03</div>
-                            <span className="text-base">🎯</span>
-                            <span>NOMINATION DETAILS</span>
-                            <div className="flex-1 h-[1px] bg-white/30 ml-2" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
+                                03
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-7c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+                            </div>
+                            <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                NOMINATION DETAILS
+                            </div>
+                            <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-300 border-t-0 rounded-b-md p-3 px-4 bg-white mb-3">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Why do you recommend this nominee? {requiredStar} <span className="text-[11px] text-gray-500 cursor-pointer">ℹ</span></label>
@@ -322,13 +340,19 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 04 ── */}
-                        <div className="flex items-center gap-2.5 bg-[#1a5c2a] text-white py-1.5 px-3 rounded-t-md text-[13px] font-bold tracking-wider uppercase">
-                            <div className="bg-white text-[#1a5c2a] rounded-[4px] w-5.5 h-5.5 flex items-center justify-center font-black text-xs shrink-0">04</div>
-                            <span className="text-base">👤</span>
-                            <span>NOMINATOR INFORMATION</span>
-                            <div className="flex-1 h-[1px] bg-white/30 ml-2" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
+                                04
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                NOMINATOR INFORMATION
+                            </div>
+                            <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-300 border-t-0 rounded-b-md p-3 px-4 bg-white mb-3">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-8">
                             <div className="grid grid-cols-4 gap-3 mb-2.5">
                                 <div className="flex flex-col gap-1">
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Your Full Name {requiredStar}</label>
@@ -386,13 +410,19 @@ const AdvisoryForm = () => {
                         </div>
 
                         {/* ── SECTION 05 ── */}
-                        <div className="flex items-center gap-2.5 bg-[#1a5c2a] text-white py-1.5 px-3 rounded-t-md text-[13px] font-bold tracking-wider uppercase">
-                            <div className="bg-white text-[#1a5c2a] rounded-[4px] w-5.5 h-5.5 flex items-center justify-center font-black text-xs shrink-0">05</div>
-                            <span className="text-base">📎</span>
-                            <span>ADDITIONAL INFORMATION</span>
-                            <div className="flex-1 h-[1px] bg-white/30 ml-2" />
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="bg-[#1a5c2a] text-white font-extrabold text-[14px] h-8 w-12 flex items-center justify-center pr-1.5 rounded-l-md shrink-0" style={{ clipPath: "polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%)" }}>
+                                05
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+                            </div>
+                            <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                ADDITIONAL INFORMATION
+                            </div>
+                            <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                         </div>
-                        <div className="border border-gray-300 border-t-0 rounded-b-md p-3 px-4 bg-white mb-3">
+                        <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-3">
                             <div className="flex justify-between items-center">
                                 <div>
                                     <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Upload Nominee's CV / Profile <span className="text-gray-500 font-normal">(Optional)</span></label>
