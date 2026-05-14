@@ -339,7 +339,7 @@ const Partnership = () => {
                 title: "Logistics Partner",
                 image: "/images/partnership/Logistics.png",
                 color: "#7b43c9",
-                link: "/logistics-partner",
+                link: "/logistic-partner",
                 icon: "/images/partnership/delivery.png",
 
                 points: [
