@@ -50,15 +50,15 @@ const AdvisoryForm = () => {
             <div className="w-[1350px] h-[400px] bg-[#e8f5e9] relative overflow-hidden flex items-start flex-shrink-0">
                 {/* Green diagonal background layers */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5e9] via-[#c8e6c9] via-[#a5d6a7] to-[#81c784]" />
-                
+
                 {/* Top-right dark green triangle */}
-                <div 
+                <div
                     className="absolute top-0 right-0 w-0 h-0 border-solid border-r-[420px] border-b-[420px] border-transparent border-r-[#1a5c2a]"
                 />
 
                 {/* Yellow diagonal stripe */}
                 <div className="absolute top-[60px] -right-[30px] w-[500px] h-[55px] bg-[#f5a623] -rotate-[15deg] opacity-85" />
-                
+
                 {/* Second yellow stripe */}
                 <div className="absolute top-[120px] -right-[60px] w-[500px] h-[30px] bg-[#f5a623] -rotate-[15deg] opacity-50" />
 
@@ -142,59 +142,110 @@ const AdvisoryForm = () => {
                 <div className="flex gap-12 items-start">
                     {/* LEFT SIDEBAR */}
                     <div className="w-[400px] shrink-0 pr-8 border-r border-gray-100">
-                        <div className="text-[22px] font-black text-[#1a5c2a] leading-tight uppercase tracking-[0.2px] whitespace-nowrap">
-                            ADVISORY BOARD MEMBERS
-                        </div>
-                        <div className="text-base font-bold text-gray-800 uppercase tracking-wide mt-0.5">
-                            NOMINATION FORM
-                        </div>
-                        <div className="w-10 h-[3px] bg-[#1a5c2a] my-3" />
-                        <div className="text-[13px] text-gray-600 font-normal leading-relaxed mb-6">
-                            Nominate an exceptional leader to join the Advisory Board of the
-                            International Health & Wellness Expo 2026 and help shape the
-                            future of global health & wellness.
-                        </div>
-
-                        {/* WHY NOMINATE */}
-                        <div className="text-sm font-extrabold text-[#1a5c2a] uppercase tracking-wider mb-1.5">
-                            WHY NOMINATE?
-                        </div>
-                        <div className="w-8 h-[2px] bg-[#f5a623] mb-4.5" />
-
-                        {[
-                            { icon: "👥", title: "Shape the Future", desc: "Contribute to strategic direction and innovation in health & wellness." },
-                            { icon: "🌍", title: "Global Impact", desc: "Be part of a global platform driving positive change." },
-                            { icon: "🤝", title: "Network & Collaborate", desc: "Connect with industry leaders and changemakers worldwide." },
-                            { icon: "⭐", title: "Recognition", desc: "Celebrate excellence and leadership in the health & wellness ecosystem." },
-                        ].map((item, i) => (
-                            <div key={i} className="flex gap-4 items-start mb-14">
-                                <div className="w-[38px] h-[38px] rounded-full bg-[#e8f5e9] flex items-center justify-center text-lg shrink-0">
-                                    {item.icon}
-                                </div>
-                                <div>
-                                    <div className="text-[14px] font-bold text-gray-800 mb-1.5">{item.title}</div>
-                                    <div className="text-[12.5px] text-gray-500 leading-relaxed">{item.desc}</div>
-                                </div>
+                        <div className="mb-8">
+                            <div className="text-[24px] font-black text-[#1a5c2a] leading-tight uppercase tracking-tight">
+                                ADVISORY BOARD MEMBERS
                             </div>
-                        ))}
+                            <div className="text-[18px] font-bold text-gray-800 uppercase tracking-wide mt-1">
+                                NOMINATION FORM
+                            </div>
+                            <div className="w-12 h-1 bg-[#1a5c2a] my-4" />
+                            <div className="text-[13.5px] text-gray-600 font-medium leading-relaxed">
+                                Nominate an exceptional leader to join the Advisory Board of the
+                                International Health & Wellness Expo 2026 and help shape the
+                                future of global health & wellness.
+                            </div>
+                        </div>
+
+                        {/* WHY NOMINATE Box */}
+                        <div className="bg-[#fcfdfc] border border-gray-100 rounded-2xl p-6 shadow-sm mb-10">
+                            <div className="text-sm font-extrabold text-[#1a5c2a] uppercase tracking-wider mb-2">
+                                WHY NOMINATE?
+                            </div>
+                            <div className="w-8 h-[2px] bg-[#1a5c2a] mb-6" />
+
+                            {[
+                                {
+                                    icon: (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#1a5c2a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                        </svg>
+                                    ),
+                                    title: "Shape the Future",
+                                    desc: "Contribute to strategic direction and innovation in health & wellness."
+                                },
+                                {
+                                    icon: (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#1a5c2a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                                            <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                        </svg>
+                                    ),
+                                    title: "Global Impact",
+                                    desc: "Be part of a global platform driving positive change."
+                                },
+                                {
+                                    icon: (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#1a5c2a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                                            <path d="M18 8a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V8z" /><path d="M10 12h.01" /><path d="M14 12h.01" /><path d="M6 12h.01" />
+                                        </svg>
+                                    ),
+                                    title: "Network & Collaborate",
+                                    desc: "Connect with industry leaders and changemakers worldwide."
+                                },
+                                {
+                                    icon: (
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#1a5c2a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    ),
+                                    title: "Recognition",
+                                    desc: "Celebrate excellence and leadership in the health & wellness ecosystem."
+                                },
+                            ].map((item, i, arr) => (
+                                <div key={i}>
+                                    <div className="flex gap-3 items-start mb-0 last:mb-0">
+                                        <div className="w-[54px] h-[54px] rounded-full border-2 border-[#1a5c2a] flex items-center justify-center shrink-0 bg-white shadow-sm">
+                                            {item.icon}
+                                        </div>
+                                        <div className="pt-1">
+                                            <div className="text-[15px] font-bold text-[#1a5c2a] mb-1.5">{item.title}</div>
+                                            <div className="text-[13px] text-gray-500 font-medium leading-relaxed">{item.desc}</div>
+                                        </div>
+                                    </div>
+                                    {i < arr.length - 1 && <div className="border-b border-dashed border-gray-100 mb-7" />}
+                                </div>
+                            ))}
+                        </div>
 
                         {/* NEED HELP box */}
-                        <div className="bg-[#1a5c2a] rounded-xl p-5 text-white mt-12">
-                            <div className="flex items-center gap-2.5 mb-3.5">
-                                <span className="text-2xl">🎧</span>
-                                <span className="text-base font-extrabold tracking-wide">NEED HELP?</span>
+                        <div className="bg-[#144a21] rounded-xl p-5 text-white mt-8 relative overflow-hidden shadow-lg">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                                        <path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                                    </svg>
+                                </div>
+                                <span className="text-base font-black tracking-wider uppercase">NEED HELP?</span>
                             </div>
-                            <div className="flex items-center gap-2 mb-2 text-[13px]">
-                                <span>✉️</span>
-                                <span>support@ihwe.in</span>
+
+                            <div className="space-y-3 mb-4">
+                                <div className="flex items-center gap-3 text-[13px] font-semibold">
+                                    <span className="text-lg">✉️</span>
+                                    <span className="hover:underline cursor-pointer">support@ihwe.in</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-[13px] font-semibold">
+                                    <span className="text-lg">📞</span>
+                                    <span>+91 98765 43210</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2 mb-3.5 text-[13px]">
-                                <span>📞</span>
-                                <span>+91 98765 43210</span>
+
+                            <div className="border-t border-white/20 pt-4 text-[13px] font-bold opacity-100 flex justify-between items-end">
+                                <span>We're here to assist you!</span>
+                                <div className="text-2xl opacity-30 rotate-12">🌿</div>
                             </div>
-                            <div className="border-t border-white/25 pt-3 text-[13px] text-center opacity-90">
-                                We're here to assist you!
-                            </div>
+
+                            {/* Corner leaf accent */}
+                            <div className="absolute -bottom-4 -right-4 text-[100px] opacity-10 pointer-events-none">🌿</div>
                         </div>
                     </div>
 
