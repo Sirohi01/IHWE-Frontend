@@ -39,7 +39,7 @@ const LogisticFooter: React.FC = () => {
               <Mail className="w-[16px] h-[16px]" />
             </div>
             <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
-              partner@ihwe.in
+              info@ihwe.in
             </a>
           </div>
 

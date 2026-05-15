@@ -721,7 +721,7 @@ const PartnerRegistration = () => {
                                     <p className="text-[13px] text-slate-500 font-bold mb-6">Our team is here to assist you.</p>
                                     <div className="space-y-4">
                                         <a href="mailto:partner@ihwe.in" className="flex items-center gap-4 text-[15px] font-black text-[#0b1a3a] hover:text-[#2e7d32] transition-colors">
-                                            <Mail className="w-6 h-6 text-[#2e7d32]" /> partner@ihwe.in
+                                            <Mail className="w-6 h-6 text-[#2e7d32]" /> info@ihwe.in
                                         </a>
                                         <a href="tel:+911149588555" className="flex items-center gap-4 text-[15px] font-black text-[#0b1a3a] hover:text-[#2e7d32] transition-colors">
                                             <Phone className="w-6 h-6 text-[#2e7d32]" /> +91 11 4958 8555

@@ -77,7 +77,7 @@ const TravelFooter: React.FC = () => {
                   className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
                 >
                   <Mail className="w-[11px] h-[11px] text-[#2D6A4F]" />
-                  <span className="font-bold text-[10.5px] group-hover:underline">partner@ihwe.in</span>
+                  <span className="font-bold text-[10.5px] group-hover:underline">info@ihwe.in</span>
                 </a>
                 <a
                   href="tel:+911149588555"

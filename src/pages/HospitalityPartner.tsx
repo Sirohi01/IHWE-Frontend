@@ -300,7 +300,7 @@ const HospitalityPartner = () => {
                                 <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent">
                                     <Mail className="w-5 h-5 text-white" />
                                 </div>
-                                <a href="mailto:partner@ihwe.in" className="text-white font-black text-sm tracking-tight hover:text-amber-500">partner@ihwe.in</a>
+                                <a href="mailto:partner@ihwe.in" className="text-white font-black text-sm tracking-tight hover:text-amber-500">info@ihwe.in</a>
                             </div>
                             <div className="px-4 border-l-2 border-white/10 flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent">

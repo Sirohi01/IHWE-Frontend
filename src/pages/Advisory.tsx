@@ -53,10 +53,10 @@ const AdvisoryForm = () => {
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
                 <div className="absolute top-[28px] left-9 flex flex-col gap-3">
-                    <img 
-                        src="/logo.png" 
-                        alt="IHWE Logo" 
-                        className="w-[380px] h-auto object-contain drop-shadow-md" 
+                    <img
+                        src="/logo.png"
+                        alt="IHWE Logo"
+                        className="w-[380px] h-auto object-contain drop-shadow-md"
                     />
                     <div className="text-[#1a5c2a] text-lg font-bold tracking-wide pl-2">
                         Global Platform. &nbsp; Limitless Possibilities.
@@ -165,11 +165,11 @@ const AdvisoryForm = () => {
                             <div className="space-y-3 mb-4">
                                 <div className="flex items-center gap-3 text-[13px] font-semibold">
                                     <span className="text-lg">✉️</span>
-                                    <span className="hover:underline cursor-pointer">support@ihwe.in</span>
+                                    <span className="hover:underline cursor-pointer">info@ihwe.in</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-[13px] font-semibold">
                                     <span className="text-lg">📞</span>
-                                    <span>+91 98765 43210</span>
+                                    <span>+91 9654900525</span>
                                 </div>
                             </div>
 
@@ -191,7 +191,7 @@ const AdvisoryForm = () => {
                                 01
                             </div>
                             <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
                             </div>
                             <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                 NOMINEE INFORMATION
@@ -270,7 +270,7 @@ const AdvisoryForm = () => {
                                 02
                             </div>
                             <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" /></svg>
                             </div>
                             <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                 NOMINEE'S EXPERTISE & BACKGROUND
@@ -313,7 +313,7 @@ const AdvisoryForm = () => {
                                 03
                             </div>
                             <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-7c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-7c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z" /></svg>
                             </div>
                             <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                 NOMINATION DETAILS
@@ -345,7 +345,7 @@ const AdvisoryForm = () => {
                                 04
                             </div>
                             <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
                             </div>
                             <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                 NOMINATOR INFORMATION
@@ -415,7 +415,7 @@ const AdvisoryForm = () => {
                                 05
                             </div>
                             <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/></svg>
+                                <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" /></svg>
                             </div>
                             <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                 ADDITIONAL INFORMATION

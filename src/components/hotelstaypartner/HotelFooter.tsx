@@ -78,7 +78,7 @@ const HotelFooter: React.FC = () => {
             <div className="p-1 px-3 flex flex-col gap-0.5">
               <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
                 <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                <span className="font-black text-[11px]">partner@ihwe.in</span>
+                <span className="font-black text-[11px]">info@ihwe.in</span>
               </a>
               <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
                 <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
