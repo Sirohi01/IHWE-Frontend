@@ -39,7 +39,7 @@ const MediaBanner = () => {
                 {/* FULL WIDTH BANNER */}
                 <div className={`w-full bg-cover bg-center bg-[url('../../assets/media_registration.webp')]`}
                 style={{ backgroundImage: `url(${media_registration_bg})` }}>
-                    <SectionContainer>
+                    <SectionContainer className='lg:px-8 py-16 lg:py-24'>
 
                         {/* Glow Effects */}
                         <motion.div
@@ -224,7 +224,6 @@ const MediaBanner = () => {
                 </div>
 
                 {/* FLOATING WHITE CARD */}
-                <SectionContainer>
                 <motion.div
                     initial={{ opacity: 0, y: 80 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -233,7 +232,7 @@ const MediaBanner = () => {
                         delay: 0.8,
                     }}
                     viewport={{ once: true }}
-                    className="relative px-4"
+                    className="relative px-4 container mx-auto max-w-[1400px]"
                 >
                     <div className="bg-white rounded-3xl shadow-2xl px-6 sm:px-10 py-8 -mt-16 relative z-20">
                         <div className="flex items-center justify-center gap-4 mb-8">
@@ -278,7 +277,6 @@ const MediaBanner = () => {
                         </div>
                     </div>
                 </motion.div>
-                </SectionContainer>
             </section>
   )
 }

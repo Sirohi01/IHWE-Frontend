@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, ArrowRight } from 'lucide-react';
 import contactimage from '../../assets/contact.webp';
 import SectionContainer from '../layout/SectionContainer';
+import { Link } from 'react-router-dom';
 
 const MediaContact = () => {
   // 1. Initialize state for form fields
@@ -71,14 +72,14 @@ const MediaContact = () => {
               <div className="p-2 border border-[#2ecc71]/30 rounded-md group-hover:bg-[#2ecc71]/10 transition-colors">
                 <Mail className="w-5 h-5 text-[#2ecc71]" />
               </div>
-              <span className="text-white font-medium">media@ihwe.in</span>
+              <span className="text-white font-medium"><Link to="mailto:info@ihwe.in">info@ihwe.in</Link></span>
             </div>
             
             <div className="flex items-center gap-4 group cursor-pointer">
               <div className="p-2 border border-[#2ecc71]/30 rounded-md group-hover:bg-[#2ecc71]/10 transition-colors">
                 <Phone className="w-5 h-5 text-[#2ecc71]" />
               </div>
-              <span className="text-white font-medium">+91 88600 12345</span>
+              <span className="text-white font-medium"><Link to="tel:+919654900525">+91 9654900525</Link></span>
             </div>
           </motion.div>
 
