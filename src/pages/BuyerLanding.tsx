@@ -163,19 +163,19 @@ const BuyerLanding = () => {
                             {[
                                 {
                                     num: '1,000+', label: 'Buyers',
-                                    icon: <img src="/buyer/sb1.png" alt="" className="w-24 h-auto object-contain" />
+                                    icon: <img src="/buyer/sb1.png" alt="" className="w-20 h-auto object-contain" />
                                 },
                                 {
                                     num: '150+', label: 'Exhibitors',
-                                    icon: <img src="/buyer/sb2.png" alt="" className="w-24 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb2.png" alt="" className="w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: '5,000+', label: 'Products',
-                                    icon: <img src="/buyer/sb3.png" alt="" className="w-24 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb3.png" alt="" className="w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: 'Global', label: 'Participation',
-                                    icon: <img src="/buyer/sb4.png" alt="" className="w-24 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb4.png" alt="" className="w-20 h-auto object-contain" />,
                                 },
                             ].map((stat, i) => (
                                 <React.Fragment key={i}>
@@ -183,10 +183,10 @@ const BuyerLanding = () => {
                                         <div className="">
                                             {stat.icon}
                                         </div>
-                                        <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                        <div className="text-xl font-medium text-[#a8d060] leading-none tracking-tight">
                                             {stat.num}
                                         </div>
-                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-2 opacity-90">
+                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90">
                                             {stat.label}
                                         </div>
                                     </div>

@@ -18,11 +18,9 @@ const BuyerLogin = () => {
     const [loginMode, setLoginMode] = useState<'email' | 'mobile'>('email');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
-    const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [buyerId, setBuyerId] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
 
     useEffect(() => {
@@ -56,9 +54,9 @@ const BuyerLogin = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const endpoint = loginMode === 'email' ? 'login' : 'send-mobile-otp';
+            const endpoint = loginMode === 'email' ? 'send-email-otp' : 'send-mobile-otp';
             const body = loginMode === 'email'
-                ? { email: email.trim(), password: password.trim() }
+                ? { email: email.trim() }
                 : { mobile: mobile.trim() };
 
             const res = await fetch(`${API_URL}/buyer-auth/${endpoint}`, {
@@ -69,19 +67,13 @@ const BuyerLogin = () => {
             const data = await res.json();
 
             if (data.success) {
-                if (data.requiresOtp || loginMode === 'mobile') {
-                    setBuyerId(data.buyerId);
-                    setStep(2);
-                    toast.success('Wait! One more step.', {
-                        description: loginMode === 'email'
-                            ? 'We sent a code to your registered email.'
-                            : 'We sent an OTP to your mobile.'
-                    });
-                } else if (data.token) {
-                    localStorage.setItem('buyerToken', data.token);
-                    toast.success('Welcome back!');
-                    login(data.buyer);
-                }
+                setBuyerId(data.buyerId);
+                setStep(2);
+                toast.success('Wait! One more step.', {
+                    description: loginMode === 'email'
+                        ? 'We sent a code to your registered email.'
+                        : 'We sent an OTP to your mobile.'
+                });
             } else {
                 showAlert('error', 'Login Failed', data.message || 'Check your details and try again.');
             }
@@ -268,44 +260,19 @@ const BuyerLogin = () => {
                                             <form onSubmit={handleLogin} className="space-y-6">
                                                 {loginMode === 'email' ? (
                                                     <div className="space-y-2">
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Mail size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type="email"
-                                                                    required
-                                                                    value={email}
-                                                                    onChange={(e) => setEmail(e.target.value)}
-                                                                    className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                    placeholder="Enter your email"
-                                                                />
+                                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
+                                                        <div className="relative group">
+                                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
+                                                                <Mail size={18} />
                                                             </div>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Password / Registration ID</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Lock size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type={showPassword ? "text" : "password"}
-                                                                    required
-                                                                    value={password}
-                                                                    onChange={(e) => setPassword(e.target.value)}
-                                                                    className="w-full pl-12 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                    placeholder="Enter password or Reg ID"
-                                                                />
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => setShowPassword(!showPassword)}
-                                                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-[#23471d] transition-colors"
-                                                                >
-                                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                                                </button>
-                                                            </div>
+                                                            <input
+                                                                type="email"
+                                                                required
+                                                                value={email}
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
+                                                                placeholder="Enter your registered email"
+                                                            />
                                                         </div>
                                                     </div>
                                                 ) : (
@@ -332,8 +299,8 @@ const BuyerLogin = () => {
                                                     disabled={loading}
                                                     className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs shadow-xl hover:shadow-[#23471d]/30 hover:-translate-y-0.5 mt-2 disabled:opacity-50 disabled:hover:translate-y-0"
                                                 >
-                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (loginMode === 'email' ? <LogIn size={18} /> : <Send size={18} />)}
-                                                    <span>{loginMode === 'email' ? 'Login Now' : 'Send Verification OTP'}</span>
+                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={18} />}
+                                                    <span>Send Verification OTP</span>
                                                 </button>
                                             </form>
 
@@ -362,9 +329,9 @@ const BuyerLogin = () => {
                                                     <div>
                                                         <h4 className="font-bold text-slate-900 text-sm mb-1">Need Help?</h4>
                                                         <div className="text-[11.5px] text-slate-500 font-medium flex flex-wrap gap-x-2">
-                                                            <span>Email: info@ihwe.in</span>
+                                                            <span className='text-sm'>Email: <a href="mailto:info@ihwe.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">info@ihwe.in</a></span>
                                                             <span className="text-slate-300 hidden sm:inline">|</span>
-                                                            <span className="w-full sm:w-auto">Phone: +91 9654900525</span>
+                                                            <span className="w-full sm:w-auto text-sm">Phone: <a href="tel:+919654900525" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">+91 9654900525</a></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -421,9 +388,7 @@ const BuyerLogin = () => {
                                     )}
                                 </AnimatePresence>
 
-                                {/* <p className="text-center text-[10px] text-slate-400 mt-10 pt-6 border-t border-slate-100 uppercase tracking-[0.2em] font-bold">
-                                    © {new Date().getFullYear()} <span className="text-[#23471d]">IHWE</span> Buyer Services
-                                </p> */}
+
                             </div>
                         </div>
                     </div>
