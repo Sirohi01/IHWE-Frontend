@@ -628,11 +628,11 @@ export const sellerRegistrationApi = {
 };
 
 export const otpApi = {
-    request: async (identifier: string, type: 'email' | 'phone', name?: string) => {
+    request: async (identifier: string, type: 'email' | 'phone', name?: string, source?: string) => {
         const response = await fetch(`${API_URL}/otp/request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier, type, name })
+            body: JSON.stringify({ identifier, type, name, source })
         });
         return await response.json();
     },

@@ -47,7 +47,7 @@ const MediaContact = () => {
 
     setIsVerifying(p => ({ ...p, [type]: true }));
     try {
-      const res = await otpApi.request(identifier, type === 'email' ? 'email' : 'phone', formData.name || "Media PR Lead");
+      const res = await otpApi.request(identifier, type === 'email' ? 'email' : 'phone', formData.name || "Media PR Lead", "MEDIA");
       if (res.success) {
         toast.success(`OTP sent to your ${type}`);
         type === 'email' ? setEmailOtpSent(true) : setMobileOtpSent(true);
