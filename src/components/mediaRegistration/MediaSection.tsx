@@ -9,6 +9,7 @@ import {
     FileText,
     PlayCircle,
 } from "lucide-react";
+import SectionContainer from "../layout/SectionContainer";
 
 const pressReleases = [
     {
@@ -97,7 +98,7 @@ export default function MediaSection() {
 
     return (
         <section className="w-full bg-[#f5f7fb] py-4 px-4">
-            <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <SectionContainer className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
                 {/* PRESS RELEASES */}
                 <motion.div
@@ -324,7 +325,7 @@ export default function MediaSection() {
                         />
                     </div>
                 </motion.div>
-            </div>
+            </SectionContainer>
         </section>
     );
 }

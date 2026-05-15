@@ -1,25 +1,26 @@
 import React from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 import media_registration_bg from "@/assets/media_registration.webp";
-import ani from "@/assets/media/ani.jpeg";
-import assocham from "@/assets/media/assocham.jpeg";
-import big from "@/assets/media/big.jpeg";
-import business_standard from "@/assets/media/business_standard.jpeg";
-import bw_wellbeing from "@/assets/media/bw_wellbeing.jpeg";
-import ficci from "@/assets/media/ficci.jpeg";
-import healthworld from "@/assets/media/health_world.jpeg";
-import ht from "@/assets/media/ht.jpeg";
-import india_today from "@/assets/media/india_today.jpeg";
-import medical_dialogues from "@/assets/media/medical_dialagues.jpeg";  
-import outlook from "@/assets/media/outlook.jpeg";
-import the_print from "@/assets/media/the_print.jpeg";
-import zee_business from "@/assets/media/zee_business.jpeg";
+import ani from "@/assets/media/ani.webp";
+import assocham from "@/assets/media/assocham.webp";
+import big from "@/assets/media/big.webp";
+import business_standard from "@/assets/media/business_standard.webp";
+import bw_wellbeing from "@/assets/media/bw_wellbeing.webp";
+import ficci from "@/assets/media/ficci.webp";
+import healthworld from "@/assets/media/health_world.webp";
+import ht from "@/assets/media/ht.webp";
+import india_today from "@/assets/media/india_today.webp";
+import medical_dialogues from "@/assets/media/medical_dialagues.webp";  
+import outlook from "@/assets/media/outlook.webp";
+import the_print from "@/assets/media/the_print.webp";
+import zee_business from "@/assets/media/zee_business.webp";
 import {
     Globe,
     Newspaper,
     Users,
     Handshake
 } from "lucide-react";
+import SectionContainer from '../layout/SectionContainer';
 
 const mediaLogos = [
     ani,
@@ -36,8 +37,9 @@ const MediaBanner = () => {
   return (
     <section className="relative w-full overflow-hidden pb-15">
                 {/* FULL WIDTH BANNER */}
-                <div className="w-full" style={{ backgroundImage: `url(${media_registration_bg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-                    <div className="relative mx-auto px-4 max-w-[1400px] lg:px-8 py-16 lg:py-24">
+                <div className={`w-full bg-cover bg-center bg-[url('../../assets/media_registration.webp')]`}
+                style={{ backgroundImage: `url(${media_registration_bg})` }}>
+                    <SectionContainer>
 
                         {/* Glow Effects */}
                         <motion.div
@@ -218,10 +220,11 @@ const MediaBanner = () => {
 
                             {/* RIGHT SIDE */}
                         </div>
-                    </div>
+                    </SectionContainer>
                 </div>
 
                 {/* FLOATING WHITE CARD */}
+                <SectionContainer>
                 <motion.div
                     initial={{ opacity: 0, y: 80 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -230,7 +233,7 @@ const MediaBanner = () => {
                         delay: 0.8,
                     }}
                     viewport={{ once: true }}
-                    className="relative max-w-[1400px] mx-auto px-4"
+                    className="relative px-4"
                 >
                     <div className="bg-white rounded-3xl shadow-2xl px-6 sm:px-10 py-8 -mt-16 relative z-20">
                         <div className="flex items-center justify-center gap-4 mb-8">
@@ -275,6 +278,7 @@ const MediaBanner = () => {
                         </div>
                     </div>
                 </motion.div>
+                </SectionContainer>
             </section>
   )
 }

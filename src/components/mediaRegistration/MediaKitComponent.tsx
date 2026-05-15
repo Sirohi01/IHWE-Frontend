@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import mediakit_image from "../../assets/mediakit.webp";
 import { Image } from "@radix-ui/react-avatar";
+import SectionContainer from "../layout/SectionContainer";
 
 const MediaKitComponent = () => {
   const downloadItems = [
@@ -38,6 +39,7 @@ const MediaKitComponent = () => {
 
   return (
     <section className="w-full bg-slate-100 py-0 flex items-center justify-center ">
+      <SectionContainer>
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -46,7 +48,7 @@ const MediaKitComponent = () => {
           ease: "easeOut",
         }}
         viewport={{ once: true }}
-        className="w-full max-w-[1400px] overflow-hidden rounded-xl shadow-2xl relative "
+        className="w-full overflow-hidden rounded-xl shadow-2xl relative "
       >
         {/* Background Gradient */}
         <div className="relative bg-gradient-to-r from-[#003d4d] via-[#001e30] to-[#000a14] flex flex-col lg:flex-row items-center gap-8 overflow-hidden lg:px-8 px-4">
@@ -226,6 +228,7 @@ const MediaKitComponent = () => {
 
         </div>
       </motion.div>
+      </SectionContainer>
     </section>
   );
 };

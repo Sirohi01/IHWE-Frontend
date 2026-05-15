@@ -6,11 +6,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import ani from "@/assets/media/ani.jpeg";
-import business_standard from "@/assets/media/business_standard.jpeg";
-import healthworld from "@/assets/media/health_world.jpeg";
-import india_today from "@/assets/media/india_today.jpeg";
-import the_print from "@/assets/media/the_print.jpeg";
+import ani from "@/assets/media/ani.webp";
+import business_standard from "@/assets/media/business_standard.webp";
+import healthworld from "@/assets/media/health_world.webp";
+import india_today from "@/assets/media/india_today.webp";
+import the_print from "@/assets/media/the_print.webp";
+import SectionContainer from "../layout/SectionContainer";
 
 const mediaCoverage = [
     {
@@ -53,7 +54,7 @@ const mediaCoverage = [
         logo: "ThePrint",
         date: "May 16, 2024",
     },
-      {
+    {
         title:
             "IHWE 2026 to Become India's Largest Wellness & Healthcare Gathering",
         image:
@@ -93,7 +94,7 @@ const mediaCoverage = [
         logo: the_print,
         date: "May 16, 2024",
     },
-      {
+    {
         title:
             "IHWE 2026 to Become India's Largest Wellness & Healthcare Gathering",
         image:
@@ -137,8 +138,8 @@ const mediaCoverage = [
 
 export default function FeaturedMediaCoverage() {
     return (
-        <section className="w-full py-4 px-4">
-            <div className="max-w-[1400px] mx-auto">
+        <section className="w-full py-4">
+            <SectionContainer>
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -182,17 +183,17 @@ export default function FeaturedMediaCoverage() {
                         className="media-swiper !pb-12" // Add padding for dots
                     >
                         {mediaCoverage.map((item, index) => (
-                           <SwiperSlide key={index} className="!h-auto flex">
-                              <motion.div
-  whileHover={{ y: -6 }}
-  className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md h-full flex flex-col w-full"
->
+                            <SwiperSlide key={index} className="!h-auto flex">
+                                <motion.div
+                                    whileHover={{ y: -6 }}
+                                    className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md h-full flex flex-col w-full"
+                                >
                                     {/* LOGO */}
                                     <div className="h-[56px] flex items-center justify-center border-b border-gray-100 bg-white px-3">
-                                        <img 
-                                            src={item.logo} 
-                                            alt="Media Logo" 
-                                            className="max-h-6 object-contain grayscale hover:grayscale-0 transition-all" 
+                                        <img
+                                            src={item.logo}
+                                            alt="Media Logo"
+                                            className="max-h-6 object-contain grayscale hover:grayscale-0 transition-all"
                                         />
                                     </div>
 
@@ -227,7 +228,7 @@ export default function FeaturedMediaCoverage() {
                     </Swiper>
 
                     {/* Custom CSS for Pagination Dots to match your theme */}
-                  <style jsx global>{`
+                    <style jsx global>{`
   .media-swiper .swiper-wrapper {
     align-items: stretch;
   }
@@ -247,7 +248,7 @@ export default function FeaturedMediaCoverage() {
   }
 `}</style>
                 </motion.div>
-            </div>
+            </SectionContainer>
         </section>
     );
 }

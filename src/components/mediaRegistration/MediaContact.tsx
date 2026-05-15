@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, ArrowRight } from 'lucide-react';
 import contactimage from '../../assets/contact.webp';
+import SectionContainer from '../layout/SectionContainer';
 
 const MediaContact = () => {
   // 1. Initialize state for form fields
@@ -44,14 +45,15 @@ const MediaContact = () => {
   };
 
   return (
-    <div className="w-full py-4 px-4 flex justify-center font-sans" >
+    <div className="w-full py-4 flex justify-center font-sans" >
+      <SectionContainer>
       <motion.div 
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={containerVariants}
-        className="w-full max-w-[1400px] flex flex-wrap lg:p-8 p-4 rounded-xl"
-        style={{ backgroundImage: `url(${contactimage})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        className={`w-fulL flex flex-wrap lg:p-8 p-4 rounded-xl bg-cover bg-center bg-[url(${contactimage})]`}
+        style={{ backgroundImage: `url(${contactimage})` }}
       >
         {/* Left Section: Media Enquiries (referencing image_a04ae1.png) */}
         <div className="flex-1 space-y-8 z-10 w-full md:w-[60%]">
@@ -167,6 +169,7 @@ const MediaContact = () => {
           </form>
         </div>
       </motion.div>
+      </SectionContainer>
     </div>
   );
 };

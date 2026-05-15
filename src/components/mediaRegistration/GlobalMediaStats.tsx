@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import global_stats_bg from "@/assets/global_stats_bg.jpg";
+import SectionContainer from "../layout/SectionContainer";
 const stats = [
     {
         number: "100+",
@@ -24,12 +25,13 @@ const stats = [
 export default function GlobalMediaStats() {
     return (
         <section className="w-full px-4 py-8 bg-[#001635]">
+            <SectionContainer>
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
                 viewport={{ once: true }}
-                className="max-w-[1400px] mx-auto rounded-2xl overflow-hidden relative"
+                className="rounded-2xl overflow-hidden relative"
             >
                 {/* BACKGROUND GLOW */}
                 <motion.div
@@ -121,6 +123,7 @@ export default function GlobalMediaStats() {
                     </motion.div>
                 </div>
             </motion.div>
+            </SectionContainer>
         </section>
     );
 }
