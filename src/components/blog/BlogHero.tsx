@@ -10,10 +10,10 @@ interface BlogHeroProps {
 
 const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) => {
   const stats = [
-    { label: 'Articles', value: settings?.articlesCount || '250+', icon: <FileText size={28} /> },
-    { label: 'Expert Contributors', value: settings?.expertsCount || '50+', icon: <Users size={28} /> },
-    { label: 'Countries Covered', value: settings?.countriesCount || '12+', icon: <Globe size={28} /> },
-    { label: 'Updates', value: settings?.updateFrequency || 'Daily', icon: <Calendar size={28} /> },
+    { label: 'Articles', value: settings?.articlesCount || '250+', icon: <FileText size={22} /> },
+    { label: 'Expert Contributors', value: settings?.expertsCount || '50+', icon: <Users size={22} /> },
+    { label: 'Countries Covered', value: settings?.countriesCount || '12+', icon: <Globe size={22} /> },
+    { label: 'Updates', value: settings?.updateFrequency || 'Daily', icon: <Calendar size={22} /> },
   ];
 
   return (
@@ -93,12 +93,12 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
           </div>
 
           {/* Right Column: Stats Box - Glassmorphism */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:translate-y-8">
+          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:translate-y-12">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
-              className="w-full max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 shadow-2xl relative overflow-hidden"
+              className="w-full max-w-xl bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-5 shadow-2xl relative overflow-hidden"
             >
               <div className="flex items-center justify-between relative z-10">
                 {stats.map((stat, idx) => (
@@ -113,7 +113,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
                       </div>
 
                       {/* Value */}
-                      <div className="text-2xl md:text-3xl font-black text-white mb-1 tracking-tight">
+                      <div className="text-xl md:text-2xl font-black text-white mb-0.5 tracking-tight">
                         {stat.value}
                       </div>
 
@@ -125,7 +125,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
 
                     {/* Divider - only between items */}
                     {idx < stats.length - 1 && (
-                      <div className="h-16 w-[1px] bg-white/10 mx-2" />
+                      <div className="h-10 w-[1px] bg-white/10 mx-2" />
                     )}
                   </React.Fragment>
                 ))}
