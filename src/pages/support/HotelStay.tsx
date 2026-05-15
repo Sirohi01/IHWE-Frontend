@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  ArrowRight, Mail, Phone, MapPin, 
-  ChevronRight, HelpCircle, 
+import {
+  ArrowRight, Mail, Phone, MapPin,
+  ChevronRight, HelpCircle,
   ShieldCheck, Zap, HeartHandshake,
   MessageCircle
 } from "lucide-react";
@@ -13,12 +13,12 @@ import who2 from "../../assets/who2.png";
 import who3 from "../../assets/who3.png";
 import who4 from "../../assets/who4.png";
 import who5 from "../../assets/who5.png";
-import part11 from "../../assets/part11.png";
-import part22 from "../../assets/part22.png";
-import part33 from "../../assets/part33.png";
-import part44 from "../../assets/part44.png";
-import part55 from "../../assets/part55.png";
-import part66 from "../../assets/part66.png";
+import part11 from "../../assets/part11.webp";
+import part22 from "../../assets/part22.webp";
+import part33 from "../../assets/part33.webp";
+import part44 from "../../assets/part44.webp";
+import part55 from "../../assets/part55.webp";
+import part66 from "../../assets/part66.webp";
 
 const HotelStay = () => {
   const [formData, setFormData] = useState({
@@ -169,11 +169,10 @@ const HotelStay = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.07 }}
                     viewport={{ once: true }}
-                    className={`p-5 rounded-2xl border transition-all duration-300 group flex flex-col justify-between min-h-[160px] ${
-                      card.active
-                        ? "border-[#2e7d32] bg-[#f7fff4] shadow-md ring-1 ring-[#2e7d32]/20"
-                        : "border-slate-100 hover:border-[#2e7d32]/30 hover:bg-slate-50 shadow-sm"
-                    }`}
+                    className={`p-5 rounded-2xl border transition-all duration-300 group flex flex-col justify-between min-h-[160px] ${card.active
+                      ? "border-[#2e7d32] bg-[#f7fff4] shadow-md ring-1 ring-[#2e7d32]/20"
+                      : "border-slate-100 hover:border-[#2e7d32]/30 hover:bg-slate-50 shadow-sm"
+                      }`}
                   >
                     <div>
                       <div className="w-10 h-10 mb-3">
