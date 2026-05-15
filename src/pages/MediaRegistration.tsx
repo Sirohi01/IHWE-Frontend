@@ -16,7 +16,6 @@ import HeroBg from "@/assets/media.jpg";
 import FeaturedMediaCoverage from "@/components/mediaRegistration/FeaturedMediaCarousel";
 import MediaSection from "@/components/mediaRegistration/MediaSection";
 import MediaBanner from "@/components/mediaRegistration/MediaBanner";
-import { Global } from "recharts";
 import GlobalMediaStats from "@/components/mediaRegistration/GlobalMediaStats";
 import MediaPartners from "@/components/mediaRegistration/MediaPartners";
 import MediaKitComponent from "@/components/mediaRegistration/MediaKitComponent";

@@ -1,16 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
 import ani from "@/assets/media/ani.jpeg";
 import business_standard from "@/assets/media/business_standard.jpeg";
 import healthworld from "@/assets/media/health_world.jpeg";
 import india_today from "@/assets/media/india_today.jpeg";
 import the_print from "@/assets/media/the_print.jpeg";
+
 
 const mediaCoverage = [
     {
@@ -136,6 +139,25 @@ const mediaCoverage = [
 ];
 
 export default function FeaturedMediaCoverage() {
+    const [coverages, setCoverages] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await mediaRegistrationApi.getPageData();
+            if (data && data.coverages) {
+                setCoverages(data.coverages);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const displayData = coverages.length > 0 ? coverages.map(item => ({
+        ...item,
+        logo: item.logo.startsWith('http') ? item.logo : `${SERVER_URL}${item.logo}`,
+        image: item.image?.startsWith('http') ? item.image : (item.image ? `${SERVER_URL}${item.image}` : "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop"),
+        date: item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+    })) : mediaCoverage;
+
     return (
         <section className="w-full py-4 px-4">
             <div className="max-w-[1400px] mx-auto">
@@ -181,12 +203,12 @@ export default function FeaturedMediaCoverage() {
                         }}
                         className="media-swiper !pb-12" // Add padding for dots
                     >
-                        {mediaCoverage.map((item, index) => (
+                        {displayData.map((item, index) => (
                            <SwiperSlide key={index} className="!h-auto flex">
                               <motion.div
-  whileHover={{ y: -6 }}
-  className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md h-full flex flex-col w-full"
->
+                                  whileHover={{ y: -6 }}
+                                  className="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md h-full flex flex-col w-full"
+                              >
                                     {/* LOGO */}
                                     <div className="h-[56px] flex items-center justify-center border-b border-gray-100 bg-white px-3">
                                         <img 
@@ -214,7 +236,8 @@ export default function FeaturedMediaCoverage() {
                                             </h3>
                                         </div>
                                         <motion.a
-                                            href="#"
+                                            href={item.link || "#"}
+                                            target={item.link ? "_blank" : "_self"}
                                             whileHover={{ x: 4 }}
                                             className="inline-flex items-center gap-1 text-[#1d4ed8] text-sm font-medium mt-4"
                                         >
@@ -227,7 +250,7 @@ export default function FeaturedMediaCoverage() {
                     </Swiper>
 
                     {/* Custom CSS for Pagination Dots to match your theme */}
-                  <style jsx global>{`
+                  <style>{`
   .media-swiper .swiper-wrapper {
     align-items: stretch;
   }

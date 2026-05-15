@@ -18,11 +18,9 @@ const BuyerLogin = () => {
     const [loginMode, setLoginMode] = useState<'email' | 'mobile'>('email');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
-    const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [buyerId, setBuyerId] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
 
     useEffect(() => {
@@ -56,9 +54,9 @@ const BuyerLogin = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const endpoint = loginMode === 'email' ? 'login' : 'send-mobile-otp';
+            const endpoint = loginMode === 'email' ? 'send-email-otp' : 'send-mobile-otp';
             const body = loginMode === 'email'
-                ? { email: email.trim(), password: password.trim() }
+                ? { email: email.trim() }
                 : { mobile: mobile.trim() };
 
             const res = await fetch(`${API_URL}/buyer-auth/${endpoint}`, {
@@ -69,19 +67,13 @@ const BuyerLogin = () => {
             const data = await res.json();
 
             if (data.success) {
-                if (data.requiresOtp || loginMode === 'mobile') {
-                    setBuyerId(data.buyerId);
-                    setStep(2);
-                    toast.success('Wait! One more step.', {
-                        description: loginMode === 'email'
-                            ? 'We sent a code to your registered email.'
-                            : 'We sent an OTP to your mobile.'
-                    });
-                } else if (data.token) {
-                    localStorage.setItem('buyerToken', data.token);
-                    toast.success('Welcome back!');
-                    login(data.buyer);
-                }
+                setBuyerId(data.buyerId);
+                setStep(2);
+                toast.success('Wait! One more step.', {
+                    description: loginMode === 'email'
+                        ? 'We sent a code to your registered email.'
+                        : 'We sent an OTP to your mobile.'
+                });
             } else {
                 showAlert('error', 'Login Failed', data.message || 'Check your details and try again.');
             }
@@ -190,15 +182,15 @@ const BuyerLogin = () => {
             </div>
             <section className="py-4 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto mb-2">
+                    <div className="max-w-5xl mx-auto mb-2">
                         <Link to="/" className="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-700 hover:text-white hover:bg-[#23471d] rounded-full shadow-md border border-slate-200 transition-all duration-300 font-bold uppercase text-[11px] tracking-widest group w-fit">
                             <ChevronLeft size={16} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
                             <span>Back to Home</span>
                         </Link>
                     </div>
 
-                    <div className="max-w-6xl mx-auto">
-                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[700px] lg:min-h-[700px]">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
                             {/* left side  */}
                             <div className="hidden lg:flex items-center justify-center bg-slate-50 border-r border-slate-100 h-full w-full">
                                 <img src="/buyerLogin1.png" alt="Buyer Login" className="w-full h-full object-fit" />
@@ -215,7 +207,7 @@ const BuyerLogin = () => {
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -20 }}
-                                            className="space-y-8"
+                                            className="space-y-4"
                                         >
 
                                             <div className="text-center">
@@ -268,44 +260,19 @@ const BuyerLogin = () => {
                                             <form onSubmit={handleLogin} className="space-y-6">
                                                 {loginMode === 'email' ? (
                                                     <div className="space-y-2">
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Mail size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type="email"
-                                                                    required
-                                                                    value={email}
-                                                                    onChange={(e) => setEmail(e.target.value)}
-                                                                    className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                    placeholder="Enter your email"
-                                                                />
+                                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
+                                                        <div className="relative group">
+                                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
+                                                                <Mail size={18} />
                                                             </div>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Password / Registration ID</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Lock size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type={showPassword ? "text" : "password"}
-                                                                    required
-                                                                    value={password}
-                                                                    onChange={(e) => setPassword(e.target.value)}
-                                                                    className="w-full pl-12 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                    placeholder="Enter password or Reg ID"
-                                                                />
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => setShowPassword(!showPassword)}
-                                                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-[#23471d] transition-colors"
-                                                                >
-                                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                                                </button>
-                                                            </div>
+                                                            <input
+                                                                type="email"
+                                                                required
+                                                                value={email}
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
+                                                                placeholder="Enter your registered email"
+                                                            />
                                                         </div>
                                                     </div>
                                                 ) : (
@@ -332,18 +299,18 @@ const BuyerLogin = () => {
                                                     disabled={loading}
                                                     className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs shadow-xl hover:shadow-[#23471d]/30 hover:-translate-y-0.5 mt-2 disabled:opacity-50 disabled:hover:translate-y-0"
                                                 >
-                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (loginMode === 'email' ? <LogIn size={18} /> : <Send size={18} />)}
-                                                    <span>{loginMode === 'email' ? 'Login Now' : 'Send Verification OTP'}</span>
+                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={18} />}
+                                                    <span>Send Verification OTP</span>
                                                 </button>
                                             </form>
 
                                             <div className="space-y-2">
-                                                <div className="relative">
+                                                <div className="relative py-2">
                                                     <div className="absolute inset-0 flex items-center">
                                                         <div className="w-full border-t border-slate-200"></div>
                                                     </div>
                                                     <div className="relative flex justify-center text-sm">
-                                                        <span className="px-3 bg-white text-slate-700 font-bold">New to IHWE Expo?</span>
+                                                        <span className="px-3  text-slate-700 font-medium">New to IHWE Expo?</span>
                                                     </div>
                                                 </div>
 
@@ -362,9 +329,9 @@ const BuyerLogin = () => {
                                                     <div>
                                                         <h4 className="font-bold text-slate-900 text-sm mb-1">Need Help?</h4>
                                                         <div className="text-[11.5px] text-slate-500 font-medium flex flex-wrap gap-x-2">
-                                                            <span>Email: info@ihwe.in</span>
+                                                            <span className='text-sm'>Email: <a href="mailto:info@ihwe.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">info@ihwe.in</a></span>
                                                             <span className="text-slate-300 hidden sm:inline">|</span>
-                                                            <span className="w-full sm:w-auto">Phone: +91 9654900525</span>
+                                                            <span className="w-full sm:w-auto text-sm">Phone: <a href="tel:+919654900525" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">+91 9654900525</a></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -421,9 +388,7 @@ const BuyerLogin = () => {
                                     )}
                                 </AnimatePresence>
 
-                                {/* <p className="text-center text-[10px] text-slate-400 mt-10 pt-6 border-t border-slate-100 uppercase tracking-[0.2em] font-bold">
-                                    © {new Date().getFullYear()} <span className="text-[#23471d]">IHWE</span> Buyer Services
-                                </p> */}
+
                             </div>
                         </div>
                     </div>

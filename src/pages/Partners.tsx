@@ -687,9 +687,9 @@ const Partners = () => {
         </div>
       </div>
 
-      <PartnershipPopup 
-        isOpen={isPopupOpen} 
-        onClose={() => setIsPopupOpen(false)} 
+      <PartnershipPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
         initialService={initialService}
       />
     </div>

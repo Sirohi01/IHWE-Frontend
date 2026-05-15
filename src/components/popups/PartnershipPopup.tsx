@@ -12,7 +12,6 @@ import t3 from "../../assets/t3.png";
 import t4 from "../../assets/t4.png";
 import t5 from "../../assets/t5.png";
 
-
 const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
   <span
     style={{
@@ -95,7 +94,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
   // OTP & Submission States
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   // Phone OTP States
   const [phoneOtp, setPhoneOtp] = useState("");
   const [showPhoneOtpInput, setShowPhoneOtpInput] = useState(false);
@@ -115,10 +114,9 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
     if (initialService) {
       setSelectedServices([initialService]);
     } else if (isOpen) {
-      // Don't reset if just opening without initialService unless it was empty before
+      // Don't reset if just opening without initialService
     } else {
       setSelectedServices([]);
-      // Reset verification states on close
       setIsSubmitted(false);
       setIsEmailVerified(false);
       setIsPhoneVerified(false);
@@ -128,13 +126,12 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
   }, [initialService, isOpen]);
 
   const toggleService = (id: string) => setSelectedServices(p => p.includes(id) ? p.filter(s => s !== id) : [...p, id]);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "message") setCharCount(value.length);
     setFormData(p => ({ ...p, [name]: value }));
-    
-    // Reset verification if field changes
+
     if (name === 'email') {
       setIsEmailVerified(false);
       setShowEmailOtpInput(false);
@@ -145,7 +142,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
     }
   };
 
-  // --- OTP Logic ---
   const handleRequestPhoneOtp = async () => {
     if (!formData.mobile || formData.mobile.length < 10) {
       return toast.error("Please enter a valid mobile number");
@@ -271,7 +267,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
         >
-          {/* ── Inject keyframe animations ── */}
           <style>{`
             @keyframes goldShift {
               0%   { background-position: 0% 50%; }
@@ -328,39 +323,14 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
             }
           `}</style>
 
-          {/* Popup Content Container with GSAP-style advanced animation */}
           <motion.div
             className="relative bg-white rounded-3xl shadow-2xl overflow-hidden flex mt-6"
             style={{ width: '100%', maxWidth: 720, height: 'auto', maxHeight: 'min(94vh, 850px)' }}
-            initial={{ 
-              opacity: 0, 
-              scale: 0.85, 
-              rotateX: 15, 
-              y: 60,
-              perspective: 1000
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotateX: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.9,
-              y: 40,
-              rotateX: -10,
-              transition: { duration: 0.3, ease: "easeInOut" }
-            }}
-            transition={{
-              type: "spring",
-              damping: 18,
-              stiffness: 100,
-              mass: 1,
-              duration: 0.6
-            }}
+            initial={{ opacity: 0, scale: 0.85, rotateX: 15, y: 60, perspective: 1000 }}
+            animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40, rotateX: -10, transition: { duration: 0.3, ease: "easeInOut" } }}
+            transition={{ type: "spring", damping: 18, stiffness: 100, mass: 1, duration: 0.6 }}
           >
-            {/* Close */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-50 w-8 h-8 bg-black/10 hover:bg-red-600 text-black hover:text-white rounded-full flex items-center justify-center transition-all shadow-sm backdrop-blur-sm"
@@ -368,10 +338,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
               <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" /></svg>
             </button>
 
-            {/* ── LEFT PANEL ── */}
             <div className="flex-1 flex flex-col p-6 overflow-hidden">
-
-              {/* Header */}
               <motion.div 
                 className="flex items-center gap-3 mb-5 flex-shrink-0"
                 initial={{ opacity: 0, x: -20 }}
@@ -389,17 +356,14 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 </div>
               </motion.div>
 
-              {/* Conditional Content */}
               {!isSubmitted ? (
                 <>
-                  {/* Form Fields Section */}
                   <motion.div
                     className="space-y-5 flex-shrink-0"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                   >
-                    {/* Name + Company */}
                     <div className="grid grid-cols-2 gap-4 px-1">
                       <div>
                         <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
@@ -417,7 +381,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       </div>
                     </div>
 
-                    {/* Mobile + Email */}
                     <div className="grid grid-cols-2 gap-4 px-1">
                       <div>
                         <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1 flex justify-between items-center">
@@ -472,7 +435,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       </div>
                     </div>
 
-                    {/* Services Selection */}
                     <div className="px-2">
                       <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-2">Select Required Service(s) *</label>
                       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -494,7 +456,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       </div>
                     </div>
 
-                    {/* Message Field */}
                     <div className="px-2">
                       <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
                       <div className="relative w-full">
@@ -512,14 +473,12 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                     </div>
                   </motion.div>
 
-                  {/* Action Buttons */}
                   <motion.div 
                     className="flex flex-wrap gap-2.5 mt-8 mb-4 px-2 flex-shrink-0"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    {/* Submit */}
                     <div className="relative group/btn flex-1 min-w-[140px]">
                       <Sparkle style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
                       <Sparkle style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
@@ -536,13 +495,11 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       </button>
                     </div>
 
-                    {/* WhatsApp */}
                     <button type="button" className="flex-1 min-w-[120px] border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
                       <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z"/></svg>
                       WHATSAPP
                     </button>
 
-                    {/* Call Us */}
                     <div className="relative group/btn flex-1 min-w-[120px]">
                       <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
                       <Sparkle color="#a2d149" style={{ bottom: '-8px', right: '10%', animationDelay: '0.6s' }} />
@@ -577,28 +534,24 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 </motion.div>
               )}
 
-              {/* Privacy Disclaimer */}
               <div className="flex items-center justify-center gap-2 text-gray-800 text-[9px] flex-shrink-0 mt-auto opacity-70 mb-4">
                 <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="7" width="10" height="8" rx="1" /><path d="M5 7V5a3 3 0 016 0v2" /></svg>
                 Your information is safe. We never share your details.
               </div>
             </div>
 
-            {/* ── RIGHT PANEL ── */}
             <div className="w-56 bg-[#f5f9f4] border-l border-gray-100 flex flex-col p-5 relative flex-shrink-0 overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, type: "spring" }}
               >
-                {/* Header Image */}
                 <div className="flex justify-center mb-3">
                   <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-[#2d6a2d] p-0.5 relative">
                     <img src={why1} alt="Why IHWE" className="w-full h-full object-contain" />
                   </div>
                 </div>
 
-                {/* Title */}
                 <div className="text-left mb-4 px-1">
                   <p className="text-black text-[11px] font-medium uppercase tracking-wider leading-tight">Why Choose</p>
                   <h3 className="text-[15px] font-extrabold text-[#2d6a2d] leading-tight">IHWE Partners?</h3>
@@ -606,7 +559,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 </div>
               </motion.div>
 
-              {/* Items List */}
               <div className="relative z-10 space-y-0.5 flex-1">
                 {whyChoose.map((item, i) => (
                   <motion.div
@@ -629,7 +581,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 ))}
               </div>
 
-              {/* Branded Leaf Decoration */}
               <motion.div
                 className="absolute -bottom-8 -right-8 w-56 h-56 pointer-events-none transform -rotate-12"
                 initial={{ opacity: 0, scale: 0.5, rotate: -30 }}

@@ -2,26 +2,31 @@
 
 import { motion } from "framer-motion";
 import global_stats_bg from "@/assets/global_stats_bg.jpg";
-const stats = [
-    {
-        number: "100+",
-        label: "Media Mentions",
-    },
-    {
-        number: "1M+",
-        label: "Audience Reach",
-    },
-    {
-        number: "20+",
-        label: "Media Partners",
-    },
-    {
-        number: "12+",
-        label: "Countries Coverage",
-    },
-];
+import { useState, useEffect } from "react";
+import { mediaRegistrationApi } from "@/lib/api";
 
 export default function GlobalMediaStats() {
+    const [bannerSettings, setBannerSettings] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await mediaRegistrationApi.getPageData();
+            if (data && data.bannerSettings) {
+                setBannerSettings(data.bannerSettings);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const displayStats = bannerSettings?.stats && bannerSettings.stats.some(s => s.number || s.label) 
+        ? bannerSettings.stats.filter(s => s.number || s.label) 
+        : [
+            { number: "100+", label: "Media Mentions" },
+            { number: "1M+", label: "Audience Reach" },
+            { number: "20+", label: "Media Partners" },
+            { number: "12+", label: "Countries Coverage" },
+        ];
+
     return (
         <section className="w-full px-4 py-8 bg-[#001635]">
             <motion.div
@@ -75,7 +80,7 @@ export default function GlobalMediaStats() {
                     >
                         {/* STATS */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            {stats.map((item, index) => (
+                            {displayStats.map((item, index) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: 20 }}
@@ -88,8 +93,8 @@ export default function GlobalMediaStats() {
                                     className="relative"
                                 >
                                     {/* DIVIDER */}
-                                    {index !== stats.length - 1 && (
-                                        <div className="hidden md:block absolute right-[-12px] top-1 h-[55px] w-px bg-white/10" />
+                                    {index !== displayStats.length - 1 && (
+                                        <div className="hidden md:block absolute right-[-12px] top-1 h-14 w-px bg-white/10" />
                                     )}
 
                                     <h3 className="text-white text-3xl md:text-4xl font-extrabold">

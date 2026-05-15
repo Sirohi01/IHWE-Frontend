@@ -24,7 +24,7 @@ const Layout = ({ children, onRegisterVisit }: LayoutProps) => {
       <Navbar onRegisterVisit={onRegisterVisit} />
       <SocialSidebar />
       <WhatsAppFloat />
-      <main className="flex-1 overflow-x-hidden">
+      <main className="flex-1">
         <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin" /></div>}>
           {children}
         </Suspense>

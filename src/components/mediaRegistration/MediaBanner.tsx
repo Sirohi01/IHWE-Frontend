@@ -21,7 +21,10 @@ import {
     Handshake
 } from "lucide-react";
 
-const mediaLogos = [
+import { useState, useEffect } from "react";
+import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
+
+const defaultLogos = [
     ani,
     business_standard,
     india_today,
@@ -32,8 +35,44 @@ const mediaLogos = [
     ht,
     medical_dialogues,
 ];
+
 const MediaBanner = () => {
-  return (
+    const [dynamicLogos, setDynamicLogos] = useState([]);
+    const [bannerSettings, setBannerSettings] = useState(null);
+    const [mainDownloadLink, setMainDownloadLink] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await mediaRegistrationApi.getPageData();
+            if (data && data.bannerLogos) {
+                const bannerLogos = data.bannerLogos.map(c => 
+                    c.logo.startsWith('http') ? c.logo : `${SERVER_URL}${c.logo}`
+                );
+                
+                if (bannerLogos.length > 0) {
+                    setDynamicLogos(bannerLogos.slice(0, 9)); 
+                }
+            }
+
+            if (data && data.resources) {
+                const main = data.resources.find(r => r.isMain) || data.resources.find(r => r.icon === 'FileArchive');
+                if (main) {
+                    const link = main.link.startsWith('http') ? main.link : `${SERVER_URL}${main.link}`;
+                    setMainDownloadLink(link);
+                }
+            }
+
+            if (data && data.bannerSettings) {
+                setBannerSettings(data.bannerSettings);
+            }
+
+        };
+        fetchData();
+    }, []);
+
+    const displayLogos = dynamicLogos.length > 0 ? dynamicLogos : defaultLogos;
+
+    return (
     <section className="relative w-full overflow-hidden pb-15">
                 {/* FULL WIDTH BANNER */}
                 <div className="w-full" style={{ backgroundImage: `url(${media_registration_bg})`, backgroundSize: "cover", backgroundPosition: "center" }}>
@@ -89,9 +128,7 @@ const MediaBanner = () => {
                                     viewport={{ once: true }}
                                     className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight"
                                 >
-                                    MEDIA & PR
-                                    <br />
-                                    <span className="text-green-400">COVERAGE</span>
+                                    {bannerSettings?.heroTitle || "MEDIA & PR COVERAGE"}
                                 </motion.h2>
 
                                 <motion.div
@@ -117,21 +154,20 @@ const MediaBanner = () => {
                                     viewport={{ once: true }}
                                     className="text-white/80 text-base sm:text-lg max-w-xl leading-relaxed"
                                 >
-                                    Showcasing the global recognition
-                                    <br /> and media visibility of{" "}
-                                    <span className="text-green-400 font-semibold">
-                                        IHWE 2026
-                                    </span>
+                                    {bannerSettings?.heroSubtitle || "Showcasing the global recognition and media visibility of IHWE 2026"}
                                 </motion.p>
 
                                 {/* STATS */}
                                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
-                                    {[
-                                        { number: "100+", label: "Media Mentions", icon: <Newspaper /> },
-                                        { number: "1M+", label: "Audience Reach", icon: <Users /> },
-                                        { number: "20+", label: "Media Partners", icon: <Handshake /> },
-                                        { number: "12+", label: "Countries Coverage", icon: <Globe /> },
-                                    ].map((item, index) => (
+                                    {(bannerSettings?.stats && bannerSettings.stats.some(s => s.number || s.label) 
+                                        ? bannerSettings.stats.filter(s => s.number || s.label) 
+                                        : [
+                                            { number: "100+", label: "Media Mentions" },
+                                            { number: "1M+", label: "Audience Reach" },
+                                            { number: "20+", label: "Media Partners" },
+                                            { number: "12+", label: "Countries Coverage" },
+                                        ]
+                                    ).map((item, index) => (
                                         <motion.div
                                             key={index}
                                             initial={{ opacity: 0, y: 40 }}
@@ -145,7 +181,7 @@ const MediaBanner = () => {
                                                 y: -6,
                                                 scale: 1.03,
                                             }}
-                                            className="flex gap-3 align-items-start"
+                                            className="flex gap-3 items-start"
                                         >
                                             <motion.div
                                                 whileHover={{
@@ -158,7 +194,7 @@ const MediaBanner = () => {
                                                 }}
                                                 className="border border-white/15 bg-white/5 backdrop-blur-md rounded-full p-2 h-10"
                                             >
-                                                {item.icon}
+                                                {[<Newspaper />, <Users />, <Handshake />, <Globe />][index]}
                                             </motion.div>
 
                                             <div>
@@ -202,6 +238,14 @@ const MediaBanner = () => {
                                             backgroundColor: "rgba(255,255,255,0.08)",
                                         }}
                                         whileTap={{ scale: 0.95 }}
+                                        onClick={() => {
+                                            if (mainDownloadLink) {
+                                                window.open(mainDownloadLink, '_blank');
+                                            } else {
+                                                const section = document.getElementById('media-kit');
+                                                if (section) section.scrollIntoView({ behavior: 'smooth' });
+                                            }
+                                        }}
                                         className="border border-white/30 hover:bg-white/10 transition-all duration-300 px-6 py-3 rounded-xl font-semibold text-white"
                                     >
                                         Download Media Kit
@@ -253,7 +297,7 @@ const MediaBanner = () => {
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 justify-between items-center md:flex-row gap-5">
-                            {mediaLogos.map((logo, index) => (
+                            {displayLogos.map((logo, index) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, scale: 0.8, y: 20 }}

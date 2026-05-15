@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import {
@@ -9,6 +9,8 @@ import {
     FileText,
     PlayCircle,
 } from "lucide-react";
+import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
+
 
 const pressReleases = [
     {
@@ -80,7 +82,53 @@ const socialPosts = [
 ];
 
 export default function MediaSection() {
+    const [dynamicPressReleases, setDynamicPressReleases] = useState([]);
+    const [dynamicVideos, setDynamicVideos] = useState([]);
     const [selectedVideo, setSelectedVideo] = useState(videos[0]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await mediaRegistrationApi.getPageData();
+            if (data) {
+                if (data.pressReleases) setDynamicPressReleases(data.pressReleases);
+                if (data.videos) {
+                    setDynamicVideos(data.videos);
+                    if (data.videos.length > 0) {
+                        const firstVideo = data.videos[0];
+                        setSelectedVideo({
+                            ...firstVideo,
+                            videoUrl: getYouTubeEmbedUrl(firstVideo.videoUrl),
+                            thumbnail: firstVideo.thumbnail?.startsWith('http') ? firstVideo.thumbnail : (firstVideo.thumbnail ? `${SERVER_URL}${firstVideo.thumbnail}` : "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"),
+                        });
+                    }
+                }
+            }
+        };
+        fetchData();
+    }, []);
+
+    const displayPressReleases = dynamicPressReleases.length > 0 ? dynamicPressReleases.map(item => ({
+        ...item,
+        file: item.file.startsWith('http') ? item.file : `${SERVER_URL}${item.file}`,
+        date: item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
+    })) : pressReleases;
+
+    const getYouTubeEmbedUrl = (url: string) => {
+        if (!url) return '';
+        if (url.includes('embed')) return url;
+        
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
+        const match = url.match(regex);
+        const videoId = match ? match[1] : null;
+        
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    };
+
+    const displayVideos = dynamicVideos.length > 0 ? dynamicVideos.map(item => ({
+        ...item,
+        videoUrl: getYouTubeEmbedUrl(item.videoUrl),
+        thumbnail: item.thumbnail?.startsWith('http') ? item.thumbnail : (item.thumbnail ? `${SERVER_URL}${item.thumbnail}` : "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"),
+    })) : videos.map(v => ({ ...v, videoUrl: getYouTubeEmbedUrl(v.videoUrl) }));
 
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,
@@ -94,6 +142,7 @@ export default function MediaSection() {
     const scrollNext = useCallback(() => {
         if (emblaApi) emblaApi.scrollNext();
     }, [emblaApi]);
+
 
     return (
         <section className="w-full bg-[#f5f7fb] py-4 px-4">
@@ -122,7 +171,7 @@ export default function MediaSection() {
                     </div>
 
                     <div className="space-y-4">
-                        {pressReleases.map((item, index) => (
+                        {displayPressReleases.map((item, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, x: -20 }}
@@ -155,6 +204,8 @@ export default function MediaSection() {
                                 <a
                                     href={item.file}
                                     download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="text-[#2563eb] text-xs font-semibold flex items-center gap-1"
                                 >
                                     PDF
@@ -204,7 +255,7 @@ export default function MediaSection() {
                             <iframe
                                 width="100%"
                                 height="100%"
-                                src={selectedVideo.videoUrl}
+                                src={getYouTubeEmbedUrl(selectedVideo.videoUrl)}
                                 title={selectedVideo.title}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
@@ -214,7 +265,7 @@ export default function MediaSection() {
 
                         {/* VIDEO LIST */}
                         <div className="space-y-3">
-                            {videos.map((video, index) => (
+                            {displayVideos.map((video, index) => (
                                 <motion.button
                                     key={index}
                                     onClick={() => setSelectedVideo(video)}
