@@ -362,9 +362,9 @@ const BuyerLogin = () => {
                                                     <div>
                                                         <h4 className="font-bold text-slate-900 text-sm mb-1">Need Help?</h4>
                                                         <div className="text-[11.5px] text-slate-500 font-medium flex flex-wrap gap-x-2">
-                                                            <span>Email: info@ihwe.in</span>
+                                                            <span>Email: <a href="mailto:info@ihwe.in" target="_blank" rel="noopener noreferrer" className="hover:text-[#23471d] hover:underline">info@ihwe.in</a></span>
                                                             <span className="text-slate-300 hidden sm:inline">|</span>
-                                                            <span className="w-full sm:w-auto">Phone: +91 9654900525</span>
+                                                            <span className="w-full sm:w-auto">Phone: <a href="tel:+919654900525" target="_blank" rel="noopener noreferrer" className="hover:text-[#23471d] hover:underline">+91 9654900525</a></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -421,9 +421,7 @@ const BuyerLogin = () => {
                                     )}
                                 </AnimatePresence>
 
-                                {/* <p className="text-center text-[10px] text-slate-400 mt-10 pt-6 border-t border-slate-100 uppercase tracking-[0.2em] font-bold">
-                                    © {new Date().getFullYear()} <span className="text-[#23471d]">IHWE</span> Buyer Services
-                                </p> */}
+
                             </div>
                         </div>
                     </div>
