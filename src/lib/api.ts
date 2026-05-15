@@ -1026,3 +1026,29 @@ export const exhibitorTestimonialsApi = {
         return data.success ? data.data : null;
     }
 };
+
+export const mediaRegistrationApi = {
+    getPageData: async () => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/data`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching media page data:", error);
+            return null;
+        }
+    },
+    submitEnquiry: async (payload: any) => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/enquiry`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Error submitting media enquiry:", error);
+            return { success: false, message: "Network error" };
+        }
+    }
+};

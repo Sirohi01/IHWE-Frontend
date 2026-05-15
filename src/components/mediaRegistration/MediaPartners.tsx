@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
 import ani from "@/assets/media/ani.jpeg";
 import assocham from "@/assets/media/assocham.jpeg";
 import big from "@/assets/media/big.jpeg";
@@ -14,6 +16,7 @@ import medical_dialogues from "@/assets/media/medical_dialagues.jpeg";
 import outlook from "@/assets/media/outlook.jpeg";
 import the_print from "@/assets/media/the_print.jpeg";
 import zee_business from "@/assets/media/zee_business.jpeg";
+
 const partners = [
     {
         category: "TV PARTNERS",
@@ -60,7 +63,29 @@ const partners = [
 ];
 
 export default function MediaPartners() {
+    const [dynamicPartners, setDynamicPartners] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await mediaRegistrationApi.getPageData();
+            if (data && data.partners) {
+                setDynamicPartners(data.partners);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const groupedPartners = dynamicPartners.length > 0 ? Object.values(dynamicPartners.reduce((acc: any, partner: any) => {
+        const category = partner.category || 'MEDIA PARTNER';
+        if (!acc[category]) {
+            acc[category] = { category, logos: [] };
+        }
+        acc[category].logos.push(partner.logo.startsWith('http') ? partner.logo : `${SERVER_URL}${partner.logo}`);
+        return acc;
+    }, {})) : partners;
+
     return (
+
         <section className="w-full bg-[#f5f7fb] px-4 py-4">
             <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -88,7 +113,8 @@ export default function MediaPartners() {
 
                 {/* PARTNERS GRID */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-8 gap-x-4">
-                    {partners.map((item, index) => (
+                    {groupedPartners.map((item: any, index: number) => (
+
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 25 }}
