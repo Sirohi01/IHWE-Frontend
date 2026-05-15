@@ -94,7 +94,7 @@ const MainConferences: React.FC = () => {
 
   return (
     <section className="py-8 bg-white">
-      <div className="mx-auto max-w-[1330px] pl-6 lg:pl-2">
+      <div className="mx-auto max-w-[1340px] px-6 lg:px-0 lg:pl-2">
 
 
         <div className="text-center mb-6">
@@ -132,7 +132,7 @@ const MainConferences: React.FC = () => {
 
                   <div className="flex justify-center items-start mb-4 w-full">
                     <div
-                      className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-20 py-2.5 rounded-br-[28px] font-black text-[22px] tracking-wider min-w-[420px] text-center border-2 border-yellow-300`}
+                      className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 md:px-20 py-2.5 rounded-br-[28px] font-black text-[18px] md:text-[22px] tracking-wider w-full md:min-w-[420px] text-center border-2 border-yellow-300`}
                       style={{
                         boxShadow:
                           "0 0 18px rgba(255, 215, 0, 0.55), 0 4px 12px rgba(255, 215, 0, 0.35)"
@@ -194,7 +194,7 @@ const MainConferences: React.FC = () => {
 
                   <div className="flex justify-center items-end w-full mt-4">
                     <div
-                      className="absolute bottom-0 left-0 px-20 py-1.5 rounded-tr-[24px] font-black text-[20px] tracking-wider min-w-[420px] text-center border-2 border-yellow-300"
+                      className="absolute bottom-0 left-0 px-6 md:px-20 py-1.5 rounded-tr-[24px] font-black text-[16px] md:text-[20px] tracking-wider w-full md:min-w-[420px] text-center border-2 border-yellow-300"
                       style={{
                         backgroundColor:
                           conf.accentColor === "#4E9F3D"
