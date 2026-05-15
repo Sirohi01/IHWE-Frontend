@@ -14,15 +14,15 @@ import footerBadge from '../../assets/hotel/hotelfoterimage.png';
 const HotelFooter: React.FC = () => {
   return (
     <footer className="bg-[#051124] py-1 px-4 relative overflow-hidden">
-      {/* Background Green Circle */}
+
       <div className="absolute -left-10 -top-10 w-80 h-80 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
       <div className="absolute -left-5 -top-5 w-40 h-40 bg-[#4E9F3D]/15 rounded-full z-0"></div>
 
       <div className="mx-auto max-w-[1330px] flex items-center justify-between relative z-10">
 
-        {/* Left Side: Branding */}
+
         <div className="flex items-center gap-2 min-w-[320px]">
-          {/* Image Badge */}
+
           <div className="relative w-20 h-20 flex-shrink-0">
             <img
               src={footerBadge}
@@ -44,7 +44,7 @@ const HotelFooter: React.FC = () => {
           </div>
         </div>
 
-        {/* Middle Side: Stats/Icons */}
+
         <div className="flex items-center gap-0 flex-1 justify-center px-2">
           {[
             { icon: <Users />, label: "Global Audience Access" },
@@ -67,7 +67,6 @@ const HotelFooter: React.FC = () => {
           ))}
         </div>
 
-        {/* Right Side: Contact Box */}
         <div className="flex items-center gap-2">
           <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10">
             <div className="bg-[#4E9F3D] py-0.5 px-2 text-center">
@@ -86,8 +85,6 @@ const HotelFooter: React.FC = () => {
               </a>
             </div>
           </div>
-
-          {/* QR Code */}
           <div className="bg-transparent border border-[#D4AF37] rounded-md p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px]">
             <div className="bg-white p-0.5 rounded-sm">
               <QrCode className="w-6 h-6 text-[#051124]" />
