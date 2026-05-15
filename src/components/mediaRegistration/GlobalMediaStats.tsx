@@ -10,22 +10,25 @@ export default function GlobalMediaStats() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await mediaRegistrationApi.getPageData();
-            if (data && data.bannerSettings) {
-                setBannerSettings(data.bannerSettings);
+            try {
+                const data = await mediaRegistrationApi.getPageData();
+
+                if (data?.bannerSettings) {
+                    setBannerSettings(data.bannerSettings);
+                }
+            } catch (error) {
+                console.log("Error fetching banner settings:", error);
             }
         };
+
         fetchData();
     }, []);
 
-    const displayStats = bannerSettings?.stats && bannerSettings.stats.some(s => s.number || s.label) 
-        ? bannerSettings.stats.filter(s => s.number || s.label) 
-        : [
-            { number: "100+", label: "Media Mentions" },
-            { number: "1M+", label: "Audience Reach" },
-            { number: "20+", label: "Media Partners" },
-            { number: "12+", label: "Countries Coverage" },
-        ];
+    // ONLY API DATA
+    const displayStats =
+        bannerSettings?.stats?.filter(
+            (s) => s.number || s.label
+        ) || [];
 
     return (
         <section className="w-full px-4 py-8 bg-[#001635]">
@@ -51,7 +54,7 @@ export default function GlobalMediaStats() {
                 />
 
                 <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] items-center gap-10 px-6 md:px-10 py-8 md:py-10">
-
+                    
                     {/* LEFT WORLD MAP */}
                     <motion.div
                         initial={{ opacity: 0, x: -40 }}
@@ -61,8 +64,6 @@ export default function GlobalMediaStats() {
                         className="relative flex justify-center lg:justify-start"
                     >
                         <div className="relative w-full max-w-[520px]">
-
-                            {/* WORLD MAP */}
                             <img
                                 src={global_stats_bg}
                                 alt="World Map"
@@ -109,20 +110,20 @@ export default function GlobalMediaStats() {
                         </div>
 
                         {/* DESCRIPTION */}
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{
-                                delay: 1,
-                                duration: 0.6,
-                            }}
-                            viewport={{ once: true }}
-                            className="text-white/70 text-sm md:text-[15px] leading-relaxed mt-8 max-w-[600px]"
-                        >
-                            IHWE 2026 is making waves across continents with
-                            strong coverage in leading healthcare, business,
-                            wellness and trade media.
-                        </motion.p>
+                        {bannerSettings?.description && (
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                transition={{
+                                    delay: 1,
+                                    duration: 0.6,
+                                }}
+                                viewport={{ once: true }}
+                                className="text-white/70 text-sm md:text-[15px] leading-relaxed mt-8 max-w-[600px]"
+                            >
+                                {bannerSettings.description}
+                            </motion.p>
+                        )}
                     </motion.div>
                 </div>
             </motion.div>

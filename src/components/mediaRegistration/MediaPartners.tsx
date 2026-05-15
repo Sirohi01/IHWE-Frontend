@@ -3,64 +3,21 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
-import ani from "@/assets/media/ani.jpeg";
-import assocham from "@/assets/media/assocham.jpeg";
-import big from "@/assets/media/big.jpeg";
-import business_standard from "@/assets/media/business_standard.jpeg";
-import bw_wellbeing from "@/assets/media/bw_wellbeing.jpeg";
-import ficci from "@/assets/media/ficci.jpeg";
-import healthworld from "@/assets/media/health_world.jpeg";
-import ht from "@/assets/media/ht.jpeg";
-import india_today from "@/assets/media/india_today.jpeg";
-import medical_dialogues from "@/assets/media/medical_dialagues.jpeg";  
-import outlook from "@/assets/media/outlook.jpeg";
-import the_print from "@/assets/media/the_print.jpeg";
-import zee_business from "@/assets/media/zee_business.jpeg";
+import ani from "@/assets/media/ani.webp";
+import assocham from "@/assets/media/assocham.webp";
+import big from "@/assets/media/big.webp";
+import business_standard from "@/assets/media/business_standard.webp";
+import bw_wellbeing from "@/assets/media/bw_wellbeing.webp";
+import ficci from "@/assets/media/ficci.webp";
+import healthworld from "@/assets/media/health_world.webp";
+import ht from "@/assets/media/ht.webp";
+import india_today from "@/assets/media/india_today.webp";
+import medical_dialogues from "@/assets/media/medical_dialagues.webp";  
+import outlook from "@/assets/media/outlook.webp";
+import the_print from "@/assets/media/the_print.webp";
+import zee_business from "@/assets/media/zee_business.webp";
 
-const partners = [
-    {
-        category: "TV PARTNERS",
-        logos: [
-            zee_business,
-            ht,
-        ],
-    },
-    {
-        category: "DIGITAL PARTNERS",
-        logos: [
-            healthworld,
-            the_print,
-        ],
-    },
-    {
-        category: "HEALTHCARE MEDIA",
-        logos: [
-            medical_dialogues,
-            bw_wellbeing,
-        ],
-    },
-    {
-        category: "MAGAZINE PARTNERS",
-        logos: [
-            outlook,
-            bw_wellbeing,
-        ],
-    },
-    {
-        category: "RADIO PARTNERS",
-        logos: [
-            big,
-            assocham,
-        ],
-    },
-    {
-        category: "COMMUNITY PARTNERS",
-        logos: [
-            ficci,
-            assocham,
-        ],
-    },
-];
+
 
 export default function MediaPartners() {
     const [dynamicPartners, setDynamicPartners] = useState([]);
@@ -75,14 +32,14 @@ export default function MediaPartners() {
         fetchData();
     }, []);
 
-    const groupedPartners = dynamicPartners.length > 0 ? Object.values(dynamicPartners.reduce((acc: any, partner: any) => {
+    const groupedPartners =  Object.values(dynamicPartners.reduce((acc: any, partner: any) => {
         const category = partner.category || 'MEDIA PARTNER';
         if (!acc[category]) {
             acc[category] = { category, logos: [] };
         }
         acc[category].logos.push(partner.logo.startsWith('http') ? partner.logo : `${SERVER_URL}${partner.logo}`);
         return acc;
-    }, {})) : partners;
+    }, {})) ;
 
     return (
 
@@ -127,9 +84,7 @@ export default function MediaPartners() {
                             className="relative text-center"
                         >
                             {/* DIVIDER */}
-                            {index !== partners.length - 1 && (
-                                <div className="hidden lg:block absolute top-2 right-[-8px] h-[90px] w-px bg-gray-200" />
-                            )}
+                            
 
                             {/* CATEGORY */}
                             <h3 className="text-[11px] md:text-xs font-bold text-[#0f172a] uppercase tracking-wide mb-5">

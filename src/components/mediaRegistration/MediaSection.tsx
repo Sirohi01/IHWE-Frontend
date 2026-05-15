@@ -11,61 +11,6 @@ import {
 } from "lucide-react";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
 
-
-const pressReleases = [
-    {
-        title: "IHWE 2026 Official Launch",
-        date: "May 20, 2024",
-        file: "/files/ihwe-launch.pdf",
-    },
-    {
-        title: "Government & International Participation Announcement",
-        date: "May 19, 2024",
-        file: "/files/government-announcement.pdf",
-    },
-    {
-        title: "IHWE 2026 Conference & Summit Highlights",
-        date: "May 18, 2024",
-        file: "/files/summit-highlights.pdf",
-    },
-    {
-        title: "AYUSH Summit & Wellness Pavilion Announcement",
-        date: "May 14, 2024",
-        file: "/files/ayush-summit.pdf",
-    },
-];
-
-const videos = [
-    {
-        title: "IHWE 2026 Launch Highlights",
-        duration: "2:45",
-        thumbnail:
-            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    },
-    {
-        title: "Organizer Exclusive Interview",
-        duration: "3:12",
-        thumbnail:
-            "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY",
-    },
-    {
-        title: "Industry Leaders on IHWE 2026",
-        duration: "2:08",
-        thumbnail:
-            "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/ysz5S6PUM-U",
-    },
-    {
-        title: "Global Media Interaction at IHWE 2026",
-        duration: "2:36",
-        thumbnail:
-            "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop",
-        videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
-    },
-];
-
 const socialPosts = [
     {
         embed:
@@ -84,7 +29,7 @@ const socialPosts = [
 export default function MediaSection() {
     const [dynamicPressReleases, setDynamicPressReleases] = useState([]);
     const [dynamicVideos, setDynamicVideos] = useState([]);
-    const [selectedVideo, setSelectedVideo] = useState(videos[0]);
+    const [selectedVideo, setSelectedVideo] = useState(undefined);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,11 +52,11 @@ export default function MediaSection() {
         fetchData();
     }, []);
 
-    const displayPressReleases = dynamicPressReleases.length > 0 ? dynamicPressReleases.map(item => ({
+    const displayPressReleases = dynamicPressReleases.map(item => ({
         ...item,
         file: item.file.startsWith('http') ? item.file : `${SERVER_URL}${item.file}`,
         date: item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : ''
-    })) : pressReleases;
+    }));
 
     const getYouTubeEmbedUrl = (url: string) => {
         if (!url) return '';
@@ -124,11 +69,11 @@ export default function MediaSection() {
         return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
     };
 
-    const displayVideos = dynamicVideos.length > 0 ? dynamicVideos.map(item => ({
+    const displayVideos = dynamicVideos.map(item => ({
         ...item,
         videoUrl: getYouTubeEmbedUrl(item.videoUrl),
         thumbnail: item.thumbnail?.startsWith('http') ? item.thumbnail : (item.thumbnail ? `${SERVER_URL}${item.thumbnail}` : "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"),
-    })) : videos.map(v => ({ ...v, videoUrl: getYouTubeEmbedUrl(v.videoUrl) }));
+    }));
 
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: true,
@@ -252,7 +197,9 @@ export default function MediaSection() {
                             layout
                             className="rounded-xl overflow-hidden bg-black h-[320px]"
                         >
-                            <iframe
+                            {selectedVideo&&(
+
+                                <iframe
                                 width="100%"
                                 height="100%"
                                 src={getYouTubeEmbedUrl(selectedVideo.videoUrl)}
@@ -260,7 +207,8 @@ export default function MediaSection() {
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                                 className="w-full h-full"
-                            />
+                                />
+                            )}
                         </motion.div>
 
                         {/* VIDEO LIST */}
