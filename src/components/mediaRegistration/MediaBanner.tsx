@@ -86,7 +86,7 @@ const MediaBanner = () => {
                     backgroundPosition: "center",
                 }}
             >
-                <SectionContainer className="relative mx-auto px-4 lg:px-8 py-16 lg:py-24">
+                <SectionContainer className="relative mx-auto  py-16 lg:py-24">
 
                     {/* Glow Effects */}
                     <motion.div
@@ -367,7 +367,7 @@ const MediaBanner = () => {
                                         <img
                                             src={logo}
                                             alt={`Media Logo ${index + 1}`}
-                                            className="max-h-10 object-contain"
+                                            className="object-contain min-h-10 max-h-20"
                                         />
                                     </motion.div>
                                 </SwiperSlide>
