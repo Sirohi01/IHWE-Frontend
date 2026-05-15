@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Shield, User, Gavel, Cookie, Folder, Link as LinkIcon,
   FileText, UserCheck, Share2, Scale, Edit3, Building2,
@@ -10,6 +11,7 @@ import TopImage from "@/assets/privacyPolicy/topImage.png";
 import middleimage from "@/assets/privacyPolicy/middleImage.png";
 
 const PrivacyPolicies = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white font-inter text-[#0b1a3a]">
       <style type="text/css" media="print">
@@ -67,13 +69,16 @@ const PrivacyPolicies = () => {
               </div>
 
               <div className="flex flex-wrap gap-2 print:hidden">
-                <button className="flex items-center gap-3 bg-[#004d40] text-white px-7 py-2 rounded-xl font-black text-sm hover:bg-[#00332c] transition-all shadow-xl tracking-tight">
+                <button 
+                  onClick={() => navigate('/contact')}
+                  className="flex items-center gap-3 bg-[#004d40] text-white px-7 py-2 rounded-xl font-black text-sm hover:bg-[#00332c] transition-all shadow-xl tracking-tight"
+                >
                   <Mail className="w-5 h-5" />
                   CONTACT SUPPORT
                 </button>
                 <button onClick={() => window.print()} className="flex items-center gap-3 bg-white text-[#0b1a3a] border-2 border-slate-200 px-7 py-2 rounded-xl font-black text-sm hover:border-[#2e7d32] transition-all shadow-sm tracking-tight">
                   <Download className="w-5 h-5 text-[#2e7d32]" />
-                  DOWNLOAD POLICY PDF
+                  Print Privacy Policy
                 </button>
               </div>
             </div>
