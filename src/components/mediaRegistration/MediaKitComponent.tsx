@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -8,11 +8,46 @@ import {
   Package,
   Image as ImageIcon,
   FileArchive,
+  Video,
 } from "lucide-react";
 import mediakit_image from "../../assets/mediakit.webp";
-import { Image } from "@radix-ui/react-avatar";
+import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
+
 
 const MediaKitComponent = () => {
+  const [dynamicResources, setDynamicResources] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await mediaRegistrationApi.getPageData();
+      if (data && data.resources) {
+        setDynamicResources(data.resources);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'FileText': return <FileText size={28} />;
+      case 'Package': return <Package size={28} />;
+      case 'FileArchive': return <FileArchive size={28} />;
+      case 'ImageIcon': return <ImageIcon size={28} />;
+      case 'Video': return <Video size={28} />;
+      default: return <FileText size={28} />;
+    }
+  };
+
+  const getFormat = (icon: string) => {
+    switch (icon) {
+        case 'FileText': return 'PDF';
+        case 'FileArchive': return 'ZIP';
+        case 'ImageIcon': return 'GALLERY';
+        case 'Video': return 'WATCH';
+        default: return 'FILE';
+    }
+  };
+
   const downloadItems = [
     {
       label: "Event Brochure",
@@ -35,6 +70,21 @@ const MediaKitComponent = () => {
       icon: <ImageIcon size={28} />,
     },
   ];
+
+  const displayResources = dynamicResources.length > 0 ? 
+    dynamicResources.filter((r: any) => !r.isMain).map((item: any) => ({
+      ...item,
+      label: item.title,
+      format: getFormat(item.icon),
+      icon: getIcon(item.icon),
+      link: item.link.startsWith('http') ? item.link : `${SERVER_URL}${item.link}`
+    })) : downloadItems;
+
+  const mainDownload = dynamicResources.find((r: any) => r.isMain) || 
+                       dynamicResources.find((r: any) => r.icon === 'FileArchive');
+
+  const mainDownloadLink = mainDownload ? (mainDownload.link.startsWith('http') ? mainDownload.link : `${SERVER_URL}${mainDownload.link}`) : null;
+
 
   return (
     <section className="w-full bg-slate-100 py-0 flex items-center justify-center ">
@@ -136,7 +186,7 @@ const MediaKitComponent = () => {
 
           {/* FILES SECTION */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-8 items-center border-l-0 lg:border-l border-white/10 lg:px-8">
-            {downloadItems.map((item, index) => (
+            {displayResources.map((item: any, index: number) => (
               <motion.div
                 key={index}
                 initial={{
@@ -158,6 +208,11 @@ const MediaKitComponent = () => {
                 whileHover={{
                   y: -8,
                   scale: 1.06,
+                }}
+                onClick={() => {
+                    if (item.link) {
+                        window.open(item.link, '_blank');
+                    }
                 }}
                 className="flex flex-col items-center text-center group cursor-pointer"
               >
@@ -184,6 +239,7 @@ const MediaKitComponent = () => {
             ))}
           </div>
 
+
           {/* CTA BUTTON */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
@@ -202,6 +258,13 @@ const MediaKitComponent = () => {
               }}
               whileTap={{
                 scale: 0.95,
+              }}
+              onClick={() => {
+                if (mainDownloadLink) {
+                    window.open(mainDownloadLink, '_blank');
+                } else {
+                    alert("Media Kit is currently being updated. Please check back later.");
+                }
               }}
               className="flex items-center justify-between gap-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold py-4 px-8 rounded-lg transition-all w-full lg:w-64 shadow-lg shadow-emerald-900/20 max-h-12"
             >

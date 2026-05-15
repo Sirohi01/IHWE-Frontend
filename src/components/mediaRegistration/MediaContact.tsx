@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, ArrowRight } from 'lucide-react';
 import contactimage from '../../assets/contact.webp';
+import { mediaRegistrationApi } from '@/lib/api';
+import { toast } from "sonner";
+
 
 const MediaContact = () => {
   // 1. Initialize state for form fields
@@ -23,11 +26,28 @@ const MediaContact = () => {
   };
 
   // 3. Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Submitted Successfully:', formData);
-    // You can add your API logic here
+    try {
+        const response = await mediaRegistrationApi.submitEnquiry(formData);
+        if (response.success) {
+            toast.success("Message sent successfully!");
+            setFormData({
+                name: '',
+                organization: '',
+                email: '',
+                phone: '',
+                message: ''
+            });
+        } else {
+            toast.error(response.message || "Failed to send message");
+        }
+    } catch (error) {
+        toast.error("Something went wrong. Please try again later.");
+        console.error("Submission error:", error);
+    }
   };
+
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -148,7 +168,7 @@ const MediaContact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                rows="3"
+                rows={3}
                 placeholder="Your Message" 
                 className="w-full bg-[#001f4d]/50 border border-white/20 rounded-md p-4 text-white placeholder-gray-400 focus:outline-none focus:border-[#2ecc71] transition-colors resize-none"
               />
