@@ -234,19 +234,19 @@ const AdvisoryForm = () => {
     const requiredStar = <span className="text-red-600">*</span>;
 
     return (
-        <div className="w-[1380px] mx-auto  font-sans">
+        <div className="w-full max-w-[1380px] mx-auto font-sans overflow-x-hidden">
             {/* ── BANNER ── */}
             <div
-                className="w-[1320px] ml-9 h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center"
+                className="w-full h-[250px] md:h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center md:rounded-xl overflow-hidden"
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
-                <div className="absolute top-[28px] left-9 flex flex-col gap-3">
+                <div className="absolute top-4 md:top-[28px] left-4 md:left-9 flex flex-col gap-2 md:gap-3">
                     <img
                         src="/logo.png"
                         alt="IHWE Logo"
-                        className="w-[380px] h-auto object-contain drop-shadow-md"
+                        className="w-[200px] md:w-[380px] h-auto object-contain drop-shadow-md"
                     />
-                    <div className="text-[#1a5c2a] text-lg font-bold tracking-wide pl-2">
+                    <div className="text-[#1a5c2a] text-sm md:text-lg font-bold tracking-wide pl-1 md:pl-2">
                         Global Platform. &nbsp; Limitless Possibilities.
                     </div>
                 </div>
@@ -260,15 +260,15 @@ const AdvisoryForm = () => {
             </div>
 
             {/* ── BODY ── */}
-            <div className="w-[1390px] bg-white box-border px-9 py-4 pb-6">
-                <div className="flex gap-12 items-start">
+            <div className="w-full bg-white box-border px-4 md:px-9 py-4 pb-6">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     {/* LEFT SIDEBAR */}
-                    <div className="w-[420px] shrink-0 pr-8 border-r border-gray-100">
+                    <div className="w-full lg:w-[420px] shrink-0 lg:pr-8 lg:border-r border-gray-100">
                         <div className="mb-8">
-                            <div className="text-[24px] font-black text-[#1a5c2a] leading-tight uppercase tracking-tight">
+                            <div className="text-[20px] md:text-[24px] font-black text-[#1a5c2a] leading-tight uppercase tracking-tight">
                                 ADVISORY BOARD MEMBERS
                             </div>
-                            <div className="text-[18px] font-bold text-gray-800 uppercase tracking-wide mt-1">
+                            <div className="text-[15px] md:text-[18px] font-bold text-gray-800 uppercase tracking-wide mt-1">
                                 NOMINATION FORM
                             </div>
                             <div className="w-12 h-1 bg-[#1a5c2a] my-4" />
@@ -400,14 +400,14 @@ const AdvisoryForm = () => {
                                     <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
                                     </div>
-                                    <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                    <div className="text-[#1a5c2a] text-[12px] md:text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                         NOMINEE INFORMATION
                                     </div>
                                     <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                                 </div>
                                 <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
                                     {/* Row 1: 4 columns */}
-                                    <div className="grid grid-cols-4 gap-3 mb-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                                         <div className="flex flex-col gap-1">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Full Name of Nominee {requiredStar}</label>
                                             <input name="fullName" placeholder="Enter full name" value={formData.fullName} onChange={handleChange} className="h-[38px] w-full border border-gray-300 rounded-md px-3 text-sm text-gray-700 outline-none bg-white font-sans" />
@@ -440,7 +440,7 @@ const AdvisoryForm = () => {
                                     </div>
 
                                     {/* Row 2: 3 columns (Email, Phone, LinkedIn) */}
-                                    <div className="grid grid-cols-5 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                                         <div className="flex flex-col gap-1 col-span-2">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Email Address {requiredStar}</label>
                                             <div className="relative flex items-center">
@@ -543,13 +543,13 @@ const AdvisoryForm = () => {
                                     <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" /></svg>
                                     </div>
-                                    <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                    <div className="text-[#1a5c2a] text-[12px] md:text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                         NOMINEE'S EXPERTISE & BACKGROUND
                                     </div>
                                     <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                                 </div>
                                 <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
-                                    <div className="grid grid-cols-3 gap-3">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                         <div className="flex flex-col gap-1">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Areas of Expertise {requiredStar}</label>
                                             <select name="areasOfExpertise" value={formData.areasOfExpertise} onChange={handleChange} className={`h-[38px] w-full border border-gray-300 rounded-md px-3 text-sm outline-none bg-white font-sans ${formData.areasOfExpertise ? 'text-gray-700' : 'text-gray-400'}`}>
@@ -586,13 +586,13 @@ const AdvisoryForm = () => {
                                     <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-7c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z" /></svg>
                                     </div>
-                                    <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                    <div className="text-[#1a5c2a] text-[12px] md:text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                         NOMINATION DETAILS
                                     </div>
                                     <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                                 </div>
                                 <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div className="flex flex-col gap-1">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Why do you recommend this nominee? {requiredStar} <span className="text-[11px] text-gray-500 cursor-pointer">ℹ</span></label>
                                             <div className="relative">
@@ -618,13 +618,13 @@ const AdvisoryForm = () => {
                                     <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
                                     </div>
-                                    <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                    <div className="text-[#1a5c2a] text-[12px] md:text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                         NOMINATOR INFORMATION
                                     </div>
                                     <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                                 </div>
                                 <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-4">
-                                    <div className="grid grid-cols-4 gap-3 mb-2.5">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-2.5">
                                         <div className="flex flex-col gap-1">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Your Full Name {requiredStar}</label>
                                             <input name="nominatorName" placeholder="Enter your full name" value={formData.nominatorName} onChange={handleChange} className="h-[38px] w-full border border-gray-300 rounded-md px-3 text-sm text-gray-700 outline-none bg-white font-sans" />
@@ -677,8 +677,8 @@ const AdvisoryForm = () => {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-4 gap-3">
-                                        <div className="flex flex-col gap-1 col-span-2">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                        <div className="flex flex-col gap-1 col-span-1 md:col-span-2">
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Phone Number {requiredStar}</label>
                                             <div className={`flex items-center border border-gray-300 rounded-md overflow-hidden bg-white h-[38px] transition-all ${mobileOtpVerified ? 'bg-green-50 border-green-200' : 'focus-within:border-[#1a5c2a] focus-within:ring-1 focus-within:ring-[#1a5c2a]/20'}`}>
                                                 <div className="flex items-center gap-1 px-2 border-r border-gray-200 h-full bg-gray-50/50 shrink-0">
@@ -753,18 +753,18 @@ const AdvisoryForm = () => {
                                     <div className="w-8 h-8 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
                                         <svg viewBox="0 0 24 24" fill="currentColor" className="w-4.5 h-4.5 text-[#1a5c2a]"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" /></svg>
                                     </div>
-                                    <div className="text-[#1a5c2a] text-[15px] font-extrabold tracking-wide uppercase shrink-0">
+                                    <div className="text-[#1a5c2a] text-[12px] md:text-[15px] font-extrabold tracking-wide uppercase shrink-0">
                                         ADDITIONAL INFORMATION
                                     </div>
                                     <div className="flex-1 h-[1px] bg-[#1a5c2a] opacity-30 ml-3" />
                                 </div>
                                 <div className="border border-gray-200 rounded-xl shadow-sm p-4 px-5 bg-white mb-3">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                         <div>
                                             <label className="text-[13px] font-semibold text-gray-800 mb-0.5 block">Upload Nominee's CV / Profile <span className="text-gray-500 font-normal">(Optional)</span></label>
                                             <p className="text-xs text-gray-400 m-0">PDF, DOC, or DOCX (Max. 5MB)</p>
                                         </div>
-                                        <label className="border border-dashed border-gray-300 rounded-lg py-3 px-6 flex items-center gap-3 cursor-pointer bg-gray-50 min-w-[300px] justify-center hover:bg-gray-100 transition-colors">
+                                        <label className="border border-dashed border-gray-300 rounded-lg py-3 px-6 flex items-center gap-3 cursor-pointer bg-gray-50 w-full md:min-w-[300px] md:w-auto justify-center hover:bg-gray-100 transition-colors">
                                             <input
                                                 type="file"
                                                 className="hidden"
@@ -773,7 +773,7 @@ const AdvisoryForm = () => {
                                             />
                                             <span className="text-xl">☁️</span>
                                             <div>
-                                                <div className="text-[13px] font-semibold text-[#1a5c2a]">
+                                                <div className="text-[13px] font-semibold text-[#1a5c2a] truncate max-w-[200px]">
                                                     {cvFile ? cvFile.name : "Click to upload"}
                                                 </div>
                                                 <div className="text-[11px] text-gray-400">
@@ -784,7 +784,7 @@ const AdvisoryForm = () => {
                                     </div>
 
                                     {/* Consent checkbox */}
-                                    <div className="flex items-start gap-2.5 mt-2">
+                                    <div className="flex items-start gap-2.5 mt-4">
                                         <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="w-4 h-4 mt-0.5 accent-[#1a5c2a] shrink-0 cursor-pointer" />
                                         <label className="text-[13px] text-gray-600 leading-normal cursor-pointer" onClick={() => setConfirmed(!confirmed)}>
                                             I confirm that the information provided is accurate and I have the nominee's consent to submit this nomination. {requiredStar}
@@ -797,7 +797,7 @@ const AdvisoryForm = () => {
                                     <button
                                         onClick={handleSubmit}
                                         disabled={isSubmitting || submitted}
-                                        className="w-[300px] bg-[#1a5c2a] hover:bg-[#144a21] text-white border-none rounded-lg py-3 text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-2.5 uppercase font-sans mb-2 shadow-sm transition-colors disabled:opacity-50"
+                                        className="w-full md:w-[300px] bg-[#1a5c2a] hover:bg-[#144a21] text-white border-none rounded-lg py-3 text-sm font-bold tracking-wider cursor-pointer flex items-center justify-center gap-2.5 uppercase font-sans mb-2 shadow-sm transition-colors disabled:opacity-50"
                                     >
                                         {isSubmitting ? (
                                             <>
