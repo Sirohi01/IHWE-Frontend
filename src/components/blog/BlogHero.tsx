@@ -82,10 +82,10 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
                 <input
                   type="text"
                   placeholder="Search articles, news, topics..."
-                  className="flex-1 bg-transparent py-4 px-6 text-white text-sm placeholder:text-white/40 focus:outline-none"
+                  className="flex-1 bg-transparent py-2 px-6 text-white text-sm placeholder:text-white/40 focus:outline-none"
                   onChange={(e) => onSearch(e.target.value)}
                 />
-                <button className="bg-[#00df82] hover:bg-[#00c572] text-[#001529] p-4 transition-colors">
+                <button className="bg-[#00df82] hover:bg-[#00c572] text-[#001529] p-2 transition-colors">
                   <Search className="w-5 h-5" strokeWidth={3} />
                 </button>
               </div>

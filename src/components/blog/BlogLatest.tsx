@@ -110,12 +110,13 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs }) => {
 
           {/* Stay Updated Sidebar (Right - 25%) - Restored */}
           <div className="w-full lg:w-1/4 pt-16">
-            <div className="bg-[#001529] rounded-[24px] p-6 flex flex-col">
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center mb-4 text-[#00df82]">
+            <div className="bg-white border border-slate-100 rounded-[24px] p-6 flex flex-col shadow-xl relative overflow-hidden group">
+              <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#00df82]/5 blur-3xl rounded-full group-hover:bg-[#00df82]/10 transition-all" />
+              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 text-[#00df82]">
                 <Mail size={20} />
               </div>
-              <h3 className="text-white text-md font-black uppercase tracking-tight mb-2">STAY UPDATED</h3>
-              <p className="text-white/60 text-[11px] font-medium mb-6 leading-relaxed">
+              <h3 className="text-[#001529] text-md font-black uppercase tracking-tight mb-2">STAY UPDATED</h3>
+              <p className="text-slate-500 text-[11px] font-medium mb-6 leading-relaxed">
                 Subscribe to our newsletter and never miss an update.
               </p>
 
@@ -125,7 +126,7 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs }) => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border border-white/20 rounded-xl py-2.5 px-4 text-white text-[11px] focus:outline-none focus:border-[#00df82] transition-colors"
+                  className="w-full bg-slate-50 border border-slate-100 rounded-xl py-2.5 px-4 text-[#001529] text-[11px] focus:outline-none focus:border-[#00df82] transition-colors placeholder:text-slate-400"
                 />
                 <button
                   disabled={submitting}
