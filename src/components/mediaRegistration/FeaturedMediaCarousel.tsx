@@ -111,7 +111,7 @@ export default function FeaturedMediaCoverage() {
                                         <img
                                             src={item.logo}
                                             alt="Media Logo"
-                                            className="max-h-6 object-contain grayscale hover:grayscale-0 transition-all"
+                                            className="max-h-6 object-cover grayscale min-h-25 hover:grayscale-0 transition-all"
                                         />
                                     </div>
 
