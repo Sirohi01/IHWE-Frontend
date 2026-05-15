@@ -276,7 +276,7 @@ const AdvisoryBoard = () => {
                   image: "/images/advisiory/4.png",
                 },
                 {
-                  number: "100+",
+                  number: "150+",
                   title: "Exhibitors",
                   color: "#27b0c8",
                   image: "/images/advisiory/5.png",
@@ -330,8 +330,6 @@ const AdvisoryBoard = () => {
 
       </section>
 
-      {/* MEMBERS SECTION */}
-      {/* MEMBERS SECTION */}
       {/* MEMBERS SECTION */}
       <section className="py-4 bg-[#f7f7f7] px 12 lg:px-24">
 
