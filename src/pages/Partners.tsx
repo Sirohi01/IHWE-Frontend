@@ -69,14 +69,14 @@ const Partners = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [initialService, setInitialService] = useState<string | null>(null);
 
-<<<<<<< HEAD
+
   const openServicePopup = (serviceId: string) => {
     setInitialService(serviceId);
     setIsPopupOpen(true);
   };
 
   // Removed auto-popup timer
-=======
+
   useEffect(() => {
 
     const timer = setTimeout(() => {
@@ -84,7 +84,7 @@ const Partners = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
->>>>>>> invoicechanges
+
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -391,7 +391,7 @@ const Partners = () => {
                     </p>
                   </div>
 
-<<<<<<< HEAD
+
                   {/* Learn More */}
                   <button
                     onClick={() => openServicePopup(card.id)}
@@ -400,7 +400,7 @@ const Partners = () => {
                   >
                     Learn More <ArrowRight className="w-3 h-3" />
                   </button>
-=======
+
                   <Link to={card.path || "#"}>
                     <button
                       className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
@@ -409,7 +409,7 @@ const Partners = () => {
                       Learn More <ArrowRight className="w-3 h-3" />
                     </button>
                   </Link>
->>>>>>> invoicechanges
+                  invoicechanges
                 </div>
 
 
@@ -708,9 +708,9 @@ const Partners = () => {
         </div>
       </div>
 
-      <PartnershipPopup 
-        isOpen={isPopupOpen} 
-        onClose={() => setIsPopupOpen(false)} 
+      <PartnershipPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
         initialService={initialService}
       />
     </div>
