@@ -6,49 +6,43 @@ const zones = [
         title: "MEDICAL\nINNOVATION ZONE",
         desc: "Healthcare technology & diagnostics",
         image: "/whyVisit/medical_zone.png",
-        icon: "/whyVisit/heart_pulse.svg",
-        color: "bg-[#0f594f]",
-        textColor: "text-[#0f594f]"
+        icon: "/whyVisit/heart_pulse.png",
+        alt: "Medical Innovation"
     },
     {
         title: "ORGANIC &\nNATURAL ZONE",
         desc: "Organic food, herbal & sustainable products",
         image: "/whyVisit/organic_zone.png",
-        icon: "/whyVisit/sprout.svg",
-        color: "bg-[#4b7928]",
-        textColor: "text-[#4b7928]"
+        icon: "/whyVisit/sprout.png",
+        alt: "Organic & Natural"
     },
     {
         title: "AYUSH\nPAVILION",
         desc: "Ayurveda, Yoga & naturopathy",
         image: "/whyVisit/ayush_zone.png",
-        icon: "/whyVisit/gold_lotus.svg",
-        color: "bg-[#a7782a]",
-        textColor: "text-[#a7782a]"
+        icon: "/whyVisit/gold_lotus.png",
+        alt: "Ayush Pavilion"
     },
     {
         title: "FITNESS\nARENA",
         desc: "Fitness products, supplements & live demos",
         image: "/whyVisit/fitness_zone.png",
-        icon: "/whyVisit/dumbbell.svg",
-        color: "bg-[#0f3b73]",
-        textColor: "text-[#0f3b73]"
+        icon: "/whyVisit/dumbbell.png",
+        alt: "Fitness Arena"
     },
     {
         title: "BEAUTY &\nWELLNESS ZONE",
         desc: "Skincare, spa & beauty innovations",
         image: "/whyVisit/beauty_zone.png",
-        icon: "/whyVisit/beauty_flower.svg",
-        color: "bg-[#5f2b72]",
-        textColor: "text-[#5f2b72]"
+        icon: "/whyVisit/beauty_flower.png",
+        alt: "Beauty & Wellness"
     },
     {
         title: "STARTUP\nPAVILION",
         desc: "Emerging wellness startups & innovations",
         image: "/whyVisit/startup_zone.png",
-        icon: "/whyVisit/rocket.svg",
-        color: "bg-[#d66a1e]",
-        textColor: "text-[#d66a1e]"
+        icon: "/whyVisit/rocket.png",
+        alt: "Startup Pavilion"
     }
 ];
 
@@ -85,15 +79,17 @@ const InteractiveExperienceZones = () => {
                                 <div className="absolute inset-0 bg-black/10"></div>
                             </div>
 
-                            {/* Floating Round Badge */}
-                            <div className={`absolute top-[104px] left-1/2 -translate-x-1/2 w-12 h-12 rounded-full ${zone.color} flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.15)] z-10`}>
-                                <img src={zone.icon} alt="icon" className="w-6 h-6 object-contain" />
+                            {/* Floating Round Badge (Transparent Container) */}
+                            <div className="absolute top-[96px] left-1/2 -translate-x-1/2 w-16 h-16 flex items-center justify-center z-10">
+                                <div className="">
+                                    <img src={zone.icon} alt={zone.alt} className="w-14 h-14 object-contain" />
+                                </div>
                             </div>
 
                             {/* Text content */}
-                            <div className="pt-8 pb-5 px-3 flex flex-col flex-grow items-center text-center">
+                            <div className="pt-10 pb-5 px-3 flex flex-col flex-grow items-center text-center">
                                 {/* Title */}
-                                <h3 className={`${zone.textColor} font-bold text-[12px] uppercase tracking-wide leading-tight mb-2 h-10 flex items-center justify-center whitespace-pre-line`}>
+                                <h3 className="text-[#011630] font-black text-[12px] uppercase tracking-wide leading-tight mb-2 h-10 flex items-center justify-center whitespace-pre-line">
                                     {zone.title}
                                 </h3>
 

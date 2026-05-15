@@ -232,14 +232,21 @@ export const countersApi = {
 };
 
 export const blogApi = {
-    getAll: async () => {
-        const response = await fetch(`${API_URL}/blogs`);
+    getAll: async (params?: { category?: string; search?: string }) => {
+        let url = `${API_URL}/blogs`;
+        if (params) {
+            const query = new URLSearchParams();
+            if (params.category) query.append('category', params.category);
+            if (params.search) query.append('search', params.search);
+            const queryString = query.toString();
+            if (queryString) url += `?${queryString}`;
+        }
+        const response = await fetch(url);
         return await response.json();
     },
     getLatest: async (limit: number = 3) => {
         const response = await fetch(`${API_URL}/blogs`);
         const data = await response.json();
-        // Return in same format but sliced
         if (data.success) {
             data.data = data.data.slice(0, limit);
         }
@@ -247,6 +254,26 @@ export const blogApi = {
     },
     getBySlug: async (slug: string) => {
         const response = await fetch(`${API_URL}/blogs/${slug}`);
+        return await response.json();
+    },
+    getExpertInsights: async () => {
+        const response = await fetch(`${API_URL}/blogs/expert-insights`);
+        return await response.json();
+    },
+    getMediaResources: async () => {
+        const response = await fetch(`${API_URL}/blogs/media-resources`);
+        return await response.json();
+    },
+    getSettings: async () => {
+        const response = await fetch(`${API_URL}/blogs/settings`);
+        return await response.json();
+    },
+    subscribe: async (email: string) => {
+        const response = await fetch(`${API_URL}/blogs/subscribe`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
         return await response.json();
     }
 };
@@ -1022,5 +1049,31 @@ export const exhibitorTestimonialsApi = {
         const response = await fetch(`${API_URL}/exhibitor-testimonials`);
         const data = await response.json();
         return data.success ? data.data : null;
+    }
+};
+
+export const mediaRegistrationApi = {
+    getPageData: async () => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/data`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching media page data:", error);
+            return null;
+        }
+    },
+    submitEnquiry: async (payload: any) => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/enquiry`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Error submitting media enquiry:", error);
+            return { success: false, message: "Network error" };
+        }
     }
 };
