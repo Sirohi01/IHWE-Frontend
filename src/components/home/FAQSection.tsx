@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, HelpCircle } from "lucide-react";
 import { faqApi, SERVER_URL } from "@/lib/api";
+import leaf from "@/assets/leaf.png";
 
 // Fallback static data shown while loading or if API fails
 const fallbackData = {
@@ -41,7 +42,10 @@ const FAQSection = () => {
   const items = faqData?.items || [];
 
   return (
-    <section className="py-16 lg:py-24 bg-[#FDFDFD] relative overflow-hidden">
+    <section className="pt-8 pb-4 lg:pt-10 lg:pb-6 bg-[#FDFDFD] relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-32 md:w-56 h-auto pointer-events-none z-0">
+        <img src={leaf} alt="decoration" className="w-full h-full object-contain rotate-[110deg] -translate-x-1/3 translate-y-[5%]" />
+      </div>
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#23471d]/[0.01] rounded-full blur-[80px] -mr-48 -mt-48" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#d26019]/[0.01] rounded-full blur-[80px] -ml-48 -mb-48" />
 
@@ -55,11 +59,11 @@ const FAQSection = () => {
             </span>
             <div className="h-px w-8 bg-[#23471d]" />
           </div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter text-slate-900 leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-inter font-semibold text-slate-900 leading-tight">
             {faqData?.heading || "Frequently Asked"}{" "}
-            <span className="text-[#d26019]">{faqData?.highlightText || "Questions"}</span>
+            <span className="text-[#134812]">{faqData?.highlightText || "Questions"}</span>
           </h2>
-          <p className="mt-4 text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
+          <p className="mt-4 text-slate-800 max-w-2xl mx-auto text-sm leading-relaxed">
             {faqData?.description}
           </p>
         </div>
@@ -87,14 +91,12 @@ const FAQSection = () => {
                     className="w-full px-6 py-4 flex items-center justify-between text-left gap-4"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-9 h-9 flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isActive ? "bg-[#23471d] text-white" : "bg-slate-50 text-slate-400"
                       }`}>
                         <HelpCircle className="w-4 h-4" />
                       </div>
-                      <span className={`font-bold text-base transition-colors duration-300 ${
-                        isActive ? "text-[#23471d]" : "text-slate-700"
-                      }`}>
+                      <span className="font-bold text-base transition-colors duration-300 text-black">
                         {item.question}
                       </span>
                     </div>
@@ -177,6 +179,8 @@ const FAQSection = () => {
               </p>
               <Link
                 to="/contact"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block bg-[#23471d] text-white px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-[#1a3a14] transition-all shadow-sm"
               >
                 Contact Our Help Desk

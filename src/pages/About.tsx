@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp, Award } from "lucide-react";
 import StatsCounter from "@/components/home/StatsCounter";
 import ExhibitorLogos from "@/components/home/ExhibitorLogos";
+import FAQSection from "@/components/home/FAQSection";
 import GlobalPlatform from "@/components/sections/GlobalPlatform";
 import MissionVision from "@/components/sections/MissionVision";
 import WhyAttend from "@/components/sections/WhyAttend";
@@ -18,7 +19,7 @@ import InternationalImg from "@/assets/international.png";
 import ConferenceImg from "@/assets/conference.png";
 import B2BImg from "@/assets/b2b.png";
 import AwardImg from "@/assets/global.png";
-import About12 from "@/assets/about12.png";
+import About12 from "@/assets/about12.webp";
 import LeafImg from "@/assets/leaf.png";
 import G1 from "@/assets/G1.png";
 import G2 from "@/assets/G2.png";
@@ -396,9 +397,10 @@ const About = () => {
           <img 
             src={About12} 
             alt="Hero Background" 
-            className="w-full h-full object-cover object-[75%] md:object-right"
+            className="w-full h-full object-cover object-[80%] md:object-right"
           />
-          <div className="absolute inset-0 bg-white/20 md:bg-transparent" />
+          {/* Enhanced Mobile Overlay for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/10 md:from-transparent md:via-transparent md:to-transparent md:bg-transparent" />
         </div>
 
         {/* Decorative Leaf Element */}
@@ -412,12 +414,12 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             
             {/* Left Content */}
-            <div data-aos="fade-right">
+            <div data-aos="fade-right" className="relative z-20 bg-white/40 md:bg-transparent backdrop-blur-[4px] md:backdrop-blur-none p-6 md:p-0 rounded-3xl md:rounded-none border border-white/50 md:border-none shadow-2xl shadow-black/5 md:shadow-none">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-[2px] w-8 bg-[#d26019]" />
                 <p 
                   className="font-extrabold text-[10px] md:text-[12px] uppercase tracking-[0.15em] md:tracking-[0.25em]" 
-                  style={{ color: '#3b7243', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
+                  style={{ color: '#23471d', textShadow: '0 0 15px rgba(255,255,255,0.9)' }}
                 >
                   INDIA'S LEADING GLOBAL PLATFORM FOR
                 </p>
@@ -425,15 +427,15 @@ const About = () => {
 
               <h1 
                 className="text-[#051c4b] font-black text-3xl md:text-4xl lg:text-[45px] leading-[1.1] mb-5 uppercase tracking-tight"
-                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.15)' }}
+                style={{ textShadow: '0 2px 10px rgba(255,255,255,0.8)' }}
               >
                 HEALTH, WELLNESS & <br />
                 <span className="block mt-2" style={{ color: '#0b471c' }}>INNOVATION</span>
               </h1>
 
               <div 
-                className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 text-black font-bold text-[10px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.15em]"
-                style={{ textShadow: 'none' }}
+                className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 text-black font-extrabold text-[10px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.15em]"
+                style={{ textShadow: '0 0 8px rgba(255,255,255,1)' }}
               >
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-[#d26019]" strokeWidth={2.5} />
@@ -1202,6 +1204,8 @@ const About = () => {
         }
       `}</style>
 
+            <FAQSection />
+
       <section className="py-3 bg-[#23471d] relative overflow-hidden border-t border-white/5">
         {/* Particle Canvas */}
         <canvas
@@ -1266,6 +1270,8 @@ const About = () => {
           </div>
         </SectionContainer>
       </section>
+
+
 
 
  {/* THE SCALE. THE IMPACT. */}

@@ -628,11 +628,11 @@ export const sellerRegistrationApi = {
 };
 
 export const otpApi = {
-    request: async (identifier: string, type: 'email' | 'phone', name?: string) => {
+    request: async (identifier: string, type: 'email' | 'phone', name?: string, source?: string) => {
         const response = await fetch(`${API_URL}/otp/request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier, type, name })
+            body: JSON.stringify({ identifier, type, name, source })
         });
         return await response.json();
     },
@@ -803,6 +803,41 @@ export const visitorAuthApi = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ credentials, otp })
+        });
+        return await response.json();
+    }
+};
+
+export const expoSupportEnquiryApi = {
+    submit: async (payload: any) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async (token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return await response.json();
+    },
+    delete: async (id: string, token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return await response.json();
+    },
+    updateStatus: async (id: string, status: string, token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry/${id}/status`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({ status })
         });
         return await response.json();
     }
