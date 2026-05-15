@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
@@ -10,6 +8,7 @@ import {
     PlayCircle,
 } from "lucide-react";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "../layout/SectionContainer";
 
 const socialPosts = [
     {
@@ -88,10 +87,15 @@ export default function MediaSection() {
         if (emblaApi) emblaApi.scrollNext();
     }, [emblaApi]);
 
+useEffect(()=>{
+    if(dynamicVideos){
 
+        setSelectedVideo(dynamicVideos[0])
+    }
+},[dynamicVideos])
     return (
         <section className="w-full bg-[#f5f7fb] py-4 px-4">
-            <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <SectionContainer className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
                 {/* PRESS RELEASES */}
                 <motion.div
@@ -213,7 +217,7 @@ export default function MediaSection() {
 
                         {/* VIDEO LIST */}
                         <div className="space-y-3">
-                            {displayVideos.map((video, index) => (
+                            {displayVideos.slice(0,4).map((video, index) => (
                                 <motion.button
                                     key={index}
                                     onClick={() => setSelectedVideo(video)}
@@ -323,7 +327,7 @@ export default function MediaSection() {
                         />
                     </div>
                 </motion.div>
-            </div>
+            </SectionContainer>
         </section>
     );
 }

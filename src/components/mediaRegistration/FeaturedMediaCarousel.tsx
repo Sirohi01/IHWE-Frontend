@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -8,6 +6,7 @@ import "swiper/css/pagination";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "../layout/SectionContainer";
 
 export default function FeaturedMediaCoverage() {
     const [coverages, setCoverages] = useState([]);
@@ -54,7 +53,7 @@ export default function FeaturedMediaCoverage() {
 
     return (
         <section className="w-full py-4 px-4">
-            <div className="max-w-[1400px] mx-auto">
+            <SectionContainer className="max-w-[1400px]">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -176,7 +175,7 @@ export default function FeaturedMediaCoverage() {
                         }
                     `}</style>
                 </motion.div>
-            </div>
+            </SectionContainer>
         </section>
     );
 }

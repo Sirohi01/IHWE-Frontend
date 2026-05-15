@@ -5,6 +5,7 @@ import contactimage from '../../assets/contact.webp';
 import { mediaRegistrationApi, otpApi } from '@/lib/api';
 import { toast } from "sonner";
 import { CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import SectionContainer from '../layout/SectionContainer';
 
 
 const MediaContact = () => {
@@ -142,12 +143,13 @@ const MediaContact = () => {
 
   return (
     <div className="w-full py-4 px-4 flex justify-center font-sans" >
+      <SectionContainer>
       <motion.div 
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={containerVariants}
-        className="w-full max-w-[1400px] flex flex-wrap lg:p-8 p-4 rounded-xl"
+        className="w-full flex flex-wrap lg:p-8 p-4 rounded-xl"
         style={{ backgroundImage: `url(${contactimage})`, backgroundSize: "cover", backgroundPosition: "center" }}
       >
         {/* Left Section: Media Enquiries (referencing image_a04ae1.png) */}
@@ -332,6 +334,7 @@ const MediaContact = () => {
           </form>
         </div>
       </motion.div>
+      </SectionContainer>
     </div>
   );
 };

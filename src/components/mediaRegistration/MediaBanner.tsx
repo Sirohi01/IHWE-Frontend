@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import media_registration_bg from "@/assets/media_registration.webp";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import {
     Globe,
     Newspaper,
     Users,
     Handshake,
 } from "lucide-react";
+import SectionContainer from "../layout/SectionContainer";
 
 const icons = [
     <Newspaper />,
@@ -84,8 +86,8 @@ const MediaBanner = () => {
                     backgroundPosition: "center",
                 }}
             >
-                <div className="relative mx-auto px-4 max-w-[1400px] lg:px-8 py-16 lg:py-24">
-                    
+                <SectionContainer className="relative mx-auto px-4 lg:px-8 py-16 lg:py-24">
+
                     {/* Glow Effects */}
                     <motion.div
                         animate={{
@@ -114,7 +116,7 @@ const MediaBanner = () => {
                     />
 
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        
+
                         {/* LEFT CONTENT */}
                         <motion.div
                             initial={{ opacity: 0, x: -60 }}
@@ -273,78 +275,115 @@ const MediaBanner = () => {
                             </motion.div>
                         </motion.div>
                     </div>
-                </div>
+                </SectionContainer>
             </div>
 
             {/* FLOATING WHITE CARD */}
-            <motion.div
-                initial={{ opacity: 0, y: 80 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                    duration: 0.4,
-                    delay: 0.8,
-                }}
-                viewport={{ once: true }}
-                className="relative max-w-[1400px] mx-auto px-4"
-            >
-                <div className="bg-white rounded-3xl shadow-2xl px-6 sm:px-10 py-8 -mt-16 relative z-20">
-                    <div className="flex items-center justify-center gap-4 mb-8">
-                        <div className="h-px bg-gray-300 flex-1 max-w-[120px]"></div>
+            <SectionContainer>
 
-                        <motion.h3
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{
-                                delay: 1.2,
-                                duration: 0.5,
-                            }}
-                            viewport={{ once: true }}
-                            className="text-[#1e243a] font-bold text-sm sm:text-base tracking-wide text-center"
-                        >
-                            FEATURED IN LEADING MEDIA
-                        </motion.h3>
+                <motion.div
+                    initial={{ opacity: 0, y: 80 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{
+                        duration: 0.4,
+                        delay: 0.8,
+                    }}
+                    viewport={{ once: true }}
+                    className="relative"
+                >
+                    <div className="bg-white rounded-3xl shadow-2xl px-6 sm:px-10 py-8 -mt-16 relative z-20">
 
-                        <div className="h-px bg-gray-300 flex-1 max-w-[120px]"></div>
-                    </div>
+                        <div className="flex items-center justify-center gap-4 mb-8">
+                            <div className="h-px bg-gray-300 flex-1 max-w-[120px]"></div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 justify-between items-center md:flex-row gap-5">
-                        {dynamicLogos.map((logo, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{
-                                    opacity: 0,
-                                    scale: 0.8,
-                                    y: 20,
-                                }}
-                                whileInView={{
-                                    opacity: 1,
-                                    scale: 1,
-                                    y: 0,
-                                }}
+                            <motion.h3
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
                                 transition={{
-                                    delay:
-                                        1.2 + index * 0.12,
+                                    delay: 1.2,
                                     duration: 0.5,
                                 }}
                                 viewport={{ once: true }}
-                                whileHover={{
-                                    y: -6,
-                                    scale: 1.04,
-                                }}
-                                className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300"
+                                className="text-[#1e243a] font-bold text-sm sm:text-base tracking-wide text-center"
                             >
-                                <img
-                                    src={logo}
-                                    alt={`Media Logo ${
-                                        index + 1
-                                    }`}
-                                    className="max-h-10 object-contain"
-                                />
-                            </motion.div>
-                        ))}
+                                FEATURED IN LEADING MEDIA
+                            </motion.h3>
+
+                            <div className="h-px bg-gray-300 flex-1 max-w-[120px]"></div>
+                        </div>
+
+                        {/* SWIPER */}
+                        <Swiper
+                            modules={[Autoplay]}
+                            slidesPerView={2}
+                            spaceBetween={20}
+                            loop={true}
+                            speed={4000}
+                            autoplay={{
+                                delay: 0,
+                                disableOnInteraction: false,
+                                pauseOnMouseEnter: false,
+                            }}
+                            breakpoints={{
+                                640: {
+                                    slidesPerView: 3,
+                                },
+                                768: {
+                                    slidesPerView: 4,
+                                },
+                                1024: {
+                                    slidesPerView: 5,
+                                },
+                                1280: {
+                                    slidesPerView: 7,
+                                },
+                            }}
+                            className="media-logo-swiper"
+                        >
+                            {dynamicLogos.map((logo, index) => (
+                                <SwiperSlide key={index} className="!h-auto">
+                                    <motion.div
+                                        initial={{
+                                            opacity: 0,
+                                            scale: 0.8,
+                                            y: 20,
+                                        }}
+                                        whileInView={{
+                                            opacity: 1,
+                                            scale: 1,
+                                            y: 0,
+                                        }}
+                                        transition={{
+                                            delay: 1.2 + index * 0.08,
+                                            duration: 0.5,
+                                        }}
+                                        viewport={{ once: true }}
+                                        whileHover={{
+                                            y: -6,
+                                            scale: 1.04,
+                                        }}
+                                        className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300 bg-white"
+                                    >
+                                        <img
+                                            src={logo}
+                                            alt={`Media Logo ${index + 1}`}
+                                            className="max-h-10 object-contain"
+                                        />
+                                    </motion.div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+
+                        <style>{`
+            .media-logo-swiper .swiper-wrapper {
+                transition-timing-function: linear !important;
+                align-items: center;
+            }
+        `}</style>
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </SectionContainer>
+
         </section>
     );
 };
