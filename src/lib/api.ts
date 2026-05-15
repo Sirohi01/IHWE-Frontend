@@ -458,6 +458,31 @@ export const advisoryApi = {
     }
 };
 
+export const advisoryNominationApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/advisory-nomination`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/advisory-nomination`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    updateStatus: async (id: string, status: string) => {
+        const response = await fetch(`${API_URL}/advisory-nomination/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+        return await response.json();
+    }
+};
+
 export const galleryApi = {
     getAll: async (category?: string) => {
         const url = category ? `${API_URL}/gallery?category=${category}` : `${API_URL}/gallery`;
