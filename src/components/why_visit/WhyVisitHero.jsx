@@ -77,7 +77,7 @@ const WhyVisitHero = () => {
                                 <div className="flex flex-col lg:flex-row gap-3">
                                     <button
                                         onClick={() => window.open('/buyer-registration', '_blank')}
-                                        className="flex items-center gap-2 bg-[#2d6a1f] text-white text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded-full hover:bg-[#245518] transition whitespace-nowrap"
+                                        className="flex items-center gap-2 bg-[#2d6a1f] text-white text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded hover:bg-[#245518] transition whitespace-nowrap"
                                     >
                                         Register as Visitor
                                         <span className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
@@ -86,7 +86,7 @@ const WhyVisitHero = () => {
                                             </svg>
                                         </span>
                                     </button>
-                                    <button className="flex items-center gap-2 bg-white text-gray-700 text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded-full border border-gray-300 hover:bg-gray-50 transition whitespace-nowrap">
+                                    <button className="flex items-center gap-2 bg-white text-gray-700 text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded border border-gray-300 hover:bg-gray-50 transition whitespace-nowrap">
                                         Download Brochure
                                         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />

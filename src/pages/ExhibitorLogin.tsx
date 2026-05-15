@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-    Lock, Mail, ArrowRight, ShieldCheck, Phone, CheckCircle2, 
-    Building2, ChevronLeft, Eye, EyeOff, Key, Sparkles, 
-    Shield, IdCard as IdCardIcon, QrCode, User, Send, LogIn, Loader2
+import {
+    Lock, Mail, ArrowRight, ShieldCheck, Phone, CheckCircle2,
+    Building2, ChevronLeft, Eye, EyeOff, Key, Sparkles,
+    Shield, Store, Send, LogIn, Loader2, Smartphone, UserPlus, Headset,
+    Users, CalendarDays, BarChart3
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,36 +18,34 @@ const ExhibitorLogin = () => {
     const [loginMode, setLoginMode] = useState<'email' | 'mobile'>('email');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
-    const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [exhibitorId, setExhibitorId] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const fetchSettings = async () => {
-          try {
-            const data = await settingsApi.get();
-            if (data) setSettings(data);
-          } catch (error) {
-            console.error("Error fetching settings:", error);
-          }
+            try {
+                const data = await settingsApi.get();
+                if (data) setSettings(data);
+            } catch (error) {
+                console.error("Error fetching settings:", error);
+            }
         };
         fetchSettings();
     }, []);
 
     const showAlert = (icon: any, title: string, text: string) => {
         Swal.fire({
-          icon: icon,
-          title: title,
-          text: text,
-          confirmButtonColor: '#23471d',
-          background: '#f8f9fa',
-          customClass: {
-            title: 'text-xl font-bold font-inter',
-            popup: 'rounded-xl',
-            confirmButton: 'py-2 px-6 text-base font-semibold'
-          }
+            icon: icon,
+            title: title,
+            text: text,
+            confirmButtonColor: '#23471d',
+            background: '#f8f9fa',
+            customClass: {
+                title: 'text-xl font-bold font-inter',
+                popup: 'rounded-xl',
+                confirmButton: 'py-2 px-6 text-base font-semibold'
+            }
         });
     };
 
@@ -54,9 +53,9 @@ const ExhibitorLogin = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const endpoint = loginMode === 'email' ? 'login' : 'send-mobile-otp';
-            const body = loginMode === 'email' 
-                ? { email: email.trim(), password: password.trim() }
+            const endpoint = loginMode === 'email' ? 'send-email-otp' : 'send-mobile-otp';
+            const body = loginMode === 'email'
+                ? { email: email.trim() }
                 : { mobile: mobile.trim() };
 
             const res = await fetch(`${API_URL}/exhibitor-auth/${endpoint}`, {
@@ -67,20 +66,13 @@ const ExhibitorLogin = () => {
             const data = await res.json();
 
             if (data.success) {
-                if (data.requiresOtp || loginMode === 'mobile') {
-                    setExhibitorId(data.exhibitorId);
-                    setStep(2);
-                    toast.success('Wait! One more step.', { 
-                        description: loginMode === 'email' 
-                            ? 'We sent a code to your mobile and email.' 
-                            : 'We sent an OTP to your mobile.' 
-                    });
-                } else if (data.token) {
-                    // Direct login if OTP not required (rare but handled)
-                    localStorage.setItem('exhibitorToken', data.token);
-                    toast.success('Welcome back!');
-                    navigate('/exhibitor-dashboard');
-                }
+                setExhibitorId(data.exhibitorId);
+                setStep(2);
+                toast.success('Wait! One more step.', {
+                    description: loginMode === 'email'
+                        ? 'We sent a code to your registered email.'
+                        : 'We sent an OTP to your mobile.'
+                });
             } else {
                 showAlert('error', 'Login Failed', data.message || 'Check your details and try again.');
             }
@@ -118,77 +110,170 @@ const ExhibitorLogin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#f9fafb] font-inter">
-            {/* Top Navigation Spacer (Reduced gap) */}
-            <div className="pt-20 lg:pt-24"></div>
+        <div className="min-h-screen bg-[#f9fafb] font-inter flex flex-col justify-center relative">
 
-            <section className="pb-20 relative overflow-hidden">
-                {/* Decorative elements matching DownloadBadge */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#23471d]/5 rounded-full blur-[120px] -mr-48 -mt-48" />
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#d26019]/5 rounded-full blur-[120px] -ml-48 -mb-48" />
+            {/* ── Animated Background ── */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
 
+                <style>{`
+    @keyframes floatLeaf {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+      33%       { transform: translateY(-22px) rotate(14deg); opacity: 1; }
+      66%       { transform: translateY(-10px) rotate(-8deg); opacity: 0.8; }
+    }
+    @keyframes drift1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      33%       { transform: translate(20px, -15px) scale(1.05); }
+      66%       { transform: translate(-10px, 10px) scale(0.97); }
+    }
+    @keyframes drift2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      33%       { transform: translate(-18px, 12px) scale(1.04); }
+      66%       { transform: translate(12px, -8px) scale(0.98); }
+    }
+    .leaf-float { animation: floatLeaf 5s ease-in-out infinite; }
+    .blob-drift1 { animation: drift1 10s ease-in-out infinite; }
+    .blob-drift2 { animation: drift2 13s ease-in-out infinite reverse; }
+    .blob-drift3 { animation: drift1 8s ease-in-out infinite reverse; }
+  `}</style>
+
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#f0f7ea] via-[#e8f5d8] to-[#f4faf0]" />
+
+                {/* Blobs */}
+                <div className="blob-drift1 absolute -top-24 -left-24 w-96 h-96 rounded-full bg-[#c5e89a]/25" />
+                <div className="blob-drift2 absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-[#8dc44f]/20" />
+                <div className="blob-drift3 absolute top-10 right-20 w-48 h-48 rounded-full bg-[#d6ffb7]/30" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-[#a8d96c]/15 animate-pulse" />
+
+                {/* Floating Leaves */}
+                {[
+                    { top: "8%", left: "8%", delay: "0s" },
+                    { top: "15%", right: "10%", delay: "1.5s" },
+                    { top: "55%", left: "5%", delay: "2.5s" },
+                    { bottom: "20%", right: "8%", delay: "0.8s" },
+                    { bottom: "35%", left: "15%", delay: "3.5s" },
+                    { top: "70%", right: "22%", delay: "1.2s" },
+                    { top: "35%", left: "45%", delay: "4s" },
+                    { top: "80%", left: "35%", delay: "2s" },
+                ].map((leaf, i) => (
+                    <div
+                        key={i}
+                        className="leaf-float absolute w-7 h-7 opacity-40"
+                        style={{
+                            top: leaf.top,
+                            left: (leaf as any).left,
+                            right: (leaf as any).right,
+                            bottom: (leaf as any).bottom,
+                            animationDelay: leaf.delay,
+                        }}
+                    >
+                        <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
+                            <path
+                                d="M18 3 C10 8,4 16,8 26 C12 34,26 32,30 22 C34 12,26 4,18 3Z"
+                                fill="#4a8c28"
+                            />
+                            <line x1="18" y1="5" x2="18" y2="28" stroke="#3a7020" strokeWidth="1.2" />
+                        </svg>
+                    </div>
+                ))}
+
+            </div>
+            <section className="py-4 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto">
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="grid lg:grid-cols-2 gap-12 items-start"
-                        >
-                            {/* LEFT SIDE: Brand & Info */}
-                            <div className="space-y-8">
-                                <div>
-                                     <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#23471d] transition-all font-bold uppercase text-[10px] tracking-widest group">
-                                        <ChevronLeft size={14} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
-                                        <span>Back to Home</span>
-                                    </Link>
-                                </div>
+                    <div className="max-w-5xl mx-auto mb-2">
+                        <Link to="/" className="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-700 hover:text-white hover:bg-[#23471d] rounded-full shadow-md border border-slate-200 transition-all duration-300 font-bold uppercase text-[11px] tracking-widest group w-fit">
+                            <ChevronLeft size={16} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
+                            <span>Back to Home</span>
+                        </Link>
+                    </div>
 
-                                <div className="flex items-center gap-6">
-                                    <img 
-                                        src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
-                                        alt="IHWE Logo" 
-                                        className="h-24 w-auto object-contain"
-                                    />
-                                    <div className="h-16 w-px bg-slate-200" />
-                                    <div>
-                                        <h2 className="text-3xl font-inter font-bold text-slate-900">
-                                            Exhibitor <span className="text-[#23471d]">Portal</span>
-                                        </h2>
-                                        <p className="text-[#d26019] font-bold tracking-[0.2em] uppercase text-xs">Official Login</p>
+                    <div className="max-w-5xl mx-auto">
+                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
+                            {/* LEFT SIDE: Brand & Info */}
+                            <div className="w-full flex flex-col">
+                                <div
+                                    className="flex-1 px-4 py-2 relative overflow-hidden flex flex-col"
+                                    style={{
+                                        backgroundImage: "url('/exhibitor-login-booth.webp')",
+                                        backgroundPosition: "center",
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundSize: "100% 100%"
+                                    }}
+                                >
+                                    <div className="relative z-10 flex-1 flex flex-col">
+                                        <div className="mb-0">
+                                            <img
+                                                src="/logo.png"
+                                                alt="IHWE Logo"
+                                                className="h-20 w-auto object-contain -ml-2"
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <h2 className="text-slate-800 text-[20px] font-black uppercase tracking-tight leading-none mb-1">
+                                                <span className="text-[#357a38]">IHWE </span>
+                                                EXHIBITOR PORTAL
+                                            </h2>
+                                            <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.15em]">
+                                                SHOWCASE. CONNECT. SUCCEED.
+                                            </p>
+                                            <div className="w-12 h-1 bg-[#357a38] mt-2"></div>
+                                        </div>
+
+                                        <div className="mb-2">
+                                            <p className="text-[#357a38] text-xl mb-1 italic" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+                                                Welcome!
+                                            </p>
+                                            <h1 className="text-[28px] md:text-[30px] font-black text-slate-900 leading-[1.1] mb-2">
+                                                Your brand.<br />
+                                                Your booth.<br />
+                                                <span className="text-[#357a38]">Your impact.</span>
+                                            </h1>
+                                            <p className="text-gray-700 text-[14px] leading-relaxed max-w-[280px]">
+                                                Manage your booth, products, <br />leads, and meetings – all in <br />one powerful platform.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-6">
-                                    <p className="text-slate-600 text-lg leading-relaxed">
-                                        Welcome to the 9th International Health & Wellness Expo Exhibitor Portal. 
-                                        Manage your stall details, access invoices, and stay updated with live event notifications.
-                                    </p>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {[
-                                            { icon: Shield, title: "Private Access", desc: "OTP protected session" },
-                                            { icon: IdCardIcon, title: "Stall Management", desc: "Update your booth info" },
-                                            { icon: QrCode, title: "Invoicing", desc: "Download receipt instant" },
-                                            { icon: Sparkles, title: "Premium Tools", desc: "Lead tracking & more" }
-                                        ].map((item, idx) => (
-                                            <div key={idx} className="flex items-center gap-4 bg-white p-4 border-2 border-[#23471d]/20 transition-all shadow-sm">
-                                                <div className="w-10 h-10 bg-[#23471d]/5 flex items-center justify-center text-[#23471d]">
-                                                    <item.icon size={20} />
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm font-bold text-slate-800">{item.title}</p>
-                                                    <p className="text-[10px] text-slate-400 uppercase tracking-wider">{item.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
+                                {/* Bottom Dark Green Bar */}
+                                <div className="bg-[#24541e] p-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-1.5">
+                                            <Store className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h4 className="text-white text-[10px] font-bold leading-tight mb-0.5">Booth Management</h4>
+                                        <p className="text-white/80 text-[9px] leading-tight">Update booth info,<br />staff, and documents.</p>
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-1.5">
+                                            <Users className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h4 className="text-white text-[10px] font-bold leading-tight mb-0.5">Lead Tracking</h4>
+                                        <p className="text-white/80 text-[9px] leading-tight">Capture, manage &<br />follow up leads.</p>
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-1.5">
+                                            <CalendarDays className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h4 className="text-white text-[10px] font-bold leading-tight mb-0.5">Scheduler</h4>
+                                        <p className="text-white/80 text-[9px] leading-tight">Manage meetings<br />appointments.</p>
+                                    </div>
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-1.5">
+                                            <BarChart3 className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h4 className="text-white text-[10px] font-bold leading-tight mb-0.5">Insights</h4>
+                                        <p className="text-white/80 text-[9px] leading-tight">Track engagement<br />and growth.</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* RIGHT SIDE: Login Form */}
-                            <div className="bg-white border border-slate-200 p-8 md:p-10 shadow-xl relative min-h-[500px] flex flex-col justify-center">
+                            {/* right side  */}
+                            <div className="px-8  relative flex flex-col justify-center h-full">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
-                                
+
                                 <AnimatePresence mode="wait">
                                     {step === 1 ? (
                                         <motion.div
@@ -196,72 +281,72 @@ const ExhibitorLogin = () => {
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -20 }}
-                                            className="space-y-8"
+                                            className="space-y-4"
                                         >
-                                            <div className="text-center lg:text-left">
-                                                <h3 className="text-3xl font-inter font-bold text-slate-900 mb-2">Welcome Back!</h3>
-                                                <p className="text-slate-500 text-sm">Please sign in to your exhibitor account</p>
+
+                                            <div className="text-center">
+
+                                                {/* Icon circle */}
+                                                <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-2 shadow-sm border border-slate-100 text-[#23471d]">
+                                                    <Store size={36} strokeWidth={1.5} />
+                                                </div>
+
+
+                                                {/* Title */}
+                                                <h3 className="text-[1.75rem] font-semibold text-slate-900 tracking-tight leading-none mb-2">
+                                                    Exhibitor Login
+                                                </h3>
+
+                                                {/* Subtitle */}
+                                                <p className="text-[13.5px] text-slate-500 leading-relaxed">
+                                                    Sign in to your exhibitor portal to continue
+                                                </p>
+
                                             </div>
 
-                                            {/* Mode Toggle */}
-                                            <div className="flex p-1.5 bg-slate-100 rounded-xl border border-slate-200">
+                                            <div className="flex p-1.5 bg-slate-100 rounded-xl border border-slate-200 relative">
+
+                                                {/* Sliding background */}
+                                                <div
+                                                    className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-lg border border-slate-200 shadow-sm transition-transform duration-200 ease-in-out ${loginMode === 'mobile' ? 'translate-x-[calc(100%+2px)]' : 'translate-x-0'
+                                                        }`}
+                                                />
+
                                                 <button
                                                     onClick={() => setLoginMode('email')}
-                                                    className={`flex-1 py-3 px-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all 
-                                                        ${loginMode === 'email' ? 'bg-white text-[#23471d] shadow-sm border border-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+                                                    className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide
+      ${loginMode === 'email' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
                                                 >
-                                                    Use Email
+                                                    <Mail size={14} strokeWidth={2} />
+                                                    Email
                                                 </button>
+
                                                 <button
                                                     onClick={() => setLoginMode('mobile')}
-                                                    className={`flex-1 py-3 px-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all 
-                                                        ${loginMode === 'mobile' ? 'bg-white text-[#23471d] shadow-sm border border-slate-200' : 'text-slate-400 hover:text-slate-600'}`}
+                                                    className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide
+      ${loginMode === 'mobile' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
                                                 >
-                                                    Use Mobile
+                                                    <Smartphone size={14} strokeWidth={2} />
+                                                    Mobile
                                                 </button>
-                                            </div>
 
+                                            </div>
                                             <form onSubmit={handleLogin} className="space-y-6">
                                                 {loginMode === 'email' ? (
-                                                    <div className="space-y-4">
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Mail size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type="email"
-                                                                    required
-                                                                    value={email}
-                                                                    onChange={(e) => setEmail(e.target.value)}
-                                                                    className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 focus:outline-none focus:border-[#23471d] transition-all text-sm placeholder:text-slate-300"
-                                                                    placeholder="Enter your email"
-                                                                />
+                                                    <div className="space-y-2">
+                                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
+                                                        <div className="relative group">
+                                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
+                                                                <Mail size={18} />
                                                             </div>
-                                                        </div>
-                                                        <div className="space-y-2">
-                                                            <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Password</label>
-                                                            <div className="relative group">
-                                                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                    <Lock size={18} />
-                                                                </div>
-                                                                <input
-                                                                    type={showPassword ? "text" : "password"}
-                                                                    required
-                                                                    value={password}
-                                                                    onChange={(e) => setPassword(e.target.value)}
-                                                                    className="w-full pl-12 pr-12 py-4 bg-white border-2 border-slate-100 focus:outline-none focus:border-[#23471d] transition-all text-sm placeholder:text-slate-300"
-                                                                    placeholder="Enter password"
-                                                                />
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => setShowPassword(!showPassword)}
-                                                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-300 hover:text-[#23471d] transition-colors"
-                                                                >
-                                                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                                                </button>
-                                                            </div>
+                                                            <input
+                                                                type="email"
+                                                                required
+                                                                value={email}
+                                                                onChange={(e) => setEmail(e.target.value)}
+                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
+                                                                placeholder="Enter your registered email"
+                                                            />
                                                         </div>
                                                     </div>
                                                 ) : (
@@ -276,8 +361,8 @@ const ExhibitorLogin = () => {
                                                                 required
                                                                 value={mobile}
                                                                 onChange={(e) => setMobile(e.target.value)}
-                                                                className="w-full pl-12 pr-4 py-4 bg-white border-2 border-slate-100 focus:outline-none focus:border-[#23471d] transition-all text-sm placeholder:text-slate-300"
-                                                                placeholder="+91 00000 00000"
+                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
+                                                                placeholder="Enter mobile number"
                                                             />
                                                         </div>
                                                     </div>
@@ -286,12 +371,45 @@ const ExhibitorLogin = () => {
                                                 <button
                                                     type="submit"
                                                     disabled={loading}
-                                                    className="w-full bg-[#23471d] hover:bg-[#1a3a14] text-white font-bold py-5 px-6 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs shadow-lg hover:shadow-[#23471d]/20 mt-8 disabled:opacity-50"
+                                                    className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs shadow-xl hover:shadow-[#23471d]/30 hover:-translate-y-0.5 mt-2 disabled:opacity-50 disabled:hover:translate-y-0"
                                                 >
-                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (loginMode === 'email' ? <LogIn size={18} /> : <Send size={18} />)}
-                                                    <span>{loginMode === 'email' ? 'Login Now' : 'Send Verification OTP'}</span>
+                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={18} />}
+                                                    <span>Send Verification OTP</span>
                                                 </button>
                                             </form>
+
+                                            <div className="space-y-2">
+                                                <div className="relative py-2">
+                                                    <div className="absolute inset-0 flex items-center">
+                                                        <div className="w-full border-t border-slate-200"></div>
+                                                    </div>
+                                                    <div className="relative flex justify-center text-sm">
+                                                        <span className="px-3  text-slate-700 font-medium">New to IHWE Expo?</span>
+                                                    </div>
+                                                </div>
+
+                                                <Link
+                                                    to="/book-a-stand"
+                                                    className="w-full bg-white text-[#23471d] hover:text-white font-bold py-3 px-6 rounded-xl border border-[#23471d] hover:bg-gradient-to-r from-[#23471d] to-[#2d5a25] transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
+                                                >
+                                                    <UserPlus size={18} />
+                                                    <span>Register as Exhibitor</span>
+                                                </Link>
+
+                                                <div className="flex items-center gap-4 pt-2">
+                                                    <div className="w-12 h-12 bg-[#23471d]/10 rounded-full flex items-center justify-center text-[#23471d] flex-shrink-0">
+                                                        <Headset size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-slate-900 text-sm mb-1">Need Help?</h4>
+                                                        <div className="text-[11.5px] text-slate-500 font-medium flex flex-wrap gap-x-2">
+                                                            <span className='text-sm'>Email: <a href="mailto:info@ihwe.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">info@ihwe.in</a></span>
+                                                            <span className="text-slate-300 hidden sm:inline">|</span>
+                                                            <span className="w-full sm:w-auto text-sm">Phone: <a href="tel:+919654900525" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">+91 9654900525</a></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </motion.div>
                                     ) : (
                                         <motion.div
@@ -319,14 +437,14 @@ const ExhibitorLogin = () => {
                                                     value={otp}
                                                     autoFocus
                                                     onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
-                                                    className="block w-full px-4 py-6 text-center tracking-[0.5em] text-4xl font-bold text-[#23471d] bg-slate-50 border-b-4 border-[#23471d]/20 focus:border-[#23471d] outline-none transition-all placeholder:text-slate-200"
+                                                    className="block w-full px-4 py-6 text-center tracking-[0.5em] text-4xl font-bold text-[#23471d] bg-white border-2 border-slate-200 rounded-2xl focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 outline-none transition-all placeholder:text-slate-200 shadow-inner"
                                                     placeholder="000000"
                                                 />
 
                                                 <button
                                                     type="submit"
                                                     disabled={loading || otp.length !== 6}
-                                                    className="w-full bg-[#d26019] hover:bg-[#b04d12] text-white font-bold py-5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-xs"
+                                                    className="w-full bg-gradient-to-r from-[#d26019] to-[#b04d12] hover:from-[#b04d12] hover:to-[#8e3e0e] text-white font-bold py-4 rounded-xl shadow-xl hover:shadow-[#d26019]/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs disabled:opacity-50 disabled:hover:translate-y-0"
                                                 >
                                                     {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 size={18} />}
                                                     <span>Verify & Access Dashboard</span>
@@ -344,13 +462,12 @@ const ExhibitorLogin = () => {
                                     )}
                                 </AnimatePresence>
 
-                                <p className="text-center text-[10px] text-slate-400 mt-10 pt-6 border-t border-slate-100 uppercase tracking-[0.2em] font-bold">
-                                    © {new Date().getFullYear()} <span className="text-[#23471d]">IHWE</span> Exhibitor Services
-                                </p>
+
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
+
             </section>
         </div>
     );

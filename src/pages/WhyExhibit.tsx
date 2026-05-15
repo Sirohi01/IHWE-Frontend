@@ -16,7 +16,7 @@ import "aos/dist/aos.css";
 import { exhibitorTestimonialsApi, SERVER_URL } from "@/lib/api";
 
 // Assets
-import exhibitBg from "@/assets/exhibitbg.png";
+import exhibitBg from "@/assets/exhibitbg.webp";
 import pragatiMaidan from "@/assets/Pragati-Maidan.jpg";
 import leafPng from "@/assets/leaf.png";
 import buyerImg1 from "@/assets/h1.png";
@@ -32,7 +32,7 @@ import band3 from "@/assets/band3.png";
 import band4 from "@/assets/band4.png";
 import band5 from "@/assets/band5.png";
 import applybg from "@/assets/applybg.png";
-import leftbg from "@/assets/leftbg.png";
+import leftbg from "@/assets/leftbg.webp";
 import top1 from "@/assets/top1.png";
 import top2 from "@/assets/top2.png";
 import top3 from "@/assets/top3.png";
@@ -43,9 +43,9 @@ import herbal2 from "@/assets/herbal2.png";
 import herbal3 from "@/assets/herbal3.png";
 import herbal5 from "@/assets/herbal5.png";
 import herbal6 from "@/assets/herbal6.png";
-import meet1 from "@/assets/meet1.png";
-import meet2 from "@/assets/meet2.png";
-import meet3 from "@/assets/meet3.png";
+import meet1 from "@/assets/meet1.webp";
+import meet2 from "@/assets/meet2.webp";
+import meet3 from "@/assets/meet3.webp";
 import footbg from "@/assets/footbg.png";
 import leaf2 from "@/assets/leaf2.png";
 
@@ -812,7 +812,7 @@ const WhyExhibit = () => {
                 <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
                 <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
                 <Link
-                  to="/msme-pms-scheme"
+                  to="/government-msme-pms-schemes"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02]"
@@ -911,7 +911,12 @@ const WhyExhibit = () => {
                 ))}
               </div>
 
-              <Link to="/book-a-stand" className="golden-btn-footer text-[#050A1A] px-8 py-3 rounded-lg font-black text-[11px] uppercase tracking-wider flex items-center gap-2 w-fit hover:scale-[1.02] transition-all group">
+              <Link 
+                to="/book-a-stand" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="golden-btn-footer text-[#050A1A] px-8 py-3 rounded-lg font-black text-[11px] uppercase tracking-wider flex items-center gap-2 w-fit hover:scale-[1.02] transition-all group"
+              >
                 <div className="absolute inset-0 pointer-events-none">
                   <Sparkle style={{ top: '-4px', left: '10%', animationDelay: '0s' }} />
                   <Sparkle style={{ top: '-6px', left: '40%', animationDelay: '0.4s' }} />

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, MapPin, Globe, HeartPulse, Sprout, User, MonitorDot, Plane, Leaf, GraduationCap, Trophy, Handshake, CheckCircle2, Users, Landmark, TrendingUp, Award } from "lucide-react";
 import StatsCounter from "@/components/home/StatsCounter";
 import ExhibitorLogos from "@/components/home/ExhibitorLogos";
+import FAQSection from "@/components/home/FAQSection";
 import GlobalPlatform from "@/components/sections/GlobalPlatform";
 import MissionVision from "@/components/sections/MissionVision";
 import WhyAttend from "@/components/sections/WhyAttend";
@@ -18,7 +19,7 @@ import InternationalImg from "@/assets/international.png";
 import ConferenceImg from "@/assets/conference.png";
 import B2BImg from "@/assets/b2b.png";
 import AwardImg from "@/assets/global.png";
-import About12 from "@/assets/about12.png";
+import About12 from "@/assets/about12.webp";
 import LeafImg from "@/assets/leaf.png";
 import G1 from "@/assets/G1.png";
 import G2 from "@/assets/G2.png";
@@ -388,24 +389,18 @@ const About = () => {
         }
       `}</style>
       {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
-      <section className="relative min-h-[480px] md:h-[580px] flex items-center pt-16 md:pt-14 pb-8 overflow-hidden bg-white">
+      {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
+      <section className="relative min-h-[520px] md:h-[600px] flex items-center pt-24 md:pt-14 pb-12 md:pb-8 overflow-hidden bg-white">
         
         {/* Full Width Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
             src={About12} 
             alt="Hero Background" 
-            className="w-full h-full object-cover object-center md:object-right"
+            className="w-full h-full object-cover object-[80%] md:object-right"
           />
-        </div>
-
-        {/* Mobile Background */}
-        <div className="absolute inset-0 z-0 md:hidden">
-          <img 
-            src={About12} 
-            alt="Hero Background" 
-            className="w-full h-full object-cover"
-          />
+          {/* Enhanced Mobile Overlay for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/10 md:from-transparent md:via-transparent md:to-transparent md:bg-transparent" />
         </div>
 
         {/* Decorative Leaf Element */}
@@ -419,28 +414,28 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             
             {/* Left Content */}
-            <div data-aos="fade-right">
+            <div data-aos="fade-right" className="relative z-20 bg-white/40 md:bg-transparent backdrop-blur-[4px] md:backdrop-blur-none p-6 md:p-0 rounded-3xl md:rounded-none border border-white/50 md:border-none shadow-2xl shadow-black/5 md:shadow-none">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-[2px] w-8 bg-[#d26019]" />
                 <p 
-                  className="font-extrabold text-[10px] md:text-[12px] uppercase tracking-[0.25em]" 
-                  style={{ color: '#3b7243', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
+                  className="font-extrabold text-[10px] md:text-[12px] uppercase tracking-[0.15em] md:tracking-[0.25em]" 
+                  style={{ color: '#23471d', textShadow: '0 0 15px rgba(255,255,255,0.9)' }}
                 >
                   INDIA'S LEADING GLOBAL PLATFORM FOR
                 </p>
               </div>
 
               <h1 
-                className="text-[#051c4b] font-black text-2xl md:text-3xl lg:text-[38px] leading-[1.1] mb-4 uppercase tracking-tight"
-                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.15)' }}
+                className="text-[#051c4b] font-black text-3xl md:text-4xl lg:text-[45px] leading-[1.1] mb-5 uppercase tracking-tight"
+                style={{ textShadow: '0 2px 10px rgba(255,255,255,0.8)' }}
               >
                 HEALTH, WELLNESS & <br />
                 <span className="block mt-2" style={{ color: '#0b471c' }}>INNOVATION</span>
               </h1>
 
               <div 
-                className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-4 text-black font-bold text-[9px] uppercase tracking-[0.15em]"
-                style={{ textShadow: 'none' }}
+                className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 text-black font-extrabold text-[10px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.15em]"
+                style={{ textShadow: '0 0 8px rgba(255,255,255,1)' }}
               >
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-[#d26019]" strokeWidth={2.5} />
@@ -452,10 +447,10 @@ const About = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-4 mb-4 md:mb-6">
                 <div className="h-[2px] w-12 bg-[#d26019]" />
                 <p 
-                  className="font-extrabold text-sm md:text-base uppercase tracking-[0.15em]" 
+                  className="font-extrabold text-[12px] md:text-base uppercase tracking-[0.1em] md:tracking-[0.15em]" 
                   style={{ color: '#081834', textShadow: 'none' }}
                 >
                   ABOUT IHWE - GLOBAL EDITION
@@ -465,26 +460,26 @@ const About = () => {
               <p 
                 className="text-black/80 text-sm md:text-base leading-relaxed mb-8 max-w-xl font-medium"
               >
-                Uniting the world's leading healthcare brands, innovators,<br />
-                and professionals to collaborate, showcase solutions,<br />
+                Uniting the world's leading healthcare brands, innovators,<br className="hidden md:block" />
+                and professionals to collaborate, showcase solutions,<br className="hidden md:block" />
                 and shape a healthier tomorrow.
               </p>
 
               {/* Feature Icons Row */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-4 mb-10 mt-8 py-4 border-t border-gray-100">
-                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+              <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-x-4 md:gap-x-6 gap-y-6 md:gap-y-4 mb-10 mt-8 py-6 md:py-4 border-t border-gray-100">
+                <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img src={G1} alt="Global Exposure" className="w-8 h-8 object-contain" />
                   <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
                     GLOBAL<br />EXPOSURE
                   </span>
                 </div>
-                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img src={G2} alt="Quality Connections" className="w-8 h-8 object-contain" />
                   <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
                     QUALITY<br />CONNECTIONS
                   </span>
                 </div>
-                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img src={G3} alt="Business Growth" className="w-8 h-8 object-contain" />
                   <span 
                     className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
@@ -493,7 +488,7 @@ const About = () => {
                     BUSINESS<br />GROWTH
                   </span>
                 </div>
-                <div className="flex items-center gap-3 pr-6 border-r border-gray-600 last:border-r-0">
+                <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img src={G4} alt="Brand Visibility" className="w-8 h-8 object-contain" />
                   <span 
                     className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
@@ -503,6 +498,7 @@ const About = () => {
                   </span>
                 </div>
               </div>
+
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-4">
@@ -1208,6 +1204,8 @@ const About = () => {
         }
       `}</style>
 
+            <FAQSection />
+
       <section className="py-3 bg-[#23471d] relative overflow-hidden border-t border-white/5">
         {/* Particle Canvas */}
         <canvas
@@ -1272,6 +1270,8 @@ const About = () => {
           </div>
         </SectionContainer>
       </section>
+
+
 
 
  {/* THE SCALE. THE IMPACT. */}

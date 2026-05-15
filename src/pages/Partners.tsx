@@ -11,7 +11,7 @@ import { partnersApi } from "@/lib/api";
 import PartnershipPopup from "@/components/popups/PartnershipPopup";
 
 import partImage1 from "../assets/partimage1.png";
-import partImage from "../assets/partimage.png";
+import partImage from "../assets/partimage.png";  
 import part1 from "../assets/part1.png";
 import part2 from "../assets/part2.png";
 import part3 from "../assets/part3.png";
@@ -20,14 +20,14 @@ import tajLogo from "../assets/h1.png";
 import leelaLogo from "../assets/h2.png";
 import radissonLogo from "../assets/h3.png";
 import hiltonLogo from "../assets/h4.png";
-import part11 from "../assets/part11.png";
-import part22 from "../assets/part22.png";
-import part33 from "../assets/part33.png";
-import part44 from "../assets/part44.png";
-import part55 from "../assets/part55.png";
-import part66 from "../assets/part66.png";
-import part111 from "../assets/part111.png";
-import part1111 from "../assets/part1111.png";
+import part11 from "../assets/part11.webp";
+import part22 from "../assets/part22.webp";
+import part33 from "../assets/part33.webp";
+import part44 from "../assets/part44.webp";
+import part55 from "../assets/part55.webp";
+import part66 from "../assets/part66.webp";
+import part111 from "../assets/part111.webp";
+import part1111 from "../assets/part212.png";
 import log1 from "../assets/log1.png";
 import log2 from "../assets/log2.png";
 import log3 from "../assets/log3.png";
@@ -69,22 +69,10 @@ const Partners = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [initialService, setInitialService] = useState<string | null>(null);
 
-
   const openServicePopup = (serviceId: string) => {
     setInitialService(serviceId);
     setIsPopupOpen(true);
   };
-
-  // Removed auto-popup timer
-
-  useEffect(() => {
-
-    const timer = setTimeout(() => {
-      setIsPopupOpen(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -245,15 +233,15 @@ const Partners = () => {
       `}</style>
 
 
-      <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden bg-white py-12 lg:py-0">
+      <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden bg-white pt-20 pb-10 lg:py-0">
         <div className="container mx-auto px-4 lg:pl-12 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
 
-            <div className="w-full lg:w-[45%] space-y-3 text-left pt-2 lg:pt-0 pb-6 lg:pb-8 lg:mt-14">
+            <div className="w-full lg:w-[45%] space-y-4 text-center lg:text-left pt-6 lg:pt-0 pb-2 lg:pb-8 lg:mt-14">
               <motion.p
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-[#084c17] font-bold text-sm tracking-[0.18em] uppercase"
+                className="text-[#084c17] font-bold text-xs md:text-sm tracking-[0.18em] uppercase"
               >
                 We're Here to Support You
               </motion.p>
@@ -262,9 +250,9 @@ const Partners = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="text-4xl md:text-5xl font-extrabold text-[#0a133c] leading-[1.08] tracking-tight"
+                className="text-[22px] sm:text-3xl md:text-5xl font-extrabold text-[#0a133c] leading-[1.2] md:leading-[1.1] tracking-tight"
               >
-                SUPPORT SERVICES <br />
+                SUPPORT SERVICES <br className="hidden md:block" />
                 FOR{" "}
                 <span className="text-[#084c17]">YOUR SUCCESS</span>
               </motion.h1>
@@ -274,7 +262,7 @@ const Partners = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="text-lg font-medium text-[#1e2131]"
+                  className="text-base md:text-lg font-medium text-[#1e2131]"
                 >
                   Everything you need. All in one place.
                 </motion.p>
@@ -282,7 +270,7 @@ const Partners = () => {
                   initial={{ opacity: 0, scaleX: 0 }}
                   animate={{ opacity: 1, scaleX: 1 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
-                  className="h-[3px] w-16 bg-gradient-to-r from-[#084c17] via-[#2e7d32] to-transparent rounded-full origin-left"
+                  className="h-[3px] w-16 bg-gradient-to-r from-[#084c17] via-[#2e7d32] to-transparent rounded-full origin-center lg:origin-left mx-auto lg:mx-0"
                 />
               </div>
 
@@ -290,11 +278,9 @@ const Partners = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-black text-sm leading-relaxed max-w-lg font-medium"
+                className="text-slate-900 text-sm md:text-base leading-relaxed max-w-lg font-medium mx-auto lg:mx-0"
               >
-                From comfortable stays to seamless travel and perfect <br />
-                exhibition support – we make your IHWE Expo experience <br />
-                smooth, productive and stress-free.
+                From comfortable stays to seamless travel and perfect exhibition support – we make your IHWE Expo experience smooth, productive and stress-free.
               </motion.p>
 
 
@@ -302,23 +288,23 @@ const Partners = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex items-center gap-0 pt-10 max-w-[500px]"
+                className="grid grid-cols-2 lg:flex items-center gap-y-8 gap-x-0 lg:gap-0 pt-8 lg:pt-10 max-w-[500px] mx-auto lg:mx-0"
               >
                 {[
-                  { label: <><span>Dedicated</span><br /><span>Support Team</span></>, img: part1, sub: "24x7 Assistance" },
-                  { label: <><span>Trusted</span><br /><span>Network</span></>, img: part2, sub: "Verified Partners" },
-                  { label: <><span>Best Rates</span><br /><span>Guaranteed</span></>, img: part3, sub: "Exclusive Deals" },
-                  { label: <><span>End-to-End</span><br /><span>Solutions</span></>, img: part4, sub: "Hassle-free Experience" },
+                  { label: <><span>Dedicated</span><br className="hidden md:block" /><span>Support Team</span></>, img: part1, sub: "24x7 Assistance" },
+                  { label: <><span>Trusted</span><br className="hidden md:block" /><span>Network</span></>, img: part2, sub: "Verified Partners" },
+                  { label: <><span>Best Rates</span><br className="hidden md:block" /><span>Guaranteed</span></>, img: part3, sub: "Exclusive Deals" },
+                  { label: <><span>End-to-End</span><br className="hidden md:block" /><span>Solutions</span></>, img: part4, sub: "Hassle-free Experience" },
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className={`flex-1 flex flex-col items-center text-center px-2 ${i !== 3 ? "border-r border-slate-300" : ""}`}
+                    className={`flex flex-col items-center text-center px-2 ${i % 2 === 0 && i < 2 ? "border-r border-slate-200 lg:border-r" : ""} ${i === 1 ? "lg:border-r border-slate-200" : ""} ${i === 2 ? "lg:border-r border-slate-200" : ""} ${i % 2 !== 0 ? "lg:border-r last:border-r-0 border-slate-200" : ""}`}
                   >
-                    <img src={item.img} alt="Feature" className="w-16 h-16 object-cover mb-1 transition-transform hover:scale-110" />
-                    <p className="text-[12px] font-black text-[#0a133c] leading-[0.8] uppercase mb-1 min-h-[24px] flex flex-col justify-center">
+                    <img src={item.img} alt="Feature" className="w-12 h-12 md:w-16 md:h-16 object-cover mb-2 transition-transform hover:scale-110" />
+                    <p className="text-[10px] md:text-[12px] font-black text-[#0a133c] leading-[0.5] uppercase flex flex-col justify-center min-h-[16px]">
                       {item.label}
                     </p>
-                    <p className="text-[8px] text-black font-bold uppercase tracking-tight">{item.sub}</p>
+                    <p className="text-[8px] text-slate-900 font-bold uppercase tracking-tighter mt-2.5">{item.sub}</p>
                   </div>
                 ))}
               </motion.div>
@@ -326,12 +312,12 @@ const Partners = () => {
 
             {/* RIGHT — Image */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="w-full lg:w-1/2 relative flex justify-end"
+              className="w-full lg:w-1/2 relative flex justify-center lg:justify-end -mx-4 lg:mx-0"
             >
-              <div className="relative w-full max-w-2xl">
+              <div className="relative w-screen lg:w-full lg:max-w-2xl">
                 <img
                   src={partImage}
                   alt="IHWE Support Services"
@@ -391,7 +377,6 @@ const Partners = () => {
                     </p>
                   </div>
 
-
                   {/* Learn More */}
                   <button
                     onClick={() => openServicePopup(card.id)}
@@ -400,16 +385,6 @@ const Partners = () => {
                   >
                     Learn More <ArrowRight className="w-3 h-3" />
                   </button>
-
-                  <Link to={card.path || "#"}>
-                    <button
-                      className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
-                      style={{ color: "#24660a" }}
-                    >
-                      Learn More <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </Link>
-                  invoicechanges
                 </div>
 
 
@@ -497,13 +472,17 @@ const Partners = () => {
                       <GoldSparkle style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
                       <GoldSparkle style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
 
-                      <button className="vendor-green-btn flex items-center justify-center gap-3 text-white w-full py-4 rounded-xl font-black text-[13px] uppercase tracking-wider shadow-lg transition-all group">
+                      <Link 
+                        to="/partner-registration" 
+                        target="_blank"
+                        className="vendor-green-btn flex items-center justify-center gap-3 text-white w-full py-4 rounded-xl font-black text-[13px] uppercase tracking-wider shadow-lg transition-all group"
+                      >
                         <Users className="w-5 h-5" />
                         REGISTER AS A VENDOR PARTNER
                         <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[#084c17] group-hover:bg-[#2e7d32] group-hover:text-white transition-colors">
                           <ChevronRight className="w-4 h-4" />
                         </div>
-                      </button>
+                      </Link>
                     </div>
                     <button className="text-[#084c17] font-bold text-[11px] uppercase tracking-widest hover:underline transition-all">
                       VENDOR REGISTRATION GUIDELINES →
@@ -585,24 +564,24 @@ const Partners = () => {
       {/* ══════════════════════════════════════
           BOTTOM CTA BANNER
       ══════════════════════════════════════ */}
-      <section className="container mx-auto px-4 lg:px-8 mb-4">
-        <div className="bg-[#001c27] rounded-3xl md:rounded-full pt-6 pb-4 md:pt-8 md:pb-6 md:px-14 relative overflow-hidden shadow-2xl border-b-4 border-[#2e7d32]/30">
+      <section className="container mx-auto px-4 lg:px-8 mb-6">
+        <div className="bg-[#001c27] rounded-[2rem] md:rounded-full pt-8 pb-6 md:pt-8 md:pb-6 md:px-14 relative overflow-hidden shadow-2xl border-b-4 border-[#2e7d32]/30">
           <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-8 relative z-10">
 
             {/* Left: Text */}
-            <div className="text-left w-full lg:w-auto">
-              <h2 className="text-[20px] md:text-[26px] font-black text-white leading-[1.1]">
+            <div className="text-center lg:text-left w-full lg:w-auto px-2 lg:px-0">
+              <h2 className="text-[16px] md:text-[26px] font-black text-white leading-[1.2] md:leading-[1.1]">
                 YOU FOCUS ON <span className="text-[#74b123]">GROWTH.</span>
-                <br /><span className="whitespace-nowrap">WE TAKE CARE OF THE REST.</span>
+                <br className="hidden md:block" /><span className="whitespace-nowrap">WE TAKE CARE OF THE REST.</span>
               </h2>
-              <p className="text-white text-[14px] font-bold max-w-[340px] mt-2 leading-relaxed">
+              <p className="text-white/80 text-[11px] md:text-[14px] font-bold max-w-[340px] mt-2.5 mx-auto lg:mx-0 leading-relaxed">
                 Let our support services make your IHWE Expo 2026 experience seamless and successful.
               </p>
             </div>
 
             {/* Middle: Icons with Dividers */}
-            <div className="flex items-center justify-center w-full lg:w-auto overflow-x-auto no-scrollbar py-2">
+            <div className="flex items-center justify-center w-full lg:w-auto overflow-x-auto no-scrollbar py-4 px-2">
               {[
                 { label: "STAY", icon: stay1 },
                 { label: "TRAVEL", icon: stay2 },
@@ -611,20 +590,20 @@ const Partners = () => {
                 { icon: stay5, label: "GROW" },
               ].map((item, i) => (
                 <React.Fragment key={i}>
-                  <div className="flex flex-col items-center gap-3 px-8 text-white/90 min-w-[100px]">
+                  <div className="flex flex-col items-center gap-1.5 px-4 md:px-8 text-white/90 min-w-[70px] md:min-w-[100px] shrink-0">
                     <div className="text-white/80">
-                      <img src={item.icon} alt={item.label} className=" object-contain" />
+                      <img src={item.icon} alt={item.label} className="w-8 md:w-12 h-auto object-contain" />
                     </div>
-                    <span className="text-[12px] font-black uppercase tracking-tight">{item.label}</span>
+                    <span className="text-[9px] md:text-[12px] font-black uppercase tracking-tight">{item.label}</span>
                   </div>
-                  {i < 4 && <div className="h-16 w-[1.5px] bg-[#74b123] shrink-0" />}
+                  {i < 4 && <div className="h-10 md:h-16 w-[1.5px] bg-[#74b123] shrink-0 opacity-50" />}
                 </React.Fragment>
               ))}
             </div>
 
             {/* Right: CTA & Contact */}
-            <div className="flex flex-col items-start gap-3 shrink-0 w-full lg:w-auto pl-4">
-              <div className="relative group/btn w-full lg:w-auto">
+            <div className="flex flex-col items-center lg:items-start gap-4 shrink-0 w-full lg:w-auto">
+              <div className="relative group/btn w-full max-w-[280px] lg:w-auto">
                 {/* Gold Sparkles */}
                 <GoldSparkle style={{ top: '-10px', left: '10%', animationDelay: '0s' }} />
                 <GoldSparkle style={{ top: '-12px', left: '40%', animationDelay: '0.4s' }} />
@@ -633,18 +612,18 @@ const Partners = () => {
                 <GoldSparkle style={{ bottom: '-12px', right: '30%', animationDelay: '0.6s' }} />
 
                 <Link to="/contact" className="w-full lg:w-auto">
-                  <button className="green-btn-support flex items-center gap-3 text-white px-8 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all group w-full lg:w-auto justify-center relative z-10 hover:scale-[1.02]">
+                  <button className="green-btn-support flex items-center gap-3 text-white px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all group w-full lg:w-auto justify-center relative z-10 hover:scale-[1.02]">
                     Get Support Now
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </Link>
               </div>
-              <div className="flex flex-col items-start gap-1.5 pl-1">
+              <div className="flex flex-col items-center lg:items-start gap-2">
                 <a href="mailto:support@ihwe.in" className="flex items-center gap-2 text-white/80 text-[11px] font-bold hover:text-[#74b123] transition-colors">
-                  <Mail className="w-3.5 h-3.5" /> support@ihwe.in
+                  <Mail className="w-3.5 h-3.5" /> info@ihwe.in
                 </a>
                 <a href="tel:+911149588555" className="flex items-center gap-2 text-white/80 text-[13px] font-black hover:text-[#74b123] transition-colors">
-                  <Phone className="w-3.5 h-3.5" /> +91 11 4958 8555
+                  <Phone className="w-3.5 h-3.5" /> +91 9654900525
                 </a>
               </div>
             </div>

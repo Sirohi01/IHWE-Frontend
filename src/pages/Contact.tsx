@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
 import SectionContainer from "../components/layout/SectionContainer";
-import contactBg from "@/assets/contactbg.png";
+import contactBg from "@/assets/contactbg.webp";
 import conbg from "@/assets/conbg.png";
 import arrowImg from "@/assets/arrow.png";
 import leafImg from "@/assets/leaf.png";
