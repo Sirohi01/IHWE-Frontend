@@ -182,15 +182,15 @@ const BuyerLogin = () => {
             </div>
             <section className="py-4 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-6xl mx-auto mb-2">
+                    <div className="max-w-5xl mx-auto mb-2">
                         <Link to="/" className="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-700 hover:text-white hover:bg-[#23471d] rounded-full shadow-md border border-slate-200 transition-all duration-300 font-bold uppercase text-[11px] tracking-widest group w-fit">
                             <ChevronLeft size={16} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
                             <span>Back to Home</span>
                         </Link>
                     </div>
 
-                    <div className="max-w-6xl mx-auto">
-                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[700px] lg:min-h-[700px]">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
                             {/* left side  */}
                             <div className="hidden lg:flex items-center justify-center bg-slate-50 border-r border-slate-100 h-full w-full">
                                 <img src="/buyerLogin1.png" alt="Buyer Login" className="w-full h-full object-fit" />
@@ -207,7 +207,7 @@ const BuyerLogin = () => {
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -20 }}
-                                            className="space-y-8"
+                                            className="space-y-4"
                                         >
 
                                             <div className="text-center">
@@ -305,12 +305,12 @@ const BuyerLogin = () => {
                                             </form>
 
                                             <div className="space-y-2">
-                                                <div className="relative">
+                                                <div className="relative py-2">
                                                     <div className="absolute inset-0 flex items-center">
                                                         <div className="w-full border-t border-slate-200"></div>
                                                     </div>
                                                     <div className="relative flex justify-center text-sm">
-                                                        <span className="px-3 bg-white text-slate-700 font-bold">New to IHWE Expo?</span>
+                                                        <span className="px-3  text-slate-700 font-medium">New to IHWE Expo?</span>
                                                     </div>
                                                 </div>
 
