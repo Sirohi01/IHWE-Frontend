@@ -69,6 +69,14 @@ const Partners = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [initialService, setInitialService] = useState<string | null>(null);
 
+
+  const openServicePopup = (serviceId: string) => {
+    setInitialService(serviceId);
+    setIsPopupOpen(true);
+  };
+
+  // Removed auto-popup timer
+
   useEffect(() => {
 
     const timer = setTimeout(() => {
@@ -76,6 +84,7 @@ const Partners = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -382,6 +391,16 @@ const Partners = () => {
                     </p>
                   </div>
 
+
+                  {/* Learn More */}
+                  <button
+                    onClick={() => openServicePopup(card.id)}
+                    className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
+                    style={{ color: "#24660a" }}
+                  >
+                    Learn More <ArrowRight className="w-3 h-3" />
+                  </button>
+
                   <Link to={card.path || "#"}>
                     <button
                       className="mt-3 flex items-center gap-1 font-extrabold text-[12px] uppercase tracking-widest transition-all hover:gap-2"
@@ -390,6 +409,7 @@ const Partners = () => {
                       Learn More <ArrowRight className="w-3 h-3" />
                     </button>
                   </Link>
+                  invoicechanges
                 </div>
 
 
