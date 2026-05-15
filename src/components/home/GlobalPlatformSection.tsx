@@ -3,7 +3,7 @@ import SectionContainer from "../layout/SectionContainer";
 import { CheckCircle2, Map } from "lucide-react";
 import { useState, useEffect } from "react";
 import { nationalExpoApi, SERVER_URL } from "../../lib/api";
-import defaultWorldMap from "@/assets/wordmap.png";
+import defaultWorldMap from "@/assets/wordmap.webp";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Globe: (
