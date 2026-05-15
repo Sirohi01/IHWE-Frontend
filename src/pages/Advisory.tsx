@@ -206,7 +206,7 @@ const AdvisoryForm = () => {
             Object.entries(formData).forEach(([key, value]) => {
                 data.append(key, value);
             });
-            
+
             // Add verification status
             data.append('otpVerifiedEmail', nomineeEmailOtpVerified.toString());
             data.append('otpVerifiedMobile', nomineeMobileOtpVerified.toString());
@@ -234,7 +234,7 @@ const AdvisoryForm = () => {
     const requiredStar = <span className="text-red-600">*</span>;
 
     return (
-        <div className="w-full max-w-[1380px] mx-auto font-sans overflow-x-hidden">
+        <div className="w-full mx-auto font-sans overflow-x-hidden">
             {/* ── BANNER ── */}
             <div
                 className="w-full h-[250px] md:h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center md:rounded-xl overflow-hidden"
@@ -260,7 +260,7 @@ const AdvisoryForm = () => {
             </div>
 
             {/* ── BODY ── */}
-            <div className="w-full bg-white box-border px-4 md:px-9 py-4 pb-6">
+            <div className="max-w-[1380px] w-full mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     {/* LEFT SIDEBAR */}
                     <div className="w-full lg:w-[420px] shrink-0 lg:pr-8 lg:border-r border-gray-100">
@@ -691,17 +691,17 @@ const AdvisoryForm = () => {
                                                     </select>
                                                 </div>
                                                 <div className="relative flex-1 h-full">
-                                                    <input 
-                                                        name="nominatorPhone" 
-                                                        placeholder="Enter phone number" 
-                                                        value={formData.nominatorPhone} 
-                                                        onChange={handleChange} 
-                                                        disabled={mobileOtpVerified} 
-                                                        className="w-full h-full border-none outline-none px-3 text-sm text-gray-700 bg-transparent font-sans" 
+                                                    <input
+                                                        name="nominatorPhone"
+                                                        placeholder="Enter phone number"
+                                                        value={formData.nominatorPhone}
+                                                        onChange={handleChange}
+                                                        disabled={mobileOtpVerified}
+                                                        className="w-full h-full border-none outline-none px-3 text-sm text-gray-700 bg-transparent font-sans"
                                                     />
                                                     {!mobileOtpVerified && (
-                                                        <button 
-                                                            onClick={() => requestOtp('mobile', 'nominator')} 
+                                                        <button
+                                                            onClick={() => requestOtp('mobile', 'nominator')}
                                                             disabled={isVerifying.nominatorMobile || mobileResendTimer > 0}
                                                             className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 bg-[#1a5c2a] text-white text-[10px] rounded hover:bg-[#144a21] disabled:opacity-50"
                                                         >
