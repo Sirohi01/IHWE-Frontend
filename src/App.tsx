@@ -47,7 +47,7 @@ const TravelPartner = lazy(() => import("./pages/TravelPartner"));
 const HotelStayPartner = lazy(() => import("./pages/HotelStayPartner"));
 const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Sponsership = lazy(()=> import("./pages/Sponsership"));
+const Sponsership = lazy(() => import("./pages/Sponsership"));
 const EPromotion = lazy(() => import("./pages/EPromotion"));
 const Partnership = lazy(() => import("./pages/Partnership"));
 const Fabricationpartner = lazy(() => import("./pages/Fabricationpartner"));
@@ -116,6 +116,7 @@ const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPag
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
 const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
+const DelegatesLogin = lazy(() => import("./pages/DelegatesLogin"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -232,6 +233,7 @@ const App = () => {
 
                   <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
                   <Route path="/buyer-login" element={<BuyerLogin />} />
+                  <Route path="/delegates-login" element={<DelegatesLogin />} />
                   <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />}>
                     <Route index element={<ExhibitorDashboardHome />} />
                     <Route path="profile" element={<ExhibitorProfilePage />} />
