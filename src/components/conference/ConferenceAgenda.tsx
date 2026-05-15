@@ -123,14 +123,14 @@ const ConferenceAgenda: React.FC = () => {
 
   return (
     <section className="bg-white overflow-hidden -mt-2">
-      <div className="mx-auto max-w-[1340px] pl-8 lg:pl-3 py-1">
+      <div className="mx-auto max-w-[1340px] px-6 lg:px-0 lg:pl-3 py-1">
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-col items-center justify-center w-full">
-            <h2 className="text-[30px] font-[900] text-[#0B2C66] uppercase tracking-tight">
+            <h2 className="text-[24px] md:text-[30px] font-[900] text-[#0B2C66] uppercase tracking-tight text-center">
               CONFERENCE <span className="text-[#1E88E5]">AGENDA</span>
             </h2>
-            <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full justify-center" />
+            <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full mx-auto" />
           </div>
         </div>
 
@@ -148,7 +148,7 @@ const ConferenceAgenda: React.FC = () => {
 
           <div className="flex-1 flex flex-col h-[520px] ">
 
-            <div className="bg-[#F8FAFC] p-0 rounded-[20px] border border-[#E2E8F0] mb-4 flex gap-3">
+            <div className="bg-[#F8FAFC] p-0 rounded-[20px] border border-[#E2E8F0] mb-4 flex overflow-x-auto lg:overflow-visible no-scrollbar pb-2 lg:pb-0 gap-3">
               {displayData.map((item, index) => {
                 const isActive = activeDay === index;
                 const colors = getDayColors(index);
@@ -157,7 +157,7 @@ const ConferenceAgenda: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => setActiveDay(index)}
-                    className={`flex-1 flex items-center gap-3 px-6 py-4 rounded-[16px] transition-all duration-300 ${isActive ? colors.active : colors.inactive
+                    className={`min-w-[180px] lg:flex-1 flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 rounded-[16px] transition-all duration-300 ${isActive ? colors.active : colors.inactive
                       }`}
                   >
                     <div className={`p-2 rounded-lg ${colors.iconBg}`}>
@@ -200,11 +200,11 @@ const ConferenceAgenda: React.FC = () => {
                     className="divide-y divide-[#E8E8E0]"
                   >
                     {displayData[activeDay]?.sessions?.map((session, idx) => (
-                      <div
-                        key={idx}
-                        className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 px-6 py-4 hover:bg-[#EBEBE5] transition-colors"
-                        style={{ backgroundColor: 'transparent' }}
-                      >
+                        <div
+                          key={idx}
+                          className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 px-4 md:px-6 py-4 hover:bg-[#EBEBE5] transition-colors"
+                          style={{ backgroundColor: 'transparent' }}
+                        >
 
                         <div className="w-[140px] shrink-0">
                           <div className="flex items-center gap-2">

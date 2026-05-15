@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.jpeg";
+import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.webp";
 import { otpApi, advisoryNominationApi } from "../lib/api";
 import { toast } from "sonner";
 
@@ -29,7 +29,7 @@ const AdvisoryForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
-    // OTP States
+
     const [emailOtpSent, setEmailOtpSent] = useState(false);
     const [emailOtpVerified, setEmailOtpVerified] = useState(false);
     const [emailOtpValue, setEmailOtpValue] = useState("");
@@ -206,7 +206,7 @@ const AdvisoryForm = () => {
             Object.entries(formData).forEach(([key, value]) => {
                 data.append(key, value);
             });
-            
+
             // Add verification status
             data.append('otpVerifiedEmail', nomineeEmailOtpVerified.toString());
             data.append('otpVerifiedMobile', nomineeMobileOtpVerified.toString());
@@ -234,24 +234,24 @@ const AdvisoryForm = () => {
     const requiredStar = <span className="text-red-600">*</span>;
 
     return (
-        <div className="w-full max-w-[1380px] mx-auto font-sans overflow-x-hidden">
-            {/* ── BANNER ── */}
+        <div className="w-full mx-auto font-sans overflow-x-hidden">
+
             <div
                 className="w-full h-[250px] md:h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center md:rounded-xl overflow-hidden"
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
-                <div className="absolute top-4 md:top-[28px] left-4 md:left-9 flex flex-col gap-2 md:gap-3">
+                <div className="absolute top-4 md:top-[28px] left-4 md:left-[50px] flex flex-col gap-2 md:gap-3">
                     <img
                         src="/logo.png"
                         alt="IHWE Logo"
                         className="w-[200px] md:w-[380px] h-auto object-contain drop-shadow-md"
                     />
-                    <div className="text-[#1a5c2a] text-sm md:text-lg font-bold tracking-wide pl-1 md:pl-2">
+                    <div className="text-[#1a5c2a] text-sm md:text-lg font-bold tracking-wide pl-1 md:pl-4">
                         Global Platform. &nbsp; Limitless Possibilities.
                     </div>
                 </div>
 
-                {/* City skyline */}
+
                 <div className="absolute bottom-0 inset-x-0 h-[120px] opacity-10">
                     <svg viewBox="0 0 1400 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-full">
                         <path d="M0,120 L0,80 L40,80 L40,60 L60,60 L60,40 L80,40 L80,60 L100,60 L100,50 L110,50 L110,30 L120,30 L120,20 L130,20 L130,30 L140,30 L140,50 L150,50 L150,40 L170,40 L170,60 L190,60 L190,70 L220,70 L220,50 L240,50 L240,30 L250,30 L250,50 L260,50 L260,70 L300,70 L300,55 L310,55 L310,35 L320,35 L320,55 L340,55 L340,65 L380,65 L380,45 L390,45 L390,25 L400,25 L400,45 L420,45 L420,60 L460,60 L460,40 L475,40 L475,20 L485,20 L485,40 L500,40 L500,55 L540,55 L540,70 L580,70 L580,50 L600,50 L600,35 L610,35 L610,50 L630,50 L630,65 L670,65 L670,50 L690,50 L690,30 L700,30 L700,50 L720,50 L720,60 L760,60 L760,45 L780,45 L780,65 L820,65 L820,50 L840,50 L840,30 L850,30 L850,50 L870,50 L870,60 L910,60 L910,45 L920,45 L920,25 L930,25 L930,45 L950,45 L950,55 L990,55 L990,70 L1030,70 L1030,55 L1050,55 L1050,35 L1060,35 L1060,55 L1080,55 L1080,65 L1120,65 L1120,50 L1140,50 L1140,30 L1150,30 L1150,50 L1170,50 L1170,60 L1210,60 L1210,45 L1230,45 L1230,65 L1270,65 L1270,75 L1350,75 L1350,120 Z" fill="#1a5c2a" />
@@ -260,7 +260,7 @@ const AdvisoryForm = () => {
             </div>
 
             {/* ── BODY ── */}
-            <div className="w-full bg-white box-border px-4 md:px-9 py-4 pb-6">
+            <div className="max-w-[1390px] md:ml-[30px] w-full mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     {/* LEFT SIDEBAR */}
                     <div className="w-full lg:w-[420px] shrink-0 lg:pr-8 lg:border-r border-gray-100">
@@ -691,17 +691,17 @@ const AdvisoryForm = () => {
                                                     </select>
                                                 </div>
                                                 <div className="relative flex-1 h-full">
-                                                    <input 
-                                                        name="nominatorPhone" 
-                                                        placeholder="Enter phone number" 
-                                                        value={formData.nominatorPhone} 
-                                                        onChange={handleChange} 
-                                                        disabled={mobileOtpVerified} 
-                                                        className="w-full h-full border-none outline-none px-3 text-sm text-gray-700 bg-transparent font-sans" 
+                                                    <input
+                                                        name="nominatorPhone"
+                                                        placeholder="Enter phone number"
+                                                        value={formData.nominatorPhone}
+                                                        onChange={handleChange}
+                                                        disabled={mobileOtpVerified}
+                                                        className="w-full h-full border-none outline-none px-3 text-sm text-gray-700 bg-transparent font-sans"
                                                     />
                                                     {!mobileOtpVerified && (
-                                                        <button 
-                                                            onClick={() => requestOtp('mobile', 'nominator')} 
+                                                        <button
+                                                            onClick={() => requestOtp('mobile', 'nominator')}
                                                             disabled={isVerifying.nominatorMobile || mobileResendTimer > 0}
                                                             className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 bg-[#1a5c2a] text-white text-[10px] rounded hover:bg-[#144a21] disabled:opacity-50"
                                                         >
