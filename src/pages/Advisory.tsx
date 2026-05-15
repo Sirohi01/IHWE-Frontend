@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.jpeg";
+import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.webp";
 import { otpApi, advisoryNominationApi } from "../lib/api";
 import { toast } from "sonner";
 
@@ -29,7 +29,7 @@ const AdvisoryForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
-    // OTP States
+
     const [emailOtpSent, setEmailOtpSent] = useState(false);
     const [emailOtpVerified, setEmailOtpVerified] = useState(false);
     const [emailOtpValue, setEmailOtpValue] = useState("");
@@ -235,18 +235,18 @@ const AdvisoryForm = () => {
 
     return (
         <div className="w-full mx-auto font-sans overflow-x-hidden">
-            {/* ── BANNER ── */}
+
             <div
                 className="w-full h-[250px] md:h-[400px] relative flex items-start flex-shrink-0 bg-cover bg-center md:rounded-xl overflow-hidden"
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
-                <div className="absolute top-4 md:top-[28px] left-4 md:left-9 flex flex-col gap-2 md:gap-3">
+                <div className="absolute top-4 md:top-[28px] left-4 md:left-[50px] flex flex-col gap-2 md:gap-3">
                     <img
                         src="/logo.png"
                         alt="IHWE Logo"
                         className="w-[200px] md:w-[380px] h-auto object-contain drop-shadow-md"
                     />
-                    <div className="text-[#1a5c2a] text-sm md:text-lg font-bold tracking-wide pl-1 md:pl-2">
+                    <div className="text-[#1a5c2a] text-sm md:text-lg font-bold tracking-wide pl-1 md:pl-4">
                         Global Platform. &nbsp; Limitless Possibilities.
                     </div>
                 </div>
@@ -260,7 +260,7 @@ const AdvisoryForm = () => {
             </div>
 
             {/* ── BODY ── */}
-            <div className="max-w-[1380px] w-full mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
+            <div className="max-w-[1390px] md:ml-[30px] w-full mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     {/* LEFT SIDEBAR */}
                     <div className="w-full lg:w-[420px] shrink-0 lg:pr-8 lg:border-r border-gray-100">
