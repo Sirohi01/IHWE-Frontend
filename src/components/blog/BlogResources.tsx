@@ -18,7 +18,7 @@ const BlogResources: React.FC<BlogResourcesProps> = ({ resources }) => {
     <div className="bg-white rounded-[24px] p-5 border border-slate-100 shadow-sm flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-[#001529] font-medium text-sm tracking-tight uppercase">Reports & Resources</h3>
-        <Link to="/resources" className="text-slate-400 text-[10px] font-medium hover:text-[#00df82] transition-colors flex items-center gap-1">
+        <Link to="/resources" className="text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors flex items-center gap-1">
           View all <ArrowRight size={12} />
         </Link>
       </div>

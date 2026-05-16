@@ -31,7 +31,7 @@ const BlogCategories: React.FC<BlogCategoriesProps> = ({ activeCategory, onCateg
   return (
     <div className="bg-white rounded-[24px] border border-slate-100 p-5 shadow-sm h-full flex flex-col">
       <h3 className="text-[#001529] font-medium text-sm mb-4 tracking-tight">Explore Categories</h3>
-      
+
       <div className="flex flex-col gap-0 flex-1">
         {categories.map((cat) => {
           const Icon = cat.icon;
@@ -41,25 +41,22 @@ const BlogCategories: React.FC<BlogCategoriesProps> = ({ activeCategory, onCateg
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`flex items-center justify-between group transition-all p-1.5 -mx-1.5 rounded-xl hover:bg-slate-50 ${
-                isActive ? 'text-[#00df82]' : 'text-slate-600'
-              }`}
+              className={`flex items-center justify-between group transition-all p-1.5 -mx-1.5 rounded-xl hover:bg-slate-50 ${isActive ? 'text-[#00df82]' : 'text-slate-600'
+                }`}
             >
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 shadow-sm ${
-                  isActive 
-                  ? 'bg-[#00df82] border-[#00df82] text-white' 
-                  : `border-slate-100 ${cat.color}`
-                }`}>
+                <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all group-hover:scale-110 shadow-sm ${isActive
+                    ? 'bg-[#00df82] border-[#00df82] text-white'
+                    : `border-slate-100 ${cat.color}`
+                  }`}>
                   <Icon size={14} strokeWidth={2.5} />
                 </div>
                 <span className="text-[11px] font-medium tracking-tight text-[#001529] group-hover:text-[#00df82] transition-colors">
                   {cat.label}
                 </span>
               </div>
-              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${
-                isActive ? 'bg-[#00df82] text-white' : 'bg-slate-50 text-slate-400'
-              }`}>
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md ${isActive ? 'bg-[#00df82] text-white' : 'bg-slate-50 text-slate-400'
+                }`}>
                 {cat.count}
               </span>
             </button>
@@ -67,7 +64,7 @@ const BlogCategories: React.FC<BlogCategoriesProps> = ({ activeCategory, onCateg
         })}
       </div>
 
-      <button className="mt-4 flex items-center justify-end gap-2 text-slate-400 text-[10px] font-medium hover:text-[#00df82] transition-colors">
+      <button className="mt-4 flex items-center justify-end gap-2 text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors">
         View all categories <ArrowRight size={12} />
       </button>
     </div>
