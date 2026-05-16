@@ -526,7 +526,8 @@ const WhyExhibit = () => {
       <section className="relative min-h-[360px] flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden">
         {/* BG Image */}
         <div className="absolute inset-0 z-0 w-full overflow-hidden pointer-events-none">
-          <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-[center_37%] max-w-full" />
+          <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-center md:object-[center_37%] max-w-full" />
+          <div className="absolute inset-0 bg-white/75 lg:bg-transparent" />
         </div>
 
         <SectionContainer className="relative z-10 py-1 md:py-2">
@@ -534,30 +535,30 @@ const WhyExhibit = () => {
             
             {/* Left Content */}
             <div className="w-full lg:w-3/5 -mt-2 md:-mt-4" data-aos="fade-right">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center justify-center lg:justify-start gap-3 mb-2">
                 <span className="w-8 h-[2px] bg-[#d26019]" />
                 <p 
-                  className="text-[#d26019] text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em]"
+                  className="text-[#d26019] text-[13px] md:text-[15px] font-bold uppercase tracking-[0.2em] text-center lg:text-left"
                   style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.3)' }}
                 >
                   Why Exhibit at IHWE 2026
                 </p>
               </div>
               <h1 
-                className="text-2xl md:text-4xl font-black leading-[1.1] mb-3"
+                className="text-2xl md:text-4xl font-black leading-[1.1] mb-3 text-center lg:text-left"
                 style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.4)' }}
               >
                 <span className="text-[#0e174f] text-xl md:text-3xl">SHOWCASE. CONNECT.</span> <br />
                 <span className="text-[#085006] text-[26px] md:text-[43px]">GROW GLOBALLY.</span>
               </h1>
               <p 
-                className="text-base md:text-lg font-bold text-[#0e174f] mb-0.5"
+                className="text-base md:text-lg font-bold text-[#0e174f] mb-0.5 text-center lg:text-left"
                 style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.2)' }}
               >
                 Exhibit at IHWE 2026
               </p>
               <p 
-                className="text-[#131730] text-[13px] md:text-[15px] max-w-xl mb-5 font-semibold leading-relaxed"
+                className="text-[#131730] text-[13px] md:text-[15px] max-w-xl mb-5 font-semibold leading-relaxed text-center lg:text-left mx-auto lg:mx-0"
                 style={{ textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
               >
                 India's Leading International Platform for <br />
@@ -565,7 +566,7 @@ const WhyExhibit = () => {
               </p>
 
               {/* Feature Highlights with Images & Dividers */}
-              <div className="flex flex-wrap items-center gap-1.5 md:gap-2.5 mb-8">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 md:gap-2.5 mb-8">
                 {[
                   { main: "Global", sub: "Exposure", img: exhib1 },
                   { main: "Quality", sub: "Connections", img: exhib2 },
@@ -573,23 +574,23 @@ const WhyExhibit = () => {
                   { main: "Brand", sub: "Visibility", img: exhib4 }
                 ].map((item, i, arr) => (
                   <React.Fragment key={i}>
-                    <div className="flex items-center gap-1">
-                      <img src={item.img} alt={item.main} className="w-5 md:w-7 h-auto shrink-0" />
+                    <div className="flex items-center gap-1.5">
+                      <img src={item.img} alt={item.main} className="w-7 md:w-8 h-auto shrink-0" />
                       <div className="flex flex-col text-left">
-                        <span className="text-[10px] font-black text-[#020633] uppercase leading-none">{item.main}</span>
-                        <span className="text-[10px] font-bold text-[#d26019] uppercase tracking-tighter mt-0.5">{item.sub}</span>
+                        <span className="text-[10px] md:text-[11px] font-black text-[#020633] uppercase leading-none">{item.main}</span>
+                        <span className="text-[10px] md:text-[11px] font-bold text-[#d26019] uppercase tracking-tighter mt-0.5">{item.sub}</span>
                       </div>
                     </div>
                     {i < arr.length - 1 && (
-                      <div className="h-6 w-[1px] bg-slate-300/40 hidden sm:block mx-0.5" />
+                      <div className="h-6 w-[1px] bg-slate-300/40 hidden sm:block mx-1" />
                     )}
                   </React.Fragment>
                 ))}
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <div className="relative">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                <div className="relative w-full sm:w-auto">
                   <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-12px', left: '10%', animationDelay: '0s' }} />
                   <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-15px', left: '50%', animationDelay: '0.4s' }} />
                   <Sparkle color="#ffdd00" shadow="#ffa500" style={{ top: '-10px', right: '10%', animationDelay: '0.8s' }} />
@@ -597,12 +598,12 @@ const WhyExhibit = () => {
                     to="/book-a-stand" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="golden-btn-hero text-[#050A1A] px-6 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all active:scale-95 shadow-2xl relative z-10"
+                    className="golden-btn-hero text-[#050A1A] px-6 py-3 rounded-lg font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 shadow-2xl relative z-10 w-full sm:w-auto"
                   >
                     Book Your Stall <ArrowRight size={14} />
                   </Link>
                 </div>
-                <div className="relative">
+                <div className="relative w-full sm:w-auto">
                   <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-12px', left: '10%', animationDelay: '0.2s' }} />
                   <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-15px', left: '50%', animationDelay: '0.6s' }} />
                   <Sparkle color="#3b82f6" shadow="#28396C" style={{ top: '-10px', right: '10%', animationDelay: '1s' }} />
@@ -610,7 +611,7 @@ const WhyExhibit = () => {
                     href="/pdf.pdf" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="blue-btn-hero text-white px-6 py-2.5 rounded-lg font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all active:scale-95 shadow-lg relative z-10"
+                    className="blue-btn-hero text-white px-6 py-3 rounded-lg font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg relative z-10 w-full sm:w-auto"
                   >
                     Download Brochure <Download size={14} />
                   </a>
@@ -619,7 +620,7 @@ const WhyExhibit = () => {
             </div>
 
             {/* Right Card */}
-            <div className="w-full lg:w-[190px] ml-auto" data-aos="fade-left">
+            <div className="w-full lg:w-[190px] mx-auto lg:ml-auto lg:mr-0" data-aos="fade-left">
               <div className="bg-white px-4 py-6 rounded-xl shadow-2xl border border-slate-100 flex flex-col gap-5">
                 
                 {/* Date */}
@@ -672,7 +673,7 @@ const WhyExhibit = () => {
               boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
             }}
           >
-            <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-0">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-nowrap items-center justify-center md:justify-between gap-y-6 gap-x-2 md:gap-0">
               {stats.map((stat, i) => (
                 <React.Fragment key={i}>
                   <div className="flex flex-col items-center text-center group flex-1">
@@ -704,31 +705,31 @@ const WhyExhibit = () => {
             {/* <h2 className="text-3xl md:text-4xl font-black text-[#00153c]">Why Your Brand Needs to be Here</h2> */}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
             {reasons.map((reason, i) => (
               <div 
                 key={i}
-                className="bg-white p-4 md:p-5 rounded-2xl border border-transparent flex flex-col items-center text-center group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                className="bg-white p-3 md:p-5 rounded-2xl border border-transparent flex flex-col items-center text-center group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset' }}
                 data-aos="fade-up"
                 data-aos-delay={i * 100}
               >
-                <div className="mb-4 h-12 md:h-16 flex items-center justify-center transition-transform group-hover:scale-110">
-                  <img src={reason.img} alt="" className="w-12 md:w-16 h-full object-contain" />
+                <div className="mb-2 h-10 md:h-16 flex items-center justify-center transition-transform group-hover:scale-110">
+                  <img src={reason.img} alt="" className="w-10 md:w-16 h-full object-contain" />
                 </div>
                 
-                <h3 className="text-[11px] md:text-[12px] font-black text-[#0c0c3e] mb-3 tracking-tight leading-tight uppercase min-h-[40px] flex flex-col items-center justify-center">
+                <h3 className="text-[10px] md:text-[12px] font-black text-[#0c0c3e] mb-2 tracking-tight leading-tight uppercase min-h-[32px] md:min-h-[40px] flex flex-col items-center justify-center">
                   <span>{reason.title1}</span>
                   <span>{reason.title2}</span>
                 </h3>
                 
-                <div className="text-slate-900 text-[9px] md:text-[10px] leading-tight mb-4 font-bold flex-1 flex flex-col items-center justify-center">
+                <div className="text-slate-900 text-[8px] md:text-[10px] leading-tight mb-3 font-bold flex-1 flex flex-col items-center justify-center">
                   {reason.descLines.map((line, idx) => (
                     <p key={idx}>{line}</p>
                   ))}
                 </div>
                 
-                <ul className="space-y-1.5 w-full text-left border-t border-slate-100 pt-4 mt-auto">
+                <ul className="space-y-1 w-full text-left border-t border-slate-100 pt-3 mt-auto">
                   {reason.points.map((point, idx) => (
                     <li key={idx} className="flex items-start gap-1.5 text-[8px] md:text-[9px] font-bold text-slate-700">
                       <span className="w-1 h-1 rounded-full bg-slate-400 mt-1.5 shrink-0" />
@@ -746,7 +747,7 @@ const WhyExhibit = () => {
       <section className="py-0 mt-4">
         <SectionContainer>
           <div
-            className="w-full rounded-[30px] flex flex-row items-stretch overflow-hidden relative"
+            className="w-full rounded-[30px] flex flex-col md:flex-row items-stretch overflow-hidden relative"
             style={{
               boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
               background: '#fdf9ed',
@@ -754,8 +755,8 @@ const WhyExhibit = () => {
             }}
             data-aos="fade-up"
           >
-            {/* Left Image */}
-            <div className="w-[44%] md:w-[38%] flex-shrink-0 relative overflow-hidden" style={{ minHeight: '160px' }}>
+            {/* Image Section */}
+            <div className="w-full md:w-[38%] h-[160px] md:h-auto flex-shrink-0 relative overflow-hidden">
               <img
                 src={leftbg}
                 alt="PMS Scheme"
@@ -764,7 +765,7 @@ const WhyExhibit = () => {
             </div>
 
             {/* Right Text Content */}
-            <div className="flex-1 flex flex-col justify-center px-5 md:px-10 py-5 md:py-6 relative z-10">
+            <div className="flex-1 flex flex-col justify-center px-6 md:px-10 py-5 md:py-6 relative z-10">
               {/* Heading */}
               <div className="flex items-center gap-2 mb-1">
                 <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
@@ -780,31 +781,31 @@ const WhyExhibit = () => {
               </p>
 
               {/* Feature items */}
-              <div className="flex items-center gap-0">
+              <div className="flex flex-wrap md:flex-nowrap items-center gap-y-2 gap-x-5 md:gap-0 mt-1">
                 {[
                   { img: band1, line1: 'Stall Cost', line2: 'Support' },
                   { img: band2, line1: 'Travel', line2: 'Assistance' },
                   { img: band3, line1: 'Global', line2: 'Exposure' },
                 ].map((item, i, arr) => (
                   <div key={i} className="flex items-center">
-                    <div className="flex items-center gap-2 px-3">
-                      <img src={item.img} alt={item.line1} className="w-7 h-7 md:w-9 md:h-9 object-contain flex-shrink-0" />
-                      <div className="flex flex-col leading-none">
-                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line1}</span>
-                        <span className="text-[10px] md:text-[11px] font-black uppercase" style={{ color: '#070e48' }}>{item.line2}</span>
+                    <div className="flex items-center gap-3 pr-4 md:px-3">
+                      <img src={item.img} alt={item.line1} className="w-8 h-8 md:w-9 md:h-9 object-contain flex-shrink-0" />
+                      <div className="flex flex-col leading-tight">
+                        <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line1}</span>
+                        <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line2}</span>
                       </div>
                     </div>
                     {i < arr.length - 1 && (
-                      <div className="w-px h-8 bg-slate-300 flex-shrink-0" />
+                      <div className="hidden md:block w-px h-8 bg-slate-300 flex-shrink-0" />
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* CTA Button - Bottom Right, above leaf */}
-            <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end">
-              <div className="relative group/btn">
+            {/* CTA Button */}
+            <div className="px-6 pb-8 md:p-0 md:absolute md:bottom-4 md:right-4 z-10 flex flex-col items-start md:items-end">
+              <div className="relative group/btn w-full md:w-auto">
                 {/* Sparkles */}
                 <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
                 <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-12px', left: '40%', animationDelay: '0.5s' }} />
@@ -815,7 +816,7 @@ const WhyExhibit = () => {
                   to="/government-msme-pms-schemes"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02] w-full md:w-auto"
                   style={{ 
                     background: 'linear-gradient(135deg, #5E0006 0%, #3D0004 100%)',
                     boxShadow: '0 4px 14px rgba(94, 0, 6, 0.4)'
@@ -824,7 +825,7 @@ const WhyExhibit = () => {
                   Apply Under PMS Scheme <ArrowRight size={13} />
                 </Link>
               </div>
-              <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1 mr-0.5">*T&amp;C Apply</p>
+              <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1.5 ml-1 md:mr-0.5">*T&amp;C Apply</p>
             </div>
 
             {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
@@ -871,8 +872,8 @@ const WhyExhibit = () => {
                   )}
                 </div>
                 <div className="flex flex-col items-center justify-center min-h-[30px] w-full px-1">
-                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-nowrap">{item.line1}</span>
-                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-nowrap">{item.line2}</span>
+                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-normal">{item.line1}</span>
+                  <span className="text-[10px] font-bold text-[#00153c] uppercase leading-tight tracking-tighter whitespace-normal">{item.line2}</span>
                 </div>
               </div>
             ))}
@@ -886,7 +887,7 @@ const WhyExhibit = () => {
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 items-center">
             {/* Left Content */}
             <div className="lg:col-span-3" data-aos="fade-right">
-              <h2 className="text-xl md:text-2xl font-black text-[#08083c] mb-1 leading-[1.1]">
+              <h2 className="text-[18px] md:text-2xl font-black text-[#08083c] mb-2 leading-[1.2] text-center lg:text-left">
                 MEET GENUINE BUYERS & <br />
                 DECISION MAKERS
               </h2>
@@ -915,7 +916,7 @@ const WhyExhibit = () => {
                 to="/book-a-stand" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="golden-btn-footer text-[#050A1A] px-8 py-3 rounded-lg font-black text-[11px] uppercase tracking-wider flex items-center gap-2 w-fit hover:scale-[1.02] transition-all group"
+                className="golden-btn-footer text-[#050A1A] px-8 py-3 rounded-lg font-black text-[11px] uppercase tracking-wider flex items-center gap-2 w-fit hover:scale-[1.02] transition-all group mx-auto lg:mx-0"
               >
                 <div className="absolute inset-0 pointer-events-none">
                   <Sparkle style={{ top: '-4px', left: '10%', animationDelay: '0s' }} />
