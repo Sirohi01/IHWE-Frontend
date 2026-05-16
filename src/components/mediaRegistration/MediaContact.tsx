@@ -5,6 +5,8 @@ import contactimage from '../../assets/contact.webp';
 import { mediaRegistrationApi, otpApi } from '@/lib/api';
 import { toast } from "sonner";
 import { CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
+import SectionContainer from '../layout/SectionContainer';
+import { Link } from 'react-router-dom';
 
 
 const MediaContact = () => {
@@ -142,12 +144,13 @@ const MediaContact = () => {
 
   return (
     <div className="w-full py-4 px-4 flex justify-center font-sans" >
+      <SectionContainer>
       <motion.div 
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={containerVariants}
-        className="w-full max-w-[1400px] flex flex-wrap lg:p-8 p-4 rounded-xl"
+        className="w-full flex flex-wrap lg:p-8 p-4 rounded-xl"
         style={{ backgroundImage: `url(${contactimage})`, backgroundSize: "cover", backgroundPosition: "center" }}
       >
         {/* Left Section: Media Enquiries (referencing image_a04ae1.png) */}
@@ -166,14 +169,17 @@ const MediaContact = () => {
               <div className="p-2 border border-[#2ecc71]/30 rounded-md group-hover:bg-[#2ecc71]/10 transition-colors">
                 <Mail className="w-5 h-5 text-[#2ecc71]" />
               </div>
-              <span className="text-white font-medium">media@ihwe.in</span>
+              <span className="text-white font-medium">
+                <Link to="mailto:info@ihwe.in">
+                </Link>
+                info@ihwe.in</span>
             </div>
             
             <div className="flex items-center gap-4 group cursor-pointer">
               <div className="p-2 border border-[#2ecc71]/30 rounded-md group-hover:bg-[#2ecc71]/10 transition-colors">
                 <Phone className="w-5 h-5 text-[#2ecc71]" />
               </div>
-              <span className="text-white font-medium">+91 88600 12345</span>
+              <span className="text-white font-medium"><Link to="tel:+919654900525">+91 96549 00525</Link></span>
             </div>
           </motion.div>
 
@@ -332,6 +338,7 @@ const MediaContact = () => {
           </form>
         </div>
       </motion.div>
+      </SectionContainer>
     </div>
   );
 };

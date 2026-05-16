@@ -86,7 +86,7 @@ const WhyVisitHero = () => {
                                             </svg>
                                         </span>
                                     </button>
-                                    <button className="flex items-center gap-2 bg-white text-gray-700 text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded border border-gray-300 hover:bg-gray-50 transition whitespace-nowrap">
+                                    <button onClick={() => window.open('/pdf.pdf', '_blank')} className="flex items-center gap-2 bg-white text-gray-700 text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded border border-gray-300 hover:bg-gray-50 transition whitespace-nowrap">
                                         Download Brochure
                                         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
