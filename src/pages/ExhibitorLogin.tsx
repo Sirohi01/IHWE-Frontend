@@ -445,7 +445,7 @@ const ExhibitorLogin = () => {
                                             <div className="space-y-6">
                                                 <div className="text-center">
                                                     {/* Icon circle */}
-                                                    <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100 text-[#23471d]">
+                                                    <div className="w-20 mt-3 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100 text-[#23471d]">
                                                         <Key size={36} strokeWidth={1.5} />
                                                     </div>
 
