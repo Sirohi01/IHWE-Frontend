@@ -260,7 +260,7 @@ const AdvisoryForm = () => {
             </div>
 
             {/* ── BODY ── */}
-            <div className="max-w-[1390px] md:ml-[30px] w-full mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
+            <div className="max-w-[1380px] mx-auto bg-white box-border px-4 md:px-9 py-4 pb-6">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     {/* LEFT SIDEBAR */}
                     <div className="w-full lg:w-[420px] shrink-0 lg:pr-8 lg:border-r border-gray-100">
