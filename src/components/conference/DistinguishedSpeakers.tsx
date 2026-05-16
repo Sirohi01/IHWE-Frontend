@@ -162,12 +162,12 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
       className={`${compact ? "py-4" : "pt-0 pb-4"
         } bg-white overflow-hidden relative`}
     >
-      <div className="mx-auto max-w-[1330px] relative left-[10px] rounded-[30px] px-0 py-4">
+      <div className="mx-auto max-w-[1340px] relative lg:left-[10px] rounded-[30px] px-6 lg:px-0 py-4">
 
         {/* HEADER */}
         <div className="flex justify-center items-center mb-4 px-4">
-          <div className="flex flex-col items-center">
-            <h2 className="text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
+          <div className="flex flex-col items-center text-center">
+            <h2 className="text-[20px] md:text-[24px] font-[900] text-[#0B2C66] uppercase tracking-tight">
               {title} <span className="text-[#1E88E5]">{highlight}</span>
             </h2>
             <div className="h-1 w-20 bg-[#4E9F3D] mt-2 rounded-full" />
@@ -184,7 +184,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
           {/* LEFT BUTTON */}
           <button
             onClick={() => scroll("left")}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-[#E6ECF3] flex items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all"
+            className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-[#E6ECF3] items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all"
             aria-label="Previous"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -193,7 +193,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
           {/* RIGHT BUTTON */}
           <button
             onClick={() => scroll("right")}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-[#E6ECF3] flex items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all"
+            className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-lg border border-[#E6ECF3] items-center justify-center text-[#0B2C66] hover:bg-[#4E9F3D] hover:text-white transition-all"
             aria-label="Next"
           >
             <ChevronRight className="w-5 h-5" />
