@@ -17,13 +17,17 @@ import {
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
 import heroImgFallback from "../assets/members.jpg";
+import SectionContainer from "@/components/layout/SectionContainer";
 
 const AdvisoryBoard = () => {
   const [heroData, setHeroData] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [visibleRows, setVisibleRows] = useState(2);
+  const itemsPerRow = 6;
+  const visibleMembers = members.slice(0, visibleRows * itemsPerRow);
+  const hasMore = visibleRows * itemsPerRow < members.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +60,7 @@ const AdvisoryBoard = () => {
 
         {/* HERO BG */}
         <div
-          className="relative min-h-[700px] bg-cover bg-center"
+          className="relative min-h-[500px] bg-cover bg-center"
           style={{
             backgroundImage: heroData?.backgroundImage
               ? `url(${SERVER_URL}${heroData.backgroundImage})`
@@ -66,37 +70,43 @@ const AdvisoryBoard = () => {
 
 
           {/* CONTENT */}
-          <div className="relative z-10 min-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 pt-20">
+          <SectionContainer className="relative z-10 px-4 pt-20">
 
             <div className="grid lg:grid-cols-[65%_35%] gap-4 items-center">
 
               {/* LEFT SIDE */}
-              <div className="text-white mt-10">
+              <div className="">
 
                 {/* TAG */}
-                <div className="flex items-center gap-3 mb-6">
-
-                  <div className="w-16 h-[2px] bg-[#c6931f]" />
-
-                  <p className="uppercase tracking-[3px] text-[#c6931f] font-bold text-sm">
-                    Experts & Visionaries
+                <div className="mb-4">
+                  <p className="uppercase tracking-[4px] text-[#23471d] font-bold text-base">
+                    Experts. Leaders. Visionaries.
                   </p>
-
+                  <div className="w-10 h-[2px] bg-[#23471d] mt-2" />
                 </div>
 
                 {/* TITLE */}
-                <h1 className="text-4xl md:text-5xl font-black leading-[0.95] uppercase">
 
-                  Advisory
+                <h1 className="text-xl md:text-5xl font-black leading-[0.95] uppercase">
 
-                  <span className="block text-[#6fce3d] mt-2">
+                  <span className="text-[#0d1f3c]">Advisory</span>
+
+                  <span
+                    className="block mt-1"
+                    style={{
+                      background: "linear-gradient(90deg, #1a4a1a 0%, #2d6b2d 40%, #7dc142 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
                     Board Members
                   </span>
 
                 </h1>
 
                 {/* DESC */}
-                <p className="text-white/85 text-lg md:text-[22px] leading-9 mt-8 max-w-[700px]">
+                <p className="text-gray-700 text-[17px] leading-1 mt-8 max-w-[430px]">
 
                   Meet the distinguished leaders and professionals
                   shaping the strategic direction of
@@ -105,514 +115,373 @@ const AdvisoryBoard = () => {
                   </span>
 
                 </p>
-              </div>
-            </div>
-            <div className="grid lg:grid-cols-[65%_35%] gap-10 items-center">
-              <div className="text-white">
-                {/* FEATURES */}
-                <div className="grid grid-cols-4 gap-x-10 gap-y-4 mt-10">
-
-                  {[
-                    {
-                      title: "Industry Experts",
-                      desc: "From diverse sectors",
-                      image: "/images/2.png",
-                    },
-                    {
-                      title: "Strategic Guidance",
-                      desc: "Driving innovation and excellence",
-                      image: "/images/3.png",
-                    },
-                    {
-                      title: "Global Perspective",
-                      desc: "Bringing international expertise",
-                      image: "/images/epromotion/globe.png",
-                    },
-                    {
-                      title: "Vision For The Future",
-                      desc: "Building a healthier tomorrow",
-                      image: "/images/icon1.png",
-                    },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-start gap-4"
-                    >
-
-                      {/* IMAGE */}
-                      <div className="w-12 h-12 rounded-full bg-white p-2 flex items-center justify-center shrink-0 shadow-xl overflow-hidden">
-
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-full object-contain"
-                        />
-
-                      </div>
-
-                      {/* TEXT */}
-                      <div>
-
-                        <h3 className="text-white text-sm font-black uppercase leading-tight">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-white/75 text-[9px] leading-4 mt-2">
-                          {item.desc}
-                        </p>
-
-                      </div>
-
-                    </div>
-                  ))}
-
-                </div>
-              </div>
-
-              {/* RIGHT CTA CARD */}
-              <div className="hidden lg:block absolute right-[8px] z-20 mt-40">
-
-                <div className="relative max-w-[360px]">
-
-
-                  {/* TITLE */}
-                  <h4 className="relative z-10 text-white text-sm md:text-sm font-black leading-tight">
-
-                    Be Part of a Visionary Network
-
-                  </h4>
-
-                  {/* DESC */}
-                  <p className="relative z-10 text-white/80 text-base leading-1 mt-1">
-
-                    Connect with thought leaders and drive
-                    meaningful change in the health &
-                    wellness ecosystem.
-
-                  </p>
-
-                  {/* BUTTON */}
-                  <Link
-                    to="/advisory"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative z-10 mt-2 bg-[#56b532] hover:bg-[#479d2a] transition-all duration-300 text-white font-black uppercase px-4 py-2 rounded-[12px] flex items-center gap-3 shadow-lg"
-                  >
-                    Register Now
-                    <div className="w-7 h-7 rounded-full bg-white text-[#56b532] flex items-center justify-center font-bold">
-                      →
-                    </div>
-                  </Link>
-
-                  {/* FOOTER */}
-                  <div className="relative z-10 border-t border-white/10 mt-2 pt-2">
-
-                    <p className="text-[#ffb648] text-lg font-bold">
-                      Join 8,000+
-                    </p>
-
-                    <p className="text-white/70 text-sm mt-0">
-                      Global Professionals
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* CURVE */}
-          <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
-
-            <svg
-              viewBox="0 0 1440 120"
-              className="w-full h-[120px]"
-              preserveAspectRatio="none"
-            >
-              <path
-                fill="#f7f7f7"
-                d="M0,64L80,69.3C160,75,320,85,480,85.3C640,85,800,75,960,69.3C1120,64,1280,64,1360,64L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"
-              />
-            </svg>
-
-          </div>
-
-        </div>
-
-        {/* STATS SECTION */}
-        <div className="relative z-20 -mt-16 px-4 md:px-10 lg:px-16 xl:px-24">
-
-          <div className="max-w-[1350px] mx-auto bg-white rounded-[26px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-[#ececec] overflow-hidden">
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-
-              {[
-                {
-                  number: "150+",
-                  title: "Expert Speakers",
-                  color: "#265613",
-                  image: "/images/advisiory/1.png",
-                },
-                {
-                  number: "8,000+",
-                  title: "Visitor / Delegates",
-                  color: "#c6931f",
-                  image: "/images/advisiory/2.png",
-                },
-                {
-                  number: "1000+",
-                  title: "Global Buyers",
-                  color: "#3f7be0",
-                  image: "/images/advisiory/3.png",
-                },
-                {
-                  number: "10+",
-                  title: "Years Legacy",
-                  color: "#9d4edd",
-                  image: "/images/advisiory/4.png",
-                },
-                {
-                  number: "150+",
-                  title: "Exhibitors",
-                  color: "#27b0c8",
-                  image: "/images/advisiory/5.png",
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 px-4 md:px-6 border-r border-[#ececec] last:border-r-0"
+                {/* BUTTON */}
+                <Link
+                  to="/advisory"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-fit ml-32 inline-block mt-10 bg-green-800 hover:bg-green-900 transition-all duration-300 text-white font-semibold uppercase px-4 py-2 rounded flex items-center gap-3 shadow-lg"
                 >
-
-                  {/* IMAGE */}
-                  <div
-                    className="w-20 h-20 bg-white flex items-center justify-center shrink-0 overflow-hidden p-2"
-                    style={{
-                      borderColor: item.color,
-                    }}
-                  >
-
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-contain"
-                    />
-
+                  Register Now
+                  <div className="w-7 h-7 rounded-full bg-white text-[#56b532] flex items-center justify-center font-bold">
+                    →
                   </div>
+                </Link>
+              </div>
+            </div>
+          </SectionContainer>
+        </div>
+      </section>
 
-                  {/* TEXT */}
-                  <div>
+      {/* charman section  */}
+      <section className="relative py-6 overflow-hidden">
 
-                    <h3
-                      className="text-xl font-black"
-                      style={{ color: item.color }}
-                    >
-                      {item.number}
-                    </h3>
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#eaf3f0] via-[#f0f7f4] to-[#ddeee8]" />
+        <div className="absolute inset-0 opacity-[0.1] bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url("/advisory/bg.png")` }} />
 
-                    <p className="text-[#222] text-sm font-medium leading-6 mt-1">
-                      {item.title}
-                    </p>
+        <SectionContainer className="relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_210px] gap-8 items-center">
 
-                  </div>
+            {/* ── LEFT: Photo Card — exact image match ── */}
+            <div className="relative w-[220px] h-[290px] flex-shrink-0">
 
-                </div>
-              ))}
+              {/* Light green bg block */}
+              <div className="absolute top-[10px] left-[10px] right-0 bottom-0 bg-[#d4edcc] rounded-[18px] z-0" />
+
+              {/* Dark green LEFT vertical bar */}
+              <div className="absolute top-[10px] left-0 w-[13px] bottom-[28px] bg-gradient-to-b from-[#2d6b2d] to-[#4a9e2a] rounded-l-lg z-[2]" />
+
+              {/* Dark green BOTTOM horizontal bar */}
+              <div className="absolute bottom-[14px] left-0 right-[10px] h-[13px] bg-gradient-to-r from-[#2d6b2d] to-[#4a9e2a] rounded-b-lg z-[2]" />
+
+              {/* Photo */}
+              <div className="absolute top-[10px] left-[13px] right-0 bottom-[27px] rounded-[14px] overflow-hidden z-[1]">
+                <img
+                  src="/advisory/chef1.png"
+                  alt="Dr. Randeep Guleria"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+
+            </div>
+
+            {/* ── MIDDLE: Text Content ── */}
+            <div className="space-y-5 px-2">
+
+              <div>
+                <p className="uppercase tracking-[3px] text-[#23471d] font-bold text-[11px] mb-2">
+                  Chairman's Message
+                </p>
+                <div className="w-8 h-[2px] bg-[#23471d]" />
+              </div>
+
+              <h2 className="text-3xl font-black text-[#0d1f3c] leading-tight">
+                Leading Together for a <br />Healthier Tomorrow
+              </h2>
+
+              <p className="text-slate-500 text-[14px] leading-relaxed">
+                At IHWE Expo 2026, our Advisory Board plays a pivotal role in driving our mission
+                forward. Their expertise, global perspective, and commitment to innovation guide us
+                in creating a world-class platform that empowers the health and wellness ecosystem.
+              </p>
+
+              <div className="pt-2">
+                <p className="font-[Brush_Script_MT,cursive] text-2xl text-slate-600 italic mb-3 tracking-wide">
+                  Randeep Guleria
+                </p>
+                <p className="text-[#23471d] font-bold text-sm">Dr. Randeep Guleria</p>
+                <p className="text-slate-400 text-xs tracking-wide">Chairman, IHWE Expo 2026</p>
+              </div>
+
+            </div>
+
+            {/* ── RIGHT: Vision Card ── */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-100 shadow-lg p-6 space-y-4">
+
+              <div className="w-11 h-11 rounded-xl bg-[#23471d]/10 flex items-center justify-center">
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none">
+                  <path d="M17 20H7M12 4C9.8 4 8 5.8 8 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"
+                    stroke="#23471d" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="5" cy="10" r="2.5" stroke="#23471d" strokeWidth="1.5" />
+                  <circle cx="19" cy="10" r="2.5" stroke="#23471d" strokeWidth="1.5" />
+                </svg>
+              </div>
+
+              <div className="border-l-[3px] border-[#23471d] pl-4 space-y-2">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#23471d]">Vision</p>
+                <p className="text-[#434B54] font-medium text-sm leading-snug">
+                  A global platform for collaboration, innovation and impact in health & wellness.
+                </p>
+              </div>
 
             </div>
 
           </div>
-
-        </div>
+        </SectionContainer>
 
       </section>
 
       {/* MEMBERS SECTION */}
-      <section className="py-4 bg-[#f7f7f7] px 12 lg:px-24">
-
-        <div className="max-w-[1450px] mx-auto">
+      <section className="py-4 bg-[#f7f7f7] ">
+        <SectionContainer className="">
 
           {/* HEADING */}
-          <div className="flex items-center justify-center gap-4 mb-8">
-
-            <div className="w-16 h-[2px] bg-[#6fa83d]" />
-
-            <h2 className="text-[18px] lg:text-[34px] font-black uppercase text-[#101828] tracking-tight">
-              Our <span className="text-[#4d9b2e]">Advisory Board</span>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-[2px] bg-[#23471d]" />
+            <h2 className="text-[20px] lg:text-2xl font-semibold uppercase text-[#101828] tracking-tight text-center">
+              Our <span className="">Esteemed Advisory Board</span>
             </h2>
-
-            <div className="w-16 h-[2px] bg-[#6fa83d]" />
-
+            <div className="w-12 h-[2px] bg-[#23471d]" />
           </div>
 
           {/* LOADER */}
           {isLoading ? (
             <div className="flex justify-center py-20">
-              <div className="w-12 h-12 border-4 border-[#2f7d1d] border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-4 border-[#2f7d1d] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
             <>
-              {/* SINGLE ROW */}
-              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-
-                {members.map((member, idx) => (
+              {/* GRID — 6 per row */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
+                {visibleMembers.map((member, idx) => (
                   <motion.div
                     key={member._id}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{
-                      duration: 0.4,
-                      delay: idx * 0.04,
-                    }}
-                    className="min-w-[320px] max-w-[320px] bg-white border border-[#e5e7eb] rounded-[10px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 relative shrink-0"
+                    transition={{ duration: 0.35, delay: idx * 0.03 }}
+                    className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
                   >
-
-                    {/* GREEN RIBBON */}
-                    <div className="absolute top-0 right-2 z-20">
-
-                      <div className="bg-[#4d9b2e] w-6 h-9 flex items-center justify-center relative">
-
-                        <span className="text-white text-[11px]">
-                          ★
-                        </span>
-
-                        <div className="absolute bottom-[-8px] left-0 w-0 h-0 border-l-[12px] border-r-[12px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#4d9b2e]" />
-
-                      </div>
+                    {/* IMAGE */}
+                    <div className="w-full h-[160px] bg-[#f3f4f6] overflow-hidden">
+                      <LazyLoadImage
+                        src={`${SERVER_URL}${member.image}`}
+                        alt={member.name}
+                        effect="blur"
+                        className="w-full h-full object-cover object-top"
+                      />
                     </div>
 
-                    {/* CARD BODY */}
-                    <div className="flex gap-3 p-3">
+                    {/* CONTENT */}
+                    <div className="p-3 flex flex-col flex-1">
 
-                      {/* LEFT IMAGE */}
-                      <div className="w-[100px] h-[250px] shrink-0 rounded-[6px] overflow-hidden bg-[#f3f3f3]">
+                      {/* NAME */}
+                      <h3 className="text-[13px] font-black text-[#111827] leading-tight mb-1">
+                        {member.name}
+                      </h3>
 
-                        <LazyLoadImage
-                          src={`${SERVER_URL}${member.image}`}
-                          alt={member.name}
-                          effect="blur"
-                          className="w-full h-full object-cover"
+                      {/* ROLE */}
+                      <p className="text-[#5ba234] text-[9px] font-bold uppercase tracking-wide mb-1">
+                        {member.role}
+                      </p>
+
+                      {/* ORGANIZATION */}
+                      <p className="text-[#666] text-[10px] leading-[14px] mb-2">
+                        {member.organization}
+                      </p>
+
+                      {/* GREEN LINE */}
+                      <div className="w-8 h-[2px] bg-[#5ba234] mb-2" />
+
+                      {/* COUNTRY FLAG */}
+                      <div className="flex items-center gap-1 mb-3">
+                        <img
+                          src={member.country?.toLowerCase() === 'usa' ? '/images/usa-flag.png' : '/images/india-flag.png'}
+                          alt={member.country || 'India'}
+                          className="w-5 h-3 object-cover rounded-sm"
                         />
-
+                        <span className="text-[10px] text-[#666]">{member.country || 'India'}</span>
                       </div>
 
-                      {/* RIGHT CONTENT */}
-                      <div className="flex-1 flex flex-col h-[260px]">
-
-                        {/* NAME */}
-                        <h3 className="text-[18px] leading-[24px] font-black text-[#111827] mt-1">
-                          {member.name}
-                        </h3>
-
-                        {/* ROLE */}
-                        <p className="text-[#5ba234] text-[10px] font-bold uppercase tracking-wide mt-1">
-                          {member.role}
-                        </p>
-
-                        {/* ORGANIZATION */}
-                        <p className="text-[#444] text-[11px] leading-[16px] mt-2 font-medium">
-                          {member.organization}
-                        </p>
-
-                        {/* GREEN LINE */}
-                        <div className="w-10 h-[2px] bg-[#5ba234] mt-3 mb-3" />
-
-                        {/* DESCRIPTION */}
-                        <p className="text-[#555] text-[11px] leading-[18px] line-clamp-4">
-                          {member.description ||
-                            "Visionary leader and industry expert driving innovation and impactful transformation globally."}
-                        </p>
-
-                        {/* BUTTON */}
-                        <button className="absolute bottom-5 border border-[#5ba234] hover:bg-[#5ba234] hover:text-white transition-all duration-300 text-[#2d6b18] text-[10px] font-bold px-3 py-2 rounded-[5px] flex items-center gap-2 w-fit">
-
+                      {/* BUTTON */}
+                      <div className="mt-auto flex items-center gap-2">
+                        <button className="border border-[#5ba234] hover:bg-[#5ba234] hover:text-white transition-all duration-200 text-[#2d6b18] text-[9px] font-bold px-2.5 py-1.5 rounded-[5px] flex items-center gap-1.5">
                           VIEW PROFILE
-
-                          <div className="w-4 h-4 rounded-full bg-[#5ba234] text-white flex items-center justify-center">
-                            <ArrowRight size={10} />
+                          <div className="w-3.5 h-3.5 rounded-full bg-[#5ba234] text-white flex items-center justify-center">
+                            <ArrowRight size={8} />
                           </div>
-
                         </button>
 
+                        {/* LinkedIn icon */}
+                        <a href={member.linkedin || '#'} target="_blank" rel="noreferrer"
+                          className="w-6 h-6 rounded-full bg-[#0077b5] flex items-center justify-center hover:scale-110 transition-transform">
+                          <svg viewBox="0 0 24 24" className="w-3 h-3 fill-white">
+                            <path d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57A1.46 1.46 0 0 1 14.38 12.11A1.46 1.46 0 0 1 15.84 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z" />
+                          </svg>
+                        </a>
                       </div>
 
                     </div>
-
                   </motion.div>
                 ))}
-
               </div>
 
-              {/* BOTTOM BUTTON */}
-              {/* <div className="text-center mt-4 ">
-
-          <button className="border border-[#5ba234] hover:bg-[#5ba234] hover:text-white transition-all duration-300 text-[#2d6b18] font-bold px-5 py-2 rounded-[6px] uppercase tracking-wide text-sm inline-flex items-center gap-3">
-
-            VIEW ALL ADVISORY BOARD MEMBERS
-
-            <div className="w-6 h-6 rounded-full bg-[#5ba234] text-white flex items-center justify-center">
-              <ArrowRight size={13} />
-            </div>
-
-          </button>
-
-        </div> */}
+              {/* VIEW ALL BUTTON */}
+              <div className="text-center mt-8">
+                {hasMore ? (
+                  <button
+                    onClick={() => setVisibleRows(prev => prev + 1)}
+                    className="border border-[#5ba234] hover:bg-[#5ba234] hover:text-white transition-all duration-300 text-[#2d6b18] font-bold px-6 py-1.5 rounded-full uppercase tracking-wide text-sm inline-flex items-center gap-3 bg-white shadow-sm"
+                  >
+                    VIEW ALL ADVISORY BOARD MEMBERS
+                    <div className="w-6 h-6 rounded-full bg-[#5ba234] text-white flex items-center justify-center">
+                      <ArrowRight size={13} />
+                    </div>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setVisibleRows(2)}
+                    className="border border-slate-300 hover:border-[#5ba234] transition-all duration-300 text-slate-500 hover:text-[#2d6b18] font-bold px-6 py-1.5 rounded-full uppercase tracking-wide text-sm inline-flex items-center gap-3 bg-white shadow-sm"
+                  >
+                    SHOW LESS
+                    <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center rotate-180">
+                      <ArrowRight size={13} />
+                    </div>
+                  </button>
+                )}
+              </div>
             </>
           )}
-        </div>
+        </SectionContainer>
       </section>
 
-      {/* WHY JOIN */}
-      <section className="pb-0 px-4 md:px-10 lg:px-16 xl:px-24">
+      {/* why join new  */}
+      <section className="py-12 bg-[#f4f6f3] relative overflow-hidden">
 
-        <div className="max-w-[1450px] mx-auto">
+        {/* DNA bg watermark */}
+        <div className="absolute right-0 top-0 h-full w-64 opacity-[0.04] pointer-events-none"
+          style={{ backgroundImage: `url("/advisory/dna-bg.png")`, backgroundSize: "cover" }} />
 
-          <div className="bg-white border border-[#ececec] rounded-[14px] shadow-sm overflow-hidden">
+        <div className="max-w-[1300px] mx-auto px-6 space-y-10">
 
-            {/* HEADING */}
-            <div className="pt-6 pb-5 text-center">
+          {/* ── ROW 1: Why Join + 4 cards ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
 
-              <h2 className="text-[18px] md:text-[26px] font-black uppercase text-[#111827] tracking-tight">
-                WHY JOIN AS AN ADVISORY BOARD MEMBER?
+            {/* Left: Why Join text */}
+            <div className="lg:col-span-1 space-y-3">
+              <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#5ba234]">Why Join</p>
+              <h2 className="text-[26px] font-black text-[#0d1f3c] uppercase leading-tight">
+                The Advisory Board?
               </h2>
-
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-[3px] bg-[#5ba234] rounded-full" />
+                <div className="w-2 h-2 rounded-full bg-[#5ba234]" />
+              </div>
+              <p className="text-[13px] text-[#555] leading-relaxed pt-1">
+                Be at the forefront of transformation in the health & wellness industry.
+              </p>
             </div>
 
-            {/* ITEMS */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-
+            {/* Right: 4 feature cards */}
+            <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 {
+                  icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v2M12 16v2M8 12H6M18 12h-2" /><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" /></svg>,
                   title: "Shape the Future",
-                  desc: "Contribute to shaping the future of health & wellness.",
-                  icon: <Users size={26} />,
+                  desc: "Contribute to policies, initiatives and global health conversations."
                 },
                 {
-                  title: "Expand Network",
-                  desc: "Connect with global leaders and industry pioneers.",
-                  icon: <Globe size={26} />,
+                  icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><path d="M17 20H7M12 4C9.8 4 8 5.8 8 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z" /><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" /><circle cx="5" cy="10" r="2" /><circle cx="19" cy="10" r="2" /></svg>,
+                  title: "Global Influence",
+                  desc: "Engage with leaders and experts from across the world."
                 },
                 {
-                  title: "Influence Change",
-                  desc: "Drive meaningful impact and positive change.",
-                  icon: <TrendingUp size={26} />,
-                },
-                {
+                  icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5" /><path d="M17 3l4 4-9 9H8v-4l9-9z" /></svg>,
                   title: "Thought Leadership",
-                  desc: "Position yourself as a thought leader in the industry.",
-                  icon: <Briefcase size={26} />,
+                  desc: "Position yourself as a trusted voice in the health & wellness sector."
                 },
                 {
-                  title: "Global Exposure",
-                  desc: "Gain visibility across international platforms.",
-                  icon: <Globe size={26} />,
+                  icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><path d="M9 12l2 2 4-4" /><path d="M20.618 5.984A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9a12.02 12.02 0 0 0-.382-3.016z" /></svg>,
+                  title: "Drive Impact",
+                  desc: "Support innovation, collaboration and meaningful change."
                 },
-                {
-                  title: "Exclusive Access",
-                  desc: "Get exclusive access to events & opportunities.",
-                  icon: <ArrowRight size={26} />,
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="relative text-center px-5 py-7 border-r border-[#ececec] last:border-r-0"
-                >
-
-                  {/* ICON */}
-                  <div className="flex justify-center text-[#4d9b2e] mb-3">
+              ].map((item, i) => (
+                <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-[#e8ede6] hover:shadow-md transition-all duration-300 flex flex-col gap-3">
+                  <div className="w-14 h-14 rounded-full bg-[#f0f7eb] border border-[#d4edcc] flex items-center justify-center">
                     {item.icon}
                   </div>
-
-                  {/* TITLE */}
-                  <h3 className="text-[14px] font-bold text-[#2f7d1d] leading-tight">
-                    {item.title}
-                  </h3>
-
-                  {/* DESC */}
-                  <p className="text-[#444] text-[11px] leading-[18px] mt-2">
-                    {item.desc}
-                  </p>
-
+                  <h3 className="text-[14px] font-bold text-[#23471d] leading-tight">{item.title}</h3>
+                  <p className="text-[12px] text-[#666] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
-
             </div>
-
-          </div>
-        </div>
-      </section>
-      {/* BOTTOM CTA SECTION */}
-      <section className="px-4 md:px-10 lg:px-16 xl:px-24 pb-10 mt-2">
-
-        <div className="max-w-[1450px] mx-auto">
-
-          <div className="relative overflow-hidden rounded-[18px] bg-gradient-to-r from-[#02122b] via-[#041d3d] to-[#02122b] px-6 md:px-10 py-2">
-
-            {/* CONTENT */}
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-
-              {/* LEFT */}
-              <div className="flex items-center gap-5">
-
-                {/* ICON */}
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shrink-0">
-
-
-                  <img src="/images/2.png" />
-
-
-                </div>
-
-                {/* TEXT */}
-                <div>
-
-                  <h2 className="text-white text-xl md:text-2xl font-black uppercase leading-tight">
-                    Join The League Of Visionaries
-                  </h2>
-
-                  <p className="text-white/80 text-sm md:text-lg mt-2 max-w-2xl">
-                    Be a part of a mission to build a healthier,
-                    happier and sustainable world.
-                  </p>
-
-                </div>
-
-              </div>
-
-              {/* RIGHT BUTTON */}
-              <div className="flex flex-col items-center lg:items-end">
-
-                <Link
-                  to="/advisory"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#56b532] hover:bg-[#469629] transition-all duration-300 text-white font-black uppercase px-3 md:px-4 py-1 rounded-[10px] text-sm md:text-sm flex items-center gap-3 shadow-lg"
-                >
-                  Become An Advisory Board Member
-                  <div className="w-7 h-7 rounded-full bg-white text-[#56b532] flex items-center justify-center font-bold">
-                    →
-                  </div>
-                </Link>
-
-                <p className="text-white/80 text-sm mt-4 text-center lg:text-right">
-                  Collaborate. Contribute. Create Impact.
-                </p>
-
-              </div>
-
-            </div>
-
-            {/* OPTIONAL GLOW */}
-            <div className="absolute -bottom-16 -right-16 w-56 h-56 bg-[#56b532]/20 blur-3xl rounded-full" />
-
           </div>
 
-        </div>
+          {/* ── ROW 2: Nominate Banner ── */}
+          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#1a4d1a] via-[#23471d] to-[#2d6b2d] min-h-[220px] flex items-center">
 
+            {/* Mesh/hex bg pattern */}
+            <div className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: `radial-gradient(circle at 20% 50%, #4a9e2a 0%, transparent 50%), radial-gradient(circle at 80% 20%, #7dc142 0%, transparent 40%)`,
+              }}
+            />
+            <div className="absolute inset-0 opacity-10"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 17.3v34.6L30 69.3 0 51.9V17.3z' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E")`,
+                backgroundSize: "60px 60px"
+              }}
+            />
+
+            {/* Left text */}
+            <div className="relative z-10 px-10 py-8 flex-1">
+              <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#d6ff63] mb-3">
+                Know an Inspiring Leader?
+              </p>
+              <h2 className="text-[36px] font-black text-white uppercase leading-none mb-4">
+                Nominate For<br />Advisory Board
+              </h2>
+              <p className="text-[14px] text-white/70 mb-6 max-w-md leading-relaxed">
+                Help us bring the right leaders together to create a healthier world.
+              </p>
+              <button className="bg-white text-[#23471d] font-black text-[11px] uppercase tracking-widest px-6 py-3 rounded-full flex items-center gap-3 hover:bg-[#d6ff63] transition-all duration-300 w-fit shadow-lg">
+                Nominate Now
+                <div className="w-7 h-7 rounded-full bg-[#23471d] text-white flex items-center justify-center">
+                  <ArrowRight size={14} />
+                </div>
+              </button>
+            </div>
+
+            {/* Right image */}
+            <div className="hidden md:block absolute right-0 bottom-0 h-full w-[420px] pointer-events-none">
+              <img
+                src="/advisory/nominate-illustration.png"
+                alt="Nominate"
+                className="h-full w-full object-contain object-right-bottom"
+              />
+            </div>
+          </div>
+
+          {/* ── ROW 3: Register CTA strip ── */}
+          <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm px-8 py-5 flex flex-col sm:flex-row items-center gap-6 justify-between">
+
+            {/* Left */}
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 rounded-full bg-[#f0f7eb] border border-[#d4edcc] flex items-center justify-center shrink-0">
+                <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5">
+                  <path d="M17 20H7M12 4C9.8 4 8 5.8 8 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z" />
+                  <path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" />
+                  <circle cx="5" cy="10" r="2" /><circle cx="19" cy="10" r="2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-[16px] font-bold text-[#0d1f3c]">Be Part of a Visionary Network</h3>
+                <p className="text-[13px] text-[#666]">Connect with leaders and drive meaningful change in the health & wellness ecosystem.</p>
+              </div>
+            </div>
+
+            {/* Right: Button */}
+            <button className="bg-[#e8711a] hover:bg-[#d26019] text-white font-black text-[12px] uppercase tracking-widest px-8 py-3.5 rounded-full flex items-center gap-3 transition-all duration-300 shrink-0 shadow-lg hover:shadow-[#e8711a]/30 hover:-translate-y-0.5">
+              Register Now
+              <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+                <ArrowRight size={14} />
+              </div>
+            </button>
+          </div>
+
+        </div>
       </section>
     </div>
   );
