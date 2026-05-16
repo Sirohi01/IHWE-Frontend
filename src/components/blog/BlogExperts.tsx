@@ -24,7 +24,7 @@ const BlogExperts: React.FC<BlogExpertsProps> = ({ experts }) => {
           </div>
 
           <div className="flex items-center gap-6">
-            <Link to="/experts" className="flex items-center gap-2 text-slate-400 text-xs font-medium hover:text-[#00df82] transition-colors">
+            <Link to="/experts" className="flex items-center gap-2 text-slate-400 text-md font-medium hover:text-[#00df82] transition-colors">
               View all experts <ArrowRight size={14} />
             </Link>
             <div className="flex items-center gap-2">
@@ -46,64 +46,64 @@ const BlogExperts: React.FC<BlogExpertsProps> = ({ experts }) => {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-        <motion.div
-          className="flex gap-6 py-4 px-4"
-          animate={{
-            x: isPaused ? undefined : ["0%", "-33.33%"],
-          }}
-          transition={{
-            x: {
-              repeat: Infinity,
-              repeatType: "loop",
-              duration: 30,
-              ease: "linear",
-            },
-          }}
-          style={{ width: 'fit-content' }}
-        >
-          {marqueeExperts.map((expert, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 w-[300px] shrink-0 flex flex-col group/card"
-            >
-              {/* Top Row: Photo & Info */}
-              <div className="flex items-center gap-4 mb-6">
-                <div className="relative w-20 h-20 rounded-full border-4 border-slate-50 shadow-md overflow-hidden shrink-0">
-                  <img
-                    src={expert.image.startsWith('http') ? expert.image : `${SERVER_URL}${expert.image}`}
-                    alt={expert.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-[#001529] font-medium text-sm mb-1">{expert.name}</h3>
-                  <p className="text-slate-400 text-[11px] font-medium leading-tight">
-                    {expert.role || "Expert Advisor"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Headline */}
-              <div className="flex-1">
-                <h4 className="text-[#001529] font-medium text-sm leading-tight mb-6 group-hover/card:text-[#00df82] transition-colors line-clamp-2">
-                  {expert.insightTitle || expert.insight || "Strengthening Healthcare Systems for Viksit Bharat"}
-                </h4>
-              </div>
-
-              {/* Read More Link */}
-              <Link
-                to={`/blog/${expert.linkedArticleSlug || '#'}`}
-                className="flex items-center gap-2 text-[#00df82] font-medium text-xs hover:gap-3 transition-all"
+          <motion.div
+            className="flex gap-6 py-4 px-4"
+            animate={{
+              x: isPaused ? undefined : ["0%", "-33.33%"],
+            }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 30,
+                ease: "linear",
+              },
+            }}
+            style={{ width: 'fit-content' }}
+          >
+            {marqueeExperts.map((expert, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 w-[300px] shrink-0 flex flex-col group/card"
               >
-                Read More <ArrowRight size={14} />
-              </Link>
-            </div>
-          ))}
-        </motion.div>
+                {/* Top Row: Photo & Info */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="relative w-20 h-20 rounded-full border-4 border-slate-50 shadow-md overflow-hidden shrink-0">
+                    <img
+                      src={expert.image.startsWith('http') ? expert.image : `${SERVER_URL}${expert.image}`}
+                      alt={expert.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-[#001529] font-medium text-sm mb-1">{expert.name}</h3>
+                    <p className="text-slate-400 text-[11px] font-medium leading-tight">
+                      {expert.role || "Expert Advisor"}
+                    </p>
+                  </div>
+                </div>
 
-        {/* Gradient overlays for smooth fading edges */}
-        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
-        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
+                {/* Headline */}
+                <div className="flex-1">
+                  <h4 className="text-[#001529] font-medium text-sm leading-tight mb-6 group-hover/card:text-[#00df82] transition-colors line-clamp-2">
+                    {expert.insightTitle || expert.insight || "Strengthening Healthcare Systems for Viksit Bharat"}
+                  </h4>
+                </div>
+
+                {/* Read More Link */}
+                <Link
+                  to={`/blog/${expert.linkedArticleSlug || '#'}`}
+                  className="flex items-center gap-2 text-[#00df82] font-medium text-xs hover:gap-3 transition-all"
+                >
+                  Read More <ArrowRight size={14} />
+                </Link>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Gradient overlays for smooth fading edges */}
+          <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
         </div>
       </div>
     </section>

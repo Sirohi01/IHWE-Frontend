@@ -34,7 +34,7 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs, type }) => {
             <div className="w-1 h-5 bg-[#00df82] rounded-full" />
             <h2 className="text-[#001529] text-lg font-medium tracking-tight">Latest from IHWE</h2>
           </div>
-          <Link to="/blog" className="flex items-center gap-1 text-slate-400 text-[10px] font-medium hover:text-[#00df82] transition-colors">
+          <Link to="/blog" className="flex items-center gap-1 text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors">
             View all <ArrowRight size={12} />
           </Link>
         </div>
@@ -84,7 +84,7 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs, type }) => {
     <div className="w-full h-[420px] flex flex-col relative">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-[#001529] text-lg font-medium tracking-tight">Video Insights</h2>
-        <Link to="/videos" className="flex items-center gap-1 text-slate-400 text-[10px] font-medium hover:text-[#00df82] transition-colors">
+        <Link to="/videos" className="flex items-center gap-1 text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors">
           View all <ArrowRight size={12} />
         </Link>
       </div>
