@@ -44,7 +44,7 @@ const BlogFeaturedLayout: React.FC<BlogFeaturedLayoutProps> = ({ featured, activ
         <div className="flex flex-col lg:flex-row gap-10 items-start">
 
           {/* Left Column: Featured Articles */}
-          <div className="w-full lg:w-[75%] mt-4">
+          <div className="w-full lg:w-[100%] mt-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-8 bg-[#00df82] rounded-full" />
