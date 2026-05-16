@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
 import { blogApi } from "@/lib/api";
-import {
-  Activity, Heart, Lightbulb, Scale, Users,
-  FileText, Image as ImageIcon, Briefcase, Video
-} from 'lucide-react';
-import blogHero from "../assets/blogs.webp";
+import blogHero from "../assets/blog/blogimagenewimage.webp";
 
 // Components
 import BlogHero from "@/components/blog/BlogHero";
-import BlogCategories from "@/components/blog/BlogCategories";
 import BlogFeaturedLayout from "@/components/blog/BlogFeaturedLayout";
 import BlogLatest from "@/components/blog/BlogLatest";
 import BlogExperts from "@/components/blog/BlogExperts";
 import BlogResources from "@/components/blog/BlogResources";
-import BlogCTA from "@/components/blog/BlogCTA";
+import BlogStatsBar from "@/components/blog/BlogStatsBar";
+import BlogFooter from "@/components/blog/BlogFooter";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -49,9 +45,9 @@ const Blog = () => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        const blogsRes = await blogApi.getAll({ 
-          category: activeCategory, 
-          search: debouncedQuery 
+        const blogsRes = await blogApi.getAll({
+          category: activeCategory,
+          search: debouncedQuery
         });
         if (blogsRes?.success) setBlogs(blogsRes.data);
       } catch (error) {
@@ -73,51 +69,33 @@ const Blog = () => {
 
   // Robust data filtering
   const allBlogs = blogs.length > 0 ? blogs : [];
-  
+
   // 1. Filter by Category & Search
   const filteredBlogs = allBlogs.filter(blog => {
-    const matchesCategory = activeCategory === "all" || 
+    const matchesCategory = activeCategory === "all" ||
       blog.category?.toLowerCase() === activeCategory.toLowerCase();
-    
-    const matchesSearch = !debouncedQuery || 
+
+    const matchesSearch = !debouncedQuery ||
       blog.title.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
       blog.excerpt?.toLowerCase().includes(debouncedQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
 
-  // Get explicitly marked blogs (from all blogs to keep featured section stable)
-  const explicitlyFeatured = allBlogs.filter(b => b.featured === true || b.featured === 'true');
-  const explicitlyTrending = allBlogs.filter(b => b.isTrending === true || b.isTrending === 'true');
+  // Featured blogs for the main section
+  const featuredBlogs = allBlogs.filter(b => b.featured === true || b.featured === 'true').slice(0, 3);
+  const displayFeatured = featuredBlogs.length > 0 ? featuredBlogs : allBlogs.slice(0, 3);
 
-  // Featured & Trending sections
-  const featuredBlogs = [...explicitlyFeatured, ...allBlogs.filter(b => !explicitlyFeatured.includes(b))].slice(0, 6);
-  const trendingBlogs = [...explicitlyTrending, ...allBlogs.filter(b => !explicitlyTrending.includes(b))].slice(0, 6);
-  
-  // Latest blogs should definitely be filtered
-  const latestBlogs = filteredBlogs.slice(0, 12);
+  // Latest blogs
+  const latestBlogs = filteredBlogs.slice(0, 6);
 
   const displayExperts = experts.length > 0 ? experts : [
-    { name: "Dr. Randeep Guleria", role: "Pulmonologist, AIIMS", insight: "Preparing Healthcare Systems for the Future is our top priority.", image: "/uploads/experts/expert1.png", linkedArticleSlug: "healthcare-future" },
-    { name: "Dr. Harsh Vardhan", role: "Former Union Minister", insight: "India's Vision for Global Health Leadership is becoming a reality.", image: "/uploads/experts/expert2.png", linkedArticleSlug: "health-leadership" },
-    { name: "Dr. Mickey Mehta", role: "Global Leading Wellness Guru", insight: "The Wellness Mantra for a Better Tomorrow starts with self-care.", image: "/uploads/experts/expert3.png", linkedArticleSlug: "wellness-mantra" },
-    { name: "Dr. Soumya Swaminathan", role: "Former Chief Scientist, WHO", insight: "Building Resilient & Inclusive Health Systems is the path forward.", image: "/uploads/experts/expert4.png", linkedArticleSlug: "resilient-systems" },
-  ];
-
-  const popularTopics = [
-    { id: 'preventive', label: 'Preventive Healthcare', count: 28, icon: Activity },
-    { id: 'mental', label: 'Mental Health', count: 24, icon: Heart },
-    { id: 'women', label: 'Women\'s Health', count: 20, icon: Users },
-    { id: 'nutrition', label: 'Nutrition & Diet', count: 18, icon: Lightbulb },
-    { id: 'fitness', label: 'Fitness & Lifestyle', count: 32, icon: Briefcase },
-    { id: 'tech', label: 'Medical Technology', count: 26, icon: Activity },
-  ];
-
-  const mediaResources = [
-    { title: "Press Kit", type: "download", icon: <FileText size={20} />, link: "#" },
-    { title: "Image Gallery", type: "view", icon: <ImageIcon size={20} />, link: "#" },
-    { title: "Logos", type: "download", icon: <Briefcase size={20} />, link: "#" },
-    { title: "Videos", type: "watch", icon: <Video size={20} />, link: "#" },
+    { name: "Dr. Randeep Guleria", role: "Pulmonologist, AIIMS", insightTitle: "Preparing Healthcare Systems for the Future", image: "/uploads/experts/expert1.png", linkedArticleSlug: "healthcare-future" },
+    { name: "Dr. Harsh Vardhan", role: "Former Union Minister", insightTitle: "India's Vision for Global Health Leadership", image: "/uploads/experts/expert2.png", linkedArticleSlug: "health-leadership" },
+    { name: "Dr. Mickey Mehta", role: "Global Leading Wellness Guru", insightTitle: "The Wellness Mantra for a Better Tomorrow", image: "/uploads/experts/expert3.png", linkedArticleSlug: "wellness-mantra" },
+    { name: "Dr. Soumya Swaminathan", role: "Former Chief Scientist, WHO", insightTitle: "Building Resilient & Inclusive Health Systems", image: "/uploads/experts/expert4.png", linkedArticleSlug: "resilient-systems" },
+    { name: "Dr. Devi Shetty", role: "Chairman, Narayana Health", insightTitle: "Affordable Healthcare for All: A Global Need", image: "/uploads/experts/expert5.png", linkedArticleSlug: "affordable-healthcare" },
+    { name: "Shri Rajiv Bansal", role: "Chairman, Ayush", insightTitle: "The Global Rise of Ayurveda & Wellness", image: "/uploads/experts/expert6.png", linkedArticleSlug: "ayurveda-wellness" },
   ];
 
   const handleSearch = (query: string) => {
@@ -125,33 +103,47 @@ const Blog = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen font-inter">
-      {/* 1. Hero Section */}
+    <div className="bg-white min-h-screen font-inter overflow-x-hidden">
+      {/* 1. Hero Section + Stats Bar */}
       <BlogHero settings={settings} onSearch={handleSearch} heroImage={blogHero} />
 
-      {/* 2. Category Filter Bar */}
-      <BlogCategories
+      {/* 2. Featured Section with Sidebar (Categories & Newsletter) */}
+      <BlogFeaturedLayout
+        featured={displayFeatured}
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
 
-      {/* 3. Featured & Trending Section */}
-      <BlogFeaturedLayout
-        featured={featuredBlogs}
-        trending={trendingBlogs}
-      />
-
-      {/* 4. Latest Articles Grid */}
-      <BlogLatest blogs={latestBlogs} />
-
-      {/* 5. Expert Insights Carousel */}
+      {/* 3. Voices of Experts (Slider) */}
       <BlogExperts experts={displayExperts} />
 
-      {/* 6. Popular Topics & Resources */}
-      <BlogResources topics={popularTopics} resources={resources.length > 0 ? resources : mediaResources} />
+      {/* 4. Bottom Grid (Latest + Videos + Resources) */}
+      <section className="mt-2 pb-2 bg-slate-50/80">
+        <div className="container mx-auto px-5 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
+            {/* Column 1: Latest from IHWE (30%) */}
+            <div className="lg:col-span-3">
+              <BlogLatest blogs={latestBlogs} type="latest" />
+            </div>
 
-      {/* 7. Newsletter & Footer CTA */}
-      <BlogCTA />
+            {/* Column 2: Video Insights (40%) */}
+            <div className="lg:col-span-4">
+              <BlogLatest blogs={latestBlogs} type="videos" />
+            </div>
+
+            {/* Column 3: Resources (30%) */}
+            <div className="lg:col-span-3">
+              <BlogResources resources={resources} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Stats Bar (Bottom) */}
+      <BlogStatsBar />
+
+      {/* 6. Professional Footer */}
+      <BlogFooter />
     </div>
   );
 };
