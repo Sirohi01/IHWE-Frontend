@@ -354,13 +354,13 @@ const AdvisoryBoard = () => {
         <div className="absolute right-0 top-0 h-full w-64 opacity-[0.04] pointer-events-none"
           style={{ backgroundImage: `url("/advisory/dna-bg.png")`, backgroundSize: "cover" }} />
 
-        <div className="max-w-[1300px] mx-auto px-6 space-y-10">
+        <SectionContainer className=" space-y-4">
 
           {/* ── ROW 1: Why Join + 4 cards ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+          <div className="flex w-full gap-6 items-start">
 
             {/* Left: Why Join text */}
-            <div className="lg:col-span-1 space-y-3">
+            <div className="w-[30%] space-y-3">
               <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#5ba234]">Why Join</p>
               <h2 className="text-[26px] font-black text-[#0d1f3c] uppercase leading-tight">
                 The Advisory Board?
@@ -375,7 +375,7 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* Right: 4 feature cards */}
-            <div className="lg:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="w-[65%] grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 {
                   icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v2M12 16v2M8 12H6M18 12h-2" /><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" /></svg>,
@@ -447,7 +447,7 @@ const AdvisoryBoard = () => {
             {/* Right image */}
             <div className="hidden md:block absolute right-0 bottom-0 h-full w-[420px] pointer-events-none">
               <img
-                src="/advisory/nominate-illustration.png"
+                src="/advisory/last1.png"
                 alt="Nominate"
                 className="h-full w-full object-contain object-right-bottom"
               />
@@ -455,7 +455,7 @@ const AdvisoryBoard = () => {
           </div>
 
           {/* ── ROW 3: Register CTA strip ── */}
-          <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm px-8 py-5 flex flex-col sm:flex-row items-center gap-6 justify-between">
+          <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm px-8 py-2 flex flex-col sm:flex-row items-center gap-6 justify-between">
 
             {/* Left */}
             <div className="flex items-center gap-5">
@@ -473,7 +473,7 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* Right: Button */}
-            <button className="bg-[#e8711a] hover:bg-[#d26019] text-white font-black text-[12px] uppercase tracking-widest px-8 py-3.5 rounded-full flex items-center gap-3 transition-all duration-300 shrink-0 shadow-lg hover:shadow-[#e8711a]/30 hover:-translate-y-0.5">
+            <button className="bg-[#e8711a] hover:bg-[#d26019] text-white font-black text-[12px] uppercase tracking-widest px-8 py-2 rounded-full flex items-center gap-3 transition-all duration-300 shrink-0 shadow-lg hover:shadow-[#e8711a]/30 hover:-translate-y-0.5">
               Register Now
               <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
                 <ArrowRight size={14} />
@@ -481,7 +481,7 @@ const AdvisoryBoard = () => {
             </button>
           </div>
 
-        </div>
+        </SectionContainer>
       </section>
     </div>
   );
