@@ -240,14 +240,31 @@ const DelegatesLogin = () => {
                                         </div>
 
                                         <div className="mt-2 mb-2">
-                                            <p className="text-[#357a38] text-xl mb-1 italic" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+                                            <p
+                                                className="text-[#357a38] text-xl mb-1 italic font-bold"
+                                                style={{
+                                                    fontFamily: "'Playfair Display', serif",
+                                                    fontStyle: "italic",
+                                                    textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff"
+                                                }}
+                                            >
                                                 Welcome!
                                             </p>
-                                            <h1 className="text-[28px] md:text-[30px] font-black text-slate-900 leading-[1.1] mt-2 mb-8">
+                                            <h1
+                                                className="text-[28px] md:text-[24px] font-black text-slate-950 leading-[1.1] mt-2 mb-6"
+                                                style={{
+                                                    textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff"
+                                                }}
+                                            >
                                                 Let’s make<br />
                                                 wellness happen
                                             </h1>
-                                            <p className="text-gray-700 text-[14px] leading-relaxed max-w-[280px]">
+                                            <p
+                                                className="text-slate-950 text-[14px] leading-relaxed max-w-[280px] font-semibold"
+                                                style={{
+                                                    textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff"
+                                                }}
+                                            >
                                                 Log in to access your agenda, sessions, exhibitors, networking and more.
                                             </p>
                                         </div>
