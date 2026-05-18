@@ -194,7 +194,7 @@ const WhoShould = () => {
     return (
 
         <div className=" relative w-full overflow-hidden py-8  bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
-            <div className={`flex justify-between flex-row ${SectionContainer}`}>
+            <SectionContainer className={`flex justify-between flex-row`}>
                 {/* ── LEFT: WHO SHOULD + BUYERS ── */}
                 <div>
                     <h2 className='text-lg font-normal uppercase ' style={{ color: '#fff', letterSpacing: '0.5px', marginBottom: '14px' }}>
@@ -237,7 +237,7 @@ const WhoShould = () => {
 
                 </div>
                 {/* ── RIGHT: KEY BENEFITS ── */}
-                <div className='flex gap-6'>
+                <div className='flex gap-2'>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
                         {/* Sellers Card */}
@@ -291,7 +291,7 @@ const WhoShould = () => {
                     </div>
 
                 </div>
-            </div>
+            </SectionContainer>
         </div>
     )
 }
