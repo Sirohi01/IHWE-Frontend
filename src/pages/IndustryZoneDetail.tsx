@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-    ArrowLeft, ArrowRight, Activity, Box, Monitor, Microscope, Leaf, Plane, 
+import {
+    ArrowLeft, ArrowRight, Activity, Box, Monitor, Microscope, Leaf, Plane,
     Beaker, Star, Heart, Globe, Zap, Award, Package, MapPin, Users, ShieldCheck,
     CheckCircle2, Target, Presentation, ArrowRightCircle, Map, Calendar
 } from "lucide-react";
@@ -27,7 +27,7 @@ const IndustryZoneDetail = () => {
     useEffect(() => {
         const fetchAll = async () => {
             if (!idOrSlug) return;
-            
+
             try {
                 setLoading(true);
                 let serviceCardId = idOrSlug;
@@ -35,7 +35,7 @@ const IndustryZoneDetail = () => {
 
                 // 1. Try to fetch by Slug first
                 pageDetail = await serviceDetailApi.getBySlug(idOrSlug);
-                
+
                 if (pageDetail) {
                     serviceCardId = pageDetail.serviceCardId;
                     setDetail(pageDetail);
@@ -97,21 +97,21 @@ const IndustryZoneDetail = () => {
             {/* ── HERO SECTION ── */}
             <section className="relative h-[55vh] min-h-[450px] flex items-start pt-12 md:pt-16 overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <img 
-                        src={detail?.heroImage ? `${SERVER_URL}${detail.heroImage}` : `${SERVER_URL}${zone.image}`} 
+                    <img
+                        src={detail?.heroImage ? `${SERVER_URL}${detail.heroImage}` : `${SERVER_URL}${zone.image}`}
                         alt={detail?.heroImageAlt || zone.title}
                         className="w-full h-full object-cover"
                     />
                     {/* Dynamic Overlay */}
-                    <div 
-                        className="absolute inset-0 bg-slate-950" 
+                    <div
+                        className="absolute inset-0 bg-slate-950"
                         style={{ opacity: overlayOpacity }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-slate-950/40 via-transparent to-transparent" />
                 </div>
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
@@ -162,15 +162,15 @@ const IndustryZoneDetail = () => {
                                             <div className="w-8 h-px bg-[#23471d]" />
                                             <span className="text-[#23471d] text-[10px] font-black uppercase tracking-[0.3em]">Overview</span>
                                         </div>
-                                        
+
                                         <h2 className="text-2xl md:text-3xl font-inter font-bold text-slate-900 mb-8 leading-tight">
                                             Driving Innovation & Excellence in the <span className="text-[#d26019]">{zone.title}</span> Sector
                                         </h2>
-                                        
+
                                         <div className="space-y-6">
                                             <div className="prose prose-lg max-w-none text-slate-600 leading-relaxed space-y-6 text-justify">
                                                 <div dangerouslySetInnerHTML={{ __html: zone.description }} />
-                                                
+
                                                 {!zone.description.includes('<p>') && (
                                                     <>
                                                         <p>
@@ -191,20 +191,20 @@ const IndustryZoneDetail = () => {
                                             </h3>
                                             <div className="grid grid-cols-1 gap-6">
                                                 {[
-                                                    { 
-                                                        title: "Targeted Networking", 
+                                                    {
+                                                        title: "Targeted Networking",
                                                         desc: "Direct access to specialized buyers, procurement officers, and hospital administrators specifically seeking your solutions.",
                                                     },
-                                                    { 
-                                                        title: "Brand Positioning", 
+                                                    {
+                                                        title: "Brand Positioning",
                                                         desc: "Showcase your leadership by exhibiting within a curated premium environment that enhances your brand's authority.",
                                                     },
-                                                    { 
-                                                        title: "Market Intelligence", 
+                                                    {
+                                                        title: "Market Intelligence",
                                                         desc: "Stay ahead of the curve with direct feedback from the Indian and international markets through face-to-face interactions.",
                                                     },
-                                                    { 
-                                                        title: "Business Expansion", 
+                                                    {
+                                                        title: "Business Expansion",
                                                         desc: "Generate high-quality leads and close deals with decision-makers who have the power to influence procurement.",
                                                     }
                                                 ].map((feature, i) => (
@@ -234,8 +234,8 @@ const IndustryZoneDetail = () => {
                                         <p className="text-white/70 text-sm mb-8 leading-relaxed text-justify">
                                             Join industry leaders in the {zone.title} pavilion. Limited stalls available for IHWE 2026.
                                         </p>
-                                        <Link 
-                                            to="/book-a-stand" 
+                                        <Link
+                                            to="/book-a-stand"
                                             className="w-full bg-[#d26019] text-white hover:bg-white hover:text-[#23471d] py-4 px-6 font-bold text-xs uppercase tracking-widest transition-all inline-flex items-center justify-center group"
                                         >
                                             Inquire Now <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -248,7 +248,7 @@ const IndustryZoneDetail = () => {
                                         <div className="w-1 h-6 bg-[#23471d]" />
                                         <h4 className="font-inter font-black text-slate-900 uppercase tracking-[0.2em] text-[11px]">Event Information</h4>
                                     </div>
-                                    
+
                                     <div className="space-y-8">
                                         <div className="flex gap-4">
                                             <div className="w-10 h-10 shrink-0 bg-slate-50 flex items-center justify-center rounded-none border-b-2 border-slate-200 group-hover:border-[#d26019] transition-colors">
@@ -256,7 +256,7 @@ const IndustryZoneDetail = () => {
                                             </div>
                                             <div>
                                                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Event Dates</p>
-                                                <p className="text-slate-900 font-bold text-sm">20-22 March 2026</p>
+                                                <p className="text-slate-900 font-bold text-sm">21-23 AUGUST 2026</p>
                                             </div>
                                         </div>
 

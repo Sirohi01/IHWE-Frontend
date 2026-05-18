@@ -80,7 +80,7 @@ const TravelFooter: React.FC = () => {
                   <span className="font-bold text-[10.5px] group-hover:underline">info@ihwe.in</span>
                 </a>
                 <a
-                  href="tel:+911149588555"
+                  href="tel:+91 9654900525"
                   className="flex items-center gap-2 text-[#1e293b] hover:text-[#4E9F3D] transition-colors group"
                 >
                   <Phone className="w-[11px] h-[11px] text-[#2D6A4F]" />

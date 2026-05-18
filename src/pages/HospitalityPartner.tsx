@@ -306,7 +306,7 @@ const HospitalityPartner = () => {
                                 <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent">
                                     <Phone className="w-5 h-5 text-white" />
                                 </div>
-                                <a href="tel:+911149588555" className="text-white font-black text-sm tracking-tight hover:text-amber-500 whitespace-nowrap">+91 11 4958 8555</a>
+                                <a href="tel:+91 9654900525" className="text-white font-black text-sm tracking-tight hover:text-amber-500 whitespace-nowrap">+91 9654900525</a>
                             </div>
                             <div className="px-4 border-l-2 border-white/10 flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent">
