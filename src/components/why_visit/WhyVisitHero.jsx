@@ -76,7 +76,7 @@ const WhyVisitHero = () => {
                                 {/* Buttons */}
                                 <div className="flex flex-col lg:flex-row gap-3">
                                     <button
-                                        onClick={() => window.open('/buyer-registration', '_blank')}
+                                        onClick={() => window.open('/visitor-registration', '_blank')}
                                         className="flex items-center gap-2 bg-[#2d6a1f] text-white text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded hover:bg-[#245518] transition whitespace-nowrap"
                                     >
                                         Register as Visitor

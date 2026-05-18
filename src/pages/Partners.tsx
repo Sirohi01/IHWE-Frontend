@@ -11,7 +11,7 @@ import { partnersApi } from "@/lib/api";
 import PartnershipPopup from "@/components/popups/PartnershipPopup";
 
 import partImage1 from "../assets/partimage1.png";
-import partImage from "../assets/partimage.png";  
+import partImage from "../assets/partimage.png";
 import part1 from "../assets/part1.png";
 import part2 from "../assets/part2.png";
 import part3 from "../assets/part3.png";
@@ -472,8 +472,8 @@ const Partners = () => {
                       <GoldSparkle style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
                       <GoldSparkle style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
 
-                      <Link 
-                        to="/partner-registration" 
+                      <Link
+                        to="/partner-registration"
                         target="_blank"
                         className="vendor-green-btn flex items-center justify-center gap-3 text-white w-full py-4 rounded-xl font-black text-[13px] uppercase tracking-wider shadow-lg transition-all group"
                       >
@@ -622,7 +622,7 @@ const Partners = () => {
                 <a href="mailto:support@ihwe.in" className="flex items-center gap-2 text-white/80 text-[11px] font-bold hover:text-[#74b123] transition-colors">
                   <Mail className="w-3.5 h-3.5" /> info@ihwe.in
                 </a>
-                <a href="tel:+911149588555" className="flex items-center gap-2 text-white/80 text-[13px] font-black hover:text-[#74b123] transition-colors">
+                <a href="tel:+91 9654900525" className="flex items-center gap-2 text-white/80 text-[13px] font-black hover:text-[#74b123] transition-colors">
                   <Phone className="w-3.5 h-3.5" /> +91 9654900525
                 </a>
               </div>
@@ -645,7 +645,7 @@ const Partners = () => {
               <Calendar className="w-9 h-9 text-[#2e7d32]" strokeWidth={1.5} />
               <div className="flex flex-col">
                 <span className="text-[18px] font-black text-[#00153c] leading-none">21 – 23</span>
-                <span className="text-[13px] font-black text-[#2e7d32] uppercase tracking-wider">MARCH 2026</span>
+                <span className="text-[13px] font-black text-[#2e7d32] uppercase tracking-wider">AUGUST 2026</span>
               </div>
             </div>
 

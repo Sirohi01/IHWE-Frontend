@@ -20,7 +20,7 @@ const testimonials = [
 ];
 
 const eventDetails = [
-    { icon: "/whyVisit/footer_calendar.svg", label: "20 - 22 MARCH 2026" },
+    { icon: "/whyVisit/footer_calendar.svg", label: "21 - 23 AUGUTST 2026" },
     { icon: "/whyVisit/footer_map.svg", label: "PRAGATI MAIDAN,\nNEW DELHI, INDIA" },
     { icon: "/whyVisit/footer_globe.svg", label: "www.ihwe.in" },
     { icon: "/whyVisit/footer_mail.svg", label: "info@ihwe.in" },

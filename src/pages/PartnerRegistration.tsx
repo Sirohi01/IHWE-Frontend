@@ -723,8 +723,8 @@ const PartnerRegistration = () => {
                                         <a href="mailto:partner@ihwe.in" className="flex items-center gap-4 text-[15px] font-black text-[#0b1a3a] hover:text-[#2e7d32] transition-colors">
                                             <Mail className="w-6 h-6 text-[#2e7d32]" /> info@ihwe.in
                                         </a>
-                                        <a href="tel:+911149588555" className="flex items-center gap-4 text-[15px] font-black text-[#0b1a3a] hover:text-[#2e7d32] transition-colors">
-                                            <Phone className="w-6 h-6 text-[#2e7d32]" /> +91 11 4958 8555
+                                        <a href="tel:+91 9654900525" className="flex items-center gap-4 text-[15px] font-black text-[#0b1a3a] hover:text-[#2e7d32] transition-colors">
+                                            <Phone className="w-6 h-6 text-[#2e7d32]" /> +91 9654900525
                                         </a>
                                         <div className="flex items-center gap-4 text-[13px] font-bold text-slate-500">
                                             <Clock className="w-6 h-6 text-[#2e7d32]" /> Mon – Sat: 10:00 AM – 6:00 PM
@@ -788,7 +788,7 @@ const PartnerRegistration = () => {
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Phone className="w-3.5 h-3.5 text-white/70" />
-                                <a href="tel:+911149588555" className="text-[11px] font-medium text-white hover:text-[#4ade80] transition-colors">+91 11 4958 8555</a>
+                                <a href="tel:+91 9654900525" className="text-[11px] font-medium text-white hover:text-[#4ade80] transition-colors">+91 9654900525</a>
                             </div>
                         </div>
 
@@ -810,7 +810,7 @@ const PartnerRegistration = () => {
                             </div>
                             <div>
                                 <p className="text-[9px] font-bold text-[#4ade80] uppercase tracking-[0.15em]">Event Dates</p>
-                                <p className="text-[12px] font-bold text-white">20 – 22 MARCH 2026</p>
+                                <p className="text-[12px] font-bold text-white">21 – 23 AUGUST 2026</p>
                                 <p className="text-[9px] font-medium text-white/50">(Tentative)</p>
                             </div>
                         </div>

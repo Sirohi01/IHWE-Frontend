@@ -339,7 +339,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
             </button>
 
             <div className="flex-1 flex flex-col p-6 overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="flex items-center gap-3 mb-5 flex-shrink-0"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -368,15 +368,15 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       <div>
                         <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
                         <div className="relative">
-                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3"/><path d="M3 18a7 7 0 0114 0" strokeLinecap="round"/></svg></span>
-                          <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3" /><path d="M3 18a7 7 0 0114 0" strokeLinecap="round" /></svg></span>
+                          <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                         </div>
                       </div>
                       <div>
                         <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Company Name *</label>
                         <div className="relative">
-                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1"/><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round"/></svg></span>
-                          <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1" /><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round" /></svg></span>
+                          <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
                         </div>
                       </div>
                     </div>
@@ -388,9 +388,9 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                           {isPhoneVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
                         </label>
                         <div className="relative">
-                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2"/><circle cx="10" cy="15" r="0.7" fill="currentColor"/></svg></span>
-                          <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} disabled={isPhoneVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70"/>
-                          
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2" /><circle cx="10" cy="15" r="0.7" fill="currentColor" /></svg></span>
+                          <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} disabled={isPhoneVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70" />
+
                           {!isPhoneVerified && !showPhoneOtpInput && (
                             <button onClick={handleRequestPhoneOtp} disabled={isSendingPhoneOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
                               {isSendingPhoneOtp ? "..." : "GET OTP"}
@@ -414,9 +414,9 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                           {isEmailVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
                         </label>
                         <div className="relative">
-                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2"/><path d="M2 7l8 5 8-5" strokeLinecap="round"/></svg></span>
-                          <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} disabled={isEmailVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70"/>
-                          
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2" /><path d="M2 7l8 5 8-5" strokeLinecap="round" /></svg></span>
+                          <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} disabled={isEmailVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70" />
+
                           {!isEmailVerified && !showEmailOtpInput && (
                             <button onClick={handleRequestEmailOtp} disabled={isSendingEmailOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
                               {isSendingEmailOtp ? "..." : "GET OTP"}
@@ -459,12 +459,12 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                     <div className="px-2">
                       <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
                       <div className="relative w-full">
-                        <textarea 
-                          name="message" 
-                          placeholder="Share your specific requirements or queries here..." 
-                          value={formData.message} 
-                          onChange={handleChange} 
-                          maxLength={300} 
+                        <textarea
+                          name="message"
+                          placeholder="Share your specific requirements or queries here..."
+                          value={formData.message}
+                          onChange={handleChange}
+                          maxLength={300}
                           rows={2}
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none"
                         />
@@ -473,7 +473,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                     </div>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     className="flex flex-wrap gap-2.5 mt-8 mb-4 px-2 flex-shrink-0"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -484,28 +484,28 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       <Sparkle style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
                       <Sparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
 
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         onClick={handleSubmit}
                         disabled={isSubmitting}
                         className="blue-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg disabled:opacity-70"
                       >
                         {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
-                        {!isSubmitting && <svg viewBox="0 0 20 20" className="w-3 h-3" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                        {!isSubmitting && <svg viewBox="0 0 20 20" className="w-3 h-3" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                       </button>
                     </div>
 
                     <button type="button" className="flex-1 min-w-[120px] border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
-                      <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z"/></svg>
+                      <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
                       WHATSAPP
                     </button>
 
                     <div className="relative group/btn flex-1 min-w-[120px]">
                       <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
                       <Sparkle color="#a2d149" style={{ bottom: '-8px', right: '10%', animationDelay: '0.6s' }} />
-                      <a href="tel:+911149588555" className="w-full">
+                      <a href="tel:+91 9654900525" className="w-full">
                         <button type="button" className="green-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg">
-                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 00-1.02.24l-2.2 2.2a15.05 15.05 0 01-6.59-6.59l2.2-2.2a1 1 0 00.25-1.02A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 00-1.02.24l-2.2 2.2a15.05 15.05 0 01-6.59-6.59l2.2-2.2a1 1 0 00.25-1.02A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z" /></svg>
                           QUICK CALL
                         </button>
                       </a>
@@ -513,7 +513,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                   </motion.div>
                 </>
               ) : (
-                <motion.div 
+                <motion.div
                   className="flex-1 flex flex-col items-center justify-center text-center p-8"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -525,7 +525,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                   <p className="text-gray-600 text-sm leading-relaxed max-w-[280px] mb-8 font-medium">
                     Thank you, <span className="text-[#2d6a2d] font-bold">{formData.fullName}</span>. Our team has received your request and will contact you shortly to coordinate further.
                   </p>
-                  <button 
+                  <button
                     onClick={onClose}
                     className="green-btn-pp text-white font-black text-[11px] tracking-widest uppercase px-10 py-3 rounded-xl transition-all hover:scale-105 shadow-xl"
                   >
@@ -555,7 +555,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 <div className="text-left mb-4 px-1">
                   <p className="text-black text-[11px] font-medium uppercase tracking-wider leading-tight">Why Choose</p>
                   <h3 className="text-[15px] font-extrabold text-[#2d6a2d] leading-tight">IHWE Partners?</h3>
-                  <div className="w-6 h-0.5 bg-[#2d6a2d] mt-1 rounded-full"/>
+                  <div className="w-6 h-0.5 bg-[#2d6a2d] mt-1 rounded-full" />
                 </div>
               </motion.div>
 

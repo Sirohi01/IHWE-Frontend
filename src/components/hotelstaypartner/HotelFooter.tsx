@@ -79,7 +79,7 @@ const HotelFooter: React.FC = () => {
                 <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
                 <span className="font-black text-[11px]">info@ihwe.in</span>
               </a>
-              <a href="tel:+911149588555" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+              <a href="tel:+91 9654900525" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
                 <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
                 <span className="font-black text-[11px]">+91 9654900525</span>
               </a>
