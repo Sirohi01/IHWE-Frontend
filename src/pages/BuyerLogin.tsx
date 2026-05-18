@@ -202,13 +202,13 @@ const BuyerLogin = () => {
                     {/* Main Container */}
                     <div className="max-w-3xl mx-auto">
 
-                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-fit lg:min-h-[550px]">
 
                             {/* LEFT SIDE */}
                             <div className="w-full flex flex-col">
 
                                 <div
-                                    className="flex-1 px-8 py-2 relative overflow-hidden flex flex-col bg-cover bg-center"
+                                    className="w-full h-auto lg:flex-1 px-8 py-8 lg:py-2 relative overflow-hidden flex flex-col bg-cover bg-center"
                                     style={{
                                         backgroundImage: "url('/buyerLogin2.webp')",
                                         backgroundRepeat: "no-repeat",
@@ -337,7 +337,7 @@ const BuyerLogin = () => {
                             </div>
 
                             {/* RIGHT SIDE */}
-                            <div className="px-8 relative flex flex-col justify-center h-full">
+                            <div className="w-full px-6 py-12 lg:px-8 lg:py-4 relative flex flex-col justify-center min-h-[500px] lg:min-h-fit">
 
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
 
