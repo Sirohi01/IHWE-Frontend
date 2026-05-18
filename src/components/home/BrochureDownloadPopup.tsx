@@ -218,7 +218,7 @@ const BrochureDownloadPopup: React.FC = () => {
         >
           <motion.div
             variants={modalVariants}
-            className="relative w-full max-w-[660px] bg-white rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.4)] my-auto border border-white/20"
+            className="relative w-full max-w-[95%] md:max-w-[660px] bg-white rounded-2xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.4)] my-auto border border-white/20"
             style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
           >
             <motion.button
@@ -231,8 +231,8 @@ const BrochureDownloadPopup: React.FC = () => {
             </motion.button>
 
             <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-[40%] bg-white flex border-r border-slate-100">
-                <div className="w-[30%] h-full min-h-[320px] relative shrink-0">
+              <div className="w-full md:w-[40%] bg-white flex border-b md:border-b-0 md:border-r border-slate-100">
+                <div className="hidden md:block w-[30%] h-full min-h-[320px] relative shrink-0">
                   <motion.img
                     initial={{ scale: 1.2, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -262,41 +262,41 @@ const BrochureDownloadPopup: React.FC = () => {
                   />
                 </div>
 
-                <div className="flex-1 p-4 md:p-5 flex flex-col justify-center text-left">
-                  <motion.div variants={itemVariants}>
-                    <img src={logoUrl || "/logo.png"} alt="Logo" className="object-contain" />
+                <div className="flex-1 p-5 md:p-5 flex flex-col justify-center text-center md:text-left">
+                  <motion.div variants={itemVariants} className="flex justify-center md:justify-start mb-2">
+                    <img src={logoUrl || "/logo.png"} alt="Logo" className="h-12 md:h-auto object-contain" />
                   </motion.div>
 
-                  <div className="space-y-0.5 mb-4">
-                    <motion.p variants={itemVariants} className="text-slate-500 text-[9px] font-bold uppercase tracking-wider">Welcome to</motion.p>
-                    <motion.h2 variants={itemVariants} className="text-[17px] font-extrabold text-[#134698] leading-[1.1] tracking-tight">
+                  <div className="space-y-0.5 mb-3 md:mb-4">
+                    <motion.p variants={itemVariants} className="text-slate-500 text-[8px] md:text-[9px] font-bold uppercase tracking-wider">Welcome to</motion.p>
+                    <motion.h2 variants={itemVariants} className="text-[15px] md:text-[17px] font-extrabold text-[#134698] leading-[1.1] tracking-tight">
                       INTERNATIONAL <br />
                       HEALTH & WELLNESS <br />
                       <span className="text-emerald-600">EXPO 2026</span>
                     </motion.h2>
                   </div>
 
-                  <motion.p variants={itemVariants} className="text-slate-500 text-[8.5px] font-semibold mb-5 leading-tight max-w-[160px] uppercase">
+                  <motion.p variants={itemVariants} className="text-slate-500 text-[8px] md:text-[8.5px] font-semibold mb-4 md:mb-5 leading-tight max-w-full md:max-w-[160px] uppercase">
                     India's Leading Global Healthcare, Wellness & Medical Trade Platform
                   </motion.p>
 
-                  <div className="space-y-3">
-                    <motion.div variants={itemVariants} className="flex items-center gap-2.5">
-                      <div className="bg-emerald-50 p-1.5 rounded-lg text-emerald-600 shrink-0">
-                        <Calendar size={14} />
+                  <div className="flex md:flex-col justify-center gap-4 md:gap-3 mb-2 md:mb-0">
+                    <motion.div variants={itemVariants} className="flex items-center gap-2 md:gap-2.5 text-left">
+                      <div className="bg-emerald-50 p-1 md:p-1.5 rounded-lg text-emerald-600 shrink-0">
+                        <Calendar size={12} className="md:w-[14px] md:h-[14px]" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-slate-900 leading-tight">21-23 AUGUST 2026</p>
-                        <p className="text-[8px] text-slate-400 font-bold uppercase">Fri - Sat - Sun</p>
+                        <p className="text-[9px] md:text-[10px] font-bold text-slate-900 leading-tight">21-23 AUG 2026</p>
+                        <p className="text-[7px] md:text-[8px] text-slate-400 font-bold uppercase">Fri - Sun</p>
                       </div>
                     </motion.div>
-                    <motion.div variants={itemVariants} className="flex items-center gap-2.5">
-                      <div className="bg-emerald-50 p-1.5 rounded-lg text-emerald-600 shrink-0">
-                        <MapPin size={14} />
+                    <motion.div variants={itemVariants} className="flex items-center gap-2 md:gap-2.5 text-left">
+                      <div className="bg-emerald-50 p-1 md:p-1.5 rounded-lg text-emerald-600 shrink-0">
+                        <MapPin size={12} className="md:w-[14px] md:h-[14px]" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-slate-900 leading-tight uppercase">PRAGATI MAIDAN</p>
-                        <p className="text-[8px] text-slate-400 font-bold uppercase">NEW DELHI, INDIA</p>
+                        <p className="text-[9px] md:text-[10px] font-bold text-slate-900 leading-tight uppercase">NEW DELHI</p>
+                        <p className="text-[7px] md:text-[8px] text-slate-400 font-bold uppercase">PRAGATI MAIDAN</p>
                       </div>
                     </motion.div>
                   </div>
@@ -313,11 +313,11 @@ const BrochureDownloadPopup: React.FC = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <motion.div variants={itemVariants} className="mb-4">
-                        <h3 className="text-[16px] font-extrabold text-slate-800 leading-tight text-left uppercase">
+                      <motion.div variants={itemVariants} className="mb-4 text-center md:text-left">
+                        <h3 className="text-[14px] md:text-[16px] font-extrabold text-slate-800 leading-tight uppercase">
                           How Would You Like to <span className="text-emerald-600">Participate?</span>
                         </h3>
-                        <p className="text-[9.5px] text-slate-500 font-semibold mt-0.5 text-left uppercase">
+                        <p className="text-[9px] md:text-[9.5px] text-slate-500 font-semibold mt-0.5 uppercase">
                           Choose your category and start your journey with IHWE 2026
                         </p>
                       </motion.div>
@@ -330,17 +330,17 @@ const BrochureDownloadPopup: React.FC = () => {
                             whileHover={{ scale: 1.02, y: -2, boxShadow: "0 10px 20px rgba(0,0,0,0.05)" }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleAction(card)}
-                            className={`flex items-center gap-3 p-3.5 rounded-xl border ${card.color} text-left transition-all shadow-sm`}
+                            className={`flex items-center gap-2.5 md:gap-3 p-3 md:p-3.5 rounded-xl border ${card.color} text-left transition-all shadow-sm`}
                           >
-                            <div className={`w-9 h-9 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}>
-                              {card.icon}
+                            <div className={`w-8 h-8 md:w-9 md:h-9 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}>
+                              {React.cloneElement(card.icon as React.ReactElement, { size: 18 })}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-[9px] font-bold text-slate-800 leading-none mb-1 uppercase tracking-tight">{card.title}</h4>
-                              <p className="text-[8px] text-slate-500 font-medium leading-tight line-clamp-1 uppercase">{card.desc}</p>
+                              <h4 className="text-[8.5px] md:text-[9px] font-bold text-slate-800 leading-none mb-1 uppercase tracking-tight">{card.title}</h4>
+                              <p className="text-[7.5px] md:text-[8px] text-slate-500 font-medium leading-tight line-clamp-1 uppercase">{card.desc}</p>
                             </div>
-                            <div className={`w-5.5 h-5.5 ${card.arrowBg} text-white rounded-full flex items-center justify-center shrink-0 shadow-sm`}>
-                              <ChevronRight size={12} />
+                            <div className={`w-5 h-5 md:w-5.5 md:h-5.5 ${card.arrowBg} text-white rounded-full flex items-center justify-center shrink-0 shadow-sm`}>
+                              <ChevronRight size={10} className="md:w-[12px] md:h-[12px]" />
                             </div>
                           </motion.button>
                         ))}
@@ -457,27 +457,27 @@ const BrochureDownloadPopup: React.FC = () => {
 
             <motion.div
               initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.8 }}
-              className="bg-[#cd1c24] text-white py-2 px-6 flex flex-wrap items-center justify-between gap-3 border-y border-white/10"
+              className="bg-[#cd1c24] text-white py-2 px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-y border-white/10"
             >
               <div className="flex items-center gap-3">
                 <motion.div
                   animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}
-                  className="p-1.5 bg-white/10 rounded-full"
+                  className="p-1.5 bg-white/10 rounded-full shrink-0"
                 >
                   <Clock size={16} className="text-white" />
                 </motion.div>
-                <div className="text-left">
-                  <p className="text-[12px] font-bold uppercase tracking-tight leading-none mb-0.5">EARLY BIRD OFFER CLOSING SOON!</p>
-                  <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest">Premium Corner Stalls Almost Full</p>
+                <div className="text-center sm:text-left">
+                  <p className="text-[11px] md:text-[12px] font-bold uppercase tracking-tight leading-none mb-0.5">EARLY BIRD OFFER CLOSING SOON!</p>
+                  <p className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase tracking-widest">Premium Corner Stalls Almost Full</p>
                 </div>
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 onClick={() => handleAction({ link: "/book-a-stand" })}
-                className="bg-[#f4b63f] hover:bg-yellow-300 text-[#cd1c24] px-4 py-2 rounded-lg text-[9px] font-bold flex items-center gap-1.5 transition-all shadow-lg"
+                className="bg-[#f4b63f] hover:bg-yellow-300 text-[#cd1c24] px-4 py-2 rounded-lg text-[8px] md:text-[9px] font-bold flex items-center gap-1.5 transition-all shadow-lg w-full sm:w-auto justify-center"
               >
-                <Star size={12} className="fill-current" />
-                RESERVE PREMIUM SPACE NOW
+                <Star size={10} className="fill-current md:w-[12px] md:h-[12px]" />
+                RESERVE SPACE NOW
               </motion.button>
             </motion.div>
 
@@ -500,7 +500,7 @@ const BrochureDownloadPopup: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-[#0f172a] py-3 px-6 flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-[#0f172a] py-3 md:py-3 px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-4">
               <div className="flex items-center gap-5 text-white">
                 <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 1.5 }} className="flex items-center gap-1.5 opacity-90">
                   <ShieldCheck size={14} className="text-blue-400" />
@@ -512,25 +512,25 @@ const BrochureDownloadPopup: React.FC = () => {
                 </motion.div>
               </div>
 
-              <div className="flex items-center gap-6">
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.7 }} className="flex items-center gap-2.5 text-white text-left">
-                  <div className="p-1.5 bg-white/5 rounded-lg border border-white/10">
+              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 w-full md:w-auto">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.7 }} className="flex items-center gap-2.5 text-white text-left self-start sm:self-auto">
+                  <div className="p-1.5 bg-white/5 rounded-lg border border-white/10 shrink-0">
                     <Phone size={14} className="text-blue-400" />
                   </div>
-                  <div className="flex-1 min-w-[150px]">
+                  <div className="flex-1 min-w-[120px] md:min-w-[150px]">
                     <p className="text-[7.5px] text-white/30 font-bold uppercase tracking-wider">Need Help?</p>
-                    <a href="tel:+919654900525" className="text-[11px] font-bold tracking-tight text-white hover:text-blue-400 transition-colors block">+91 9654900525</a>
-                    <a href="mailto:info@ihwe.in" className="text-[11px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5 hover:text-white transition-colors block">info@ihwe.in</a>
+                    <a href="tel:+919654900525" className="text-[10px] md:text-[11px] font-bold tracking-tight text-white hover:text-blue-400 transition-colors block">+91 9654900525</a>
+                    <a href="mailto:info@ihwe.in" className="text-[10px] md:text-[11px] font-bold text-blue-400/80 tracking-tight lowercase mt-0.5 hover:text-white transition-colors block">info@ihwe.in</a>
                   </div>
                 </motion.div>
                 <motion.button
                   initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 1.8 }}
                   whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                   onClick={() => handleAction({ link: whatsappUrl })}
-                  className="bg-[#22c55e] hover:bg-[#16a34a] text-white px-4 py-2 rounded-xl flex items-center gap-2 text-[10px] font-bold transition-all shadow-lg"
+                  className="bg-[#22c55e] hover:bg-[#16a34a] text-white px-4 py-2.5 md:py-2 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold transition-all shadow-lg w-full sm:w-auto"
                 >
                   <MessageCircle size={15} fill="currentColor" />
-                  CHAT ON WHATSAPP
+                  WHATSAPP
                 </motion.button>
               </div>
             </div>

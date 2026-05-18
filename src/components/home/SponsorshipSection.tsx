@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 
-import bgImage from '../../assets/1234.png';
+import bgImage from '../../assets/12345.png';
 import titleSponsorImg from '../../assets/icon111.png';
 import poweredByImg from '../../assets/icon222.png';
 import associateSponsorImg from '../../assets/icon333.png';

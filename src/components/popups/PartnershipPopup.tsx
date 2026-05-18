@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
+import { CheckCircle, ShieldCheck } from "lucide-react";
+import { API_URL, otpApi, expoSupportEnquiryApi } from "../../lib/api";
 import pop1 from "../../assets/pop1.png";
 import leaf2 from "../../assets/leaf2.png";
 import why1 from "../../assets/why1.png";
@@ -8,7 +11,6 @@ import t2 from "../../assets/t2.png";
 import t3 from "../../assets/t3.png";
 import t4 from "../../assets/t4.png";
 import t5 from "../../assets/t5.png";
-
 
 const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
   <span
@@ -86,23 +88,173 @@ interface PartnershipPopupProps {
 
 export default function PartnershipPopup({ isOpen, onClose, initialService }: PartnershipPopupProps) {
   const [formData, setFormData] = useState({ fullName: "", companyName: "", mobile: "", email: "", stallSize: "", message: "" });
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [charCount, setCharCount] = useState(0);
+
+  // OTP & Submission States
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Phone OTP States
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [showPhoneOtpInput, setShowPhoneOtpInput] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isSendingPhoneOtp, setIsSendingPhoneOtp] = useState(false);
+  const [isVerifyingPhoneOtp, setIsVerifyingPhoneOtp] = useState(false);
+
+  // Email OTP States
+  const [emailOtp, setEmailOtp] = useState("");
+  const [showEmailOtpInput, setShowEmailOtpInput] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isSendingEmailOtp, setIsSendingEmailOtp] = useState(false);
+  const [isVerifyingEmailOtp, setIsVerifyingEmailOtp] = useState(false);
 
   // Initialize selected services when initialService changes
   useEffect(() => {
     if (initialService) {
       setSelectedServices([initialService]);
+    } else if (isOpen) {
+      // Don't reset if just opening without initialService
     } else {
       setSelectedServices([]);
+      setIsSubmitted(false);
+      setIsEmailVerified(false);
+      setIsPhoneVerified(false);
+      setShowEmailOtpInput(false);
+      setShowPhoneOtpInput(false);
     }
   }, [initialService, isOpen]);
 
-  const toggleService = (id) => setSelectedServices(p => p.includes(id) ? p.filter(s => s !== id) : [...p, id]);
-  const handleChange = (e) => {
+  const toggleService = (id: string) => setSelectedServices(p => p.includes(id) ? p.filter(s => s !== id) : [...p, id]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === "message") setCharCount(value.length);
     setFormData(p => ({ ...p, [name]: value }));
+
+    if (name === 'email') {
+      setIsEmailVerified(false);
+      setShowEmailOtpInput(false);
+    }
+    if (name === 'mobile') {
+      setIsPhoneVerified(false);
+      setShowPhoneOtpInput(false);
+    }
+  };
+
+  const handleRequestPhoneOtp = async () => {
+    if (!formData.mobile || formData.mobile.length < 10) {
+      return toast.error("Please enter a valid mobile number");
+    }
+    setIsSendingPhoneOtp(true);
+    try {
+      const res = await otpApi.request(formData.mobile, 'phone', formData.fullName, 'EXPO_SUPPORT');
+      if (res.success) {
+        setShowPhoneOtpInput(true);
+        toast.success("OTP sent to WhatsApp");
+      } else {
+        toast.error(res.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      setIsSendingPhoneOtp(false);
+    }
+  };
+
+  const handleVerifyPhoneOtp = async () => {
+    if (!phoneOtp || phoneOtp.length !== 6) {
+      return toast.error("Enter 6-digit OTP");
+    }
+    setIsVerifyingPhoneOtp(true);
+    try {
+      const res = await otpApi.verify(formData.mobile, phoneOtp, 'phone');
+      if (res.success) {
+        setIsPhoneVerified(true);
+        setShowPhoneOtpInput(false);
+        toast.success("Mobile verified!");
+      } else {
+        toast.error(res.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      setIsVerifyingPhoneOtp(false);
+    }
+  };
+
+  const handleRequestEmailOtp = async () => {
+    if (!formData.email || !formData.email.includes('@')) {
+      return toast.error("Please enter a valid email");
+    }
+    setIsSendingEmailOtp(true);
+    try {
+      const res = await otpApi.request(formData.email, 'email', formData.fullName, 'EXPO_SUPPORT');
+      if (res.success) {
+        setShowEmailOtpInput(true);
+        toast.success("OTP sent to your email");
+      } else {
+        toast.error(res.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      setIsSendingEmailOtp(false);
+    }
+  };
+
+  const handleVerifyEmailOtp = async () => {
+    if (!emailOtp || emailOtp.length !== 6) {
+      return toast.error("Enter 6-digit OTP");
+    }
+    setIsVerifyingEmailOtp(true);
+    try {
+      const res = await otpApi.verify(formData.email, emailOtp, 'email');
+      if (res.success) {
+        setIsEmailVerified(true);
+        setShowEmailOtpInput(false);
+        toast.success("Email verified!");
+      } else {
+        toast.error(res.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      setIsVerifyingEmailOtp(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.fullName || !formData.companyName || !formData.mobile || !formData.email) {
+      return toast.error("Please fill all required fields");
+    }
+    if (selectedServices.length === 0) {
+      return toast.error("Please select at least one service");
+    }
+    if (!isPhoneVerified) {
+      return toast.warning("Please verify your mobile number via OTP");
+    }
+    if (!isEmailVerified) {
+      return toast.warning("Please verify your email via OTP");
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await expoSupportEnquiryApi.submit({
+        ...formData,
+        selectedServices
+      });
+      if (res.success) {
+        setIsSubmitted(true);
+        toast.success("Enquiry submitted successfully!");
+      } else {
+        toast.error(res.message || "Failed to submit enquiry");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -115,7 +267,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
         >
-          {/* ── Inject keyframe animations ── */}
           <style>{`
             @keyframes goldShift {
               0%   { background-position: 0% 50%; }
@@ -172,39 +323,14 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
             }
           `}</style>
 
-          {/* Popup Content Container with GSAP-style advanced animation */}
           <motion.div
-            className="relative bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex mt-6"
-            style={{ width: '100%', maxWidth: 800, height: 'auto', maxHeight: 'min(94vh, 820px)' }}
-            initial={{
-              opacity: 0,
-              scale: 0.85,
-              rotateX: 15,
-              y: 60,
-              perspective: 1000
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotateX: 0,
-              y: 0
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.9,
-              y: 40,
-              rotateX: -10,
-              transition: { duration: 0.3, ease: "easeInOut" }
-            }}
-            transition={{
-              type: "spring",
-              damping: 18,
-              stiffness: 100,
-              mass: 1,
-              duration: 0.6
-            }}
+            className="relative bg-white rounded-3xl shadow-2xl overflow-hidden flex mt-6"
+            style={{ width: '100%', maxWidth: 720, height: 'auto', maxHeight: 'min(94vh, 850px)' }}
+            initial={{ opacity: 0, scale: 0.85, rotateX: 15, y: 60, perspective: 1000 }}
+            animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40, rotateX: -10, transition: { duration: 0.3, ease: "easeInOut" } }}
+            transition={{ type: "spring", damping: 18, stiffness: 100, mass: 1, duration: 0.6 }}
           >
-            {/* Close */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-50 w-8 h-8 bg-black/10 hover:bg-red-600 text-black hover:text-white rounded-full flex items-center justify-center transition-all shadow-sm backdrop-blur-sm"
@@ -212,12 +338,9 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
               <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" /></svg>
             </button>
 
-            {/* ── LEFT PANEL ── */}
             <div className="flex-1 flex flex-col p-6 overflow-hidden">
-
-              {/* Header */}
-              <motion.div
-                className="flex items-center gap-4 mb-6 flex-shrink-0"
+              <motion.div 
+                className="flex items-center gap-3 mb-5 flex-shrink-0"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -233,157 +356,209 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 </div>
               </motion.div>
 
-              {/* Form Fields Section */}
-              <motion.div
-                className="space-y-5 flex-shrink-0"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                {/* Name + Company */}
-                <div className="grid grid-cols-2 gap-4 px-1">
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
-                    <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3" /><path d="M3 18a7 7 0 0114 0" strokeLinecap="round" /></svg></span>
-                      <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+              {!isSubmitted ? (
+                <>
+                  <motion.div
+                    className="space-y-5 flex-shrink-0"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <div className="grid grid-cols-2 gap-4 px-1">
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3"/><path d="M3 18a7 7 0 0114 0" strokeLinecap="round"/></svg></span>
+                          <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Company Name *</label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1"/><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round"/></svg></span>
+                          <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all"/>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Company Name *</label>
-                    <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1" /><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round" /></svg></span>
-                      <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+
+                    <div className="grid grid-cols-2 gap-4 px-1">
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1 flex justify-between items-center">
+                          Mobile Number *
+                          {isPhoneVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2"/><circle cx="10" cy="15" r="0.7" fill="currentColor"/></svg></span>
+                          <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} disabled={isPhoneVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70"/>
+                          
+                          {!isPhoneVerified && !showPhoneOtpInput && (
+                            <button onClick={handleRequestPhoneOtp} disabled={isSendingPhoneOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isSendingPhoneOtp ? "..." : "GET OTP"}
+                            </button>
+                          )}
+                        </div>
+
+                        {showPhoneOtpInput && !isPhoneVerified && (
+                          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mt-1.5 flex gap-1.5 items-center bg-gray-50 p-1.5 rounded-lg border border-gray-200">
+                            <input type="text" maxLength={6} placeholder="6-digit OTP" value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)} className="flex-1 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded focus:outline-none focus:border-[#2d6a2d]" />
+                            <button onClick={handleVerifyPhoneOtp} disabled={isVerifyingPhoneOtp} className="bg-[#2d6a2d] text-white text-[8px] font-bold px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isVerifyingPhoneOtp ? "..." : "VERIFY"}
+                            </button>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1 flex justify-between items-center">
+                          Email Address *
+                          {isEmailVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2"/><path d="M2 7l8 5 8-5" strokeLinecap="round"/></svg></span>
+                          <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} disabled={isEmailVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70"/>
+                          
+                          {!isEmailVerified && !showEmailOtpInput && (
+                            <button onClick={handleRequestEmailOtp} disabled={isSendingEmailOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isSendingEmailOtp ? "..." : "GET OTP"}
+                            </button>
+                          )}
+                        </div>
+
+                        {showEmailOtpInput && !isEmailVerified && (
+                          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mt-1.5 flex gap-1.5 items-center bg-gray-50 p-1.5 rounded-lg border border-gray-200">
+                            <input type="text" maxLength={6} placeholder="6-digit OTP" value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)} className="flex-1 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded focus:outline-none focus:border-[#2d6a2d]" />
+                            <button onClick={handleVerifyEmailOtp} disabled={isVerifyingEmailOtp} className="bg-[#2d6a2d] text-white text-[8px] font-bold px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isVerifyingEmailOtp ? "..." : "VERIFY"}
+                            </button>
+                          </motion.div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Mobile + Email */}
-                <div className="grid grid-cols-2 gap-4 px-1">
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Mobile Number *</label>
-                    <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2" /><circle cx="10" cy="15" r="0.7" fill="currentColor" /></svg></span>
-                      <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+                    <div className="px-2">
+                      <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-2">Select Required Service(s) *</label>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {serviceOptions.map(s => {
+                          const checked = selectedServices.includes(s.id);
+                          return (
+                            <button key={s.id} type="button" onClick={() => toggleService(s.id)}
+                              className={`relative border-2 rounded-lg pt-2 pb-1.5 px-1.5 flex flex-col items-center gap-1 transition-all cursor-pointer
+                                ${checked ? "border-[#2d6a2d] bg-[#f0f7ee]" : "border-gray-200 bg-white hover:border-[#a5d6a7]"}`}>
+                              <div className={`absolute top-1 right-1 w-3.5 h-3.5 border-2 rounded flex items-center justify-center
+                                ${checked ? "border-[#2d6a2d] bg-[#2d6a2d]" : "border-gray-300 bg-white"}`}>
+                                {checked && <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="white" strokeWidth="2.5"><path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                              </div>
+                              {s.icon}
+                              <span className="text-[9.5px] font-semibold text-gray-700 leading-tight text-center">{s.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Email Address *</label>
-                    <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2" /><path d="M2 7l8 5 8-5" strokeLinecap="round" /></svg></span>
-                      <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+
+                    <div className="px-2">
+                      <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
+                      <div className="relative w-full">
+                        <textarea 
+                          name="message" 
+                          placeholder="Share your specific requirements or queries here..." 
+                          value={formData.message} 
+                          onChange={handleChange} 
+                          maxLength={300} 
+                          rows={2}
+                          className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none"
+                        />
+                        <span className="absolute bottom-2 right-3 text-[8.5px] text-gray-400">{charCount}/300</span>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </motion.div>
 
-                {/* Services Selection */}
-                <div className="px-2">
-                  <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-2">Select Required Service(s) *</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                    {serviceOptions.map(s => {
-                      const checked = selectedServices.includes(s.id);
-                      return (
-                        <button key={s.id} type="button" onClick={() => toggleService(s.id)}
-                          className={`relative border-2 rounded-lg pt-2 pb-1.5 px-1.5 flex flex-col items-center gap-1 transition-all cursor-pointer
-                            ${checked ? "border-[#2d6a2d] bg-[#f0f7ee]" : "border-gray-200 bg-white hover:border-[#a5d6a7]"}`}>
-                          <div className={`absolute top-1 right-1 w-3.5 h-3.5 border-2 rounded flex items-center justify-center
-                            ${checked ? "border-[#2d6a2d] bg-[#2d6a2d]" : "border-gray-300 bg-white"}`}>
-                            {checked && <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="white" strokeWidth="2.5"><path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" /></svg>}
-                          </div>
-                          {s.icon}
-                          <span className="text-[9.5px] font-semibold text-gray-700 leading-tight text-center">{s.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                  <motion.div 
+                    className="flex flex-wrap gap-2.5 mt-8 mb-4 px-2 flex-shrink-0"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="relative group/btn flex-1 min-w-[140px]">
+                      <Sparkle style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
+                      <Sparkle style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
+                      <Sparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
 
-                {/* Stall Size + Message */}
-                <div className="grid grid-cols-2 gap-5 px-2">
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Stall Size / Requirement</label>
-                    <div className="relative max-w-[280px]">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 17L7 13M17 3l-4 4M3 3l4 4M17 17l-4-4M3 3h4M3 3v4M17 17h-4M17 17v-4" strokeLinecap="round" /></svg></span>
-                      <input type="text" name="stallSize" placeholder="Stall size" value={formData.stallSize} onChange={handleChange} className="w-full pl-8 pr-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+                      <button 
+                        type="button" 
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className="blue-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg disabled:opacity-70"
+                      >
+                        {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
+                        {!isSubmitting && <svg viewBox="0 0 20 20" className="w-3 h-3" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </button>
                     </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
-                    <div className="relative max-w-[280px]">
-                      <textarea name="message" placeholder="Message..." value={formData.message} onChange={handleChange} maxLength={300} rows={1}
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none" />
-                      <span className="absolute bottom-1 right-2 text-[8.5px] text-gray-400">{charCount}/300</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
 
-              {/* Action Buttons */}
-              <motion.div
-                className="flex gap-3 mt-8 mb-4 px-2 flex-shrink-0"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                {/* Submit */}
-                <div className="relative group/btn flex-1 min-w-[140px]">
-                  <Sparkle style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
-                  <Sparkle style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
-                  <Sparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
-
-                  <button type="button" className="blue-btn-pp w-full text-white font-black text-[11px] tracking-widest uppercase py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02] shadow-lg">
-                    SUBMIT REQUIREMENT
-                    <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                  </button>
-                </div>
-                <button type="button" className="flex-1 border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[11px] tracking-widest uppercase py-3 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-[1.02]">
-                  <svg viewBox="0 0 20 20" className="w-4 h-4" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
-                  WHATSAPP
-                </button>
-
-                {/* Call Us */}
-                <div className="relative group/btn flex-1 min-w-[120px]">
-                  <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
-                  <Sparkle color="#a2d149" style={{ bottom: '-8px', right: '10%', animationDelay: '0.6s' }} />
-                  <a href="tel:+911149588555" className="w-full">
-                    <button type="button" className="green-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg">
-                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 00-1.02.24l-2.2 2.2a15.05 15.05 0 01-6.59-6.59l2.2-2.2a1 1 0 00.25-1.02A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z" /></svg>
-                      QUICK CALL
+                    <button type="button" className="flex-1 min-w-[120px] border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
+                      <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z"/></svg>
+                      WHATSAPP
                     </button>
-                  </a>
-                </div>
-              </motion.div>
 
-              {/* Privacy Disclaimer */}
-              <div className="flex items-center justify-center gap-2 text-gray-800 text-[9px] flex-shrink-0 mt-auto opacity-70">
+                    <div className="relative group/btn flex-1 min-w-[120px]">
+                      <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
+                      <Sparkle color="#a2d149" style={{ bottom: '-8px', right: '10%', animationDelay: '0.6s' }} />
+                      <a href="tel:+911149588555" className="w-full">
+                        <button type="button" className="green-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg">
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 00-1.02.24l-2.2 2.2a15.05 15.05 0 01-6.59-6.59l2.2-2.2a1 1 0 00.25-1.02A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+                          QUICK CALL
+                        </button>
+                      </a>
+                    </div>
+                  </motion.div>
+                </>
+              ) : (
+                <motion.div 
+                  className="flex-1 flex flex-col items-center justify-center text-center p-8"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6 border-4 border-green-100 shadow-inner">
+                    <CheckCircle className="w-12 h-12 text-[#2d6a2d]" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 mb-3 uppercase tracking-tight">Request Received!</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed max-w-[280px] mb-8 font-medium">
+                    Thank you, <span className="text-[#2d6a2d] font-bold">{formData.fullName}</span>. Our team has received your request and will contact you shortly to coordinate further.
+                  </p>
+                  <button 
+                    onClick={onClose}
+                    className="green-btn-pp text-white font-black text-[11px] tracking-widest uppercase px-10 py-3 rounded-xl transition-all hover:scale-105 shadow-xl"
+                  >
+                    CLOSE WINDOW
+                  </button>
+                </motion.div>
+              )}
+
+              <div className="flex items-center justify-center gap-2 text-gray-800 text-[9px] flex-shrink-0 mt-auto opacity-70 mb-4">
                 <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="7" width="10" height="8" rx="1" /><path d="M5 7V5a3 3 0 016 0v2" /></svg>
                 Your information is safe. We never share your details.
               </div>
             </div>
 
-            {/* ── RIGHT PANEL ── */}
             <div className="w-56 bg-[#f5f9f4] border-l border-gray-100 flex flex-col p-5 relative flex-shrink-0 overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, type: "spring" }}
               >
-                {/* Header Image */}
                 <div className="flex justify-center mb-3">
                   <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-[#2d6a2d] p-0.5 relative">
                     <img src={why1} alt="Why IHWE" className="w-full h-full object-contain" />
                   </div>
                 </div>
 
-                {/* Title */}
-                <div className="text-left mb-6 px-1">
-                  <p className="text-black text-[13px] font-medium uppercase tracking-wider">Why Choose</p>
-                  <h3 className="text-[17px] font-extrabold text-[#2d6a2d]">IHWE Partners?</h3>
-                  <div className="w-8 h-0.5 bg-[#2d6a2d] mt-1.5 rounded-full" />
+                <div className="text-left mb-4 px-1">
+                  <p className="text-black text-[11px] font-medium uppercase tracking-wider leading-tight">Why Choose</p>
+                  <h3 className="text-[15px] font-extrabold text-[#2d6a2d] leading-tight">IHWE Partners?</h3>
+                  <div className="w-6 h-0.5 bg-[#2d6a2d] mt-1 rounded-full"/>
                 </div>
               </motion.div>
 
-              {/* Items List */}
               <div className="relative z-10 space-y-0.5 flex-1">
                 {whyChoose.map((item, i) => (
                   <motion.div
@@ -406,7 +581,6 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 ))}
               </div>
 
-              {/* Branded Leaf Decoration */}
               <motion.div
                 className="absolute -bottom-8 -right-8 w-56 h-56 pointer-events-none transform -rotate-12"
                 initial={{ opacity: 0, scale: 0.5, rotate: -30 }}

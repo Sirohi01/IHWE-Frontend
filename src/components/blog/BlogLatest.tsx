@@ -1,148 +1,121 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail } from 'lucide-react';
-import axios from 'axios';
 import { SERVER_URL } from '@/lib/api';
-import { toast } from 'sonner';
+import { Play, Calendar, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BlogLatestProps {
   blogs: any[];
+  type: 'latest' | 'videos';
 }
 
-const BlogLatest: React.FC<BlogLatestProps> = ({ blogs }) => {
-  const [email, setEmail] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const marqueeBlogs = [...blogs, ...blogs, ...blogs, ...blogs];
+const BlogLatest: React.FC<BlogLatestProps> = ({ blogs, type }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const mainBlog = blogs[0];
 
-  const handleSubscribe = async () => {
-    if (!email) {
-      toast.error('Please enter your email');
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const res = await axios.post(`${SERVER_URL}/api/blogs/subscribe`, { email });
-      if (res.data.success) {
-        toast.success('Successfully subscribed!');
-        setEmail('');
-      }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Subscription failed');
-    } finally {
-      setSubmitting(false);
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
+      scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
   };
 
-  return (
-    <section className="pt-4 pb-2 bg-white">
-      <div className="container mx-auto px-5 md:px-12">
+  const videos = [
+    { title: "The Next Frontier in Biotechnology", duration: "3:45", image: "https://cdn.pixabay.com/video/2016/09/13/5192-183786490_tiny.jpg" },
+    { title: "Women Leadership in Healthcare", duration: "4:12", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800" },
+    { title: "Planetary Health: Act Now", duration: "5:10", image: "https://images.unsplash.com/photo-1530973428-5bf2db2e4d71?auto=format&fit=crop&q=80&w=800" },
+  ];
 
-        <div className="flex flex-col lg:flex-row gap-8 items-stretch">
-
-          {/* Latest Articles Marquee Area (Left - 75%) */}
-          <div className="w-full lg:w-3/4 overflow-hidden">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-6 bg-[#00df82] rounded-full" />
-                <h2 className="text-[#001529] text-xl font-black uppercase tracking-tight">LATEST ARTICLES</h2>
-              </div>
-            </div>
-
-            <div 
-              className="relative flex overflow-hidden"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-              <motion.div
-                className="flex gap-6 py-4 px-2"
-                animate={{
-                  x: isPaused ? undefined : [0, -2400], 
-                }}
-                transition={{
-                  x: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 50, 
-                    ease: "linear",
-                  },
-                }}
-                style={{ width: 'fit-content' }}
-              >
-                {marqueeBlogs.map((blog, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/blog/${blog.slug}`}
-                    className="group flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden w-[240px] shrink-0"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img
-                        src={`${SERVER_URL}${blog.image}`}
-                        alt={blog.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="bg-black/20 backdrop-blur-md text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded">
-                          {blog.category || "HEALTHCARE"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-4 flex flex-col flex-1">
-                      <h3 className="text-[#001529] font-black text-[13px] leading-snug group-hover:text-[#00df82] transition-colors mb-3 line-clamp-2">
-                        {blog.title}
-                      </h3>
-                      <div className="mt-auto flex items-center gap-3 text-slate-400 text-[9px] font-bold">
-                        <span>{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                        <span className="opacity-40">|</span>
-                        <span>{blog.readTime || "5 min read"}</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </motion.div>
-
-              {/* Edge fading */}
-              <div className="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-white to-transparent z-10" />
-              <div className="absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-transparent z-10" />
-            </div>
+  if (type === 'latest') {
+    return (
+      <div className="w-full flex flex-col h-[420px]">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-5 bg-[#00df82] rounded-full" />
+            <h2 className="text-[#001529] text-lg font-medium tracking-tight">Latest from IHWE</h2>
           </div>
-
-          {/* Stay Updated Sidebar (Right - 25%) - Restored */}
-          <div className="w-full lg:w-1/4 pt-16">
-            <div className="bg-white border border-slate-100 rounded-[24px] p-6 flex flex-col shadow-xl relative overflow-hidden group">
-              <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#00df82]/5 blur-3xl rounded-full group-hover:bg-[#00df82]/10 transition-all" />
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 text-[#00df82]">
-                <Mail size={20} />
-              </div>
-              <h3 className="text-[#001529] text-md font-black uppercase tracking-tight mb-2">STAY UPDATED</h3>
-              <p className="text-slate-500 text-[11px] font-medium mb-6 leading-relaxed">
-                Subscribe to our newsletter and never miss an update.
-              </p>
-
-              <div className="space-y-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-xl py-2.5 px-4 text-[#001529] text-[11px] focus:outline-none focus:border-[#00df82] transition-colors placeholder:text-slate-400"
-                />
-                <button
-                  disabled={submitting}
-                  onClick={handleSubscribe}
-                  className="w-full bg-[#00df82] hover:bg-[#00c572] disabled:opacity-50 text-[#001529] font-black py-2.5 rounded-xl uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-[#00df82]/20"
-                >
-                  {submitting ? 'Subscribing...' : 'SUBSCRIBE'}
-                </button>
-              </div>
-            </div>
-          </div>
-
+          <Link to="/blog" className="flex items-center gap-1 text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors">
+            View all <ArrowRight size={12} />
+          </Link>
         </div>
 
+        {mainBlog && (
+          <Link
+            to={`/blog/${mainBlog.slug}`}
+            className="group flex flex-col bg-white rounded-[24px] overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full"
+          >
+            <div className="relative aspect-video overflow-hidden shrink-0">
+              <img
+                src={`${SERVER_URL}${mainBlog.image}`}
+                alt={mainBlog.title}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+              <div className="absolute bottom-3 left-3">
+                <span className="bg-[#00df82] text-[#001529] text-[8px] font-medium uppercase tracking-widest px-2.5 py-1.5 rounded shadow-lg">
+                  CONFERENCE
+                </span>
+              </div>
+            </div>
+            <div className="p-4 flex flex-col flex-1">
+              <h3 className="text-[#001529] font-medium text-sm leading-tight mb-2 group-hover:text-[#00df82] transition-colors line-clamp-2">
+                {mainBlog.title}
+              </h3>
+              <p className="text-slate-500 text-[11px] font-medium leading-relaxed line-clamp-3 mb-4">
+                {mainBlog.excerpt}
+              </p>
+              <div className="mt-auto flex items-center gap-2.5 text-slate-400 text-[13px] font-medium">
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={16} className="text-[#00df82]" />
+                  {new Date(mainBlog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 bg-slate-200 rounded-full" />
+                  Business Standard
+                </div>
+              </div>
+            </div>
+          </Link>
+        )}
       </div>
-    </section>
+    );
+  }
+
+  return (
+    <div className="w-full h-[420px] flex flex-col relative">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-[#001529] text-lg font-medium tracking-tight">Video Insights</h2>
+        <Link to="/videos" className="flex items-center gap-1 text-slate-400 text-[14px] font-medium hover:text-[#00df82] transition-colors">
+          View all <ArrowRight size={12} />
+        </Link>
+      </div>
+
+      <div className="relative flex-1 group/carousel">
+        <div
+          ref={scrollRef}
+          className="flex gap-3 h-full"
+        >
+          {videos.map((video, idx) => (
+            <div key={idx} className="flex-1 snap-start group cursor-pointer h-full flex flex-col">
+              <div className="relative aspect-[3/4.2] rounded-2xl overflow-hidden mb-3 shrink-0 shadow-sm border border-slate-100">
+                <img src={video.image} alt={video.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                    <Play size={18} className="text-white fill-white ml-0.5" />
+                  </div>
+                </div>
+                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[9px] font-medium px-1.5 py-0.5 rounded">
+                  {video.duration}
+                </div>
+              </div>
+              <h4 className="text-[#001529] font-medium text-xs leading-tight group-hover:text-[#00df82] transition-colors line-clamp-2">
+                {video.title}
+              </h4>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

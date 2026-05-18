@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import {
     Lock, Mail, ArrowRight, ShieldCheck, Phone, CheckCircle2,
     Building2, ChevronLeft, Eye, EyeOff, Key, Sparkles,
-    Shield, IdCard as IdCardIcon, QrCode, User, Send, LogIn, Loader2, Smartphone, UserPlus, Headset
+    Shield, IdCard as IdCardIcon, QrCode, User, Send, LogIn, Loader2, Smartphone, UserPlus, Headset,
+    Users, Globe, Briefcase, Award
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -117,26 +118,26 @@ const BuyerLogin = () => {
             <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
 
                 <style>{`
-    @keyframes floatLeaf {
-      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-      33%       { transform: translateY(-22px) rotate(14deg); opacity: 1; }
-      66%       { transform: translateY(-10px) rotate(-8deg); opacity: 0.8; }
-    }
-    @keyframes drift1 {
-      0%, 100% { transform: translate(0px, 0px) scale(1); }
-      33%       { transform: translate(20px, -15px) scale(1.05); }
-      66%       { transform: translate(-10px, 10px) scale(0.97); }
-    }
-    @keyframes drift2 {
-      0%, 100% { transform: translate(0px, 0px) scale(1); }
-      33%       { transform: translate(-18px, 12px) scale(1.04); }
-      66%       { transform: translate(12px, -8px) scale(0.98); }
-    }
-    .leaf-float { animation: floatLeaf 5s ease-in-out infinite; }
-    .blob-drift1 { animation: drift1 10s ease-in-out infinite; }
-    .blob-drift2 { animation: drift2 13s ease-in-out infinite reverse; }
-    .blob-drift3 { animation: drift1 8s ease-in-out infinite reverse; }
-  `}</style>
+@keyframes floatLeaf {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+  33%       { transform: translateY(-22px) rotate(14deg); opacity: 1; }
+  66%       { transform: translateY(-10px) rotate(-8deg); opacity: 0.8; }
+}
+@keyframes drift1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%       { transform: translate(20px, -15px) scale(1.05); }
+  66%       { transform: translate(-10px, 10px) scale(0.97); }
+}
+@keyframes drift2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%       { transform: translate(-18px, 12px) scale(1.04); }
+  66%       { transform: translate(12px, -8px) scale(0.98); }
+}
+.leaf-float { animation: floatLeaf 5s ease-in-out infinite; }
+.blob-drift1 { animation: drift1 10s ease-in-out infinite; }
+.blob-drift2 { animation: drift2 13s ease-in-out infinite reverse; }
+.blob-drift3 { animation: drift1 8s ease-in-out infinite reverse; }
+`}</style>
 
                 {/* Background gradient */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[#f0f7ea] via-[#e8f5d8] to-[#f4faf0]" />
@@ -163,9 +164,9 @@ const BuyerLogin = () => {
                         className="leaf-float absolute w-7 h-7 opacity-40"
                         style={{
                             top: leaf.top,
-                            left: (leaf as any).left,
-                            right: (leaf as any).right,
-                            bottom: (leaf as any).bottom,
+                            left: leaf.left,
+                            right: leaf.right,
+                            bottom: leaf.bottom,
                             animationDelay: leaf.delay,
                         }}
                     >
@@ -178,30 +179,160 @@ const BuyerLogin = () => {
                         </svg>
                     </div>
                 ))}
-
             </div>
+
             <section className="py-4 relative z-10">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-5xl mx-auto mb-2">
-                        <Link to="/" className="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-700 hover:text-white hover:bg-[#23471d] rounded-full shadow-md border border-slate-200 transition-all duration-300 font-bold uppercase text-[11px] tracking-widest group w-fit">
-                            <ChevronLeft size={16} strokeWidth={3} className="group-hover:-translate-x-1 transition-transform" />
+
+                    {/* Back Button */}
+                    <div className="max-w-3xl mx-auto mb-2">
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 px-5 py-2 bg-white text-slate-700 hover:text-white hover:bg-[#23471d] rounded-full shadow-md border border-slate-200 transition-all duration-300 font-bold uppercase text-[11px] tracking-widest group w-fit"
+                        >
+                            <ChevronLeft
+                                size={16}
+                                strokeWidth={3}
+                                className="group-hover:-translate-x-1 transition-transform"
+                            />
                             <span>Back to Home</span>
                         </Link>
                     </div>
 
-                    <div className="max-w-5xl mx-auto">
+                    {/* Main Container */}
+                    <div className="max-w-3xl mx-auto">
+
                         <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
-                            {/* left side  */}
-                            <div className="hidden lg:flex items-center justify-center bg-slate-50 border-r border-slate-100 h-full w-full">
-                                <img src="/buyerLogin1.png" alt="Buyer Login" className="w-full h-full object-fit" />
+
+                            {/* LEFT SIDE */}
+                            <div className="w-full flex flex-col">
+
+                                <div
+                                    className="flex-1 px-8 py-2 relative overflow-hidden flex flex-col bg-cover bg-center"
+                                    style={{
+                                        backgroundImage: "url('/buyerLogin2.webp')",
+                                        backgroundRepeat: "no-repeat"
+                                    }}
+                                >
+
+                                    {/* Decorative blobs */}
+                                    <div
+                                        className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-40 pointer-events-none"
+                                        style={{
+                                            background: "radial-gradient(circle, #b8e0a0 0%, transparent 70%)",
+                                            transform: "translate(30%, -30%)",
+                                        }}
+                                    />
+                                    <div
+                                        className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-30 pointer-events-none"
+                                        style={{
+                                            background: "radial-gradient(circle, #7dc465 0%, transparent 70%)",
+                                            transform: "translate(-30%, 30%)",
+                                        }}
+                                    />
+                                    <div className="relative z-10 flex-1 flex flex-col">
+                                        {/* Logo */}
+                                        <div className="mt-8 mb-8">
+                                            <img
+                                                src="/logo.png"
+                                                alt="IHWE Logo"
+                                                className="h-20 w-auto object-contain -ml-2"
+                                            />
+                                        </div>
+
+                                        {/* Heading */}
+                                        <div className="mb-4">
+                                            <h2 className="text-[20px] font-black text-slate-800 uppercase tracking-tight leading-none mb-1">
+                                                IHWE BUYER
+                                            </h2>
+
+                                            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-600 mt-2">
+                                                CONNECT. SOURCE. GROW.
+                                            </p>
+
+                                            <div className="w-12 h-1 bg-[#357a38] mt-2" />
+                                        </div>
+
+                                        {/* Content */}
+                                        <div className="mt-2 mb-2">
+
+                                            <p
+                                                className="text-[#357a38] text-xl mb-1 italic"
+                                                style={{
+                                                    fontFamily: "'Playfair Display', serif",
+                                                    fontStyle: "italic"
+                                                }}
+                                            >
+                                                Welcome!
+                                            </p>
+
+                                            <h1 className="text-[28px] md:text-[30px] font-black text-slate-900 leading-[1.1] mt-2 mb-8">
+                                                Discover the
+                                                <br />
+                                                Future of Wellness
+                                            </h1>
+
+                                            <p className="text-gray-700 text-[14px] leading-relaxed max-w-[280px]">
+                                                Join IHWE 2026 to connect with global wellness leaders and innovations.
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bottom Feature Bar */}
+                                <div className="bg-[#24541e] p-4 grid grid-cols-2 lg:grid-cols-4 gap-3 text-center">
+
+                                    {[
+                                        {
+                                            icon: <Globe size={14} />,
+                                            title: "Global Marketplace",
+                                            desc: "Explore products worldwide."
+                                        },
+                                        {
+                                            icon: <Users size={14} />,
+                                            title: "Connect & Network",
+                                            desc: "Meet verified exhibitors."
+                                        },
+                                        {
+                                            icon: <Briefcase size={14} />,
+                                            title: "Smart Sourcing",
+                                            desc: "Connect with top suppliers."
+                                        },
+                                        {
+                                            icon: <Award size={14} />,
+                                            title: "Exclusive Access",
+                                            desc: "Buyer-only deals & updates."
+                                        }
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex flex-col items-center">
+
+                                            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white mb-1.5">
+                                                {item.icon}
+                                            </div>
+
+                                            <h4 className="text-white text-[10px] font-bold leading-tight mb-0.5">
+                                                {item.title}
+                                            </h4>
+
+                                            <p className="text-white/80 text-[9px] leading-tight">
+                                                {item.desc}
+                                            </p>
+
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
-                            {/* right side  */}
-                            <div className="px-8  relative flex flex-col justify-center h-full">
+                            {/* RIGHT SIDE */}
+                            <div className="px-8 relative flex flex-col justify-center h-full">
+
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
 
                                 <AnimatePresence mode="wait">
+
                                     {step === 1 ? (
+
                                         <motion.div
                                             key="login-step"
                                             initial={{ opacity: 0, x: 20 }}
@@ -209,129 +340,123 @@ const BuyerLogin = () => {
                                             exit={{ opacity: 0, x: -20 }}
                                             className="space-y-4"
                                         >
-
-                                            <div className="text-center">
-
-                                                {/* Icon circle */}
-                                                <div className="w-20 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-2 shadow-sm border border-slate-100 text-[#23471d]">
-                                                    <User size={36} strokeWidth={1.5} />
+                                            <div className="space-y-4">
+                                                <div className="text-center">
+                                                    {/* Icon circle */}
+                                                    <div className="w-20 mt-3 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100 text-[#23471d]">
+                                                        <User size={36} strokeWidth={1.5} />
+                                                    </div>
+                                                    {/* Title */}
+                                                    <h3 className="text-[1.75rem] font-semibold text-slate-900 mb-2 tracking-tight leading-none">
+                                                        Buyer Login
+                                                    </h3>
+                                                    {/* Subtitle */}
+                                                    <p className="text-[13.5px] text-slate-500 leading-relaxed">
+                                                        Sign in to your buyer portal to continue
+                                                    </p>
                                                 </div>
 
+                                                <div className="flex p-1.5 bg-slate-100 rounded-xl border border-slate-200 relative">
+                                                    {/* Sliding background */}
+                                                    <div
+                                                        className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-lg border border-slate-200 shadow-sm transition-transform duration-200 ease-in-out ${loginMode === 'mobile' ? 'translate-x-[calc(100%+2px)]' : 'translate-x-0'}`}
+                                                    />
 
-                                                {/* Title */}
-                                                <h3 className="text-[1.75rem] font-semibold text-slate-900 tracking-tight leading-none mb-2">
-                                                    Welcome back
-                                                </h3>
+                                                    <button
+                                                        onClick={() => setLoginMode('email')}
+                                                        className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide ${loginMode === 'email' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
+                                                    >
+                                                        <Mail size={14} strokeWidth={2} />
+                                                        Email
+                                                    </button>
 
-                                                {/* Subtitle */}
-                                                <p className="text-[13.5px] text-slate-500 leading-relaxed">
-                                                    Sign in to your buyer account to continue
-                                                </p>
-
-                                            </div>
-
-                                            <div className="flex p-1.5 bg-slate-100 rounded-xl border border-slate-200 relative">
-
-                                                {/* Sliding background */}
-                                                <div
-                                                    className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-lg border border-slate-200 shadow-sm transition-transform duration-200 ease-in-out ${loginMode === 'mobile' ? 'translate-x-[calc(100%+2px)]' : 'translate-x-0'
-                                                        }`}
-                                                />
-
-                                                <button
-                                                    onClick={() => setLoginMode('email')}
-                                                    className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide
-      ${loginMode === 'email' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
-                                                >
-                                                    <Mail size={14} strokeWidth={2} />
-                                                    Email
-                                                </button>
-
-                                                <button
-                                                    onClick={() => setLoginMode('mobile')}
-                                                    className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide
-      ${loginMode === 'mobile' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
-                                                >
-                                                    <Smartphone size={14} strokeWidth={2} />
-                                                    Mobile
-                                                </button>
-
-                                            </div>
-                                            <form onSubmit={handleLogin} className="space-y-6">
-                                                {loginMode === 'email' ? (
-                                                    <div className="space-y-2">
-                                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Email Address</label>
-                                                        <div className="relative group">
-                                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                <Mail size={18} />
-                                                            </div>
-                                                            <input
-                                                                type="email"
-                                                                required
-                                                                value={email}
-                                                                onChange={(e) => setEmail(e.target.value)}
-                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                placeholder="Enter your registered email"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                ) : (
-                                                    <div className="space-y-2">
-                                                        <label className="block text-xs font-bold uppercase tracking-widest text-[#23471d]">Mobile Number</label>
-                                                        <div className="relative group">
-                                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#23471d] transition-colors">
-                                                                <Phone size={18} />
-                                                            </div>
-                                                            <input
-                                                                type="tel"
-                                                                required
-                                                                value={mobile}
-                                                                onChange={(e) => setMobile(e.target.value)}
-                                                                className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all text-sm placeholder:text-slate-400 text-slate-800 shadow-sm"
-                                                                placeholder="Enter mobile number"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                <button
-                                                    type="submit"
-                                                    disabled={loading}
-                                                    className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs shadow-xl hover:shadow-[#23471d]/30 hover:-translate-y-0.5 mt-2 disabled:opacity-50 disabled:hover:translate-y-0"
-                                                >
-                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={18} />}
-                                                    <span>Send Verification OTP</span>
-                                                </button>
-                                            </form>
-
-                                            <div className="space-y-2">
-                                                <div className="relative py-2">
-                                                    <div className="absolute inset-0 flex items-center">
-                                                        <div className="w-full border-t border-slate-200"></div>
-                                                    </div>
-                                                    <div className="relative flex justify-center text-sm">
-                                                        <span className="px-3  text-slate-700 font-medium">New to IHWE Expo?</span>
-                                                    </div>
+                                                    <button
+                                                        onClick={() => setLoginMode('mobile')}
+                                                        className={`flex-1 relative z-10 py-2.5 px-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors duration-200 text-[11px] font-semibold uppercase tracking-wide ${loginMode === 'mobile' ? 'text-[#23471d]' : 'text-slate-400 hover:text-slate-500'}`}
+                                                    >
+                                                        <Smartphone size={14} strokeWidth={2} />
+                                                        Mobile
+                                                    </button>
                                                 </div>
 
-                                                <Link
-                                                    to="/buyer-registration"
-                                                    className="w-full bg-white text-[#23471d] hover:text-white font-bold py-3 px-6 rounded-xl border border-[#23471d] hover:bg-gradient-to-r from-[#23471d] to-[#2d5a25] transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest text-xs"
-                                                >
-                                                    <UserPlus size={18} />
-                                                    <span>Register as Buyer</span>
-                                                </Link>
+                                                <form onSubmit={handleLogin} className="space-y-4">
+                                                    {loginMode === 'email' ? (
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider ml-1">Email Address</label>
+                                                            <div className="relative group">
+                                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#23471d] transition-colors">
+                                                                    <Mail size={16} />
+                                                                </div>
+                                                                <input
+                                                                    type="email"
+                                                                    required
+                                                                    value={email}
+                                                                    onChange={(e) => setEmail(e.target.value)}
+                                                                    className="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all placeholder:text-slate-400 text-[13px]"
+                                                                    placeholder="Enter registered email"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider ml-1">Mobile Number</label>
+                                                            <div className="relative group">
+                                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#23471d] transition-colors">
+                                                                    <Smartphone size={16} />
+                                                                </div>
+                                                                <input
+                                                                    type="tel"
+                                                                    required
+                                                                    value={mobile}
+                                                                    onChange={(e) => setMobile(e.target.value.replace(/[^0-9]/g, ''))}
+                                                                    className="block w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all placeholder:text-slate-400 text-[13px]"
+                                                                    placeholder="Enter mobile number"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
 
-                                                <div className="flex items-center gap-4 pt-2">
+                                                    <button
+                                                        type="submit"
+                                                        disabled={loading}
+                                                        className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-2.5 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-[11px] shadow-lg hover:shadow-[#23471d]/30 hover:-translate-y-0.5 disabled:opacity-50"
+                                                    >
+                                                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send size={16} />}
+                                                        <span>Send Verification OTP</span>
+                                                    </button>
+                                                </form>
+
+                                                <div className="mt-4">
+                                                    <div className="relative py-1">
+                                                        <div className="absolute inset-0 flex items-center">
+                                                            <div className="w-full border-t border-slate-100"></div>
+                                                        </div>
+                                                        <div className="relative flex justify-center text-[10px]">
+                                                            <span className="px-2 bg-white text-slate-400 font-medium">New to IHWE Expo?</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <Link
+                                                        to="/buyer-registration"
+                                                        className="w-full py-2.5 px-4 rounded-lg border border-[#23471d] text-[#23471d] hover:bg-[#23471d] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] font-bold"
+                                                    >
+                                                        <UserPlus size={14} />
+                                                        <span>Register as Buyer</span>
+                                                    </Link>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-6 pt-6 pb-8 border-t border-slate-100">
+                                                <div className="flex items-center gap-4">
                                                     <div className="w-12 h-12 bg-[#23471d]/10 rounded-full flex items-center justify-center text-[#23471d] flex-shrink-0">
                                                         <Headset size={20} />
                                                     </div>
                                                     <div>
-                                                        <h4 className="font-bold text-slate-900 text-sm mb-1">Need Help?</h4>
-                                                        <div className="text-[11.5px] text-slate-500 font-medium flex flex-wrap gap-x-2">
-                                                            <span className='text-sm'>Email: <a href="mailto:info@ihwe.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">info@ihwe.in</a></span>
-                                                            <span className="text-slate-300 hidden sm:inline">|</span>
-                                                            <span className="w-full sm:w-auto text-sm">Phone: <a href="tel:+919654900525" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-semibold transition-colors">+91 9654900525</a></span>
+                                                        <h4 className="font-bold text-slate-900 text-[15px] mb-1">Need Help?</h4>
+                                                        <div className="text-[12px] text-slate-500 font-medium flex items-center gap-2 whitespace-nowrap">
+                                                            <span>Email: <a href="mailto:info@ihwe.in" className="text-blue-600 hover:underline">info@ihwe.in</a></span>
+                                                            <span className="text-slate-300">|</span>
+                                                            <span>Phone: <a href="tel:+919654900525" className="text-blue-600 hover:underline">+91 9654900525</a></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -343,57 +468,54 @@ const BuyerLogin = () => {
                                             initial={{ opacity: 0, scale: 0.9 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.9 }}
-                                            className="space-y-10 text-center"
+                                            className="flex flex-col h-full justify-between"
                                         >
-                                            <div className="space-y-4">
-                                                <div className="mx-auto w-20 h-20 bg-[#23471d]/5 rounded-3xl flex items-center justify-center text-[#23471d] shadow-sm">
-                                                    <Key size={32} />
+                                            <div className="space-y-6">
+                                                <div className="text-center">
+                                                    <div className="w-20 mt-3 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100 text-[#23471d]">
+                                                        <Key size={36} strokeWidth={1.5} />
+                                                    </div>
+                                                    <h3 className="text-[1.75rem] font-semibold text-slate-900 tracking-tight leading-none mb-2">Verify Code</h3>
+                                                    <p className="text-[13.5px] text-slate-500 leading-relaxed">Enter the 6-digit verification code sent to your registered contact.</p>
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-3xl font-inter font-bold text-slate-900">Verify Code</h3>
-                                                    <p className="text-slate-500 text-sm mt-2">Enter the 6-digit verification code sent to your registered contact.</p>
-                                                </div>
+
+                                                <form onSubmit={handleVerifyOtp} className="space-y-6">
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        maxLength={6}
+                                                        value={otp}
+                                                        autoFocus
+                                                        onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                                                        className="block w-full px-4 py-3 text-center tracking-[0.5em] text-2xl font-bold text-[#23471d] bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 transition-all placeholder:text-slate-400 shadow-sm"
+                                                        placeholder="000000"
+                                                    />
+
+                                                    <button
+                                                        type="submit"
+                                                        disabled={loading || otp.length !== 6}
+                                                        className="w-full bg-gradient-to-r from-[#23471d] to-[#2d5a25] hover:from-[#1a3a14] hover:to-[#23471d] text-white font-bold py-2.5 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-[11px] shadow-lg hover:shadow-[#23471d]/30 hover:-translate-y-0.5 disabled:opacity-50"
+                                                    >
+                                                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 size={16} />}
+                                                        <span>Verify & Access Dashboard</span>
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => { setStep(1); setOtp(''); }}
+                                                        className="text-[10px] font-bold text-slate-400 hover:text-[#23471d] uppercase tracking-widest transition-all underline underline-offset-4 w-full text-center"
+                                                    >
+                                                        Incorrect details? Go Back
+                                                    </button>
+                                                </form>
                                             </div>
-
-                                            <form onSubmit={handleVerifyOtp} className="space-y-8">
-                                                <input
-                                                    type="text"
-                                                    required
-                                                    maxLength={6}
-                                                    value={otp}
-                                                    autoFocus
-                                                    onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
-                                                    className="block w-full px-4 py-6 text-center tracking-[0.5em] text-4xl font-bold text-[#23471d] bg-white border-2 border-slate-200 rounded-2xl focus:border-[#23471d] focus:ring-4 focus:ring-[#23471d]/10 outline-none transition-all placeholder:text-slate-200 shadow-inner"
-                                                    placeholder="000000"
-                                                />
-
-                                                <button
-                                                    type="submit"
-                                                    disabled={loading || otp.length !== 6}
-                                                    className="w-full bg-gradient-to-r from-[#d26019] to-[#b04d12] hover:from-[#b04d12] hover:to-[#8e3e0e] text-white font-bold py-4 rounded-xl shadow-xl hover:shadow-[#d26019]/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 uppercase tracking-widest text-xs disabled:opacity-50 disabled:hover:translate-y-0"
-                                                >
-                                                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 size={18} />}
-                                                    <span>Verify & Access Dashboard</span>
-                                                </button>
-
-                                                <button
-                                                    type="button"
-                                                    onClick={() => { setStep(1); setOtp(''); }}
-                                                    className="text-[10px] font-bold text-slate-400 hover:text-[#23471d] uppercase tracking-widest transition-all underline underline-offset-4"
-                                                >
-                                                    Incorrect details? Go Back
-                                                </button>
-                                            </form>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-
-
                             </div>
                         </div>
                     </div>
                 </div>
-
             </section>
         </div>
     );

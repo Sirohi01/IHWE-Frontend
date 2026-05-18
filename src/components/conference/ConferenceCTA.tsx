@@ -19,10 +19,10 @@ const ConferenceCTA: React.FC = () => {
       </Link>
 
       {/* MAIN CONTAINER */}
-      <div className="relative z-10 mx-auto max-w-[1400px] w-full pl-6 lg:pl-2 pr-6 flex flex-row items-center justify-between min-h-[68px]">
+      <div className="relative z-10 mx-auto max-w-[1400px] w-full px-6 flex flex-col md:flex-row items-center justify-center md:justify-between min-h-[100px] md:min-h-[68px] py-4 md:py-0 gap-4">
 
         {/* Left Side */}
-        <div className="flex items-center gap-4 flex-1 min-w-0">
+        <div className="flex flex-col md:flex-row items-center gap-4 flex-1 min-w-0 text-center md:text-left">
 
           {/* Bigger Leaf Image + More Height */}
           <Link to="/travel-partner" target="_blank" rel="noopener noreferrer" className="hidden md:block flex-shrink-0 w-[125px] relative h-[24px] cursor-pointer">
@@ -40,14 +40,14 @@ const ConferenceCTA: React.FC = () => {
               <span className="text-[#1E88E5]">Tomorrow</span>
             </h2>
 
-            <p className="text-white/75 text-[10px] md:text-[12px] font-medium whitespace-nowrap">
+            <p className="text-white/75 text-[11px] md:text-[12px] font-medium whitespace-normal md:whitespace-nowrap">
               Join India's most influential healthcare and wellness conference platform.
             </p>
           </div>
         </div>
 
         {/* Right Side Button - Thinner */}
-        <div className="flex-shrink-0 ml-4">
+        <div className="flex-shrink-0 md:ml-4">
           <Link to="/delegate-registration" target="_blank" rel="noopener noreferrer">
             <motion.button
               whileHover={{ scale: 1.04 }}

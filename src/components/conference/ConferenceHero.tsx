@@ -24,11 +24,11 @@ const ConferenceHero: React.FC = () => {
       </div>
 
 
-      <div className="container mx-auto px-8 lg:px-11 relative z-20">
+      <div className="container mx-auto px-6 lg:px-11 relative z-20 flex flex-col items-center lg:items-start text-center lg:text-left">
         <div className="max-w-[600px]">
 
 
-          <div className="flex flex-col items-start gap-0 -mt-4">
+          <div className="flex flex-col items-center lg:items-start gap-0 -mt-4">
             <div className="flex items-center gap-0">
               <span
                 className="text-[12px] sm:text-[14px] uppercase tracking-[0.3em] sm:tracking-[0.4em] font-bold"
@@ -105,11 +105,10 @@ const ConferenceHero: React.FC = () => {
             style={{ marginTop: "12px" }}
           >
             <div
-              className="text-[#0B2C66] leading-[1.1] flex items-center whitespace-nowrap"
+              className="text-[#0B2C66] leading-[1.1] flex flex-col sm:flex-row items-center lg:items-start gap-2 sm:gap-[10px]"
               style={{
                 fontFamily: "'Helvetica Neue', Arial, sans-serif",
                 fontWeight: 400,
-                gap: "10px",
               }}
             >
               <div className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-semibold">
@@ -131,7 +130,7 @@ const ConferenceHero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[14px] sm:text-[15px] md:text-[16px] text-[#5F6B7A] leading-[1.5] max-w-[480px]"
+            className="text-[14px] sm:text-[15px] md:text-[16px] text-[#5F6B7A] leading-[1.5] max-w-[480px] mx-auto lg:mx-0"
             style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400, marginTop: '12px', marginBottom: '16px' }}
           >
             3 Days of world-class conferences, expert panels, and thought
@@ -142,7 +141,7 @@ const ConferenceHero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center lg:items-start"
             style={{ marginTop: '8px' }}
           >
             <Link to="/delegate-registration" target="_blank" rel="noopener noreferrer">
