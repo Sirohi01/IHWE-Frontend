@@ -32,67 +32,15 @@ const BSMeetHero = () => {
                 backgroundImage: "url('/bsmeet/bg4.png')"
             }}
         >
-            <style>{`
-                @keyframes goldShift {
-                    0%   { background-position: 0% 50%; }
-                    50%  { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-                @keyframes shimmer {
-                    0%   { left: -75%; }
-                    100% { left: 150%; }
-                }
-                @keyframes sparkleAnim {
-                    0%   { opacity: 0; transform: scale(0.5) translateY(0); }
-                    50%  { opacity: 1; transform: scale(1.5) translateY(-15px); }
-                    100% { opacity: 0; transform: scale(0.8) translateY(-30px); }
-                }
-                .navy-btn-bsm {
-                    background: linear-gradient(135deg, #093C5D 0%, #0d5585 40%, #093C5D 100%);
-                    background-size: 200% 200%;
-                    animation: goldShift 2.5s ease infinite;
-                    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.4), 0 0 20px rgba(9,60,93,0.2);
-                    position: relative;
-                    overflow: hidden;
-                }
-                .navy-btn-bsm::before {
-                    content: '';
-                    position: absolute;
-                    top: -50%;
-                    left: -75%;
-                    width: 50%;
-                    height: 200%;
-                    background: linear-gradient(to right, transparent, rgba(255,255,255,0.35), transparent);
-                    transform: skewX(-20deg);
-                    animation: shimmer 2s infinite;
-                }
-                .teal-btn-bsm {
-                    background: linear-gradient(135deg, #0A7C6E 0%, #0db39e 40%, #0A7C6E 100%);
-                    background-size: 200% 200%;
-                    animation: goldShift 2.5s ease infinite;
-                    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.4), 0 0 20px rgba(10,124,110,0.2);
-                    position: relative;
-                    overflow: hidden;
-                }
-                .teal-btn-bsm::before {
-                    content: '';
-                    position: absolute;
-                    top: -50%;
-                    left: -75%;
-                    width: 50%;
-                    height: 200%;
-                    background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
-                    transform: skewX(-20deg);
-                    animation: shimmer 2s infinite;
-                }
-            `}</style>
+            {/* GREEN OVERLAY */}
+            {/* <div className="absolute inset-0 bg-green-200/10"></div> */}
 
-            <SectionContainer className="relative z-10 py-10 md:py-20">
-                <div className="flex flex-col md:flex-row justify-between w-full gap-8 md:gap-10 items-center">
+            <SectionContainer className="relative z-10 py-10">
+                <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
-                    <div className="w-full md:w-[60%] text-left">
-                        <h2 className="text-xl md:text-3xl mt-2 md:mt-4 font-bold text-green-900 leading-tight">
+                    <div className="w-[40%]">
+                        <h2 className="text-2xl md:text-4xl mt-4 font-bold text-green-900 leading-tight">
                             IHWE 2026
                         </h2>
                         <h2 className="text-3xl md:text-6xl font-extrabold text-green-900 leading-tight">
@@ -133,25 +81,8 @@ const BSMeetHero = () => {
                                 </button>
                             </div>
 
-                            {/* REGISTER AS SELLER */}
-                            <div className="relative group/btn">
-                                <div className="hidden md:block">
-                                    <Sparkle color="#57c1ff" shadowColor="#093C5D" style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
-                                    <Sparkle color="#57c1ff" shadowColor="#093C5D" style={{ top: '-10px', left: '40%', animationDelay: '0.4s' }} />
-                                    <Sparkle color="#57c1ff" shadowColor="#093C5D" style={{ top: '-6px', right: '15%', animationDelay: '0.8s' }} />
-                                    <Sparkle color="#57c1ff" shadowColor="#093C5D" style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
-                                    <Sparkle color="#57c1ff" shadowColor="#093C5D" style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
-                                </div>
-                                <button
-                                    onClick={() => window.open('/exhibitor-login', '_blank')}
-                                    className="navy-btn-bsm flex items-center justify-center gap-2.5 px-6 py-2.5 rounded-md transition-all relative z-10 hover:scale-[1.03] border-none"
-                                >
-                                    <FaStore className="text-base text-white" />
-                                    <span className="text-white font-black text-[11px] md:text-[12px] uppercase tracking-wider">REGISTER AS SELLER</span>
-                                    <ArrowRight size={15} className="text-white ml-1" />
-                                </button>
-                            </div>
-                        </div>
+                            <div className="flex items-center gap-3 px-10 py-1"
+                                style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase", whiteSpace: "nowrap" }}>
 
                         {/* DATE & LOCATION BAR - STRAIGHT LINE */}
                         <div className="inline-flex flex-row items-center overflow-hidden rounded-xl mt-12 border-2 border-[#c8d8b0] bg-[#edf2e4] w-fit shadow-md">
@@ -162,8 +93,10 @@ const BSMeetHero = () => {
 
                             <div className="w-[1.5px] h-8 bg-[#c0d4a8]" />
 
-                            <div className="flex items-center gap-3 px-6 md:px-10 py-3 md:py-2.5 text-[13px] md:text-[15px] font-bold text-[#1a3d20] uppercase whitespace-nowrap">
-                                <FaMapMarkerAlt size={18} className="text-green-700" />
+                            <div className="flex items-center gap-3 px-10 py-1 "
+                                style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase" }}>
+
+                                <FaMapMarkerAlt size={20} color="#1a3d20" />
                                 <span>PRAGATI MAIDAN, NEW DELHI, INDIA</span>
                             </div>
                         </div>
