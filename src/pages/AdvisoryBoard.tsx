@@ -279,17 +279,17 @@ const AdvisoryBoard = () => {
                     <div className="p-3 flex flex-col flex-1">
 
                       {/* NAME */}
-                      <h3 className="text-[13px] font-black text-[#111827] leading-tight mb-1">
+                      <h3 className="text-[13px] font-bold text-[#111827] leading-tight mb-1">
                         {member.name}
                       </h3>
 
                       {/* ROLE */}
-                      <p className="text-[#5ba234] text-[9px] font-bold uppercase tracking-wide mb-1">
+                      <p className="text-[#5ba234] text-xs font-semibold uppercase tracking-wide mb-1">
                         {member.role}
                       </p>
 
                       {/* ORGANIZATION */}
-                      <p className="text-[#666] text-[10px] leading-[14px] mb-2">
+                      <p className="text-xs text-gray-600 font-medium leading-[14px] mb-2">
                         {member.organization}
                       </p>
 
@@ -297,13 +297,14 @@ const AdvisoryBoard = () => {
                       <div className="w-8 h-[2px] bg-[#5ba234] mb-2" />
 
                       {/* COUNTRY FLAG */}
-                      <div className="flex items-center gap-1 mb-3">
+                      <div className="flex items-center gap-4 mb-3">
                         <img
-                          src={member.country?.toLowerCase() === 'usa' ? '/images/usa-flag.png' : '/images/india-flag.png'}
+                          // src={member.country?.toLowerCase() === 'usa' ? '/images/usa-flag.png' : '/images/india-flag.png'}
+                          src="/advisory/india-flag.png"
                           alt={member.country || 'India'}
-                          className="w-5 h-3 object-cover rounded-sm"
+                          className="w-5 h-4 object-cover"
                         />
-                        <span className="text-[10px] text-[#666]">{member.country || 'India'}</span>
+                        <span className="text-xs text-gray-600">{member.country || 'India'}</span>
                       </div>
 
                       {/* BUTTON */}
@@ -484,12 +485,15 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* Right: Button */}
-            <button className="bg-[#e8711a] hover:bg-[#d26019] text-white font-black text-[12px] uppercase tracking-widest px-8 py-2 rounded-full flex items-center gap-3 transition-all duration-300 shrink-0 shadow-lg hover:shadow-[#e8711a]/30 hover:-translate-y-0.5">
+            <Link
+              to="/advisory"
+              target="_blank"
+              rel="noopener noreferrer" className="bg-[#e8711a] hover:bg-[#d26019] text-white font-black text-[12px] uppercase tracking-widest px-8 py-2 rounded-full flex items-center gap-3 transition-all duration-300 shrink-0 shadow-lg hover:shadow-[#e8711a]/30 hover:-translate-y-0.5">
               Register Now
               <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
                 <ArrowRight size={14} />
               </div>
-            </button>
+            </Link>
           </div>
 
         </SectionContainer>

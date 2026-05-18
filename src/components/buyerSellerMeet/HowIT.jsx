@@ -62,7 +62,7 @@ const industries = [
 const HowIT = () => {
     return (
         <div className="py-4">
-            <div className={`flex flex-row items-stretch gap-4 ${SectionContainer}`}>
+            <SectionContainer className="flex flex-row items-stretch gap-4">
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
                 <div className='w-[63%] flex flex-col'>
@@ -165,7 +165,7 @@ const HowIT = () => {
                     </div>
                 </div>
 
-            </div>
+            </SectionContainer>
         </div>
     )
 }

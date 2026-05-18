@@ -80,9 +80,7 @@ const BSMeetHero = () => {
                                     </div>
                                 </button>
                             </div>
-
-                            <div className="flex items-center gap-3 px-10 py-1"
-                                style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                        </div>
 
                         {/* DATE & LOCATION BAR - STRAIGHT LINE */}
                         <div className="inline-flex flex-row items-center overflow-hidden rounded-xl mt-12 border-2 border-[#c8d8b0] bg-[#edf2e4] w-fit shadow-md">

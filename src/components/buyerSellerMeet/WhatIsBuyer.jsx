@@ -43,7 +43,7 @@ const WhatIsBuyer = () => {
     return (
         <div className="relative overflow-hidden py-2 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
 
-            <div className={`flex justify-between w-full ${SectionContainer}`}>
+            <SectionContainer className="flex justify-between w-full">
                 {/* text  data  */}
                 <div className='w-[35%]'>
                     {/* Heading */}
@@ -91,7 +91,7 @@ const WhatIsBuyer = () => {
                         </React.Fragment>
                     ))}
                 </div>
-            </div >
+            </SectionContainer >
         </div >
     )
 }

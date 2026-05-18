@@ -28,7 +28,7 @@ const WhatPar = () => {
         if (testimonials.length > 2) {
             const timer = setInterval(() => {
                 setCurrentIndex((prev) => (prev + 1) % (testimonials.length));
-            }, 3000); 
+            }, 3000);
             return () => clearInterval(timer);
         }
     }, [testimonials.length]);
@@ -44,7 +44,7 @@ const WhatPar = () => {
 
     return (
         <div className="bg-[#FAF9F2] py-6 font-['Barlow',sans-serif]">
-            <div className={`flex justify-between w-full gap-4 ${SectionContainer}`}>
+            <SectionContainer className="flex justify-between w-full gap-4">
 
                 {/* ── LEFT: IMPACT BOX ── */}
                 <div
@@ -119,7 +119,7 @@ const WhatPar = () => {
                             </div>
                         )}
                     </div>
-                    
+
                     {!loading && testimonials.length > 2 && (
                         <div className="flex justify-center gap-2 mt-1">
                             {Array.from({ length: testimonials.length - 1 }).map((_, i) => (
@@ -133,7 +133,7 @@ const WhatPar = () => {
                     )}
                 </div>
 
-            </div>
+            </SectionContainer>
         </div>
     )
 }
