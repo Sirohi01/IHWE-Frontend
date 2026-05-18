@@ -76,7 +76,7 @@ const Partnership = () => {
 
                 <div className="flex flex-wrap gap-3 mt-4">
 
-                  <Link to="/partner-registration">
+                  <Link to="/partner-registration" target="_blank">
                     <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
                       Register As Partner
                     </button>
@@ -493,7 +493,7 @@ const Partnership = () => {
 
                   <div className="mt-8 w-full">
                     {item.link ? (
-                      <Link to={item.link} className="block w-full">
+                      <Link to={item.link} className="block w-full" target="_blank">
                         <button
                           className="w-full h-[46px] rounded-full border-2 font-black uppercase text-sm transition-all duration-300 hover:text-white flex items-center justify-center"
                           style={{
@@ -550,7 +550,7 @@ const Partnership = () => {
             <div></div>
 
             <div className="flex justify-end relative bottom-[10px]">
-              <Link to="/partner-registration">
+              <Link to="/partner-registration" target="_blank">
                 <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
 
                   Register As Official Partner
