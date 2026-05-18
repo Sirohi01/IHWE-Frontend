@@ -15,11 +15,11 @@ const BSMeetHero = () => {
             {/* GREEN OVERLAY */}
             {/* <div className="absolute inset-0 bg-green-200/10"></div> */}
 
-            <div className={`relative z-10 py-14 ${SectionContainer}`}>
+            <SectionContainer className="relative z-10 py-10">
                 <div className="flex justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
-                    <div className="w-[50%]">
+                    <div className="w-[40%]">
                         <h2 className="text-2xl md:text-4xl mt-4 font-bold text-green-900 leading-tight">
                             IHWE 2026
 
@@ -60,7 +60,7 @@ const BSMeetHero = () => {
                         <div className="inline-flex items-stretch overflow-hidden rounded-xl mt-6"
                             style={{ background: "#edf2e4", border: "1.5px solid #c8d8b0" }}>
 
-                            <div className="flex items-center gap-3 px-10 py-2"
+                            <div className="flex items-center gap-3 px-10 py-1"
                                 style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase", whiteSpace: "nowrap" }}>
 
                                 <FaCalendarAlt size={20} color="#1a3d20" />
@@ -69,7 +69,7 @@ const BSMeetHero = () => {
 
                             <div style={{ width: "1.5px", background: "#c0d4a8", margin: "10px 0" }} />
 
-                            <div className="flex items-center gap-3 px-10 py-2 "
+                            <div className="flex items-center gap-3 px-10 py-1 "
                                 style={{ fontSize: "15px", fontWeight: 500, color: "#1a3d20", textTransform: "uppercase" }}>
 
                                 <FaMapMarkerAlt size={20} color="#1a3d20" />
@@ -94,7 +94,7 @@ const BSMeetHero = () => {
                     </div> */}
 
                 </div>
-            </div>
+            </SectionContainer>
         </div>
     )
 }
