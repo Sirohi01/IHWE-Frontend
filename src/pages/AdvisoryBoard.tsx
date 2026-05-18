@@ -12,6 +12,7 @@ import {
 import {
   advisoryApi,
   heroBackgroundApi,
+  chairmanMessageApi,
   SERVER_URL,
 } from "@/lib/api";
 
@@ -23,6 +24,7 @@ import SectionContainer from "@/components/layout/SectionContainer";
 const AdvisoryBoard = () => {
   const [heroData, setHeroData] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
+  const [chairmanData, setChairmanData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [visibleRows, setVisibleRows] = useState(2);
   const itemsPerRow = 6;
@@ -32,14 +34,16 @@ const AdvisoryBoard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [heroRes, membersRes] = await Promise.all([
+        const [heroRes, membersRes, chairmanRes] = await Promise.all([
           heroBackgroundApi.getByPage(
             "Overview / Advisory Board Members"
           ),
           advisoryApi.getAll(),
+          chairmanMessageApi.get(),
         ]);
 
         if (heroRes) setHeroData(heroRes);
+        if (chairmanRes) setChairmanData(chairmanRes);
 
         setMembers(membersRes);
       } catch (error) {
@@ -159,8 +163,8 @@ const AdvisoryBoard = () => {
               {/* Photo */}
               <div className="absolute top-[10px] left-[13px] right-0 bottom-[27px] rounded-[14px] overflow-hidden z-[1]">
                 <img
-                  src="/advisory/chef1.png"
-                  alt="Dr. Randeep Guleria"
+                  src={chairmanData?.photo ? (chairmanData.photo.startsWith('http') ? chairmanData.photo : `${SERVER_URL}${chairmanData.photo}`) : "/advisory/vijay.png"}
+                  alt={chairmanData?.chairmanName || "Dr. Randeep Guleria"}
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -172,27 +176,34 @@ const AdvisoryBoard = () => {
 
               <div>
                 <p className="uppercase tracking-[3px] text-[#23471d] font-bold text-[11px] mb-2">
-                  Chairman's Message
+                  {chairmanData?.title || "Chairman's Message"}
                 </p>
                 <div className="w-8 h-[2px] bg-[#23471d]" />
               </div>
 
-              <h2 className="text-3xl font-black text-[#0d1f3c] leading-tight">
-                Leading Together for a <br />Healthier Tomorrow
+              <h2 className="text-3xl font-semibold text-[#0d1f3c] leading-tight">
+                {chairmanData?.heading ? (
+                  chairmanData.heading.split('\n').map((line: string, i: number) => (
+                    <span key={i}>
+                      {line}
+                      {i < chairmanData.heading.split('\n').length - 1 && <br />}
+                    </span>
+                  ))
+                ) : (
+                  <>Leading Together for a <br />Healthier Tomorrow</>
+                )}
               </h2>
 
               <p className="text-slate-500 text-[14px] leading-relaxed">
-                At IHWE Expo 2026, our Advisory Board plays a pivotal role in driving our mission
-                forward. Their expertise, global perspective, and commitment to innovation guide us
-                in creating a world-class platform that empowers the health and wellness ecosystem.
+                {chairmanData?.description || "At IHWE Expo 2026, our Advisory Board plays a pivotal role in driving our mission forward. Their expertise, global perspective, and commitment to innovation guide us in creating a world-class platform that empowers the health and wellness ecosystem."}
               </p>
 
               <div className="pt-2">
                 <p className="font-[Brush_Script_MT,cursive] text-2xl text-slate-600 italic mb-3 tracking-wide">
-                  Randeep Guleria
+                  {chairmanData?.signatureName || "Vijay Sharma"}
                 </p>
-                <p className="text-[#23471d] font-bold text-sm">Dr. Randeep Guleria</p>
-                <p className="text-slate-400 text-xs tracking-wide">Chairman, IHWE Expo 2026</p>
+                <p className="text-[#23471d] font-bold text-sm">{chairmanData?.chairmanName || "Mr. Vijay Sharma"}</p>
+                <p className="text-slate-400 text-xs tracking-wide">{chairmanData?.chairmanDesignation || "Chairman, IHWE Expo 2026"}</p>
               </div>
 
             </div>
@@ -212,7 +223,7 @@ const AdvisoryBoard = () => {
               <div className="border-l-[3px] border-[#23471d] pl-4 space-y-2">
                 <p className="text-[10px] font-black uppercase tracking-widest text-[#23471d]">Vision</p>
                 <p className="text-[#434B54] font-medium text-sm leading-snug">
-                  A global platform for collaboration, innovation and impact in health & wellness.
+                  {chairmanData?.visionText || "A global platform for collaboration, innovation and impact in health & wellness."}
                 </p>
               </div>
 
@@ -348,7 +359,7 @@ const AdvisoryBoard = () => {
       </section>
 
       {/* why join new  */}
-      <section className="py-12 bg-[#f4f6f3] relative overflow-hidden">
+      <section className="py-4 bg-[#f4f6f3] relative overflow-hidden">
 
         {/* DNA bg watermark */}
         <div className="absolute right-0 top-0 h-full w-64 opacity-[0.04] pointer-events-none"
@@ -426,17 +437,17 @@ const AdvisoryBoard = () => {
             />
 
             {/* Left text */}
-            <div className="relative z-10 px-10 py-8 flex-1">
+            <div className="relative z-10 px-10 py-4 flex-1">
               <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#d6ff63] mb-3">
                 Know an Inspiring Leader?
               </p>
-              <h2 className="text-[36px] font-black text-white uppercase leading-none mb-4">
+              <h2 className="text-3xl font-semibold text-white uppercase leading-none mb-4">
                 Nominate For<br />Advisory Board
               </h2>
-              <p className="text-[14px] text-white/70 mb-6 max-w-md leading-relaxed">
+              <p className="text-[14px] text-white/80 mb-4 max-w-md leading-relaxed">
                 Help us bring the right leaders together to create a healthier world.
               </p>
-              <button className="bg-white text-[#23471d] font-black text-[11px] uppercase tracking-widest px-6 py-3 rounded-full flex items-center gap-3 hover:bg-[#d6ff63] transition-all duration-300 w-fit shadow-lg">
+              <button className="bg-white text-[#23471d] font-black text-[11px] uppercase tracking-widest px-6 py-2 rounded-full flex items-center gap-3 hover:bg-[#d6ff63] transition-all duration-300 w-fit shadow-lg">
                 Nominate Now
                 <div className="w-7 h-7 rounded-full bg-[#23471d] text-white flex items-center justify-center">
                   <ArrowRight size={14} />

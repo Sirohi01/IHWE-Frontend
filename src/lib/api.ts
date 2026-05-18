@@ -458,6 +458,14 @@ export const advisoryApi = {
     }
 };
 
+export const chairmanMessageApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/chairman-message`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const advisoryNominationApi = {
     submit: async (payload: any) => {
         const isFormData = payload instanceof FormData;
