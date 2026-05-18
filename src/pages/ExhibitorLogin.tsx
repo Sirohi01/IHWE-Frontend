@@ -212,14 +212,15 @@ const ExhibitorLogin = () => {
                     </div>
 
                     <div className="max-w-3xl mx-auto">
-                        <div className="grid lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-[550px] lg:min-h-[550px]">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 items-stretch rounded-2xl shadow-2xl overflow-hidden bg-white border border-slate-100 min-h-fit lg:min-h-[550px]">
                             {/* LEFT SIDE: Brand & Info */}
                             <div className="w-full flex flex-col">
                                 <div
-                                    className="flex-1 px-8 py-2 relative overflow-hidden flex flex-col bg-cover bg-center"
+                                    className="w-full h-auto lg:flex-1 px-8 py-8 lg:py-2 relative overflow-hidden flex flex-col bg-cover bg-center"
                                     style={{
-                                        backgroundImage: "url('/exhibitor-login-booth.webp')",
-                                        backgroundRepeat: "no-repeat"
+                                        backgroundImage: "linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.5) 45%, rgba(255, 255, 255, 0) 80%), url('/exhibitor-login-booth.webp')",
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundSize: "cover"
                                     }}
                                 >
                                     {/* Decorative soft blob top-right */}
@@ -258,14 +259,19 @@ const ExhibitorLogin = () => {
                                         </div>
 
                                         <div className="mt-2 mb-2">
-                                            <p className="text-[#357a38] text-xl mb-1 italic" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic" }}>
+                                            <p className="text-[#357a38] text-xl mb-1 italic font-bold" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff" }}>
                                                 Welcome!
                                             </p>
-                                            <h1 className="text-[28px] md:text-[30px] font-black text-slate-900 leading-[1.1] mt-2 mb-8">
-                                                Your brand & booth.<br />
+                                            <h1 className="text-[28px] md:text-[24px] font-black text-slate-950 leading-[1.1] mt-2 mb-6" style={{ textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff" }}>
+                                                Your brand <br /> Your booth<br />
                                                 <span className="text-[#357a38]">Your impact.</span>
                                             </h1>
-                                            <p className="text-gray-700 text-[14px] leading-relaxed max-w-[280px]">
+                                            <p
+                                                className="text-slate-950 text-[14px] leading-relaxed max-w-[280px] font-semibold"
+                                                style={{
+                                                    textShadow: "0 2px 4px #fff, 0 -2px 4px #fff, 2px 0px 4px #fff, -2px 0px 4px #fff, 0 0 10px #fff, 0 0 15px #fff"
+                                                }}
+                                            >
                                                 Manage your booth, products, leads, and meetings – all in one powerful platform.
                                             </p>
                                         </div>
@@ -291,7 +297,7 @@ const ExhibitorLogin = () => {
                             </div>
 
                             {/* right side  */}
-                            <div className="px-8 relative flex flex-col justify-center h-full">
+                            <div className="w-full px-6 py-12 lg:px-8 lg:py-4 relative flex flex-col justify-center min-h-[500px] lg:min-h-fit">
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#23471d]/10 to-transparent -rotate-45" />
 
                                 <AnimatePresence mode="wait">

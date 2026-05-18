@@ -279,8 +279,8 @@ const HotelStay = () => {
                     </div>
                   </div>
                   <div className="space-y-1.5 pl-11">
-                    <a href="tel:+911149588555" className="flex items-center gap-2 text-[12px] font-bold hover:text-[#74b123] transition-colors">
-                      <Phone className="w-3 h-3" /> +91 11 4958 8555
+                    <a href="tel:+91 9654900525" className="flex items-center gap-2 text-[12px] font-bold hover:text-[#74b123] transition-colors">
+                      <Phone className="w-3 h-3" /> +91 9654900525
                     </a>
                     <a href="mailto:support@ihwe.in" className="flex items-center gap-2 text-[12px] font-bold hover:text-[#74b123] transition-colors">
                       <Mail className="w-3 h-3" /> support@ihwe.in

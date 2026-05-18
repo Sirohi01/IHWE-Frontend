@@ -135,6 +135,7 @@ const BSMeetHero = () => {
                     <div className="w-full md:w-[60%] lg:w-[50%] flex flex-col items-center md:items-start text-center md:text-left">
                         <h2 className="text-2xl md:text-4xl mt-4 font-bold text-green-900 leading-tight">
                             IHWE 2026
+
                         </h2>
                         <h2 className="text-3xl md:text-6xl font-extrabold text-green-900 leading-tight mt-1">
                             BUYER–SELLER <br />
@@ -190,9 +191,20 @@ const BSMeetHero = () => {
                         </div>
                     </div>
 
-                    <div className="hidden md:block w-[35%]">
-                        {/* Optional content */}
-                    </div>
+                    {/* RIGHT SIDE EMPTY (optional ya kuch aur add kar sakte ho) */}
+                    {/* <div className="relative w-[45%]">
+                   
+                        <img src="/bsmeet/bsmeetRight3.png" alt="Buyer Seller Meet" className="mix-blend-multiply bg-transparent object-contain w-full h-auto" />
+                        
+                        <a
+                            href="https://wa.me/919220408160"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute bottom-4 right-60 z-10 cursor-pointer hover:scale-110 transition-transform duration-300 drop-shadow-xl hover:drop-shadow-2xl"
+                        >
+                            <img src="/bsmeet/bsherob.png" alt="WhatsApp Chat" className="w-24 h-24 object-contain" />
+                        </a>
+                    </div> */}
 
                 </div>
             </SectionContainer>

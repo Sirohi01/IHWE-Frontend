@@ -472,8 +472,8 @@ const Partners = () => {
                       <GoldSparkle color="#134E8E" style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
                       <GoldSparkle color="#134E8E" style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
 
-                      <Link 
-                        to="/partner-registration" 
+                      <Link
+                        to="/partner-registration"
                         target="_blank"
                         className="vendor-blue-btn flex items-center justify-center gap-2 md:gap-3 text-white w-full py-3.5 md:py-4 px-2 rounded-xl font-black text-[9.5px] sm:text-[10px] md:text-[13px] uppercase tracking-wider shadow-lg transition-all group whitespace-nowrap"
                       >
@@ -623,7 +623,7 @@ const Partners = () => {
                 <a href="mailto:support@ihwe.in" className="flex items-center gap-2 text-white/80 text-[11px] font-bold hover:text-[#74b123] transition-colors">
                   <Mail className="w-3.5 h-3.5" /> info@ihwe.in
                 </a>
-                <a href="tel:+911149588555" className="flex items-center gap-2 text-white/80 text-[13px] font-black hover:text-[#74b123] transition-colors">
+                <a href="tel:+91 9654900525" className="flex items-center gap-2 text-white/80 text-[13px] font-black hover:text-[#74b123] transition-colors">
                   <Phone className="w-3.5 h-3.5" /> +91 9654900525
                 </a>
               </div>

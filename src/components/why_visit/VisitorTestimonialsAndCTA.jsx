@@ -20,7 +20,7 @@ const testimonials = [
 ];
 
 const eventDetails = [
-    { icon: "/whyVisit/footer_calendar.svg", label: "20 - 22 AUGUST 2026" },
+    { icon: "/whyVisit/footer_calendar.svg", label: "21 - 23 AUGUST 2026" },
     { icon: "/whyVisit/footer_map.svg", label: "PRAGATI MAIDAN,\nNEW DELHI, INDIA" },
     { icon: "/whyVisit/footer_globe.svg", label: "www.ihwe.in", href: "https://www.ihwe.in", target: "_blank" },
     { icon: "/whyVisit/footer_mail.svg", label: "info@ihwe.in", href: "mailto:info@ihwe.in" },
@@ -29,7 +29,7 @@ const eventDetails = [
 
 const VisitorTestimonialsAndCTA = () => {
     const handleRegister = () => {
-        window.open('/buyer-registration', '_blank');
+        window.open('/visitor-registration', '_blank');
     };
 
     const handleContact = () => {

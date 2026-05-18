@@ -6,9 +6,9 @@ const SessionSelection: React.FC = () => {
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
 
   const dayData = [
-    { id: 1, date: "21 AUG 2026", day: "Thu", title: "HEALTHCARE INNOVATION SUMMIT" },
-    { id: 2, date: "22 AUG 2026", day: "Fri", title: "GLOBAL WELLNESS LEADERSHIP FORUM" },
-    { id: 3, date: "23 AUG 2026", day: "Sat", title: "WELLNESS & AYUSH LEADERSHIP FORUM" },
+    { id: 1, date: "21 AUG 2026", day: "Fri", title: "HEALTHCARE INNOVATION SUMMIT" },
+    { id: 2, date: "22 AUG 2026", day: "Sat", title: "GLOBAL WELLNESS LEADERSHIP FORUM" },
+    { id: 3, date: "23 AUG 2026", day: "Sun", title: "WELLNESS & AYUSH LEADERSHIP FORUM" },
   ];
 
   const sessionsData: Record<number, any[]> = {
