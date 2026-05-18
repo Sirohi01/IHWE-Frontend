@@ -1,133 +1,139 @@
 import React from 'react';
-import { Search, FileText, Users, Globe, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface BlogHeroProps {
-  settings: any;
-  onSearch: (query: string) => void;
+  settings?: any;
+  onSearch?: (query: string) => void;
   heroImage?: string;
 }
 
 const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) => {
-  const stats = [
-    { label: 'Articles', value: settings?.articlesCount || '250+', icon: <FileText size={18} className="text-rose-500" /> },
-    { label: 'Expert Contributors', value: settings?.expertsCount || '50+', icon: <Users size={18} className="text-blue-500" /> },
-    { label: 'Countries Covered', value: settings?.countriesCount || '12+', icon: <Globe size={18} className="text-emerald-500" /> },
-    { label: 'Updates', value: settings?.updateFrequency || 'Daily', icon: <Calendar size={18} className="text-amber-500" /> },
-  ];
-
   return (
-    <section className="relative min-h-[400px] pt-24 pb-12 overflow-hidden bg-[#001529] text-white flex items-center">
-      {/* Background Image Container */}
-      <div className="absolute inset-0 z-0">
-        {heroImage && (
-          <img
-            src={heroImage}
-            className="absolute inset-0 w-full h-full object-cover opacity-100"
-            alt="Hero Background"
-          />
+    <section className="relative overflow-hidden bg-white">
+
+      {/* ── Main Hero Banner ── */}
+      <div className="relative min-h-[240px] md:min-h-[320px] flex items-center overflow-hidden">
+
+        {/* White to light-blue gradient bg */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-[#f0f8ff] to-[#e0f2fe]" />
+
+        {/* Soft arc/wave bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 overflow-hidden">
+          <svg viewBox="0 0 1440 64" className="w-full h-full" preserveAspectRatio="none">
+            <path
+              d="M0,40 C360,80 1080,0 1440,40 L1440,64 L0,64 Z"
+              fill="url(#waveGrad)"
+            />
+            <defs>
+              <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#04215A" />
+                <stop offset="100%" stopColor="#098E7B" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* Hero background image — right side */}
+        {heroImage ? (
+          <div className="absolute inset-0 z-0">
+            <img
+              src={heroImage}
+              className="absolute inset-0 w-full h-full object-fill"
+              alt="Hero Background"
+            />
+          </div>
+        ) : (
+          /* Default decorative right side when no image */
+          <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none z-0">
+
+            {/* Soft blob */}
+            <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-bl from-[#e0f2fe]/80 to-transparent" />
+
+            {/* Floating health icons */}
+            {[
+              { icon: "+", top: "18%", right: "38%", size: 48, border: "#0ea5e9" },
+              { icon: "♥", top: "12%", right: "20%", size: 44, border: "#098E7B" },
+              { icon: "🌿", top: "40%", right: "10%", size: 40, border: "#4ade80" },
+              { icon: "⚕", top: "55%", right: "30%", size: 36, border: "#0ea5e9" },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 + i * 0.1, type: "spring" }}
+                className="absolute flex items-center justify-center rounded-full bg-white shadow-md"
+                style={{
+                  top: item.top,
+                  right: item.right,
+                  width: item.size,
+                  height: item.size,
+                  border: `2px solid ${item.border}`,
+                  fontSize: item.size * 0.4,
+                }}
+              >
+                {item.icon}
+              </motion.div>
+            ))}
+
+            {/* Dashed connecting lines SVG */}
+            <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 300">
+              <path d="M200,60 Q280,100 320,140 Q280,180 200,200 Q160,160 180,100 Z"
+                fill="none" stroke="#0ea5e9" strokeWidth="1" strokeDasharray="6,4" />
+              <path d="M240,40 L310,90" fill="none" stroke="#098E7B" strokeWidth="1" strokeDasharray="4,4" />
+              <path d="M310,90 L350,160" fill="none" stroke="#0ea5e9" strokeWidth="1" strokeDasharray="4,4" />
+            </svg>
+          </div>
         )}
-      </div>
 
-      <div className="container mx-auto px-5 md:px-12 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
+        {/* ── Left Content ── */}
+        <div className="relative z-10 container mx-auto px-6 md:px-12 py-10">
+          <div className="">
 
-          {/* Left Column: Text & Search */}
-          <div className="w-full lg:w-1/2">
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-[#00df82] font-medium text-xs uppercase tracking-[0.2em] mb-4"
+            {/* Logo + Title row */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 mb-5"
             >
-              INSIGHTS & MEDIA
-            </motion.p>
+
+              {/* Expo name */}
+              <motion.h2
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-3xl font-semibold text-[#04215A] leading-tight"
+              >
+                International<br />
+                Health & Wellness<br />
+                Expo <span className="text-[#098E7B]">2026</span>
+              </motion.h2>
+            </motion.div>
+
+            {/* Main heading */}
             <motion.h1
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-medium mb-4 tracking-tight leading-tight text-[#001529]"
+              className="text-8xl py-3 font-semibold leading-none mb-3 tracking-tight"
             >
-              {settings?.heroTitle || "BLOG & NEWS"}
+              <span className="text-[#04215A]">Blogs & </span>
+              <span className="text-[#098E7B]">News</span>
             </motion.h1>
 
-            {/* Green Line */}
+            {/* Double underline with dot */}
             <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: 60 }}
-              className="h-1 bg-[#00df82] mb-8 rounded-full"
-            />
-
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-slate-800 text-base md:text-lg font-medium max-w-lg leading-relaxed mb-6"
+              className="flex items-center gap-1 mb-10"
             >
-              {settings?.heroSubtitle || "Your go-to source for the latest updates, expert insights, industry trends and stories from the world of healthcare, wellness & innovation."}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="relative max-w-md"
-            >
-              <div className="flex items-center bg-white/60 backdrop-blur-md border border-[#001529]/20 rounded-lg overflow-hidden group focus-within:border-[#00df82]/50 transition-all shadow-lg">
-                <input
-                  type="text"
-                  placeholder="Search articles, news, topics..."
-                  className="flex-1 bg-transparent py-2 px-6 text-[#001529] text-sm placeholder:text-[#001529]/40 focus:outline-none font-normal"
-                  onChange={(e) => onSearch(e.target.value)}
-                />
-                <button className="bg-[#00df82] hover:bg-[#00c572] text-[#001529] p-2 transition-colors">
-                  <Search className="w-5 h-5" strokeWidth={3} />
-                </button>
-              </div>
+              <div className="w-28 h-[4px] bg-[#04215A] rounded-full" />
+              <div className="w-3 h-3 rounded-full bg-[#098E7B]" />
+              <div className="w-28 h-[4px] bg-[#098E7B] rounded-full" />
             </motion.div>
+
           </div>
-
-          {/* Right Column: Stats Box - Glassmorphism */}
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end lg:translate-y-24">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="w-full max-w-md bg-white/40 backdrop-blur-md border border-white/40 rounded-[20px] p-2.5 shadow-xl relative overflow-hidden"
-            >
-              <div className="flex items-center justify-between relative z-10">
-                {stats.map((stat, idx) => (
-                  <React.Fragment key={idx}>
-                    <div className="flex flex-col items-center text-center flex-1 group">
-                      {/* Icon with Glow */}
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-blue-500/10 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="relative z-10 opacity-100 transition-all">
-                          {stat.icon}
-                        </div>
-                      </div>
-
-                      {/* Value */}
-                      <div className="text-sm md:text-base font-medium text-[#001529] mb-0.5 tracking-tight">
-                        {stat.value}
-                      </div>
-
-                      {/* Label */}
-                      <div className="text-slate-600 text-[8px] font-medium uppercase tracking-wider whitespace-nowrap px-2">
-                        {stat.label}
-                      </div>
-                    </div>
-
-                    {/* Divider - only between items */}
-                    {idx < stats.length - 1 && (
-                      <div className="h-8 w-[1px] bg-[#001529]/10 mx-1" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
         </div>
+
       </div>
     </section>
   );
