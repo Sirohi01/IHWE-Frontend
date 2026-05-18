@@ -29,7 +29,7 @@ const eventDetails = [
 
 const VisitorTestimonialsAndCTA = () => {
     const handleRegister = () => {
-        window.open('/buyer-registration', '_blank');
+        window.open('/visitor-registration', '_blank');
     };
 
     const handleContact = () => {

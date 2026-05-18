@@ -6,7 +6,7 @@ const StatsBand = () => {
     { icon: Users, val: "8,000+", label: "VISITORS", desc: "Qualified trade visitors from India & across the globe", color: "#8cc63f" },
     { icon: Building2, val: "150+", label: "EXHIBITORS", desc: "Leading brands & organizations", color: "#00aef0" },
     { icon: Globe, val: "1,000+", label: "GLOBAL BUYERS", desc: "Global participation & representation", color: "#c8d400" },
-    { icon: Mic, val: "40+", label: "Expert Speakers", desc: "Industry experts & thought leaders", color: "#a13ccf" },
+    { icon: Mic, val: "150+", label: "Expert Speakers", desc: "Industry experts & thought leaders", color: "#a13ccf" },
     { icon: Handshake, val: "B2B", label: "MEETINGS", desc: "Pre-scheduled meetings that drive real business", color: "#f7931e" },
   ];
 
