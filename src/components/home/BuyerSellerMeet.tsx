@@ -317,17 +317,17 @@ const BuyerSellerMeet = () => {
       <div className="w-full flex flex-col md:flex-row h-auto md:h-12 relative z-20">
 
         {/* Dark navy left: date + location */}
-        <div className="bg-[#0f172a] flex items-center px-8 py-2 md:py-0 gap-6 md:w-auto shrink-0 whitespace-nowrap">
-          <div className="flex items-center gap-2 text-white">
-            <Calendar size={14} className="text-[#4ade80]" />
-            <span className="font-bold tracking-wider text-[11px] md:text-[11.5px] whitespace-nowrap">
+        <div className="bg-[#0f172a] flex items-center justify-center px-2 sm:px-4 md:px-8 py-2.5 md:py-0 gap-3 md:gap-6 w-full md:w-auto shrink-0 whitespace-nowrap overflow-hidden">
+          <div className="flex items-center gap-1.5 md:gap-2 text-white">
+            <Calendar size={12} className="md:w-[14px] md:h-[14px] text-[#4ade80]" />
+            <span className="font-bold tracking-wider text-[8.5px] sm:text-[10px] md:text-[11.5px] whitespace-nowrap">
               21 – 23 AUGUST 2026
             </span>
           </div>
-          <div className="w-px h-5 bg-white/20" />
-          <div className="flex items-center gap-2 text-white">
-            <MapPin size={14} className="text-[#4ade80]" />
-            <span className="font-bold tracking-wider uppercase text-[11px] md:text-[11.5px] whitespace-nowrap">
+          <div className="w-px h-4 md:h-5 bg-white/20 shrink-0" />
+          <div className="flex items-center gap-1.5 md:gap-2 text-white">
+            <MapPin size={12} className="md:w-[14px] md:h-[14px] text-[#4ade80]" />
+            <span className="font-bold tracking-wider uppercase text-[8.5px] sm:text-[10px] md:text-[11.5px] whitespace-nowrap">
               Pragati Maidan, New Delhi
             </span>
           </div>

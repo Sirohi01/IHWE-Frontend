@@ -110,7 +110,7 @@ const BuyerLanding = () => {
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-inter text-slate-900">
             <section
-                className="hero-background-registration relative overflow-hidden "
+                className="hero-background-registration relative overflow-hidden pt-[125px] sm:pt-[100px] lg:pt-0 pb-8 lg:pb-0 !aspect-auto lg:!aspect-[16/5] !h-auto lg:!h-auto"
                 style={{
                     backgroundImage: "url('/buyer/doin.jpg')",
                     backgroundSize: 'cover',
@@ -120,10 +120,10 @@ const BuyerLanding = () => {
                 }}
             >
                 <SectionContainer className="w-full py-4">
-                    <div className="relative z-10  flex flex-col gap-2 w-[70%]">
+                    <div className="relative z-10 flex flex-col gap-2 w-full lg:w-[70%] text-center lg:text-left items-center lg:items-start">
 
                         {/* Register as a Buyer */}
-                        <div className="inline-block mt-6 w-fit">
+                        <div className="inline-block mt-6 w-fit mx-auto lg:mx-0">
                             <h2
                                 className="text-sm md:text-base font-bold uppercase tracking-[0.2em] text-[#1a4d1a] bg-[#a8d060] px-3 py-1 rounded-sm border-l-4 border-[#5a9e20]"
                                 style={{ animation: 'gentleBounce 2s ease-in-out infinite' }}
@@ -140,10 +140,10 @@ const BuyerLanding = () => {
 
                         {/* Main Heading */}
                         <div className="mt-2">
-                            <h1 className="text-5xl font-black text-white uppercase leading-tight">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase leading-tight">
                                 Unlock Business
                             </h1>
-                            <h1 className="text-5xl font-black uppercase leading-tight">
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase leading-tight mt-1">
                                 <span className="text-[#a8d060] drop-shadow-[0_0_20px_rgba(168,208,96,0.4)]">
                                     Opportunities
                                 </span>
@@ -151,7 +151,7 @@ const BuyerLanding = () => {
                         </div>
 
                         {/* Description */}
-                        <p className="text-white/90 text-lg leading-relaxed max-w-md mt-4">
+                        <p className="text-white/90 text-sm sm:text-base lg:text-lg leading-relaxed max-w-md mt-4 mx-auto lg:mx-0">
                             Join{' '}
                             <span className="text-[#a8d060] font-bold">8,000+ verified</span>{' '}
                             seller | buyers, connect with top exhibitors,
@@ -159,48 +159,48 @@ const BuyerLanding = () => {
                         </p>
 
                         {/* Stats Row */}
-                        <div className="flex items-center mt-1 gap-2">
+                        <div className="grid grid-cols-2 lg:flex lg:items-center gap-y-6 gap-x-2 lg:gap-0 mt-6 lg:mt-3 w-full max-w-lg lg:max-w-none mx-auto lg:mx-0">
                             {[
                                 {
                                     num: '1,000+', label: 'Buyers',
-                                    icon: <img src="/buyer/sb1.png" alt="" className="w-20 h-auto object-contain" />
+                                    icon: <img src="/buyer/sb1.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />
                                 },
                                 {
                                     num: '150+', label: 'Exhibitors',
-                                    icon: <img src="/buyer/sb2.png" alt="" className="w-20 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb2.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: '5,000+', label: 'Products',
-                                    icon: <img src="/buyer/sb3.png" alt="" className="w-20 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb3.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: 'Global', label: 'Participation',
-                                    icon: <img src="/buyer/sb4.png" alt="" className="w-20 h-auto object-contain" />,
+                                    icon: <img src="/buyer/sb4.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
-                            ].map((stat, i) => (
-                                <React.Fragment key={i}>
-                                    <div className="flex flex-col items-center text-center px-4">
-                                        <div className="">
+                            ].map((stat, i, arr) => (
+                                <div key={i} className="flex items-center lg:contents">
+                                    <div className="flex flex-col items-center text-center px-2 flex-1">
+                                        <div className="mb-1">
                                             {stat.icon}
                                         </div>
-                                        <div className="text-xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                        <div className="text-lg lg:text-xl font-bold text-[#a8d060] leading-none tracking-tight">
                                             {stat.num}
                                         </div>
-                                        <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90">
+                                        <div className="text-[10px] lg:text-xs font-semibold text-white uppercase tracking-[0.2em] mt-1.5 opacity-90">
                                             {stat.label}
                                         </div>
                                     </div>
                                     {/* Vertical Divider */}
-                                    {i < 3 && (
-                                        <div className="h-32 w-[1.5px] bg-[#a8d060]/30" />
+                                    {i < arr.length - 1 && (
+                                        <div className="hidden lg:block h-16 w-[1.5px] bg-[#a8d060]/30 shrink-0" />
                                     )}
-                                </React.Fragment>
+                                </div>
                             ))}
                         </div>
 
                     </div>
 
-                    <div className="w-[30%]">
+                    <div className="hidden lg:block lg:w-[30%]">
                         {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
                     </div>
                 </SectionContainer>

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { ShieldCheck, Download,PhoneCall,
@@ -97,7 +97,43 @@ const comparisonData = [
     values: ["✔", "✔", "✔", "✔", "✔", "✔", "✔", "—"],
   },
 ];
+
+// StatCounter component for live counting
+const StatCounter = ({ value }) => {
+    const [displayValue, setDisplayValue] = useState(0);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+    const isNumeric = /^[0-9]/.test(value);
+    if (!isNumeric) {
+        return <span ref={ref}>{value}</span>;
+    }
+
+    const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+    const suffix = value.replace(/[0-9,]/g, '');
+
+    useEffect(() => {
+        if (isInView) {
+            const controls = animate(0, numericValue, {
+                duration: 2.5,
+                ease: "easeOut",
+                onUpdate(v) {
+                    setDisplayValue(Math.floor(v));
+                },
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, numericValue]);
+
+    return (
+        <span ref={ref}>
+            {displayValue.toLocaleString()}{suffix}
+        </span>
+    );
+};
+
 const Sponsership = () => {
+    const [activeMobileTab, setActiveMobileTab] = useState(0);
     return (
         <div className="bg-[#f5f5f5] overflow-hidden">
             {/* SPONSOR HERO SECTION */}
@@ -130,23 +166,23 @@ const Sponsership = () => {
                                     </span>
                                 </h1>
 
-                                <p className="text-[#4B5563] text-[17px] leading-8 mt-6 max-w-[650px]">
+                                <p className="text-black font-medium text-[17px] leading-8 mt-6 max-w-[650px]">
                                     Position your brand at the forefront of the global health &
                                     wellness industry and connect with leaders, innovators and
                                     decision-makers.
                                 </p>
 
-                                {/* STATS */}
-                                <div className="flex flex-wrap gap-8 mt-10">
+                                {/* STATS IN A STRAIGHT LINE */}
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-10 w-full">
 
                                     {[
                                         {
                                             number: "8,000+",
-                                            label: "Visitors / Delagtes",
+                                            label: "Visitors / Delegates",
                                             icon: "/images/partnership/users.png",
                                         },
                                         {
-                                            number: "1000+",
+                                            number: "1,000+",
                                             label: "Global Buyers",
                                             icon: "/images/partnership/global.png",
                                         },
@@ -163,26 +199,22 @@ const Sponsership = () => {
                                     ].map((item, idx) => (
                                         <div
                                             key={idx}
-                                            className="flex items-center gap-3"
+                                            className="flex items-center gap-2 sm:gap-3"
                                         >
 
-                                            <div className="w-12 h-12 rounded-full bg-white shadow-md border border-[#E5E7EB] flex items-center justify-center shrink-0">
-
-                                                <img
-                                                    src={item.icon}
-                                                    alt=""
-                                                    className="w-10 h-10 object-contain"
-                                                />
-
-                                            </div>
+                                            <img
+                                                src={item.icon}
+                                                alt=""
+                                                className="w-10 h-10 sm:w-12 sm:h-12 object-contain shrink-0"
+                                            />
 
                                             <div>
 
-                                                <h4 className="text-[#0B2C66] font-bold text-[18px] leading-none">
-                                                    {item.number}
+                                                <h4 className="text-[#0B2C66] font-black text-base sm:text-[18px] leading-none">
+                                                    <StatCounter value={item.number} />
                                                 </h4>
 
-                                                <p className="text-[#5E6472] text-[12px] mt-1">
+                                                <p className="text-[#5E6472] text-[11px] sm:text-[12px] mt-1 whitespace-nowrap">
                                                     {item.label}
                                                 </p>
 
@@ -345,7 +377,8 @@ const Sponsership = () => {
           {sponsorCards.map((item, index) => (
             <div
               key={index}
-              className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 text-center"
+              className="bg-white border border-gray-200 rounded-2xl p-4 transition-all duration-300 text-center hover:scale-[1.03] hover:shadow-lg"
+              style={{ boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px" }}
             >
               {/* IMAGE */}
               <div className="w-16 h-16 mx-auto flex items-center justify-center">
@@ -408,32 +441,104 @@ const Sponsership = () => {
             </h2>
           </div>
 
-          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
-            <table className="w-full min-w-[1200px] border-collapse">
+          {/* ================= MOBILE VIEW (TABS + ACCORDION CARD) ================= */}
+          <div className="block lg:hidden w-full">
+            {/* Scrollable category tabs */}
+            <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-none snap-x snap-mandatory">
+              {sponsorCards.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveMobileTab(idx)}
+                  className={`snap-center shrink-0 px-4 py-2.5 rounded-xl text-xs font-extrabold uppercase transition-all duration-300 ${
+                    activeMobileTab === idx
+                      ? item.color === "blue"
+                        ? "bg-[#173A72] text-white shadow-md scale-105"
+                        : "bg-[#1F8A4C] text-white shadow-md scale-105"
+                      : "bg-[#F3F7FD] text-gray-600 border border-gray-200"
+                  }`}
+                >
+                  {item.title.replace(" SPONSOR", "").replace(" PARTNER", "")}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected category card details */}
+            <div className="w-full bg-white border border-gray-100 rounded-3xl p-5 shadow-md" style={{ boxShadow: "rgba(60, 64, 67, 0.15) 0px 4px 12px 0px" }}>
+              {/* Card header */}
+              <div className="flex items-center gap-3.5 pb-4 border-b border-gray-100">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                  sponsorCards[activeMobileTab].color === "blue" ? "bg-blue-50" : "bg-green-50"
+                }`}>
+                  <img
+                    src={sponsorCards[activeMobileTab].image}
+                    alt=""
+                    className="w-8 h-8 object-contain"
+                  />
+                </div>
+                <div>
+                  <h4 className={`text-sm font-black tracking-wide uppercase ${
+                    sponsorCards[activeMobileTab].color === "blue" ? "text-[#173A72]" : "text-[#1F8A4C]"
+                  }`}>
+                    {sponsorCards[activeMobileTab].title}
+                  </h4>
+                  <p className="text-[11px] text-gray-500 leading-snug mt-0.5">
+                    {sponsorCards[activeMobileTab].desc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefits list */}
+              <div className="mt-4 flex flex-col gap-2">
+                {comparisonData.map((row, i) => {
+                  const val = row.values[activeMobileTab];
+                  return (
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0 gap-3">
+                      <span className="text-[11px] font-bold text-gray-600 uppercase tracking-wide leading-tight">
+                        {row.benefit}
+                      </span>
+                      <span className={`text-[12px] font-black shrink-0 px-3 py-1 rounded-lg text-center min-w-[75px] ${
+                        val === "✔" 
+                          ? sponsorCards[activeMobileTab].color === "blue"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}>
+                        {val}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* ================= DESKTOP VIEW (FULL TABLE) ================= */}
+          <div className="hidden lg:block overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full border-collapse" style={{ minWidth: "1200px" }}>
               {/* TABLE HEADER */}
               <thead>
                 <tr>
-                  <th className="bg-[#173A72] text-white p-4 text-left text-sm font-semibold">
+                  <th className="bg-[#173A72] text-white p-4 text-left text-sm font-semibold sticky left-0 z-20 border-r border-white/10" style={{ minWidth: "220px", boxShadow: "2px 0 5px rgba(0,0,0,0.15)" }}>
                     BENEFITS
                   </th>
 
                   {sponsorCards.map((item, index) => (
                     <th
                       key={index}
-                      className={`p-2 text-white text-sm font-medium ${
+                      className={`p-4 text-white text-xs font-bold text-center ${
                         item.color === "blue"
                           ? "bg-[#025cb4]"
                           : "bg-[#05803f]"
                       }`}
+                      style={{ minWidth: "130px" }}
                     >
                       <div className="flex flex-col items-center gap-2">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="w-8 h-8 object-contain brightness-0 invert"
+                          className="w-7 h-7 object-contain brightness-0 invert"
                         />
-
-                        <span>{item.title}</span>
+                        <span className="leading-tight block uppercase tracking-wider text-[10px]">{item.title}</span>
                       </div>
                     </th>
                   ))}
@@ -445,16 +550,17 @@ const Sponsership = () => {
                 {comparisonData.map((row, idx) => (
                   <tr
                     key={idx}
-                    className="border-b border-gray-200 hover:bg-gray-50"
+                    className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                   >
-                    <td className="p-2 text-sm font-medium text-gray-600 bg-gray-50">
+                    <td className="p-3.5 text-xs font-bold text-gray-700 bg-white sticky left-0 z-10 border-r border-gray-200/80" style={{ minWidth: "220px", boxShadow: "2px 0 5px rgba(0,0,0,0.05)" }}>
                       {row.benefit}
                     </td>
 
                     {row.values.map((value, i) => (
                       <td
                         key={i}
-                        className="p-4 text-center text-sm text-gray-700"
+                        className="p-3 text-center text-xs text-gray-600 font-semibold"
+                        style={{ minWidth: "130px" }}
                       >
                         {value}
                       </td>

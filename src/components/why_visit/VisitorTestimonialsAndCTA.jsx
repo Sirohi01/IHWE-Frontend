@@ -20,11 +20,11 @@ const testimonials = [
 ];
 
 const eventDetails = [
-    { icon: "/whyVisit/footer_calendar.svg", label: "20 - 22 MARCH 2026" },
+    { icon: "/whyVisit/footer_calendar.svg", label: "20 - 22 AUGUST 2026" },
     { icon: "/whyVisit/footer_map.svg", label: "PRAGATI MAIDAN,\nNEW DELHI, INDIA" },
-    { icon: "/whyVisit/footer_globe.svg", label: "www.ihwe.in" },
-    { icon: "/whyVisit/footer_mail.svg", label: "info@ihwe.in" },
-    { icon: "/whyVisit/footer_phone.svg", label: "+91-9654900525" }
+    { icon: "/whyVisit/footer_globe.svg", label: "www.ihwe.in", href: "https://www.ihwe.in", target: "_blank" },
+    { icon: "/whyVisit/footer_mail.svg", label: "info@ihwe.in", href: "mailto:info@ihwe.in" },
+    { icon: "/whyVisit/footer_phone.svg", label: "+91-9654900525", href: "tel:+919654900525" }
 ];
 
 const VisitorTestimonialsAndCTA = () => {
@@ -150,20 +150,41 @@ const VisitorTestimonialsAndCTA = () => {
             <div className="w-full border-t border-gray-200 py-2">
                 <SectionContainer>
                     <div className="flex flex-wrap items-center justify-between gap-4 md:gap-0">
-                        {eventDetails.map((detail, idx) => (
-                            <div
-                                key={idx}
-                                className={`flex items-center gap-3 flex-1 min-w-[160px] justify-center md:justify-start ${idx < eventDetails.length - 1 ? 'md:border-r md:border-gray-200' : ''
-                                    } px-4`}
-                            >
-                                <div className="w-8 h-8 shrink-0 flex items-center justify-center">
-                                    <img src={detail.icon} alt="event detail icon" className="w-6 h-6 object-contain" />
+                        {eventDetails.map((detail, idx) => {
+                            const content = (
+                                <>
+                                    <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+                                        <img src={detail.icon} alt="event detail icon" className="w-6 h-6 object-contain" />
+                                    </div>
+                                    <span className="text-[11px] md:text-[12px] font-extrabold text-[#011630] tracking-wide leading-snug whitespace-pre-line">
+                                        {detail.label}
+                                    </span>
+                                </>
+                            );
+
+                            if (detail.href) {
+                                return (
+                                    <a
+                                        key={idx}
+                                        href={detail.href}
+                                        target={detail.target}
+                                        rel={detail.target === '_blank' ? 'noopener noreferrer' : undefined}
+                                        className={`flex items-center gap-3 flex-1 min-w-[160px] justify-center md:justify-start ${idx < eventDetails.length - 1 ? 'md:border-r md:border-gray-200' : ''} px-4 hover:opacity-80 transition-opacity`}
+                                    >
+                                        {content}
+                                    </a>
+                                );
+                            }
+
+                            return (
+                                <div
+                                    key={idx}
+                                    className={`flex items-center gap-3 flex-1 min-w-[160px] justify-center md:justify-start ${idx < eventDetails.length - 1 ? 'md:border-r md:border-gray-200' : ''} px-4`}
+                                >
+                                    {content}
                                 </div>
-                                <span className="text-[11px] md:text-[12px] font-extrabold text-[#011630] tracking-wide leading-snug whitespace-pre-line">
-                                    {detail.label}
-                                </span>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </SectionContainer>
             </div>

@@ -139,7 +139,7 @@ const Footer = () => {
     { label: "Floor Plan Download", href: "/pdf1.pdf", newTab: true },
     { label: "Brochure Download", href: "/pdf.pdf", newTab: true },
     { label: "Exhibitor List", href: "/exhibitors", newTab: true },
-    { label: "Sponsorship Opportunities", href: "/contact", newTab: true },
+    { label: "Sponsorship Opportunities", href: "/sponsership", newTab: true },
     { label: "MSME PMS Scheme", href: "/msme-pms-scheme", newTab: true },
     { label: "Buyer Seller Meet", href: "/buyer-seller-meet", newTab: true },
     { label: "Travel & Stay", href: "/partners", newTab: true },
@@ -446,7 +446,9 @@ const Footer = () => {
             </p>
             <div className="w-7 h-[2px] bg-[#F3B71B] my-2" />
             <div className="flex flex-col gap-1.5">
-              {exhibitorLinks.map((l: any) => (
+              {exhibitorLinks
+                .filter((l: any) => !(l.label === "MSME PMS Scheme" && settings?.showGovtPmsScheme === false))
+                .map((l: any) => (
                 <Link
                   key={l.label}
                   to={l.href}

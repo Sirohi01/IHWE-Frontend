@@ -958,7 +958,7 @@ const BookAStand = () => {
 
             {/* bg section  */}
             <section
-                className="hero-background-registration relative overflow-hidden "
+                className="hero-background-registration relative overflow-hidden !aspect-auto md:!aspect-[16/5] !h-auto md:!h-auto py-6 md:py-0"
                 style={{
                     backgroundImage: "url('/exhibition/bg.png')",
                     backgroundSize: 'cover',
@@ -969,72 +969,70 @@ const BookAStand = () => {
             >
                 <SectionContainer>
                     <div className="w-full">
-                        <div className="relative z-10  py-2 flex flex-col gap-2 w-[60%]">
+                            <div className="relative z-10 py-6 md:py-12 flex flex-col gap-2 w-full md:w-[60%] lg:w-[55%] bg-black/40 md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none backdrop-blur-sm md:backdrop-blur-none">
 
                             {/* Register as a Buyer */}
-                            <div className="inline-block mt-4 px-5 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-sm md:text-base font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
+                            <div className="inline-block mt-4 px-4 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-xs font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
                                 Exhibition stall booking
                             </div>
 
                             {/* Main Heading */}
-                            <div>
-                                <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                    Book Your
-                                </h1>
-                                <h1 className="text-5xl font-semibold text-white  leading-tight">
-                                    Exhibition <span className="text-[#a8d060]"  >Stand</span>
+                            <div className="mt-1">
+                                <h1 className="text-3xl md:text-[38px] font-extrabold text-white leading-tight uppercase">
+                                    Book Your <br />
+                                    Exhibition <span className="text-[#a8d060]">Stand</span>
                                 </h1>
                             </div>
 
                             {/* Description */}
-                            <p className="text-white/90 text-lg leading-relaxed max-w-lg">
-                                Showcase your innovations to 8,000+ healthcare  Professionals-fill the form and get a customized stall for your brand.
+                            <p className="text-white/80 text-[13px] md:text-sm leading-relaxed max-w-md mt-1">
+                                Showcase your innovations to 8,000+ healthcare Professionals-fill the form and get a customized stall for your brand.
                             </p>
 
                             {/* Stats Row */}
-                            <div className="flex items-center mt-2 gap-2">
+                            <div className="grid grid-cols-2 md:flex md:items-center mt-3 gap-y-4 gap-x-2 md:gap-3">
                                 {[
                                     {
                                         num: '', label: '8,000+\nHealthcare\nProfessionals',
-                                        icon: <img src="/exhibition/b1.png" alt="" className="w-20 h-auto object-contain" />
+                                        icon: <img src="/exhibition/b1.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
                                     },
                                     {
                                         num: '', label: 'Custom\nStall\nSolutions',
-                                        icon: <img src="/exhibition/b2.png" alt="" className="w-20 h-auto object-contain" />,
+                                        icon: <img src="/exhibition/b2.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                     },
                                     {
                                         num: '', label: 'Maximum\nBrand\nVisibility',
-                                        icon: <img src="/exhibition/b3.png" alt="" className="w-20 h-auto object-contain" />,
+                                        icon: <img src="/exhibition/b3.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                     },
                                     {
                                         num: '', label: 'High-Value\nBusiness\nConnections',
-                                        icon: <img src="/exhibition/b4.png" alt="" className="w-20 h-auto object-contain" />,
+                                        icon: <img src="/exhibition/b4.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                     },
-                                ].map((stat, i) => (
-                                    <React.Fragment key={i}>
-                                        <div className="flex flex-col items-center text-center px-1.5">
-                                            <div>{stat.icon}</div>
+                                ].map((stat, i, arr) => (
+                                    <div key={i} className="flex items-center md:contents">
+                                        <div className="flex flex-col items-center text-center px-1 flex-1">
+                                            <div className="mb-1.5">{stat.icon}</div>
                                             {stat.num && (
-                                                <div className="text-2xl font-medium text-[#a8d060] leading-none tracking-tight">
+                                                <div className="text-lg md:text-xl font-bold text-[#a8d060] leading-none tracking-tight">
                                                     {stat.num}
                                                 </div>
                                             )}
-                                            <div className="text-xs font-medium text-white uppercase tracking-[0.25em] mt-1 opacity-90 whitespace-pre-line">
+                                            <div className="text-[9px] md:text-[10px] font-semibold text-white uppercase tracking-wider leading-tight opacity-90 whitespace-pre-line max-w-[120px]">
                                                 {stat.label}
                                             </div>
                                         </div>
-                                        {i < 3 && (
-                                            <div className="h-28 w-[1.5px] bg-[#a8d060]/30" />
+                                        {i < arr.length - 1 && (
+                                            <div className="hidden md:block h-16 w-px bg-[#a8d060]/20 shrink-0" />
                                         )}
-                                    </React.Fragment>
+                                    </div>
                                 ))}
                             </div>
 
-                            <div className="mt-4">
-                                <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-8 py-1.5 rounded-md text-sm font-medium uppercase tracking-widest transition-colors">
+                            <div className="mt-5">
+                                <button className="flex items-center gap-3 bg-[#4a8f2f] hover:bg-[#3d7a26] text-white px-6 py-2 rounded-full text-xs font-semibold uppercase tracking-wider shadow-md transition-all duration-300 hover:scale-[1.03]">
                                     Book Your Stall Now
-                                    <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <span className="w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#4a8f2f]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M5 12h14M13 6l6 6-6 6" />
                                         </svg>
                                     </span>
@@ -1052,7 +1050,7 @@ const BookAStand = () => {
 
             {/* bannar section  */}
             <SectionContainer>
-                <section className="flex items-center justify-between  my-3 py-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                <section className="grid grid-cols-1 md:flex md:items-center md:justify-between my-3 p-4 md:py-3 md:px-2 gap-4 md:gap-0 bg-white border border-gray-100 rounded-xl shadow-sm">
                     {[
                         {
                             icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
@@ -1076,9 +1074,9 @@ const BookAStand = () => {
                         },
                     ].map((item, i) => (
                         <React.Fragment key={i}>
-                            <div className="flex items-start gap-3 flex-1 px-4 ">
+                            <div className="flex items-start gap-4 flex-1 px-2 md:px-4">
                                 {/* Icon Circle */}
-                                <div className="w-16 h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0">
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#f0f7e6] flex items-center justify-center shrink-0 p-2 md:p-3">
                                     {item.icon}
                                 </div>
                                 {/* Text */}
@@ -1088,14 +1086,19 @@ const BookAStand = () => {
                                 </div>
                             </div>
                             {/* Divider */}
-                            {i < 3 && <div className="w-px h-12 bg-gray-200 shrink-0" />}
+                            {i < 3 && (
+                                <>
+                                    <div className="hidden md:block w-px h-12 bg-gray-200 shrink-0" />
+                                    <div className="block md:hidden h-px w-full bg-gray-100 my-1" />
+                                </>
+                            )}
                         </React.Fragment>
                     ))}
                 </section>
             </SectionContainer>
             {/* button section */}
             <SectionContainer>
-                <section className="bg-white border border-gray-100 my-3 py-4 rounded-xl shadow-sm p-8 flex gap-10">
+                <section className="bg-white border border-gray-100 my-3 py-6 rounded-xl shadow-sm p-4 md:p-8 flex flex-col lg:flex-row gap-8 lg:gap-10">
 
                     {/* Left Side */}
                     <div className="flex-1 flex flex-col justify-between">
@@ -1120,14 +1123,15 @@ const BookAStand = () => {
                     </div>
 
                     {/* Divider */}
-                    <div className="w-px bg-gray-200 self-stretch" />
+                    <div className="hidden lg:block w-px bg-gray-200 self-stretch" />
+                    <div className="block lg:hidden h-px w-full bg-gray-200 my-2" />
 
                     {/* Right Side */}
                     <div className="flex-1">
                         <h3 className="text-gray-900 text-xl font-medium mb-1">Choose Exhibitor Category</h3>
                         <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-5" />
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                             {/* Domestic Exhibitor */}
                             <div

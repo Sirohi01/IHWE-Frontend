@@ -45,7 +45,7 @@ const Partnership = () => {
 
 
           {/* CONTENT */}
-          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-22 pt-16">
+          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 xl:px-22 pt-16 pb-28 lg:pb-16">
 
             <div className="grid lg:grid-cols-[1fr_0.9fr] gap-10 items-center">
 
@@ -62,10 +62,10 @@ const Partnership = () => {
                     Tomorrow
                   </span>
                 </h1>
-                <p className="uppercase tracking-[4px] text-white font-bold text-sm mb-3">
+                <p className="uppercase tracking-[4px] text-white font-bold text-sm mb-3 mt-1.5">
                   Partner With IHWE 2026
                 </p>
-                <p className="text-white/85 text-lg md:text-[16px] leading-9 mt-2 max-w-[700px]">
+                <p className="text-white/85 text-[15px] sm:text-[16px] leading-8 mt-2 max-w-[700px]">
 
                   Join hands with IHWE 2026, the global
                   platform bringing together innovators,
@@ -74,15 +74,15 @@ const Partnership = () => {
 
                 </p>
 
-                <div className="flex flex-wrap gap-3 mt-4">
+                <div className="flex flex-wrap gap-3.5 mt-5">
 
                   <Link to="/partner-registration">
-                    <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-4 py-1 rounded-[20px] shadow-2xl">
+                    <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md tracking-wider">
                       Register As Partner
                     </button>
                   </Link>
 
-                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-4 py-2 rounded-[20px]">
+                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wider">
 
                     Explore Opportunities
 
@@ -92,12 +92,12 @@ const Partnership = () => {
 
               </div>
 
-              <div className="flex">
+              <div className="flex w-full justify-center lg:justify-start mt-6 lg:mt-0">
 
 
                 <div className="w-full max-w-[620px]">
 
-                  <div className="absolute top-10 right-6 bg-[#042a64] border-[4px] border-[#619941] rounded-[30px] p-6 w-[280px] shadow-2xl rotate-[6deg]">
+                  <div className="relative lg:absolute lg:top-10 lg:right-6 lg:rotate-[6deg] rotate-0 bg-[#042a64] border-[4px] border-[#619941] rounded-[30px] p-6 w-full max-w-[320px] lg:w-[280px] mx-auto lg:mx-0 shadow-2xl">
 
                     {[
                       {
@@ -188,8 +188,11 @@ const Partnership = () => {
           <div className="max-w-[1450px] mx-auto bg-white rounded-[30px] shadow-[0_15px_60px_rgba(0,0,0,0.08)] overflow-hidden border border-[#ececec]">
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-              <div className=" p-2 md:p-4 border-r border-[#ececec] last:border-r-0 mt-10">
-                <h3 className="text-[#16316b] text-lg md:text-xl font-black uppercase">WHY PARTNER <span className="text-[#619941]">WITH IHWE 2026?</span></h3>
+              <div className="flex flex-col justify-center p-4 md:p-5 border-r border-[#ececec] last:border-r-0">
+                <h3 className="text-[#16316b] text-base md:text-[17px] font-extrabold uppercase leading-snug">
+                  WHY PARTNER <br className="hidden lg:block" />
+                  <span className="text-[#619941]">WITH IHWE 2026?</span>
+                </h3>
               </div>
               {[
                 {
@@ -220,10 +223,10 @@ const Partnership = () => {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="text-center p-2 md:p-4 border-r border-[#ececec] last:border-r-0"
+                  className="flex flex-col items-center justify-center text-center p-4 border-r border-[#ececec] last:border-r-0"
                 >
 
-                  <div className="w-16 h-16 mx-auto rounded-full bg-[#eef8ea] flex items-center justify-center p-3">
+                  <div className="w-12 h-12 mx-auto rounded-full bg-[#eef8ea] flex items-center justify-center p-2.5 mb-2.5 shadow-sm">
 
                     <img
                       src={item.image}
@@ -233,11 +236,11 @@ const Partnership = () => {
 
                   </div>
 
-                  <h4 className="text-[#16316b] text-[14px] font-black uppercase">
+                  <h4 className="text-[#16316b] text-[13px] font-extrabold uppercase mb-1 leading-tight">
                     {item.title}
                   </h4>
 
-                  <p className="text-[#555] text-[12px] leading-2">
+                  <p className="text-black font-medium text-[11px] leading-relaxed max-w-[185px]">
                     {item.desc}
                   </p>
 
@@ -533,8 +536,10 @@ const Partnership = () => {
         </div>
 
       </section>
+
+      {/* ================= DESKTOP BANNER VIEW ================= */}
       <section
-        className="relative overflow-hidden bg-no-repeat bg-top bg-contain mb-0"
+        className="relative overflow-hidden bg-no-repeat bg-top bg-contain mb-0 hidden md:block"
         style={{
           backgroundImage: "url('/images/partnership/impact-bg.png')",
           backgroundSize: "100% auto",
@@ -542,23 +547,40 @@ const Partnership = () => {
         }}
       >
         <div className="max-w-[1400px] mx-auto px-4 md:px-10 h-full">
-
           <div className="grid grid-cols-2 md:grid-cols-4 items-end h-[420px]">
-
             <div></div>
             <div></div>
             <div></div>
-
             <div className="flex justify-end relative bottom-[10px]">
               <Link to="/partner-registration">
-                <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white  tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
-
+                <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
                   Register As Official Partner
-
                 </button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* ================= MOBILE BANNER VIEW ================= */}
+      <section className="block md:hidden px-4 mb-6 mt-4">
+        <div className="bg-gradient-to-r from-[#031d44] via-[#042a64] to-[#031d44] border border-[#619941]/30 rounded-3xl p-6 text-center shadow-lg relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#619941]/10 to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-4">
+            <h3 className="text-white text-lg font-black uppercase tracking-wide leading-snug">
+              Ready to Partner <br />
+              <span className="text-[#78cd3d]">For A Healthier Future?</span>
+            </h3>
+            <p className="text-white/80 text-xs leading-relaxed max-w-[280px] mx-auto">
+              Join hands with IHWE 2026 and grow your business with endless opportunities.
+            </p>
+            <div className="pt-2 flex justify-center">
+              <Link to="/partner-registration" className="inline-block">
+                <button className="h-[46px] px-8 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-bold shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                  Register As Official Partner
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

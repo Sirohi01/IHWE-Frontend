@@ -183,7 +183,7 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   <Sparkle color="#fff176" style={{ top: '-4px', left: '10%' }} />
                   <Sparkle color="#fff176" style={{ bottom: '-4px', right: '15%', animationDelay: '0.4s' }} />
                   <button 
-                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
+                    onClick={() => window.open("/government-msme-pms-schemes", "_blank")}
                     className="orange-btn-popup flex items-center gap-1 md:gap-1.5 px-1.5 md:px-4 h-6 md:h-9 rounded-md md:rounded-lg transition-transform hover:scale-[1.03] min-w-[65px] md:min-w-[110px]"
                   >
                     <CheckCircle className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 text-white shrink-0" />
@@ -199,7 +199,7 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
                   <Sparkle color="#a4c639" style={{ top: '-4px', right: '10%' }} />
                   <Sparkle color="#a4c639" style={{ bottom: '-4px', left: '15%', animationDelay: '0.6s' }} />
                   <button 
-                    onClick={() => window.open("/msme-pms-scheme", "_blank")}
+                    onClick={() => window.open("/government-msme-pms-schemes", "_blank")}
                     className="white-btn-popup flex items-center gap-1 md:gap-1.5 px-1.5 md:px-4 h-6 md:h-9 rounded-md md:rounded-lg transition-transform hover:scale-[1.03] min-w-[65px] md:min-w-[110px]"
                   >
                     <Info className="w-2.5 h-2.5 md:w-3.5 md:h-3.5 text-[#28396C] shrink-0" />

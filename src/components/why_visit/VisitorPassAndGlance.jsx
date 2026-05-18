@@ -1,5 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useInView, animate } from "framer-motion";
 import SectionContainer from '../layout/SectionContainer';
+
+// StatCounter component
+const StatCounter = ({ value }) => {
+    const [displayValue, setDisplayValue] = useState(0);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+    // Only count up if the string starts with a digit (e.g. "8,000+", "3", etc.)
+    const isNumeric = /^[0-9]/.test(value);
+    if (!isNumeric) {
+        return <span ref={ref}>{value}</span>;
+    }
+
+    const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+    const suffix = value.replace(/[0-9,]/g, '');
+
+    useEffect(() => {
+        if (isInView) {
+            const controls = animate(0, numericValue, {
+                duration: 2.5,
+                ease: "easeOut",
+                onUpdate(v) {
+                    setDisplayValue(Math.floor(v));
+                },
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, numericValue]);
+
+    return (
+        <span ref={ref}>
+            {displayValue.toLocaleString()}{suffix}
+        </span>
+    );
+};
 
 const passColumns = [
     {
@@ -92,8 +128,8 @@ const VisitorPassAndGlance = () => {
                                             <img src={stat.icon} alt="stat" className="w-8 h-8 object-contain" />
                                         </div>
                                         <div className="flex flex-row items-baseline gap-2">
-                                            <span className={`text-xl font-extrabold tracking-tight ${stat.color}`}>
-                                                {stat.value}
+                                            <span className={`text-sm font-extrabold tracking-tight ${stat.color}`}>
+                                                <StatCounter value={stat.value} />
                                             </span>
                                             <span className="text-[9px] font-extrabold text-gray-700 uppercase tracking-wider whitespace-nowrap">
                                                 {stat.label}

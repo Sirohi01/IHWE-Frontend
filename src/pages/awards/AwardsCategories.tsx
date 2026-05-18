@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView, animate } from "framer-motion";
 import icon1 from "../../assets/icon1.png";
 import icon2 from "../../assets/icon2.png";
 import icon3 from "../../assets/icon3.png";
@@ -13,6 +14,36 @@ import icon11 from "../../assets/icon11.png";
 import icon12 from "../../assets/icon12.png";
 import icon13 from "../../assets/icon13.png";
 import icon14 from "../../assets/icon14.png";
+
+const StatCounter = ({ value }: { value: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const [displayValue, setDisplayValue] = useState(0);
+
+  if (!value) return null;
+
+  const numberPart = parseInt(value.replace(/,/g, ""), 10) || 0;
+  const suffix = value.replace(/[0-9,]/g, "");
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numberPart, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          setDisplayValue(Math.floor(latest));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numberPart]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const awardCategories = [
   { title: "Best Hospital / Healthcare Institution", color: "#008d48", icon: icon1 },
@@ -120,7 +151,7 @@ const AwardsCategories = () => {
               </div>
               <div className="flex flex-col">
                 <div className="text-white text-[22px] md:text-[24px] font-black leading-none">
-                  {stat.number}
+                  <StatCounter value={stat.number} />
                 </div>
                 <div className="text-white/70 text-[10px] md:text-[10px] font-bold uppercase tracking-[0.15em] mt-1 md:mt-0.5">
                   {stat.label}

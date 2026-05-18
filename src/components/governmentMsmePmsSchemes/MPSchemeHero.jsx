@@ -1,11 +1,93 @@
 import React from 'react';
-import { CheckCircle2, TrendingUp, Globe, Landmark, Calendar, MapPin, ArrowRight } from 'lucide-react';
+import { CheckCircle2, TrendingUp, Globe, Landmark, Calendar, MapPin } from 'lucide-react';
+
+// ── Sparkle Component (Same as BrochurePopUp) ──
+const Sparkle = ({ style, color = '#fff176' }) => (
+    <span
+        style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            fontSize: '10px',
+            color: color,
+            textShadow: `0 0 6px ${color}, 0 0 12px ${color}`,
+            animation: 'sparkleAnim 1.6s ease-in-out infinite',
+            opacity: 0,
+            zIndex: 20,
+            ...style,
+        }}
+    >
+        ✦
+    </span>
+);
 
 const MPSchemeHero = ({ onApplyClick }) => {
     return (
         <div
             className="w-full relative min-h-[400px] lg:min-h-[450px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
         >
+            {/* Background white overlay for mobile readability */}
+            <div className="absolute inset-0 bg-white/90 md:bg-transparent z-0 pointer-events-none" />
+
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+                
+                @keyframes goldShift {
+                  0%   { background-position: 0% 50%; }
+                  50%  { background-position: 100% 50%; }
+                  100% { background-position: 0% 50%; }
+                }
+                @keyframes shimmer {
+                  0%   { left: -75%; }
+                  100% { left: 150%; }
+                }
+                @keyframes sparkleAnim {
+                  0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+                  40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+                  80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+                  100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+                }
+                .orange-btn-popup {
+                  background: linear-gradient(135deg, #F08D39 0%, #ff9d4d 30%, #d97a26 60%, #F08D39 100%);
+                  background-size: 200% 200%;
+                  animation: goldShift 2.5s ease infinite;
+                  box-shadow: 0 0 16px 4px rgba(240,141,57,0.45), 0 4px 15px rgba(240,141,57,0.3);
+                  position: relative;
+                  overflow: hidden;
+                  font-family: 'Roboto', sans-serif;
+                }
+                .orange-btn-popup::before {
+                  content: '';
+                  position: absolute;
+                  top: -50%;
+                  left: -75%;
+                  width: 50%;
+                  height: 200%;
+                  background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+                  transform: skewX(-20deg);
+                  animation: shimmer 2s infinite;
+                }
+                .golden-btn-popup {
+                  background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+                  background-size: 200% 200%;
+                  animation: goldShift 2.5s ease infinite;
+                  box-shadow: 0 0 16px 4px rgba(255,200,0,0.4), 0 4px 15px rgba(255,165,0,0.35);
+                  position: relative;
+                  overflow: hidden;
+                  font-family: 'Roboto', sans-serif;
+                }
+                .golden-btn-popup::before {
+                  content: '';
+                  position: absolute;
+                  top: -50%;
+                  left: -75%;
+                  width: 50%;
+                  height: 200%;
+                  background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+                  transform: skewX(-20deg);
+                  animation: shimmer 2s infinite;
+                }
+            `}</style>
+
             <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row relative z-10 h-full py-8 lg:py-0">
 
                 {/* ── LEFT CONTENT PANEL ── */}
@@ -111,18 +193,29 @@ const MPSchemeHero = ({ onApplyClick }) => {
 
                     {/* Final Actions Container - Relocates to vertical stack if viewport tightens */}
                     <div className="relative lg:absolute w-full lg:w-auto flex flex-col sm:flex-row items-center justify-center gap-3 lg:gap-[14px] bottom-0 lg:bottom-8 lg:right-14 z-30 pb-4 lg:pb-0">
-                        <button
-                            onClick={onApplyClick}
-                            className="w-full sm:w-auto bg-green-800 text-white flex items-center justify-center gap-2 px-5 py-2.5 sm:py-2 text-xs sm:text-sm font-medium uppercase rounded-lg shadow hover:bg-green-900 transition whitespace-nowrap"
-                        >
-                            Apply for PMS Scheme →
-                        </button>
-                        <button
-                            onClick={() => window.open('/book-a-stand', '_blank')}
-                            className="w-full sm:w-auto bg-white hover:bg-gray-100 text-gray-800 border-2 border-gray-800 rounded-lg py-2.5 sm:py-2 px-6 text-xs sm:text-sm font-medium uppercase tracking-[0.8px] flex items-center justify-center gap-1.5 whitespace-nowrap"
-                        >
-                            Book Your Stall →
-                        </button>
+                        {/* Apply for PMS Scheme (ORANGE + SHIMMER + SPARKLES) */}
+                        <div className="relative group/btn w-full sm:w-auto shrink-0">
+                            <Sparkle color="#fff176" style={{ top: '-4px', left: '10%' }} />
+                            <Sparkle color="#fff176" style={{ bottom: '-4px', right: '15%', animationDelay: '0.4s' }} />
+                            <button
+                                onClick={onApplyClick}
+                                className="w-full sm:w-auto orange-btn-popup text-white flex items-center justify-center gap-1.5 px-5 py-2 text-[10px] sm:text-xs font-black uppercase rounded-lg shadow-md hover:scale-[1.02] transition whitespace-nowrap"
+                            >
+                                Apply for PMS Scheme →
+                            </button>
+                        </div>
+
+                        {/* Book Your Stall (GOLDEN + SHIMMER + SPARKLES) */}
+                        <div className="relative group/btn w-full sm:w-auto shrink-0">
+                            <Sparkle color="#fff176" style={{ top: '-4px', right: '40%' }} />
+                            <Sparkle color="#fff176" style={{ bottom: '-4px', right: '10%', animationDelay: '0.2s' }} />
+                            <button
+                                onClick={() => window.open('/book-a-stand', '_blank')}
+                                className="w-full sm:w-auto golden-btn-popup text-[#050A1A] flex items-center justify-center gap-1.5 px-5 py-2 text-[10px] sm:text-xs font-black uppercase rounded-lg shadow-md hover:scale-[1.02] transition whitespace-nowrap"
+                            >
+                                Book Your Stall →
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

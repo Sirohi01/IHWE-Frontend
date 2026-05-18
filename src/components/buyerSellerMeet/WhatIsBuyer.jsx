@@ -41,58 +41,60 @@ const features = [
 
 const WhatIsBuyer = () => {
     return (
-        <div className="relative overflow-hidden py-2 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className="relative overflow-hidden py-10 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+            <SectionContainer className="relative z-10">
+                <div className="flex flex-col lg:flex-row justify-between w-full gap-8 lg:gap-10 items-stretch">
+                    
+                    {/* Left Text Column */}
+                    <div className='w-full lg:w-[32%] flex flex-col items-center lg:items-start text-center lg:text-left'>
+                        {/* Heading */}
+                        <h2 className='text-xl md:text-2xl font-bold text-[#1a3d20] uppercase tracking-wider'>
+                            WHAT IS BUYER<span style={{ color: '#3a8c2f' }}>–</span>SELLER MEET?
+                        </h2>
 
-            <div className={`flex justify-between w-full ${SectionContainer}`}>
-                {/* text  data  */}
-                <div className='w-[35%]'>
-                    {/* Heading */}
-                    <h2 className='text-xl font-medium' style={{ fontFamily: "'Barlow Condensed', sans-serif", color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '1px', textAlign: 'start', }}>
-                        WHAT IS BUYER<span style={{ color: '#3a8c2f' }}>–</span>SELLER MEET?
-                    </h2>
+                        {/* Separator */}
+                        <div className="flex items-center justify-center lg:justify-start gap-3 my-4 w-full">
+                            <div style={{ width: '60px', height: '1.5px', background: '#b0c890' }} />
+                            <div style={{ width: '7px', height: '7px', background: '#3a8c2f', transform: 'rotate(45deg)' }} />
+                            <div style={{ width: '60px', height: '1.5px', background: '#b0c890' }} />
+                        </div>
 
-                    {/* Separator */}
-                    <div className="flex items-center justify-center gap-3 mb-3">
-                        <div style={{ width: '60px', height: '1.5px', background: '#b0c890' }} />
-                        <div style={{ width: '7px', height: '7px', background: '#3a8c2f', transform: 'rotate(45deg)' }} />
-                        <div style={{ width: '60px', height: '1.5px', background: '#b0c890' }} />
+                        {/* Tagline */}
+                        <p className='text-sm text-center lg:text-left text-[#4a5a40] leading-relaxed max-w-2xl'>
+                            Buyer–Seller Meet is a premium B2B networking platform at International Health & Wellness Expo 2026, designed to connect exhibitors with genuine, pre-verified buyers from the health, wellness, Ayurveda, fitness, organic, nutraceutical, beauty, and healthcare industries. <br /><br />
+                            This curated business matchmaking initiative enables direct meetings with distributors, retailers, importers, wholesalers, wellness chains, hospitals, and key decision-makers — helping brands generate quality leads, expand business networks, and create new growth opportunities.
+                        </p>
                     </div>
 
-                    {/* Tagline */}
-                    <p className='text-sm text-center mx-auto mb-4 text-[#4a5a40] text-start'>
-                        Buyer–Seller Meet is a premium B2B networking platform at International Health & Wellness Expo 2026, designed to connect exhibitors with genuine, pre-verified buyers from the health, wellness, Ayurveda, fitness, organic, nutraceutical, beauty, and healthcare industries. <br /><br />
-                        This curated business matchmaking initiative enables direct meetings with distributors, retailers, importers, wholesalers, wellness chains, hospitals, and key decision-makers — helping brands generate quality leads, expand business networks, and create new growth opportunities.
-                    </p>
+                    {/* Feature Cards Column */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row items-stretch lg:w-[65%] w-full gap-6 lg:gap-0 mt-8 lg:mt-0">
+                        {features.map((feat, i) => (
+                            <React.Fragment key={i}>
+                                {/* Card */}
+                                <div className="flex-1 flex flex-col items-center text-center gap-3 p-4 bg-white/40 lg:bg-transparent rounded-2xl border border-white/30 lg:border-none shadow-sm lg:shadow-none transition-all">
+                                    <div className="flex items-center justify-center rounded-full shadow-sm shrink-0"
+                                        style={{ width: '74px', height: '74px', border: '2px solid #b0c890', background: '#fff' }}>
+                                        {feat.icon}
+                                    </div>
+                                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '0.4px', lineHeight: 1.4, whiteSpace: 'pre-line' }} className="mt-1">
+                                        {feat.title}
+                                    </div>
+                                    <div style={{ fontSize: '13px', color: '#5a7050', lineHeight: 1.55 }}>
+                                        {feat.desc}
+                                    </div>
+                                </div>
+
+                                {/* Vertical divider — HIDDEN ON MOBILE */}
+                                {i < features.length - 1 && (
+                                    <div className="hidden lg:block self-stretch w-px bg-[#d4e4bc] my-4 shrink-0" />
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </div>
 
                 </div>
-
-                {/* Feature Cards */}
-                <div className="flex items-start w-[65%]">
-                    {features.map((feat, i) => (
-                        <React.Fragment key={i}>
-                            {/* Card — no border */}
-                            <div className="flex-1 flex flex-col items-center text-center gap-3 p-4">
-                                <div className="flex items-center justify-center rounded-full"
-                                    style={{ width: '74px', height: '74px', border: '2px solid #b0c890', background: '#fff', flexShrink: 0 }}>
-                                    {feat.icon}
-                                </div>
-                                <div style={{ fontSize: '13px', fontWeight: 800, color: '#1a3d20', textTransform: 'uppercase', letterSpacing: '0.4px', lineHeight: 1.4, whiteSpace: 'pre-line' }}>
-                                    {feat.title}
-                                </div>
-                                <div style={{ fontSize: '13px', color: '#5a7050', lineHeight: 1.55 }}>
-                                    {feat.desc}
-                                </div>
-                            </div>
-
-                            {/* Vertical divider — last card ke baad nahi */}
-                            {i < features.length - 1 && (
-                                <div className="self-stretch w-px bg-[#d4e4bc] my-4" />
-                            )}
-                        </React.Fragment>
-                    ))}
-                </div>
-            </div >
-        </div >
+            </SectionContainer>
+        </div>
     )
 }
 

@@ -1,5 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useInView, animate } from "framer-motion";
 import { Users, Building2, Globe, Mic, Handshake } from 'lucide-react';
+
+// StatCounter component
+const StatCounter = ({ value }) => {
+    const [displayValue, setDisplayValue] = useState(0);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+    // Only count up if the string starts with a digit (e.g. "8,000+", "40+", etc.)
+    const isNumeric = /^[0-9]/.test(value);
+    if (!isNumeric) {
+        return <span ref={ref}>{value}</span>;
+    }
+
+    const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+    const suffix = value.replace(/[0-9,]/g, '');
+
+    useEffect(() => {
+        if (isInView) {
+            const controls = animate(0, numericValue, {
+                duration: 2.5,
+                ease: "easeOut",
+                onUpdate(v) {
+                    setDisplayValue(Math.floor(v));
+                },
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, numericValue]);
+
+    return (
+        <span ref={ref}>
+            {displayValue.toLocaleString()}{suffix}
+        </span>
+    );
+};
 
 const StatsBand = () => {
   const stats = [
@@ -33,8 +69,8 @@ const StatsBand = () => {
                   <item.icon strokeWidth={1.8} size={30} className="md:w-[34px] md:h-[34px]" />
                 </div>
                 <div className="flex flex-col items-start text-left min-w-0">
-                  <span className="text-[18px] md:text-[20px] font-extrabold text-white leading-none tracking-tight">
-                    {item.val}
+                  <span className="text-[18px] md:text-[20px] font-bold text-white leading-none tracking-tight">
+                    <StatCounter value={item.val} />
                   </span>
                   <span className="text-[9px] md:text-[10px] font-black text-white tracking-widest uppercase mt-0.5 opacity-90">
                     {item.label}

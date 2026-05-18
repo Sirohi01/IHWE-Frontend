@@ -66,7 +66,7 @@ const participationCards = [
     color: "border-amber-200 bg-white",
     iconBg: "bg-amber-50 text-amber-600",
     arrowBg: "bg-amber-500",
-    link: "coming-soon"
+    link: "/sponsership"
   },
   {
     id: "whatsapp",

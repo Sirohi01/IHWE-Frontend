@@ -13,7 +13,7 @@ import SectionContainer from "@/components/layout/SectionContainer";
 import { cn } from "@/lib/utils";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { exhibitorTestimonialsApi, SERVER_URL } from "@/lib/api";
+import { exhibitorTestimonialsApi, settingsApi, SERVER_URL } from "@/lib/api";
 
 // Assets
 import exhibitBg from "@/assets/exhibitbg.webp";
@@ -255,11 +255,22 @@ const WhyExhibit = () => {
   const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [testimonialHeading, setTestimonialHeading] = useState("What Our Exhibitors Say");
+  const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
     window.scrollTo(0, 0);
     loadTestimonials();
+    
+    const fetchSettings = async () => {
+      try {
+        const data = await settingsApi.get();
+        if (data) setSettings(data);
+      } catch (error) {
+        console.error("Failed to load settings in WhyExhibit:", error);
+      }
+    };
+    fetchSettings();
   }, []);
 
   const loadTestimonials = async () => {
@@ -620,24 +631,24 @@ const WhyExhibit = () => {
             </div>
 
             {/* Right Card */}
-            <div className="w-full lg:w-[190px] mx-auto lg:ml-auto lg:mr-0" data-aos="fade-left">
-              <div className="bg-white px-4 py-6 rounded-xl shadow-2xl border border-slate-100 flex flex-col gap-5">
+            <div className="w-fit lg:w-[190px] mx-auto lg:ml-auto lg:mr-0" data-aos="fade-left">
+              <div className="bg-white px-5 py-3 lg:py-6 rounded-xl shadow-2xl border border-slate-100 flex flex-col gap-2.5 lg:gap-5 w-full">
                 
                 {/* Date */}
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-center lg:items-start gap-2.5">
                   <Calendar className="text-[#0e174f] shrink-0" size={26} strokeWidth={1.5} />
                   <div className="flex flex-col">
-                    <h3 className="text-lg md:text-xl font-black text-[#0e174f] leading-none">21 – 23</h3>
-                    <p className="text-[10px] font-bold text-[#0e174f] uppercase tracking-wide mt-0.5">AUGUST 2026</p>
+                    <h3 className="text-lg md:text-xl font-black text-[#0e174f] leading-none m-0 p-0">21 – 23</h3>
+                    <span className="text-[10px] font-bold text-[#0e174f] uppercase tracking-wide mt-0.5 m-0 p-0">AUGUST 2026</span>
                   </div>
                 </div>
 
                 {/* Location */}
-                <div className="flex items-start gap-2.5">
+                <div className="flex items-center lg:items-start gap-2.5">
                   <MapPin className="text-[#2f8f3a] shrink-0" size={26} strokeWidth={1.5} />
                   <div className="flex flex-col">
-                    <h3 className="text-[12px] font-black text-[#0e174f] leading-tight uppercase">PRAGATI MAIDAN,</h3>
-                    <p className="text-[11px] font-bold text-[#0e174f] uppercase tracking-tight">NEW DELHI, INDIA</p>
+                    <h3 className="text-[12px] font-black text-[#0e174f] leading-tight uppercase m-0 p-0">PRAGATI MAIDAN,</h3>
+                    <span className="text-[11px] font-bold text-[#0e174f] uppercase tracking-tight m-0 p-0">NEW DELHI, INDIA</span>
                   </div>
                 </div>
 
@@ -645,16 +656,16 @@ const WhyExhibit = () => {
                 <div className="w-full h-px bg-slate-200" />
 
                 {/* Quote */}
-                <div className="text-center -mt-1">
-                  <p className="text-[#316234] font-black text-[11px] leading-tight">
+                <div className="text-left lg:text-center flex flex-col gap-0.5 m-0 p-0">
+                  <span className="text-[#316234] font-black text-[11px] leading-tight m-0 p-0">
                     A Global Convergence
-                  </p>
-                  <p className="text-[#0e174f] font-black text-[11px] leading-tight">
+                  </span>
+                  <span className="text-[#0e174f] font-black text-[11px] leading-tight m-0 p-0">
                     of Health & Wellness
-                  </p>
-                  <p className="text-[#0e174f] font-black text-[11px] leading-tight mt-0.5">
+                  </span>
+                  <span className="text-[#0e174f] font-black text-[11px] leading-tight mt-0.5 m-0 p-0">
                     Innovators
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
@@ -744,101 +755,103 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── GOVT PMS SCHEME BANNER ─── */}
-      <section className="py-0 mt-4">
-        <SectionContainer>
-          <div
-            className="w-full rounded-[30px] flex flex-col md:flex-row items-stretch overflow-hidden relative"
-            style={{
-              boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
-              background: '#fdf9ed',
-              minHeight: '160px'
-            }}
-            data-aos="fade-up"
-          >
-            {/* Image Section */}
-            <div className="w-full md:w-[38%] h-[160px] md:h-auto flex-shrink-0 relative overflow-hidden">
+      {settings?.showGovtPmsScheme !== false && (
+        <section className="py-0 mt-4">
+          <SectionContainer>
+            <div
+              className="w-full rounded-[30px] flex flex-col md:flex-row items-stretch overflow-hidden relative"
+              style={{
+                boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+                background: '#fdf9ed',
+                minHeight: '160px'
+              }}
+              data-aos="fade-up"
+            >
+              {/* Image Section */}
+              <div className="w-full md:w-[38%] h-[160px] md:h-auto flex-shrink-0 relative overflow-hidden">
+                <img
+                  src={leftbg}
+                  alt="PMS Scheme"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+              </div>
+
+              {/* Right Text Content */}
+              <div className="flex-1 flex flex-col justify-center px-6 md:px-10 py-5 md:py-6 relative z-10">
+                {/* Heading */}
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
+                  {/* <p className="text-[10px] md:text-[11px] font-black text-[#1a682d] uppercase tracking-widest">Government Scheme</p> */}
+                </div>
+                <h2 className="text-[15px] md:text-[22px] font-black text-[#00153c] leading-tight mb-1 uppercase">
+                  Exhibit Under <br />
+                  <span className="text-[#1a682d]">Government PMS Scheme</span>
+                </h2>
+                <p className="text-[10px] md:text-[12px] font-semibold mb-3 leading-relaxed max-w-md" style={{ color: '#070e48' }}>
+                  Eligible MSMEs can get reimbursement support on <br />
+                  participation expenses under the PMS Scheme.
+                </p>
+
+                {/* Feature items */}
+                <div className="flex flex-wrap md:flex-nowrap items-center gap-y-2 gap-x-5 md:gap-0 mt-1">
+                  {[
+                    { img: band1, line1: 'Stall Cost', line2: 'Support' },
+                    { img: band2, line1: 'Travel', line2: 'Assistance' },
+                    { img: band3, line1: 'Global', line2: 'Exposure' },
+                  ].map((item, i, arr) => (
+                    <div key={i} className="flex items-center">
+                      <div className="flex items-center gap-3 pr-4 md:px-3">
+                        <img src={item.img} alt={item.line1} className="w-8 h-8 md:w-9 md:h-9 object-contain flex-shrink-0" />
+                        <div className="flex flex-col leading-tight">
+                          <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line1}</span>
+                          <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line2}</span>
+                        </div>
+                      </div>
+                      {i < arr.length - 1 && (
+                        <div className="hidden md:block w-px h-8 bg-slate-300 flex-shrink-0" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div className="px-6 pb-8 md:p-0 md:absolute md:bottom-4 md:right-4 z-10 flex flex-col items-start md:items-end">
+                <div className="relative group/btn w-full md:w-auto">
+                  {/* Sparkles */}
+                  <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
+                  <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-12px', left: '40%', animationDelay: '0.5s' }} />
+                  <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
+                  <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
+                  <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
+                  <Link
+                    to="/government-msme-pms-schemes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02] w-full md:w-auto"
+                    style={{ 
+                      background: 'linear-gradient(135deg, #5E0006 0%, #3D0004 100%)',
+                      boxShadow: '0 4px 14px rgba(94, 0, 6, 0.4)'
+                    }}
+                  >
+                    Apply Under PMS Scheme <ArrowRight size={13} />
+                  </Link>
+                </div>
+                <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1.5 ml-1 md:mr-0.5">*T&amp;C Apply</p>
+              </div>
+
+              {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
               <img
-                src={leftbg}
-                alt="PMS Scheme"
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                src={leaf2}
+                alt=""
+                aria-hidden="true"
+                className="absolute bottom-0 right-0 w-[140px] md:w-[210px] h-auto object-contain pointer-events-none select-none z-0"
+                style={{ opacity: 1 }}
               />
             </div>
-
-            {/* Right Text Content */}
-            <div className="flex-1 flex flex-col justify-center px-6 md:px-10 py-5 md:py-6 relative z-10">
-              {/* Heading */}
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
-                {/* <p className="text-[10px] md:text-[11px] font-black text-[#1a682d] uppercase tracking-widest">Government Scheme</p> */}
-              </div>
-              <h2 className="text-[15px] md:text-[22px] font-black text-[#00153c] leading-tight mb-1 uppercase">
-                Exhibit Under <br />
-                <span className="text-[#1a682d]">Government PMS Scheme</span>
-              </h2>
-              <p className="text-[10px] md:text-[12px] font-semibold mb-3 leading-relaxed max-w-md" style={{ color: '#070e48' }}>
-                Eligible MSMEs can get reimbursement support on <br />
-                participation expenses under the PMS Scheme.
-              </p>
-
-              {/* Feature items */}
-              <div className="flex flex-wrap md:flex-nowrap items-center gap-y-2 gap-x-5 md:gap-0 mt-1">
-                {[
-                  { img: band1, line1: 'Stall Cost', line2: 'Support' },
-                  { img: band2, line1: 'Travel', line2: 'Assistance' },
-                  { img: band3, line1: 'Global', line2: 'Exposure' },
-                ].map((item, i, arr) => (
-                  <div key={i} className="flex items-center">
-                    <div className="flex items-center gap-3 pr-4 md:px-3">
-                      <img src={item.img} alt={item.line1} className="w-8 h-8 md:w-9 md:h-9 object-contain flex-shrink-0" />
-                      <div className="flex flex-col leading-tight">
-                        <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line1}</span>
-                        <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line2}</span>
-                      </div>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="hidden md:block w-px h-8 bg-slate-300 flex-shrink-0" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <div className="px-6 pb-8 md:p-0 md:absolute md:bottom-4 md:right-4 z-10 flex flex-col items-start md:items-end">
-              <div className="relative group/btn w-full md:w-auto">
-                {/* Sparkles */}
-                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
-                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-12px', left: '40%', animationDelay: '0.5s' }} />
-                <Sparkle color="#5E0006" shadow="#3D0004" style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
-                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
-                <Sparkle color="#5E0006" shadow="#3D0004" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
-                <Link
-                  to="/government-msme-pms-schemes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-black text-[10px] md:text-[11px] uppercase tracking-wider text-white transition-all active:scale-95 relative z-10 hover:scale-[1.02] w-full md:w-auto"
-                  style={{ 
-                    background: 'linear-gradient(135deg, #5E0006 0%, #3D0004 100%)',
-                    boxShadow: '0 4px 14px rgba(94, 0, 6, 0.4)'
-                  }}
-                >
-                  Apply Under PMS Scheme <ArrowRight size={13} />
-                </Link>
-              </div>
-              <p className="text-[8px] md:text-[9px] text-slate-400 font-semibold mt-1.5 ml-1 md:mr-0.5">*T&amp;C Apply</p>
-            </div>
-
-            {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
-            <img
-              src={leaf2}
-              alt=""
-              aria-hidden="true"
-              className="absolute bottom-0 right-0 w-[140px] md:w-[210px] h-auto object-contain pointer-events-none select-none z-0"
-              style={{ opacity: 1 }}
-            />
-          </div>
-        </SectionContainer>
-      </section>
+          </SectionContainer>
+        </section>
+      )}
 
       {/* ─── INDUSTRIES WE SERVE ─── */}
       <section className="pt-4 pb-8 bg-white">

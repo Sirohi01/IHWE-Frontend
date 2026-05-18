@@ -543,7 +543,7 @@ const VisitorRegistration = () => {
             {/* ── 1. HERO BANNER SECTION ── */}
 
             <section
-                className="hero-background-registration relative overflow-hidden pt-[80px] pb-0"
+                className="hero-background-registration relative overflow-hidden pt-[135px] sm:pt-[110px] lg:pt-[85px] pb-8 lg:pb-0 !aspect-auto lg:!aspect-[16/5] !h-auto lg:!h-auto"
                 style={{
                     backgroundImage: `linear-gradient(to right, rgba(0, 40, 15, 0.96) 0%, rgba(0, 40, 15, 0.85) 35%, rgba(0, 40, 15, 0.4) 65%, rgba(0, 40, 15, 0.1) 100%), url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : '/visitor/visitor-reg.png'})`,
                     backgroundSize: 'cover',
@@ -579,24 +579,24 @@ const VisitorRegistration = () => {
                             </p>
 
                             {/* Stats Row with separators */}
-                            <div className="flex items-center justify-center lg:justify-start mb-0 w-full">
+                            <div className="grid grid-cols-2 lg:flex lg:items-center lg:justify-start gap-y-6 gap-x-2 lg:gap-0 mb-4 lg:mb-0 w-full max-w-lg lg:max-w-none mx-auto lg:mx-0 mt-3">
                                 {[
                                     { label: 'Meet 8,000+\nIndustry Professionals', img: "/visitor/meet.png" },
                                     { label: 'Explore 8,000+\nProducts & Solutions', img: "/visitor/explore.png" },
                                     { label: 'Attend Conferences\n& Live Sessions', img: "/visitor/conference.png" },
                                     { label: 'Build Valuable\nBusiness Connections', img: "/visitor/buildvalue.png" },
-                                ].map((stat, i) => (
-                                    <React.Fragment key={i}>
-                                        <div className="flex flex-col items-center text-center px-4 md:px-6">
+                                ].map((stat, i, arr) => (
+                                    <div key={i} className="flex items-center lg:contents">
+                                        <div className="flex flex-col items-center text-center px-2 flex-1">
                                             <div className="mb-2 flex items-center justify-center">
                                                 <img src={stat.img} alt={stat.label} className="w-8 h-8 object-contain opacity-95" />
                                             </div>
-                                            <div className="text-[11px] md:text-[12px] font-bold text-white tracking-tight leading-snug whitespace-pre-line drop-shadow-md">
+                                            <div className="text-[10px] md:text-[12px] font-bold text-white tracking-tight leading-snug whitespace-pre-line drop-shadow-md max-w-[130px]">
                                                 {stat.label}
                                             </div>
                                         </div>
-                                        {i < 3 && <div className="w-[1px] h-10 bg-white/25 shrink-0" />}
-                                    </React.Fragment>
+                                        {i < arr.length - 1 && <div className="hidden lg:block w-[1px] h-10 bg-white/25 shrink-0" />}
+                                    </div>
                                 ))}
                             </div>
                         </div>

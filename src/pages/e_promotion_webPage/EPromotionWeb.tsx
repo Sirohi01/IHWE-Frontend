@@ -1,7 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ePromotionPackagesApi } from "@/lib/api";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
+import { motion, useInView, animate } from "framer-motion";
+
+const StatCounter = ({ value }: { value: string }) => {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.3 });
+    const [displayValue, setDisplayValue] = useState(0);
+
+    const numberPart = parseInt(value.replace(/,/g, ""), 10) || 0;
+    const suffix = value.replace(/[0-9,]/g, "");
+
+    useEffect(() => {
+        if (isInView) {
+            const controls = animate(0, numberPart, {
+                duration: 2,
+                ease: "easeOut",
+                onUpdate: (latest) => {
+                    setDisplayValue(Math.floor(latest));
+                },
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, numberPart]);
+
+    return (
+        <span ref={ref}>
+            {displayValue.toLocaleString()}{suffix}
+        </span>
+    );
+};
 
 const testimonials = [
   {
@@ -58,7 +87,7 @@ export default function EPromotionWeb({ data }: any) {
         }}
       >
         {/* Dark Overlay */}
-        <div className="absolute"></div>
+        <div className="absolute inset-0 bg-black/50 md:bg-transparent pointer-events-none"></div>
 
         {/* Content */}
         <SectionContainer className="relative w-full ">
@@ -70,17 +99,17 @@ export default function EPromotionWeb({ data }: any) {
             <div className="space-y-5">
 
               {/* HEADING */}
-              <h2 className="text-3xl md:text-6xl font-bold text-green-900 leading-tight">
+              <h2 className="text-3xl md:text-6xl font-bold text-white md:text-green-900 leading-tight">
                 E-Promotion <br /> Opportunities
               </h2>
 
               {/* SUBTITLE */}
-              <h4 className="text-xl md:text-2xl text-green-800 font-semibold">
+              <h4 className="text-xl md:text-2xl text-green-300 md:text-green-800 font-semibold">
                 Promote | Connect | Convert
               </h4>
 
               {/* DESCRIPTION */}
-              <p className="text-black text-sm md:text-base leading-relaxed max-w-2xl">
+              <p className="text-gray-200 md:text-black text-sm md:text-base leading-relaxed max-w-2xl">
                 Maximize your brand visibility before, during and after IHWE 2026.
                 Reach thousands of targeted buyers and generate quality leads with our
                 digital promotion solutions.
@@ -90,25 +119,25 @@ export default function EPromotionWeb({ data }: any) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4">
 
                 {/* ITEM 1 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
+                <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
                   <img src="/images/1.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
+                  <p className="text-white md:text-green-800 text-sm leading-tight">
                     Increased <br /> Brand Visibility
                   </p>
                 </div>
 
                 {/* ITEM 2 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
+                <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
                   <img src="/images/2.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
+                  <p className="text-white md:text-green-800 text-sm leading-tight">
                     Generate <br /> Quality Leads
                   </p>
                 </div>
 
                 {/* ITEM 3 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
+                <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
                   <img src="/images/3.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
+                  <p className="text-white md:text-green-800 text-sm leading-tight">
                     Reach Targeted <br /> Audience
                   </p>
                 </div>
@@ -116,7 +145,7 @@ export default function EPromotionWeb({ data }: any) {
                 {/* ITEM 4 (NO BORDER) */}
                 <div className="flex items-center gap-2">
                   <img src="/images/4.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
+                  <p className="text-white md:text-green-800 text-sm leading-tight">
                     Boost ROI from <br /> Participation
                   </p>
                 </div>
@@ -129,7 +158,7 @@ export default function EPromotionWeb({ data }: any) {
                   Explore Packages
                 </button>
 
-                <button className="border border-green-800 text-green-700 hover:bg-green-600 hover:text-white transition px-6 py-2 rounded-md font-semibold">
+                <button className="border border-white text-white md:border-green-800 md:text-green-700 hover:bg-green-600 hover:text-white transition px-6 py-2 rounded-md font-semibold">
                   Book Your Promotion Slot
                 </button>
               </div>
@@ -369,7 +398,9 @@ export default function EPromotionWeb({ data }: any) {
                     className="w-12 h-12 object-contain mx-auto mb-2"
                   />
 
-                  <p className="text-lg font-bold text-green-800">{item[1]}</p>
+                  <p className="text-lg font-bold text-green-800">
+                    <StatCounter value={item[1]} />
+                  </p>
 
                   <p className="text-xs text-gray-600">{item[2]}</p>
                 </div>
@@ -441,63 +472,58 @@ export default function EPromotionWeb({ data }: any) {
       {/* TOP MAIN SECTION */}
       <SectionContainer className=" mt-4 mb-0">
 
-        <div className="bg-gradient-to-r from-[#062c17] via-[#0d4b27] to-[#062c17] rounded relative pb-4 overflow-visible shadow-md border border-[#1f4f33]">
+        <div className="bg-gradient-to-r from-[#062c17] via-[#0d4b27] to-[#062c17] rounded relative pb-4 md:pb-6 overflow-visible shadow-md border border-[#1f4f33] px-4 py-5 md:p-0">
 
           {/* MAIN CONTENT */}
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 px-4 sm:px-5 py-3">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-5 px-0 md:px-5 py-3 text-center lg:text-left">
 
             {/* LEFT SIDE */}
-            <div className="flex items-center gap-3 flex-1 w-full">
+            <div className="flex flex-col sm:flex-row items-center gap-4 flex-1 w-full">
 
               {/* ICON */}
-              <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md">
+              <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md bg-[#0d3a20] rounded-xl border border-[#7ea35f]/30">
                 <img
                   src="/images/epromotion/megaphone.png"
                   alt="Megaphone"
-                  className="w-20 h-20 object-contain"
+                  className="w-14 h-14 object-contain"
                 />
               </div>
 
               {/* TEXT */}
               <div className="leading-tight">
-                <h2 className="text-white font-bold text-[15px] sm:text-[22px]">
+                <h2 className="text-white font-bold text-[16px] sm:text-[22px]">
                   Don’t Just Exhibit – Get Seen Before You Arrive!
                 </h2>
 
-                <p className="text-[#d7e8da] text-[10px] sm:text-[12px] mt-[2px]">
+                <p className="text-[#d7e8da] text-[11px] sm:text-[12px] mt-1">
                   Promote your brand, generate leads and grow your business with IHWE 2026.
                 </p>
               </div>
             </div>
 
             {/* RIGHT BUTTONS */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto mt-2 lg:mt-0">
 
-              <button className="bg-[#f58220] hover:bg-orange-600 transition-all duration-300 text-white text-[10px] sm:text-[11px] font-bold px-4 sm:px-5 py-2 rounded-sm uppercase tracking-wide whitespace-nowrap">
+              <button className="w-full sm:w-auto bg-[#f58220] hover:bg-orange-600 transition-all duration-300 text-white text-[11px] font-bold px-6 py-2.5 rounded uppercase tracking-wide whitespace-nowrap shadow-md">
                 Book E-Promotion Package →
               </button>
 
-              <button className="border border-[#5ea06f] hover:bg-white/10 transition-all duration-300 text-white text-[10px] sm:text-[11px] font-bold px-4 sm:px-5 py-2 rounded-sm uppercase tracking-wide whitespace-nowrap">
+              <button className="w-full sm:w-auto border border-[#5ea06f] hover:bg-white/10 transition-all duration-300 text-white text-[11px] font-bold px-6 py-2.5 rounded uppercase tracking-wide whitespace-nowrap">
                 Talk To Our Team →
               </button>
 
             </div>
           </div>
 
-          {/* WHITE OFFER STRIP */}
-          <div className="absolute left-1/2 -translate-x-1/2 -bottom-4 w-[70%] z-10 rounded-[4px]">
-
+          {/* ================= DESKTOP WHITE OFFER STRIP ================= */}
+          <div className="absolute left-1/2 -translate-x-1/2 -bottom-4 w-[90%] md:w-[70%] z-10 rounded-[4px] hidden md:block">
             <div className="bg-white border border-gray-200 rounded-[4px] px-4 py-[8px] shadow-sm">
-
               <div className="flex items-center justify-between gap-3">
-
                 {/* LEFT OFFER */}
                 <div className="flex items-center gap-2">
-
                   <div className="w-[18px] h-[18px] rounded-full bg-[#0d4b27] flex items-center justify-center shrink-0">
                     <span className="text-white text-[9px]">✦</span>
                   </div>
-
                   <p className="text-[11px] sm:text-[11px] font-semibold text-[#222]">
                     <span className="uppercase text-[#0d4b27] font-bold">
                       Special Offer:
@@ -509,12 +535,38 @@ export default function EPromotionWeb({ data }: any) {
                     on any E-Promotion Package
                   </p>
                 </div>
-
                 {/* KNOW MORE */}
                 <button className="text-[#0d4b27] text-[10px] sm:text-[11px] font-bold uppercase whitespace-nowrap flex items-center gap-1">
                   Know More →
                 </button>
+              </div>
+            </div>
+          </div>
 
+          {/* ================= MOBILE WHITE OFFER STRIP ================= */}
+          <div className="block md:hidden mt-4 w-full z-10">
+            <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 shadow-md">
+              <div className="flex flex-col items-center gap-2.5 text-center">
+                {/* LEFT OFFER */}
+                <div className="flex items-start gap-2.5 text-left">
+                  <div className="w-5 h-5 rounded-full bg-[#0d4b27] flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-white text-[10px]">✦</span>
+                  </div>
+                  <p className="text-xs font-semibold text-gray-800 leading-tight">
+                    <span className="uppercase text-[#0d4b27] font-bold block mb-0.5">
+                      Special Offer:
+                    </span>
+                    Book your stall & get{" "}
+                    <span className="text-[#f58220] font-bold">
+                      20% OFF
+                    </span>{" "}
+                    on any E-Promotion Package
+                  </p>
+                </div>
+                {/* KNOW MORE */}
+                <button className="text-[#0d4b27] text-[11px] font-extrabold uppercase flex items-center gap-1 border-t border-gray-100 w-full justify-center pt-2 mt-1">
+                  Know More →
+                </button>
               </div>
             </div>
           </div>
@@ -551,7 +603,7 @@ export default function EPromotionWeb({ data }: any) {
                 {/* TEXT */}
                 <div className="leading-tight">
                   <p className="text-white text-base font-medium leading-none mb-0.5">
-                    {item[1]}
+                    <StatCounter value={item[1]} />
                   </p>
                   <p className="text-white text-xs font-medium uppercase tracking-wide leading-none">
                     {item[2]}

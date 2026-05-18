@@ -71,9 +71,39 @@
 // };
 
 // export default ConferenceStats;
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, useInView, animate } from "framer-motion";
 import { Users, Mic, Calendar, Trophy, Globe2 } from "lucide-react";
+
+const StatCounter = ({ value }: { value: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const [displayValue, setDisplayValue] = useState(0);
+
+  if (!value) return null;
+
+  const numberPart = parseInt(value.replace(/,/g, ""), 10) || 0;
+  const suffix = value.replace(/[0-9,]/g, "");
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numberPart, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          setDisplayValue(Math.floor(latest));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numberPart]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const InfinityIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4E9F3D" strokeWidth="2">
@@ -127,7 +157,7 @@ const ConferenceStats: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <h3 className="text-[16px] font-black text-white leading-none tracking-tight">
-                  {stat.value}
+                  <StatCounter value={stat.value} />
                 </h3>
                 <p className="text-[9px] font-medium text-white/100 uppercase tracking-[0.1em] leading-tight mt-0.5">
                   {stat.label}

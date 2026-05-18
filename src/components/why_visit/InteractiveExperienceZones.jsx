@@ -66,7 +66,8 @@ const InteractiveExperienceZones = () => {
                     {zones.map((zone, index) => (
                         <div
                             key={index}
-                            className="relative bg-white rounded-2xl overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.04)] border border-gray-100 hover:shadow-md transition-all duration-300 flex flex-col group"
+                            className="relative bg-white rounded-2xl overflow-hidden border border-gray-100 transition-all duration-300 flex flex-col group hover:scale-[1.02] hover:shadow-lg"
+                            style={{ boxShadow: 'rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset' }}
                         >
                             {/* Image Container */}
                             <div className="w-full h-32 overflow-hidden relative">
@@ -94,7 +95,7 @@ const InteractiveExperienceZones = () => {
                                 </h3>
 
                                 {/* Description */}
-                                <p className="text-gray-600 text-[11px] leading-relaxed max-w-[140px]">
+                                <p className="text-black text-[11px] leading-relaxed max-w-[140px]">
                                     {zone.desc}
                                 </p>
                             </div>

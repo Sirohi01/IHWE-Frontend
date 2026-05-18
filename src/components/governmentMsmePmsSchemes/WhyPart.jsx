@@ -1,6 +1,25 @@
 import React from "react";
 import { FileText } from "lucide-react";
 
+// ── Sparkle Component (Same as BrochurePopUp) ──
+const Sparkle = ({ style, color = '#fff176' }) => (
+    <span
+        style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            fontSize: '10px',
+            color: color,
+            textShadow: `0 0 6px ${color}, 0 0 12px ${color}`,
+            animation: 'sparkleAnim 1.6s ease-in-out infinite',
+            opacity: 0,
+            zIndex: 20,
+            ...style,
+        }}
+    >
+        ✦
+    </span>
+);
+
 const WhyPart = ({ onApplyClick }) => {
     const benefits = [
         {
@@ -43,6 +62,65 @@ const WhyPart = ({ onApplyClick }) => {
 
     return (
         <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12">
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+                
+                @keyframes goldShift {
+                  0%   { background-position: 0% 50%; }
+                  50%  { background-position: 100% 50%; }
+                  100% { background-position: 0% 50%; }
+                }
+                @keyframes shimmer {
+                  0%   { left: -75%; }
+                  100% { left: 150%; }
+                }
+                @keyframes sparkleAnim {
+                  0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+                  40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+                  80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+                  100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+                }
+                .orange-btn-popup {
+                  background: linear-gradient(135deg, #F08D39 0%, #ff9d4d 30%, #d97a26 60%, #F08D39 100%);
+                  background-size: 200% 200%;
+                  animation: goldShift 2.5s ease infinite;
+                  box-shadow: 0 0 16px 4px rgba(240,141,57,0.45), 0 4px 15px rgba(240,141,57,0.3);
+                  position: relative;
+                  overflow: hidden;
+                  font-family: 'Roboto', sans-serif;
+                }
+                .orange-btn-popup::before {
+                  content: '';
+                  position: absolute;
+                  top: -50%;
+                  left: -75%;
+                  width: 50%;
+                  height: 200%;
+                  background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+                  transform: skewX(-20deg);
+                  animation: shimmer 2s infinite;
+                }
+                .golden-btn-popup {
+                  background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+                  background-size: 200% 200%;
+                  animation: goldShift 2.5s ease infinite;
+                  box-shadow: 0 0 16px 4px rgba(255,200,0,0.4), 0 4px 15px rgba(255,165,0,0.35);
+                  position: relative;
+                  overflow: hidden;
+                  font-family: 'Roboto', sans-serif;
+                }
+                .golden-btn-popup::before {
+                  content: '';
+                  position: absolute;
+                  top: -50%;
+                  left: -75%;
+                  width: 50%;
+                  height: 200%;
+                  background: linear-gradient(to right, transparent, rgba(255,255,255,0.45), transparent);
+                  transform: skewX(-20deg);
+                  animation: shimmer 2s infinite;
+                }
+            `}</style>
 
             {/* ── SECTION ONE: WHY PARTICIPATE ── */}
             {/* <div className='bg-white px-4 py-2 border border-[#e0e8d8] rounded-2xl mt-4 mb-4'>
@@ -233,16 +311,30 @@ const WhyPart = ({ onApplyClick }) => {
                 </div>
 
                 {/* Buttons - Full width stack on mobile */}
-                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 shrink-0 z-10 py-2 md:py-5 w-full md:w-auto">
-                    <button className="w-full sm:w-auto text-center justify-center flex bg-[#f5a623] hover:bg-[#e09610] text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition whitespace-nowrap" onClick={onApplyClick}>
-                        Apply for PMS Scheme →
-                    </button>
-                    <button
-                        onClick={() => window.open('/book-a-stand', '_blank')}
-                        className="w-full sm:w-auto text-center justify-center flex bg-transparent hover:bg-white/10 text-white font-medium text-xs uppercase tracking-widest px-6 py-2 rounded-lg cursor-pointer transition border-2 border-white whitespace-nowrap"
-                    >
-                        Book Your Stall →
-                    </button>
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 shrink-0 z-10 py-2 md:py-5 w-full md:w-auto">
+                    {/* Apply for PMS Scheme */}
+                    <div className="relative group/btn w-full sm:w-auto shrink-0">
+                        <Sparkle color="#fff176" style={{ top: '-4px', left: '10%' }} />
+                        <Sparkle color="#fff176" style={{ bottom: '-4px', right: '15%', animationDelay: '0.4s' }} />
+                        <button
+                            onClick={onApplyClick}
+                            className="w-full sm:w-auto orange-btn-popup text-white flex items-center justify-center gap-1.5 px-5 py-2 text-[10px] sm:text-xs font-black uppercase rounded-lg shadow-md hover:scale-[1.02] transition whitespace-nowrap cursor-pointer"
+                        >
+                            Apply for PMS Scheme →
+                        </button>
+                    </div>
+
+                    {/* Book Your Stall */}
+                    <div className="relative group/btn w-full sm:w-auto shrink-0">
+                        <Sparkle color="#fff176" style={{ top: '-4px', right: '40%' }} />
+                        <Sparkle color="#fff176" style={{ bottom: '-4px', right: '10%', animationDelay: '0.2s' }} />
+                        <button
+                            onClick={() => window.open('/book-a-stand', '_blank')}
+                            className="w-full sm:w-auto golden-btn-popup text-[#050A1A] flex items-center justify-center gap-1.5 px-5 py-2 text-[10px] sm:text-xs font-black uppercase rounded-lg shadow-md hover:scale-[1.02] transition whitespace-nowrap cursor-pointer"
+                        >
+                            Book Your Stall →
+                        </button>
+                    </div>
                 </div>
 
             </div>

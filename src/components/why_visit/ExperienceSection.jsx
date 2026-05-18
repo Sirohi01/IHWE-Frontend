@@ -64,7 +64,8 @@ const ExperienceSection = () => {
                     {experiences.map((item, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] p-5 text-center hover:shadow-lg transition-shadow duration-300"
+                            className="flex flex-col items-center bg-white rounded-xl p-5 text-center transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
+                            style={{ boxShadow: 'rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px' }}
                         >
                             {/* Icon container */}
                             <div className="w-20 h-20 flex items-center justify-center">
@@ -77,7 +78,7 @@ const ExperienceSection = () => {
                             </h3>
 
                             {/* Description */}
-                            <p className="text-gray-600 text-[12px] leading-relaxed">
+                            <p className="text-black text-[12px] leading-relaxed">
                                 {item.desc}
                             </p>
                         </div>

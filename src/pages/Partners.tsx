@@ -11,7 +11,7 @@ import { partnersApi } from "@/lib/api";
 import PartnershipPopup from "@/components/popups/PartnershipPopup";
 
 import partImage1 from "../assets/partimage1.png";
-import partImage from "../assets/partimage.png";  
+import partImage from "../assets/partimagee.png";  
 import part1 from "../assets/part1.png";
 import part2 from "../assets/part2.png";
 import part3 from "../assets/part3.png";
@@ -51,9 +51,9 @@ const GoldSparkle = ({ style, color = "#fff176" }: { style?: React.CSSProperties
     style={{
       position: 'absolute',
       pointerEvents: 'none',
-      fontSize: '12px',
+      fontSize: '18px',
       color: color,
-      textShadow: `0 0 6px ${color}, 0 0 12px ${color}`,
+      textShadow: `0 0 8px ${color}, 0 0 16px ${color}, 0 0 24px ${color}`,
       animation: 'greenSparkleAnim 1.6s ease-in-out infinite',
       opacity: 0,
       zIndex: 20,
@@ -199,20 +199,20 @@ const Partners = () => {
           animation: greenSweep 2s infinite;
         }
 
-        .vendor-green-btn {
-          background: linear-gradient(135deg, #084c17 0%, #16511e 50%, #2e7d32 100%);
+        .vendor-blue-btn {
+          background: linear-gradient(135deg, #134E8E 0%, #1c5b9e 50%, #276ab0 100%);
           background-size: 200% auto;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           border: 1px solid rgba(255, 255, 255, 0.1);
           position: relative;
           overflow: hidden;
         }
-        .vendor-green-btn:hover {
+        .vendor-blue-btn:hover {
           background-position: right center;
           transform: translateY(-2px);
-          box-shadow: 0 15px 30px rgba(8, 76, 23, 0.4);
+          box-shadow: 0 15px 30px rgba(19, 78, 142, 0.4);
         }
-        .vendor-green-btn::before {
+        .vendor-blue-btn::before {
           content: '';
           position: absolute;
           top: 0;
@@ -227,7 +227,7 @@ const Partners = () => {
           );
           transition: all 0.6s;
         }
-        .vendor-green-btn:hover::before {
+        .vendor-blue-btn:hover::before {
           left: 100%;
         }
       `}</style>
@@ -291,20 +291,20 @@ const Partners = () => {
                 className="grid grid-cols-2 lg:flex items-center gap-y-8 gap-x-0 lg:gap-0 pt-8 lg:pt-10 max-w-[500px] mx-auto lg:mx-0"
               >
                 {[
-                  { label: <><span>Dedicated</span><br className="hidden md:block" /><span>Support Team</span></>, img: part1, sub: "24x7 Assistance" },
-                  { label: <><span>Trusted</span><br className="hidden md:block" /><span>Network</span></>, img: part2, sub: "Verified Partners" },
-                  { label: <><span>Best Rates</span><br className="hidden md:block" /><span>Guaranteed</span></>, img: part3, sub: "Exclusive Deals" },
-                  { label: <><span>End-to-End</span><br className="hidden md:block" /><span>Solutions</span></>, img: part4, sub: "Hassle-free Experience" },
+                  { label: <><span>Dedicated</span><br /><span>Support Team</span></>, img: part1, sub: "24x7 Assistance" },
+                  { label: <><span>Trusted</span><br /><span>Network</span></>, img: part2, sub: "Verified Partners" },
+                  { label: <><span>Best Rates</span><br /><span>Guaranteed</span></>, img: part3, sub: "Exclusive Deals" },
+                  { label: <><span>End-to-End</span><br /><span>Solutions</span></>, img: part4, sub: "Hassle-free Experience" },
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className={`flex flex-col items-center text-center px-2 ${i % 2 === 0 && i < 2 ? "border-r border-slate-200 lg:border-r" : ""} ${i === 1 ? "lg:border-r border-slate-200" : ""} ${i === 2 ? "lg:border-r border-slate-200" : ""} ${i % 2 !== 0 ? "lg:border-r last:border-r-0 border-slate-200" : ""}`}
+                    className={`flex flex-col items-center text-center px-2 border-slate-200 ${i % 2 === 0 ? "border-r" : "border-r-0 lg:border-r"} lg:last:border-r-0`}
                   >
-                    <img src={item.img} alt="Feature" className="w-12 h-12 md:w-16 md:h-16 object-cover mb-2 transition-transform hover:scale-110" />
-                    <p className="text-[10px] md:text-[12px] font-black text-[#0a133c] leading-[0.5] uppercase flex flex-col justify-center min-h-[16px]">
+                    <img src={item.img} alt="Feature" className="w-12 h-12 md:w-16 md:h-16 object-cover mb-1 md:mb-1.5 transition-transform hover:scale-110" />
+                    <p className="text-[10px] md:text-[12px] font-black text-[#0a133c] leading-[1.1] uppercase">
                       {item.label}
                     </p>
-                    <p className="text-[8px] text-slate-900 font-bold uppercase tracking-tighter mt-2.5">{item.sub}</p>
+                    <p className="text-[8px] text-slate-900 font-bold uppercase tracking-tighter mt-1 md:mt-1">{item.sub}</p>
                   </div>
                 ))}
               </motion.div>
@@ -315,7 +315,7 @@ const Partners = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="w-full lg:w-1/2 relative flex justify-center lg:justify-end -mx-4 lg:mx-0"
+              className="hidden lg:flex w-full lg:w-1/2 relative justify-center lg:justify-end -mx-4 lg:mx-0"
             >
               <div className="relative w-screen lg:w-full lg:max-w-2xl">
                 <img
@@ -463,24 +463,24 @@ const Partners = () => {
                   {/* CTA Area */}
                   <div className="flex flex-col items-center lg:items-start gap-4 w-full">
                     <div className="relative group/btn w-full lg:max-w-[340px]">
-                      {/* Gold Sparkles */}
-                      <GoldSparkle style={{ top: '-10px', left: '8%', animationDelay: '0s' }} />
-                      <GoldSparkle style={{ top: '-12px', left: '30%', animationDelay: '0.3s' }} />
-                      <GoldSparkle style={{ top: '-10px', left: '55%', animationDelay: '0.6s' }} />
-                      <GoldSparkle style={{ top: '-12px', right: '12%', animationDelay: '0.15s' }} />
-                      <GoldSparkle style={{ bottom: '-10px', left: '18%', animationDelay: '0.45s' }} />
-                      <GoldSparkle style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
-                      <GoldSparkle style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
+                      {/* Gold Sparkles changed to Blue */}
+                      <GoldSparkle color="#134E8E" style={{ top: '-10px', left: '8%', animationDelay: '0s' }} />
+                      <GoldSparkle color="#134E8E" style={{ top: '-12px', left: '30%', animationDelay: '0.3s' }} />
+                      <GoldSparkle color="#134E8E" style={{ top: '-10px', left: '55%', animationDelay: '0.6s' }} />
+                      <GoldSparkle color="#134E8E" style={{ top: '-12px', right: '12%', animationDelay: '0.15s' }} />
+                      <GoldSparkle color="#134E8E" style={{ bottom: '-10px', left: '18%', animationDelay: '0.45s' }} />
+                      <GoldSparkle color="#134E8E" style={{ bottom: '-12px', left: '42%', animationDelay: '0.75s' }} />
+                      <GoldSparkle color="#134E8E" style={{ bottom: '-10px', right: '20%', animationDelay: '0.2s' }} />
 
                       <Link 
                         to="/partner-registration" 
                         target="_blank"
-                        className="vendor-green-btn flex items-center justify-center gap-3 text-white w-full py-4 rounded-xl font-black text-[13px] uppercase tracking-wider shadow-lg transition-all group"
+                        className="vendor-blue-btn flex items-center justify-center gap-2 md:gap-3 text-white w-full py-3.5 md:py-4 px-2 rounded-xl font-black text-[9.5px] sm:text-[10px] md:text-[13px] uppercase tracking-wider shadow-lg transition-all group whitespace-nowrap"
                       >
-                        <Users className="w-5 h-5" />
+                        <Users className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
                         REGISTER AS A VENDOR PARTNER
-                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[#084c17] group-hover:bg-[#2e7d32] group-hover:text-white transition-colors">
-                          <ChevronRight className="w-4 h-4" />
+                        <div className="w-5 h-5 md:w-6 md:h-6 bg-white rounded-full flex items-center justify-center text-[#134E8E] group-hover:bg-[#1c5b9e] group-hover:text-white transition-colors shrink-0">
+                          <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
                         </div>
                       </Link>
                     </div>
@@ -611,12 +611,13 @@ const Partners = () => {
                 <GoldSparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.2s' }} />
                 <GoldSparkle style={{ bottom: '-12px', right: '30%', animationDelay: '0.6s' }} />
 
-                <Link to="/contact" className="w-full lg:w-auto">
-                  <button className="green-btn-support flex items-center gap-3 text-white px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all group w-full lg:w-auto justify-center relative z-10 hover:scale-[1.02]">
-                    Get Support Now
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </Link>
+                <button 
+                  onClick={() => setIsPopupOpen(true)}
+                  className="green-btn-support flex items-center gap-3 text-white px-6 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest transition-all group w-full lg:w-auto justify-center relative z-10 hover:scale-[1.02]"
+                >
+                  Get Support Now
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
               <div className="flex flex-col items-center lg:items-start gap-2">
                 <a href="mailto:support@ihwe.in" className="flex items-center gap-2 text-white/80 text-[11px] font-bold hover:text-[#74b123] transition-colors">
@@ -645,7 +646,7 @@ const Partners = () => {
               <Calendar className="w-9 h-9 text-[#2e7d32]" strokeWidth={1.5} />
               <div className="flex flex-col">
                 <span className="text-[18px] font-black text-[#00153c] leading-none">21 – 23</span>
-                <span className="text-[13px] font-black text-[#2e7d32] uppercase tracking-wider">MARCH 2026</span>
+                <span className="text-[13px] font-black text-[#2e7d32] uppercase tracking-wider">AUGUST 2026</span>
               </div>
             </div>
 

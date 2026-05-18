@@ -23,7 +23,7 @@ const navLinks = [
       { label: "Advisory Board Members", path: "/advisory-board", icon: Users, description: "Meet the experts behind the exhibition" },
       { label: "Media", path: "/media-registration", icon: Camera, description: "Latest updates, press releases and event coverage" },
       { label: "Blogs", path: "/blog", icon: Sparkles, description: "Latest news and insights from the wellness industry" },
-      { label: "Event Highlights", path: "/event-highlights", icon: FileCheck, description: "Get your complimentary visitor pass today" },
+      // { label: "Event Highlights", path: "/event-highlights", icon: FileCheck, description: "Get your complimentary visitor pass today" },
       { label: "Glimpses of the Event", path: "/gallery", icon: ShoppingBag, description: "Explore opportunities as a domestic or international buyer" },
     ],
   },
@@ -65,9 +65,9 @@ const bottomTabs = [
 const registrationOptions = [
   { label: "BOOK A STALL", path: "/book-a-stand", icon: Store, color: "green" },
   { label: "REGISTER AS VISITOR", path: "/visitor-registration", icon: UserPlus, color: "orange" },
-  { label: "DELEGATE REGISTRATION", path: "/delegate-registration", icon: Globe, color: "green" },
+  { label: "DELEGATE REGISTRATION", path: "/conference", icon: Globe, color: "green" },
   { label: "REGISTER AS BUYER", path: "/buyer-registration", icon: Users, color: "orange" },
-  { label: "SPONSORSHIP OPPORTUNITIES", path: "/contact", icon: Award, color: "green" },
+  { label: "SPONSORSHIP OPPORTUNITIES", path: "/sponsership", icon: Award, color: "green" },
   { label: "TALK TO EXPO ADVISOR", path: "tel:+919654900525", icon: Phone, color: "orange" },
 ];
 
@@ -212,7 +212,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="relative bg-white/95 backdrop-blur-2xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-slate-100 py-2 overflow-hidden z-20"
                           >
-                            {link.dropdown.map((item, idx) => {
+                            {link.dropdown
+                              .filter((item: any) => !(item.path === "/government-msme-pms-schemes" && settings?.showGovtPmsScheme === false))
+                              .map((item, idx) => {
                               const isEven = idx % 2 === 0;
                               return (
                                 <Link
@@ -278,9 +280,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                             {[
                               { to: "/book-a-stand", icon: Store, label: "BOOK A\nSTALL", color: "orange", click: "Registration: Book A Stall" },
                               { to: "/visitor-registration", icon: UserPlus, label: "REGISTER AS\nVISITOR", color: "green", click: "Registration: Visitor Pass" },
-                              { to: "/delegate-registration", icon: Globe, label: "DELEGATE\nREGISTRATION", color: "orange", click: "Registration: Delegates Register" },
+                              { to: "/conference", icon: Globe, label: "DELEGATE\nREGISTRATION", color: "orange", click: "Registration: Delegates Register" },
                               { to: "/buyer-registration", icon: Users, label: "REGISTER AS\nBUYER", color: "green", click: "Registration: Buyer Register" },
-                              { to: "/contact", icon: Award, label: "SPONSORSHIP\nOPPORTUNITIES", color: "orange", click: "Registration: Sponsorship" },
+                              { to: "/sponsership", icon: Award, label: "SPONSORSHIP\nOPPORTUNITIES", color: "orange", click: "Registration: Sponsorship" },
                               { to: "tel:+919654900525", icon: Phone, label: "TALK TO EXPO\nADVISOR", color: "green", click: "Registration: Expo Advisor" },
                             ].map((item, idx) => {
                               const commonProps = {
@@ -561,7 +563,9 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                             className="overflow-hidden"
                           >
                             <div className="pl-12 pr-2 pb-2 flex flex-col gap-0.5">
-                              {link.dropdown!.map((item, idx) => (
+                               {link.dropdown!
+                                .filter((item: any) => !(item.path === "/government-msme-pms-schemes" && settings?.showGovtPmsScheme === false))
+                                .map((item, idx) => (
                                 <Link
                                   key={item.path}
                                   to={item.path}
@@ -647,7 +651,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                     Buyer
                   </Link>
                   <Link
-                    to="/delegate-registration"
+                    to="/conference"
                     onClick={() => setMobileOpen(false)}
                     className="flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-800 rounded-xl py-3 text-[10px] font-semibold uppercase tracking-wider active:scale-95 transition-all"
                   >

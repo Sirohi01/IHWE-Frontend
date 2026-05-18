@@ -98,12 +98,15 @@ const AwardsHero = () => {
               >
                 NOMINATE NOW <span className="text-[14px] md:text-[16px]">→</span>
               </Link>
-              <button
+              <Link
+                to="/sponsership"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex-1 md:flex-none justify-center bg-white px-4 md:px-7 py-2.5 rounded-md text-[10px] md:text-[12px] font-black uppercase tracking-[0.1em] border-2 transition-all hover:bg-slate-50 shadow-md whitespace-nowrap"
                 style={{ ...jakartaFont, borderColor: navyColor, color: navyColor }}
               >
                 BECOME A SPONSOR
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>
