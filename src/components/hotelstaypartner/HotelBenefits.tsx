@@ -26,7 +26,7 @@ const HotelBenefits: React.FC = () => {
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="bg-white rounded-[20px] ml-3 overflow-hidden shadow-sm border border-[#E2E8F0]"
+        className="bg-white rounded-[20px] ml-0 md:ml-3 overflow-hidden shadow-sm border border-[#E2E8F0]"
       >
         <div className="bg-[#4E9F3D] px-[16px] py-[10px]">
           <h3 className="text-white font-[900] text-[11px] uppercase tracking-wide text-center">
@@ -46,7 +46,7 @@ const HotelBenefits: React.FC = () => {
               <div className="flex-shrink-0 w-[28px] h-[28px] rounded-full border border-[#4E9F3D] flex items-center justify-center text-[#4E9F3D]">
                 {React.cloneElement(item.icon as React.ReactElement, { className: "w-[14px] h-[14px]" })}
               </div>
-              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
+              <p className="text-xs md:text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
             </div>
           ))}
         </div>
@@ -76,7 +76,7 @@ const HotelBenefits: React.FC = () => {
               <div className="flex-shrink-0 w-[28px] h-[28px] rounded-full bg-[#0B2C66] text-white flex items-center justify-center">
                 {React.cloneElement(item.icon as React.ReactElement, { className: "w-[14px] h-[14px]" })}
               </div>
-              <p className="text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
+              <p className="text-xs md:text-[10px] font-bold text-[#2D3748] leading-[1.3]">{item.text}</p>
             </div>
           ))}
         </div>
@@ -113,7 +113,7 @@ const HotelBenefits: React.FC = () => {
                 <div className="w-[42px] h-[42px] rounded-full border border-[#4E9F3D] flex items-center justify-center text-[#4E9F3D] mb-2 bg-white">
                   {React.cloneElement(perk.icon as React.ReactElement, { className: "w-[20px] h-[20px]" })}
                 </div>
-                <p className="text-[8px] font-bold text-[#0B2C66] uppercase leading-tight max-w-[75px]">
+                <p className="text-[9px] md:text-[8px] font-bold text-[#0B2C66] uppercase leading-tight max-w-[85px] md:max-w-[75px]">
                   {perk.label}
                 </p>
               </div>

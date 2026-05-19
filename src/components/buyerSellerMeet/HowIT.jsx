@@ -62,10 +62,10 @@ const industries = [
 const HowIT = () => {
     return (
         <div className="py-4">
-            <SectionContainer className="flex flex-row items-stretch gap-4">
+            <SectionContainer className="flex flex-col lg:flex-row items-stretch gap-8 lg:gap-4">
 
                 {/* ── LEFT SIDE: HOW IT WORKS ── */}
-                <div className='w-[63%] flex flex-col'>
+                <div className='w-full lg:w-[63%] flex flex-col'>
 
                     {/* Section Title */}
                     {/* HOW IT WORKS? heading with side lines */}
@@ -84,8 +84,8 @@ const HowIT = () => {
 
                     </div>
 
-                    {/* Steps Row */}
-                    <div className="flex items-start justify-center">
+                    {/* Steps Row - Desktop (Visible on Desktop) */}
+                    <div className="hidden lg:flex items-start justify-center">
                         {steps.map((step, i) => (
                             <React.Fragment key={i}>
                                 {/* Step */}
@@ -117,10 +117,40 @@ const HowIT = () => {
                             </React.Fragment>
                         ))}
                     </div>
+
+                    {/* Steps Timeline - Mobile (Visible on Mobile) */}
+                    <div className="flex lg:hidden flex-col gap-6 my-6 w-full max-w-md mx-auto relative">
+                        {/* Vertical connecting line in the background */}
+                        <div className="absolute left-[39px] top-6 bottom-6 w-[2px] bg-[#3a7a30] opacity-20 z-0" />
+
+                        {steps.map((step, i) => (
+                            <div key={i} className="flex items-start gap-4 bg-white/40 p-4 rounded-xl border border-white/20 shadow-sm relative z-10 hover:bg-white/60 transition-all duration-300">
+                                {/* Left Side: Icon Circle and Number Badge */}
+                                <div className="relative shrink-0">
+                                    <div className="w-[80px] h-[80px] rounded-full border-[2.5px] border-[#3a7a30] bg-white flex items-center justify-center overflow-hidden p-3 shadow-md">
+                                        {step.icon}
+                                    </div>
+                                    <div className="absolute -bottom-1 -right-1 w-[26px] h-[26px] rounded-full bg-[#3a7a30] text-white font-['Barlow_Condensed',sans-serif] text-[14px] font-extrabold flex items-center justify-center shadow-md">
+                                        {step.num}
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Content */}
+                                <div className="pt-2 flex-1">
+                                    <h4 className="text-sm font-bold text-[#d4a832] uppercase tracking-[0.5px] leading-tight mb-1 whitespace-pre-line">
+                                        {step.title}
+                                    </h4>
+                                    <p className="text-[13px] font-semibold text-[#4a6040] leading-snug">
+                                        {step.desc}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* ── RIGHT SIDE: INDUSTRIES COVERED ── */}
-                <div className='w-[37%] flex flex-col'>
+                <div className='w-full lg:w-[37%] flex flex-col'>
 
                     {/* Section Title */}
 
@@ -139,8 +169,8 @@ const HowIT = () => {
 
                     </div>
 
-                    {/* Outer Box with Unified Border */}
-                    <div className="border-[1.5px] border-[#c5d9c0] rounded-xl bg-white overflow-hidden flex-1 flex flex-col">
+                    {/* Outer Box with Unified Border - Desktop (5 columns) */}
+                    <div className="hidden lg:block border-[1.5px] border-[#c5d9c0] rounded-xl bg-white overflow-hidden flex-1 flex flex-col">
                         {/* Grid */}
                         <div className="grid grid-cols-5 flex-1">
                             {industries.map((item, i) => {
@@ -159,8 +189,28 @@ const HowIT = () => {
                         </div>
                     </div>
 
+                    {/* Outer Box with Unified Border - Mobile (3 columns) */}
+                    <div className="lg:hidden border-[1.5px] border-[#c5d9c0] rounded-xl bg-white overflow-hidden flex-1 flex flex-col w-full max-w-md mx-auto">
+                        {/* Grid */}
+                        <div className="grid grid-cols-3 flex-1">
+                            {industries.map((item, i) => {
+                                const isRightEdge = (i + 1) % 3 === 0;
+                                const isBottomEdge = i >= industries.length - 3;
+
+                                return (
+                                    <div key={i} className={`py-3 px-1.5 flex flex-col items-center justify-center gap-2 border-[#c5d9c0] ${!isRightEdge ? 'border-r-[1.5px]' : ''} ${!isBottomEdge ? 'border-b-[1.5px]' : ''}`}>
+                                        <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
+                                        <div className="font-['Barlow',sans-serif] text-[11px] font-semibold text-[#1a3d20] text-center leading-[1.2] whitespace-pre-line">
+                                            {item.label}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     {/* And more */}
-                    <div className="text-right text-[11px] text-[#4a6040] mt-[1px] italic font-medium">
+                    <div className="text-right text-[11px] text-[#4a6040] mt-[1px] italic font-medium w-full max-w-md mx-auto lg:mx-0">
                         ...and more
                     </div>
                 </div>

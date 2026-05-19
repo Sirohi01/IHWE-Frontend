@@ -29,7 +29,7 @@ const BSMeetHero = () => {
         <div
             className="w-full bg-cover relative bg-no-repeat bg-center font-['Barlow',sans-serif] overflow-visible z-10"
             style={{
-                backgroundImage: "url('/bsmeet/bg4.png')"
+                backgroundImage: "url('/bsmeet/bg4.webp')"
             }}
         >
             {/* Background white overlay for mobile readability */}

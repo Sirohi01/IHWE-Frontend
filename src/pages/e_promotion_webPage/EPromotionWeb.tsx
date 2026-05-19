@@ -81,7 +81,7 @@ export default function EPromotionWeb({ data }: any) {
       <section
         className="relative w-full min-h-[450px] md:min-h-[500px] flex items-center text-white overflow-hidden "
         style={{
-          backgroundImage: "url('/images/epromotion.jpeg')",
+          backgroundImage: "url('/images/epromotion.webp')",
           backgroundSize: "cover",
           backgroundPosition: "right center",
         }}

@@ -13,15 +13,15 @@ import footerBadge from '../../assets/hotel/hotelfoterimage.png';
 
 const HotelFooter: React.FC = () => {
   return (
-    <footer className="bg-[#051124] py-1 px-4 relative overflow-hidden">
+    <footer className="bg-[#051124] py-6 lg:py-1 px-4 relative overflow-hidden">
 
       <div className="absolute -left-10 -top-10 w-80 h-80 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
       <div className="absolute -left-5 -top-5 w-40 h-40 bg-[#4E9F3D]/15 rounded-full z-0"></div>
 
-      <div className="mx-auto max-w-[1330px] flex items-center justify-between relative z-10">
+      <div className="mx-auto max-w-[1330px] flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 relative z-10">
 
 
-        <div className="flex items-center gap-2 min-w-[320px]">
+        <div className="flex items-center gap-2 min-w-0 lg:min-w-[320px] justify-center lg:justify-start">
 
           <div className="relative w-20 h-20 flex-shrink-0">
             <img
@@ -31,7 +31,7 @@ const HotelFooter: React.FC = () => {
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col text-left">
             <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight">
               Together, let's create
             </p>
@@ -45,7 +45,7 @@ const HotelFooter: React.FC = () => {
         </div>
 
 
-        <div className="flex items-center gap-0 flex-1 justify-center px-2">
+        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-y-4 gap-x-2 lg:gap-0 flex-1 px-2">
           {[
             { icon: <Users />, label: "Global Audience Access" },
             { icon: <BarChart3 />, label: "Brand Exposure" },
@@ -54,7 +54,7 @@ const HotelFooter: React.FC = () => {
             { icon: <Globe />, label: "Positive Global Impact" },
           ].map((item, i) => (
             <React.Fragment key={i}>
-              <div className="flex flex-col items-center text-center px-3 group">
+              <div className="flex flex-col items-center text-center px-2 lg:px-3 group">
                 <div className="w-8 h-8 rounded-full bg-[#0B2C66] border border-white/20 flex items-center justify-center text-white mb-0.5 shadow-inner group-hover:bg-[#4E9F3D] transition-colors duration-300">
                   {React.cloneElement(item.icon as React.ReactElement, { className: "w-4 h-4" })}
                 </div>
@@ -62,12 +62,12 @@ const HotelFooter: React.FC = () => {
                   {item.label}
                 </p>
               </div>
-              {i < 4 && <div className="h-6 w-[1px] bg-white/10" />}
+              {i < 4 && <div className="hidden lg:block h-6 w-[1px] bg-white/10" />}
             </React.Fragment>
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full lg:w-auto justify-center">
           <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10">
             <div className="bg-[#4E9F3D] py-0.5 px-2 text-center">
               <h4 className="text-white font-black text-[9px] uppercase tracking-wider">
@@ -85,7 +85,7 @@ const HotelFooter: React.FC = () => {
               </a>
             </div>
           </div>
-          <div className="bg-transparent border border-[#D4AF37] rounded-md p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px]">
+          <div className="bg-transparent border border-[#D4AF37] rounded-md p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] shrink-0">
             <div className="bg-white p-0.5 rounded-sm">
               <QrCode className="w-6 h-6 text-[#051124]" />
             </div>

@@ -23,7 +23,7 @@ const Sparkle = ({ style, color = '#fff176' }) => (
 const MPSchemeHero = ({ onApplyClick }) => {
     return (
         <div
-            className="w-full relative min-h-[400px] lg:min-h-[450px] flex bg-[url('/mpscheme/bg2.png')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
+            className="w-full relative min-h-[400px] lg:min-h-[450px] flex bg-[url('/mpscheme/bg2.webp')] bg-cover bg-center bg-no-repeat font-['Barlow',sans-serif] overflow-visible z-10"
         >
             {/* Background white overlay for mobile readability */}
             <div className="absolute inset-0 bg-white/90 md:bg-transparent z-0 pointer-events-none" />

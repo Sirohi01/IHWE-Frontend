@@ -132,7 +132,7 @@ const WhyVisitHero = () => {
             {/* Hero Section */}
             <div
                 className="relative w-full bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/whyVisit/bg.jpg')" }}
+                style={{ backgroundImage: "url('/whyVisit/bg.webp')" }}
             >
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-white/80 md:bg-white/10" />

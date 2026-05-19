@@ -6,6 +6,7 @@ const WhatPar = () => {
     const [testimonials, setTestimonials] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
 
     const fetchTestimonials = async () => {
         try {
@@ -25,30 +26,45 @@ const WhatPar = () => {
     }, []);
 
     useEffect(() => {
-        if (testimonials.length > 2) {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    useEffect(() => {
+        const limit = isMobile ? 1 : 2;
+        if (testimonials.length > limit) {
             const timer = setInterval(() => {
                 setCurrentIndex((prev) => (prev + 1) % (testimonials.length));
             }, 3000);
             return () => clearInterval(timer);
         }
-    }, [testimonials.length]);
+    }, [testimonials.length, isMobile]);
 
-    // Slider logic: Translate by 50% for 2 items view
+    // Slider logic: Translate by 50% for 2 items view on desktop, 100% on mobile
     const getTransform = () => {
-        if (testimonials.length <= 2) return 'translateX(0%)';
-        // If we are at the last item, we shouldn't translate past the end
-        const maxIndex = testimonials.length - 2;
-        const index = Math.min(currentIndex, maxIndex);
-        return `translateX(-${index * 50}%)`;
+        if (isMobile) {
+            if (testimonials.length <= 1) return 'translateX(0%)';
+            const index = Math.min(currentIndex, testimonials.length - 1);
+            return `translateX(-${index * 100}%)`;
+        } else {
+            if (testimonials.length <= 2) return 'translateX(0%)';
+            const maxIndex = testimonials.length - 2;
+            const index = Math.min(currentIndex, maxIndex);
+            return `translateX(-${index * 50}%)`;
+        }
     };
 
     return (
         <div className="bg-[#FAF9F2] py-6 font-['Barlow',sans-serif]">
-            <SectionContainer className="flex justify-between w-full gap-4">
+            <SectionContainer className="flex flex-col md:flex-row justify-between w-full gap-8 md:gap-4">
 
                 {/* ── LEFT: IMPACT BOX ── */}
                 <div
-                    className="w-[40%] rounded-[14px] pt-6 px-7 pb-7 relative flex-1"
+                    className="w-full md:w-[40%] rounded-[14px] pt-6 px-7 pb-7 relative flex-1"
                     style={{
                         backgroundImage: "url('/bsmeet/world-map.png')",
                         backgroundSize: 'cover',
@@ -62,8 +78,8 @@ const WhatPar = () => {
                         Buyer–Seller Meet 2026 Impact
                     </div>
 
-                    {/* Stats Row */}
-                    <div className="grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
+                    {/* Stats Row - Desktop (Visible on Desktop) */}
+                    <div className="hidden md:grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
                         {[
                             { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
                             { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
@@ -86,10 +102,30 @@ const WhatPar = () => {
                             </React.Fragment>
                         ))}
                     </div>
+
+                    {/* Stats Row - Mobile (Visible on Mobile) */}
+                    <div className="grid md:hidden grid-cols-2 gap-y-6 gap-x-4 items-start relative z-10 w-full max-w-sm mx-auto">
+                        {[
+                            { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
+                            { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
+                            { icon: '/bsmeet/bsm3.png', num: '100+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex flex-col items-center gap-2 px-1.5">
+                                <img src={item.icon} alt="" className="w-[60px] h-[60px] object-contain" />
+                                <div className="text-[26px] font-extrabold text-[#d4a832] leading-none">
+                                    {item.num}
+                                </div>
+                                <div className="text-[12px] text-[#cde0c5] text-center leading-[1.45] whitespace-pre-line font-medium">
+                                    {item.label}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* ── MIDDLE: TESTIMONIALS ── */}
-                <div className="w-[60%] bg-[#2A4924] rounded-[14px] p-4 pb-5 flex flex-col gap-4 border border-[#e8e8e8] min-w-0 shadow-sm relative overflow-hidden">
+                <div className="w-full md:w-[60%] bg-[#2A4924] rounded-[14px] p-4 pb-5 flex flex-col gap-4 border border-[#e8e8e8] min-w-0 shadow-sm relative overflow-hidden">
                     <div className="text-lg font-bold text-[#d4a832] uppercase tracking-[0.5px] text-center">
                         What Participants Say
                     </div>
@@ -101,7 +137,7 @@ const WhatPar = () => {
                         ) : (
                             <div className="flex transition-transform duration-700 ease-in-out w-full" style={{ transform: getTransform() }}>
                                 {testimonials.map((t, i) => (
-                                    <div key={t._id || i} className="min-w-[50%] px-2 box-border">
+                                    <div key={t._id || i} className={`${isMobile ? 'min-w-full' : 'min-w-[50%]'} px-2 box-border`}>
                                         <div className="bg-[#fcfdfa] border border-[#e4e4e4] rounded-[10px] p-4 flex flex-col justify-between gap-3 h-full hover:shadow-md transition-shadow duration-300">
                                             <div>
                                                 <div className="text-3xl text-[#3a7a30] leading-[0.8] font-['Georgia',serif] font-medium opacity-70">&#10077;</div>
@@ -120,9 +156,9 @@ const WhatPar = () => {
                         )}
                     </div>
 
-                    {!loading && testimonials.length > 2 && (
+                    {!loading && testimonials.length > (isMobile ? 1 : 2) && (
                         <div className="flex justify-center gap-2 mt-1">
-                            {Array.from({ length: testimonials.length - 1 }).map((_, i) => (
+                            {Array.from({ length: testimonials.length - (isMobile ? 0 : 1) }).map((_, i) => (
                                 <div
                                     key={i}
                                     onClick={() => setCurrentIndex(i)}

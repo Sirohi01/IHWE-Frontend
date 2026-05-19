@@ -194,14 +194,14 @@ const WhoShould = () => {
     return (
 
         <div className=" relative w-full overflow-hidden py-8  bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
-            <div className={`flex justify-between flex-row ${SectionContainer}`}>
+            <SectionContainer className="flex flex-col md:flex-row justify-between gap-8 md:gap-4 lg:gap-8 items-start">
                 {/* ── LEFT: WHO SHOULD + BUYERS ── */}
-                <div>
-                    <h2 className='text-lg font-normal uppercase ' style={{ color: '#fff', letterSpacing: '0.5px', marginBottom: '14px' }}>
+                <div className="w-full md:w-auto md:max-w-[400px]">
+                    <h2 className='text-lg font-normal uppercase text-center md:text-left' style={{ color: '#fff', letterSpacing: '0.5px', marginBottom: '14px' }}>
                         WHO SHOULD PARTICIPATE?
                     </h2>
 
-                    <div >
+                    <div className="w-full max-w-md mx-auto md:mx-0">
 
                         {/* ── HEADER with diagonal right-side cut ── */}
                         <div className="py-2 text-center text-sm font-medium rounded-t-md bg-[#6a8c3a] text-white uppercase tracking-[1px] [clip-path:polygon(0_0,82%_0,100%_100%,0_100%)]">
@@ -237,11 +237,11 @@ const WhoShould = () => {
 
                 </div>
                 {/* ── RIGHT: KEY BENEFITS ── */}
-                <div className='flex gap-3'>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className='flex flex-col sm:flex-row gap-6 md:gap-4 lg:gap-6 w-full md:w-auto items-start justify-between'>
+                    <div className="w-full sm:w-auto sm:max-w-[320px] shrink-0" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 
                         {/* Sellers Card */}
-                        <div className="bg-white rounded-[10px_30px_10px_10px] overflow-hidden">
+                        <div className="bg-white rounded-[10px_30px_10px_10px] overflow-hidden w-full max-w-md mx-auto sm:mx-0">
                             <div className="bg-[#b8861a] py-2.5 px-4 text-center font-['Barlow_Condensed',sans-serif] text-sm font-medium text-white uppercase tracking-[1px]">
                                 SELLERS
                             </div>
@@ -260,7 +260,7 @@ const WhoShould = () => {
                         </div>
                     </div>
 
-                    <div className="font-['Barlow',sans-serif]">
+                    <div className="font-['Barlow',sans-serif] w-full max-w-md mx-auto sm:mx-0">
 
                         {/* Heading with side lines */}
                         <div className="flex items-center gap-2.5 mb-4">
@@ -291,7 +291,7 @@ const WhoShould = () => {
                     </div>
 
                 </div>
-            </div>
+            </SectionContainer>
         </div>
     )
 }
