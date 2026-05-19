@@ -92,7 +92,7 @@ const TravelFooter: React.FC = () => {
 
 
             <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0">
-              <Link to="/partner-registration" target="_blank">
+              <Link to="/partner-registration?type=travel" target="_blank">
                 <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
                   Register As Partner
                 </button>

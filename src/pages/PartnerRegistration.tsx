@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { partnerRegistrationApi, otpApi } from "@/lib/api";
 import { motion } from "framer-motion";
+
 import {
     Building2, User, MapPin, Settings, Award, Upload, Handshake, FileText, ShieldCheck,
     ChevronRight, RotateCcw, ArrowRight, Calendar, Users, Globe, Eye, TrendingUp,
@@ -121,6 +124,66 @@ const PartnerRegistration = () => {
     const states = form.country ? LOCATION_DATA[form.country]?.states || [] : [];
     const cities = form.state && form.country ? LOCATION_DATA[form.country]?.cities[form.state] || [] : [];
 
+    const [searchParams] = useSearchParams();
+    const referrerType = searchParams.get("type");
+
+    const filteredServices = (() => {
+        if (!referrerType) return SERVICES_LIST;
+        const type = referrerType.toLowerCase();
+        switch (type) {
+            case "hotel":
+                return ["Hotel Booking Assistance", "Hospitality & Concierge", "Other Services"];
+            case "travel":
+                return ["Flight Booking", "Airport Transfers", "Local Transportation", "Other Services"];
+            case "logistics":
+                return ["Logistics & Freight Handling", "Warehousing Support", "Local Transportation", "Other Services"];
+            case "printing":
+                return ["Printing & Branding Solutions", "Exhibition Stall Fabrication", "Custom Stall Designing", "Other Services"];
+            case "hospitality":
+                return ["Hospitality & Concierge", "Event Staffing", "Other Services"];
+            default:
+                return SERVICES_LIST;
+        }
+    })();
+
+    useEffect(() => {
+        if (referrerType) {
+            const type = referrerType.toLowerCase();
+            let category = "";
+            let interest = "";
+            switch (type) {
+                case "hotel":
+                    category = "Hospitality";
+                    interest = "Official Hotel Partner";
+                    break;
+                case "travel":
+                    category = "Travel & Tourism";
+                    interest = "Official Travel Partner";
+                    break;
+                case "logistics":
+                    category = "Logistics & Freight";
+                    interest = "Official Logistics Partner";
+                    break;
+                case "printing":
+                    category = "Printing & Branding";
+                    interest = "Official Printing Partner";
+                    break;
+                case "hospitality":
+                    category = "Hospitality";
+                    interest = "Official Hospitality Partner";
+                    break;
+            }
+            if (category) {
+                setForm(p => ({
+                    ...p,
+                    businessCategory: category,
+                    partnershipInterests: interest ? [interest] : []
+                }));
+            }
+        }
+    }, [referrerType]);
+
+
     const set = (key: string, val: any) => {
         setForm(p => ({ ...p, [key]: val }));
         if (errors[key]) {
@@ -172,77 +235,139 @@ const PartnerRegistration = () => {
         setForm(p => ({ ...p, documents: { ...p.documents, [key]: file } }));
     };
 
-    const handleSendOtp = () => {
+    const handleSendOtp = async () => {
         if (!form.email || !form.email.includes("@")) {
             Swal.fire("Error", "Please enter a valid email address first.", "error");
             return;
         }
 
-        // Simulate sending OTP
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        set("otpCode", code);
-        set("isOtpSent", true);
-
-        Swal.fire({
-            title: "OTP Sent!",
-            text: `A 6-digit verification code has been sent to ${form.email} (Simulated OTP: ${code})`,
-            icon: "success",
-            confirmButtonColor: "#2e7d32"
-        });
-    };
-
-    const handleVerifyOtp = () => {
-        if (form.otpInput === form.otpCode) {
-            set("isOtpVerified", true);
-            set("otpInput", "");
-            Swal.fire("Verified", "Email address verified successfully!", "success");
-            // Clear verification errors if validated
-            if (errors.email) {
-                setErrors(p => {
-                    const copy = { ...p };
-                    delete copy.email;
-                    return copy;
+        try {
+            Swal.fire({
+                title: "Sending OTP...",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const res = await otpApi.request(form.email, "email", form.fullName, "partner");
+            Swal.close();
+            if (res.success) {
+                set("isOtpSent", true);
+                Swal.fire({
+                    title: "OTP Sent!",
+                    text: `A 6-digit verification code has been sent to your email address.`,
+                    icon: "success",
+                    confirmButtonColor: "#2e7d32"
                 });
+            } else {
+                Swal.fire("Error", res.message || "Failed to send OTP. Please try again.", "error");
             }
-        } else {
-            Swal.fire("Error", "Invalid OTP. Please try again.", "error");
+        } catch (error) {
+            Swal.close();
+            Swal.fire("Error", "Could not connect to the server. Please try again.", "error");
         }
     };
 
-    const handleSendMobileOtp = () => {
+    const handleVerifyOtp = async () => {
+        if (!form.otpInput) {
+            Swal.fire("Error", "Please enter the OTP first.", "error");
+            return;
+        }
+        try {
+            Swal.fire({
+                title: "Verifying OTP...",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const res = await otpApi.verify(form.email, form.otpInput, "email");
+            Swal.close();
+            if (res.success) {
+                set("isOtpVerified", true);
+                set("otpInput", "");
+                Swal.fire("Verified", "Email address verified successfully!", "success");
+                if (errors.email) {
+                    setErrors(p => {
+                        const copy = { ...p };
+                        delete copy.email;
+                        return copy;
+                    });
+                }
+            } else {
+                Swal.fire("Error", res.message || "Invalid OTP. Please try again.", "error");
+            }
+        } catch (error) {
+            Swal.close();
+            Swal.fire("Error", "Could not connect to the server. Please try again.", "error");
+        }
+    };
+
+    const handleSendMobileOtp = async () => {
         if (!form.mobile || form.mobile.length !== 10) {
             Swal.fire("Error", "Please enter a valid 10-digit mobile number first.", "error");
             return;
         }
 
-        // Simulate sending OTP
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-        set("mobileOtpCode", code);
-        set("isMobileOtpSent", true);
-
-        Swal.fire({
-            title: "OTP Sent!",
-            text: `A 6-digit verification code has been sent to ${form.mobile} (Simulated OTP: ${code})`,
-            icon: "success",
-            confirmButtonColor: "#2e7d32"
-        });
+        try {
+            Swal.fire({
+                title: "Sending OTP...",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const res = await otpApi.request(form.mobile, "phone", form.fullName, "partner");
+            Swal.close();
+            if (res.success) {
+                set("isMobileOtpSent", true);
+                Swal.fire({
+                    title: "OTP Sent!",
+                    text: `A 6-digit verification code has been sent to your mobile number.`,
+                    icon: "success",
+                    confirmButtonColor: "#2e7d32"
+                });
+            } else {
+                Swal.fire("Error", res.message || "Failed to send OTP. Please try again.", "error");
+            }
+        } catch (error) {
+            Swal.close();
+            Swal.fire("Error", "Could not connect to the server. Please try again.", "error");
+        }
     };
 
-    const handleVerifyMobileOtp = () => {
-        if (form.mobileOtpInput === form.mobileOtpCode) {
-            set("isMobileOtpVerified", true);
-            set("mobileOtpInput", "");
-            Swal.fire("Verified", "Mobile number verified successfully!", "success");
-            // Clear verification errors if validated
-            if (errors.mobile) {
-                setErrors(p => {
-                    const copy = { ...p };
-                    delete copy.mobile;
-                    return copy;
-                });
+    const handleVerifyMobileOtp = async () => {
+        if (!form.mobileOtpInput) {
+            Swal.fire("Error", "Please enter the OTP first.", "error");
+            return;
+        }
+        try {
+            Swal.fire({
+                title: "Verifying OTP...",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            const res = await otpApi.verify(form.mobile, form.mobileOtpInput, "phone");
+            Swal.close();
+            if (res.success) {
+                set("isMobileOtpVerified", true);
+                set("mobileOtpInput", "");
+                Swal.fire("Verified", "Mobile number verified successfully!", "success");
+                if (errors.mobile) {
+                    setErrors(p => {
+                        const copy = { ...p };
+                        delete copy.mobile;
+                        return copy;
+                    });
+                }
+            } else {
+                Swal.fire("Error", res.message || "Invalid OTP. Please try again.", "error");
             }
-        } else {
-            Swal.fire("Error", "Invalid OTP. Please try again.", "error");
+        } catch (error) {
+            Swal.close();
+            Swal.fire("Error", "Could not connect to the server. Please try again.", "error");
         }
     };
 
@@ -376,19 +501,64 @@ const PartnerRegistration = () => {
         }
 
         setLoading(true);
-        // Simulate a delay for UI feedback
-        setTimeout(() => {
-            setLoading(false);
+
+        const formData = new FormData();
+        // Append text fields
+        const textFields = [
+            "companyName", "businessCategory", "website", "yearEstablished", "gstNumber", "msmeRegistration",
+            "fullName", "designation", "mobile", "whatsapp", "email", "officeAddress", "city",
+            "state", "country", "pinCode", "otherService", "experience", "majorClients",
+            "canHandleInternational", "operationalCities", "additionalInfo", "declaration"
+        ];
+        
+        textFields.forEach(field => {
+            if (form[field as keyof typeof form] !== undefined) {
+                formData.append(field, String(form[field as keyof typeof form]));
+            }
+        });
+
+        // Append array fields
+        formData.append("selectedServices", JSON.stringify(form.selectedServices));
+        formData.append("partnershipInterests", JSON.stringify(form.partnershipInterests));
+
+        // Append document files
+        Object.entries(form.documents).forEach(([key, file]) => {
+            if (file) {
+                formData.append(key, file);
+            }
+        });
+
+        try {
+            const res = await partnerRegistrationApi.submit(formData);
+            if (res.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Registration Successful!",
+                    text: `Thank you for your interest. Your Registration ID is ${res.data.registrationId}. Our team will review the details for ${form.companyName} and contact you soon.`,
+                    confirmButtonColor: "#084c17"
+                });
+                handleReset();
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Registration Failed",
+                    text: res.message || "An error occurred during submission. Please try again.",
+                    confirmButtonColor: "#c62828"
+                });
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
             Swal.fire({
-                icon: "success",
-                title: "Registration Successful!",
-                text: `Thank you for your interest. Our team will review the details for ${form.companyName} and contact you soon.`,
-                confirmButtonColor: "#084c17"
+                icon: "error",
+                title: "Submission Error",
+                text: "Could not connect to the server. Please check your network and try again.",
+                confirmButtonColor: "#c62828"
             });
-            console.log(form, "Form has been submitted successfully");
-            handleReset();
-        }, 1500);
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     return (
         <div className="min-h-screen bg-[#f8faf9] font-inter relative">
@@ -636,9 +806,10 @@ const PartnerRegistration = () => {
                                             Which Services Do You Offer? <span className="text-slate-400 font-medium normal-case">(Select all that apply)</span>
                                         </p>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5">
-                                            {SERVICES_LIST.map(s => (
+                                            {filteredServices.map(s => (
                                                 <label key={s} className="flex items-center gap-2 cursor-pointer group">
                                                     <Checkbox
+
                                                         checked={form.selectedServices.includes(s)}
                                                         onCheckedChange={() => toggleService(s)}
                                                         className="border-slate-300 data-[state=checked]:bg-[#2e7d32] data-[state=checked]:border-[#2e7d32]"

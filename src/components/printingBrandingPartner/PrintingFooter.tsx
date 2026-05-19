@@ -106,7 +106,7 @@ const PricingFooter = () => {
 
         {/* Register Button */}
         <div className="flex items-center gap-4 px-6 py-5">
-          <Link to="/partner-registration" target="_blank">
+          <Link to="/partner-registration?type=printing" target="_blank">
             <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
               Register As Partner
             </button>
