@@ -1120,3 +1120,19 @@ export const mediaRegistrationApi = {
         }
     }
 };
+
+export const partnerRegistrationApi = {
+    submit: async (payload: FormData) => {
+        try {
+            const response = await fetch(`${API_URL}/partner-registration`, {
+                method: 'POST',
+                body: payload
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Error submitting partner registration:", error);
+            return { success: false, message: "Network error" };
+        }
+    }
+};
+

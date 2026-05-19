@@ -119,7 +119,7 @@ const LogisticPackages: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[7px] mt-auto flex justify-between items-center">
+      <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[10px] lg:py-[7px] mt-auto flex flex-wrap lg:flex-nowrap justify-center sm:justify-between items-center gap-y-2 gap-x-4">
         {[
           { text: "Custom packages available on request", icon: <Check /> },
           { text: "GST as applicable", icon: <Check /> },
