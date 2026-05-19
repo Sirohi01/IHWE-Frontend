@@ -81,8 +81,8 @@ const LOCATION_DATA: Record<string, { states: string[]; cities: Record<string, s
     }
 };
 
-const inputCls = "rounded-[4px]  border-slate-300 h-7 focus:border-[#0b1a3a] focus:ring-[#0b1a3a]/10 transition-all text-[9px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-2.5 py-0 w-full";
-const labelCls = "text-[11px] font-black text-[#003399] mb-0.5 block";
+const inputCls = "rounded-[4px] border-slate-300 h-9 focus:border-[#0b1a3a] focus:ring-[#0b1a3a]/10 transition-all text-[13px] bg-white placeholder:text-slate-400 placeholder:text-[13px] text-slate-900 font-medium shadow-none outline-none px-2.5 py-0 w-full";
+const labelCls = "text-[12px] font-black text-[#003399] mb-0.5 block";
 
 const SectionHeader = ({ num, icon: Icon, title }: { num: number; icon: any; title: string }) => (
     <div className="flex items-center gap-2 mb-4">
@@ -912,7 +912,7 @@ const PartnerRegistration = () => {
                                         <div className="relative">
                                             <textarea
                                                 placeholder="Write about your services, capabilities, infrastructure and unique strengths."
-                                                className="w-full h-24 px-3 py-2 rounded-[3px] border border-slate-300 text-[11px] font-medium text-slate-900 placeholder:text-slate-400 resize-none focus:border-[#084c17] focus:ring-2 focus:ring-[#084c17]/10 outline-none transition-all"
+                                                className="w-full h-24 px-3 py-2 rounded-[3px] border border-slate-300 text-[13px] font-medium text-slate-900 placeholder:text-slate-400 placeholder:text-[13px] resize-none focus:border-[#084c17] focus:ring-2 focus:ring-[#084c17]/10 outline-none transition-all"
                                                 maxLength={1000}
                                                 value={form.additionalInfo}
                                                 onChange={e => set("additionalInfo", e.target.value)}
