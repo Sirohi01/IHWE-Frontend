@@ -128,6 +128,11 @@ const SelectionHeader = () => (
     </div>
 );
 
+const unescapeHtml = (str: string) => {
+    if (!str) return str;
+    return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+};
+
 const VisitorRegistration = () => {
     const [visitorType, setVisitorType] = useState("corporate");
     const [selected, setSelected] = useState<string | null>(null);
@@ -560,22 +565,22 @@ const VisitorRegistration = () => {
                                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-[#C7DF36] flex items-center justify-center shrink-0 shadow-inner">
                                     <User className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#C7DF36] fill-current" />
                                 </div>
-                                {heroData?.subtitle || "Visitor Registration"}
+                                {unescapeHtml(heroData?.subtitle) || "Visitor Registration"}
                             </div>
 
                             {/* Main Heading */}
                             <div className="mb-3 text-center lg:text-left">
                                 <h1 className="text-[28px] sm:text-[38px] lg:text-[42px] font-extrabold text-white leading-[1.1] tracking-tight">
-                                    {heroData?.title || "Your Pass to"}
+                                    {unescapeHtml(heroData?.title) || "Your Pass to"}
                                 </h1>
                                 <h1 className="text-[26px] sm:text-[36px] lg:text-[42px] font-extrabold text-[#C7DF36] leading-[1.1] tracking-tight mt-1">
-                                    {heroData?.title2 || "Health & Wellness Excellence!"}
+                                    {unescapeHtml(heroData?.title2) || "Health & Wellness Excellence!"}
                                 </h1>
                             </div>
 
                             {/* Description */}
                             <p className="text-white text-[13px] sm:text-[14px] font-medium leading-relaxed max-w-xl mb-5 opacity-95 drop-shadow-sm lg:px-0">
-                                {heroData?.shortDescription || "Register as a visitor and unlock access to innovations, global experts, live sessions and endless networking opportunities."}
+                                {unescapeHtml(heroData?.shortDescription) || "Register as a visitor and unlock access to innovations, global experts, live sessions and endless networking opportunities."}
                             </p>
 
                             {/* Stats Row with separators */}
