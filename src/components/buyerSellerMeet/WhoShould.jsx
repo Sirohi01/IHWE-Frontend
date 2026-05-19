@@ -192,100 +192,106 @@ const BuyerIcon = () => (
 
 const WhoShould = () => {
     return (
-        <div className="relative w-full overflow-hidden py-10 bg-cover bg-center bg-no-repeat z-10" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
-            <SectionContainer className="relative z-10">
-                <div className="flex flex-col lg:flex-row justify-between items-stretch gap-8 lg:gap-10 w-full">
-                    
-                    {/* ── LEFT: WHO SHOULD + BUYERS ── */}
-                    <div className="w-full lg:w-[32%] flex flex-col">
-                        <h2 className='text-xl md:text-2xl font-bold uppercase text-center lg:text-left text-white tracking-wide mb-6'>
-                            WHO SHOULD PARTICIPATE?
-                        </h2>
 
-                        <div className="w-full bg-white rounded-b-xl rounded-t-lg overflow-hidden shadow-md">
-                            {/* ── HEADER with diagonal right-side cut ── */}
-                            <div className="py-2.5 text-center text-sm font-semibold bg-[#6a8c3a] text-white uppercase tracking-[1px] [clip-path:polygon(0_0,85%_0,100%_100%,0_100%)]">
-                                BUYERS
-                            </div>
+        <div className=" relative w-full overflow-hidden py-8  bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+            <div className={`flex justify-between flex-row ${SectionContainer}`}>
+                {/* ── LEFT: WHO SHOULD + BUYERS ── */}
+                <div>
+                    <h2 className='text-lg font-normal uppercase ' style={{ color: '#fff', letterSpacing: '0.5px', marginBottom: '14px' }}>
+                        WHO SHOULD PARTICIPATE?
+                    </h2>
 
-                            {/* ── BODY ── */}
-                            <div className="p-4 flex flex-col">
-                                {buyers.map((label, i) => (
-                                    <div key={i} className="flex items-center gap-3.5 py-2.5 text-sm font-semibold text-[#1a3d20]"
-                                         style={{ borderBottom: i < buyers.length - 1 ? '0.5px solid #e8f0e0' : 'none' }}>
-                                        <div className="flex items-center justify-center shrink-0 w-6 h-6">
-                                            {buyerIcons[label]}
-                                        </div>
-                                        <span>{label}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                    <div >
 
-                    {/* ── RIGHT: KEY BENEFITS & SELLERS ── */}
-                    <div className='w-full lg:w-[65%] flex flex-col md:flex-row gap-8 lg:gap-10 items-stretch mt-0 lg:mt-12'>
-                        
-                        {/* Sellers Card */}
-                        <div className="w-full md:w-[48%] lg:w-[48%] flex flex-col bg-white rounded-2xl overflow-hidden shadow-md">
-                            <div className="bg-[#b8861a] py-3 px-4 text-center font-['Barlow_Condensed',sans-serif] text-sm font-bold text-white uppercase tracking-wider">
-                                SELLERS
-                            </div>
-                            <div className="p-4 flex flex-col justify-between flex-1">
-                                <div className="flex flex-col">
-                                    {sellers.map((s, i) => (
-                                        <div key={i} className="flex items-center gap-2.5 py-2 text-sm text-[#1a3d20] font-semibold">
-                                            <StarIcon />
-                                            <span>{s}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex items-center gap-2 mt-4 pt-2 border-t border-gray-100 text-[11px] text-[#888] italic">
-                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                                        <circle cx="6.5" cy="6.5" r="5" stroke="#aaa" strokeWidth="1.1" />
-                                        <path d="M4 6.5h5M6.5 4v5" stroke="#aaa" strokeWidth="1.1" strokeLinecap="round" />
-                                    </svg>
-                                    <span>...and many more</span>
-                                </div>
-                            </div>
+                        {/* ── HEADER with diagonal right-side cut ── */}
+                        <div className="py-2 text-center text-sm font-medium rounded-t-md bg-[#6a8c3a] text-white uppercase tracking-[1px] [clip-path:polygon(0_0,82%_0,100%_100%,0_100%)]">
+                            BUYERS
                         </div>
 
-                        {/* Key Benefits */}
-                        <div className="w-full md:w-[50%] lg:w-[50%] font-['Barlow',sans-serif] flex flex-col">
-                            {/* Heading with side lines */}
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="flex-1 h-[1.5px] bg-white/40" />
-                                <h3 className="font-['Barlow_Condensed',sans-serif] text-lg font-bold text-white uppercase tracking-[2px] whitespace-nowrap m-0">
-                                    KEY BENEFITS
-                                </h3>
-                                <div className="flex-1 h-[1.5px] bg-white/40" />
-                            </div>
-
-                            {/* Benefit rows */}
-                            <div className="flex flex-col gap-5">
-                                {benefits.map((b, i) => (
-                                    <div key={i} className="flex items-start gap-4">
-                                        {/* Golden icon circle */}
-                                        <div className="w-12 h-12 rounded-full border-2 border-[#c8941a] bg-[rgba(180,130,20,0.2)] flex items-center justify-center shrink-0 shadow-sm">
-                                            {b.icon}
-                                        </div>
-                                        <div className="pt-0.5">
-                                            <h4 className="text-sm font-semibold text-white leading-tight mb-1">
-                                                {b.title}
-                                            </h4>
-                                            <p className="text-[11px] text-white/70 leading-relaxed font-medium">
-                                                {b.desc}
-                                            </p>
-                                        </div>
+                        {/* ── BODY ── */}
+                        <div style={{
+                            background: '#fff',
+                            borderRadius: '0 0px 10px 10px',
+                            padding: '10px 14px',
+                        }}>
+                            {buyers.map((label, i) => (
+                                <div key={i} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '10px',
+                                    padding: '7px 0',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    color: '#1a3d20',
+                                    borderBottom: i < buyers.length - 1 ? '0.5px solid #e8f0e0' : 'none',
+                                }}>
+                                    <div style={{ flexShrink: 0, width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        {buyerIcons[label]}
                                     </div>
-                                ))}
-                            </div>
+                                    {label}
+                                </div>
+                            ))}
                         </div>
 
                     </div>
 
                 </div>
-            </SectionContainer>
+                {/* ── RIGHT: KEY BENEFITS ── */}
+                <div className='flex gap-3'>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+
+                        {/* Sellers Card */}
+                        <div className="bg-white rounded-[10px_30px_10px_10px] overflow-hidden">
+                            <div className="bg-[#b8861a] py-2.5 px-4 text-center font-['Barlow_Condensed',sans-serif] text-sm font-medium text-white uppercase tracking-[1px]">
+                                SELLERS
+                            </div>
+                            <div className="py-2.5 px-3.5">
+                                {sellers.map((s, i) => (
+                                    <div key={i} className="flex items-center gap-2 py-[5px] text-sm text-[#1a3d20] font-medium">
+                                        <StarIcon />
+                                        {s}
+                                    </div>
+                                ))}
+                                {/* <div className="flex items-center gap-2 py-[3.5px] text-[11px] text-[#888] italic">
+                                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="#aaa" strokeWidth="1.1" /><path d="M4 6.5h5M6.5 4v5" stroke="#aaa" strokeWidth="1.1" strokeLinecap="round" /></svg>
+                                    ...and many more
+                                </div> */}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="font-['Barlow',sans-serif]">
+
+                        {/* Heading with side lines */}
+                        <div className="flex items-center gap-2.5 mb-4">
+                            <div className="flex-1 h-[1.5px] bg-white/40" />
+                            <h3 className="font-['Barlow_Condensed',sans-serif] text-lg font-medium text-white uppercase tracking-[2px] whitespace-nowrap m-0">
+                                KEY BENEFITS
+                            </h3>
+                            <div className="flex-1 h-[1.5px] bg-white/40" />
+                        </div>
+
+                        {/* Benefit rows */}
+                        {benefits.map((b, i) => (
+                            <div key={i} className={`flex items-start gap-3 py-1.5 ${i < benefits.length - 1 ? 'mb-[18px]' : 'mb-0'}`}>
+                                {/* Golden icon circle */}
+                                <div className="w-[50px] h-[50px] rounded-full border-[2.5px] border-[#c8941a] bg-[rgba(180,130,20,0.2)] flex items-center justify-center shrink-0">
+                                    {b.icon}
+                                </div>
+                                <div className="pt-1">
+                                    <div className="text-sm font-medium text-white leading-[1.3] mb-1">
+                                        {b.title}
+                                    </div>
+                                    <div className="text-[11px] text-white/60 leading-[1.55]">
+                                        {b.desc}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                </div>
+            </div>
         </div>
     )
 }
