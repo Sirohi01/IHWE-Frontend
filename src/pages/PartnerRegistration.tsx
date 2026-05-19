@@ -939,8 +939,8 @@ const PartnerRegistration = () => {
                                 </div>
 
                                 {/* FORM FOOTER */}
-                                <div className="bg-[#f8fafc] border-t border-slate-100 px-6 md:p-8 py-6 ">
-                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-28">
+                                <div className="bg-[#f8fafc] border-t border-slate-100 px-6 md:p-4 py-1 ">
+                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
 
                                         <button
                                             type="submit"
@@ -953,7 +953,7 @@ const PartnerRegistration = () => {
                                             </div>
                                         </button>
                                     </div>
-                                    <p className="text-center text-[10px] text-slate-400 font-bold mt-6 uppercase tracking-tight">
+                                    <p className="text-center text-[10px] text-slate-400 font-bold mt-3 uppercase tracking-tight">
                                         By clicking submit, you agree to our <a href="/terms-of-service" className="text-[#2e7d32] hover:underline">Terms & Conditions</a> and <a href="/privacy-policy" className="text-[#2e7d32] hover:underline">Privacy Policy</a>.
                                     </p>
                                 </div>
