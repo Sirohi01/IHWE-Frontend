@@ -38,7 +38,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
           <div className="absolute inset-0 z-0">
             <img
               src={heroImage}
-              className="absolute inset-0 w-full h-full object-fill"
+              className="absolute inset-0 w-full h-full object-cover object-right-bottom"
               alt="Hero Background"
             />
           </div>
@@ -113,7 +113,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-8xl py-3 font-semibold leading-none mb-3 tracking-tight"
+              className="text-5xl md:text-7xl lg:text-8xl py-3 font-semibold leading-none mb-3 tracking-tight"
             >
               <span className="text-[#04215A]">Blogs & </span>
               <span className="text-[#098E7B]">News</span>
