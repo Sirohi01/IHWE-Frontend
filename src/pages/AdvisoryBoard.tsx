@@ -124,7 +124,7 @@ const AdvisoryBoard = () => {
                   to="/advisory"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-fit ml-32 inline-block mt-10 bg-green-800 hover:bg-green-900 transition-all duration-300 text-white font-semibold uppercase px-4 py-2 rounded flex items-center gap-3 shadow-lg"
+                  className="w-fit ml-0 sm:ml-32 inline-block mt-10 bg-green-800 hover:bg-green-900 transition-all duration-300 text-white font-semibold uppercase px-4 py-2 rounded flex items-center gap-3 shadow-lg"
                 >
                   Register Now
                   <div className="w-7 h-7 rounded-full bg-white text-[#56b532] flex items-center justify-center font-bold">
@@ -149,7 +149,7 @@ const AdvisoryBoard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_210px] gap-8 items-center">
 
             {/* ── LEFT: Photo Card — exact image match ── */}
-            <div className="relative w-[220px] h-[290px] flex-shrink-0">
+            <div className="relative w-[220px] h-[290px] flex-shrink-0 mx-auto lg:mx-0">
 
               {/* Light green bg block */}
               <div className="absolute top-[10px] left-[10px] right-0 bottom-0 bg-[#d4edcc] rounded-[18px] z-0" />
@@ -172,13 +172,13 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* ── MIDDLE: Text Content ── */}
-            <div className="space-y-5 px-2">
+            <div className="space-y-5 px-2 text-center lg:text-left flex flex-col items-center lg:items-start">
 
               <div>
                 <p className="uppercase tracking-[3px] text-[#23471d] font-bold text-[11px] mb-2">
                   {chairmanData?.title || "Chairman's Message"}
                 </p>
-                <div className="w-8 h-[2px] bg-[#23471d]" />
+                <div className="w-8 h-[2px] bg-[#23471d] mx-auto lg:mx-0" />
               </div>
 
               <h2 className="text-3xl font-semibold text-[#0d1f3c] leading-tight">
@@ -369,10 +369,10 @@ const AdvisoryBoard = () => {
         <SectionContainer className=" space-y-4">
 
           {/* ── ROW 1: Why Join + 4 cards ── */}
-          <div className="flex w-full gap-6 items-start">
+          <div className="flex flex-col lg:flex-row w-full gap-6 items-start">
 
             {/* Left: Why Join text */}
-            <div className="w-[30%] space-y-3">
+            <div className="w-full lg:w-[30%] space-y-3">
               <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#5ba234]">Why Join</p>
               <h2 className="text-[26px] font-black text-[#0d1f3c] uppercase leading-tight">
                 The Advisory Board?
@@ -387,7 +387,7 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* Right: 4 feature cards */}
-            <div className="w-[65%] grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="w-full lg:w-[65%] grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 {
                   icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v2M12 16v2M8 12H6M18 12h-2" /><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" /></svg>,
