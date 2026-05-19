@@ -6,6 +6,7 @@ import {
     Eye, Handshake, Shield, Contact2, Bed, Megaphone, BadgeCheck, Percent,
     CreditCard, CheckCircle, Smartphone, ConciergeBell
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import SectionContainer from "@/components/layout/SectionContainer";
 import TopImage from "@/assets/hospitalityPartner/TopImage.jpeg";
 import BottomImage from "@/assets/hospitalityPartner/BottomImage2.jpeg";
@@ -316,14 +317,12 @@ const HospitalityPartner = () => {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-6 pl-2 border-l border-white/10">
-                            <div className="w-20 h-20 bg-white p-1 rounded-xl shadow-lg">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.ihwe.in/partner-form" alt="QR" className="w-full h-full" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-amber-500 font-black text-[14px] uppercase leading-tight tracking-[0.1em]">SCAN TO</span>
-                                <span className="text-amber-500 font-black text-[14px] uppercase leading-tight tracking-[0.1em]">PARTNER</span>
-                            </div>
+                        <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0">
+                            <Link to="/partner-registration?type=hospitality" target="_blank">
+                                <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
+                                    Register As Partner
+                                </button>
+                            </Link>
                         </div>
                     </SectionContainer>
                 </div>

@@ -124,7 +124,7 @@ const AdvisoryBoard = () => {
                   to="/advisory"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-fit ml-32 inline-block mt-10 bg-green-800 hover:bg-green-900 transition-all duration-300 text-white font-semibold uppercase px-4 py-2 rounded flex items-center gap-3 shadow-lg"
+                  className="w-fit ml-0 sm:ml-32 inline-block mt-10 bg-green-800 hover:bg-green-900 transition-all duration-300 text-white font-semibold uppercase px-4 py-2 rounded flex items-center gap-3 shadow-lg"
                 >
                   Register Now
                   <div className="w-7 h-7 rounded-full bg-white text-[#56b532] flex items-center justify-center font-bold">
@@ -149,7 +149,7 @@ const AdvisoryBoard = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_210px] gap-8 items-center">
 
             {/* ── LEFT: Photo Card — exact image match ── */}
-            <div className="relative w-[220px] h-[290px] flex-shrink-0">
+            <div className="relative w-[220px] h-[290px] flex-shrink-0 mx-auto lg:mx-0">
 
               {/* Light green bg block */}
               <div className="absolute top-[10px] left-[10px] right-0 bottom-0 bg-[#d4edcc] rounded-[18px] z-0" />
@@ -172,13 +172,13 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* ── MIDDLE: Text Content ── */}
-            <div className="space-y-5 px-2">
+            <div className="space-y-5 px-2 text-center lg:text-left flex flex-col items-center lg:items-start">
 
               <div>
                 <p className="uppercase tracking-[3px] text-[#23471d] font-bold text-[11px] mb-2">
                   {chairmanData?.title || "Chairman's Message"}
                 </p>
-                <div className="w-8 h-[2px] bg-[#23471d]" />
+                <div className="w-8 h-[2px] bg-[#23471d] mx-auto lg:mx-0" />
               </div>
 
               <h2 className="text-3xl font-semibold text-[#0d1f3c] leading-tight">
@@ -199,9 +199,9 @@ const AdvisoryBoard = () => {
               </p>
 
               <div className="pt-2">
-                <p className="font-[Brush_Script_MT,cursive] text-2xl text-slate-600 italic mb-3 tracking-wide">
+                {/* <p className="font-[Brush_Script_MT,cursive] text-2xl text-slate-600 italic mb-3 tracking-wide">
                   {chairmanData?.signatureName || "Vijay Sharma"}
-                </p>
+                </p> */}
                 <p className="text-[#23471d] font-bold text-sm">{chairmanData?.chairmanName || "Mr. Vijay Sharma"}</p>
                 <p className="text-slate-400 text-xs tracking-wide">{chairmanData?.chairmanDesignation || "Chairman, IHWE Expo 2026"}</p>
               </div>
@@ -254,8 +254,8 @@ const AdvisoryBoard = () => {
             </div>
           ) : (
             <>
-              {/* GRID — 6 per row */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
+              {/* FLEX WRAP — centered cards */}
+              <div className="flex flex-wrap justify-center gap-3 mt-4">
                 {visibleMembers.map((member, idx) => (
                   <motion.div
                     key={member._id}
@@ -263,7 +263,7 @@ const AdvisoryBoard = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.35, delay: idx * 0.03 }}
-                    className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
+                    className="bg-white border border-[#e5e7eb] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col w-[calc(50%-8px)] sm:w-[calc(33.33%-8px)] lg:w-[calc(16.66%-10px)] min-w-[150px] max-w-[200px]"
                   >
                     {/* IMAGE */}
                     <div className="w-full h-[160px] bg-[#f3f4f6] overflow-hidden">
@@ -342,7 +342,7 @@ const AdvisoryBoard = () => {
                       <ArrowRight size={13} />
                     </div>
                   </button>
-                ) : (
+                ) : (members.length > 2 * itemsPerRow && visibleRows > 2) ? (
                   <button
                     onClick={() => setVisibleRows(2)}
                     className="border border-slate-300 hover:border-[#5ba234] transition-all duration-300 text-slate-500 hover:text-[#2d6b18] font-bold px-6 py-1.5 rounded-full uppercase tracking-wide text-sm inline-flex items-center gap-3 bg-white shadow-sm"
@@ -352,7 +352,7 @@ const AdvisoryBoard = () => {
                       <ArrowRight size={13} />
                     </div>
                   </button>
-                )}
+                ) : null}
               </div>
             </>
           )}
@@ -369,10 +369,10 @@ const AdvisoryBoard = () => {
         <SectionContainer className=" space-y-4">
 
           {/* ── ROW 1: Why Join + 4 cards ── */}
-          <div className="flex w-full gap-6 items-start">
+          <div className="flex flex-col lg:flex-row w-full gap-6 items-start">
 
             {/* Left: Why Join text */}
-            <div className="w-[30%] space-y-3">
+            <div className="w-full lg:w-[30%] space-y-3">
               <p className="text-[11px] font-bold uppercase tracking-[3px] text-[#5ba234]">Why Join</p>
               <h2 className="text-[26px] font-black text-[#0d1f3c] uppercase leading-tight">
                 The Advisory Board?
@@ -387,7 +387,7 @@ const AdvisoryBoard = () => {
             </div>
 
             {/* Right: 4 feature cards */}
-            <div className="w-[65%] grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="w-full lg:w-[65%] grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 {
                   icon: <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><path d="M12 6v2M12 16v2M8 12H6M18 12h-2" /><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" /></svg>,
@@ -448,7 +448,7 @@ const AdvisoryBoard = () => {
               <p className="text-[14px] text-white/80 mb-4 max-w-md leading-relaxed">
                 Help us bring the right leaders together to create a healthier world.
               </p>
-              <button className="bg-white text-[#23471d] font-black text-[11px] uppercase tracking-widest px-6 py-2 rounded-full flex items-center gap-3 hover:bg-[#d6ff63] transition-all duration-300 w-fit shadow-lg">
+              <button onClick={() => window.open("/advisory", "_blank")} className="bg-white text-[#23471d] font-black text-[11px] uppercase tracking-widest px-6 py-2 rounded-full flex items-center gap-3 hover:bg-[#d6ff63] transition-all duration-300 w-fit shadow-lg">
                 Nominate Now
                 <div className="w-7 h-7 rounded-full bg-[#23471d] text-white flex items-center justify-center">
                   <ArrowRight size={14} />
@@ -467,9 +467,8 @@ const AdvisoryBoard = () => {
           </div>
 
           {/* ── ROW 3: Register CTA strip ── */}
-          <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm px-8 py-2 flex flex-col sm:flex-row items-center gap-6 justify-between">
+          {/* <div className="bg-white rounded-2xl border border-[#e5e7eb] shadow-sm px-8 py-2 flex flex-col sm:flex-row items-center gap-6 justify-between">
 
-            {/* Left */}
             <div className="flex items-center gap-5">
               <div className="w-14 h-14 rounded-full bg-[#f0f7eb] border border-[#d4edcc] flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="#23471d" strokeWidth="1.5">
@@ -484,7 +483,6 @@ const AdvisoryBoard = () => {
               </div>
             </div>
 
-            {/* Right: Button */}
             <Link
               to="/advisory"
               target="_blank"
@@ -494,7 +492,7 @@ const AdvisoryBoard = () => {
                 <ArrowRight size={14} />
               </div>
             </Link>
-          </div>
+          </div> */}
 
         </SectionContainer>
       </section>

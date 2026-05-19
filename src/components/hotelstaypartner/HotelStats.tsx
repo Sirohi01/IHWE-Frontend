@@ -45,7 +45,9 @@ const HotelStats: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`flex items-center gap-[12px] px-2 md:px-4 group flex-1 justify-start ${index === 4 ? 'col-span-2 justify-center md:col-span-1 md:justify-start' : ''}`}
+              className={`flex items-center gap-[12px] px-2 sm:px-4 group flex-1 justify-start ${
+                index === 4 ? 'col-span-2 justify-center md:col-span-1 md:justify-start' : 'justify-center md:justify-start'
+              }`}
             >
               <div 
                 className="w-[36px] h-[36px] rounded-full flex items-center justify-center text-[#4E9F3D] border-2 border-[#4E9F3D]/20 transition-all duration-300 group-hover:scale-110 shadow-sm shrink-0"

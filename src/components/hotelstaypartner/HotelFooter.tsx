@@ -7,8 +7,9 @@ import {
   Globe,
   Mail,
   Phone,
-  QrCode,
+  QrCode
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import footerBadge from '../../assets/hotel/hotelfoterimage.png';
 
 const HotelFooter: React.FC = () => {
@@ -18,10 +19,10 @@ const HotelFooter: React.FC = () => {
       <div className="absolute -left-10 -top-10 w-80 h-80 bg-[#103D1A] rounded-full blur-2xl opacity-40 z-0"></div>
       <div className="absolute -left-5 -top-5 w-40 h-40 bg-[#4E9F3D]/15 rounded-full z-0"></div>
 
-      <div className="mx-auto max-w-[1330px] flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 relative z-10">
+      <div className="mx-auto max-w-[1330px] flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 relative z-10 text-center lg:text-left py-4 lg:py-0">
 
 
-        <div className="flex items-center gap-2 min-w-0 lg:min-w-[320px] justify-center lg:justify-start">
+        <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 w-full lg:w-auto justify-center lg:justify-start">
 
           <div className="relative w-20 h-20 flex-shrink-0">
             <img
@@ -45,7 +46,7 @@ const HotelFooter: React.FC = () => {
         </div>
 
 
-        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-y-4 gap-x-2 lg:gap-0 flex-1 px-2">
+        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-y-4 gap-x-2 lg:gap-0 flex-1 px-2 w-full max-w-[500px] lg:max-w-none">
           {[
             { icon: <Users />, label: "Global Audience Access" },
             { icon: <BarChart3 />, label: "Brand Exposure" },
@@ -54,7 +55,7 @@ const HotelFooter: React.FC = () => {
             { icon: <Globe />, label: "Positive Global Impact" },
           ].map((item, i) => (
             <React.Fragment key={i}>
-              <div className="flex flex-col items-center text-center px-2 lg:px-3 group">
+              <div className="flex flex-col items-center text-center px-3 group flex-shrink-0">
                 <div className="w-8 h-8 rounded-full bg-[#0B2C66] border border-white/20 flex items-center justify-center text-white mb-0.5 shadow-inner group-hover:bg-[#4E9F3D] transition-colors duration-300">
                   {React.cloneElement(item.icon as React.ReactElement, { className: "w-4 h-4" })}
                 </div>
@@ -67,14 +68,14 @@ const HotelFooter: React.FC = () => {
           ))}
         </div>
 
-        <div className="flex items-center gap-2 w-full lg:w-auto justify-center">
-          <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10">
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto justify-center">
+          <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10 w-full sm:w-auto">
             <div className="bg-[#4E9F3D] py-0.5 px-2 text-center">
               <h4 className="text-white font-black text-[9px] uppercase tracking-wider">
                 Let's Grow Together!
               </h4>
             </div>
-            <div className="p-1 px-3 flex flex-col gap-0.5">
+            <div className="p-1 px-3 flex flex-col gap-0.5 items-center sm:items-start">
               <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
                 <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
                 <span className="font-black text-[11px]">info@ihwe.in</span>
@@ -85,13 +86,13 @@ const HotelFooter: React.FC = () => {
               </a>
             </div>
           </div>
-          <div className="bg-transparent border border-[#D4AF37] rounded-md p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] shrink-0">
-            <div className="bg-white p-0.5 rounded-sm">
-              <QrCode className="w-6 h-6 text-[#051124]" />
-            </div>
-            <p className="text-white font-black text-[6px] uppercase text-center leading-tight tracking-widest mt-0.5">
-              Scan to<br />Partner
-            </p>
+          <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0">
+
+            <Link to="/partner-registration?type=hotel" target="_blank">
+              <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
+                Register As Partner
+              </button>
+            </Link>
           </div>
         </div>
 
