@@ -76,17 +76,17 @@ const Partnership = () => {
 
                 <div className="flex flex-wrap gap-3.5 mt-5">
 
-                  <Link to="/partner-registration" target="_blank">
+                  {/* <Link to="/partner-registration" target="_blank">
                     <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md tracking-wider">
                       Register As Partner
                     </button>
-                  </Link>
+                  </Link> */}
 
-                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wider">
+                  {/* <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wider">
 
                     Explore Opportunities
 
-                  </button>
+                  </button> */}
 
                 </div>
 
@@ -554,7 +554,7 @@ const Partnership = () => {
             <div className="flex justify-end relative bottom-[10px]">
               <Link to="/partner-registration" target="_blank">
                 <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
-                  Register As Official Partner
+                  Register
                 </button>
               </Link>
             </div>
@@ -577,7 +577,7 @@ const Partnership = () => {
             <div className="pt-2 flex justify-center">
               <Link to="/partner-registration" className="inline-block">
                 <button className="h-[46px] px-8 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-bold shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
-                  Register As Official Partner
+                  Register
                 </button>
               </Link>
             </div>

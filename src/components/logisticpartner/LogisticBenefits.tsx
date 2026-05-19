@@ -62,7 +62,7 @@ const LogisticBenefits: React.FC = () => {
 
 
       {/* 5 Main Benefit Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2 ml-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2 lg:ml-3">
 
 
 
@@ -107,7 +107,7 @@ const LogisticBenefits: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="bg-white rounded-[15px] border border-[#E2E8F0] overflow-hidden shadow-sm flex flex-col md:flex-row items-stretch ml-3"
+        className="bg-white rounded-[15px] border border-[#E2E8F0] overflow-hidden shadow-sm flex flex-col md:flex-row items-stretch lg:ml-3"
       >
 
 

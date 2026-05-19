@@ -96,7 +96,7 @@ const FabricationFooter = () => {
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
 
             {/* QR */}
-            <div className="flex items-center gap-4 px-6 py-5">
+            {/* <div className="flex items-center gap-4 px-6 py-5">
 
               <div className="bg-white p-2 rounded-[6px] shadow-lg">
                 <QrCode className="w-[70px] h-[70px] text-black" />
@@ -108,7 +108,7 @@ const FabricationFooter = () => {
                 Partner
               </h4>
 
-            </div>
+            </div> */}
 
           </div>
 
