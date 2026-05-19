@@ -554,7 +554,7 @@ const Partnership = () => {
             <div className="flex justify-end relative bottom-[10px]">
               <Link to="/partner-registration" target="_blank">
                 <button className="group h-[42px] px-2 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-4">
-                  Register As Official Partner
+                  Register
                 </button>
               </Link>
             </div>
@@ -577,7 +577,7 @@ const Partnership = () => {
             <div className="pt-2 flex justify-center">
               <Link to="/partner-registration" className="inline-block">
                 <button className="h-[46px] px-8 rounded-full bg-gradient-to-r from-[#78cd3d] to-[#57b327] text-white tracking-wide text-sm font-bold shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
-                  Register As Official Partner
+                  Register
                 </button>
               </Link>
             </div>

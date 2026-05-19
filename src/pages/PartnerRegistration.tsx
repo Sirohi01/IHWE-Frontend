@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Swal from "sweetalert2";
-import heroImg from "@/assets/partnerRegistration/MainImage.png";
+import heroImg from "@/assets/partnerRegistration/new.png";
 import MiddleImage from "@/assets/partnerRegistration/MiddleImage.png";
 import BottomImage from "@/assets/partnerRegistration/BottomImage.png";
 
@@ -78,7 +78,7 @@ const LOCATION_DATA: Record<string, { states: string[]; cities: Record<string, s
     }
 };
 
-const inputCls = "rounded-[4px] border-slate-300 h-7 focus:border-[#0b1a3a] focus:ring-[#0b1a3a]/10 transition-all text-[9px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-2.5 py-0 w-full";
+const inputCls = "rounded-[4px]  border-slate-300 h-7 focus:border-[#0b1a3a] focus:ring-[#0b1a3a]/10 transition-all text-[9px] bg-white placeholder:text-slate-400 text-slate-900 font-medium shadow-none outline-none px-2.5 py-0 w-full";
 const labelCls = "text-[11px] font-black text-[#003399] mb-0.5 block";
 
 const SectionHeader = ({ num, icon: Icon, title }: { num: number; icon: any; title: string }) => (
@@ -115,18 +115,37 @@ const initialForm = {
 
 const PartnerRegistration = () => {
     const [form, setForm] = useState(initialForm);
+    const [errors, setErrors] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(false);
     const countries = Object.keys(LOCATION_DATA);
     const states = form.country ? LOCATION_DATA[form.country]?.states || [] : [];
     const cities = form.state && form.country ? LOCATION_DATA[form.country]?.cities[form.state] || [] : [];
 
-    const set = (key: string, val: any) => setForm(p => ({ ...p, [key]: val }));
+    const set = (key: string, val: any) => {
+        setForm(p => ({ ...p, [key]: val }));
+        if (errors[key]) {
+            setErrors(p => {
+                const copy = { ...p };
+                delete copy[key];
+                return copy;
+            });
+        }
+    };
 
     const toggleService = (s: string) => {
         setForm(p => {
             const arr = [...p.selectedServices];
             const idx = arr.indexOf(s);
             idx > -1 ? arr.splice(idx, 1) : arr.push(s);
+
+            // Clear service errors if any service is selected
+            if (arr.length > 0 && errors.selectedServices) {
+                setErrors(prev => {
+                    const copy = { ...prev };
+                    delete copy.selectedServices;
+                    return copy;
+                });
+            }
             return { ...p, selectedServices: arr };
         });
     };
@@ -136,6 +155,15 @@ const PartnerRegistration = () => {
             const arr = [...p.partnershipInterests];
             const idx = arr.indexOf(s);
             idx > -1 ? arr.splice(idx, 1) : arr.push(s);
+
+            // Clear partnership errors if any interest is selected
+            if (arr.length > 0 && errors.partnershipInterests) {
+                setErrors(prev => {
+                    const copy = { ...prev };
+                    delete copy.partnershipInterests;
+                    return copy;
+                });
+            }
             return { ...p, partnershipInterests: arr };
         });
     };
@@ -166,7 +194,16 @@ const PartnerRegistration = () => {
     const handleVerifyOtp = () => {
         if (form.otpInput === form.otpCode) {
             set("isOtpVerified", true);
+            set("otpInput", "");
             Swal.fire("Verified", "Email address verified successfully!", "success");
+            // Clear verification errors if validated
+            if (errors.email) {
+                setErrors(p => {
+                    const copy = { ...p };
+                    delete copy.email;
+                    return copy;
+                });
+            }
         } else {
             Swal.fire("Error", "Invalid OTP. Please try again.", "error");
         }
@@ -194,69 +231,147 @@ const PartnerRegistration = () => {
     const handleVerifyMobileOtp = () => {
         if (form.mobileOtpInput === form.mobileOtpCode) {
             set("isMobileOtpVerified", true);
+            set("mobileOtpInput", "");
             Swal.fire("Verified", "Mobile number verified successfully!", "success");
+            // Clear verification errors if validated
+            if (errors.mobile) {
+                setErrors(p => {
+                    const copy = { ...p };
+                    delete copy.mobile;
+                    return copy;
+                });
+            }
         } else {
             Swal.fire("Error", "Invalid OTP. Please try again.", "error");
         }
     };
 
-    const handleReset = () => setForm(initialForm);
+    const handleReset = () => {
+        setForm(initialForm);
+        setErrors({});
+    };
+
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+
+        // 1. Company Name
+        if (!form.companyName.trim()) {
+            newErrors.companyName = "Company or Brand Name is required";
+        }
+
+        // 2. Business Category
+        if (!form.businessCategory) {
+            newErrors.businessCategory = "Business Category is required";
+        }
+
+        // 3. Website
+        if (form.website.trim() && !form.website.includes(".")) {
+            newErrors.website = "Please enter a valid website URL";
+        }
+
+        // 4. Year Established
+        if (form.yearEstablished) {
+            if (form.yearEstablished.length !== 4 || isNaN(Number(form.yearEstablished))) {
+                newErrors.yearEstablished = "Must be a 4-digit year";
+            } else if (Number(form.yearEstablished) > new Date().getFullYear()) {
+                newErrors.yearEstablished = "Year cannot be in the future";
+            }
+        }
+
+        // 5. Full Name (Name-only checks)
+        if (!form.fullName.trim()) {
+            newErrors.fullName = "Full Name is required";
+        } else if (/[^a-zA-Z\s]/.test(form.fullName)) {
+            newErrors.fullName = "Name must only contain letters and spaces";
+        }
+
+        // 6. Designation
+        if (!form.designation.trim()) {
+            newErrors.designation = "Designation is required";
+        }
+
+        // 7. Mobile
+        if (!form.mobile) {
+            newErrors.mobile = "Mobile Number is required";
+        } else if (form.mobile.length !== 10) {
+            newErrors.mobile = "Mobile number must be exactly 10 digits";
+        } else if (!form.isMobileOtpVerified) {
+            newErrors.mobile = "Please verify your mobile number via OTP";
+        }
+
+        // 8. WhatsApp
+        if (form.whatsapp && form.whatsapp.length !== 10) {
+            newErrors.whatsapp = "WhatsApp number must be exactly 10 digits";
+        }
+
+        // 9. Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!form.email.trim()) {
+            newErrors.email = "Email Address is required";
+        } else if (!emailRegex.test(form.email)) {
+            newErrors.email = "Please enter a valid email address";
+        } else if (!form.isOtpVerified) {
+            newErrors.email = "Please verify your email address via OTP";
+        }
+
+        // 10. Office Address
+        if (!form.officeAddress.trim()) {
+            newErrors.officeAddress = "Office Address is required";
+        }
+
+        // 11. Location
+        if (!form.country) {
+            newErrors.country = "Country is required";
+        }
+        if (!form.state) {
+            newErrors.state = "State is required";
+        }
+        if (!form.city) {
+            newErrors.city = "City is required";
+        }
+
+        // 12. Pincode
+        if (!form.pinCode.trim()) {
+            newErrors.pinCode = "PIN Code is required";
+        } else if (form.pinCode.length < 5 || form.pinCode.length > 10) {
+            newErrors.pinCode = "PIN Code must be between 5 and 10 digits";
+        }
+
+        // 13. Service offering
+        if (form.selectedServices.length === 0) {
+            newErrors.selectedServices = "Please select at least one service offering";
+        }
+
+        // 14. Experience
+        if (!form.experience) {
+            newErrors.experience = "Experience selection is required";
+        }
+
+        // 15. Partnership interests
+        if (form.partnershipInterests.length === 0) {
+            newErrors.partnershipInterests = "Please select at least one partnership interest";
+        }
+
+        // 16. Declaration
+        if (!form.declaration) {
+            newErrors.declaration = "You must accept the declaration to register";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 1. Basic Required Checks (Some are handled by browser 'required' attribute)
-        if (!form.companyName || !form.businessCategory || !form.fullName || !form.designation ||
-            !form.mobile || !form.email || !form.officeAddress || !form.country ||
-            !form.state || !form.city || !form.pinCode || !form.experience) {
-            Swal.fire("Incomplete Form", "Please fill in all mandatory fields marked with *", "warning");
-            return;
-        }
-
-        // 2. OTP Verification Check
-        if (!form.isOtpVerified) {
-            Swal.fire("Email Not Verified", "Please verify your email address using the OTP sent to you.", "error");
-            return;
-        }
-
-        if (!form.isMobileOtpVerified) {
-            Swal.fire("Mobile Not Verified", "Please verify your mobile number using the OTP sent to you.", "error");
-            return;
-        }
-
-        // 3. Email Validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(form.email)) {
-            Swal.fire("Invalid Email", "Please enter a valid official email address.", "error");
-            return;
-        }
-
-        // 3. Mobile Number Validation (India specific 10 digits, or general length check)
-        if (form.mobile.length !== 10) {
-            Swal.fire("Invalid Mobile", "Mobile number must be exactly 10 digits.", "error");
-            return;
-        }
-
-        // 4. PIN Code Validation
-        if (form.pinCode.length < 5 || form.pinCode.length > 10) {
-            Swal.fire("Invalid PIN Code", "Please enter a valid PIN/Postal code.", "error");
-            return;
-        }
-
-        // 5. Website Validation (Optional but if provided should be valid-ish)
-        if (form.website && !form.website.includes(".")) {
-            Swal.fire("Invalid Website", "Please enter a valid website URL.", "error");
-            return;
-        }
-
-        // 6. Year Established Validation
-        if (form.yearEstablished && (form.yearEstablished.length !== 4 || parseInt(form.yearEstablished) > new Date().getFullYear())) {
-            Swal.fire("Invalid Year", "Please enter a valid 4-digit establishment year.", "error");
-            return;
-        }
-
-        if (!form.declaration) {
-            Swal.fire("Declaration Required", "Please accept the declaration before submitting.", "warning");
+        const isValid = validateForm();
+        if (!isValid) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete Form",
+                text: "Please fill in all mandatory fields and resolve errors highlighted in red.",
+                confirmButtonColor: "#2e7d32"
+            });
             return;
         }
 
@@ -278,17 +393,17 @@ const PartnerRegistration = () => {
     return (
         <div className="min-h-screen bg-[#f8faf9] font-inter relative">
             {/* HERO BANNER */}
-            <section className="relative w-full overflow-hidden">
+            <section className="relative pb-2 overflow-hidden px-8 w-[1400px] mx-auto">
                 <img src={heroImg} alt="partner form" className="w-full h-auto object-cover" />
             </section>
 
             {/* MAIN CONTENT */}
-            <section className="px-10 relative z-10 -mt-[2%] xl:-mt-[2%] mb-0">
+            <section className="px-10 relative z-10 mt-[2%] xl:-mt-[2%] mb-0">
                 <div className="container mx-auto px-6 max-w-[1400px]">
                     <div className="flex flex-col lg:flex-row gap-8 items-stretch">
                         {/* LEFT: FORM */}
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1 min-w-0">
-                            <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
+                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1 min-w-0 mt-6">
+                            <form onSubmit={handleSubmit} noValidate className="bg-white border border-slate-200 rounded-2xl shadow-lg overflow-hidden flex flex-col h-full">
                                 <div className="p-5 md:p-6 space-y-4 flex-1">
 
                                     {/* 1. COMPANY INFORMATION */}
@@ -297,22 +412,26 @@ const PartnerRegistration = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
                                             <div>
                                                 <Label className={labelCls}>Company / Brand Name <span className="text-red-500">*</span></Label>
-                                                <Input required placeholder="Enter company or brand name" className={inputCls} value={form.companyName} onChange={e => set("companyName", e.target.value)} />
+                                                <Input placeholder="Enter company or brand name" className={inputCls} value={form.companyName} onChange={e => set("companyName", e.target.value)} />
+                                                {errors.companyName && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.companyName}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Business Category <span className="text-red-500">*</span></Label>
-                                                <Select required value={form.businessCategory} onValueChange={v => set("businessCategory", v)}>
+                                                <Select value={form.businessCategory} onValueChange={v => set("businessCategory", v)}>
                                                     <SelectTrigger className={inputCls}><SelectValue placeholder="Select business category" /></SelectTrigger>
                                                     <SelectContent>{BUSINESS_CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                                                 </Select>
+                                                {errors.businessCategory && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.businessCategory}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Company Website</Label>
                                                 <Input placeholder="www.yourwebsite.com" className={inputCls} value={form.website} onChange={e => set("website", e.target.value)} />
+                                                {errors.website && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.website}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Year Established</Label>
                                                 <Input placeholder="YYYY" maxLength={4} className={inputCls} value={form.yearEstablished} onChange={e => set("yearEstablished", e.target.value.replace(/\D/g, "").slice(0, 4))} />
+                                                {errors.yearEstablished && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.yearEstablished}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>GST Number</Label>
@@ -331,18 +450,19 @@ const PartnerRegistration = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-2">
                                             <div>
                                                 <Label className={labelCls}>Full Name <span className="text-red-500">*</span></Label>
-                                                <Input required placeholder="Enter full name" className={inputCls} value={form.fullName} onChange={e => set("fullName", e.target.value)} />
+                                                <Input placeholder="Enter full name" className={inputCls} value={form.fullName} onChange={e => set("fullName", e.target.value.replace(/[^a-zA-Z\s]/g, ""))} />
+                                                {errors.fullName && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.fullName}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Designation <span className="text-red-500">*</span></Label>
-                                                <Input required placeholder="Enter designation" className={inputCls} value={form.designation} onChange={e => set("designation", e.target.value)} />
+                                                <Input placeholder="Enter designation" className={inputCls} value={form.designation} onChange={e => set("designation", e.target.value)} />
+                                                {errors.designation && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.designation}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Mobile Number <span className="text-red-500">*</span></Label>
                                                 <div className="flex gap-2">
                                                     <div className="relative flex-1">
                                                         <Input
-                                                            required
                                                             disabled={form.isMobileOtpVerified}
                                                             placeholder="Enter mobile number"
                                                             maxLength={10}
@@ -396,17 +516,18 @@ const PartnerRegistration = () => {
                                                         <ShieldCheck className="w-3 h-3" /> Mobile number verified
                                                     </p>
                                                 )}
+                                                {errors.mobile && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.mobile}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>WhatsApp Number</Label>
                                                 <Input placeholder="Enter WhatsApp number" maxLength={10} className={inputCls} value={form.whatsapp} onChange={e => set("whatsapp", e.target.value.replace(/\D/g, "").slice(0, 10))} />
+                                                {errors.whatsapp && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.whatsapp}</span>}
                                             </div>
                                             <div className="md:col-span-2">
                                                 <Label className={labelCls}>Official Email Address <span className="text-red-500">*</span></Label>
                                                 <div className="flex gap-2">
                                                     <div className="relative flex-1">
                                                         <Input
-                                                            required
                                                             type="email"
                                                             disabled={form.isOtpVerified}
                                                             placeholder="Enter official email address"
@@ -460,6 +581,7 @@ const PartnerRegistration = () => {
                                                         <ShieldCheck className="w-3 h-3" /> Email verified successfully
                                                     </p>
                                                 )}
+                                                {errors.email && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.email}</span>}
                                             </div>
                                         </div>
                                     </div>
@@ -470,33 +592,38 @@ const PartnerRegistration = () => {
                                         <div className="space-y-3">
                                             <div>
                                                 <Label className={labelCls}>Office Address <span className="text-red-500">*</span></Label>
-                                                <Input required placeholder="Enter complete office address" className={inputCls} value={form.officeAddress} onChange={e => set("officeAddress", e.target.value)} />
+                                                <Input placeholder="Enter complete office address" className={inputCls} value={form.officeAddress} onChange={e => set("officeAddress", e.target.value)} />
+                                                {errors.officeAddress && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.officeAddress}</span>}
                                             </div>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                                                 <div>
                                                     <Label className={labelCls}>Country <span className="text-red-500">*</span></Label>
-                                                    <Select required value={form.country} onValueChange={v => { set("country", v); set("state", ""); set("city", ""); }}>
+                                                    <Select value={form.country} onValueChange={v => { set("country", v); set("state", ""); set("city", ""); }}>
                                                         <SelectTrigger className={inputCls}><SelectValue placeholder="Select country" /></SelectTrigger>
                                                         <SelectContent className="max-h-[250px]">{countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                                                     </Select>
+                                                    {errors.country && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.country}</span>}
                                                 </div>
                                                 <div>
                                                     <Label className={labelCls}>State <span className="text-red-500">*</span></Label>
-                                                    <Select required disabled={!form.country} value={form.state} onValueChange={v => { set("state", v); set("city", ""); }}>
+                                                    <Select disabled={!form.country} value={form.state} onValueChange={v => { set("state", v); set("city", ""); }}>
                                                         <SelectTrigger className={inputCls}><SelectValue placeholder="Select state" /></SelectTrigger>
                                                         <SelectContent className="max-h-[250px]">{states.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
                                                     </Select>
+                                                    {errors.state && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.state}</span>}
                                                 </div>
                                                 <div>
                                                     <Label className={labelCls}>City <span className="text-red-500">*</span></Label>
-                                                    <Select required disabled={!form.state} value={form.city} onValueChange={v => set("city", v)}>
+                                                    <Select disabled={!form.state} value={form.city} onValueChange={v => set("city", v)}>
                                                         <SelectTrigger className={inputCls}><SelectValue placeholder="Enter city" /></SelectTrigger>
                                                         <SelectContent className="max-h-[250px]">{cities.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                                                     </Select>
+                                                    {errors.city && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.city}</span>}
                                                 </div>
                                                 <div>
                                                     <Label className={labelCls}>PIN Code <span className="text-red-500">*</span></Label>
-                                                    <Input required placeholder="Enter PIN code" maxLength={6} className={inputCls} value={form.pinCode} onChange={e => set("pinCode", e.target.value.replace(/\D/g, "").slice(0, 6))} />
+                                                    <Input placeholder="Enter PIN code" maxLength={6} className={inputCls} value={form.pinCode} onChange={e => set("pinCode", e.target.value.replace(/\D/g, "").slice(0, 6))} />
+                                                    {errors.pinCode && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.pinCode}</span>}
                                                 </div>
                                             </div>
                                         </div>
@@ -520,6 +647,7 @@ const PartnerRegistration = () => {
                                                 </label>
                                             ))}
                                         </div>
+                                        {errors.selectedServices && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.selectedServices}</span>}
                                         {form.selectedServices.includes("Other Services") && (
                                             <div className="mt-2">
                                                 <Input placeholder="Please specify" className={inputCls} value={form.otherService} onChange={e => set("otherService", e.target.value)} />
@@ -533,10 +661,11 @@ const PartnerRegistration = () => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-3">
                                             <div>
                                                 <Label className={labelCls}>Years of Experience <span className="text-red-500">*</span></Label>
-                                                <Select required value={form.experience} onValueChange={v => set("experience", v)}>
+                                                <Select value={form.experience} onValueChange={v => set("experience", v)}>
                                                     <SelectTrigger className={inputCls}><SelectValue placeholder="Select experience" /></SelectTrigger>
                                                     <SelectContent>{EXPERIENCE_OPTIONS.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                                                 </Select>
+                                                {errors.experience && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.experience}</span>}
                                             </div>
                                             <div>
                                                 <Label className={labelCls}>Major Clients / Brands Worked With</Label>
@@ -602,6 +731,7 @@ const PartnerRegistration = () => {
                                                 </label>
                                             ))}
                                         </div>
+                                        {errors.partnershipInterests && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.partnershipInterests}</span>}
                                     </div>
 
                                     {/* 8. ADDITIONAL INFORMATION */}
@@ -633,6 +763,7 @@ const PartnerRegistration = () => {
                                                 We confirm that all information provided is correct and authentic.
                                             </span>
                                         </label>
+                                        {errors.declaration && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.declaration}</span>}
                                     </div>
                                 </div>
 
@@ -643,9 +774,9 @@ const PartnerRegistration = () => {
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="w-full sm:w-auto flex items-center justify-center gap-6 px-6 py-2 rounded-lg text-white font-bold text-[13px] uppercase tracking-wider transition-all bg-[#2e7d32] hover:bg-[#1b5e20] shadow-lg active:scale-[0.98]"
+                                            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2 rounded-lg text-white font-bold text-[13px] uppercase tracking-wider transition-all bg-[#2e7d32] hover:bg-[#1b5e20] shadow-lg active:scale-[0.98]"
                                         >
-                                            <span>{loading ? "Submitting..." : "REGISTER AS OFFICIAL PARTNER"}</span>
+                                            <span>{loading ? "Submitting..." : "REGISTER"}</span>
                                             <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-inner">
                                                 <ArrowRight className="w-4 h-4 text-[#2e7d32]" />
                                             </div>
@@ -727,10 +858,10 @@ const PartnerRegistration = () => {
                                 </div>
 
                                 {/* CTA BANNER */}
-                                <div className="min-h-[260px] relative rounded-[24px] overflow-hidden shadow-2xl group ">
+                                <div className="min-h-[200px] relative rounded-[24px] overflow-hidden shadow-2xl group ">
                                     <img src={MiddleImage} alt="Handshake" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20] via-[#1b5e20]/90 to-transparent p-10 flex flex-col justify-center">
-                                        <div className="max-w-[75%] mb-8">
+                                        <div className="max-w-[75%] mb-2">
                                             <h4 className="text-white font-semibold text-[22px] uppercase leading-[1.1] mb-4 drop-shadow-lg">Become An Official IHWE 2026 <br /> Service Partner</h4>
                                             <p className="text-[13px] font-semibold text-white leading-relaxed drop-shadow-md">Deliver world-class support services to exhibitors, buyers & delegates from across the globe.</p>
                                         </div>
