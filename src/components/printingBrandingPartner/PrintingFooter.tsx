@@ -7,6 +7,7 @@ import {
   QrCode,
   Plane,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 
 const PricingFooter = () => {
@@ -103,19 +104,13 @@ const PricingFooter = () => {
         </div>
         {/* DIVIDER */}
 
-        {/* QR */}
+        {/* Register Button */}
         <div className="flex items-center gap-4 px-6 py-5">
-
-          <div className="bg-white p-2 rounded-[6px] shadow-lg">
-            <QrCode className="w-[70px] h-[70px] text-black" />
-          </div>
-
-          <h4 className="text-[#00a9b7] uppercase font-black text-[20px] leading-[1.1]">
-            Scan To
-            <br />
-            Partner
-          </h4>
-
+          <Link to="/partner-registration" target="_blank">
+            <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
+              Register As Partner
+            </button>
+          </Link>
         </div>
 
       </div>

@@ -6,14 +6,15 @@ import {
   QrCode,
   Truck,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import busAndTruck from '../../assets/logistic/raman.png';
 
 const LogisticFooter: React.FC = () => {
   return (
-    <footer className="bg-[#001D3D] py-0.5 mt-2">
-      <div className="max-w-[1350px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+    <footer className="bg-[#001D3D] py-4 lg:py-0.5 mt-2">
+      <div className="max-w-[1350px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 px-4">
+        <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4">
           <div className="hidden sm:block">
             <img src={busAndTruck} alt="Logistics" className="w-auto h-[60px] object-contain" />
           </div>
@@ -21,7 +22,7 @@ const LogisticFooter: React.FC = () => {
 
 
           <div className="flex flex-col">
-            <h3 className="text-white font-black text-[14px] uppercase leading-tight whitespace-nowrap">
+            <h3 className="text-white font-black text-[14px] uppercase leading-tight sm:whitespace-nowrap">
               LET'S MOVE SUCCESS <span className="text-[#4E9F3D]">TOGETHER!</span>
             </h3>
             <p className="text-white text-[8.5px] font-medium opacity-80 mt-0 max-w-[280px]">
@@ -69,19 +70,13 @@ const LogisticFooter: React.FC = () => {
 
         </div>
 
-        {/* Right Section: QR Code & Button */}
-        <div className="flex items-center gap-3 bg-black/10 p-1.5 pr-3 rounded-[10px] border border-white/5">
-          <div className="bg-white p-0.5 rounded-[6px] shadow-lg">
-            <QrCode className="w-[34px] h-[34px] text-[#001D3D]" />
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="bg-[#4E9F3D] px-3 py-1 rounded-[6px] shadow-sm hover:bg-[#458b36] transition-colors cursor-pointer">
-              <span className="text-white font-black text-[10px] uppercase tracking-wider leading-[0.9]">
-                SCAN TO PARTNER
-              </span>
-
-            </div>
-          </div>
+        {/* Right Section: Register Button */}
+        <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0">
+          <Link to="/partner-registration" target="_blank">
+            <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
+              Register As Partner
+            </button>
+          </Link>
         </div>
 
       </div>

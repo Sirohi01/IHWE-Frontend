@@ -639,13 +639,7 @@ const PartnerRegistration = () => {
                                 {/* FORM FOOTER */}
                                 <div className="bg-[#f8fafc] border-t border-slate-100 px-6 md:p-8 py-6 ">
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-28">
-                                        <button
-                                            type="button"
-                                            onClick={handleReset}
-                                            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-2.5 border border-slate-300 rounded-lg text-[12px] font-black text-[#0b1a3a] uppercase tracking-wider hover:bg-slate-50 transition-all"
-                                        >
-                                            <RotateCcw className="w-4 h-4" /> RESET FORM
-                                        </button>
+
                                         <button
                                             type="submit"
                                             disabled={loading}
@@ -740,14 +734,7 @@ const PartnerRegistration = () => {
                                             <h4 className="text-white font-semibold text-[22px] uppercase leading-[1.1] mb-4 drop-shadow-lg">Become An Official IHWE 2026 <br /> Service Partner</h4>
                                             <p className="text-[13px] font-semibold text-white leading-relaxed drop-shadow-md">Deliver world-class support services to exhibitors, buyers & delegates from across the globe.</p>
                                         </div>
-                                        <div className="flex">
-                                            <button className="flex items-center gap-6 bg-[#0b1a3a] text-white pl-8 pr-3 py-2 rounded-xl font-semibold text-[15px] uppercase tracking-widest hover:bg-[#0f2a5a] transition-all shadow-xl hover:-translate-y-0.5 active:translate-y-0 group/btn">
-                                                Join Us Today!
-                                                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-lg transition-transform group-hover/btn:translate-x-1">
-                                                    <ArrowRight className="w-4 h-4 text-[#2e7d32]" />
-                                                </div>
-                                            </button>
-                                        </div>
+
                                     </div>
                                 </div>
                             </aside>

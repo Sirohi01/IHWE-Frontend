@@ -122,38 +122,7 @@ export const Footer = () => (
             </div>
 
 
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, textAlign: "right", lineHeight: 1.1 }}>
-                    SCAN TO APPLY
-                </div>
-                <div
-                    style={{
-                        width: 32,
-                        height: 32,
-                        background: "white",
-                        borderRadius: 4,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                    }}
-                >
-                    <svg width="24" height="24" viewBox="0 0 50 50">
-                        {[0, 1, 2, 3, 4, 5, 6].map((r) =>
-                            [0, 1, 2, 3, 4, 5, 6].map((c) => {
-                                const on =
-                                    (r < 3 && c < 3) ||
-                                    (r < 3 && c > 3) ||
-                                    (r > 3 && c < 3) ||
-                                    ((r + c) % 2 === 0 && r > 2 && c > 2);
-                                return on ? (
-                                    <rect key={`${r}-${c}`} x={c * 7 + 1} y={r * 7 + 1} width={5} height={5} fill={TEAL} />
-                                ) : null;
-                            })
-                        )}
-                    </svg>
-                </div>
-            </div>
+
         </div>
 
 

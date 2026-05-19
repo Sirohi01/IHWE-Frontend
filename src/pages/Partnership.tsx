@@ -76,17 +76,17 @@ const Partnership = () => {
 
                 <div className="flex flex-wrap gap-3.5 mt-5">
 
-                  <Link to="/partner-registration" target="_blank">
+                  {/* <Link to="/partner-registration" target="_blank">
                     <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-md tracking-wider">
                       Register As Partner
                     </button>
-                  </Link>
+                  </Link> */}
 
-                  <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wider">
+                  {/* <button className="border border-white hover:bg-white hover:text-[#021b45] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-wider">
 
                     Explore Opportunities
 
-                  </button>
+                  </button> */}
 
                 </div>
 

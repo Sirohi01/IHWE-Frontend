@@ -26,7 +26,7 @@ const HotelBenefits: React.FC = () => {
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="bg-white rounded-[20px] ml-3 overflow-hidden shadow-sm border border-[#E2E8F0]"
+        className="bg-white rounded-[20px] lg:ml-3 overflow-hidden shadow-sm border border-[#E2E8F0]"
       >
         <div className="bg-[#4E9F3D] px-[16px] py-[10px]">
           <h3 className="text-white font-[900] text-[11px] uppercase tracking-wide text-center">
