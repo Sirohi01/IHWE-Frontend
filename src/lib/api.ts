@@ -1136,3 +1136,16 @@ export const partnerRegistrationApi = {
     }
 };
 
+
+export const sponsorComparisonApi = {
+    get: async () => {
+        try {
+            const response = await fetch(`${API_URL}/sponsor-comparison`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching sponsor-comparison:", error);
+            return null;
+        }
+    }
+};

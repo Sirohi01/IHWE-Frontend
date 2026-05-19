@@ -5,8 +5,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { ShieldCheck, Download, PhoneCall, Mail, Globe, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { API_URL, otpApi } from "@/lib/api";
-const sponsorCards = [
+import { API_URL, otpApi, sponsorComparisonApi, SERVER_URL } from "@/lib/api";
+const DEFAULT_SPONSOR_CARDS = [
   {
     title: "TITLE SPONSOR",
     desc: "Maximum visibility & brand exclusivity",
@@ -57,7 +57,7 @@ const sponsorCards = [
   },
 ];
 
-const comparisonData = [
+const DEFAULT_COMPARISON_DATA = [
   {
     benefit: "Logo on all event branding",
     values: ["✔", "✔", "✔", "✔", "✔", "✔", "✔", "✔"],
@@ -133,6 +133,25 @@ const StatCounter = ({ value }) => {
 
 const Sponsership = () => {
     const [activeMobileTab, setActiveMobileTab] = useState(0);
+    const [sponsorCards, setSponsorCards] = useState<any[]>(DEFAULT_SPONSOR_CARDS);
+    const [comparisonData, setComparisonData] = useState<any[]>(DEFAULT_COMPARISON_DATA);
+
+    useEffect(() => {
+        sponsorComparisonApi.get().then(data => {
+            if (data) {
+                if (data.cards && data.cards.length > 0) {
+                    setSponsorCards(data.cards.map((c: any) => ({
+                        ...c,
+                        image: c.image.startsWith('/uploads') ? `${SERVER_URL}${c.image}` : c.image
+                    })));
+                }
+                if (data.comparisonData && data.comparisonData.length > 0) {
+                    setComparisonData(data.comparisonData);
+                }
+            }
+        });
+    }, []);
+
   const [formData, setFormData] = useState({
     fullName: "",
     companyName: "",
@@ -669,7 +688,7 @@ const Sponsership = () => {
               {/* Benefits list */}
               <div className="mt-4 flex flex-col gap-2">
                 {comparisonData.map((row, i) => {
-                  const val = row.values[activeMobileTab];
+                  const val = row.values[activeMobileTab] || "—";
                   return (
                     <div key={i} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0 gap-3">
                       <span className="text-[11px] font-bold text-gray-600 uppercase tracking-wide leading-tight">
@@ -735,15 +754,18 @@ const Sponsership = () => {
                       {row.benefit}
                     </td>
 
-                    {row.values.map((value, i) => (
-                      <td
-                        key={i}
-                        className="p-3 text-center text-xs text-gray-600 font-semibold"
-                        style={{ minWidth: "130px" }}
-                      >
-                        {value}
-                      </td>
-                    ))}
+                     {sponsorCards.map((card, cIdx) => {
+                       const value = row.values[cIdx] || '—';
+                       return (
+                         <td
+                           key={cIdx}
+                           className="p-3 text-center text-xs text-gray-600 font-semibold"
+                           style={{ minWidth: "130px" }}
+                         >
+                           {value}
+                         </td>
+                       );
+                     })}
                   </tr>
                 ))}
               </tbody>
