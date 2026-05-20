@@ -10,9 +10,10 @@ const IconRenderer = ({ name, className }: { name: string, className?: string })
 
 interface HotelHeroProps {
   hero: any;
+  benefits?: any;
 }
 
-const HotelHero: React.FC<HotelHeroProps> = ({ hero }) => {
+const HotelHero: React.FC<HotelHeroProps> = ({ hero, benefits }) => {
   const bgImageUrl = hero?.image?.startsWith('/uploads') ? `${SERVER_URL}${hero.image}` : hero?.image;
 
   return (
@@ -118,11 +119,11 @@ const HotelHero: React.FC<HotelHeroProps> = ({ hero }) => {
                 className="absolute -top-[105px] left-[15px] right-0 bg-[#0B2C66]/95 backdrop-blur-md rounded-[20px] p-[24px_22px] w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.3)] border border-white/10"
               >
                 <h3 className="text-white font-black text-[17px] leading-tight mb-6 uppercase tracking-tight whitespace-pre-line">
-                  {hero?.whyPartnerTitle || "Why Partner With IHWE 2026?"}
+                  {benefits?.companyCard?.title || hero?.whyPartnerTitle || "Why Partner With IHWE 2026?"}
                 </h3>
 
                 <div className="flex flex-col gap-4">
-                  {(hero?.whyPartnerItems || []).map((item: any, i: number) => (
+                  {(benefits?.companyCard?.items || hero?.whyPartnerItems || []).map((item: any, i: number) => (
                     <div key={i} className="flex gap-3 items-center">
                       <div className="w-[28px] h-[28px] bg-[#4E9F3D] rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-md">
                         <IconRenderer name={item.icon} className="w-[14px] h-[14px]" />
@@ -188,11 +189,11 @@ const HotelHero: React.FC<HotelHeroProps> = ({ hero }) => {
 
           <div className="bg-white/5 backdrop-blur-md rounded-2xl p-5 mt-2 border border-white/10 shadow-lg">
             <h3 className="text-white font-black text-[16px] leading-tight mb-4 uppercase tracking-tight whitespace-pre-line">
-              {hero?.whyPartnerTitle || "Why Partner With IHWE 2026?"}
+              {benefits?.companyCard?.title || hero?.whyPartnerTitle || "Why Partner With IHWE 2026?"}
             </h3>
 
             <div className="flex flex-col gap-3.5">
-              {(hero?.whyPartnerItems || []).map((item: any, i: number) => (
+              {(benefits?.companyCard?.items || hero?.whyPartnerItems || []).map((item: any, i: number) => (
                 <div key={i} className="flex gap-3 items-center">
                   <div className="w-[26px] h-[26px] bg-[#4E9F3D] rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-sm">
                     <IconRenderer name={item.icon} className="w-[12px] h-[12px]" />

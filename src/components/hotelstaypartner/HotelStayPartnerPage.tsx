@@ -39,7 +39,7 @@ const HotelStayPartnerPage: React.FC = () => {
   return (
     <div className="bg-[#F8FAFC] font-sans">
       {/* Hero Section */}
-      <HotelHero hero={data.hero} />
+      <HotelHero hero={data.hero} benefits={data.benefits} />
 
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-8 -mt-2 relative z-20">
 
