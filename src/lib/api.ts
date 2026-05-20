@@ -303,6 +303,14 @@ export const heroBackgroundApi = {
     }
 };
 
+export const partnerComparisonApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/partner-categories`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const globalPlatformApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/global-platform`);

@@ -3,14 +3,122 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   heroBackgroundApi,
+  partnerComparisonApi,
   SERVER_URL,
 } from "@/lib/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import partnersHeroFallback from "../assets/cara14.jpg";
 
+const fallbackCards = [
+  {
+    no: "01",
+    title: "Hotel & Stay Partner",
+    image: "/images/partnership/3.png",
+    color: "#619941",
+    link: "/hotel-stay-partner",
+    icon: "/images/partnership/bed.png",
+    points: [
+      "Brand visibility on official platforms",
+      "Direct access to exhibitors & delegates",
+      "Priority partner listing",
+      "Business inquiries & repeat bookings",
+      "Exclusive partner rates",
+    ],
+  },
+  {
+    no: "02",
+    title: "Travel Partner",
+    image: "/images/partnership/2.png",
+    color: "#2f68c5",
+    link: "/travel-partner",
+    icon: "/images/partnership/aeroplan.png",
+    points: [
+      "Featured as official travel partner",
+      "Exposure to global exhibitors & buyers",
+      "Lead generation opportunities",
+      "Association with premium event",
+      "Referral business opportunities",
+    ],
+  },
+  {
+    no: "03",
+    title: "Stall Design & Fabrication",
+    image: "/images/partnership/1.png",
+    color: "#11a7b8",
+    link: "/fabrication-partner",
+    icon: "/images/partnership/home.png",
+    points: [
+      "Official branding on event collaterals",
+      "High visibility at venue",
+      "Access to exhibitors for stall needs",
+      "Repeat business potential",
+      "Showcase portfolio to global brands",
+    ],
+  },
+  {
+    no: "04",
+    title: "Logistics Partner",
+    image: "/images/partnership/Logistics.png",
+    color: "#7b43c9",
+    link: "/logistic-partner",
+    icon: "/images/partnership/delivery.png",
+    points: [
+      "Listed as official logistics partner",
+      "International partner recognition",
+      "Continuous business opportunities",
+      "Access to exhibitors logistics needs",
+      "Long-term contracts",
+    ],
+  },
+  {
+    no: "05",
+    title: "Printing & Branding",
+    image: "/images/partnership/printing.png",
+    color: "#ff7a00",
+    link: "/printing-branding-partner",
+    icon: "/images/partnership/print.png",
+    points: [
+      "Branding across event materials",
+      "On-site branding opportunities",
+      "High footfall audience visibility",
+      "Year-round referrals",
+      "Association with globally recognized event",
+    ],
+  },
+  {
+    no: "06",
+    title: "Hospitality Partner",
+    image: "/images/partnership/hospitality.jpg",
+    color: "#e93d8b",
+    link: "/hospitality-partner",
+    icon: "/images/partnership/bell.png",
+    points: [
+      "Recognition as hospitality partner",
+      "Networking with delegates & exhibitors",
+      "Brand exposure at venue",
+      "Long-term collaboration opportunities",
+      "Enhance brand credibility",
+    ],
+  },
+];
+
+const formatUrl = (url: string) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  if (url.startsWith("/uploads") || url.startsWith("uploads/")) {
+    const cleanUrl = url.startsWith("/") ? url : `/${url}`;
+    return `${SERVER_URL}${cleanUrl}`;
+  }
+  return url;
+};
+
+
 const Partnership = () => {
   const [heroData, setHeroData] = useState<any>(null);
+  const [partnerCards, setPartnerCards] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchHero = async () => {
@@ -25,8 +133,21 @@ const Partnership = () => {
       }
     };
 
+    const fetchPartnerCards = async () => {
+      try {
+        const res = await partnerComparisonApi.get();
+        if (res && res.cards) {
+          setPartnerCards(res.cards);
+        }
+      } catch (error) {
+        console.error("Error fetching partner cards:", error);
+      }
+    };
+
     fetchHero();
+    fetchPartnerCards();
   }, []);
+
 
   return (
     <div className="bg-[#f5f5f5] overflow-hidden">
@@ -291,99 +412,7 @@ const Partnership = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            {[
-              {
-                no: "01",
-                title: "Hotel & Stay Partner",
-                image: "/images/partnership/3.png",
-                color: "#619941",
-                link: "/hotel-stay-partner",
-                icon: "/images/partnership/bed.png",
-                points: [
-                  "Brand visibility on official platforms",
-                  "Direct access to exhibitors & delegates",
-                  "Priority partner listing",
-                  "Business inquiries & repeat bookings",
-                  "Exclusive partner rates",
-                ],
-              },
-              {
-                no: "02",
-                title: "Travel Partner",
-                image: "/images/partnership/2.png",
-                color: "#2f68c5",
-                link: "/travel-partner",
-                icon: "/images/partnership/aeroplan.png",
-                points: [
-                  "Featured as official travel partner",
-                  "Exposure to global exhibitors & buyers",
-                  "Lead generation opportunities",
-                  "Association with premium event",
-                  "Referral business opportunities",
-                ],
-              },
-              {
-                no: "03",
-                title: "Stall Design & Fabrication",
-                image: "/images/partnership/1.png",
-                color: "#11a7b8",
-                link: "/fabrication-partner",
-                icon: "/images/partnership/home.png",
-                points: [
-                  "Official branding on event collaterals",
-                  "High visibility at venue",
-                  "Access to exhibitors for stall needs",
-                  "Repeat business potential",
-                  "Showcase portfolio to global brands",
-                ],
-              },
-              {
-                no: "04",
-                title: "Logistics Partner",
-                image: "/images/partnership/Logistics.png",
-                color: "#7b43c9",
-                link: "/logistic-partner",
-                icon: "/images/partnership/delivery.png",
-
-                points: [
-                  "Listed as official logistics partner",
-                  "International partner recognition",
-                  "Continuous business opportunities",
-                  "Access to exhibitors logistics needs",
-                  "Long-term contracts",
-                ],
-              },
-              {
-                no: "05",
-                title: "Printing & Branding",
-                image: "/images/partnership/printing.png",
-                color: "#ff7a00",
-                link: "/printing-branding-partner",
-                icon: "/images/partnership/print.png",
-                points: [
-                  "Branding across event materials",
-                  "On-site branding opportunities",
-                  "High footfall audience visibility",
-                  "Year-round referrals",
-                  "Association with globally recognized event",
-                ],
-              },
-              {
-                no: "06",
-                title: "Hospitality Partner",
-                image: "/images/partnership/hospitality.jpg",
-                color: "#e93d8b",
-                link: "/hospitality-partner",
-                icon: "/images/partnership/bell.png",
-                points: [
-                  "Recognition as hospitality partner",
-                  "Networking with delegates & exhibitors",
-                  "Brand exposure at venue",
-                  "Long-term collaboration opportunities",
-                  "Enhance brand credibility",
-                ],
-              },
-            ].map((item, idx) => (
+            {(partnerCards.length > 0 ? partnerCards : fallbackCards).map((item, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ y: -6 }}
@@ -431,7 +460,7 @@ const Partnership = () => {
                 <div
                   className="h-[200px] bg-cover bg-center relative"
                   style={{
-                    backgroundImage: `url(${item.image})`,
+                    backgroundImage: `url(${formatUrl(item.image)})`,
                   }}
                 >
 
@@ -449,7 +478,7 @@ const Partnership = () => {
                   >
 
                     <img
-                      src={item.icon}
+                      src={formatUrl(item.icon)}
                       alt=""
                       className="w-full h-full object-contain p-4"
                     />
