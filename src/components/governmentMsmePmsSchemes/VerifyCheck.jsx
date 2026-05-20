@@ -18,7 +18,7 @@ const VerifyCheck = () => {
             btn: "VERIFY LISTING",
             icon: BadgeCheck,
             color: "blue",
-            link: "https://my.msme.gov.in",
+            link: "https://my.msme.gov.in/MyMsme/Reg/COM_ViewEvent.aspx",
             img: "/mpscheme/qa2.png"
         },
         {

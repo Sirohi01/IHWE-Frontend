@@ -32,14 +32,14 @@ const LogisticFooter: React.FC = () => {
         </div>
 
         {/* Middle Section: Contact Info with Dividers */}
-        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
+        <div className="flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-center justify-center gap-4 sm:gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
 
           {/* Email */}
           <div className="flex items-center gap-2.5 group">
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
               <Mail className="w-[16px] h-[16px]" />
             </div>
-            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+            <a href="mailto:info@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
               info@ihwe.in
             </a>
           </div>
@@ -51,7 +51,7 @@ const LogisticFooter: React.FC = () => {
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
               <Phone className="w-[16px] h-[16px]" />
             </div>
-            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+            <a href="tel:+919654900525" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
               +91 9654900525
             </a>
           </div>

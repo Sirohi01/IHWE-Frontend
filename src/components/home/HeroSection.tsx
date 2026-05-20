@@ -351,7 +351,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               className="flex flex-wrap flex-col sm:flex-row gap-3 items-start sm:items-center w-full sm:w-auto"
             >
               {slides[current].button1Name && (
-                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-[75%] max-w-[280px] sm:max-w-none sm:w-auto">
                   {/* Enhanced Gold Sparkles */}
                   <Sparkle style={{ top: '-15px', left: '10%', animationDelay: '0s' }} />
                   <Sparkle style={{ top: '-12px', left: '45%', animationDelay: '0.4s' }} />
@@ -402,7 +402,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               )}
 
               {slides[current].button3Name && (
-                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-[75%] max-w-[280px] sm:max-w-none sm:w-auto">
                   {/* Enhanced Blue Sparkles */}
                   <Sparkle color="#60a5fa" style={{ top: '-15px', left: '20%', animationDelay: '0.2s' }} />
                   <Sparkle color="#60a5fa" style={{ bottom: '-15px', right: '15%', animationDelay: '0.6s' }} />
@@ -440,7 +440,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               )}
 
               {slides[current].button2Name && (
-                <div style={{ position: 'relative', display: 'inline-block' }} className="w-full sm:w-auto">
+                <div style={{ position: 'relative', display: 'inline-block' }} className="w-[75%] max-w-[280px] sm:max-w-none sm:w-auto">
                   {/* Enhanced Green Sparkles */}
                   <Sparkle color="#4ade80" style={{ top: '-15px', right: '20%', animationDelay: '0.4s' }} />
                   <Sparkle color="#4ade80" style={{ bottom: '-15px', left: '15%', animationDelay: '0.8s' }} />

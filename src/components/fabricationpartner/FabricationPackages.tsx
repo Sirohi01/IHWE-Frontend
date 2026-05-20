@@ -102,7 +102,7 @@ const FabricationPackages = () => {
       </div>
 
       {/* Footer Notes */}
-      <div className="bg-[#01122c] px-[14px] py-[10px] mt-auto">
+      <div className="bg-[#01122c] px-[14px] py-[10px] mt-auto flex flex-col sm:flex-row lg:flex-col flex-wrap justify-center sm:justify-between lg:justify-start gap-y-2 gap-x-4">
         {[
           "Custom packages available on request",
           "GST as applicable",
@@ -110,13 +110,13 @@ const FabricationPackages = () => {
         ].map((note, i) => (
           <div
             key={i}
-            className="flex items-center gap-[6px] mb-[5px] last:mb-0"
+            className="flex items-center gap-[6px]"
           >
-            <div className="w-[16px] h-[16px] bg-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
-              <Check className="w-[9px] h-[9px] text-white" strokeWidth={4} />
+            <div className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] bg-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="w-[7px] h-[7px] sm:w-[9px] sm:h-[9px] text-white" strokeWidth={4} />
             </div>
 
-            <p className="text-white text-[10px] font-bold uppercase tracking-tight">
+            <p className="text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-tight">
               {note}
             </p>
           </div>

@@ -119,7 +119,7 @@ const LogisticPackages: React.FC = () => {
         ))}
       </div>
 
-      <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[10px] lg:py-[7px] mt-auto flex flex-wrap lg:flex-nowrap justify-center sm:justify-between items-center gap-y-2 gap-x-4">
+      <div className="bg-gradient-to-r from-[#001D3D] to-[#000000] px-[16px] py-[10px] lg:py-[7px] mt-auto flex flex-col sm:flex-row flex-wrap lg:flex-nowrap justify-center sm:justify-between items-center gap-y-2 gap-x-4">
         {[
           { text: "Custom packages available on request", icon: <Check /> },
           { text: "GST as applicable", icon: <Check /> },
@@ -129,8 +129,11 @@ const LogisticPackages: React.FC = () => {
             <div className="w-[12px] h-[12px] border border-[#4E9F3D] rounded-full flex items-center justify-center flex-shrink-0">
               <Check className="w-[7px] h-[7px] text-[#4E9F3D]" strokeWidth={4} />
             </div>
-            <p className="text-white text-[7.5px] font-bold uppercase tracking-tight opacity-90 leading-none">
-              {note.text.split(' ').slice(0, 2).join(' ')}<br />{note.text.split(' ').slice(2).join(' ')}
+            <p className="text-white text-[10px] sm:text-[8px] lg:text-[7.5px] font-bold uppercase tracking-tight opacity-90 leading-tight">
+              <span className="lg:hidden">{note.text}</span>
+              <span className="hidden lg:inline">
+                {note.text.split(' ').slice(0, 2).join(' ')}<br />{note.text.split(' ').slice(2).join(' ')}
+              </span>
             </p>
           </div>
         ))}

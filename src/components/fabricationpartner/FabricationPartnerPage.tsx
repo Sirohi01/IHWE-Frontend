@@ -12,23 +12,25 @@ const FabricationPartnerPage: React.FC = () => {
       <FabricationHero />
 
       {/* Stats + Benefits + Packages */}
-      <div className="mx-auto max-w-[1400px] px-6 md:px-8 -mt-2 relative z-20">
+      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-8 -mt-2 relative z-20">
         {/* Stats Bar - Width slightly increased and left-aligned */}
-        <div className="max-w-[1000px]">
+        <div className="max-w-[1000px] mx-auto lg:ml-0">
           <FabricationStats />
         </div>
 
         {/* Benefits (3 cols) + Packages (sidebar) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-8">
-          <div className="lg:col-span-9 -mt-4">
+          <div className="lg:col-span-9 lg:-mt-4">
             <FabricationBenefits />
           </div>
-          <div className="lg:col-span-3 -mt-20">
+          <div className="lg:col-span-3 lg:-mt-20">
             <FabricationPackages />
           </div>
         </div>
         {/* Footer */}
-      <FabricationFooter />
+        <div className="w-full mt-8 pb-4">
+          <FabricationFooter />
+        </div>
       </div>
 
       

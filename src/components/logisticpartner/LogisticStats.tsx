@@ -38,7 +38,7 @@ const stats = [
 
 const LogisticStats: React.FC = () => {
   return (
-    <div className="bg-white rounded-[20px] border border-[#E2E8F0] shadow-[0_20px_50px_rgba(0,0,0,0.08)] p-[12px_20px] mx-auto max-w-[1200px]">
+    <div className="bg-white rounded-[20px] border border-[#E2E8F0] shadow-[0_20px_50px_rgba(0,0,0,0.08)] p-[16px_12px] md:p-[12px_20px] mx-auto max-w-[1200px]">
       <div className="grid grid-cols-2 md:flex md:flex-row items-center justify-between gap-y-4 gap-x-2 md:gap-0">
         {stats.map((stat, index) => (
           <React.Fragment key={index}>
@@ -51,16 +51,16 @@ const LogisticStats: React.FC = () => {
               }`}
             >
               <div 
-                className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 shadow-md"
+                className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] rounded-full flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 shadow-md shrink-0"
                 style={{ backgroundColor: stat.color }}
               >
-                {stat.icon}
+                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-4 h-4 md:w-5 md:h-5" })}
               </div>
               <div className="flex flex-col">
-                <span className="text-[18px] font-black text-[#0B2C66] leading-none mb-0.5">
+                <span className="text-sm sm:text-[18px] font-black text-[#0B2C66] leading-none mb-0.5">
                   {stat.value}
                 </span>
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight leading-tight whitespace-pre-line">
+                <span className="text-[9px] md:text-[10px] font-bold text-gray-500 uppercase tracking-tight leading-tight whitespace-pre-line">
                   {stat.label}
                 </span>
               </div>
