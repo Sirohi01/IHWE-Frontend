@@ -1,47 +1,57 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Box, Star, Truck, Crown } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { Check } from 'lucide-react';
 
-const packages = [
-  {
-    name: "Associate Partner",
-    price: "₹1,25,000 + GST",
-    color: "#4E9F3D",
-    bgColor: "bg-[#F0FDF4]",
-    icon: <Truck className="w-7 h-7" />,
-    features: [
-      "Logo on website & digital platforms",
-    ],
-  },
-  {
-    name: "Preferred Partner",
-    price: "₹2,25,000 + GST",
-    color: "#0B2C66",
-    bgColor: "bg-[#EFF6FF]",
-    icon: <Truck className="w-7 h-7" />,
-    features: [
-      "All benefits of Associate Partner",
-      "Dedicated email promotions",
-      "Premium logo placement",
-    ],
-  },
-  {
-    name: "Premier Partner",
-    price: "₹3,75,000 + GST",
-    color: "#7C3AED",
-    bgColor: "bg-[#F5F3FF]",
-    icon: <Truck className="w-7 h-7" />,
-    features: [
-      "All benefits of Preferred Partner",
-      "On-site branding (booth / signage)",
-      "Speaking opportunity / brand showcase",
-      "Featured listing in all marketing",
-    ],
-  },
-];
+const renderIcon = (iconName: string, className: string = "w-5 h-5") => {
+  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+  return <IconComponent className={className} />;
+};
+
+interface LogisticPackagesProps {
+  data?: any[];
+}
+
+const LogisticPackages: React.FC<LogisticPackagesProps> = ({ data }) => {
+  const packages = data || [
+    {
+      name: "Associate Partner",
+      price: "₹1,25,000 + GST",
+      color: "#4E9F3D",
+      bgColor: "bg-[#F0FDF4]",
+      icon: "Truck",
+      features: [
+        "Logo on website & digital platforms",
+      ],
+    },
+    {
+      name: "Preferred Partner",
+      price: "₹2,25,000 + GST",
+      color: "#0B2C66",
+      bgColor: "bg-[#EFF6FF]",
+      icon: "Truck",
+      features: [
+        "All benefits of Associate Partner",
+        "Dedicated email promotions",
+        "Premium logo placement",
+      ],
+    },
+    {
+      name: "Premier Partner",
+      price: "₹3,75,000 + GST",
+      color: "#7C3AED",
+      bgColor: "bg-[#F5F3FF]",
+      icon: "Truck",
+      features: [
+        "All benefits of Preferred Partner",
+        "On-site branding (booth / signage)",
+        "Speaking opportunity / brand showcase",
+        "Featured listing in all marketing",
+      ],
+    },
+  ];
 
 
-const LogisticPackages: React.FC = () => {
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col shadow-sm h-full">
 
@@ -74,7 +84,7 @@ const LogisticPackages: React.FC = () => {
                 className="w-[18px] h-[25px] flex items-center justify-center text-white text-[9px]"
                 style={{ backgroundColor: pkg.color }}
               >
-                <Star className="w-[10px] h-[10px] fill-white text-white" />
+                <LucideIcons.Star className="w-[10px] h-[10px] fill-white text-white" />
               </div>
               <div
                 className="w-0 h-0"
@@ -91,7 +101,7 @@ const LogisticPackages: React.FC = () => {
                 className="w-[42px] h-[42px] rounded-full flex items-center justify-center text-white flex-shrink-0 bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8]"
                 style={{ background: pkg.name === "Preferred Partner" ? 'linear-gradient(to bottom right, #4E9F3D, #3d7a30)' : undefined }}
               >
-                {React.cloneElement(pkg.icon as React.ReactElement, { className: "w-5 h-5" })}
+                {renderIcon(pkg.icon, "w-5 h-5")}
               </div>
               <div className="flex-1">
                 <h4
@@ -105,7 +115,7 @@ const LogisticPackages: React.FC = () => {
                 </p>
 
                 <ul className="flex flex-col gap-[1px]">
-                  {pkg.features.map((feature, i) => (
+                  {pkg.features.map((feature: string, i: number) => (
                     <li key={i} className="flex items-center gap-[6px] text-[11px] font-bold text-[#4A5568] leading-tight">
                       <div className="w-[3.5px] h-[3.5px] rounded-full bg-gray-400" />
                       {feature}
@@ -142,7 +152,7 @@ const LogisticPackages: React.FC = () => {
 };
 
 
-const Check = ({ className, strokeWidth, style }: { className?: string; strokeWidth?: number; style?: React.CSSProperties }) => (
+const CustomCheck = ({ className, strokeWidth, style }: { className?: string; strokeWidth?: number; style?: React.CSSProperties }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className={className}

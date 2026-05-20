@@ -10,7 +10,21 @@ import { Link } from 'react-router-dom';
 
 import busAndTruck from '../../assets/logistic/raman.png';
 
-const LogisticFooter: React.FC = () => {
+interface LogisticFooterProps {
+  data?: any;
+}
+
+const LogisticFooter: React.FC<LogisticFooterProps> = ({ data }) => {
+  const successTitle = data?.successTitle || "LET'S MOVE SUCCESS TOGETHER!";
+  const successSub = data?.successSub || "Partner with IHWE 2026 and deliver excellence at every step.";
+  const email = data?.email || "info@ihwe.in";
+  const phone = data?.phone || "+91 9654900525";
+  const website = data?.website || "www.ihwe.in";
+
+  const successTitleParts = successTitle.split(' ');
+  const successTitleLast = successTitleParts.length > 1 ? successTitleParts.pop() : '';
+  const successTitleFirst = successTitleParts.join(' ');
+
   return (
     <footer className="bg-[#001D3D] py-4 lg:py-0.5 mt-2">
       <div className="max-w-[1350px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 px-4">
@@ -23,10 +37,10 @@ const LogisticFooter: React.FC = () => {
 
           <div className="flex flex-col">
             <h3 className="text-white font-black text-[14px] uppercase leading-tight sm:whitespace-nowrap">
-              LET'S MOVE SUCCESS <span className="text-[#4E9F3D]">TOGETHER!</span>
+              {successTitleFirst} {successTitleLast && <span className="text-[#4E9F3D]">{successTitleLast}</span>}
             </h3>
             <p className="text-white text-[8.5px] font-medium opacity-80 mt-0 max-w-[280px]">
-              Partner with IHWE 2026 and deliver excellence at every step.
+              {successSub}
             </p>
           </div>
         </div>
@@ -39,8 +53,8 @@ const LogisticFooter: React.FC = () => {
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
               <Mail className="w-[16px] h-[16px]" />
             </div>
-            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
-              info@ihwe.in
+            <a href={`mailto:${email}`} className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              {email}
             </a>
           </div>
 
@@ -51,8 +65,8 @@ const LogisticFooter: React.FC = () => {
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
               <Phone className="w-[16px] h-[16px]" />
             </div>
-            <a href="mailto:partner@ihwe.in" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
-              +91 9654900525
+            <a href={`tel:${phone}`} className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              {phone}
             </a>
           </div>
 
@@ -63,8 +77,8 @@ const LogisticFooter: React.FC = () => {
             <div className="w-[34px] h-[34px] bg-[#4E9F3D] rounded-full flex items-center justify-center text-white shadow-[0_0_10px_rgba(78,159,61,0.3)] transition-all duration-300 group-hover:scale-105">
               <Globe className="w-[16px] h-[16px]" />
             </div>
-            <a href="https://www.ihwe.in" target="_blank" rel="noreferrer" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
-              www.ihwe.in
+            <a href={website.startsWith('http') ? website : `https://${website}`} target="_blank" rel="noreferrer" className="text-white font-bold text-[12px] hover:text-[#4E9F3D] transition-colors">
+              {website.replace(/^https?:\/\//, '')}
             </a>
           </div>
 

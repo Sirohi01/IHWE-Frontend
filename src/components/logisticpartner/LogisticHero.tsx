@@ -1,13 +1,59 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Megaphone, Globe, Handshake, Award } from 'lucide-react';
-import heroBg from '../../assets/logistic/nisu.webp';
+import * as LucideIcons from 'lucide-react';
+import heroBgFallback from '../../assets/logistic/nisu.webp';
+import { SERVER_URL } from '@/lib/api';
 
-const LogisticHero: React.FC = () => {
+const formatUrl = (url: string) => {
+  if (!url) return "";
+
+  // Normalize backslashes to forward slashes for easier checking
+  const normalizedUrl = url.replace(/\\/g, "/");
+
+  if (normalizedUrl.startsWith("http://") || normalizedUrl.startsWith("https://")) return normalizedUrl;
+
+  if (normalizedUrl.startsWith("/uploads") || normalizedUrl.startsWith("uploads/")) {
+    const cleanUrl = normalizedUrl.startsWith("/") ? normalizedUrl : `/${normalizedUrl}`;
+    return `${SERVER_URL}${cleanUrl}`;
+  }
+
+  if (normalizedUrl.startsWith("/")) {
+    return `${SERVER_URL}${normalizedUrl}`;
+  }
+
+  return normalizedUrl;
+};
+
+const renderIcon = (iconName: string, className: string = "w-[15px] h-[15px]") => {
+  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+  return <IconComponent className={className} />;
+};
+
+interface LogisticHeroProps {
+  data?: any;
+}
+
+const LogisticHero: React.FC<LogisticHeroProps> = ({ data }) => {
+  const bgImage = data?.bgImage ? formatUrl(data.bgImage) : heroBgFallback;
+  const title = data?.title || "LOGISTICS PARTNER";
+  const subTitle = data?.subTitle || "Powering Smooth Connections. Delivering Success Together.\nBe the preferred logistics partner for a global platform that unites health, wellness and innovation.";
+  const whyPartnerTitle = data?.whyPartnerTitle || "WHY PARTNER\nWITH IHWE 2026?";
+  const whyPartnerPoints = data?.whyPartnerPoints || [
+    { text: "Access 8,000+ exhibitors, buyers & decision makers", icon: "Users" },
+    { text: "High visibility before, during & after the event", icon: "Megaphone" },
+    { text: "Be part of a trusted global health & wellness platform", icon: "Globe" },
+    { text: "Build strong partnerships & long-term relationships", icon: "Handshake" },
+    { text: "Enhance brand credibility & market leadership", icon: "Award" },
+  ];
+
+  const titleParts = title.split(' ');
+  const titleFirst = titleParts.slice(0, titleParts.length > 1 ? titleParts.length - 1 : 1).join(' ');
+  const titleLast = titleParts.length > 1 ? titleParts[titleParts.length - 1] : '';
+
   return (
     <section
       className="relative min-h-[350px] lg:h-[350px] bg-white bg-cover bg-top bg-no-repeat overflow-hidden flex flex-col pb-6 lg:pb-0"
-      style={{ backgroundImage: `url(${heroBg})` }}
+      style={{ backgroundImage: `url("${bgImage}")` }}
     >
       <div className="relative z-10 mx-auto max-w-[1400px] w-full h-full px-4 sm:px-6 md:px-12 flex flex-col justify-start pt-0 pb-6 lg:pb-10">
         <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[20px] lg:mt-[30px]">
@@ -55,7 +101,7 @@ const LogisticHero: React.FC = () => {
               <p className="pb-1 text-white font-[900] text-[16px] leading-none uppercase tracking-tight">
                 Logistics
               </p>
-              <p className="text-white font-[900] text-[16spx] leading-none uppercase tracking-tight mb-[14px]">
+              <p className="text-white font-[900] text-[16px] leading-none uppercase tracking-tight mb-[14px]">
                 Partner
               </p>
 
@@ -67,8 +113,8 @@ const LogisticHero: React.FC = () => {
               Partner with us as a
             </p>
             <h2 className="text-[26px] sm:text-[38px] lg:text-[46px] font-[1000] leading-[1] lg:leading-[0.8] tracking-tighter flex flex-wrap items-center gap-2 sm:gap-4">
-              <span className="text-[#0B2C66]">LOGISTICS</span>
-              <span className="text-[#4E9F3D]">PARTNER</span>
+              <span className="text-[#0B2C66]">{titleFirst}</span>
+              {titleLast && <span className="text-[#4E9F3D]">{titleLast}</span>}
             </h2>
 
 
@@ -82,9 +128,8 @@ const LogisticHero: React.FC = () => {
               <div className="h-[1.5px] flex-1 bg-gradient-to-r from-gray-300 to-transparent" />
             </div>
 
-            <p className="text-[#0B2C66] text-[12px] sm:text-[14px] font-bold leading-[1.4] max-w-[500px] opacity-90 mt-1">
-              Powering Smooth Connections. Delivering Success Together.<br />
-              Be the preferred logistics partner for a global platform that unites health, wellness and innovation.
+            <p className="text-[#0B2C66] text-[12px] sm:text-[14px] font-bold leading-[1.4] max-w-[500px] opacity-90 mt-1 whitespace-pre-line">
+              {subTitle}
             </p>
           </div>
 
@@ -96,32 +141,30 @@ const LogisticHero: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               className="relative lg:absolute lg:-top-[110px] lg:left-[15px] lg:right-0 bg-[#001D3D] backdrop-blur-md rounded-[15px] p-[14px_18px] w-full max-w-[320px] lg:w-[260px] shadow-[0_40px_80px_rgba(0,0,0,0.4)] border border-white/10"
             >
-              <h3 className="text-white font-black text-[16px] leading-tight mb-1.5 uppercase tracking-tight">
-                WHY PARTNER<br />
-                WITH <span className="text-[#4E9F3D]">IHWE 2026?</span>
+              <h3 className="text-white font-black text-[16px] leading-tight mb-1.5 uppercase tracking-tight whitespace-pre-line">
+                {whyPartnerTitle.split('\n').map((line: string, idx: number) => (
+                  <React.Fragment key={idx}>
+                    {idx === 1 ? <span className="text-[#4E9F3D]">{line}</span> : line}
+                    {idx === 0 && <br />}
+                  </React.Fragment>
+                ))}
               </h3>
 
               <div className="w-[35px] h-[1.5px] bg-[#4E9F3D] mb-3" />
 
               <div className="flex flex-col">
-                {[
-                  { text: "Access 8,000+ exhibitors, buyers & decision makers", icon: <Users /> },
-                  { text: "High visibility before, during & after the event", icon: <Megaphone /> },
-                  { text: "Be part of a trusted global health & wellness platform", icon: <Globe /> },
-                  { text: "Build strong partnerships & long-term relationships", icon: <Handshake /> },
-                  { text: "Enhance brand credibility & market leadership", icon: <Award /> },
-                ].map((item, i) => (
+                {whyPartnerPoints.map((item: any, i: number) => (
                   <React.Fragment key={i}>
                     <div className="flex gap-3 items-center group py-2">
                       <div className="w-[32px] h-[32px] bg-gradient-to-b from-[#3B82F6] to-[#1D4ED8] rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-lg transition-all duration-300 group-hover:scale-110 border border-white/10">
-                        {React.cloneElement(item.icon as React.ReactElement, { className: "w-[15px] h-[15px]" })}
+                        {renderIcon(item.icon, "w-[15px] h-[15px]")}
                       </div>
 
                       <p className="text-white font-bold text-[9.2px] leading-tight tracking-tight">
                         {item.text}
                       </p>
                     </div>
-                    {i < 4 && <div className="border-t border-dashed border-white/5 w-full" />}
+                    {i < whyPartnerPoints.length - 1 && <div className="border-t border-dashed border-white/5 w-full" />}
                   </React.Fragment>
                 ))}
               </div>

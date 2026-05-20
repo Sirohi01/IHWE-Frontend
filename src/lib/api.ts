@@ -310,6 +310,27 @@ export const partnerComparisonApi = {
         return data.success ? data.data : null;
     }
 };
+export const printingBrandingPartnerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/printing-branding-partner`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const logisticPartnerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/logistic-partner`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const hospitalityPartnerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/hospitality-partner`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
 
 export const globalPlatformApi = {
     get: async () => {
