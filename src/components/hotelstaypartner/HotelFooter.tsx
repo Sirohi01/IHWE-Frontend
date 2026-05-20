@@ -1,18 +1,19 @@
 import React from 'react';
-import {
-  Users,
-  BarChart3,
-  Handshake,
-  Award,
-  Globe,
-  Mail,
-  Phone,
-  QrCode
-} from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { SERVER_URL } from '../../lib/api';
 import { Link } from 'react-router-dom';
-import footerBadge from '../../assets/hotel/hotelfoterimage.png';
 
-const HotelFooter: React.FC = () => {
+const IconRenderer = ({ name, className }: { name: string, className?: string }) => {
+  const Icon = (Icons as any)[name] || Icons.Star;
+  return <Icon className={className} />;
+};
+
+interface HotelFooterProps {
+  footer: any;
+}
+
+const HotelFooter: React.FC<HotelFooterProps> = ({ footer }) => {
+  const footerBgImage = footer?.image?.startsWith('/uploads') ? `${SERVER_URL}${footer.image}` : footer?.image;
   return (
     <footer className="bg-[#051124] py-6 lg:py-1 px-4 relative overflow-hidden">
 
@@ -26,40 +27,34 @@ const HotelFooter: React.FC = () => {
 
           <div className="relative w-20 h-20 flex-shrink-0">
             <img
-              src={footerBadge}
+              src={footerBgImage}
               alt="IHWE Footer Badge"
               className="w-full h-full object-contain"
             />
           </div>
 
           <div className="flex flex-col text-left">
-            <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight">
-              Together, let's create
+            <p className="text-white font-medium text-[11px] uppercase tracking-wide leading-tight whitespace-pre-line">
+              {footer?.footerTitle || "Together, let's create"}
             </p>
-            <p className="text-white font-black text-[16px] uppercase leading-tight tracking-tight">
-              Memorable Experiences
+            <p className="text-white font-black text-[16px] uppercase leading-tight tracking-tight whitespace-pre-line">
+              {footer?.footerSubtitle || "Memorable Experiences"}
             </p>
-            <p className="text-[#D4AF37] font-serif italic text-[14px] leading-none">
-              for a Healthier Tomorrow
+            <p className="text-[#D4AF37] font-serif italic text-[14px] leading-none whitespace-pre-line">
+              {footer?.footerItalicText || "for a Healthier Tomorrow"}
             </p>
           </div>
         </div>
 
 
         <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-y-4 gap-x-2 lg:gap-0 flex-1 px-2 w-full max-w-[500px] lg:max-w-none">
-          {[
-            { icon: <Users />, label: "Global Audience Access" },
-            { icon: <BarChart3 />, label: "Brand Exposure" },
-            { icon: <Handshake />, label: "Business Growth" },
-            { icon: <Award />, label: "Long-term Partnership" },
-            { icon: <Globe />, label: "Positive Global Impact" },
-          ].map((item, i) => (
+          {(footer?.perks || []).map((item: any, i: number) => (
             <React.Fragment key={i}>
               <div className="flex flex-col items-center text-center px-3 group flex-shrink-0">
                 <div className="w-8 h-8 rounded-full bg-[#0B2C66] border border-white/20 flex items-center justify-center text-white mb-0.5 shadow-inner group-hover:bg-[#4E9F3D] transition-colors duration-300">
-                  {React.cloneElement(item.icon as React.ReactElement, { className: "w-4 h-4" })}
+                  <IconRenderer name={item.icon} className="w-4 h-4" />
                 </div>
-                <p className="text-white text-[7px] font-bold uppercase tracking-tight leading-tight max-w-[55px]">
+                <p className="text-white text-[7px] font-bold uppercase tracking-tight leading-tight max-w-[55px] whitespace-pre-line">
                   {item.label}
                 </p>
               </div>
@@ -71,18 +66,18 @@ const HotelFooter: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto justify-center">
           <div className="bg-white rounded-md overflow-hidden min-w-[240px] shadow-md border border-white/10 w-full sm:w-auto">
             <div className="bg-[#4E9F3D] py-0.5 px-2 text-center">
-              <h4 className="text-white font-black text-[9px] uppercase tracking-wider">
-                Let's Grow Together!
+              <h4 className="text-white font-black text-[9px] uppercase tracking-wider whitespace-pre-line">
+                {footer?.footerGrowTitle || "Let's Grow Together!"}
               </h4>
             </div>
             <div className="p-1 px-3 flex flex-col gap-0.5 items-center sm:items-start">
-              <a href="mailto:partner@ihwe.in" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                <Mail className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                <span className="font-black text-[11px]">info@ihwe.in</span>
+              <a href={`mailto:${footer?.email || 'info@ihwe.in'}`} className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <IconRenderer name="Mail" className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">{footer?.email || 'info@ihwe.in'}</span>
               </a>
-              <a href="tel:+91 9654900525" className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
-                <Phone className="w-3.5 h-3.5 text-[#4E9F3D]" />
-                <span className="font-black text-[11px]">+91 9654900525</span>
+              <a href={`tel:${footer?.phone || '+91 9654900525'}`} className="flex items-center gap-2 text-[#0B2C66] hover:text-[#4E9F3D] transition-colors group">
+                <IconRenderer name="Phone" className="w-3.5 h-3.5 text-[#4E9F3D]" />
+                <span className="font-black text-[11px]">{footer?.phone || '+91 9654900525'}</span>
               </a>
             </div>
           </div>
