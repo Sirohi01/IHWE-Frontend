@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-  Users,
-  Megaphone,
-  TrendingUp,
-  Handshake,
-  Globe,
-  Mail,
-  Phone,
-  QrCode,
-  Plane,
-} from 'lucide-react';
+import { Mail, Phone } from 'lucide-react';
+import { SERVER_URL } from '../../lib/api';
 
-const FabricationFooter = () => {
+interface FabricationFooterProps {
+  footer?: any;
+}
+
+const FabricationFooter: React.FC<FabricationFooterProps> = ({ footer }) => {
+  const footerImgUrl = footer?.image?.startsWith('/uploads') ? `${SERVER_URL}${footer.image}` : (footer?.image || "/images/stall.png");
+
   return (
     <footer className="bg-[#f5f7fa] py-2">
       <div className="max-w-[1500px] mx-auto">
@@ -38,7 +35,7 @@ const FabricationFooter = () => {
               {/* IMAGE */}
               <div className="w-[120px] md:w-[160px] shrink-0 hidden md:block">
                 <img
-                  src="/images/stall.png"
+                  src={footerImgUrl}
                   alt="Stall"
                   className="w-full object-contain opacity-95"
                 />
@@ -47,13 +44,12 @@ const FabricationFooter = () => {
               {/* TEXT */}
               <div>
                 <h3 className="text-white uppercase font-black leading-[1.05] text-[16px] md:text-[20px]">
-                  LET’S DESIGN.
+                  {footer?.footerTitle || "LET’S DESIGN."}
                   <br />
-                  LET’S BUILD.
+                  {footer?.footerSubtitle || "LET’S BUILD."}
                   <br />
-                  LET’S{" "}
                   <span className="text-[#00a9b7]">
-                    GROW TOGETHER!
+                    {footer?.footerItalicText || "LET'S GROW TOGETHER!"}
                   </span>
                 </h3>
               </div>
@@ -64,14 +60,14 @@ const FabricationFooter = () => {
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
 
             {/* EMAIL */}
-            <a href="mailto:info@ihwe.in" className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
+            <a href={`mailto:${footer?.email || "info@ihwe.in"}`} className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
 
               <div className="w-12 h-12 md:w-[64px] md:h-[64px] rounded-full bg-[#0097a7] flex items-center justify-center shadow-lg shrink-0">
                 <Mail className="w-[22px] h-[22px] md:w-[30px] md:h-[30px] text-white" />
               </div>
 
               <h4 className="text-white text-[16px] md:text-[18px] lg:text-[20px] font-semibold tracking-wide hover:text-[#00b7c2] transition-colors">
-                info@ihwe.in
+                {footer?.email || "info@ihwe.in"}
               </h4>
 
             </a>
@@ -80,14 +76,14 @@ const FabricationFooter = () => {
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
 
             {/* PHONE */}
-            <a href="tel:+919654900525" className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
+            <a href={`tel:${(footer?.phone || "+919654900525").replace(/\s+/g, '')}`} className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
 
               <div className="w-12 h-12 md:w-[64px] md:h-[64px] rounded-full bg-[#00a388] flex items-center justify-center shadow-lg shrink-0">
                 <Phone className="w-[22px] h-[22px] md:w-[30px] md:h-[30px] text-white" />
               </div>
 
               <h4 className="text-white text-[16px] md:text-[18px] lg:text-[18px] font-semibold tracking-wide hover:text-[#00a388] transition-colors">
-                +91 9654900525
+                {footer?.phone || "+91 9654900525"}
               </h4>
 
             </a>

@@ -133,6 +133,8 @@ const PartnerRegistration = () => {
         switch (type) {
             case "hotel":
                 return ["Hotel Booking Assistance", "Hospitality & Concierge", "Other Services"];
+            case "fabrication":
+                return ["Exhibition Stall Fabrication", "Custom Stall Designing", "Other Services"];
             case "travel":
                 return ["Flight Booking", "Airport Transfers", "Local Transportation", "Other Services"];
             case "logistics":
@@ -155,6 +157,10 @@ const PartnerRegistration = () => {
                 case "hotel":
                     category = "Hospitality";
                     interest = "Official Hotel Partner";
+                    break;
+                case "fabrication":
+                    category = "Stall Fabrication";
+                    interest = "Official Stall Fabrication Partner";
                     break;
                 case "travel":
                     category = "Travel & Tourism";
