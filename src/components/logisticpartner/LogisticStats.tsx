@@ -36,7 +36,7 @@ const LogisticStats: React.FC<LogisticStatsProps> = ({ data }) => {
                 className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] rounded-full flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 shadow-md shrink-0"
                 style={{ backgroundColor: stat.color }}
               >
-                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-4 h-4 md:w-5 md:h-5" })}
+                {renderIcon(stat.icon, "w-4 h-4 md:w-5 md:h-5")}
               </div>
               <div className="flex flex-col">
                 <span className="text-sm sm:text-[18px] font-black text-[#0B2C66] leading-none mb-0.5">

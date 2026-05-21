@@ -27,7 +27,7 @@ const defaultAdvantageIcons = [<Gem />, <FolderOpen />, <Users />, <BadgePercent
 
 const AdvantageCard = ({ title, icon, showBorder }) => {
     return (
-        <div className={`flex items-center gap-4 flex-col flex-1 px-4 ${showBorder ? 'border-r border-gray' : ''} flex-1`}>
+        <div className={`flex flex-col items-center flex-1 ${showBorder ? 'border-b md:border-b-0 md:border-r border-gray-400 pb-4 md:pb-0' : ''} px-2`}>
             <div className="img-container p-1 rounded-full text-lg">{icon}</div>
             <h3 className="text-xs font-semibold text-[#0D0B61] text-center">{title}</h3>
         </div>
@@ -37,11 +37,11 @@ const AdvantageCard = ({ title, icon, showBorder }) => {
 const AdvantageCardGroup = ({ items }) => {
     const list = items && items.length ? items : defaultAdvantagesData;
     return (
-        <div className="flex justify-between items-center gap-4 mt-4 shadow-lg shadow-black/20 rounded-xl p-4">
+        <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mt-4 shadow-lg shadow-black/20 rounded-xl p-4">
             {list.map((advantage, index) => (
                 <AdvantageCard
                     key={index}
-                    title={advantage.title}
+                    title={advantage.title || advantage.text}
                     icon={advantage.icon || defaultAdvantageIcons[index % defaultAdvantageIcons.length]}
                     showBorder={index !== list.length - 1}
                 />

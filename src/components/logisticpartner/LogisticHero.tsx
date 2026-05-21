@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import heroBgFallback from '../../assets/logistic/nisu.webp';
 import { SERVER_URL } from '@/lib/api';
-
+import heroBg from '../../assets/logistic/nisu.webp';
 const formatUrl = (url: string) => {
-  if (!url) return "";
+  if (!url || url === '/images/partnership/nisu.webp' || url === '/images/nisu.webp') return heroBgFallback;
 
   // Normalize backslashes to forward slashes for easier checking
   const normalizedUrl = url.replace(/\\/g, "/");
@@ -231,11 +231,11 @@ const LogisticHero: React.FC<LogisticHeroProps> = ({ data }) => {
 
             <div className="flex flex-col gap-3.5">
               {[
-                { text: "Access 8,000+ exhibitors, buyers & decision makers", icon: <Users /> },
-                { text: "High visibility before, during & after the event", icon: <Megaphone /> },
-                { text: "Be part of a trusted global health & wellness platform", icon: <Globe /> },
-                { text: "Build strong partnerships & long-term relationships", icon: <Handshake /> },
-                { text: "Enhance brand credibility & market leadership", icon: <Award /> },
+                { text: "Access 8,000+ exhibitors, buyers & decision makers", icon: <LucideIcons.Users /> },
+                { text: "High visibility before, during & after the event", icon: <LucideIcons.Megaphone /> },
+                { text: "Be part of a trusted global health & wellness platform", icon: <LucideIcons.Globe /> },
+                { text: "Build strong partnerships & long-term relationships", icon: <LucideIcons.Handshake /> },
+                { text: "Enhance brand credibility & market leadership", icon: <LucideIcons.Award /> },
               ].map((item, i) => (
                 <div key={i} className="flex gap-3 items-center">
                   <div className="w-[26px] h-[26px] bg-[#4E9F3D] rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-sm">

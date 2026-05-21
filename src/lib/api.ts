@@ -317,11 +317,17 @@ export const printingBrandingPartnerApi = {
         return data.success ? data.data : null;
     }
 };
+
 export const logisticPartnerApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/logistic-partner`);
-        const data = await response.json();
-        return data.success ? data.data : null;
+        try {
+            const response = await fetch(`${API_URL}/logistic-partner`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching logistic partner:", error);
+            return null;
+        }
     }
 };
 export const hospitalityPartnerApi = {
@@ -463,7 +469,7 @@ export const exhibitorApi = {
         }
         const response = await fetch(url, { cache: 'no-store' });
         const data = await response.json();
-        
+
         // Return full object if pagination metadata is present
         if (data.success && data.pagination) {
             return { data: data.data, pagination: data.pagination };
@@ -895,9 +901,9 @@ export const expoSupportEnquiryApi = {
     updateStatus: async (id: string, status: string, token: string) => {
         const response = await fetch(`${API_URL}/expo-support-enquiry/${id}/status`, {
             method: 'PUT',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ status })
         });
@@ -1019,55 +1025,55 @@ export const newTestimonialsApi = {
 
 // ─── Awards Nomination API ───
 export const awardsNominationApi = {
-  submit: async (payload: any) => {
-    const response = await fetch(`${API_URL}/awards-nomination`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    return await response.json();
-  },
-  uploadFile: async (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const response = await fetch(`${API_URL}/awards-nomination/upload`, {
-      method: 'POST',
-      body: formData
-    });
-    return await response.json();
-  },
-  getAll: async (filters?: { status?: string; awardCategory?: string; search?: string }) => {
-    const params = new URLSearchParams(filters as any);
-    const response = await fetch(`${API_URL}/awards-nomination?${params}`);
-    return await response.json();
-  },
-  getById: async (id: string) => {
-    const response = await fetch(`${API_URL}/awards-nomination/${id}`);
-    return await response.json();
-  },
-  updateStatus: async (id: string, status: string, adminRemarks?: string) => {
-    const response = await fetch(`${API_URL}/awards-nomination/${id}/status`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, adminRemarks })
-    });
-    return await response.json();
-  },
-  delete: async (id: string) => {
-    const response = await fetch(`${API_URL}/awards-nomination/${id}`, {
-      method: 'DELETE'
-    });
-    return await response.json();
-  }
+    submit: async (payload: any) => {
+        const response = await fetch(`${API_URL}/awards-nomination`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    uploadFile: async (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(`${API_URL}/awards-nomination/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        return await response.json();
+    },
+    getAll: async (filters?: { status?: string; awardCategory?: string; search?: string }) => {
+        const params = new URLSearchParams(filters as any);
+        const response = await fetch(`${API_URL}/awards-nomination?${params}`);
+        return await response.json();
+    },
+    getById: async (id: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}`);
+        return await response.json();
+    },
+    updateStatus: async (id: string, status: string, adminRemarks?: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status, adminRemarks })
+        });
+        return await response.json();
+    },
+    delete: async (id: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}`, {
+            method: 'DELETE'
+        });
+        return await response.json();
+    }
 };
 
 // ─── Award Categories API ───
 export const awardCategoryApi = {
-  getAll: async () => {
-    const response = await fetch(`${API_URL}/award-categories`);
-    const data = await response.json();
-    return data.success ? data.data : [];
-  }
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/award-categories`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
 };
 export const agendaApi = {
     get: async () => {

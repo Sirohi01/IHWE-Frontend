@@ -47,7 +47,7 @@ const CardWithTag = ({ title, icon, description, isOdd }) => {
 const CardWithTagGroup = ({ items }) => {
     const list = items && items.length ? items : defaultCardWithTagData;
     return (
-        <div className="flex justify-between items-stretch gap-4 mt-4 shadow-lg shadow-black/20 rounded-xl p-5">
+        <div className="flex flex-col md:flex-row justify-between items-stretch gap-4 mt-4 shadow-lg shadow-black/20 rounded-xl p-5">
             {list.map((stat, index) => (
                 <CardWithTag
                     key={index}

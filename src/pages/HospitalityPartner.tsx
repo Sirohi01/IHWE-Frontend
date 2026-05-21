@@ -248,40 +248,42 @@ const HospitalityPartner = () => {
 
                         {/* 2. STATS STRIP (Compacted) */}
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0 border border-slate-200 rounded-[1.5rem] overflow-hidden shadow-sm bg-white">
-                            {[
-                                { icon: persons, val: "8,000+", label: "Delegates & Exhibitors Expected", color: "text-white", bg: "bg-[#006b70]", isImg: true },
-                                { icon: globe, val: "Multiple", label: "Exhibitor Segments", color: "text-white", bg: "bg-[#0b1a3a]", isImg: true },
-                                { icon: calender, val: "3", label: "Power-Packed Days", color: "text-white", bg: "bg-[#b4841c]", isImg: true },
-                                { icon: power, val: "Unlimited", label: "Business Opportunities", color: "text-white", bg: "bg-[#0b1a3a]", isImg: true },
-                                { icon: bell, val: "High", label: "Brand Visibility & Exposure", color: "text-white", bg: "bg-[#006b70]", isImg: true }
-                            ].map((stat, i) => (
-                                <div key={i} className={`py-4 px-3 sm:px-4 flex items-center gap-2 sm:gap-4 border-r border-b md:border-b-0 border-slate-100 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 justify-center' : ''}`}>
-                                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shrink-0 shadow-md">
-                                        <img src={stat.icon} alt="" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
+                            {stats.map((stat: any, i: number) => {
+                                const icons = [persons, globe, calender, power, bell];
+                                const iconSrc = stat.icon || icons[i % icons.length];
+                                return (
+                                    <div key={i} className={`py-4 px-3 sm:px-4 flex items-center gap-2 sm:gap-4 border-r border-b md:border-b-0 border-slate-100 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 justify-center' : ''}`}>
+                                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shrink-0 shadow-md">
+                                            <img src={iconSrc} alt="" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
+                                        </div>
+                                        <div className="flex flex-col text-left">
+                                            <h5 className="text-[#0b1a3a] font-black text-sm sm:text-[16px] leading-none mb-1">{stat.val}</h5>
+                                            <p className="text-slate-500 text-[8px] sm:text-[9px] font-bold uppercase leading-tight max-w-[100px] whitespace-pre-line">{stat.label}</p>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col text-left">
-                                        <h5 className="text-[#0b1a3a] font-black text-sm sm:text-[16px] leading-none mb-1">{stat.val}</h5>
-                                        <p className="text-slate-500 text-[8px] sm:text-[9px] font-bold uppercase leading-tight max-w-[100px]">{stat.label}</p>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* CORE BENEFITS GRID */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 md:gap-2">
-                            {benefits.map((benefit: any, i: number) => (
-                                <div key={i} className="flex flex-col h-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow">
-                                    <div className="bg-[#006b70] text-white px-2 py-2 flex items-center justify-center text-center">
-                                        <span className="text-[10px] font-semibold uppercase tracking-tight leading-none">{benefit.title}</span>
-                                    </div>
-                                    <div className="px-6 py-4 md:py-2 flex-1 flex flex-col items-center text-center justify-center bg-white">
-                                        <div className="w-16 h-16 flex items-center justify-center mb-2">
-                                            <img src={resolveImg(benefit.icon, building)} alt="" className="w-16 h-16 object-contain" />
+                            {benefits.map((benefit: any, i: number) => {
+                                const benefitIcons = [building, idcard, bed, megaphone, awards];
+                                const iconSrc = benefit.icon ? resolveImg(benefit.icon, benefitIcons[i % benefitIcons.length]) : benefitIcons[i % benefitIcons.length];
+                                return (
+                                    <div key={i} className="flex flex-col h-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow">
+                                        <div className="text-white px-2 py-2 flex items-center justify-center text-center" style={{ backgroundColor: benefit.color || '#006b70' }}>
+                                            <span className="text-[10px] font-semibold uppercase tracking-tight leading-none">{benefit.title}</span>
                                         </div>
-                                        <p className="text-[10px] text-slate-600 leading-tight font-medium">{benefit.desc}</p>
+                                        <div className="px-6 py-4 md:py-2 flex-1 flex flex-col items-center text-center justify-center bg-white">
+                                            <div className="w-16 h-16 flex items-center justify-center mb-2">
+                                                <img src={iconSrc} alt="" className="w-16 h-16 object-contain" />
+                                            </div>
+                                            <p className="text-[10px] text-slate-600 leading-tight font-medium">{benefit.desc}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {/* ADDITIONAL ADVANTAGES STRIP */}
@@ -319,16 +321,18 @@ const HospitalityPartner = () => {
                             {packages.map((pkg: any, i: number) => (
                                 <div key={i} className="relative flex flex-col p-3 border-b last:border-b-0 border-slate-100 group transition-colors">
                                     <div className="flex items-center gap-4 mb-1 pr-10">
-                                        <div className={`w-14 h-14 rounded-full ${pkg.bg || "bg-[#006b70]"} flex items-center justify-center shrink-0 shadow-md border-2 border-white`}>
+                                        <div className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 shadow-md border-2 border-white"
+                                            style={{ backgroundColor: pkg.bg || '#006b70' }}>
                                             <Building2 className="w-7 h-7 text-white" />
                                         </div>
                                         <div className="flex flex-col">
-                                            <h4 className={`${pkg.color || "text-[#006b70]"} font-black text-[14px] uppercase leading-tight`}>{pkg.name}</h4>
-                                            <p className="text-[#0b1a3a] font-black text-[18px] tracking-tight">{pkg.price}</p>
+                                            <h4 className="font-black text-[14px] uppercase leading-tight"
+                                                style={{ color: pkg.color || '#006b70' }}>{pkg.name}</h4>
+                                            <p className="text-[#0b1a3a] font-black text-[18px] tracking-tight">{pkg.price.replace(/,1|,/, '₹')}</p>
                                         </div>
                                     </div>
-                                    <div className={`absolute right-4 top-0 w-8 h-12 ${pkg.bg || "bg-[#006b70]"} flex flex-col items-center pt-1.5 shadow-sm`}
-                                        style={{ clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%)' }}>
+                                    <div className="absolute right-4 top-0 w-8 h-12 flex flex-col items-center pt-1.5 shadow-sm"
+                                        style={{ backgroundColor: pkg.bg || '#006b70', clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%)' }}>
                                         <Star className="w-4 h-4 text-white fill-white" />
                                     </div>
                                     <ul className="space-y-1 pl-2">

@@ -70,7 +70,7 @@ const PrintingBrandingPartner = () => {
 
     // Resolve image URL — handle uploads paths from backend
     const resolveImg = (img: string) => {
-        if (!img) return heroBg;
+        if (!img || img === '/images/printing.jpeg') return heroBg;
         const normalizedImg = img.replace(/\\/g, "/");
         if (normalizedImg.startsWith("http://") || normalizedImg.startsWith("https://")) return normalizedImg;
         if (normalizedImg.startsWith("/uploads") || normalizedImg.startsWith("uploads/")) {
@@ -88,8 +88,8 @@ const PrintingBrandingPartner = () => {
     return (
         <div className="bg-white min-h-screen font-inter">
             <div className="min-h-[375px] bg-cover bg-center py-5" style={{ backgroundImage: `url("${bgImage}")` }}>
-                <div className="container mx-auto px-6 max-w-[1400px] relative">
-                    <div className="md:w-1/2 ">
+                <div className="container mx-auto px-6 max-w-[1400px] relative flex flex-col md:block">
+                    <div className="w-full md:w-1/2 relative z-10 pb-8 md:pb-0">
                         <div className="top-logo-and-text flex items-center gap-4">
                             <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[30px]">
                                 <div className="flex items-center gap-[15px]">
@@ -140,12 +140,12 @@ const PrintingBrandingPartner = () => {
                 </div>
             </div>
             <div className="container mx-auto px-6 max-w-[1400px]">
-                <div className="flex gap-4">
-                    <div className="md:w-[70%]">
+                <div className="flex flex-col md:flex-row gap-4 mb-10">
+                    <div className="w-full md:w-[70%]">
                         <StatCardsGroup items={data?.stats} />
                         <CardWithTagGroup items={data?.benefits} />
                         <div className="relative flex items-center flex-column py-4 mt-4">
-                            <span className="flex-shrink mx-4 text-sm font-bold bg-white px-2 uppercase absolute top-4 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#1E104E]">
+                            <span className="flex-shrink mx-2 md:mx-4 text-[11px] md:text-sm font-bold bg-white px-2 uppercase absolute top-4 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#1E104E] whitespace-nowrap">
                                 Additional Advantages
                             </span>
                             <div className="flex-grow border border-gray-300 rounded-lg">
@@ -153,7 +153,7 @@ const PrintingBrandingPartner = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="md:w-[30%] h-[100%]">
+                    <div className="w-full md:w-[30%] h-full mt-6 md:mt-0">
                         <div className="flex flex-col items-start justify-between gap-2 rounded-lg bg-[#0D0B61] pt-2 flex-1 border border-2 border-white h-full">
                             <div className="flex center items-center justify-center w-full h-full">
                                 <h3 className="text-lg font-semibold text-white text-center uppercase">Partnership Packages</h3>
