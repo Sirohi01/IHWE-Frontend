@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUsers, FaBuilding, FaGlobe, FaCalendarAlt, FaHandshake, FaRocket, FaMapMarkerAlt } from "react-icons/fa";
 import { useInView, animate } from "framer-motion";
 import SectionContainer from "../layout/SectionContainer";
+import { settingsApi, SERVER_URL } from "../../lib/api";
 
 // Sparkle component
 const Sparkle = ({ style, color = '#5ef5e0', shadowColor = '#0A7C6E' }) => (
@@ -60,6 +61,19 @@ const StatCounter = ({ value }) => {
 
 const WhyVisitHero = () => {
     const navigate = useNavigate();
+    const [settings, setSettings] = useState(null);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const data = await settingsApi.get();
+                if (data) setSettings(data);
+            } catch (error) {
+                console.error("Failed to load settings in WhyVisitHero:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     const stats = [
         { icon: <FaUsers />, num: '8,000+', label: 'Visitors / Delegates' },
@@ -217,7 +231,7 @@ const WhyVisitHero = () => {
                                         <Sparkle color="#3d528f" shadowColor="#28396C" style={{ bottom: '-12px', right: '30%', animationDelay: '0.7s' }} />
 
                                         <button 
-                                            onClick={() => window.open('/pdf.pdf', '_blank')} 
+                                            onClick={() => window.open(settings?.downloadBrochurePdf ? `${SERVER_URL}${settings.downloadBrochurePdf}` : '/pdf.pdf', '_blank')} 
                                             className="blue-btn-hero flex items-center justify-center gap-1.5 text-white text-[10px] font-black uppercase tracking-widest px-5 py-2 rounded-lg transition whitespace-nowrap w-full hover:scale-[1.02]"
                                         >
                                             Download Brochure

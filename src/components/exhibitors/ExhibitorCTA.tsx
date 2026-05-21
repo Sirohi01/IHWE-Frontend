@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { settingsApi, SERVER_URL } from '../../lib/api';
 import leaveImg from '../../assets/leave.png';
 import cta1 from '../../assets/cta1.png';
 import cta2 from '../../assets/cta2.png';
@@ -18,7 +19,21 @@ const BOTTOM_STATS = [
 ];
 
 const ExhibitorCTA = () => {
-    const domesticBrochureUrl = '/pdf.pdf';
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const data = await settingsApi.get();
+                if (data) setSettings(data);
+            } catch (error) {
+                console.error("Failed to load settings in ExhibitorCTA:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    const domesticBrochureUrl = settings?.downloadBrochurePdf ? `${SERVER_URL}${settings.downloadBrochurePdf}` : '/pdf.pdf';
 
     return (
         <section className="bg-white">
