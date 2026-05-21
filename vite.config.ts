@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => ({
         target: 'http://localhost:5000',
         changeOrigin: true,
       },
+      '/sitemap/xml': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
       '/robots.txt': {
         target: 'http://localhost:5000',
         changeOrigin: true,
@@ -26,5 +30,26 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-animation';
+            }
+            return 'vendor-libs';
+          }
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
   },
 }));

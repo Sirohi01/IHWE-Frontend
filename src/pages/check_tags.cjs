@@ -23,3 +23,4 @@ lines.forEach((line, i) => {
 });
 
 console.log(`Total Open: ${openDivs}, Total Close: ${closeDivs}`);
+ 

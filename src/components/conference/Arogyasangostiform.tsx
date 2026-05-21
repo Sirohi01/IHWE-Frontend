@@ -271,6 +271,128 @@ export default function ArogyaSanghostiForm() {
 
     return (
         <div style={{ background: "#F1F5F9", minHeight: "100vh" }}>
+            <style>{`
+                /* Global responsive variables for Speaker Registration Form */
+                :root {
+                    --section-width: 90%;
+                    --left-box-width: 90%;
+                    --left-box-margin-left: 70px;
+                    --right-box-width: 90%;
+                    --right-box-margin-left: 30px;
+                    --grid-margin-top: -131px;
+                    --grid-padding: 0 10px;
+                    --grid-cols: 1fr 1fr;
+                    --grid-gap: 40px;
+                    --left-col-margin-top: -37px;
+                    --right-col-margin-top: 126px;
+                    --chip-grid-cols: repeat(3, 1fr);
+                    --track-grid-cols: repeat(3, 1fr);
+                    --session-grid-cols: repeat(3, 1fr);
+                    --support-grid-cols: 1fr 1fr 1fr;
+                    --field-flex-dir: row;
+                    --field-align-items: center;
+                    --field-gap: 10px;
+                    --field-label-width: 180px;
+                    --field-input-width: auto;
+                    --field-colon-display: inline;
+                    --illustration-display: block;
+                    --tagline-margin-x: 70px;
+                    --tagline-flex-dir: row;
+                    --tagline-grid-cols: repeat(5, 1fr);
+                    --tagline-text-align: left;
+                    --footer-top-padding: 6px 80px;
+                    --footer-top-flex-dir: row;
+                    --footer-top-justify: space-between;
+                    --footer-top-width: auto;
+                    --queries-flex-dir: row;
+                    --queries-items-flex-dir: row;
+                    --queries-items-align: center;
+                    --queries-gap: 16px;
+                    --footer-bottom-padding: 15px 80px;
+                    --footer-bottom-flex-dir: row;
+                    --footer-bottom-text-align: left;
+                    --footer-bottom-right-flex-dir: row;
+                    --footer-bottom-right-width: auto;
+                    --footer-buttons-flex-dir: row;
+                    --footer-buttons-width: auto;
+                    
+                    --hero-logo-height: 20vw;
+                    --hero-logo-min-height: 160px;
+                    --hero-sub-size: 1.1vw;
+                    --hero-title-size: 4.5vw;
+                    --hero-title-sub-size: 2vw;
+                    --hero-padding: 3.5% 6%;
+                }
+                
+                @media (max-width: 1024px) {
+                    :root {
+                        --section-width: 100%;
+                        --left-box-width: 100%;
+                        --left-box-margin-left: 0px;
+                        --right-box-width: 100%;
+                        --right-box-margin-left: 0px;
+                        --grid-margin-top: 15px;
+                        --grid-padding: 0 12px;
+                        --grid-cols: 1fr;
+                        --grid-gap: 24px;
+                        --left-col-margin-top: 0px;
+                        --right-col-margin-top: 0px;
+                        --chip-grid-cols: repeat(2, 1fr);
+                        --track-grid-cols: 1fr;
+                        --session-grid-cols: 1fr;
+                        --support-grid-cols: 1fr;
+                        --field-flex-dir: column;
+                        --field-align-items: flex-start;
+                        --field-gap: 6px;
+                        --field-label-width: 100%;
+                        --field-input-width: 100%;
+                        --field-colon-display: none;
+                        --illustration-display: none;
+                        --tagline-margin-x: 12px;
+                        --tagline-flex-dir: column;
+                        --tagline-grid-cols: repeat(2, 1fr);
+                        --tagline-text-align: center;
+                        --footer-top-padding: 16px 12px;
+                        --footer-top-flex-dir: column;
+                        --footer-top-justify: center;
+                        --footer-top-width: 100%;
+                        --queries-flex-dir: column;
+                        --queries-items-flex-dir: column;
+                        --queries-items-align: flex-start;
+                        --queries-gap: 12px;
+                        --footer-bottom-padding: 20px 12px;
+                        --footer-bottom-flex-dir: column;
+                        --footer-bottom-text-align: center;
+                        --footer-bottom-right-flex-dir: column;
+                        --footer-bottom-right-width: 100%;
+                        --footer-buttons-flex-dir: column;
+                        --footer-buttons-width: 100%;
+                        
+                        --hero-logo-height: 15vw;
+                        --hero-logo-min-height: 60px;
+                        --hero-sub-size: 2.2vw;
+                        --hero-title-size: 6vw;
+                        --hero-title-sub-size: 3.5vw;
+                        --hero-padding: 4% 8%;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    :root {
+                        --chip-grid-cols: repeat(2, 1fr);
+                        --tagline-grid-cols: 1fr;
+                        --hero-logo-min-height: 50px;
+                        --hero-sub-size: 2.8vw;
+                        --hero-title-size: 7.5vw;
+                        --hero-title-sub-size: 4vw;
+                    }
+                }
+                
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}</style>
             <div
                 style={{
                     fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif",
@@ -284,15 +406,15 @@ export default function ArogyaSanghostiForm() {
 
 
                 <div style={{
-                    marginTop: "-131px",
-                    padding: "0 10px 0 10px",
+                    marginTop: "var(--grid-margin-top, -131px)",
+                    padding: "var(--grid-padding, 0 10px 0 10px)",
                     position: "relative",
                     zIndex: 20
                 }}>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, position: "relative", zIndex: 10 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "var(--grid-cols, 1fr 1fr)", gap: "var(--grid-gap, 40px)", position: "relative", zIndex: 10 }}>
 
-                        <div style={{ display: "flex", flexDirection: "column", marginTop: "-37px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "var(--left-col-margin-top, -37px)" }}>
                             <BasicDetailsSection
                                 form={form}
                                 set={set}
@@ -316,7 +438,7 @@ export default function ArogyaSanghostiForm() {
                         </div>
 
                         {/* RIGHT COLUMN */}
-                        <div style={{ display: "flex", flexDirection: "column", marginTop: "126px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginTop: "var(--right-col-margin-top, 126px)" }}>
                             <SessionDetailsSection
                                 form={form}
                                 set={set}
@@ -352,14 +474,6 @@ export default function ArogyaSanghostiForm() {
                 {/* ── FOOTER ── */}
                 <Footer />
             </div>
-
-            {/* ── SPINNER ANIMATION ── */}
-            <style>{`
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            `}</style>
         </div>
     );
 }

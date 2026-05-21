@@ -40,7 +40,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                padding: "3.5% 6%",
+                padding: "var(--hero-padding, 3.5% 6%)",
                 lineHeight: "normal",
                 boxSizing: "border-box"
             }}>
@@ -56,8 +56,8 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
 
                     {/* Logo */}
                     <img src={arogyaLogo} alt="Arogya Logo" style={{
-                        height: "20vw",
-                        minHeight: "160px",
+                        height: "var(--hero-logo-height, 20vw)",
+                        minHeight: "var(--hero-logo-min-height, 160px)",
                         width: "auto",
                         alignSelf: "flex-start"
                     }} />
@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                             color: "white",
                             padding: "6px 24px",
                             borderRadius: "24px",
-                            fontSize: "1.4vw",
+                            fontSize: "var(--hero-sub-size, 1.4vw)",
                             fontWeight: 400,
                             clipPath: "polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%)",
                             display: "inline-block"
@@ -81,7 +81,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                     {/* Subtitle - Normal font weight */}
                     <div style={{
                         color: TEAL,
-                        fontSize: "1.1vw",
+                        fontSize: "var(--hero-sub-size, 1.1vw)",
                         fontWeight: 400,
                         letterSpacing: "0.5px",
                         textTransform: "uppercase",
@@ -97,12 +97,12 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                         fontWeight: 400,
                         lineHeight: 1.1,
                         textTransform: "uppercase",
-                        fontSize: "4.5vw",
+                        fontSize: "var(--hero-title-size, 4.5vw)",
                         textAlign: "left",
                         fontFamily: "'Helvetica Neue', Arial, sans-serif"
                     }}>
                         Speaker
-                        <div style={{ fontSize: "2vw", fontWeight: 400, opacity: 0.8, marginTop: "2px" }}>
+                        <div style={{ fontSize: "var(--hero-title-sub-size, 2vw)", fontWeight: 400, opacity: 0.8, marginTop: "2px" }}>
                             Nomination Form
                         </div>
                     </h1>

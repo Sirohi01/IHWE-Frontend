@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { API_URL, socialMediaApi, settingsApi, analyticsApi } from '../../lib/api';
+import { API_URL, socialMediaApi, settingsApi, analyticsApi, SERVER_URL } from '../../lib/api';
 
 import {
   Trophy, Zap, Users, Mic2, BadgeCheck, UserCheck,
@@ -197,6 +197,7 @@ const SponsorshipSection = () => {
   const [whatsappNumber, setWhatsappNumber] = useState("919654900525");
   const [whatsappMsg, setWhatsappMsg] = useState("Hello! I am interested in Sponsorship opportunities for IHWE 2026.");
   const [contactPhone, setContactPhone] = useState("+91 9654900525");
+  const [brochureUrl, setBrochureUrl] = useState("/pdf.pdf");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -211,8 +212,11 @@ const SponsorshipSection = () => {
           if (socialData.whatsappMessage) setWhatsappMsg(socialData.whatsappMessage);
         }
 
-        if (settingsData && settingsData.phoneNumber) {
-          setContactPhone(settingsData.phoneNumber);
+        if (settingsData) {
+          if (settingsData.phoneNumber) setContactPhone(settingsData.phoneNumber);
+          if (settingsData.downloadBrochurePdf) {
+            setBrochureUrl(`${SERVER_URL}${settingsData.downloadBrochurePdf}`);
+          }
         }
       } catch (error) {
         console.error("Error fetching sponsorship contact data:", error);
@@ -592,7 +596,7 @@ const SponsorshipSection = () => {
                   {/* Horizontal Buttons Row */}
                   <div className="flex flex-wrap lg:flex-nowrap gap-3 lg:gap-2 items-center justify-center lg:justify-start lg:pt-0.5">
                     <a 
-                      href="/pdf.pdf" 
+                      href={brochureUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"

@@ -20,7 +20,7 @@ import {
   Plane,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { settingsApi } from "@/lib/api";
+import { settingsApi, SERVER_URL } from "@/lib/api";
 import { motion } from "framer-motion";
 
 // Sparkle component
@@ -137,7 +137,7 @@ const Footer = () => {
   const exhibitorLinks = [
     { label: "Book Your Stall", href: "/book-a-stand", newTab: true },
     { label: "Floor Plan Download", href: "/pdf1.pdf", newTab: true },
-    { label: "Brochure Download", href: "/pdf.pdf", newTab: true },
+    { label: "Brochure Download", href: settings?.downloadBrochurePdf ? `${SERVER_URL}${settings.downloadBrochurePdf}` : "/pdf.pdf", newTab: true },
     { label: "Exhibitor List", href: "/exhibitors", newTab: true },
     { label: "Sponsorship Opportunities", href: "/sponsership", newTab: true },
     { label: "MSME PMS Scheme", href: "/msme-pms-scheme", newTab: true },

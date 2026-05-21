@@ -427,10 +427,10 @@ const Sponsership = () => {
               </div>
 
               {/* RIGHT SIDE */}
-              <div className="relative flex justify-end min-h-[400px]">
+              <div className="relative flex justify-center lg:justify-end lg:min-h-[400px] mt-8 lg:mt-0">
 
                 {/* FLOATING EVENT CARD */}
-                <div className="absolute bottom-[-40px] right-0 bg-[#032C69] text-white rounded-[24px] px-4 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.25)] w-[340px] z-30">
+                <div className="lg:absolute lg:bottom-[-40px] lg:right-0 bg-[#032C69] text-white rounded-[24px] px-4 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.25)] w-[340px] z-30 mx-auto lg:mx-0">
                   {[
                     {
                       label: "21 – 23 August 2026",

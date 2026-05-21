@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Swal from "sweetalert2";
-import heroImg from "@/assets/partnerRegistration/imagec.png";
+import heroImg from "@/assets/partnerRegistration/new.jpeg";
 import MiddleImage from "@/assets/partnerRegistration/MiddleImage.png";
 import BottomImage from "@/assets/partnerRegistration/BottomImage.png";
 
@@ -133,6 +133,8 @@ const PartnerRegistration = () => {
         switch (type) {
             case "hotel":
                 return ["Hotel Booking Assistance", "Hospitality & Concierge", "Other Services"];
+            case "fabrication":
+                return ["Exhibition Stall Fabrication", "Custom Stall Designing", "Other Services"];
             case "travel":
                 return ["Flight Booking", "Airport Transfers", "Local Transportation", "Other Services"];
             case "logistics":
@@ -155,6 +157,10 @@ const PartnerRegistration = () => {
                 case "hotel":
                     category = "Hospitality";
                     interest = "Official Hotel Partner";
+                    break;
+                case "fabrication":
+                    category = "Stall Fabrication";
+                    interest = "Official Stall Fabrication Partner";
                     break;
                 case "travel":
                     category = "Travel & Tourism";
@@ -563,13 +569,13 @@ const PartnerRegistration = () => {
     return (
         <div className="min-h-screen bg-[#f8faf9] font-inter relative">
             {/* HERO BANNER */}
-            <section className="relative pb-2 overflow-hidden px-10 w-[1400px] mx-auto ">
+            <section className="relative pb-2 overflow-hidden px-4 md:px-10 w-full max-w-[1400px] mx-auto ">
                 <img src={heroImg} alt="partner form" className="w-full h-auto object-cover" />
             </section>
 
             {/* MAIN CONTENT */}
-            <section className="px-10 relative z-10 mt-[2%] xl:-mt-[2%] mb-0">
-                <div className="container mx-auto px-6 max-w-[1400px]">
+            <section className="px-4 md:px-10 relative z-10 mt-[2%] xl:-mt-[2%] mb-0">
+                <div className="container mx-auto px-0 md:px-6 max-w-[1400px]">
                     <div className="flex flex-col lg:flex-row gap-8 items-stretch">
                         {/* LEFT: FORM */}
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1 min-w-0 mt-6">
@@ -964,7 +970,7 @@ const PartnerRegistration = () => {
                         <div className="w-full lg:w-[400px] shrink-0 pt-6">
                             <aside className="space-y-6 flex flex-col h-full">
                                 {/* WHY PARTNER WITH IHWE 2026? */}
-                                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-8">
+                                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-5 md:p-8">
                                     <h3 className="text-[#0b1a3a] font-black text-[18px] uppercase tracking-tight mb-2">Why Partner With IHWE 2026?</h3>
                                     <div className="w-12 h-1 bg-[#084c17] mb-8" />
                                     <div className="space-y-4">
@@ -991,7 +997,7 @@ const PartnerRegistration = () => {
                                 {/* ABOUT IHWE 2026 */}
                                 <div className="relative rounded-[24px] overflow-hidden shadow-xl group border border-white/10 min-h-[270px]">
                                     <img src={BottomImage} alt="IHWE Venue" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-[#0b1a3a] via-[#0b1a3a]/85 to-transparent p-10 flex flex-col justify-center">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-[#0b1a3a] via-[#0b1a3a]/85 to-transparent p-6 md:p-10 flex flex-col justify-center">
                                         <div className="relative z-10">
                                             <h3 className="text-[18px] font-semibold uppercase tracking-widest mb-6 text-white drop-shadow-md">About IHWE 2026</h3>
                                             <div className="space-y-5">
@@ -1012,7 +1018,7 @@ const PartnerRegistration = () => {
                                 </div>
 
                                 <div className="flex-grow"></div>                                {/* NEED HELP? */}
-                                <div className="bg-white border border-slate-100 rounded-2xl p-8">
+                                <div className="bg-white border border-slate-100 rounded-2xl p-5 md:p-8">
                                     <h4 className="text-[20px] font-black text-[#0b1a3a] uppercase mb-1">Need Help?</h4>
                                     <p className="text-[13px] text-slate-500 font-bold mb-6">Our team is here to assist you.</p>
                                     <div className="space-y-4">
@@ -1031,8 +1037,8 @@ const PartnerRegistration = () => {
                                 {/* CTA BANNER */}
                                 <div className="min-h-[200px] relative rounded-[24px] overflow-hidden shadow-2xl group ">
                                     <img src={MiddleImage} alt="Handshake" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20] via-[#1b5e20]/90 to-transparent p-10 flex flex-col justify-center">
-                                        <div className="max-w-[75%] mb-2">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20] via-[#1b5e20]/90 to-transparent p-6 md:p-10 flex flex-col justify-center">
+                                        <div className="max-w-full md:max-w-[75%] mb-2">
                                             <h4 className="text-white font-semibold text-[22px] uppercase leading-[1.1] mb-4 drop-shadow-lg">Become An Official IHWE 2026 <br /> Service Partner</h4>
                                             <p className="text-[13px] font-semibold text-white leading-relaxed drop-shadow-md">Deliver world-class support services to exhibitors, buyers & delegates from across the globe.</p>
                                         </div>
@@ -1048,7 +1054,7 @@ const PartnerRegistration = () => {
             {/* BOTTOM INFO BAR */}
             <section className="bg-[#0f1b3d] ">
                 <div className="w-full px-8">
-                    <div className="flex items-center justify-between py-3">
+                    <div className="flex flex-col lg:flex-row items-center lg:justify-between py-6 lg:py-3 gap-6 lg:gap-0">
                         {/* STAY CONNECTED */}
                         <div className="flex flex-col items-center gap-1.5">
                             <p className="text-[9px] font-bold text-[#4ade80] uppercase tracking-[0.15em]">Stay Connected</p>
@@ -1069,11 +1075,11 @@ const PartnerRegistration = () => {
                         </div>
 
                         {/* CONTACT US */}
-                        <div className="flex flex-col items-start gap-0.5 border-l-[1px] border-[#4ade80] pl-12">
+                        <div className="flex flex-col items-center lg:items-start gap-0.5 border-t lg:border-t-0 lg:border-l-[1px] border-[#4ade80] pt-4 lg:pt-0 w-full lg:w-auto pl-0 lg:pl-12">
                             <p className="text-[9px] font-bold text-[#4ade80] uppercase tracking-[0.15em] mb-0.5">Contact Us</p>
                             <div className="flex items-center gap-1.5">
                                 <Mail className="w-3.5 h-3.5 text-white/70" />
-                                <a href="mailto:support@ihwe.in" className="text-[11px] font-medium text-white hover:text-[#4ade80] transition-colors">support@ihwe.in</a>
+                                <a href="mailto:info@ihwe.in" className="text-[11px] font-medium text-white hover:text-[#4ade80] transition-colors">info@ihwe.in</a>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <Phone className="w-3.5 h-3.5 text-white/70" />
@@ -1082,7 +1088,7 @@ const PartnerRegistration = () => {
                         </div>
 
                         {/* VISIT OUR WEBSITE */}
-                        <div className="flex items-center gap-3 border-l-[1px] border-[#4ade80] pl-12">
+                        <div className="flex flex-col lg:flex-row items-center gap-3 border-t lg:border-t-0 lg:border-l-[1px] border-[#4ade80] pt-4 lg:pt-0 w-full lg:w-auto pl-0 lg:pl-12 text-center lg:text-left">
                             <div className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center">
                                 <Globe className="w-5 h-5 text-white/70" />
                             </div>
@@ -1093,7 +1099,7 @@ const PartnerRegistration = () => {
                         </div>
 
                         {/* EVENT DATES */}
-                        <div className="flex items-center gap-3 border-l-[1px] border-[#4ade80] pl-12">
+                        <div className="flex flex-col lg:flex-row items-center gap-3 border-t lg:border-t-0 lg:border-l-[1px] border-[#4ade80] pt-4 lg:pt-0 w-full lg:w-auto pl-0 lg:pl-12 text-center lg:text-left">
                             <div className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center">
                                 <Calendar className="w-5 h-5 text-white/70" />
                             </div>
@@ -1105,7 +1111,7 @@ const PartnerRegistration = () => {
                         </div>
 
                         {/* PMS SCHEME BADGE */}
-                        <div className="flex items-center gap-2.5 border-l-[1px] border-[#4ade80] pl-12">
+                        <div className="flex flex-col lg:flex-row items-center gap-2.5 border-t lg:border-t-0 lg:border-l-[1px] border-[#4ade80] pt-4 lg:pt-0 w-full lg:w-auto pl-0 lg:pl-12 text-center lg:text-left">
                             <svg className="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                 <path d="M20 2L6 10v10c0 9.1 5.97 17.6 14 20 8.03-2.4 14-10.9 14-20V10L20 2z" fill="#4CAF50" />
                                 <path d="M20 4L8 11v9c0 8.2 5.1 15.8 12 18 6.9-2.2 12-9.8 12-18v-9L20 4z" fill="#43A047" />

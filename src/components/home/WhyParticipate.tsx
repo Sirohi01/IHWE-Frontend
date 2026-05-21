@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import SectionContainer from '../layout/SectionContainer';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { whyParticipateApi, SERVER_URL } from '../../lib/api';
+import { whyParticipateApi, SERVER_URL, settingsApi } from '../../lib/api';
 
 import participateImgDefault from '@/assets/participate.webp';
 
@@ -28,13 +28,20 @@ const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, co
 
 const WhyParticipate = () => {
   const [data, setData] = useState<any>(null);
+  const [brochureUrl, setBrochureUrl] = useState("/pdf.pdf");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await whyParticipateApi.get();
+        const [response, settingsData] = await Promise.all([
+          whyParticipateApi.get(),
+          settingsApi.get()
+        ]);
         if (response) {
           setData(response);
+        }
+        if (settingsData && settingsData.downloadBrochurePdf) {
+          setBrochureUrl(`${SERVER_URL}${settingsData.downloadBrochurePdf}`);
         }
       } catch (err) {
         console.error("Error fetching why participate data:", err);
@@ -48,7 +55,7 @@ const WhyParticipate = () => {
   const points = data.keyPoints || [];
   const mainPoints = data.mainPoints || ["Exhibit", "Connect", "Grow"];
   const imageSrc = data.image ? `${SERVER_URL}${data.image}` : participateImgDefault;
-  const brochurePath = data.button2File ? `${SERVER_URL}${data.button2File}` : "/pdf.pdf";
+  const brochurePath = brochureUrl;
 
   return (
     <section className="bg-[#F9FCF9] pt-4 pb-12 overflow-hidden">

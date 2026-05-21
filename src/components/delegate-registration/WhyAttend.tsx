@@ -32,12 +32,12 @@ const WhyAttend: React.FC = () => {
 
   return (
     <section className="w-full bg-white py-6 px-6 lg:px-10">
-      <div className="max-w-[1360px] mx-auto pl-[30px]">
+      <div className="max-w-[1360px] mx-auto pl-0 md:pl-[30px]">
         {/* Section Title with Dot-Line Decoration */}
         <div className="relative flex items-center justify-center mb-10 gap-4">
           <div className="flex-1 h-[1px] bg-gray-200" />
           <div className="w-1.5 h-1.5 rounded-full bg-[#143111]" />
-          <h2 className="text-[20px] font-black text-[#143111] uppercase tracking-[0.1em] whitespace-nowrap">
+          <h2 className="text-[15px] sm:text-[18px] md:text-[20px] font-black text-[#143111] uppercase tracking-[0.1em] text-center whitespace-normal">
             WHY ATTEND AROGYA SANGHOSHTI 2026?
           </h2>
           <div className="w-1.5 h-1.5 rounded-full bg-[#143111]" />
@@ -57,7 +57,7 @@ const WhyAttend: React.FC = () => {
                     {benefit.title}
                   </h3>
                 </div>
-                <p className="text-[12px] font-medium text-gray-400 leading-relaxed pl-16">
+                <p className="text-[12px] font-medium text-gray-400 leading-relaxed pl-0 lg:pl-16">
                   {benefit.description}
                 </p>
               </div>
