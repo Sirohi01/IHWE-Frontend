@@ -100,7 +100,8 @@ const HospitalityPartner = () => {
             <div className="w-full">
 
                 {/* 1. HERO BANNER */}
-                <div className="relative w-full overflow-hidden bg-white min-h-[440px]">
+                {/* DESKTOP VIEW - Visible only on Desktop (>= md) */}
+                <div className="hidden md:block relative w-full overflow-hidden bg-white min-h-[440px]">
                     <div className="absolute right-0 top-0 bottom-0 w-[85%] pointer-events-none z-0">
                         <img src={heroTopImg} alt="Hospitality Background" className="w-full h-full object-cover" />
                     </div>
@@ -162,33 +163,118 @@ const HospitalityPartner = () => {
                     </SectionContainer>
                 </div>
 
-                {/* MIDDLE SECTION */}
-                <SectionContainer className="mb-1 flex flex-col lg:flex-row gap-6 items-start">
-                    <div className="w-full lg:w-[70%] flex flex-col gap-2 relative z-20 -mt-3">
+                {/* MOBILE VIEW - Visible only on Mobile (< md) */}
+                <div
+                    className="md:hidden relative w-full overflow-hidden flex flex-col py-6 px-4"
+                    style={{
+                        backgroundImage: `linear-gradient(to bottom, rgba(11, 26, 58, 0.94), rgba(11, 26, 58, 0.98)), url(${TopImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }}
+                >
+                    <div className="relative z-10 w-full flex flex-col gap-5">
 
-                        {/* STATS STRIP */}
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-0 border border-slate-200 rounded-[1.5rem] overflow-hidden shadow-sm bg-white">
-                            {stats.map((stat: any, i: number) => (
-                                <div key={i} className="py-4 px-4 flex items-center gap-4 border-r last:border-r-0 border-slate-100">
-                                    <div className="w-16 h-16 rounded-full flex items-center justify-center shrink-0 shadow-md">
-                                        <img src={resolveImg(stat.icon, persons)} alt="" className="w-16 h-16 object-contain" />
+                        {/* Logo & Tagline row */}
+                        <div className="flex justify-between items-start w-full">
+                            <div>
+                                <h2 className="text-[#3b82f6] font-black text-[13px] sm:text-[14px] leading-[1.1] uppercase tracking-tight">
+                                    International <br />
+                                    <span className="text-emerald-400">Health & Wellness</span> <br />
+                                    Expo 2026
+                                </h2>
+                                <div className="bg-amber-500 text-white text-[7px] font-black px-1.5 py-0.5 mt-0.5 rounded tracking-widest w-fit uppercase">Global Edition</div>
+                            </div>
+
+                            <div className="flex items-center gap-3 border-l border-slate-400/50 pl-3 py-1 text-[11px] sm:text-xs">
+                                <div className="flex flex-col font-bold">
+                                    <span className="text-white uppercase leading-tight">Collaborate.</span>
+                                    <span className="text-emerald-400 uppercase leading-tight">Connect.</span>
+                                    <span className="text-amber-500 uppercase leading-tight">Grow.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Title Section */}
+                        <div className="flex flex-col mt-1">
+                            <p className="text-amber-500 font-extrabold text-[10px] sm:text-[11px] tracking-widest uppercase mb-1">Partner with us as a</p>
+                            <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-white uppercase">
+                                Hospitality <span className="text-amber-500">Partner</span>
+                            </h1>
+
+                            <div className="flex w-32 h-[3px] my-3">
+                                <div className="w-[45%] bg-[#3b82f6]"></div>
+                                <div className="w-[55%] bg-amber-500"></div>
+                            </div>
+
+                            <p className="text-slate-100 font-extrabold text-[14px] leading-snug mb-1">Exceptional Experiences. Memorable Stays. Lasting Impressions.</p>
+                            <p className="text-slate-300 text-[12px] font-medium leading-relaxed max-w-[480px]">
+                                Partner with IHWE 2026 and be the preferred hospitality partner for 8,000+ exhibitors, buyers and decision makers from around the world.
+                            </p>
+                        </div>
+
+                        {/* Why Partner Card */}
+                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 text-white border border-white/10 shadow-xl mt-2 flex flex-col">
+                            <h4 className="text-white font-black text-[13px] uppercase tracking-wider mb-3 flex flex-col leading-tight">
+                                WHY PARTNER WITH <span className="text-amber-500">IHWE 2026?</span>
+                            </h4>
+
+                            <div className="space-y-2">
+                                {[
+                                    { icon: Users, text: "Access 8,000+ exhibitors, buyers & decision makers" },
+                                    { icon: Eye, text: "High visibility before, during & after the event" },
+                                    { icon: Globe, text: "Be part of a trusted global health & wellness platform" },
+                                    { icon: Handshake, text: "Build strong partnerships & long-term relationships" },
+                                    { icon: Shield, text: "Enhance brand credibility & market leadership" }
+                                ].map((item, i) => (
+                                    <div key={i} className="flex gap-3 items-center border-t border-white/10 pt-2 first:border-0 first:pt-0">
+                                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                            <item.icon className="w-4 h-4 text-emerald-400" />
+                                        </div>
+                                        <p className="text-[9px] sm:text-[10px] font-bold leading-tight text-slate-100 uppercase tracking-tight">{item.text}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {/* MIDDLE SECTION (70/30 SPLIT - Standardized Alignment) */}
+                <SectionContainer className="mb-1 flex flex-col lg:flex-row gap-6 items-start ">
+
+                    {/* LEFT COLUMN: 70% (Stats + Benefits) */}
+                    <div className="w-full lg:w-[70%] flex flex-col gap-2 relative z-20 lg:-mt-3 ">
+
+                        {/* 2. STATS STRIP (Compacted) */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0 border border-slate-200 rounded-[1.5rem] overflow-hidden shadow-sm bg-white">
+                            {[
+                                { icon: persons, val: "8,000+", label: "Delegates & Exhibitors Expected", color: "text-white", bg: "bg-[#006b70]", isImg: true },
+                                { icon: globe, val: "Multiple", label: "Exhibitor Segments", color: "text-white", bg: "bg-[#0b1a3a]", isImg: true },
+                                { icon: calender, val: "3", label: "Power-Packed Days", color: "text-white", bg: "bg-[#b4841c]", isImg: true },
+                                { icon: power, val: "Unlimited", label: "Business Opportunities", color: "text-white", bg: "bg-[#0b1a3a]", isImg: true },
+                                { icon: bell, val: "High", label: "Brand Visibility & Exposure", color: "text-white", bg: "bg-[#006b70]", isImg: true }
+                            ].map((stat, i) => (
+                                <div key={i} className={`py-4 px-3 sm:px-4 flex items-center gap-2 sm:gap-4 border-r border-b md:border-b-0 border-slate-100 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 justify-center' : ''}`}>
+                                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shrink-0 shadow-md">
+                                        <img src={stat.icon} alt="" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
                                     </div>
                                     <div className="flex flex-col text-left">
-                                        <h5 className="text-[#0b1a3a] font-black text-[16px] leading-none mb-1">{stat.val}</h5>
-                                        <p className="text-slate-500 text-[9px] font-bold uppercase leading-tight max-w-[100px]">{stat.label}</p>
+                                        <h5 className="text-[#0b1a3a] font-black text-sm sm:text-[16px] leading-none mb-1">{stat.val}</h5>
+                                        <p className="text-slate-500 text-[8px] sm:text-[9px] font-bold uppercase leading-tight max-w-[100px]">{stat.label}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* CORE BENEFITS GRID */}
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 md:gap-2">
                             {benefits.map((benefit: any, i: number) => (
                                 <div key={i} className="flex flex-col h-full bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow">
                                     <div className="bg-[#006b70] text-white px-2 py-2 flex items-center justify-center text-center">
                                         <span className="text-[10px] font-semibold uppercase tracking-tight leading-none">{benefit.title}</span>
                                     </div>
-                                    <div className="px-6 py-2 flex-1 flex flex-col items-center text-center justify-center bg-white">
+                                    <div className="px-6 py-4 md:py-2 flex-1 flex flex-col items-center text-center justify-center bg-white">
                                         <div className="w-16 h-16 flex items-center justify-center mb-2">
                                             <img src={resolveImg(benefit.icon, building)} alt="" className="w-16 h-16 object-contain" />
                                         </div>
@@ -199,11 +285,11 @@ const HospitalityPartner = () => {
                         </div>
 
                         {/* ADDITIONAL ADVANTAGES STRIP */}
-                        <div className="bg-[#f1f5f9] border border-slate-200 rounded-2xl flex overflow-hidden">
-                            <div className="w-[160px] bg-slate-100/50 py-6 px-5 flex items-center border-r border-slate-200">
-                                <h3 className="text-[#0b1a3a] font-black text-[13px] uppercase leading-tight tracking-widest">ADDITIONAL <br /> ADVANTAGES</h3>
+                        <div className="bg-[#f1f5f9] border border-slate-200 rounded-2xl flex flex-col md:flex-row overflow-hidden">
+                            <div className="w-full md:w-[160px] bg-slate-100/50 py-4 md:py-6 px-5 flex items-center justify-center md:justify-start border-b md:border-b-0 md:border-r border-slate-200">
+                                <h3 className="text-[#0b1a3a] font-black text-[13px] uppercase leading-tight tracking-widest text-center md:text-left">ADDITIONAL <br className="hidden md:block" /> ADVANTAGES</h3>
                             </div>
-                            <div className="flex-1 grid grid-cols-5 gap-0">
+                            <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-0">
                                 {[
                                     { icon: building, text: "Opportunity to offer exclusive rates & packages to exhibitors", isImg: true },
                                     { icon: bell, text: "Showcase your hotel facilities to a high-value business audience", isImg: true },
@@ -211,7 +297,7 @@ const HospitalityPartner = () => {
                                     { icon: Percent, text: "Opportunity for seasonal tie-ups & long-term partnerships", isImg: false },
                                     { icon: power, text: "Year-round visibility through pre & post event promotions", isImg: true }
                                 ].map((adv, i) => (
-                                    <div key={i} className="flex flex-col items-center text-center py-6 px-3 border-r last:border-r-0 border-slate-200">
+                                    <div key={i} className={`flex flex-col items-center text-center py-6 px-3 border-r border-b md:border-b-0 border-slate-200 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 border-r-0' : ''}`}>
                                         <div className="w-12 h-12 flex items-center justify-center mb-2">
                                             {adv.isImg
                                                 ? <img src={adv.icon as string} alt="" className="w-10 h-10 object-contain" />
@@ -225,7 +311,7 @@ const HospitalityPartner = () => {
                     </div>
 
                     {/* RIGHT COLUMN: PACKAGES */}
-                    <div className="w-full lg:w-[30%] bg-white border border-slate-200 rounded-3xl shadow-xl overflow-hidden flex flex-col h-full relative z-20 -mt-8">
+                    <div className="w-full lg:w-[30%] bg-white border border-slate-200 rounded-3xl shadow-xl overflow-hidden flex flex-col h-full relative z-20 lg:-mt-8">
                         <div className="bg-gradient-to-r from-[#b4841c] via-[#d4a017] to-[#b4841c] px-4 py-2 flex items-center justify-center text-center">
                             <h3 className="text-white font-black text-[18px] uppercase tracking-wider">PARTNERSHIP PACKAGES</h3>
                         </div>
@@ -255,12 +341,17 @@ const HospitalityPartner = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="bg-[#0b1a3a] p-2 flex flex-col gap-2 mt-auto">
-                            <div className="grid grid-cols-3 gap-1">
-                                {["Custom packages available on request", "GST as applicable", "Stay vouchers valid during event period"].map((u, i) => (
+
+                        <div className="bg-[#0b1a3a] p-3 flex flex-col gap-2 mt-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-1">
+                                {[
+                                    { text: "Custom packages available on request" },
+                                    { text: "GST as applicable" },
+                                    { text: "Stay vouchers valid during event period" }
+                                ].map((u, i) => (
                                     <div key={i} className="flex flex-col items-center gap-1 text-center">
                                         <CheckCircle className="w-3 h-3 text-amber-500 shrink-0" />
-                                        <span className="text-[7px] text-white font-bold leading-tight uppercase">{u}</span>
+                                        <span className="text-[9px] sm:text-[7px] text-white font-bold leading-tight uppercase">{u.text}</span>
                                     </div>
                                 ))}
                             </div>
@@ -268,12 +359,19 @@ const HospitalityPartner = () => {
                     </div>
                 </SectionContainer>
 
-                {/* FOOTER BANNER */}
-                <div className="bg-[#0b1a3a] overflow-hidden py-1 shadow-2xl relative"
-                    style={{ backgroundImage: `url(${footerBgImg})`, backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat', backgroundPosition: 'left center' }}>
-                    <SectionContainer className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-2 h-full py-2">
-                        <div className="flex items-center gap-8 min-w-[210px] ml-56">
-                            <div className="flex flex-col">
+                {/* 4. FINAL FOOTER BANNER (Aligned under Logo) */}
+                <div
+                    className="bg-[#0b1a3a] overflow-hidden py-6 lg:py-1 shadow-2xl relative"
+                    style={{
+                        backgroundImage: `url(${footerBgImg})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }}
+                >
+                    <SectionContainer className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6 h-full py-2">
+                        <div className="flex items-center text-center lg:text-left gap-8 min-w-[210px] lg:ml-56">
+                            <div className="flex flex-col items-center lg:items-start w-full">
                                 <h4 className="text-white font-semibold text-[14px] leading-tight uppercase tracking-tight">
                                     {footer.headline || "LET'S CREATE MEMORIES. LET'S DELIVER HOSPITALITY. LET'S GROW TOGETHER!"}
                                 </h4>
@@ -282,24 +380,31 @@ const HospitalityPartner = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-0 flex-1 justify-center">
-                            {[
-                                { icon: Mail, href: `mailto:${footer.email || "info@ihwe.in"}`, label: footer.email || "info@ihwe.in" },
-                                { icon: Phone, href: `tel:${footer.phone || "+91 9654900525"}`, label: footer.phone || "+91 9654900525" },
-                                { icon: Globe2, href: "https://www.ihwe.in", label: footer.website || "www.ihwe.in" },
-                            ].map((item, i) => (
-                                <div key={i} className="px-4 border-l-2 border-white/10 flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent">
-                                        <item.icon className="w-5 h-5 text-white" />
-                                    </div>
-                                    <a href={item.href} target={i === 2 ? "_blank" : undefined} rel="noreferrer"
-                                        className="text-white font-black text-sm tracking-tight hover:text-amber-500 whitespace-nowrap">{item.label}</a>
+
+                        <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-0 flex-1 justify-center w-full">
+                            <div className="px-4 lg:border-l-2 lg:border-white/10 flex items-center gap-4 hover:opacity-90 transition-opacity">
+                                <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent shrink-0">
+                                    <Mail className="w-5 h-5 text-white" />
                                 </div>
-                            ))}
+                                <a href="mailto:info@ihwe.in" className="text-white font-black text-sm tracking-tight hover:text-amber-500">info@ihwe.in</a>
+                            </div>
+                            <div className="px-4 lg:border-l-2 lg:border-white/10 flex items-center gap-4 hover:opacity-90 transition-opacity">
+                                <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent shrink-0">
+                                    <Phone className="w-5 h-5 text-white" />
+                                </div>
+                                <a href="tel:+919654900525" className="text-white font-black text-sm tracking-tight hover:text-amber-500 whitespace-nowrap">+91 9654900525</a>
+                            </div>
+                            <div className="px-4 lg:border-l-2 lg:border-white/10 flex items-center gap-4 hover:opacity-90 transition-opacity">
+                                <div className="w-12 h-12 rounded-full border-2 border-amber-500/50 flex items-center justify-center bg-transparent shrink-0">
+                                    <Globe2 className="w-5 h-5 text-white" />
+                                </div>
+                                <a href="https://www.ihwe.in" target="_blank" rel="noreferrer" className="text-white font-black text-sm tracking-tight hover:text-amber-500">www.ihwe.in</a>
+                            </div>
                         </div>
-                        <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0">
-                            <Link to="/partner-registration?type=hospitality" target="_blank">
-                                <button className="bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
+
+                        <div className="p-1 flex flex-col items-center justify-center gap-0.5 min-w-[70px] flex-shrink-0 w-full lg:w-auto">
+                            <Link to="/partner-registration?type=hospitality" target="_blank" className="w-full lg:w-auto flex justify-center">
+                                <button className="w-full sm:w-auto bg-[#619941] hover:bg-[#58b02d] transition-all duration-300 text-white uppercase px-6 py-2.5 rounded-md text-xs sm:text-sm font-bold shadow-md tracking-wider">
                                     Register As Partner
                                 </button>
                             </Link>

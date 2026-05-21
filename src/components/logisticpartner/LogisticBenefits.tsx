@@ -92,12 +92,13 @@ const LogisticBenefits: React.FC<LogisticBenefitsProps> = ({ data }) => {
 
 
         {/* Advantages List */}
-        <div className="flex-1 p-[12px_20px] flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
+        <div className="flex-1 p-[16px_12px] md:p-[12px_20px] grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-row md:flex-nowrap items-center justify-between gap-4">
           {additionalAdvantages.map((item: any, i: number) => (
             <React.Fragment key={i}>
-              <div className="flex flex-col items-center text-center gap-2 flex-1 min-w-[100px] group">
-                <div className="w-12 h-12 rounded-full bg-[#0B2C66] flex items-center justify-center text-white transition-all duration-300 shadow-md group-hover:scale-110">
-                  {renderIcon(item.icon, "w-6 h-6")}
+              <div className={`flex flex-col items-center text-center gap-2 flex-1 min-w-[100px] group ${i === 4 ? 'col-span-2 sm:col-span-1' : ''
+                }`}>
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0B2C66] flex items-center justify-center text-white transition-all duration-300 shadow-md group-hover:scale-110 shrink-0">
+                  {renderIcon(item.icon, "w-5 h-5 md:w-6 md:h-6")}
                 </div>
 
 

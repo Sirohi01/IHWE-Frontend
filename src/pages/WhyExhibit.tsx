@@ -780,7 +780,7 @@ const WhyExhibit = () => {
               <div className="flex-1 flex flex-col justify-center px-6 md:px-10 py-5 md:py-6 relative z-10">
                 {/* Heading */}
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="w-5 h-[2px] bg-[#1a682d] rounded-full" />
+                  <span className="w-5 h-[2px] bg-[#1a682d] rou  nded-full" />
                   {/* <p className="text-[10px] md:text-[11px] font-black text-[#1a682d] uppercase tracking-widest">Government Scheme</p> */}
                 </div>
                 <h2 className="text-[15px] md:text-[22px] font-black text-[#00153c] leading-tight mb-1 uppercase">

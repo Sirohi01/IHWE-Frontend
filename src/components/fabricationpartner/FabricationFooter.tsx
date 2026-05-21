@@ -30,13 +30,13 @@ const FabricationFooter = () => {
             <div className="absolute bottom-0 right-[10%] w-[250px] h-[250px] bg-[#00b7c2] blur-[120px]" />
           </div>
 
-          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between">
+          <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between text-center lg:text-left gap-4 py-4 lg:py-0">
 
             {/* LEFT */}
-            <div className="flex items-center gap-3 px-6 py-3 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 px-6 py-3 w-full lg:w-auto">
 
               {/* IMAGE */}
-              <div className="w-[160px] shrink-0 hidden md:block">
+              <div className="w-[120px] md:w-[160px] shrink-0 hidden md:block">
                 <img
                   src="/images/stall.png"
                   alt="Stall"
@@ -64,51 +64,36 @@ const FabricationFooter = () => {
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
 
             {/* EMAIL */}
-            <div className="flex items-center gap-4 px-6 py-5">
+            <a href="mailto:info@ihwe.in" className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
 
-              <div className="w-[64px] h-[64px] rounded-full bg-[#0097a7] flex items-center justify-center shadow-lg">
-                <Mail className="w-[30px] h-[30px] text-white" />
+              <div className="w-12 h-12 md:w-[64px] md:h-[64px] rounded-full bg-[#0097a7] flex items-center justify-center shadow-lg shrink-0">
+                <Mail className="w-[22px] h-[22px] md:w-[30px] md:h-[30px] text-white" />
               </div>
 
-              <h4 className="text-white text-[20px] font-semibold tracking-wide">
+              <h4 className="text-white text-[16px] md:text-[18px] lg:text-[20px] font-semibold tracking-wide hover:text-[#00b7c2] transition-colors">
                 info@ihwe.in
               </h4>
 
-            </div>
+            </a>
 
             {/* DIVIDER */}
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
 
             {/* PHONE */}
-            <div className="flex items-center gap-4 px-6 py-5">
+            <a href="tel:+919654900525" className="flex items-center gap-4 px-6 py-3 hover:opacity-90 transition-all duration-300">
 
-              <div className="w-[64px] h-[64px] rounded-full bg-[#00a388] flex items-center justify-center shadow-lg">
-                <Phone className="w-[30px] h-[30px] text-white" />
+              <div className="w-12 h-12 md:w-[64px] md:h-[64px] rounded-full bg-[#00a388] flex items-center justify-center shadow-lg shrink-0">
+                <Phone className="w-[22px] h-[22px] md:w-[30px] md:h-[30px] text-white" />
               </div>
 
-              <h4 className="text-white text-[18px] font-semibold tracking-wide">
+              <h4 className="text-white text-[16px] md:text-[18px] lg:text-[18px] font-semibold tracking-wide hover:text-[#00a388] transition-colors">
                 +91 9654900525
               </h4>
 
-            </div>
+            </a>
 
             {/* DIVIDER */}
             <div className="hidden lg:block w-[1px] h-[90px] bg-white/20" />
-
-            {/* QR */}
-            {/* <div className="flex items-center gap-4 px-6 py-5">
-
-              <div className="bg-white p-2 rounded-[6px] shadow-lg">
-                <QrCode className="w-[70px] h-[70px] text-black" />
-              </div>
-
-              <h4 className="text-[#00a9b7] uppercase font-black text-[20px] leading-[1.1]">
-                Scan To
-                <br />
-                Partner
-              </h4>
-
-            </div> */}
 
           </div>
 
@@ -116,7 +101,7 @@ const FabricationFooter = () => {
 
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default FabricationFooter
+export default FabricationFooter;

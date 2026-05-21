@@ -46,7 +46,7 @@ const LogisticFooter: React.FC<LogisticFooterProps> = ({ data }) => {
         </div>
 
         {/* Middle Section: Contact Info with Dividers */}
-        <div className="flex flex-wrap lg:flex-nowrap items-center justify-center gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
+        <div className="flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-center justify-center gap-4 sm:gap-5 lg:gap-8 flex-1 border-x-0 lg:border-x border-white/10 lg:px-8">
 
           {/* Email */}
           <div className="flex items-center gap-2.5 group">

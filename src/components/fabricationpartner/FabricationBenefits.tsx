@@ -38,26 +38,26 @@ const FabricationBenefits = () => {
       ].map((item, idx) => (
         <div
           key={idx}
-          className="rounded-[16px] overflow-hidden border border-[#d8d8d8] bg-[#fafafa] shadow-sm hover:shadow-lg transition-all duration-300"
+          className="rounded-[16px] overflow-hidden border border-[#d8d8d8] bg-[#fafafa] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full"
         >
 
           {/* HEADER */}
           <div
-            className="h-[36px] flex items-center justify-center"
+            className="h-[36px] flex items-center justify-center px-2 shrink-0"
             style={{
               background: `linear-gradient(180deg, ${item.color} 0%, ${item.color}dd 100%)`,
             }}
           >
-            <h3 className="text-white text-[14px] md:text-[15px] font-semibold uppercase tracking-[0.5px] text-center">
+            <h3 className="text-white text-xs sm:text-[13px] md:text-[15px] font-semibold uppercase tracking-[0.5px] text-center">
               {item.title}
             </h3>
           </div>
 
           {/* BODY */}
-          <div className="px-4 py-2 flex flex-col items-center text-center min-h-[150px]">
+          <div className="px-4 py-4 flex flex-col items-center text-center flex-1">
 
             {/* ICON */}
-            <div className="w-[62px] h-[62px] flex items-center justify-center mb-2">
+            <div className="w-12 h-12 md:w-[62px] md:h-[62px] flex items-center justify-center mb-2 shrink-0">
               <img
                 src={item.icon}
                 alt={item.title}
@@ -66,7 +66,7 @@ const FabricationBenefits = () => {
             </div>
 
             {/* DESC */}
-            <p className="text-[#111827] text-[12px] leading-[1.55]">
+            <p className="text-[#111827] text-[11px] sm:text-[12px] leading-[1.55]">
               {item.desc}
             </p>
 
@@ -78,23 +78,23 @@ const FabricationBenefits = () => {
     </div>
 
     {/* ADDITIONAL ADVANTAGES */}
-    <div className="mt-2 border border-[#69aeb3] rounded-[18px] bg-[#fcfcfc] overflow-hidden">
+    <div className="mt-8 border border-[#69aeb3] rounded-[18px] bg-[#fcfcfc] overflow-hidden">
 
       {/* TITLE */}
-      <div className="flex items-center justify-center gap-5">
+      <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 mt-6">
 
-        <div className="h-[1px] w-[120px] bg-[#69aeb3]" />
+        <div className="h-[1px] flex-1 max-w-[120px] bg-[#69aeb3]" />
 
-        <h3 className="text-[#111827] text-[16px] md:text-[22px] font-black uppercase tracking-[1px]">
+        <h3 className="text-[#111827] text-sm sm:text-[16px] md:text-[22px] font-black uppercase tracking-[1px] text-center shrink-0">
           Additional Advantages
         </h3>
 
-        <div className="h-[1px] w-[120px] bg-[#69aeb3]" />
+        <div className="h-[1px] flex-1 max-w-[120px] bg-[#69aeb3]" />
 
       </div>
 
       {/* ITEMS */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 p-2">
 
         {[
           {
@@ -124,7 +124,7 @@ const FabricationBenefits = () => {
         ].map((item, idx) => (
           <div
             key={idx}
-            className="relative flex flex-col items-center text-center px-2 py-3"
+            className="relative flex flex-col items-center text-center px-2 py-4"
           >
 
             {/* VERTICAL DIVIDER */}
@@ -133,7 +133,7 @@ const FabricationBenefits = () => {
             )}
 
             {/* ICON */}
-            <div className="w-[58px] h-[58px] mb-1">
+            <div className="w-[48px] h-[48px] md:w-[58px] md:h-[58px] mb-2 shrink-0">
               <img
                 src={item.icon}
                 alt=""
@@ -142,7 +142,7 @@ const FabricationBenefits = () => {
             </div>
 
             {/* TEXT */}
-            <p className="text-[#111827] text-[12px] leading-[1.45]">
+            <p className="text-[#111827] text-[10px] sm:text-[12px] leading-[1.45] font-bold">
               {item.text}
             </p>
 
