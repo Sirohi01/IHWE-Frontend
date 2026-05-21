@@ -1,72 +1,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import {
-  Truck,
-  Megaphone,
-  Star,
-  Users,
-  Globe,
-  Package,
-  UserCheck,
-  MapPin,
-  Monitor,
-  TrendingUp,
-  Handshake,
-  Award,
-} from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 
-const mainBenefits = [
-  {
-    title: "BRAND VISIBILITY",
-    text: "Prominent logo placement across IHWE 2026 platforms, signage, and collaterals.",
-    icon: <Megaphone className="w-6 h-6" />,
-    color: "#0B2C66",
-  },
-  {
-    title: "DIRECT BUSINESS ACCESS",
-    text: "Receive contact details of all exhibitors for their logistics & shipping requirements.",
-    icon: <UserCheck className="w-6 h-6" />,
-    color: "#4E9F3D",
-  },
-  {
-    title: "ON-SITE PRESENCE",
-    text: "Branding at key logistical touchpoints inside the exhibition venue.",
-    icon: <MapPin className="w-6 h-6" />,
-    color: "#0B2C66",
-  },
-  {
-    title: "OPERATIONAL SUPPORT",
-    text: "Preferred partner for exhibitor logistics with advance communication & coordination.",
-    icon: <Package className="w-6 h-6" />,
-    color: "#4E9F3D",
-  },
-  {
-    title: "DIGITAL PROMOTION",
-    text: "Logo promotion on our website with a direct link to your website.",
-    icon: <Monitor className="w-6 h-6" />,
-    color: "#0B2C66",
-  },
-];
+const renderIcon = (iconName: string, className: string = "w-6 h-6") => {
+  const IconComponent = (LucideIcons as any)[iconName] || LucideIcons.HelpCircle;
+  return <IconComponent className={className} />;
+};
 
-const additionalAdvantages = [
-  { text: "Opportunity to be the exclusive logistics partner for exhibitors", icon: <Truck /> },
-  { text: "Build trust as the go-to logistics expert", icon: <Award /> },
-  { text: "Access to a network of industry leaders & businesses", icon: <Users /> },
-  { text: "Opportunity to offer exclusive deals to exhibitors", icon: <TrendingUp /> },
-  { text: "Year-round visibility through pre & post event promotions", icon: <Handshake /> },
-];
+interface LogisticBenefitsProps {
+  data?: any;
+}
 
-const LogisticBenefits: React.FC = () => {
+const LogisticBenefits: React.FC<LogisticBenefitsProps> = ({ data }) => {
+  const mainBenefits = data?.main || [];
+
+  const additionalTitle = data?.additionalTitle || "ADDITIONAL\nADVANTAGES";
+  const additionalAdvantages = data?.additional || [];
+
   return (
     <div className="flex flex-col gap-2 w-full">
 
 
-      {/* 5 Main Benefit Cards */}
+      {/* Main Benefit Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2 lg:ml-3">
 
 
 
-        {mainBenefits.map((benefit, i) => (
+        {mainBenefits.map((benefit: any, i: number) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
@@ -91,7 +51,7 @@ const LogisticBenefits: React.FC = () => {
                 className="w-12 h-12 rounded-full flex items-center justify-center text-white mb-3 shadow-sm"
                 style={{ backgroundColor: benefit.color }}
               >
-                {benefit.icon}
+                {renderIcon(benefit.icon, "w-6 h-6")}
               </div>
               <p className="text-[11px] font-bold text-[#4A5568] leading-snug text-center">
                 {benefit.text}
@@ -113,21 +73,20 @@ const LogisticBenefits: React.FC = () => {
 
         {/* Sidebar Title */}
         <div className="bg-[#dddddd] p-[15px_20px] flex items-center justify-center min-w-[140px]">
-          <h3 className="text-[#0B2C66] font-black text-[14px] uppercase tracking-wider text-center leading-tight">
-            ADDITIONAL<br />ADVANTAGES
+          <h3 className="text-[#0B2C66] font-black text-[14px] uppercase tracking-wider text-center leading-tight whitespace-pre-line">
+            {additionalTitle}
           </h3>
         </div>
 
 
         {/* Advantages List */}
         <div className="flex-1 p-[16px_12px] md:p-[12px_20px] grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-row md:flex-nowrap items-center justify-between gap-4">
-          {additionalAdvantages.map((item, i) => (
+          {additionalAdvantages.map((item: any, i: number) => (
             <React.Fragment key={i}>
-              <div className={`flex flex-col items-center text-center gap-2 flex-1 min-w-[100px] group ${
-                i === 4 ? 'col-span-2 sm:col-span-1' : ''
-              }`}>
+              <div className={`flex flex-col items-center text-center gap-2 flex-1 min-w-[100px] group ${i === 4 ? 'col-span-2 sm:col-span-1' : ''
+                }`}>
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0B2C66] flex items-center justify-center text-white transition-all duration-300 shadow-md group-hover:scale-110 shrink-0">
-                  {React.cloneElement(item.icon as React.ReactElement, { className: "w-5 h-5 md:w-6 md:h-6" })}
+                  {renderIcon(item.icon, "w-5 h-5 md:w-6 md:h-6")}
                 </div>
 
 
