@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+interface FabricationPackagesProps {
+  packages?: any;
+}
 
-const packages = [
+const defaultPackages = [
   {
     name: "Associate Partner",
     price: "₹1,25,000 + GST",
@@ -26,20 +29,42 @@ const packages = [
   },
 ];
 
-const FabricationPackages = () => {
+const defaultNotes = [
+  "Custom packages available on request",
+  "GST as applicable",
+  "Stay vouchers valid during event period",
+];
+
+const FabricationPackages: React.FC<FabricationPackagesProps> = ({ packages }) => {
+  const packagesList = packages?.items && packages.items.length > 0
+    ? packages.items.map((item: any, idx: number) => ({
+        name: item.name,
+        price: item.price,
+        color: item.color || defaultPackages[idx]?.color || "#00767a",
+        bgColor: defaultPackages[idx]?.bgColor || "bg-[#F0FDF4]",
+        image: defaultPackages[idx]?.image || "/images/partnership/stallhome.png"
+      }))
+    : defaultPackages;
+
+  const notesList = packages?.notes && packages.notes.length > 0
+    ? packages.notes.map((note: any) => note.text)
+    : defaultNotes;
+
+  const sectionTitle = packages?.title || "Partnership Packages & Investment";
+
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] overflow-hidden flex flex-col">
       
       {/* Header */}
       <div className="bg-[#aa7002] px-[16px] py-[8px]">
         <h3 className="text-white font-semibold text-[12px] uppercase tracking-wider text-center">
-          Partnership Packages &amp; Investment
+          {sectionTitle}
         </h3>
       </div>
 
       {/* Package Items */}
       <div className="p-[6px_6px_2px] flex flex-col gap-[2px] flex-1">
-        {packages.map((pkg, index) => (
+        {packagesList.map((pkg, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: 20 }}
@@ -78,10 +103,10 @@ const FabricationPackages = () => {
                 style={{ backgroundColor: pkg.color }}
               >
                 <img
-  src={pkg.image}
-  alt={pkg.name}
-  className="w-[30px] h-[30px] object-contain brightness-0 invert"
-/>
+                  src={pkg.image}
+                  alt={pkg.name}
+                  className="w-[30px] h-[30px] object-contain brightness-0 invert"
+                />
               </div>
 
               <div className="flex-1">
@@ -103,11 +128,7 @@ const FabricationPackages = () => {
 
       {/* Footer Notes */}
       <div className="bg-[#01122c] px-[14px] py-[10px] mt-auto flex flex-col sm:flex-row lg:flex-col flex-wrap justify-center sm:justify-between lg:justify-start gap-y-2 gap-x-4">
-        {[
-          "Custom packages available on request",
-          "GST as applicable",
-          "Stay vouchers valid during event period",
-        ].map((note, i) => (
+        {notesList.map((note, i) => (
           <div
             key={i}
             className="flex items-center gap-[6px]"

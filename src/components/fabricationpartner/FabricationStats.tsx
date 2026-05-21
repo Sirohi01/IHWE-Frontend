@@ -1,45 +1,56 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Globe, Calendar, Briefcase, TrendingUp } from 'lucide-react';
+import * as Icons from 'lucide-react';
 
-const stats = [
+const IconRenderer = ({ name, className }: { name: string, className?: string }) => {
+  const Icon = (Icons as any)[name] || Icons.Star;
+  return <Icon className={className} />;
+};
+
+interface FabricationStatsProps {
+  stats?: any[];
+}
+
+const defaultStats = [
   {
-    icon: <Users className="w-5 h-5" />,
+    icon: "Users",
     value: "8,000+",
     label: "Visitor / Delegates",
     color: "#04777a"
   },
   {
-    icon: <Globe className="w-5 h-5" />,
+    icon: "Globe",
     value: "1000+",
     label: "Global Buyers",
     color: "#707717"
   },
   {
-    icon: <Calendar className="w-5 h-5" />,
+    icon: "Calendar",
     value: "3",
     label: "Power-Packed\nDays",
     color: "#b37504"
   },
   {
-    icon: <Briefcase className="w-5 h-5" />,
+    icon: "Briefcase",
     value: "Unlimited",
     label: "Business\nOpportunities",
     color: "#01366a"
   },
   {
-    icon: <TrendingUp className="w-5 h-5" />,
+    icon: "TrendingUp",
     value: "High",
     label: "Brand Visibility\n& Exposure",
     color: "#036975"
   },
 ];
 
-const FabricationStats = () => {
+const FabricationStats: React.FC<FabricationStatsProps> = ({ stats }) => {
+  const statsList = stats && stats.length > 0 ? stats : defaultStats;
+
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] shadow-[0_20px_50px_rgba(0,0,0,0.08)] p-[16px_12px] md:p-[12px_20px] mx-auto max-w-[1200px]">
       <div className="grid grid-cols-2 md:flex md:flex-row items-center justify-between gap-y-4 gap-x-2 md:gap-0">
-        {stats.map((stat, index) => (
+        {statsList.map((stat, index) => (
           <React.Fragment key={index}>
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -53,7 +64,7 @@ const FabricationStats = () => {
                 className="w-[36px] h-[36px] md:w-[42px] md:h-[42px] rounded-full flex items-center justify-center text-white transition-all duration-300 group-hover:scale-110 shadow-md shrink-0"
                 style={{ backgroundColor: stat.color }}
               >
-                {React.cloneElement(stat.icon as React.ReactElement, { className: "w-4 h-4 md:w-5 md:h-5" })}
+                <IconRenderer name={stat.icon} className="w-4 h-4 md:w-5 md:h-5" />
               </div>
               <div className="flex flex-col">
                 <span className="text-sm sm:text-[18px] font-black text-[#0B2C66] leading-none mb-0.5">
@@ -64,7 +75,7 @@ const FabricationStats = () => {
                 </span>
               </div>
             </motion.div>
-            {index < stats.length - 1 && (
+            {index < statsList.length - 1 && (
               <div className="hidden md:block w-[1px] h-[35px] bg-gray-100" />
             )}
           </React.Fragment>

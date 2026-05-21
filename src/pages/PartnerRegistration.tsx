@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Swal from "sweetalert2";
-import heroImg from "@/assets/partnerRegistration/imagec.png";
+import heroImg from "@/assets/partnerRegistration/new.jpeg";
 import MiddleImage from "@/assets/partnerRegistration/MiddleImage.png";
 import BottomImage from "@/assets/partnerRegistration/BottomImage.png";
 
@@ -133,6 +133,8 @@ const PartnerRegistration = () => {
         switch (type) {
             case "hotel":
                 return ["Hotel Booking Assistance", "Hospitality & Concierge", "Other Services"];
+            case "fabrication":
+                return ["Exhibition Stall Fabrication", "Custom Stall Designing", "Other Services"];
             case "travel":
                 return ["Flight Booking", "Airport Transfers", "Local Transportation", "Other Services"];
             case "logistics":
@@ -155,6 +157,10 @@ const PartnerRegistration = () => {
                 case "hotel":
                     category = "Hospitality";
                     interest = "Official Hotel Partner";
+                    break;
+                case "fabrication":
+                    category = "Stall Fabrication";
+                    interest = "Official Stall Fabrication Partner";
                     break;
                 case "travel":
                     category = "Travel & Tourism";
@@ -563,7 +569,7 @@ const PartnerRegistration = () => {
     return (
         <div className="min-h-screen bg-[#f8faf9] font-inter relative">
             {/* HERO BANNER */}
-            <section className="relative pb-2 overflow-hidden px-10 w-[1400px] mx-auto ">
+            <section className="relative pb-2 overflow-hidden  mx-auto ">
                 <img src={heroImg} alt="partner form" className="w-full h-auto object-cover" />
             </section>
 
