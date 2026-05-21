@@ -8,48 +8,9 @@ import FloatingOfficialPartner from "../../components/printingBrandingPartner/Fl
 import PartnerShipBenefitCard from "@/components/printingBrandingPartner/PartnerShipBenefitCard";
 import PricingFooter from "@/components/printingBrandingPartner/PrintingFooter";
 import { printingBrandingPartnerApi, SERVER_URL } from "@/lib/api";
+import SectionContainer from "@/components/layout/SectionContainer";
 
-const defaultHero = {
-    subtitle: "Partner With Us As a",
-    title: "Printing &\nBranding Partner",
-    shortDescription: "Bring Ideas to Life. Amplify Brands Create Impact",
-    description: "Partner with IHWE",
-    bgImage: heroBg
-};
 
-const defaultPackages = [
-    {
-        title: "Associate Partner",
-        price: "1,25,000",
-        color: "#1E104E",
-        list: [
-            "Logo on website & digital platforms",
-            "Social media mentions",
-            "Exhibitor list & emails"
-        ]
-    },
-    {
-        title: "Preferred Partner",
-        price: "2,25,000",
-        color: "#81912F",
-        list: [
-            "All benefits of Associate Partner",
-            "Branding at key areas in the venue",
-            "Premium logo placement"
-        ]
-    },
-    {
-        title: "Premier Partner",
-        price: "3,75,000",
-        color: "orange",
-        list: [
-            "All benefits of Preferred Partner",
-            "On-site branding (booth / signage)",
-            "Speaking opportunity / brand showcase",
-            "Featured listing in all marketing"
-        ]
-    }
-];
 
 const PrintingBrandingPartner = () => {
     const [data, setData] = useState<any>(null);
@@ -66,7 +27,15 @@ const PrintingBrandingPartner = () => {
         fetchData();
     }, []);
 
-    const hero = data?.hero || defaultHero;
+    if (!data) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="w-8 h-8 border-4 border-[#0D0B61] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    const hero = data.hero || {};
 
     // Resolve image URL — handle uploads paths from backend
     const resolveImg = (img: string) => {
@@ -88,8 +57,8 @@ const PrintingBrandingPartner = () => {
     return (
         <div className="bg-white min-h-screen font-inter">
             <div className="min-h-[375px] bg-cover bg-center py-5" style={{ backgroundImage: `url("${bgImage}")` }}>
-                <div className="container mx-auto px-6 max-w-[1400px] relative flex flex-col md:block">
-                    <div className="w-full md:w-1/2 relative z-10 pb-8 md:pb-0">
+                <SectionContainer className="relative flex flex-col lg:block">
+                    <div className="w-full lg:w-1/2 relative z-10 pb-8 lg:pb-0">
                         <div className="top-logo-and-text flex items-center gap-4">
                             <div className="flex items-start gap-4 w-full mb-0 pt-4 mt-[30px]">
                                 <div className="flex items-center gap-[15px]">
@@ -106,8 +75,8 @@ const PrintingBrandingPartner = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="w-[1px] h-[70px] bg-gray-200 hidden md:block" />
-                                <div className="hidden md:block">
+                                <div className="w-[1px] h-[70px] bg-gray-200 hidden lg:block" />
+                                <div className="hidden lg:block">
                                     <p className="text-[#0B2C66] font-bold text-[20px] leading-[1.2] tracking-tight">
                                         Collaborate.
                                         <br />
@@ -135,11 +104,11 @@ const PrintingBrandingPartner = () => {
                             <p className="text-sm text-[#0D0B61] max-w-[350px] mt-2">{hero.description}</p>
                         </div>
                     </div>
-                    <WhyPartner items={data?.whyPartner} />
                     <FloatingOfficialPartner />
-                </div>
+                    <WhyPartner items={data?.whyPartner} />
+                </SectionContainer>
             </div>
-            <div className="container mx-auto px-6 max-w-[1400px]">
+            <SectionContainer>
                 <div className="flex flex-col md:flex-row gap-4 mb-10">
                     <div className="w-full md:w-[70%]">
                         <StatCardsGroup items={data?.stats} />
@@ -159,7 +128,7 @@ const PrintingBrandingPartner = () => {
                                 <h3 className="text-lg font-semibold text-white text-center uppercase">Partnership Packages</h3>
                             </div>
                             <div className="bg-white rounded-lg p-3 text-center flex items-center justify-between flex-col gap-2 border border-1 border-gray-300 w-full h-full flex-grow-1">
-                                {(data?.packages || defaultPackages).map((packageData, index) => (
+                                {(data?.packages || []).map((packageData: any, index: number) => (
                                     <PartnerShipBenefitCard
                                         key={index}
                                         color={packageData.color}
@@ -173,7 +142,7 @@ const PrintingBrandingPartner = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </SectionContainer>
             <PricingFooter footer={data?.footer} />
         </div>
     );

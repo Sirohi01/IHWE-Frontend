@@ -230,16 +230,10 @@ const LogisticHero: React.FC<LogisticHeroProps> = ({ data }) => {
             </h3>
 
             <div className="flex flex-col gap-3.5">
-              {[
-                { text: "Access 8,000+ exhibitors, buyers & decision makers", icon: <LucideIcons.Users /> },
-                { text: "High visibility before, during & after the event", icon: <LucideIcons.Megaphone /> },
-                { text: "Be part of a trusted global health & wellness platform", icon: <LucideIcons.Globe /> },
-                { text: "Build strong partnerships & long-term relationships", icon: <LucideIcons.Handshake /> },
-                { text: "Enhance brand credibility & market leadership", icon: <LucideIcons.Award /> },
-              ].map((item, i) => (
+              {whyPartnerPoints.map((item: any, i: number) => (
                 <div key={i} className="flex gap-3 items-center">
                   <div className="w-[26px] h-[26px] bg-[#4E9F3D] rounded-full flex-shrink-0 flex items-center justify-center text-white shadow-sm">
-                    {React.cloneElement(item.icon as React.ReactElement, { className: "w-[12px] h-[12px]" })}
+                    {renderIcon(item.icon, "w-[12px] h-[12px]")}
                   </div>
                   <p className="text-white/90 font-bold text-[11px] sm:text-xs leading-snug">
                     {item.text}

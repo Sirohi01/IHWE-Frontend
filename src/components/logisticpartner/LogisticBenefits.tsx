@@ -12,22 +12,10 @@ interface LogisticBenefitsProps {
 }
 
 const LogisticBenefits: React.FC<LogisticBenefitsProps> = ({ data }) => {
-  const mainBenefits = data?.main || [
-    { title: "BRAND VISIBILITY", text: "Prominent logo placement across IHWE 2026 platforms, signage, and collaterals.", icon: "Megaphone", color: "#0B2C66" },
-    { title: "DIRECT BUSINESS ACCESS", text: "Receive contact details of all exhibitors for their logistics & shipping requirements.", icon: "UserCheck", color: "#4E9F3D" },
-    { title: "ON-SITE PRESENCE", text: "Branding at key logistical touchpoints inside the exhibition venue.", icon: "MapPin", color: "#0B2C66" },
-    { title: "OPERATIONAL SUPPORT", text: "Preferred partner for exhibitor logistics with advance communication & coordination.", icon: "Package", color: "#4E9F3D" },
-    { title: "DIGITAL PROMOTION", text: "Logo promotion on our website with a direct link to your website.", icon: "Monitor", color: "#0B2C66" }
-  ];
+  const mainBenefits = data?.main || [];
 
   const additionalTitle = data?.additionalTitle || "ADDITIONAL\nADVANTAGES";
-  const additionalAdvantages = data?.additional || [
-    { text: "Opportunity to be the exclusive logistics partner for exhibitors", icon: "Truck" },
-    { text: "Build trust as the go-to logistics expert", icon: "Award" },
-    { text: "Access to a network of industry leaders & businesses", icon: "Users" },
-    { text: "Opportunity to offer exclusive deals to exhibitors", icon: "TrendingUp" },
-    { text: "Year-round visibility through pre & post event promotions", icon: "Handshake" },
-  ];
+  const additionalAdvantages = data?.additional || [];
 
   return (
     <div className="flex flex-col gap-2 w-full">

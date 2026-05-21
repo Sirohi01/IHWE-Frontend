@@ -21,6 +21,14 @@ const LogisticPartnerPage: React.FC = () => {
     fetchData();
   }, []);
 
+  if (!data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
+        <div className="w-8 h-8 border-4 border-[#0B2C66] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#F8FAFC] font-sans">
       {/* Hero Section */}

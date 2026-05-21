@@ -12,13 +12,7 @@ interface LogisticStatsProps {
 }
 
 const LogisticStats: React.FC<LogisticStatsProps> = ({ data }) => {
-  const stats = data || [
-    { icon: "Users", value: "8,000+", label: "Delegates &\nExhibitors Expected", color: "#6B46C1" },
-    { icon: "Globe", value: "Multiple", label: "Exhibitor\nSegments", color: "#434190" },
-    { icon: "Calendar", value: "3", label: "Power-Packed\nDays", color: "#D53F8C" },
-    { icon: "Briefcase", value: "Unlimited", label: "Business\nOpportunities", color: "#3182CE" },
-    { icon: "TrendingUp", value: "High", label: "Brand Visibility\n& Exposure", color: "#553C9A" }
-  ];
+  const stats = data || [];
 
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E8F0] shadow-[0_20px_50px_rgba(0,0,0,0.08)] p-[16px_12px] md:p-[12px_20px] mx-auto max-w-[1200px]">

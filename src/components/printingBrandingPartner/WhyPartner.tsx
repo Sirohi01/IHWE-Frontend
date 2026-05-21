@@ -46,7 +46,7 @@ const WhyPartnerStats = ({ text, icon, showBorder }) => {
 const WhyPartner = ({ items }) => {
     const list = items && items.length ? items : defaultWhyPartnerData;
     return (
-        <div className="py-2 px-4 border border-solid border-2 border-white relative md:absolute md:bottom-5 md:top-2 md:right-6 w-full md:w-[300px] md:h-[95%] bg-[#0D0B61] text-white rounded-lg z-20 mt-6 md:mt-0">
+        <div className="py-2 px-4 border border-solid border-2 border-white relative lg:absolute lg:bottom-5 lg:top-2 lg:right-6 w-full lg:w-[300px] lg:h-[95%] bg-[#0D0B61] text-white rounded-lg z-20 mt-6 lg:mt-0">
             <h3 className="text-lg font-bold mt-2">Why Partner </h3>
             <h3 className="text-[#81912F] mb-2 font-bold text-lg">
                 <span className="text-white font-bold text-lg">WITH &nbsp;</span>

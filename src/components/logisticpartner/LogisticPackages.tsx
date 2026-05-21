@@ -13,43 +13,7 @@ interface LogisticPackagesProps {
 }
 
 const LogisticPackages: React.FC<LogisticPackagesProps> = ({ data }) => {
-  const packages = data || [
-    {
-      name: "Associate Partner",
-      price: "₹1,25,000 + GST",
-      color: "#4E9F3D",
-      bgColor: "bg-[#F0FDF4]",
-      icon: "Truck",
-      features: [
-        "Logo on website & digital platforms",
-      ],
-    },
-    {
-      name: "Preferred Partner",
-      price: "₹2,25,000 + GST",
-      color: "#0B2C66",
-      bgColor: "bg-[#EFF6FF]",
-      icon: "Truck",
-      features: [
-        "All benefits of Associate Partner",
-        "Dedicated email promotions",
-        "Premium logo placement",
-      ],
-    },
-    {
-      name: "Premier Partner",
-      price: "₹3,75,000 + GST",
-      color: "#7C3AED",
-      bgColor: "bg-[#F5F3FF]",
-      icon: "Truck",
-      features: [
-        "All benefits of Preferred Partner",
-        "On-site branding (booth / signage)",
-        "Speaking opportunity / brand showcase",
-        "Featured listing in all marketing",
-      ],
-    },
-  ];
+  const packages = data || [];
 
 
   return (

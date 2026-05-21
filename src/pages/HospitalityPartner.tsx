@@ -32,45 +32,7 @@ const resolveImg = (img: string, fallback: string) => {
     return img;
 };
 
-const DEFAULT_STATS = [
-    { icon: persons, val: "8,000+", label: "Delegates & Exhibitors Expected" },
-    { icon: globe, val: "Multiple", label: "Exhibitor Segments" },
-    { icon: calender, val: "3", label: "Power-Packed Days" },
-    { icon: power, val: "Unlimited", label: "Business Opportunities" },
-    { icon: bell, val: "High", label: "Brand Visibility & Exposure" },
-];
 
-const DEFAULT_BENEFITS = [
-    { title: "BRAND VISIBILITY", icon: building, desc: "Prominent logo placement across IHWE 2026 platforms, signage, digital promotions and hospitality areas." },
-    { title: "DIRECT BUSINESS ACCESS", icon: idcard, desc: "Receive contact details of all exhibitors for exclusive stay offers and hospitality solutions." },
-    { title: "PREFERRED STAY PARTNER", icon: bed, desc: "Recommended as the official hospitality partner to exhibitors and visitors attending the event." },
-    { title: "EXCLUSIVE VISIBILITY", icon: megaphone, desc: "Logo promotion on our website with a direct link to your website." },
-    { title: "ADDITIONAL BENEFITS", icon: awards, desc: "Inclusion in event directory, social media mentions & emailer promotions." },
-];
-
-const DEFAULT_PACKAGES = [
-    { name: "ASSOCIATE PARTNER", price: "₹1,25,000 + GST", color: "text-[#006b70]", bg: "bg-[#006b70]", benefits: ["Logo on website & digital platforms", "Social media mentions", "Exhibitor list & emails"] },
-    { name: "PREFERRED PARTNER", price: "₹2,25,000 + GST", color: "text-[#0b1a3a]", bg: "bg-[#0b1a3a]", benefits: ["All benefits of Associate Partner", "Dedicated email promotions", "Premium logo placement"] },
-    { name: "PREMIER PARTNER", price: "₹3,75,000 + GST", color: "text-[#b4841c]", bg: "bg-[#b4841c]", benefits: ["All benefits of Preferred Partner", "On-site branding (hospitality areas)", "Speaking opportunity / brand showcase", "Featured listing in all marketing"] },
-];
-
-const DEFAULT_HERO = {
-    tagline: "Partner with us as a",
-    title: "Hospitality",
-    titleHighlight: "Partner",
-    subtitle: "Exceptional Experiences. Memorable Stays. Lasting Impressions.",
-    description: "Partner with IHWE 2026 and be the preferred hospitality partner for 8,000+ exhibitors, buyers and decision makers from around the world.",
-    topImage: TopImage,
-};
-
-const DEFAULT_FOOTER = {
-    headline: "LET'S CREATE MEMORIES. LET'S DELIVER HOSPITALITY. LET'S GROW TOGETHER!",
-    subtext: "Join hands with IHWE 2026 and be the preferred stay partner for global leaders.",
-    email: "info@ihwe.in",
-    phone: "+91 9654900525",
-    website: "www.ihwe.in",
-    bottomImage: BottomImage,
-};
 
 const HospitalityPartner = () => {
     const [data, setData] = useState<any>(null);
@@ -79,18 +41,15 @@ const HospitalityPartner = () => {
         hospitalityPartnerApi.get().then(res => { if (res) setData(res); }).catch(console.error);
     }, []);
 
-    const hero = data?.hero || DEFAULT_HERO;
-    const stats = data?.stats?.length ? data.stats : DEFAULT_STATS;
-    const benefits = data?.benefits?.length ? data.benefits : DEFAULT_BENEFITS;
-    const packages = data?.packages?.length ? data.packages : DEFAULT_PACKAGES;
-    const footer = data?.footer || DEFAULT_FOOTER;
-    const whyPartner = data?.whyPartner || [
-        { text: "Access 8,000+ exhibitors, buyers & decision makers" },
-        { text: "High visibility before, during & after the event" },
-        { text: "Be part of a trusted global health & wellness platform" },
-        { text: "Build strong partnerships & long-term relationships" },
-        { text: "Enhance brand credibility & market leadership" },
-    ];
+    if (!data) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-white">
+                <div className="w-8 h-8 border-4 border-[#0b1a3a] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    const { hero = {}, stats = [], benefits = [], packages = [], footer = {}, whyPartner = [] } = data;
 
     const heroTopImg = resolveImg(hero.topImage, TopImage);
     const footerBgImg = resolveImg(footer.bottomImage, BottomImage);
@@ -110,19 +69,42 @@ const HospitalityPartner = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-1 h-full">
                             <div className="lg:col-span-5 flex flex-col pt-2">
                                 <div className="flex items-start justify-start gap-2 mb-6">
-                                    <div className="flex flex-col">
-                                        <h2 className="text-[#003399] font-black text-[24px] leading-[1.05] uppercase tracking-tight">
-                                            International <br />
-                                            <span className="text-[#2e7d32]">Health & Wellness</span> <br />
-                                            Expo 2026
-                                        </h2>
-                                        <div className="bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 mt-1 rounded tracking-[0.2em] w-fit uppercase">Global Edition</div>
+                                    <div className="flex items-center">
+                                        <div className="flex flex-col">
+                                            <h2 className="text-[#003399] font-black text-[24px] leading-[1.05] uppercase tracking-tight">
+                                                {hero?.logoTitle ? hero.logoTitle.split('\n').map((line: string, i: number) => (
+                                                    <React.Fragment key={i}>
+                                                        {i === 1 ? <span className="text-[#2e7d32]">{line}</span> : line}
+                                                        {i < (hero.logoTitle.split('\n').length || 0) - 1 && <br />}
+                                                    </React.Fragment>
+                                                )) :
+                                                    (
+                                                        <>
+                                                            International <br />
+                                                            <span className="text-[#2e7d32]">Health & Wellness</span> <br />
+                                                            Expo 2026
+                                                        </>
+                                                    )
+                                                }
+                                            </h2>
+                                            <div className="bg-amber-600 text-white text-[9px] font-black px-2 py-0.5 mt-1 rounded tracking-[0.2em] w-fit uppercase">
+                                                {hero?.logoBadge || "Global Edition"}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="flex items-center gap-5 border-l-2 border-slate-200 ml-6 pl-4 py-3">
                                         <div className="flex flex-col">
-                                            <span className="text-[#0b1a3a] font-black text-lg leading-tight uppercase">Collaborate.</span>
-                                            <span className="text-[#2e7d32] font-black text-lg leading-tight uppercase">Connect.</span>
-                                            <span className="text-amber-600 font-black text-lg leading-tight uppercase">Grow Together.</span>
+                                            {hero?.logoRightText ? hero.logoRightText.split('\n').map((line: string, i: number) => (
+                                                <span key={i} className={`${i === 0 ? 'text-[#0b1a3a]' : i === 1 ? 'text-[#2e7d32]' : 'text-amber-600'} font-black text-lg leading-tight uppercase`}>
+                                                    {line}
+                                                </span>
+                                            )) : (
+                                                <>
+                                                    <span className="text-[#0b1a3a] font-black text-lg leading-tight uppercase">Collaborate.</span>
+                                                    <span className="text-[#2e7d32] font-black text-lg leading-tight uppercase">Connect.</span>
+                                                    <span className="text-amber-600 font-black text-lg leading-tight uppercase">Grow Together.</span>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -179,18 +161,37 @@ const HospitalityPartner = () => {
                         <div className="flex justify-between items-start w-full">
                             <div>
                                 <h2 className="text-[#3b82f6] font-black text-[13px] sm:text-[14px] leading-[1.1] uppercase tracking-tight">
-                                    International <br />
-                                    <span className="text-emerald-400">Health & Wellness</span> <br />
-                                    Expo 2026
+                                    {hero?.logoTitle ? hero.logoTitle.split('\n').map((line: string, i: number) => (
+                                        <React.Fragment key={i}>
+                                            {i === 1 ? <span className="text-emerald-400">{line}</span> : line}
+                                            {i < (hero.logoTitle.split('\n').length || 0) - 1 && <br />}
+                                        </React.Fragment>
+                                    )) : (
+                                        <>
+                                            International <br />
+                                            <span className="text-emerald-400">Health & Wellness</span> <br />
+                                            Expo 2026
+                                        </>
+                                    )}
                                 </h2>
-                                <div className="bg-amber-500 text-white text-[7px] font-black px-1.5 py-0.5 mt-0.5 rounded tracking-widest w-fit uppercase">Global Edition</div>
+                                <div className="bg-amber-500 text-white text-[7px] font-black px-1.5 py-0.5 mt-0.5 rounded tracking-widest w-fit uppercase">
+                                    {hero?.logoBadge || "Global Edition"}
+                                </div>
                             </div>
 
                             <div className="flex items-center gap-3 border-l border-slate-400/50 pl-3 py-1 text-[11px] sm:text-xs">
                                 <div className="flex flex-col font-bold">
-                                    <span className="text-white uppercase leading-tight">Collaborate.</span>
-                                    <span className="text-emerald-400 uppercase leading-tight">Connect.</span>
-                                    <span className="text-amber-500 uppercase leading-tight">Grow.</span>
+                                    {hero?.logoRightText ? hero.logoRightText.split('\n').map((line: string, i: number) => (
+                                        <span key={i} className={`${i === 0 ? 'text-white' : i === 1 ? 'text-emerald-400' : 'text-amber-500'} uppercase leading-tight`}>
+                                            {line}
+                                        </span>
+                                    )) : (
+                                        <>
+                                            <span className="text-white uppercase leading-tight">Collaborate.</span>
+                                            <span className="text-emerald-400 uppercase leading-tight">Connect.</span>
+                                            <span className="text-amber-500 uppercase leading-tight">Grow.</span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -198,8 +199,8 @@ const HospitalityPartner = () => {
                         {/* Title Section */}
                         <div className="flex flex-col mt-1">
                             <p className="text-amber-500 font-extrabold text-[10px] sm:text-[11px] tracking-widest uppercase mb-1">Partner with us as a</p>
-                            <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-white uppercase">
-                                Hospitality <span className="text-amber-500">Partner</span>
+                            <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-white uppercase flex flex-wrap gap-2">
+                                <span>{hero?.title || 'Hospitality'}</span> <span className="text-amber-500">{hero?.titleHighlight || 'Partner'}</span>
                             </h1>
 
                             <div className="flex w-32 h-[3px] my-3">
@@ -207,9 +208,9 @@ const HospitalityPartner = () => {
                                 <div className="w-[55%] bg-amber-500"></div>
                             </div>
 
-                            <p className="text-slate-100 font-extrabold text-[14px] leading-snug mb-1">Exceptional Experiences. Memorable Stays. Lasting Impressions.</p>
+                            <p className="text-slate-100 font-extrabold text-[14px] leading-snug mb-1">{hero?.subtitle || 'Exceptional Experiences. Memorable Stays. Lasting Impressions.'}</p>
                             <p className="text-slate-300 text-[12px] font-medium leading-relaxed max-w-[480px]">
-                                Partner with IHWE 2026 and be the preferred hospitality partner for 8,000+ exhibitors, buyers and decision makers from around the world.
+                                {hero?.description || 'Partner with IHWE 2026 and be the preferred hospitality partner for 8,000+ exhibitors, buyers and decision makers from around the world.'}
                             </p>
                         </div>
 
@@ -231,7 +232,7 @@ const HospitalityPartner = () => {
                                         <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
                                             <item.icon className="w-4 h-4 text-emerald-400" />
                                         </div>
-                                        <p className="text-[9px] sm:text-[10px] font-bold leading-tight text-slate-100 uppercase tracking-tight">{item.text}</p>
+                                        <p className="text-[9px] sm:text-[10px] font-bold leading-tight text-slate-100 uppercase tracking-tight">{whyPartner[i]?.text || item.text}</p>
                                     </div>
                                 ))}
                             </div>
@@ -328,7 +329,9 @@ const HospitalityPartner = () => {
                                         <div className="flex flex-col">
                                             <h4 className="font-black text-[14px] uppercase leading-tight"
                                                 style={{ color: pkg.color || '#006b70' }}>{pkg.name}</h4>
-                                            <p className="text-[#0b1a3a] font-black text-[18px] tracking-tight">{pkg.price.replace(/,1|,/, '₹')}</p>
+                                            <p className="text-[#0b1a3a] font-black text-[18px] tracking-tight">
+                                                {pkg.price?.includes('₹') ? pkg.price : `₹${pkg.price}`}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="absolute right-4 top-0 w-8 h-12 flex flex-col items-center pt-1.5 shadow-sm"
