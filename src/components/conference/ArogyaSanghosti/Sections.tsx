@@ -65,7 +65,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
     ];
 
     return (
-        <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
+        <SectionBox style={{ width: "var(--left-box-width, 90%)", marginLeft: "var(--left-box-margin-left, 70px)" }}>
             <SectionHeader number="01" title="Basic Details" icon={<IconPerson size={24} color="white" />} />
             <FormField label="Full Name" value={form.fullName} onChange={set("fullName")} lettersOnly />
             <FormField label="Designation" value={form.designation} onChange={set("designation")} />
@@ -75,7 +75,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
                 <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Industry Category <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "var(--chip-grid-cols, repeat(3, 1fr))", gap: 12 }}>
                     {categories.map((cat) => (
                         <CategoryChip
                             key={cat.label}
@@ -98,7 +98,7 @@ export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCa
 
 
 export const ContactDetailsSection = ({ form, set }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
+    <SectionBox style={{ width: "var(--left-box-width, 90%)", marginLeft: "var(--left-box-margin-left, 70px)" }}>
         <SectionHeader number="02" title="Contact Details" icon={<IconPhone size={24} color="white" />} />
         <FormField label="Mobile Number" icon={<IconMobile size={22} />} value={form.mobile} onChange={set("mobile")} type="tel" />
         <FormField label="Email Address" icon={<IconEmail size={22} />} value={form.email} onChange={set("email")} type="email" />
@@ -121,7 +121,7 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
     ];
 
     return (
-        <SectionBox style={{ width: "90%", marginLeft: '70px' }}>
+        <SectionBox style={{ width: "var(--left-box-width, 90%)", marginLeft: "var(--left-box-margin-left, 70px)" }}>
             <SectionHeader number="03" title="Speaker Profile" icon={<IconMic size={20} color="white" />} gold />
             <div style={{ marginBottom: 12 }}>
                 <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 4 }}>
@@ -151,7 +151,7 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
                 <div style={{ fontSize: 12, color: TEXT_DARK, fontWeight: 700, marginBottom: 8 }}>
                     Areas of Expertise <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select all that apply)</span>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "var(--chip-grid-cols, repeat(3, 1fr))", gap: 12 }}>
                     {expertiseAreas.map((area) => (
                         <ExpertiseChip
                             key={area.label}
@@ -169,13 +169,13 @@ export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }:
 
 // ─── Section 04: Session Details ──────────────────────────────────────────────
 export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredTrack, sessionType, setSessionType }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
+    <SectionBox style={{ width: "var(--right-box-width, 90%)", marginLeft: "var(--right-box-margin-left, 30px)" }}>
         <SectionHeader number="04" title="Session Details" icon={<IconChat size={20} color="white" />} />
         <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>
                 Preferred Track <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span>
             </div>
-            <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "var(--track-grid-cols, repeat(3, 1fr))", gap: 10 }}>
                 {[
                     { label: "AYUSH &\nWellness", key: "ayush", icon: <img src={ayushWellnessImg} alt="AYUSH" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                     { label: "Medical &\nHealthcare", key: "medical", icon: <img src={medicalHealthcareImg} alt="Medical" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
@@ -200,7 +200,7 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
         </div>
         <div style={{ marginBottom: 18 }}>
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Session Type <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span></div>
-            <div style={{ display: "flex", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "var(--session-grid-cols, repeat(3, 1fr))", gap: 10 }}>
                 {[
                     { label: "Keynote", key: "keynote", icon: <img src={keynoteImg} alt="Keynote" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                     { label: "Panel Discussion", key: "panel", icon: <img src={panelImg} alt="Panel" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
@@ -222,7 +222,7 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
 
 // ─── Section 05: Speaking Experience ──────────────────────────────────────────
 export const SpeakingExperienceSection = ({ form, set, spokenBefore, setSpokenBefore }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
+    <SectionBox style={{ width: "var(--right-box-width, 90%)", marginLeft: "var(--right-box-margin-left, 30px)" }}>
         <SectionHeader number="05" title="Speaking Experience" icon={<IconStar size={20} color="white" />} />
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 15 }}>
             <span style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700 }}>Have you spoken at conferences before?</span>
@@ -279,10 +279,10 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
     ];
 
     return (
-        <SectionBox style={{ width: "90%", marginLeft: '30px' }}>
+        <SectionBox style={{ width: "var(--right-box-width, 90%)", marginLeft: "var(--right-box-margin-left, 30px)" }}>
             <SectionHeader number="06" title="Supporting Details" icon={<IconUpload size={20} color="white" />} />
             <div style={{ fontSize: 11, color: TEXT_DARK, fontWeight: 700, marginBottom: 6 }}>Please upload / provide the following:</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "var(--support-grid-cols, 1fr 1fr 1fr)", gap: 10 }}>
                 {items.map((item) => {
                     const selectedFile: File | null = files[item.key];
                     return (
@@ -315,12 +315,12 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
 
 // ─── Section 07: Expectations ─────────────────────────────────────────────────
 export const ExpectationsSection = ({ expectations, toggleExpectation }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '70px', minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
+    <SectionBox style={{ width: "var(--left-box-width, 90%)", marginLeft: "var(--left-box-margin-left, 70px)", minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="07" title="Expectations" icon={<IconGroup size={20} color="white" />} gold />
         <div style={{ display: "flex", justifyContent: "space-between", flex: 1, marginTop: "8px" }}>
             <div style={{ flex: 1, paddingBottom: 10, alignSelf: "flex-start" }}>
                 <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Are you open for:</div>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 20px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {[
                         "Sponsored Speaking Slot",
                         "Panel Participation",
@@ -333,14 +333,14 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
                     ))}
                 </div>
             </div>
-            <img src={expectationImg} alt="Expectations" style={{ width: 110, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
+            <img src={expectationImg} alt="Expectations" style={{ width: 110, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
         </div>
     </SectionBox>
 );
 
 // ─── Section 08: Consent ──────────────────────────────────────────────────────
 export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2, onSubmit, isSubmitting }: any) => (
-    <SectionBox style={{ width: "90%", marginLeft: '30px', minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
+    <SectionBox style={{ width: "var(--right-box-width, 90%)", marginLeft: "var(--right-box-margin-left, 30px)", minHeight: "130px", paddingBottom: "10px", display: "flex", flexDirection: "column" }}>
         <SectionHeader number="08" title="Consent" icon={<IconShield size={20} color="white" />} />
         <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, paddingBottom: 10, flex: 1, alignSelf: "flex-start" }}>
@@ -401,7 +401,7 @@ export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2, o
                     </button>
                 </div>
             </div>
-            <img src={consentImg} alt="Consent" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end" }} />
+            <img src={consentImg} alt="Consent" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
         </div>
     </SectionBox>
 );

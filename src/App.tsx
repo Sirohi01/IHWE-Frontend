@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -124,24 +124,31 @@ import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
 import { HelmetProvider } from "react-helmet-async";
 import SeoHelmet from "@/components/SeoHelmet";
 import ScrollToTopOnNavigation from "@/components/layout/ScrollToTopOnNavigation";
-import AnnexureD from "@/pages/psmClaim/AnnexureD";
-import ParticipantsFeedback from "@/pages/psmClaim/ParticipantsFeedback";
-import MandateForm from "@/pages/psmClaim/MandateForm";
-import PaymentReminders from "@/pages/navbar_page/PaymentReminders";
-import Notification from "@/pages/navbar_page/Notification";
-import RelationshipManager from "@/pages/navbar_page/RelationshipManager";
-import ExProfile from "@/pages/navbar_page/ExProfile";
-import AddInternationalVistor from "@/pages/visitors/international_vistor/AddInternationalVistor";
-import SellerFeedbackForm from "./pages/feedbacks/SellerFeedbackForm";
-import WhyVisit from "@/pages/why_visit/WhyVisit";
-import EPromotionWeb from "./pages/e_promotion_webPage/EPromotionWeb";
+const AnnexureD = lazy(() => import("@/pages/psmClaim/AnnexureD"));
+const ParticipantsFeedback = lazy(() => import("@/pages/psmClaim/ParticipantsFeedback"));
+const MandateForm = lazy(() => import("@/pages/psmClaim/MandateForm"));
+const PaymentReminders = lazy(() => import("@/pages/navbar_page/PaymentReminders"));
+const Notification = lazy(() => import("@/pages/navbar_page/Notification"));
+const RelationshipManager = lazy(() => import("@/pages/navbar_page/RelationshipManager"));
+const ExProfile = lazy(() => import("@/pages/navbar_page/ExProfile"));
+const AddInternationalVistor = lazy(() => import("@/pages/visitors/international_vistor/AddInternationalVistor"));
+const SellerFeedbackForm = lazy(() => import("./pages/feedbacks/SellerFeedbackForm"));
+const WhyVisit = lazy(() => import("@/pages/why_visit/WhyVisit"));
+const EPromotionWeb = lazy(() => import("./pages/e_promotion_webPage/EPromotionWeb"));
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
+import { SERVER_URL } from "./lib/api";
 
+const SitemapRedirect = () => {
+  useEffect(() => {
+    window.location.href = `${SERVER_URL}/sitemap/xml`;
+  }, []);
+  return null;
+};
 
 const queryClient = new QueryClient();
 
@@ -228,6 +235,8 @@ const App = () => {
                     <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="/e-promotion-web" element={<EPromotionWeb />} />
+                    <Route path="/sitemap/xml" element={<SitemapRedirect />} />
+                    <Route path="/sitemap.xml" element={<SitemapRedirect />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 

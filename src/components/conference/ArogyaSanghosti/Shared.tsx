@@ -74,43 +74,54 @@ export const FormField: React.FC<{
     placeholder?: string;
     lettersOnly?: boolean;
 }> = ({ label, icon, children, type = "text", value, onChange, placeholder, lettersOnly }) => (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: 6, gap: 10 }}>
-        {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
-        <label
-            style={{
-                minWidth: 180,
-                fontSize: 12,
-                color: TEXT_DARK,
-                fontFamily: "'Segoe UI', sans-serif",
-                fontWeight: 600,
-            }}
-        >
-            {label}
-        </label>
-        <span style={{ color: "#94A3B8", fontWeight: 400, marginRight: 8 }}>:</span>
-        {children ?? (
-            <input
-                type={type}
-                value={value}
-                placeholder={placeholder}
-                onChange={(e) => {
-                    let val = e.target.value;
-                    if (lettersOnly) val = val.replace(/[^a-zA-Z\s.''-]/g, "");
-                    onChange?.(val);
-                }}
+    <div style={{
+        display: "flex",
+        flexDirection: "var(--field-flex-dir, row)",
+        alignItems: "var(--field-align-items, center)",
+        marginBottom: 12,
+        gap: "var(--field-gap, 10px)"
+    }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, width: "var(--field-label-width, 180px)", flexShrink: 0 }}>
+            {icon && <span style={{ minWidth: 18, display: "flex", alignItems: "center", opacity: 0.6 }}>{icon}</span>}
+            <label
                 style={{
-                    flex: 1,
-                    border: "none",
-                    borderBottom: `1.2px solid ${BORDER_COLOR}`,
-                    outline: "none",
-                    fontSize: 13,
-                    padding: "4px 0",
-                    fontFamily: "'Segoe UI', sans-serif",
+                    fontSize: 12,
                     color: TEXT_DARK,
-                    background: "transparent",
+                    fontFamily: "'Segoe UI', sans-serif",
+                    fontWeight: 600,
+                    whiteSpace: "normal",
                 }}
-            />
-        )}
+            >
+                {label}
+            </label>
+        </div>
+        <span style={{ color: "#94A3B8", fontWeight: 400, marginRight: 8, display: "var(--field-colon-display, inline)" }}>:</span>
+        <div style={{ flex: 1, width: "var(--field-input-width, auto)", display: "flex" }}>
+            {children ?? (
+                <input
+                    type={type}
+                    value={value}
+                    placeholder={placeholder}
+                    onChange={(e) => {
+                        let val = e.target.value;
+                        if (lettersOnly) val = val.replace(/[^a-zA-Z\s.''-]/g, "");
+                        onChange?.(val);
+                    }}
+                    style={{
+                        flex: 1,
+                        width: "100%",
+                        border: "none",
+                        borderBottom: `1.2px solid ${BORDER_COLOR}`,
+                        outline: "none",
+                        fontSize: 13,
+                        padding: "4px 0",
+                        fontFamily: "'Segoe UI', sans-serif",
+                        color: TEXT_DARK,
+                        background: "transparent",
+                    }}
+                />
+            )}
+        </div>
     </div>
 );
 

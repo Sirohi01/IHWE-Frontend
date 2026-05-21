@@ -16,21 +16,22 @@ export const BottomTagline = () => (
         style={{
             background: "#FFFFFF",
             borderRadius: 8,
-            padding: "6px 16px",
+            padding: "16px 16px",
             display: "flex",
+            flexDirection: "var(--tagline-flex-dir, row)",
             alignItems: "center",
-            gap: 12,
+            gap: 16,
             marginTop: 20,
             marginBottom: 0,
-            marginLeft: 70,
-            marginRight: 70,
+            marginLeft: "var(--tagline-margin-x, 70px)",
+            marginRight: "var(--tagline-margin-x, 70px)",
             border: `1px solid ${BORDER_COLOR}`,
         }}
     >
-        <div style={{ fontWeight: 800, fontSize: 15, color: TEAL, flexShrink: 0 }}>
+        <div style={{ fontWeight: 800, fontSize: 15, color: TEAL, flexShrink: 0, textAlign: "var(--tagline-text-align, left)", width: "var(--footer-top-width, auto)" }}>
             BE PART OF A MOVEMENT THAT<br />BUILDS A HEALTHIER TOMORROW
         </div>
-        <div style={{ flex: 1, display: "flex", justifyContent: "space-around" }}>
+        <div style={{ flex: 1, display: "grid", gridTemplateColumns: "var(--tagline-grid-cols, repeat(5, 1fr))", gap: 12, width: "100%" }}>
             {[
                 { img: networkImg, label: "Network with\nIndustry Leaders" },
                 { img: shareExpertiseImg, label: "Share Your\nExpertise" },
@@ -50,7 +51,6 @@ export const BottomTagline = () => (
                         textAlign: "center",
                         lineHeight: 1.1,
                         fontWeight: 700,
-                        flex: 1
                     }}
                 >
                     <div style={{
@@ -75,10 +75,11 @@ export const Footer = () => (
         <div
             style={{
                 background: `linear-gradient(135deg, ${TEAL} 0%, #0F3D3C 100%)`,
-                padding: "6px 80px",
+                padding: "var(--footer-top-padding, 6px 80px)",
                 display: "flex",
+                flexDirection: "var(--footer-top-flex-dir, row)",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "var(--footer-top-justify, space-between)",
                 gap: 16,
             }}
         >
@@ -88,6 +89,8 @@ export const Footer = () => (
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
+                    justifyContent: "var(--footer-top-justify, flex-start)",
+                    width: "var(--footer-top-width, auto)"
                 }}
             >
                 <IconCalendar size={18} color="white" />
@@ -97,23 +100,23 @@ export const Footer = () => (
                 </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "6px 18px", borderRadius: 8 }}>
+            <div style={{ display: "flex", flexDirection: "var(--queries-flex-dir, row)", alignItems: "center", gap: 12, padding: "6px 18px", borderRadius: 8, width: "var(--footer-top-width, auto)" }}>
                 <div style={{ fontWeight: 800, fontSize: 12, color: "white", letterSpacing: "0.5px" }}>FOR QUERIES:</div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 13, color: "rgba(255,255,255,0.9)" }}>
+                <div style={{ display: "flex", flexDirection: "var(--queries-items-flex-dir, row)", alignItems: "var(--queries-items-align, center)", gap: "var(--queries-gap, 16px)", fontSize: 13, color: "rgba(255,255,255,0.9)" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                             <IconEmail size={16} color={GOLD} />
                         </div>
                         <span>info@ihwe.in</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                             <IconMobile size={16} color={GOLD} />
                         </div>
                         <span>+91-9654900525</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(255,255,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                             <IconLocation size={16} color={GOLD} />
                         </div>
                         <span>www.ihwe.in</span>
@@ -129,32 +132,34 @@ export const Footer = () => (
         <div
             style={{
                 background: LIGHT_TEAL_BG,
-                padding: "15px 80px",
+                padding: "var(--footer-bottom-padding, 15px 80px)",
                 fontSize: 12,
                 color: TEAL,
                 borderTop: `1px solid ${BORDER_COLOR}`,
                 display: "flex",
+                flexDirection: "var(--footer-bottom-flex-dir, row)",
                 alignItems: "center",
                 justifyContent: "space-between",
+                gap: 16,
             }}
         >
-            <div style={{ display: "flex", alignItems: "center", gap: 8, fontStyle: "italic" }}>
-                <LeafIcon size={14} />
-                Shortlisted speakers will be contacted by the organizing committee.
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontStyle: "italic", textAlign: "var(--footer-bottom-text-align, left)" }}>
+                <LeafIcon size={14} style={{ flexShrink: 0 }} />
+                <span>Shortlisted speakers will be contacted by the organizing committee.</span>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <div style={{ display: "flex", flexDirection: "var(--footer-bottom-right-flex-dir, row)", alignItems: "center", gap: 20, width: "var(--footer-bottom-right-width, auto)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <div style={{ fontSize: 10, fontWeight: 700, color: TEAL }}>Organised By</div>
                     <div style={{ height: 25, width: 1, background: BORDER_COLOR }}></div>
                     <div style={{ fontSize: 12, fontWeight: 900, color: TEAL, letterSpacing: 0.5 }}>NAMO GANGE WELLNESS PVT. LTD.</div>
                 </div>
 
-                <div style={{ display: "flex", gap: 10 }}>
-                    <a href="/book-a-stand" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                <div style={{ display: "flex", flexDirection: "var(--footer-buttons-flex-dir, row)", gap: 10, width: "var(--footer-buttons-width, auto)" }}>
+                    <a href="/book-a-stand" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flex: 1 }}>
                         <button style={{ background: "white", color: TEAL, border: `1px solid ${TEAL}`, borderRadius: 5, padding: "7px 18px", fontSize: 13, fontWeight: 800, cursor: "pointer", width: "100%", height: "100%", letterSpacing: 0.3 }}>BOOK YOUR STALL</button>
                     </a>
-                    <a href="/buyer-registration" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                    <a href="/buyer-registration" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", flex: 1 }}>
                         <button style={{ background: TEAL, color: "white", border: "none", borderRadius: 5, padding: "7px 18px", fontSize: 13, fontWeight: 800, cursor: "pointer", width: "100%", height: "100%", letterSpacing: 0.3 }}>REGISTER AS BUYER</button>
                     </a>
                 </div>

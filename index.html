@@ -11,6 +11,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    // Global Web Optimization: Dynamic image lazy loading
+    (function() {
+      const observer = new MutationObserver((mutations) => {
+        for (let i = 0; i < mutations.length; i++) {
+          const addedNodes = mutations[i].addedNodes;
+          for (let j = 0; j < addedNodes.length; j++) {
+            const node = addedNodes[j];
+            if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.tagName === 'IMG') {
+                if (!node.hasAttribute('loading')) {
+                  node.setAttribute('loading', 'lazy');
+                }
+              } else {
+                const imgs = node.getElementsByTagName('img');
+                for (let k = 0; k < imgs.length; k++) {
+                  const img = imgs[k];
+                  if (!img.hasAttribute('loading')) {
+                    img.setAttribute('loading', 'lazy');
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+      });
+    })();
+  </script>
 </head>
 
 <body>

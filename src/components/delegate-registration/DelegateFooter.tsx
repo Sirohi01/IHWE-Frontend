@@ -35,9 +35,10 @@ const DelegateFooter: React.FC = () => {
   return (
     <footer className="w-full bg-white">
       {/* Top Contact Bar - Dark Green background with colorful icons */}
-      <div className="bg-[#143111] py-4 px-6 lg:px-10">
-        <div className="max-w-[1360px] mx-auto flex flex-wrap items-center justify-between gap-6 pl-[30px]">
-          <div className="flex flex-wrap items-center gap-10">
+      {/* Top Contact Bar - Dark Green background with colorful icons */}
+      <div className="bg-[#143111] py-6 md:py-4 px-4 sm:px-6 lg:px-10">
+        <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 pl-0 md:pl-[30px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center gap-6 md:gap-10 w-full md:w-auto">
             {/* Helpline */}
             <div className="flex items-center gap-3">
               <Headphones className="w-6 h-6 text-[#A3E635]" />
@@ -47,7 +48,7 @@ const DelegateFooter: React.FC = () => {
               </div>
             </div>
 
-            <div className="h-8 w-[1px] bg-white/10" />
+            <div className="hidden md:block h-8 w-[1px] bg-white/10" />
 
             {/* Phone */}
             <div className="flex items-center gap-3">
@@ -57,7 +58,7 @@ const DelegateFooter: React.FC = () => {
               <span className="text-[15px] font-black text-white">+91-9654900525</span>
             </div>
 
-            <div className="h-8 w-[1px] bg-white/10" />
+            <div className="hidden md:block h-8 w-[1px] bg-white/10" />
 
             {/* Email */}
             <div className="flex items-center gap-3">
@@ -67,7 +68,7 @@ const DelegateFooter: React.FC = () => {
               <span className="text-[13px] font-bold text-white tracking-tight">info@ihwe.in</span>
             </div>
 
-            <div className="h-8 w-[1px] bg-white/10" />
+            <div className="hidden md:block h-8 w-[1px] bg-white/10" />
 
             {/* Web */}
             <div className="flex items-center gap-3">
@@ -79,9 +80,9 @@ const DelegateFooter: React.FC = () => {
           </div>
 
           {/* Socials - Colorful */}
-          <div className="flex items-center gap-5">
-            <span className="text-[12px] font-black text-white uppercase tracking-widest opacity-60">Follow Us</span>
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 w-full md:w-auto mt-4 md:mt-0 border-t border-white/10 pt-4 md:border-none md:pt-0">
+            <span className="text-[12px] font-black text-white uppercase tracking-widest opacity-60 text-center">Follow Us</span>
+            <div className="flex items-center gap-3 justify-center">
               <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#0077b5] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <Linkedin className="w-4 h-4" />
               </a>
@@ -103,20 +104,20 @@ const DelegateFooter: React.FC = () => {
       </div>
 
       {/* Main Branding Section - More Compact */}
-      <div className="bg-white py-4 px-6 lg:px-10 border-t border-gray-100">
-        <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6 pl-[30px]">
+      <div className="bg-white py-6 md:py-4 px-4 sm:px-6 lg:px-10 border-t border-gray-100">
+        <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6 pl-0 md:pl-[30px]">
           {/* Logo & Info */}
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left">
             <img src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />
-            <div className="border-l border-gray-100 pl-8">
+            <div className="border-t sm:border-t-0 sm:border-l border-gray-100 pt-4 sm:pt-0 sm:pl-8">
               <h3 className="text-[20px] font-black text-[#143111] uppercase tracking-tight leading-none">AROGYA SANGHOSHTI 2026</h3>
-              <div className="h-[1px] w-20 bg-gray-100 my-2" />
+              <div className="h-[1px] w-20 bg-gray-100 my-2 mx-auto sm:mx-0" />
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">18th Edition</p>
             </div>
           </div>
 
           {/* Partners */}
-          <div className="flex flex-wrap items-center justify-center gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-8 border-t border-gray-100 pt-6 md:pt-0 md:border-none w-full md:w-auto">
             <div className="flex flex-col items-center md:items-start">
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Part of</p>
               <div className="flex items-center gap-4">
@@ -125,7 +126,7 @@ const DelegateFooter: React.FC = () => {
                   alt="International Health & Wellness Expo"
                   className="w-14 h-14 object-contain"
                 />
-                <div className="text-[12px] font-black text-[#143111] leading-tight">
+                <div className="text-[12px] font-black text-[#143111] leading-tight text-left">
                   <div>INTERNATIONAL</div>
                   <div className="text-green-600">HEALTH & WELLNESS</div>
                   <div>EXPO 2026</div>
@@ -135,16 +136,16 @@ const DelegateFooter: React.FC = () => {
 
             <div className="h-12 w-[1px] bg-gray-100 hidden md:block" />
 
-            <div className="flex flex-col items-center md:items-start">
-              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Supported By</p>
-              <div className="flex items-center gap-8">
+            <div className="flex flex-col items-center md:items-start w-full sm:w-auto">
+              <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2 text-center md:text-left w-full">Supported By</p>
+              <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 justify-center">
                 <div className="flex items-center gap-3">
                   <img
                     src="/MSME.png"
                     alt="Govt of India"
                     className="w-10 h-10 object-contain"
                   />
-                  <div className="text-[11px] font-black text-[#143111]">
+                  <div className="text-[11px] font-black text-[#143111] text-left">
                     <div>Ministry of AYUSH</div>
                     <div className="text-[8px] font-bold text-gray-400 uppercase">Government of India</div>
                   </div>
@@ -155,7 +156,7 @@ const DelegateFooter: React.FC = () => {
                     alt="NITI Aayog"
                     className="w-10 h-10 object-contain"
                   />
-                  <div className="text-[11px] font-black text-[#143111]">
+                  <div className="text-[11px] font-black text-[#143111] text-left">
                     <div>NITI Aayog</div>
                     <div className="text-[8px] font-bold text-gray-400 uppercase">Government of India</div>
                   </div>

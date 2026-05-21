@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { CheckCircle, ShieldCheck } from "lucide-react";
-import { API_URL, otpApi, expoSupportEnquiryApi } from "../../lib/api";
+import { API_URL, otpApi, expoSupportEnquiryApi, socialMediaApi } from "../../lib/api";
 import pop1 from "../../assets/pop1.png";
 import leaf2 from "../../assets/leaf2.png";
 import why1 from "../../assets/why1.png";
@@ -108,6 +108,29 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isSendingEmailOtp, setIsSendingEmailOtp] = useState(false);
   const [isVerifyingEmailOtp, setIsVerifyingEmailOtp] = useState(false);
+
+  // WhatsApp Configuration States
+  const [whatsappNumber, setWhatsappNumber] = useState("9654900525");
+  const [whatsappMessage, setWhatsappMessage] = useState("Hello! I would like to know more about the International Health & Wellness Expo 2026.");
+
+  useEffect(() => {
+    const fetchSocialData = async () => {
+      try {
+        const data = await socialMediaApi.get();
+        if (data) {
+          if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
+          if (data.whatsappMessage) setWhatsappMessage(data.whatsappMessage);
+        }
+      } catch (error) {
+        console.error("Error fetching WhatsApp data:", error);
+      }
+    };
+    fetchSocialData();
+  }, []);
+
+  const cleanPhone = whatsappNumber.replace(/\D/g, "");
+  const formattedPhone = cleanPhone.length === 10 ? "91" + cleanPhone : cleanPhone;
+  const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(whatsappMessage)}`;
 
   // Initialize selected services when initialService changes
   useEffect(() => {
@@ -495,10 +518,17 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                       </button>
                     </div>
 
-                    <button type="button" className="flex-1 min-w-[120px] border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
-                      <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
-                      WHATSAPP
-                    </button>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[120px] no-underline flex"
+                    >
+                      <button type="button" className="w-full border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
+                        <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
+                        WHATSAPP
+                      </button>
+                    </a>
 
                     <div className="relative group/btn flex-1 min-w-[120px]">
                       <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
