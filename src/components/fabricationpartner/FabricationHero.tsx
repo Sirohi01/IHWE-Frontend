@@ -67,7 +67,7 @@ const FabricationHero: React.FC<FabricationHeroProps> = ({ hero, benefits }) => 
               <p className="uppercase tracking-[3px] text-[#071b3b] text-[16px] font-bold mb-2">
                 {hero?.partnerTitle || "Partner With Us As A"}
               </p>
-              <h2 className="text-[28px] md:text-[40px] leading-[0.95] font-black uppercase tracking-[-3px] text-[#041735] whitespace-pre-line">
+              <h2 className="text-[28px] md:text-[40px] leading-[0.95] font-black uppercase tracking-[3px] text-[#041735] whitespace-pre-line">
                 {hero?.fabricationPartnerLabel || "Stall Designer &\nFabrication Partner"}
               </h2>
 
