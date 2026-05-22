@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import DelegatesImage from '../assets/DelegateLogin.webp';
+import DelegatesImage from '../../assets/DelegateLogin.webp';
 import Swal from 'sweetalert2';
 
 const DelegatesLogin = () => {
