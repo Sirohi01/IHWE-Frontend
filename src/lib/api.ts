@@ -420,6 +420,30 @@ export const ePromotionPackagesApi = {
     }
 };
 
+export const ePromotionAddonsApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/addons`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const ePromotionReachApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/reach`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const ePromotionTestimonialsApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
 export const stallVendorApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/stall-vendor`);

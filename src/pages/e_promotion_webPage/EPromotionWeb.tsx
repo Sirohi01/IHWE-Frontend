@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { ePromotionPackagesApi } from "@/lib/api";
+import { ePromotionPackagesApi, ePromotionAddonsApi, ePromotionReachApi, ePromotionTestimonialsApi } from "@/lib/api";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { motion, useInView, animate } from "framer-motion";
@@ -32,47 +32,46 @@ const StatCounter = ({ value }: { value: string }) => {
     );
 };
 
-const testimonials = [
-  {
-    text: "IHWE digital promotion helped us reach the right audience before the event. We generated quality leads even before the exhibition started.",
-    name: "Exhibitor, IHWE 2025",
-  },
-  {
-    text: "The email campaigns and social media promotions gave our brand excellent visibility across the industry.",
-    name: "Marketing Partner",
-  },
-  {
-    text: "We received strong visitor engagement and genuine business inquiries through the online promotion package.",
-    name: "International Exhibitor",
-  },
-];
+// Testimonials are now fetched dynamically from the backend
 
 export default function EPromotionWeb({ data }: any) {
   const [active, setActive] = useState(0);
   const [packages, setPackages] = useState<any[]>([]);
+  const [addons, setAddons] = useState<any[]>([]);
+  const [reach, setReach] = useState<any>(null);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPackages = async () => {
+    const fetchAll = async () => {
       try {
-        const data = await ePromotionPackagesApi.getAll();
-        setPackages(data);
+        const [pkgs, addonData, reachData, testimonialData] = await Promise.all([
+          ePromotionPackagesApi.getAll(),
+          ePromotionAddonsApi.getAll(),
+          ePromotionReachApi.get(),
+          ePromotionTestimonialsApi.getAll(),
+        ]);
+        setPackages(pkgs);
+        setAddons(addonData);
+        setReach(reachData);
+        // Sort by order field
+        setTestimonials([...testimonialData].sort((a, b) => a.order - b.order));
       } catch (error) {
-        console.error("Error fetching packages:", error);
+        console.error("Error fetching e-promotion data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchPackages();
+    fetchAll();
   }, []);
 
   useEffect(() => {
+    if (testimonials.length === 0) return;
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % testimonials.length);
     }, 4000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [testimonials.length]);
 
   return (
     <div className="space-y-5 bg-white">
@@ -354,19 +353,27 @@ export default function EPromotionWeb({ data }: any) {
             </h4>
 
             <ul className="space-y-3 text-sm">
-              {[
-                ["Homepage Banner Ad (7 Days)", "₹ 15,000"],
-                ["Category Sponsorship", "₹ 25,000"],
-                ["Featured Brand of the Day", "₹ 10,000"],
-                ["Push Notification Alert (App)", "₹ 8,000"],
-                ["Influencer Collaboration", "₹ 20,000"],
-                ["Additional Email Campaign", "₹ 10,000"],
-              ].map((item, i) => (
-                <li key={i} className="flex justify-between border-b pb-2">
-                  <span className="text-gray-700">{item[0]}</span>
-                  <span className="font-semibold text-green-700">{item[1]}</span>
-                </li>
-              ))}
+              {addons.length > 0
+                ? [...addons].sort((a, b) => a.order - b.order).map((addon) => (
+                  <li key={addon._id} className="flex justify-between border-b pb-2">
+                    <span className="text-gray-700">{addon.name}</span>
+                    <span className="font-semibold text-green-700">{addon.price}</span>
+                  </li>
+                ))
+                : [
+                  ["Homepage Banner Ad (7 Days)", "₹ 15,000"],
+                  ["Category Sponsorship", "₹ 25,000"],
+                  ["Featured Brand of the Day", "₹ 10,000"],
+                  ["Push Notification Alert (App)", "₹ 8,000"],
+                  ["Influencer Collaboration", "₹ 20,000"],
+                  ["Additional Email Campaign", "₹ 10,000"],
+                ].map((item, i) => (
+                  <li key={i} className="flex justify-between border-b pb-2">
+                    <span className="text-gray-700">{item[0]}</span>
+                    <span className="font-semibold text-green-700">{item[1]}</span>
+                  </li>
+                ))
+              }
             </ul>
 
             <p className="text-xs text-gray-500 mt-3">
@@ -382,27 +389,27 @@ export default function EPromotionWeb({ data }: any) {
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {[
-                ["/images/epromotion/visitors.png", "20,000+", "Trade Visitors"],
-                ["/images/epromotion/exhibitors.png", "500+", "Exhibitors"],
-                ["/images/epromotion/globe.png", "25+", "Countries"],
-                ["/images/epromotion/social-reach.png", "5,00,000+", "Social Media Reach"],
-                ["/images/epromotion/email-reach.png", "1,00,000+", "Email Reach"],
+                { icon: "/images/epromotion/visitors.png", value: reach?.tradeVisitors || "20,000+", label: "Trade Visitors" },
+                { icon: "/images/epromotion/exhibitors.png", value: reach?.exhibitors || "500+", label: "Exhibitors" },
+                { icon: "/images/epromotion/globe.png", value: reach?.countries || "25+", label: "Countries" },
+                { icon: "/images/epromotion/social-reach.png", value: reach?.socialMediaReach || "5,00,000+", label: "Social Media Reach" },
+                { icon: "/images/epromotion/email-reach.png", value: reach?.emailReach || "1,00,000+", label: "Email Reach" },
               ].map((item, i) => (
                 <div
                   key={i}
                   className="bg-gray-50 border rounded-xl p-4 text-center hover:shadow-md transition"
                 >
                   <img
-                    src={item[0]}
-                    alt={item[2]}
+                    src={item.icon}
+                    alt={item.label}
                     className="w-12 h-12 object-contain mx-auto mb-2"
                   />
 
                   <p className="text-lg font-bold text-green-800">
-                    <StatCounter value={item[1]} />
+                    <StatCounter value={item.value} />
                   </p>
 
-                  <p className="text-xs text-gray-600">{item[2]}</p>
+                  <p className="text-xs text-gray-600">{item.label}</p>
                 </div>
               ))}
             </div>
@@ -421,13 +428,18 @@ export default function EPromotionWeb({ data }: any) {
 
                   {/* CONTENT */}
                   <div className="relative z-10 max-w-md">
-                    <p className="text-sm md:text-[15px] text-gray-700 leading-relaxed font-medium">
-                      {testimonials[active].text}
-                    </p>
-
-                    <div className="mt-4 text-xs md:text-sm font-semibold text-gray-600">
-                      – {testimonials[active].name}
-                    </div>
+                    {testimonials.length > 0 ? (
+                      <>
+                        <p className="text-sm md:text-[15px] text-gray-700 leading-relaxed font-medium">
+                          {testimonials[active % testimonials.length]?.text}
+                        </p>
+                        <div className="mt-4 text-xs md:text-sm font-semibold text-gray-600">
+                          – {testimonials[active % testimonials.length]?.name}
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-400 italic">Loading testimonials...</p>
+                    )}
                   </div>
 
                   {/* BOTTOM QUOTE */}

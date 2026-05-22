@@ -138,12 +138,19 @@ const Gallery = () => {
         
         // Include titles from items that match photo category but might not have a formal category object
         mediaItems.forEach(item => {
-            if (item.category === 'photo' && item.title) galleryTitles.add(item.title);
+            if (item.category === 'photo' && item.title && !item.galleryCategoryId) {
+                galleryTitles.add(item.title);
+            }
         });
 
         return Array.from(galleryTitles).map(title => {
-            const items = mediaItems.filter(item => item.title === title && item.category === 'photo');
             const catInfo = categories.find(cat => cat.title === title && (cat.type === 'gallery' || !cat.type));
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'photo') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
             
             return {
                 title,
@@ -156,7 +163,46 @@ const Gallery = () => {
                 order: catInfo?.order ?? 999,
                 type: 'gallery'
             };
-        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'gallery'))
+        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && (!c.type || c.type === 'gallery')))
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+    }, [mediaItems, categories]);
+
+    // VIDEO GALLERY EVENT LIST (filter to only categories of type 'video')
+    const videoEventList = useMemo(() => {
+        const videoCats = categories.filter(cat => cat.type === 'video');
+        const videoTitles = new Set(videoCats.map(c => c.title));
+
+        // Include titles from items that match video category
+        mediaItems.forEach(item => {
+            if (item.category === 'video' && item.title && !item.galleryCategoryId) {
+                videoTitles.add(item.title);
+            }
+        });
+
+        return Array.from(videoTitles).map(title => {
+            const catInfo = categories.find(cat => cat.title === title && cat.type === 'video');
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'video') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
+            
+            return {
+                title,
+                items,
+                coverImage: catInfo?.coverImage 
+                    ? `${SERVER_URL}${catInfo.coverImage}`
+                    : (items[0]?.thumbnail || items[0]?.src),
+                count: items.length,
+                date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
+                type: 'video'
+            };
+        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'video'))
           .sort((a, b) => {
             if (a.order !== b.order) return a.order - b.order;
             return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -170,12 +216,19 @@ const Gallery = () => {
 
         // Include titles from items that match press category
         mediaItems.forEach(item => {
-            if (item.category === 'press' && item.title) mediaTitles.add(item.title);
+            if (item.category === 'press' && item.title && !item.galleryCategoryId) {
+                mediaTitles.add(item.title);
+            }
         });
 
         return Array.from(mediaTitles).map(title => {
-            const items = mediaItems.filter(item => item.title === title && item.category === 'press');
             const catInfo = categories.find(cat => cat.title === title && cat.type === 'media');
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'press') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
             
             return {
                 title,
@@ -197,21 +250,24 @@ const Gallery = () => {
 
     const filteredItems = useMemo(() => {
         if (activeEvent) {
-            return mediaItems.filter(item => item.title === activeEvent && (filter === 'all' || item.category === filter));
+            const activeCat = categories.find(c => c.title === activeEvent);
+            return mediaItems.filter(item => {
+                if (filter !== 'all' && item.category !== filter) return false;
+                if (activeCat && item.galleryCategoryId) return item.galleryCategoryId === activeCat._id;
+                return item.title === activeEvent;
+            });
         }
         
         if (filter === "photo") return []; // Grid view handled separately
         if (filter === "press") return []; // Grid view handled separately
+        if (filter === "video") return []; // Grid view handled separately
         
         return mediaItems.filter(item => item.category === filter);
-    }, [filter, activeEvent, mediaItems]);
+    }, [filter, activeEvent, mediaItems, categories]);
 
     const finalDisplayItems = useMemo(() => {
-        const items = activeEvent 
-            ? mediaItems.filter(item => item.title === activeEvent && (filter === 'all' || item.category === filter))
-            : filteredItems;
-        return items;
-    }, [activeEvent, filter, mediaItems, filteredItems]);
+        return filteredItems;
+    }, [filteredItems]);
 
     const paginatedItems = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -233,9 +289,7 @@ const Gallery = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`
                 }}
             >
-
                 <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
                 <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
@@ -250,7 +304,6 @@ const Gallery = () => {
                 </div>
             </section>
 
-            {/* FILTER SYSTEM */}
             <section className="pt-4 pb-8 bg-white border-b border-slate-50 sticky top-[70px] z-40 lg:top-[80px]">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center">
@@ -375,8 +428,49 @@ const Gallery = () => {
                         </div>
                     )}
 
-                    {/* MASONRY LIST (When activeEvent is set OR filter is all/video) */}
-                    {(activeEvent || (filter !== "photo" && filter !== "press")) && (
+                    {/* VIDEO GALLERY CATEGORY GRID */}
+                    {filter === "video" && !activeEvent && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {videoEventList.map((event) => (
+                                <motion.div
+                                    key={event.title}
+                                    initial={{ opacity: 0, scale: 0.98 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="relative group cursor-pointer"
+                                    onClick={() => setActiveEvent(event.title)}
+                                >
+                                    <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
+                                        <img
+                                            src={event.coverImage}
+                                            alt={event.title}
+                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
+                                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Video Collection</span>
+                                                    <div className="h-px w-4 bg-white/30" />
+                                                </div>
+                                                <h3 className="text-base font-inter font-bold mb-2 uppercase">{event.title}</h3>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-[#23471d]">
+                                                        <ArrowRight className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">View {event.count} Videos</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity text-left">
+                                             <h3 className="text-white text-xs font-inter uppercase tracking-widest">{event.title}</h3>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* MASONRY LIST (When activeEvent is set OR filter is all/other) */}
+                    {(activeEvent || (filter !== "photo" && filter !== "press" && filter !== "video")) && (
                         <div>
                             {activeEvent && (
                                 <div className="flex items-center gap-4 mb-10 group cursor-pointer" onClick={() => setActiveEvent(null)}>
@@ -411,6 +505,8 @@ const Gallery = () => {
                                                         <div className="relative w-full aspect-[16/9] bg-slate-900 flex items-center justify-center">
                                                             {item.thumbnail ? (
                                                                 <img src={item.thumbnail} className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                                                            ) : !item.isExternalVideo && item.src ? (
+                                                                <video src={`${item.src}#t=0.5`} className="absolute inset-0 w-full h-full object-cover opacity-60" preload="metadata" muted playsInline />
                                                             ) : (
                                                                 <Video className="w-10 h-10 text-white/20" />
                                                             )}

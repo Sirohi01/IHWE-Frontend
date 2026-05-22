@@ -30,6 +30,7 @@ import CoreValues from "@/components/home/CoreValues";
 import EventGlimpses from "@/components/home/EventGlimpses";
 import WhyParticipate from "@/components/home/WhyParticipate";
 import ConferenceSeminars from "@/components/home/ConferenceSeminars";
+import LogoShowcase from "@/components/home/LogoShowcase";
 import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
 import FloatingVideo from "@/components/home/FloatingVideo";
@@ -53,6 +54,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <CoreValues />
       <WhyParticipate />
       <ConferenceSeminars />
+    
       <ExhibitionCategories />
          <BeyondExhibition />
          {/* <MsmePmsSection /> */}
@@ -61,6 +63,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <EventInfoBanner />
    
       <SponsorshipSection />
+        <LogoShowcase />
       <HealthcareSectors />
       <MarqueeStrip />
       <BuyerSellerMeet />
