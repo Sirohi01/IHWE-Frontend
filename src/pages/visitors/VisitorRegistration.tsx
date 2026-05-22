@@ -35,7 +35,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi, crmApi } from "@/lib/api";
 import HeroBg from "@/assets/car22.jpg";
 import AddInternationalVistor from "./international_vistor/AddInternationalVistor";
-import DelegateRegistration from "../DelegateRegistration";
+import DelegateRegistration from "../delegate/DelegateRegistration";
 import GroupRegistration from "./GroupRegistration";
 
 

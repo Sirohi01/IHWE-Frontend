@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import DelegateHero from "../components/delegate-registration/DelegateHero";
-import RegistrationStepper from "../components/delegate-registration/RegistrationStepper";
-import SessionSelection from "../components/delegate-registration/SessionSelection";
-import RegistrationSidebar from "../components/delegate-registration/RegistrationSidebar";
-import WhyAttend from "../components/delegate-registration/WhyAttend";
-import DelegateFooter from "../components/delegate-registration/DelegateFooter";
+import DelegateHero from "../../components/delegate/delegate-registration/DelegateHero";
+import RegistrationStepper from "../../components/delegate/delegate-registration/RegistrationStepper";
+import SessionSelection from "../../components/delegate/delegate-registration/SessionSelection";
+import RegistrationSidebar from "../../components/delegate/delegate-registration/RegistrationSidebar";
+import WhyAttend from "../../components/delegate/delegate-registration/WhyAttend";
+import DelegateFooter from "../../components/delegate/delegate-registration/DelegateFooter";
 import { motion } from "framer-motion";
 
 const DelegateRegistration: React.FC = () => {
@@ -24,7 +24,7 @@ const DelegateRegistration: React.FC = () => {
 
         {/* Content Grid - Standard py-4 gap-8 */}
         <div className="max-w-[1360px] mx-auto px-6 lg:px-10 py-4 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* Left Content (Step Specific) */}
           <div className="lg:col-span-8">
             <motion.div
