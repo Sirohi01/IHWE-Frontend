@@ -1,50 +1,68 @@
-import { Award, Eye, Globe, Handshake, Users, X } from "lucide-react"
+import * as LucideIcons from "lucide-react";
+import { SERVER_URL } from "@/lib/api";
 
-const whyPartnerData = [
-    {
-        text: "Access 8,000+ exhibitors, buyers and decision makers",
-        icon: <Users />,
-    },
-    {
-        text: "High visibility before, during and after the event",
-        icon:<Eye />
-    },
-    {
-        text: "Be part of a trusted global health & wellness event",
-        icon:<Globe />
-    },
-    {
-        text: "Build strong partnerships & long-term relationships",
-        icon: <Handshake />
-    },
-    {
-        text: "Enhance brand credibility & market leadership",
-        icon:<Award/>
+const defaultWhyPartnerData = [
+    { text: "Access 8,000+ exhibitors, buyers and decision makers" },
+    { text: "High visibility before, during and after the event" },
+    { text: "Be part of a trusted global health & wellness event" },
+    { text: "Build strong partnerships & long-term relationships" },
+    { text: "Enhance brand credibility & market leadership" }
+];
+
+const iconList = [<LucideIcons.Users />, <LucideIcons.Eye />, <LucideIcons.Globe />, <LucideIcons.Handshake />, <LucideIcons.Award />];
+
+const renderIcon = (icon) => {
+    if (!icon) return null;
+
+    if (typeof icon === 'string') {
+        const normalizedUrl = icon.replace(/\\/g, '/');
+        const isImageUrl = normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://') || normalizedUrl.startsWith('/uploads') || normalizedUrl.startsWith('uploads/') || normalizedUrl.startsWith('/images');
+
+        if (isImageUrl) {
+            const src = normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')
+                ? normalizedUrl
+                : `${SERVER_URL}${normalizedUrl.startsWith('/') ? normalizedUrl : `/${normalizedUrl}`}`;
+            return <img src={src} alt="icon" className="w-4 h-4 object-contain" />;
+        }
+
+        const IconComponent = (LucideIcons as any)[icon] || LucideIcons.HelpCircle;
+        return <IconComponent className="w-4 h-4" />;
     }
-]
+
+    return icon;
+};
 
 const WhyPartnerStats = ({ text, icon, showBorder }) => {
-    return (<div className={`flex justify-center items-center ${showBorder ? 'border-b border-[#294669]' : ''} pb-2`}>
-        <div className="img-container bg-[#294669] p-2 rounded-full mr-4">
-            {icon}
-        </div>
-        <p className="text-[12px] text-white">{text}</p>
-    </div>)
-}
-const WhyPartner = () => {
     return (
-        <div className="py-2 px-4 border border-solid border-2 border-white absolute bottom-5 top-2 right-6 w-[300px] h-full bg-[#0D0B61] text-white rounded-lg">
+        <div className={`flex justify-start items-center ${showBorder ? 'border-b border-[#294669]' : ''} pb-2`}>
+            <div className="bg-[#294669] rounded-full mr-4 shrink-0 flex items-center justify-center w-9 h-9">
+                {renderIcon(icon)}
+            </div>
+            <p className="text-[12px] text-white text-left leading-tight">{text}</p>
+        </div>
+    );
+};
+
+const WhyPartner = ({ items }) => {
+    const list = items && items.length ? items : defaultWhyPartnerData;
+    return (
+        <div className="py-2 px-4 border border-solid border-2 border-white relative lg:absolute lg:bottom-5 lg:top-2 lg:right-6 w-full lg:w-[300px] lg:h-[95%] bg-[#0D0B61] text-white rounded-lg z-20 mt-6 lg:mt-0">
             <h3 className="text-lg font-bold mt-2">Why Partner </h3>
             <h3 className="text-[#81912F] mb-2 font-bold text-lg">
-                <span className="text-white font-bold text-lg">
-                    WITH &nbsp;
-                </span>
+                <span className="text-white font-bold text-lg">WITH &nbsp;</span>
                 IHWE 2026?
             </h3>
             <div className="flex flex-col gap-2">
-                {whyPartnerData.map((item, index) => <WhyPartnerStats key={index} text={item.text} icon={item.icon} showBorder={index !== whyPartnerData.length - 1} />)}
+                {list.map((item, index) => (
+                    <WhyPartnerStats
+                        key={index}
+                        text={item.text}
+                        icon={item.icon || iconList[index % iconList.length]}
+                        showBorder={index !== list.length - 1}
+                    />
+                ))}
             </div>
         </div>
-    )
-}
+    );
+};
 export default WhyPartner;
