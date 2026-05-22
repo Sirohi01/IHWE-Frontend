@@ -116,7 +116,7 @@ const BuyerInvoicesPage = lazy(() => import("./pages/buyer/tabs/BuyerInvoicesPag
 const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotificationsPage"));
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
 const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
-const DelegatesLogin = lazy(() => import("./pages/DelegatesLogin"));
+const DelegatesLogin = lazy(() => import("./pages/delegate/DelegatesLogin"));
 import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
@@ -135,10 +135,11 @@ const AddInternationalVistor = lazy(() => import("@/pages/visitors/international
 const SellerFeedbackForm = lazy(() => import("./pages/feedbacks/SellerFeedbackForm"));
 const WhyVisit = lazy(() => import("@/pages/why_visit/WhyVisit"));
 const EPromotionWeb = lazy(() => import("./pages/e_promotion_webPage/EPromotionWeb"));
+import DelegateRegistrationDetails from "./pages/delegate/DelegateRegistrationDetails";
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
-const DelegateRegistration = lazy(() => import("@/pages/DelegateRegistration"));
+const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
 import { SERVER_URL } from "./lib/api";
@@ -206,6 +207,7 @@ const App = () => {
                     <Route path="/conference/day-3" element={<Navigate to="/conference/3" replace />} />
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
+                    <Route path="/delegate-registration-details" element={<DelegateRegistrationDetails />} />
                     <Route path="/group-registration" element={<GroupRegistration />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
