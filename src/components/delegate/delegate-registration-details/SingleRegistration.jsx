@@ -3,6 +3,8 @@ import SectionContainer from "@/components/layout/SectionContainer";
 import { Calendar, MapPin, Users, Lightbulb, BookOpen, TrendingUp, Mail, Lock } from "lucide-react";
 import leftImg from "@/assets/deligateimage/left.png";
 import BottomData from "./BottomData";
+import { Link } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const SingleRegistration = () => {
     return (
@@ -187,7 +189,7 @@ const SingleRegistration = () => {
                         </div>
 
                         {/* Checkbox */}
-                        <div className="flex items-center gap-2 mb-5">
+                        {/* <div className="flex items-center gap-2 mb-5">
                             <input type="checkbox" id="terms" className="w-4 h-4 accent-[#1a5c1a]" />
                             <label htmlFor="terms" className="text-sm text-gray-600">
                                 I agree to the{" "}
@@ -196,10 +198,31 @@ const SingleRegistration = () => {
                                 <a href="#" className="text-[#1a5c1a] underline">Privacy Policy</a>.{" "}
                                 <span className="text-red-500">*</span>
                             </label>
+                        </div> */}
+
+                        <div className="w-full space-y-2">
+                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                    I hereby confirm that the information provided is accurate. I have read and agree to the  <Link to={`/terms-of-service?page=exhibitor-registration`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
+                                </span>
+                            </label>
+                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                    I have read and agree to the <Link to="/refund-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Refund & Cancellation Policy</Link> for IHWE Stand Booking.
+                                </span>
+                            </label>
+                            <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                    I have read and agree to the <Link to="/privacy-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Privacy Policy</Link> of IHWE.
+                                </span>
+                            </label>
                         </div>
 
                         {/* Buttons */}
-                        <button className="w-full mt-4 bg-[#1a5c1a] text-white font-medium py-2 rounded-lg text-base hover:bg-[#145014] transition-colors">
+                        <button className="w-full mt-4 bg-[#1a5c1a] text-white font-medium py-2 rounded-lg text-sm hover:bg-[#145014] transition-colors">
                             Register Now
                         </button>
                     </div>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Plus, Trash2 } from "lucide-react";
 import BottomData from "./BottomData";
+import { Link } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const emptyMember = () => ({
     title: "",
@@ -241,7 +243,7 @@ const GroupRegistration = () => {
                             </div>
 
                             {/* Terms */}
-                            <div className="flex items-center gap-2 mb-2 mt-2">
+                            {/* <div className="flex items-center gap-2 mb-2 mt-2">
                                 <input type="checkbox" id="terms" className="w-4 h-4 accent-[#1a5c1a]" />
                                 <label htmlFor="terms" className="text-sm text-gray-600">
                                     I agree to the{" "}
@@ -250,12 +252,33 @@ const GroupRegistration = () => {
                                     <a href="#" className="text-[#1a5c1a] underline">Privacy Policy</a>.{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
+                            </div> */}
+
+                            <div className="w-full space-y-2">
+                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                        I hereby confirm that the information provided is accurate. I have read and agree to the  <Link to={`/terms-of-service?page=exhibitor-registration`} className="text-blue-600 font-bold hover:underline" target="_blank">Terms & Conditions</Link> and the exhibition policy for IHWE Stand Booking.
+                                    </span>
+                                </label>
+                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                        I have read and agree to the <Link to="/refund-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Refund & Cancellation Policy</Link> for IHWE Stand Booking.
+                                    </span>
+                                </label>
+                                <label className="flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-sm cursor-pointer group hover:bg-slate-100 transition-all">
+                                    <Checkbox required className="mt-0.5 border-slate-400 peer-checked:bg-[#23471d]" />
+                                    <span className="text-[11px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-relaxed">
+                                        I have read and agree to the <Link to="/privacy-policy" className="text-blue-600 font-bold hover:underline" target="_blank">Privacy Policy</Link> of IHWE.
+                                    </span>
+                                </label>
                             </div>
 
                             {/* Submit */}
-                            <div className="flex justify-end mt-0">
-                                <button className="bg-[#1a5c1a] text-white font-medium px-6 py-2 rounded-lg text-base hover:bg-[#145014] transition-colors">
-                                    Register Group ({members.length} Members)
+                            <div className="flex justify-end mt-4">
+                                <button className="bg-[#1a5c1a] text-white font-medium px-6 py-2 rounded-lg text-sm hover:bg-[#145014] transition-colors">
+                                    Next
                                 </button>
                             </div>
                         </div>
