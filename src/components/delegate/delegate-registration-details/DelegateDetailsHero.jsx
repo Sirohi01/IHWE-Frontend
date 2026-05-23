@@ -100,11 +100,11 @@ const DelegateDetailsHero = () => {
                             <div>
                                 <p className="m-0 text-[#131E0C] font-bold text-[17px] leading-snug"
                                 >
-                                    YASHOBHOOMI (IICC),
+                                    PRAGATI MAIDAN,
                                 </p>
                                 <p className="m-0 text-[#131E0C] font-bold text-[17px] leading-snug"
                                 >
-                                    DWARKA, NEW DELHI, INDIA
+                                    NEW DELHI, INDIA
                                 </p>
                             </div>
                         </div>
