@@ -151,6 +151,13 @@ const SitemapRedirect = () => {
   return null;
 };
 
+const RobotsRedirect = () => {
+  useEffect(() => {
+    window.location.href = `${SERVER_URL}/robots.txt`;
+  }, []);
+  return null;
+};
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -239,6 +246,7 @@ const App = () => {
                     <Route path="/e-promotion-web" element={<EPromotionWeb />} />
                     <Route path="/sitemap/xml" element={<SitemapRedirect />} />
                     <Route path="/sitemap.xml" element={<SitemapRedirect />} />
+                    <Route path="/robots.txt" element={<RobotsRedirect />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 

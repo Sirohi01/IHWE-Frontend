@@ -11,6 +11,16 @@ const NotFound = () => {
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
     
+    // SMART REDIRECT FOR STATIC SEO/VERIFICATION FILES:
+    // If the path is a root-level file request (e.g. google6581b418ce0ea55e.html, sitemap_index.xml, verification.txt)
+    // redirect to the backend to let it serve dynamically.
+    const path = location.pathname;
+    const isFileRequest = path.includes('.') && !path.substring(1).includes('/');
+    if (isFileRequest) {
+      window.location.href = `${SERVER_URL}${path}`;
+      return;
+    }
+
     const fetchSettings = async () => {
       try {
         const data = await settingsApi.get();

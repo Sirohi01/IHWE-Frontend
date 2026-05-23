@@ -18,7 +18,7 @@ const VerifyCheck = () => {
             btn: "VERIFY LISTING",
             icon: BadgeCheck,
             color: "blue",
-            link: "https://my.msme.gov.in/MyMsme/Reg/COM_ViewEvent.aspx",
+            link: "https://my.msme.gov.in/MyMsme/Reg/COM_Matu.aspx",
             img: "/mpscheme/qa2.png"
         },
         {
@@ -27,7 +27,7 @@ const VerifyCheck = () => {
             btn: "VERIFY SCHEME",
             icon: ShieldCheck,
             color: "purple",
-            link: "https://msme.gov.in",
+            link: "https://dcmsme.gov.in/OM%20&%20PMS%20Scheme%20Guidelines.pdf",
             img: "/mpscheme/qa3.png"
         },
         {
