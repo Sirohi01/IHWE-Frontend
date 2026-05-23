@@ -6,9 +6,15 @@ import SingleRegistration from "./SingleRegistration";
 import GroupRegistration from "./GroupRegistration";
 const DelegateDetailsHero = () => {
     const [delegateType, setDelegateType] = React.useState(null);
+    const formRef = React.useRef(null);
 
     const handleDelegateTypeChange = (type) => {
         setDelegateType(type);
+        setTimeout(() => {
+            if (formRef.current) {
+                formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }, 100);
     };
 
     return (
@@ -256,8 +262,10 @@ const DelegateDetailsHero = () => {
             </SectionContainer>
 
             {/* main screen  */}
-            {delegateType === 'single' && <SingleRegistration />}
-            {delegateType === 'group' && <GroupRegistration />}
+            <div ref={formRef}>
+                {delegateType === 'single' && <SingleRegistration />}
+                {delegateType === 'group' && <GroupRegistration />}
+            </div>
 
         </>
     );
