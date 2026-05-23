@@ -68,10 +68,10 @@ const FloatingVideo: React.FC = () => {
               </p>
             </div>
 
-            {/* Centered Play Button */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-10 h-10 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-xl transform transition-transform duration-300 group-hover:scale-110">
-                <Play size={18} fill="currentColor" className="ml-1" />
+            {/* Play Button - Bottom Right */}
+            <div className="absolute bottom-9 right-2 pointer-events-none">
+              <div className="w-7 h-7 bg-[#d26019] text-white rounded-full flex items-center justify-center shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                <Play size={12} fill="currentColor" className="ml-[1px]" />
               </div>
             </div>
 

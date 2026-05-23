@@ -13,7 +13,8 @@ import {
     Layers,
     Search,
     ChevronRight,
-    MoreHorizontal
+    MoreHorizontal,
+    Instagram
 } from "lucide-react";
 import {
     Pagination,
@@ -33,7 +34,7 @@ import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 const Gallery = () => {
     const [filter, setFilter] = useState("photo");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = filter === "press" ? 15 : 8;
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
     const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
     const [mediaItems, setMediaItems] = useState<any[]>([]);
@@ -71,6 +72,27 @@ const Gallery = () => {
         return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : url;
     };
 
+    const getInstagramEmbedUrl = (url: string) => {
+        let cleanUrl = url.split("?")[0];
+        if (!cleanUrl.endsWith("/")) {
+            cleanUrl += "/";
+        }
+        return `${cleanUrl}embed/`;
+    };
+
+    const getInstagramThumbnail = (url: string) => {
+        if (!url) return null;
+        let shortcode = "";
+        if (url.includes("instagram.com/reel/")) {
+            shortcode = url.split("instagram.com/reel/")[1]?.split("/")[0]?.split("?")[0];
+        } else if (url.includes("instagram.com/p/")) {
+            shortcode = url.split("instagram.com/p/")[1]?.split("/")[0]?.split("?")[0];
+        } else if (url.includes("instagr.am/p/")) {
+            shortcode = url.split("instagr.am/p/")[1]?.split("/")[0]?.split("?")[0];
+        }
+        return shortcode ? `https://www.instagram.com/p/${shortcode}/media/?size=l` : null;
+    };
+
     useEffect(() => {
         const fetchGallery = async () => {
             setIsLoading(true);
@@ -91,7 +113,12 @@ const Gallery = () => {
                     
                     let thumb = item.image ? `${SERVER_URL}${item.image}` : null;
                     if (isVideo && isExternalVideo && !thumb) {
-                        thumb = getYouTubeThumbnail(item.videoUrl);
+                        const isInstagram = item.videoUrl && (item.videoUrl.includes('instagram.com') || item.videoUrl.includes('instagr.am'));
+                        if (isInstagram) {
+                            thumb = getInstagramThumbnail(item.videoUrl);
+                        } else {
+                            thumb = getYouTubeThumbnail(item.videoUrl);
+                        }
                     }
 
                     return {
@@ -259,7 +286,7 @@ const Gallery = () => {
         }
         
         if (filter === "photo") return []; // Grid view handled separately
-        if (filter === "press") return []; // Grid view handled separately
+        if (filter === "press") return mediaItems.filter(item => item.category === "press");
         if (filter === "video") return []; // Grid view handled separately
         
         return mediaItems.filter(item => item.category === filter);
@@ -304,7 +331,7 @@ const Gallery = () => {
                 </div>
             </section>
 
-            <section className="pt-4 pb-8 bg-white border-b border-slate-50 sticky top-[70px] z-40 lg:top-[80px]">
+            <section className="pt-4 pb-8 bg-white/95 backdrop-blur-md border-b border-slate-200/60 sticky top-[60px] z-40 shadow-sm transition-all duration-300">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center">
                         <div className="inline-flex p-1.5 bg-slate-100/50 backdrop-blur-sm rounded-xl mb-4 border border-slate-200/50 flex-wrap justify-center shadow-sm">
@@ -387,46 +414,7 @@ const Gallery = () => {
                         </div>
                     )}
 
-                    {/* MEDIA GALLERY CATEGORY GRID */}
-                    {filter === "press" && !activeEvent && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {mediaEventList.map((event) => (
-                                <motion.div
-                                    key={event.title}
-                                    initial={{ opacity: 0, scale: 0.98 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="relative group cursor-pointer"
-                                    onClick={() => setActiveEvent(event.title)}
-                                >
-                                    <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
-                                        <img
-                                            src={event.coverImage}
-                                            alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
-                                        />
-                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
-                                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Media Coverage</span>
-                                                    <div className="h-px w-4 bg-white/30" />
-                                                </div>
-                                                <h3 className="text-base font-inter font-bold mb-2 uppercase">{event.title}</h3>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-[#23471d]">
-                                                        <ArrowRight className="w-4 h-4" />
-                                                    </div>
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">View {event.count} Photos</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent group-hover:opacity-0 transition-opacity text-left">
-                                             <h3 className="text-white text-xs font-inter uppercase tracking-widest">{event.title}</h3>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    )}
+                    {/* MEDIA GALLERY CATEGORY GRID REMOVED - IMAGES SHOWN DIRECTLY */}
 
                     {/* VIDEO GALLERY CATEGORY GRID */}
                     {filter === "video" && !activeEvent && (
@@ -440,11 +428,34 @@ const Gallery = () => {
                                     onClick={() => setActiveEvent(event.title)}
                                 >
                                     <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
-                                        <img
-                                            src={event.coverImage}
-                                            alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
-                                        />
+                                        {event.coverImage && (event.coverImage.includes('instagram.com') || event.coverImage.includes('instagr.am')) ? (
+                                            <div className="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center bg-black">
+                                                <iframe 
+                                                    src={getInstagramEmbedUrl(event.coverImage)} 
+                                                    className="w-full h-[220%] border-0 opacity-80"
+                                                    scrolling="no"
+                                                    allowTransparency={true}
+                                                />
+                                                <div className="absolute inset-0 bg-black/10" />
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={event.coverImage}
+                                                alt={event.title}
+                                                className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    const parent = target.parentElement;
+                                                    if (parent) {
+                                                        target.style.display = 'none';
+                                                        const fallbackDiv = document.createElement('div');
+                                                        fallbackDiv.className = "absolute inset-0 bg-gradient-to-tr from-[#f9ce3f] via-[#e1306c] to-[#833ab4] opacity-80 flex items-center justify-center";
+                                                        fallbackDiv.innerHTML = `<svg class="w-10 h-10 text-white opacity-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+                                                        parent.appendChild(fallbackDiv);
+                                                    }
+                                                }}
+                                            />
+                                        )}
                                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
                                             <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                                 <div className="flex items-center gap-2 mb-2">
@@ -469,8 +480,8 @@ const Gallery = () => {
                         </div>
                     )}
 
-                    {/* MASONRY LIST (When activeEvent is set OR filter is all/other) */}
-                    {(activeEvent || (filter !== "photo" && filter !== "press" && filter !== "video")) && (
+                    {/* MASONRY LIST (When activeEvent is set OR filter is "press" OR filter is all/other) */}
+                    {(activeEvent || filter === "press" || (filter !== "photo" && filter !== "press" && filter !== "video")) && (
                         <div>
                             {activeEvent && (
                                 <div className="flex items-center gap-4 mb-10 group cursor-pointer" onClick={() => setActiveEvent(null)}>
@@ -502,9 +513,34 @@ const Gallery = () => {
                                             >
                                                 <div className="overflow-hidden bg-slate-100 flex items-center justify-center">
                                                     {item.type === "video" ? (
-                                                        <div className="relative w-full aspect-[16/9] bg-slate-900 flex items-center justify-center">
-                                                            {item.thumbnail ? (
-                                                                <img src={item.thumbnail} className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                                                        <div className="relative w-full aspect-[16/9] bg-slate-900 flex items-center justify-center overflow-hidden">
+                                                            {item.src && (item.src.includes('instagram.com') || item.src.includes('instagr.am')) && (!item.thumbnail || item.thumbnail.includes('instagram.com')) ? (
+                                                                <div className="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center bg-black">
+                                                                    <iframe 
+                                                                        src={getInstagramEmbedUrl(item.src)} 
+                                                                        className="w-full h-[220%] border-0 opacity-80"
+                                                                        scrolling="no"
+                                                                        allowTransparency={true}
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-black/10" />
+                                                                </div>
+                                                            ) : item.thumbnail ? (
+                                                                <img 
+                                                                    src={item.thumbnail} 
+                                                                    referrerPolicy="no-referrer"
+                                                                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                                                    onError={(e) => {
+                                                                        const target = e.target as HTMLImageElement;
+                                                                        const parent = target.parentElement;
+                                                                        if (parent) {
+                                                                            target.style.display = 'none';
+                                                                            const fallbackDiv = document.createElement('div');
+                                                                            fallbackDiv.className = "absolute inset-0 bg-gradient-to-tr from-[#f9ce3f] via-[#e1306c] to-[#833ab4] opacity-80 flex items-center justify-center";
+                                                                            fallbackDiv.innerHTML = `<svg class="w-10 h-10 text-white opacity-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+                                                                            parent.appendChild(fallbackDiv);
+                                                                        }
+                                                                    }}
+                                                                />
                                                             ) : !item.isExternalVideo && item.src ? (
                                                                 <video src={`${item.src}#t=0.5`} className="absolute inset-0 w-full h-full object-cover opacity-60" preload="metadata" muted playsInline />
                                                             ) : (
@@ -628,8 +664,18 @@ const Gallery = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {selectedMedia.type === "video" ? (
-                                <div className="aspect-video w-full">
-                                    {selectedMedia.isExternalVideo ? (
+                                <div className={selectedMedia.src && (selectedMedia.src.includes('instagram.com') || selectedMedia.src.includes('instagr.am')) 
+                                    ? "w-full max-w-[400px] h-[580px] bg-black overflow-hidden flex items-center justify-center rounded-lg" 
+                                    : "aspect-video w-full"}>
+                                    {selectedMedia.src && (selectedMedia.src.includes('instagram.com') || selectedMedia.src.includes('instagr.am')) ? (
+                                        <iframe 
+                                            src={getInstagramEmbedUrl(selectedMedia.src)} 
+                                            className="w-full h-full shadow-2xl border-0" 
+                                            scrolling="no" 
+                                            allowTransparency={true}
+                                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                        />
+                                    ) : selectedMedia.isExternalVideo ? (
                                         <iframe 
                                             src={getYouTubeEmbedUrl(selectedMedia.src)} 
                                             className="w-full h-full shadow-2xl" 

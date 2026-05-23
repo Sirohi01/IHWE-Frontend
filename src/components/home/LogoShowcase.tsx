@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionContainer from '../layout/SectionContainer';
+import Marquee from 'react-fast-marquee';
 
 const LogoShowcase = () => {
   return (
@@ -14,14 +15,14 @@ const LogoShowcase = () => {
             <h3 className="font-bold text-[11px] lg:text-[13px] tracking-[0.15em] lg:tracking-[0.2em] uppercase text-[#012112] text-center mb-6">
               Knowledge Partners
             </h3>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              {[
-                { src: "/knowledge1.png", alt: "Knowledge Partner 1" },
-                { src: "/knowledge2.png", alt: "Knowledge Partner 2" },
-                { src: "/knowledge3.png", alt: "Knowledge Partner 3" }
-              ].map((logo, idx, arr) => (
-                <React.Fragment key={idx}>
-                  <div className="transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
+            <div className="w-full overflow-hidden">
+              <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
+                {[
+                  { src: "/knowledge1.png", alt: "Knowledge Partner 1" },
+                  { src: "/knowledge2.png", alt: "Knowledge Partner 2" },
+                  { src: "/knowledge3.png", alt: "Knowledge Partner 3" }
+                ].map((logo, idx) => (
+                  <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
                     <img 
                       src={logo.src} 
                       alt={logo.alt} 
@@ -32,11 +33,8 @@ const LogoShowcase = () => {
                       }}
                     />
                   </div>
-                  {idx < arr.length - 1 && (
-                    <div className="h-10 w-px bg-slate-300 hidden sm:block self-center" />
-                  )}
-                </React.Fragment>
-              ))}
+                ))}
+              </Marquee>
             </div>
           </div>
 
@@ -48,12 +46,12 @@ const LogoShowcase = () => {
             <div className="flex items-center justify-center">
               <div className="transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
                 <img 
-                  src="/health.png" 
+                  src="/health1.png" 
                   alt="Healthcare Partner" 
-                  className="h-18 md:h-22 lg:h-26 w-auto max-w-[140px] md:max-w-[180px] lg:max-w-[200px] object-contain transition-all duration-300"
+                  className="h-16 md:h-20 lg:h-24 w-auto max-w-[120px] md:max-w-[150px] lg:max-w-[200px] object-contain transition-all duration-300"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src =
-                      `https://placehold.co/140x80/ffffff/888?text=Healthcare+Partner`;
+                      `https://placehold.co/100x100/ffffff/888?text=Healthcare+Partner`;
                   }}
                 />
               </div>
@@ -65,13 +63,14 @@ const LogoShowcase = () => {
             <h3 className="font-bold text-[11px] lg:text-[13px] tracking-[0.15em] lg:tracking-[0.2em] uppercase text-[#012112] text-center mb-6">
               Supporting Association
             </h3>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              {[
-                { src: "/Supporting.png", alt: "Supporting Association 1" },
-                { src: "/Supporting%20Association%20(2).webp", alt: "Supporting Association 2" }
-              ].map((logo, idx, arr) => (
-                <React.Fragment key={idx}>
-                  <div className="transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
+            <div className="w-full overflow-hidden">
+              <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
+                {[
+                  { src: "/health.png", alt: "Healthcare Partner" },
+                  { src: "/Supporting.png", alt: "Supporting Association 1" },
+                  { src: "/Supporting%20Association%20(2).webp", alt: "Supporting Association 2" }
+                ].map((logo, idx) => (
+                  <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
                     <img 
                       src={logo.src} 
                       alt={logo.alt} 
@@ -82,11 +81,8 @@ const LogoShowcase = () => {
                       }}
                     />
                   </div>
-                  {idx < arr.length - 1 && (
-                    <div className="h-10 w-px bg-slate-300 hidden sm:block self-center" />
-                  )}
-                </React.Fragment>
-              ))}
+                ))}
+              </Marquee>
             </div>
           </div>
 
