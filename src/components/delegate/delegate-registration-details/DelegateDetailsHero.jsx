@@ -6,9 +6,15 @@ import SingleRegistration from "./SingleRegistration";
 import GroupRegistration from "./GroupRegistration";
 const DelegateDetailsHero = () => {
     const [delegateType, setDelegateType] = React.useState(null);
+    const formRef = React.useRef(null);
 
     const handleDelegateTypeChange = (type) => {
         setDelegateType(type);
+        setTimeout(() => {
+            if (formRef.current) {
+                formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        }, 100);
     };
 
     return (
@@ -169,9 +175,9 @@ const DelegateDetailsHero = () => {
                     {/* Left Side */}
                     <div className="flex-1 flex flex-col justify-between">
                         <div>
-                            <p className="text-gray-900 text-xl font-medium mb-1">9th Edition of</p>
+                            <p className="text-gray-900 text-xl font-medium mb-1">Edition Of Health & Wellness At</p>
                             <h2 className="text-[#1a4d1a] text-2xl font-semibold leading-snug mb-2">
-                                International Health & Wellness Expo 2026<br />(IHWE Global Edition)
+                                9th International Health & Wellness Expo 2026<br />(IHWE Global Edition)
                             </h2>
                             <div className="w-8 h-[3px] bg-[#4a8f2f] rounded mb-4" />
                             <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -256,8 +262,10 @@ const DelegateDetailsHero = () => {
             </SectionContainer>
 
             {/* main screen  */}
-            {delegateType === 'single' && <SingleRegistration />}
-            {delegateType === 'group' && <GroupRegistration />}
+            <div ref={formRef}>
+                {delegateType === 'single' && <SingleRegistration />}
+                {delegateType === 'group' && <GroupRegistration />}
+            </div>
 
         </>
     );
