@@ -68,94 +68,92 @@ const Topbar = () => {
         className="bg-[#002511] border-b border-white/5 text-slate-300 text-[11px] relative z-[150] py-1"
       >
       <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
- 
-        <div className="flex items-center gap-3 md:gap-4 flex-shrink-0 pl-1">
-          {/* Left Section - Contact Info (Compact on mobile) */}
-          <div className="flex items-center justify-center md:justify-start gap-3 md:gap-3 w-full md:w-auto overflow-hidden">
-            {topbarEmails.slice(0, 1).map((item: any, idx: number) => (
+        {/* Left Section - Contact Info (Compact on mobile) */}
+        <div className="flex items-center justify-center md:justify-start gap-3 md:gap-3 w-full md:w-auto overflow-hidden flex-shrink-0 pl-1">
+          {topbarEmails.slice(0, 1).map((item: any, idx: number) => (
+            <a
+              key={`email-top-${idx}`}
+              href={`mailto:${item.email}`}
+              className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
+            >
+              <Mail className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
+              <span>{item.email}</span>
+            </a>
+          ))}
+
+          {/* Secondary Emails - Desktop Only */}
+          <div className="hidden md:flex gap-6">
+            {topbarEmails.slice(1).map((item: any, idx: number) => (
               <a
-                key={`email-top-${idx}`}
+                key={`email-sec-${idx}`}
                 href={`mailto:${item.email}`}
-                className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
+                className="flex items-center gap-2 hover:text-white transition font-medium"
               >
-                <Mail className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
+                <Mail className="w-3.5 h-3.5 text-[#d26019]" />
                 <span>{item.email}</span>
               </a>
             ))}
+          </div>
 
-            {/* Secondary Emails - Desktop Only */}
-            <div className="hidden md:flex gap-6">
-              {topbarEmails.slice(1).map((item: any, idx: number) => (
-                <a
-                  key={`email-sec-${idx}`}
-                  href={`mailto:${item.email}`}
-                  className="flex items-center gap-2 hover:text-white transition font-medium"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#d26019]" />
-                  <span>{item.email}</span>
-                </a>
-              ))}
-            </div>
+          <div className="h-2 w-px bg-slate-700 md:hidden" />
 
-            <div className="h-2 w-px bg-slate-700 md:hidden" />
+          {topbarPhones.slice(0, 1).map((item: any, idx: number) => (
+            <a
+              key={`phone-top-${idx}`}
+              href={`tel:${item.phone}`}
+              className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
+            >
+              <Phone className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
+              <span>{item.phone}</span>
+            </a>
+          ))}
 
-            {topbarPhones.slice(0, 1).map((item: any, idx: number) => (
+          {/* Secondary Phones - Desktop Only */}
+          <div className="hidden md:flex gap-6">
+            {topbarPhones.slice(1).map((item: any, idx: number) => (
               <a
-                key={`phone-top-${idx}`}
+                key={`phone-sec-${idx}`}
                 href={`tel:${item.phone}`}
-                className="flex items-center gap-1.5 hover:text-white transition font-bold text-[9px] md:text-[11px] whitespace-nowrap"
+                className="flex items-center gap-2 hover:text-white transition font-medium"
               >
-                <Phone className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#d26019]" />
+                <Phone className="w-3.5 h-3.5 text-[#d26019]" />
                 <span>{item.phone}</span>
               </a>
             ))}
+          </div>
+        </div>
 
-            {/* Secondary Phones - Desktop Only */}
-            <div className="hidden md:flex gap-6">
-              {topbarPhones.slice(1).map((item: any, idx: number) => (
-                <a
-                  key={`phone-sec-${idx}`}
-                  href={`tel:${item.phone}`}
-                  className="flex items-center gap-2 hover:text-white transition font-medium"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#d26019]" />
-                  <span>{item.phone}</span>
-                </a>
+        {/* Center Section - Scrolling Marquee - Hidden on small screens */}
+        <div className="hidden md:flex flex-1 min-w-0 max-w-[200px] lg:max-w-[340px] xl:max-w-[560px] 2xl:max-w-[720px] overflow-hidden relative h-full items-center justify-center px-4 ml-6">
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              repeat: Infinity,
+              duration: 100,
+              ease: "linear",
+            }}
+            className="whitespace-nowrap font-bold uppercase tracking-[0.1em] text-[10px] marquee-golden-text flex items-center"
+          >
+            <div className="flex items-center gap-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <span>{marqueeText}</span>
+                  <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                </div>
               ))}
             </div>
-          </div>
+            <div className="flex items-center gap-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <span>{marqueeText}</span>
+                  <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
 
-          {/* Center Section - Scrolling Marquee - Hidden on small screens */}
-          <div className="hidden md:flex flex-1 min-w-0 max-w-[200px] lg:max-w-[340px] xl:max-w-[560px] 2xl:max-w-[720px] overflow-hidden relative h-full items-center justify-center px-4 ml-6">
-            <motion.div
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{
-                repeat: Infinity,
-                duration: 100,
-                ease: "linear",
-              }}
-              className="whitespace-nowrap font-bold uppercase tracking-[0.1em] text-[10px] marquee-golden-text flex items-center"
-            >
-              <div className="flex items-center gap-1">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-center">
-                    <span>{marqueeText}</span>
-                    <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-1">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-center">
-                    <span>{marqueeText}</span>
-                    <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-          </div>
-
+        {/* Right Section - Login Buttons */}
         <div className="hidden md:flex flex-shrink-0 items-center gap-1.5">
           <Link 
             to="/exhibitor-login" 

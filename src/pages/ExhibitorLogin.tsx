@@ -313,14 +313,15 @@ const ExhibitorLogin = () => {
                                                 <div className="text-center">
 
                                                     {/* Icon circle */}
-                                                    <div className="w-20 mt-3 h-20 mx-auto bg-gradient-to-tr from-[#23471d]/10 to-[#d26019]/10 rounded-full flex items-center justify-center mb-4 shadow-sm border border-slate-100 text-[#23471d]">
-                                                        <Store size={36} strokeWidth={1.5} />
+                                                    <div className="h-20 mx-auto  flex items-center justify-center mb-4  text-[#23471d]">
+                                                        {/* <Store size={36} strokeWidth={1.5} /> */}
+                                                        <img src="/exhibition/namo_logo.webp" className='h-[90%] w-auto' alt="" />
                                                     </div>
 
 
                                                     {/* Title */}
                                                     <h3 className="text-[1.75rem] font-semibold text-slate-900 tracking-tight leading-none mb-2">
-                                                        Exhibitor Login
+                                                       IHWE Exhibitor Login
                                                     </h3>
 
                                                     {/* Subtitle */}

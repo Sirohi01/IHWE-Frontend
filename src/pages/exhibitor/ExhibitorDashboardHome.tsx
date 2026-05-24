@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareText, X } from 'lucide-react';
 import { useState } from 'react';
+import ExhibotorTopbar from "@/components/dashboard/exhibitor2/ExhibotorTopbar";
+import ExEventCountdown from '@/components/dashboard/exhibitor2/ExEventCountdown';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();
@@ -24,48 +26,50 @@ export default function ExhibitorDashboardHome() {
     const [showFeedbackBanner, setShowFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
 
     return (
-        <div className="space-y-4">
-            <AnimatePresence>
-                {showFeedbackBanner && (
-                    <motion.div 
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="bg-gradient-to-r from-[#d26019] to-[#b05015] text-white p-4 rounded-[4px] shadow-lg relative overflow-hidden"
-                    >
-                        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-white/20 p-2 rounded-full">
-                                    <MessageSquareText className="text-white" size={20} />
-                                </div>
-                                <div>
-                                    <h4 className="font-black uppercase tracking-tight text-[14px]">Your Feedback Matters!</h4>
-                                    <p className="text-[11px] font-medium opacity-90">Please share your experience at IHWE 2026 to help us improve.</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <button 
-                                    onClick={() => setActiveTab('feedback')}
-                                    className="bg-white text-[#d26019] px-6 py-2 rounded-full font-black text-[11px] uppercase tracking-widest shadow-sm hover:bg-slate-100 transition-colors"
-                                >
-                                    Fill Feedback Form
-                                </button>
-                                <button 
-                                    onClick={() => setShowFeedbackBanner(false)}
-                                    className="text-white/70 hover:text-white p-1"
-                                >
-                                    <X size={18} />
-                                </button>
-                            </div>
-                        </div>
-                        {/* Decorative circle */}
-                        <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+        <>
+            <ExhibotorTopbar />
+            <div className="space-y-3 p-4">
+                <AnimatePresence>
+                    {showFeedbackBanner && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="bg-white border border-gray-200 rounded-md overflow-hidden relative"
+                        >
+                            {/* Left accent bar */}
+                            <div className="absolute top-0 left-0 w-1 h-full bg-[#d26019]" />
 
-            <HeroSection onRegisterVisit={() => {}} forceNewTab={true} hideStats={true} />
-            {!data.isSeller && (
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 py-1.5 pl-7">
+
+                                {/* Left: Icon + Text */}
+                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                    <div className="w-10 h-10 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center flex-shrink-0">
+                                        <MessageSquareText size={20} className="text-[#d26019]" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-[13px] font-semibold text-gray-900 leading-snug">
+                                            Your feedback matters
+                                        </p>
+                                        <p className="text-[12px] text-gray-500 truncate">
+                                            Share your experience at IHWE 2026 to help us improve.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Right: Buttons */}
+                                <div className="flex items-center justify-center w-full md:w-auto flex-shrink-0 pb-1 md:pb-0">
+                                    <ExEventCountdown />
+                                </div>
+
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
+                {/* {!data.isSeller && (
                 <div className="bg-gradient-to-r from-[#d26019] to-[#b34d10] text-white p-6 rounded-sm shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4 text-center md:text-left">
                         <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
@@ -76,18 +80,19 @@ export default function ExhibitorDashboardHome() {
                             <p className="text-xs text-white/80 max-w-lg">Unlock premium seller features including advanced B2B matchmaking, global product directory, and marketing toolkit.</p>
                         </div>
                     </div>
-                    <button 
+                    <button
                         onClick={() => navigate('/exhibitor-dashboard/become-seller')}
                         className="bg-white text-[#d26019] px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all shadow-lg active:scale-95 whitespace-nowrap"
                     >
                         Become a Seller
                     </button>
                 </div>
-            )}
-            <div className="bg-white shadow-sm">
-                <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
+            )} */}
+                <div className="bg-white shadow-sm">
+                    <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
+                </div>
+                <ExhibitorOverview data={data} cur={cur} status={status} paidPct={paidPct} paid={paid} total={total} balance={balance} setActiveTab={setActiveTab} />
             </div>
-            <ExhibitorOverview data={data} cur={cur} status={status} paidPct={paidPct} paid={paid} total={total} balance={balance} setActiveTab={setActiveTab} />
-        </div>
+        </>
     );
 }
