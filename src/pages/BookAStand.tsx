@@ -753,10 +753,10 @@ const BookAStand = () => {
                 const finalAmount = formData.amountPaid;
                 const gatewayAmount = Math.round(finalAmount * 1.025 * 100) / 100;
 
-                // Step 1: Save registration first (status=pending) to get a DB _id for order creation
+                // Step 1: Save registration first (status=payment-failed) to get a DB _id for order creation
                 const pendingData = {
                     ...formData,
-                    status: 'pending',
+                    status: 'payment-failed',
                     paymentMode: 'online',
                     amountPaid: 0,
                     balanceAmount: formData.financeBreakdown?.netPayable || 0,
