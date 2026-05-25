@@ -32,7 +32,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
             />
             <SocialSidebar />
             <AdminWhatsAppFloat data={data} />
-            <div className="flex pt-16 print:pt-0 flex-1">
+            <div className="flex pt-14 print:pt-0 flex-1">
                 <ExhibitorSidebar
                     data={data}
                     activeTab={activeTab}
@@ -44,10 +44,10 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
 
                 <main
                     className={`flex-1 transition-all duration-300 overflow-hidden print:overflow-visible print:p-0
-                        ${sidebarOpen ? 'lg:ml-56 print:ml-0' : 'lg:ml-14 print:ml-0'}
+                        ${sidebarOpen ? 'lg:ml-64 print:ml-0' : 'lg:ml-14 print:ml-0'}
                     `}
                 >
-                    <div className="w-full">
+                    <div className="w-full bg-white">
                         {children}
                     </div>
                 </main>

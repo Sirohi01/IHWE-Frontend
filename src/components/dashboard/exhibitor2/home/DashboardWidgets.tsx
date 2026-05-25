@@ -1,0 +1,103 @@
+import { Building2, FileText, CreditCard, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare } from "lucide-react";
+
+// ─── Quick Access Data ────────────────────────────────────────────────────────
+
+const QUICK_ACCESS = [
+    { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
+    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
+    { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
+    { id: "documentation", label: "Documentation", sub: "Upload & manage", icon: FolderOpen, iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
+    { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
+    { id: "exhibitions", label: "My Events", sub: "Your schedule", icon: CalendarDays, iconBg: "bg-gradient-to-br from-[#f59e0b] to-[#d97706]" },
+    { id: "bsm", label: "Buyer Connect", sub: "Connect with buyers", icon: UsersRound, iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
+    { id: "chat", label: "Chat Support", sub: "Get instant help", icon: MessageSquare, iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
+];
+
+// ─── Important Updates Data ───────────────────────────────────────────────────
+
+type BadgeType = "New" | "Info" | "Alert";
+
+const UPDATES: { badge: BadgeType; title: string; desc: string; date: string }[] = [
+    { badge: "New", title: "Buyer Seller Meet Registrations Open", desc: "Register now to connect with quality buyers.", date: "20 May 2026" },
+    { badge: "Info", title: "Last Date for Stall Setup", desc: "Stall setup begins from 19 August 2026.", date: "18 May 2026" },
+    { badge: "Alert", title: "Submit Your Documents", desc: "Please complete remaining documents.", date: "15 May 2026" },
+];
+
+const BADGE_STYLES: Record<BadgeType, string> = {
+    New: "bg-blue-100 text-blue-600 border border-blue-200",
+    Info: "bg-amber-100 text-amber-600 border border-amber-200",
+    Alert: "bg-red-100 text-red-600 border border-red-200",
+};
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+
+interface DashboardWidgetsProps {
+    onNavigate?: (tab: string) => void;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) {
+    return (
+        <div className="flex gap-4 w-full">
+
+            {/* Quick Access */}
+            <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="flex items-center gap-2 mb-4">
+                    <span className="text-sm font-bold text-gray-800 uppercase tracking-wider">Quick Access</span>
+                    <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
+                </div>
+
+                <div className="grid grid-cols-4 gap-3">
+                    {QUICK_ACCESS.map(item => {
+                        const Icon = item.icon;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => onNavigate?.(item.id)}
+                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all group text-left"
+                            >
+                                <div className={`${item.iconBg} rounded-xl p-2.5 shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
+                                    <Icon size={18} className="text-white" strokeWidth={1.8} />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-[13px] font-semibold text-gray-700 leading-tight truncate">{item.label}</p>
+                                    <p className="text-[11px] text-gray-400 leading-tight mt-0.5 truncate">{item.sub}</p>
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Important Updates */}
+            <div className="w-[340px] shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wider">Important Updates</span>
+                        <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
+                    </div>
+                    <button className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
+                </div>
+
+                <div className="space-y-4">
+                    {UPDATES.map((u, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 mt-0.5 ${BADGE_STYLES[u.badge]}`}>
+                                {u.badge}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between gap-2">
+                                    <p className="text-[13px] font-semibold text-gray-800 leading-tight">{u.title}</p>
+                                    <span className="text-[11px] text-gray-400 shrink-0 whitespace-nowrap">{u.date}</span>
+                                </div>
+                                <p className="text-[11px] text-gray-400 mt-0.5 leading-tight">{u.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+        </div>
+    );
+}

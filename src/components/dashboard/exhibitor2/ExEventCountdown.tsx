@@ -36,9 +36,9 @@ const ExEventCountdown = ({ targetDateString }: { targetDateString?: string }) =
     ];
 
     return (
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-start gap-1">
             {/* <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1a6b3a]">Event Begins In</span> */}
-            <div className="flex gap-2 sm:gap-2.5 items-center">
+            <div className="flex gap-2 sm:gap-2.5 items-start">
                 {boxes.map((box, i) => (
                     <div key={i} className="flex flex-col items-center">
                         <div

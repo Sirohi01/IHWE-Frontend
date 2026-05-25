@@ -1,0 +1,117 @@
+import { CalendarDays, MapPin, CheckCircle2 } from "lucide-react";
+import ExEventCountdown from "../ExEventCountdown";
+import { useExhibitorCtx } from "@/context/ExhibitorContext";
+
+const WelcomeHeader = () => {
+    const { data } = useExhibitorCtx();
+    const companyName = data?.companyName || data?.exhibitorName || data?.fullName || "Exhibitor";
+
+    return (
+
+        <div
+            className=" flex justify-between items-stretch gap-5 "
+        >
+            {/* ── Left ── */}
+            <div className="flex flex-col justify-center ">
+                <p className="text-xs text-gray-500 mb-1.5 tracking-wide">Welcome back,</p>
+                <div className="flex items-center gap-2 mb-2.5">
+                    <h2
+                        className="text-[20px] font-semibold text-gray-900 leading-tight"
+                        style={{
+                            textShadow: '0 1px 0 rgba(255,255,255,0.9), 0 2px 4px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06)'
+                        }}
+                    >
+                        {companyName}.
+                    </h2>
+                    <div
+                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{
+                            background: 'linear-gradient(135deg, #02a344, #027D34)',
+                            boxShadow: '0 2px 6px rgba(2,125,52,0.4), 0 1px 0 rgba(255,255,255,0.3) inset'
+                        }}
+                    >
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </div>
+
+                </div>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                    Here's what's happening with your participation in IHWE 2026.
+                </p>
+            </div>
+
+            <div className="flex gap-4">
+                {/* ── Center Card ── */}
+                <div
+                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-sm px-4 py-1.5 flex flex-col justify-center"
+                    style={{
+                        boxShadow: '0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.06), 0 8px 20px rgba(0,0,0,0.05)',
+                        transform: 'perspective(800px) rotateY(-1deg) rotateX(1deg)',
+                    }}
+                >
+                    {/* Date Row */}
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
+                            <CalendarDays size={17} className="text-[#1a3a7c]" />
+                        </div>
+                        <div>
+                            <p
+                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
+                                style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
+                            >
+                                21 – 23 AUGUST 2026
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Location Row */}
+                    <div className="flex items-center gap-2.5 pt-2">
+                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
+                            <MapPin size={17} className="text-[#1a3a7c]" />
+                        </div>
+                        <div>
+                            <p
+                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
+                                style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
+                            >
+                                PRAGATI MAIDAN,<br />NEW DELHI, INDIA
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── Right Banner ── */}
+                <div
+                    className="flex-none w-[420px] rounded-sm overflow-hidden relative flex items-center px-5 py-1.5 bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: "url('/exhibition/topright.png')"
+                    }}
+                >
+
+                    {/* Building */}
+                    <div className="absolute right-0 inset-y-0 w-28 opacity-35 z-[1]">
+                        {/* your building SVG */}
+                    </div>
+
+                    {/* Text */}
+                    <div className="relative z-[2] max-w-[150px]">
+                        <p className="text-[11px] text-white/75 mb-1 leading-relaxed">
+                            Be a part of the world's leading platform for
+                        </p>
+                        <p
+                            className="text-[15px] font-medium text-white leading-snug"
+                            style={{ textShadow: '0 1px 0 rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.4)' }}
+                        >
+                            Healthcare &amp; Wellness Innovation!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    );
+};
+
+export default WelcomeHeader;
