@@ -1,358 +1,332 @@
 import { useState } from "react";
-import { LayoutDashboard, User, FileText, Building2, Lock, ChevronRight, Award, Package, MessageSquare, ChevronDown, Megaphone, CalendarCheck, FolderOpen, CreditCard, Store, ShoppingBag, Send, ExternalLink, Star } from "lucide-react";
+import {
+    LayoutDashboard, User, FileText, Building2, Headphones,
+    ArrowRight, Award, Package, MessageSquare, ChevronDown,
+    ChevronRight, Megaphone, CalendarCheck, FolderOpen,
+    CreditCard, Store, ShoppingBag, Send, ExternalLink,
+    Star, UsersRound
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface NavItem {
+    id: string;
+    label: string;
+    icon: React.ElementType;
+    isNew?: boolean;
+}
+
+interface MsmeLeafItem { id: string; label: string }
+interface MsmeNestedGroup { id: string; label: string; isDropdown: true; subItems: MsmeLeafItem[] }
+interface MsmeGroup { id: string; label: string; isDropdown: true; subItems: (MsmeNestedGroup | MsmeLeafItem)[] }
+type MsmeItem = MsmeLeafItem | MsmeGroup;
 
 interface SidebarProps {
     data: any;
     activeTab: string;
-    setActiveTab: (tab: any) => void;
+    setActiveTab: (tab: string) => void;
     sidebarOpen: boolean;
     onChangePwd: () => void;
     unreadChat?: number;
 }
 
-export default function ExhibitorSidebar({ data, activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0 }: SidebarProps) {
+// ─── Static nav data ──────────────────────────────────────────────────────────
+
+const NAV_ITEMS: NavItem[] = [
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "stall-management", label: "Stall Information", icon: Building2 },
+    { id: "invoices", label: "Invoice & Receipts", icon: FileText },
+    { id: "payments", label: "Make Payment", icon: CreditCard },
+    { id: "documentation", label: "Documentation", icon: FolderOpen },
+    { id: "epromotion", label: "E-Promotion", icon: Star },
+    { id: "exhibitions", label: "My Events", icon: Star },
+    { id: "bsm", label: "Buyer Connect", icon: UsersRound, isNew: true },
+    { id: "feedback", label: "Feedback", icon: MessageSquare },
+    { id: "chat", label: "Chat Support", icon: MessageSquare },
+];
+
+const PSM_REPORT_IDS = [
+    "annexure_c", "annexure_d", "declaration", "feedback_report",
+    "undertaking", "pre_receipt", "mandate_form", "pfms_details",
+    "covering_letter", "narrative_feedback",
+];
+
+const MSME_ITEMS: MsmeItem[] = [
+    { id: "msme", label: "Udyam Details" },
+    {
+        id: "psm_claim", label: "PSM Claim", isDropdown: true,
+        subItems: [
+            {
+                id: "psm_reports", label: "Reports", isDropdown: true,
+                subItems: PSM_REPORT_IDS.map(id => ({
+                    id,
+                    label: id.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+                })),
+            },
+            {
+                id: "psm_reports_table", label: "Reports Table", isDropdown: true,
+                subItems: PSM_REPORT_IDS.map(id => ({
+                    id: `${id}_table`,
+                    label: id.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+                })),
+            },
+        ],
+    },
+];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function getAllMsmeIds(items: MsmeItem[]): string[] {
+    return items.flatMap(item => {
+        const base = [item.id];
+        if ("subItems" in item) base.push(...getAllMsmeIds(item.subItems as MsmeItem[]));
+        return base;
+    });
+}
+
+const ALL_MSME_IDS = getAllMsmeIds(MSME_ITEMS);
+
+function cx(...classes: (string | false | undefined)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function Collapse({ open, children }: { open: boolean; children: React.ReactNode }) {
+    return (
+        <AnimatePresence initial={false}>
+            {open && (
+                <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                >
+                    {children}
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+function MsmeNode({
+    item, depth = 0, activeTab, setActiveTab, expandedGroups, toggleGroup,
+}: {
+    item: MsmeItem;
+    depth?: number;
+    activeTab: string;
+    setActiveTab: (id: string) => void;
+    expandedGroups: string[];
+    toggleGroup: (id: string) => void;
+}) {
+    const isGroup = "subItems" in item;
+    const isActive = activeTab === item.id;
+
+    if (!isGroup) {
+        return (
+            <button
+                onClick={() => setActiveTab(item.id)}
+                className={cx(
+                    "w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group",
+                    isActive ? "bg-emerald-500/20 text-emerald-400" : "text-white/60 hover:bg-white/8 hover:text-white"
+                )}
+            >
+                <span className={cx(
+                    "absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-[#061d49]",
+                    isActive ? "bg-emerald-400 scale-100" : "bg-slate-500 scale-0 group-hover:scale-100"
+                )} />
+                <span className={cx("whitespace-nowrap text-xs uppercase tracking-wide", isActive ? "font-bold" : "font-medium")}>
+                    {item.label}
+                </span>
+                {isActive && <ChevronRight size={10} className="ml-auto" />}
+            </button>
+        );
+    }
+
+    const group = item as MsmeGroup;
+    const isOpen = expandedGroups.includes(group.id);
+    const isGroupActive = activeTab === group.id || getAllMsmeIds(group.subItems as MsmeItem[]).includes(activeTab);
+    const ChevronIcon = isOpen ? ChevronDown : ChevronRight;
+    const iconSize = depth === 0 ? 12 : 10;
+
+    return (
+        <div className="flex flex-col w-full">
+            <button
+                onClick={() => toggleGroup(group.id)}
+                className={cx(
+                    "w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group",
+                    isGroupActive ? "bg-emerald-500/20 text-emerald-400" : "text-white/60 hover:bg-white/8 hover:text-white"
+                )}
+            >
+                <span className={cx(
+                    "absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-[#061d49]",
+                    isGroupActive ? "bg-emerald-400 scale-100" : "bg-slate-500 scale-0 group-hover:scale-100"
+                )} />
+                <span className={cx("flex-1 whitespace-nowrap text-xs uppercase tracking-wide", isGroupActive ? "font-bold" : "font-semibold")}>
+                    {group.label}
+                </span>
+                <ChevronIcon size={iconSize} className="shrink-0" />
+            </button>
+
+            <Collapse open={isOpen}>
+                <div className="mt-1 mb-1 ml-[8px] border-l border-white/20 pl-2 space-y-0.5">
+                    {group.subItems.map(child => (
+                        <MsmeNode
+                            key={child.id}
+                            item={child as MsmeItem}
+                            depth={depth + 1}
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                            expandedGroups={expandedGroups}
+                            toggleGroup={toggleGroup}
+                        />
+                    ))}
+                </div>
+            </Collapse>
+        </div>
+    );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+export default function ExhibitorSidebar({
+    data, activeTab, setActiveTab, sidebarOpen, onChangePwd, unreadChat = 0,
+}: SidebarProps) {
     const navigate = useNavigate();
     const isSeller = data?.isSeller || false;
-    const isSubscribed = data?.sellerSubscription?.status === 'active';
+    const isSubscribed = data?.sellerSubscription?.status === "active";
+    const sellerStatus = data?.sellerStatus;
 
-    const navItems = [
-        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { id: "stall-management", label: "Stall Information", icon: Building2 },
-        { id: "invoices", label: "Invoice and Receipts", icon: FileText },
-        { id: "payments", label: "Make Payment", icon: CreditCard },
-        { id: "documentation", label: "Documentation", icon: FolderOpen },
-        { id: "epromotion", label:"E-Promotion", icon: Star},
-        { id: "exhibitions", label: "My Events", icon: Star },
-        { id: "feedback", label: "Feedback", icon: MessageSquare },
-        { id: "chat", label: "Chat Support", icon: MessageSquare },
-    ];
-
-    const sellerSubItems = [
-        { id: "seller-dashboard", label: "Dashboard Home", icon: LayoutDashboard },
-        { id: "ex-profile", label: "Profile Management", icon: User },
-        { id: "stall-management", label: "Stall Booking", icon: Building2 },
-        { id: "payments", label: "Payment Management", icon: CreditCard },
-        { id: "seller-products", label: "Manage Products", icon: Package },
-        { id: "product-export", label: "Product Export", icon: Send },
-        { id: "seller-leads", label: "Lead Management", icon: Store },
-        { id: "seller-sponsorship", label: "Sponsorships", icon: Award },
-        { id: "seller-conference", label: "Conferences", icon: CalendarCheck },
-        ...(isSubscribed ? [{ id: "seller-marketing", label: "Marketing Toolkit", icon: Megaphone }] : []),
-        { id: "seller-logistics", label: "Logistics & Ops", icon: Package },
-        { id: "seller-reports", label: "Business Reports", icon: FileText },
-    ];
-
-    const isSellerActive = activeTab.startsWith('seller-') || activeTab === 'product-export' || activeTab === 'stall-management' || activeTab === 'ex-profile' || activeTab === 'payments';
-    const [sellerOpen, setSellerOpen] = useState(isSellerActive);
-
-    const msmeSubItems = [
-        { id: "msme", label: "Udyam Details" },
-        {
-            id: "psm_claim", label: "PSM Claim",
-            isDropdown: true,
-            subItems: [
-                {
-                    id: "psm_reports", label: "Reports", isDropdown: true, subItems: [
-                        { id: "annexure_c", label: "Annexure C" },
-                        { id: "annexure_d", label: "Annexure D" },
-                        { id: "declaration", label: "Declaration" },
-                        { id: "feedback_report", label: "Feedback Report" },
-                        { id: "undertaking", label: "Undertaking" },
-                        { id: "pre_receipt", label: "Pre-Receipt" },
-                        // { id: "participants_feedback", label: "Participants Feedback" },
-                        { id: "mandate_form", label: "Mandate Form" },
-                        { id: "pfms_details", label: "PFMS Details" },
-                        { id: "covering_letter", label: "Covering Letter" },
-                        { id: "narrative_feedback", label: "Narrative Feedback" }
-                    ]
-                },
-                {
-                    id: "psm_reports_table", label: "Reports Table", isDropdown: true, subItems: [
-                        { id: "annexure_c_table", label: "Annexure C" },
-                        { id: "annexure_d_table", label: "Annexure D" },
-                        { id: "declaration_table", label: "Declaration" },
-                        { id: "feedback_report_table", label: "Feedback Report" },
-                        { id: "undertaking_table", label: "Undertaking" },
-                        { id: "pre_receipt_table", label: "Pre-Receipt" },
-                        // { id: "participants_feedback", label: "Participants Feedback" },
-                        { id: "mandate_form_table", label: "Mandate Form" },
-                        { id: "pfms_details_table", label: "PFMS Details" },
-                        { id: "covering_letter_table", label: "Covering Letter" },
-                        { id: "narrative_feedback_table", label: "Narrative Feedback" }
-                    ]
-                },
-            ]
-        },
-    ];
-
-    const psmSubItems = msmeSubItems.find(i => i.id === "psm_claim")?.subItems || [];
-    const psmSubItemIds = psmSubItems.flatMap(si => [si.id, ...(si.subItems?.map(ni => ni.id) || [])]);
-    const isMsmeActive = activeTab === "msme" || activeTab === "psm_claim" || psmSubItemIds.includes(activeTab);
+    const isMsmeActive = ALL_MSME_IDS.includes(activeTab);
 
     const [msmeOpen, setMsmeOpen] = useState(isMsmeActive);
     const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
-        const initial = [];
-        if (psmSubItemIds.includes(activeTab)) initial.push("psm_claim");
-        const activeSub = psmSubItems.find(si => si.subItems?.some(s => s.id === activeTab));
-        if (activeSub) initial.push(activeSub.id);
-        return initial;
+        const init: string[] = [];
+        if (isMsmeActive) init.push("psm_claim");
+        // find which nested group contains activeTab
+        const psmGroup = MSME_ITEMS.find(i => i.id === "psm_claim") as MsmeGroup | undefined;
+        if (psmGroup) {
+            const parent = psmGroup.subItems.find(s => "subItems" in s && getAllMsmeIds((s as MsmeGroup).subItems as MsmeItem[]).includes(activeTab)) as MsmeGroup | undefined;
+            if (parent) init.push(parent.id);
+        }
+        return init;
     });
 
-    const toggleGroup = (id: string) => {
+    const toggleGroup = (id: string) =>
         setExpandedGroups(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-    };
 
     const handleMsmeToggle = () => {
-        if (!sidebarOpen) {
-
-            setActiveTab("msme");
-            return;
-        }
-        setMsmeOpen(prev => !prev);
+        if (!sidebarOpen) { setActiveTab("msme"); return; }
+        setMsmeOpen(p => !p);
     };
 
+    // Seller section variants
+    const sellerSection = (() => {
+        const btnBase = "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-all";
+        if (!isSeller) return (
+            <button onClick={() => setActiveTab("become-seller")} className={cx(btnBase, activeTab === "become-seller" ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}>
+                <Store size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
+                {sidebarOpen && <span className="text-sm font-semibold text-white flex-1 whitespace-nowrap">Become a Seller</span>}
+            </button>
+        );
+        if (sellerStatus === "pending") return (
+            <div className={cx("w-full flex items-center gap-3 px-3 py-3 rounded-lg", sidebarOpen && "bg-amber-50 border border-amber-200")}>
+                <Store size={15} className="text-amber-500 shrink-0" />
+                {sidebarOpen && <div className="flex-1 min-w-0"><span className="text-[10px] font-black uppercase tracking-wider text-amber-700 block">Seller: Pending</span><span className="text-[9px] text-amber-600 block">Awaiting admin approval</span></div>}
+            </div>
+        );
+        if (sellerStatus === "active" && !isSubscribed) return (
+            <button onClick={() => navigate("/seller-portal")} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-all">
+                <Store size={15} className="text-blue-600 shrink-0" />
+                {sidebarOpen && <><div className="flex-1 min-w-0"><span className="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Seller Approved!</span><span className="text-[9px] text-blue-600 block">Buy a plan to activate</span></div><ExternalLink size={11} className="text-blue-400 shrink-0" /></>}
+            </button>
+        );
+        return (
+            <button onClick={() => navigate("/seller-portal")} className={cx(btnBase, activeTab === "seller-dashboard" ? "bg-[#23471d] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}>
+                <ShoppingBag size={15} className="shrink-0" />
+                {sidebarOpen && <><span className="text-[11px] font-bold uppercase tracking-wider flex-1 whitespace-nowrap">Open Seller Portal</span><ExternalLink size={12} className="opacity-50" /></>}
+            </button>
+        );
+    })();
+
     return (
-        <aside className={`fixed top-16 left-0 bottom-0 z-50 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 overflow-hidden print:hidden ${sidebarOpen ? "w-56" : "w-14"}`}>
-            <nav className="flex-1 py-4 space-y-0.5 px-2 overflow-y-auto">
-                {navItems.map(item => {
+        <aside className={cx("fixed top-0 left-0 bottom-0 z-50 flex flex-col transition-all duration-300 overflow-hidden print:hidden", sidebarOpen ? "w-64" : "w-[72px]")}>
+            {/* Backgrounds */}
+            <div className="absolute inset-0 bg-[#061d49]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_88%,rgba(21,220,173,0.36),transparent_26%),radial-gradient(circle_at_78%_8%,rgba(37,112,255,0.22),transparent_24%),linear-gradient(180deg,#08204d_0%,#031b47_58%,#06306b_100%)]" />
+            {/* <div className="absolute inset-x-0 bottom-0 h-44 opacity-55 bg-[linear-gradient(180deg,transparent,#06d6a0_180%),repeating-linear-gradient(90deg,transparent_0_18px,rgba(41,208,255,.28)_19px_20px)]" /> */}
+            <div className="absolute inset-x-0 bottom-8 h-52 opacity-55">
+                <img src="/exhibition/1.png" alt="" />
+            </div>
+            {/* Logo */}
+            <div className="relative z-10 flex py-2 items-center justify-center px-4">
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-16 bg-white/90 rounded-full blur-md" />
+                </div>
+                <img src="/logo.png" alt="IHWE 2026" className="relative h-[70px] w-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,1)]" />
+            </div>
+
+
+            <nav className="relative z-10 flex-1 space-y-1 px-3 pt-1 mt-1 overflow-y-auto pb-28">
+                {/* Main nav */}
+                {NAV_ITEMS.map(item => {
                     const Icon = item.icon;
                     const active = activeTab === item.id;
                     const isChat = item.id === "chat";
                     return (
                         <button key={item.id} onClick={() => setActiveTab(item.id)}
-                            className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${active ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
+                            className={cx("w-full flex items-center gap-4 px-3 py-1.5    rounded-lg text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white shadow-[0_0_0_1px_rgba(90,255,203,0.45),0_12px_28px_rgba(0,0,0,0.28)]" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                        >
                             <div className="relative shrink-0">
-                                <Icon size={15} />
+                                <Icon size={sidebarOpen ? 16 : 15} strokeWidth={2.1} className="text-white" />
                                 {isChat && unreadChat > 0 && (
-                                    <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#d26019] rounded-full text-[8px] font-black text-white flex items-center justify-center">
+                                    <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#d26019] rounded-full text-[8px] font-medium text-white flex items-center justify-center">
                                         {unreadChat > 9 ? "9+" : unreadChat}
                                     </span>
                                 )}
                             </div>
-                            {sidebarOpen && (
-                                <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">{item.label}</span>
-                            )}
+                            {sidebarOpen && <span className="text-sm font-medium text-white whitespace-nowrap flex-1">{item.label}</span>}
+                            {sidebarOpen && item.isNew && <span className="rounded-md bg-emerald-500/90 px-2 py-0.5 text-[11px] font-bold text-white shadow">New</span>}
                             {sidebarOpen && isChat && unreadChat > 0 && !active && (
                                 <span className="bg-[#d26019] text-white text-[9px] font-black px-1.5 py-0.5 rounded-full">{unreadChat}</span>
                             )}
-                            {sidebarOpen && active && <ChevronRight size={12} className="ml-auto" />}
                         </button>
                     );
                 })}
 
-                {/* ── Seller Section ── */}
-                {!isSeller ? (
-                    // Not a seller yet — show "Become a Seller" button
-                    <button
-                        onClick={() => setActiveTab("become-seller")}
-                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === "become-seller" ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
-                        <div className="relative shrink-0">
-                            <Store size={15} />
-                        </div>
-                        {sidebarOpen && (
-                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Become a Seller</span>
-                        )}
-                        {sidebarOpen && activeTab === "become-seller" && <ChevronRight size={12} className="ml-auto" />}
-                    </button>
-                ) : data?.sellerStatus === 'pending' ? (
-                    // Seller registered but pending admin approval
-                    <div className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm ${sidebarOpen ? 'bg-amber-50 border border-amber-200' : ''}`}>
-                        <div className="relative shrink-0 text-amber-500">
-                            <Store size={15} />
-                        </div>
-                        {sidebarOpen && (
-                            <div className="flex-1 min-w-0">
-                                <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 block">Seller: Pending</span>
-                                <span className="text-[9px] text-amber-600 leading-tight block">Awaiting admin approval</span>
-                            </div>
-                        )}
-                    </div>
-                ) : data?.sellerStatus === 'active' && data?.sellerSubscription?.status !== 'active' ? (
-                    // Approved but no subscription — go to seller portal (sponsorship page inside)
-                    <button
-                        onClick={() => navigate("/seller-portal")}
-                        className="w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all bg-blue-50 border border-blue-200 hover:bg-blue-100">
-                        <div className="relative shrink-0 text-blue-600">
-                            <Store size={15} />
-                        </div>
-                        {sidebarOpen && (
-                            <div className="flex-1 min-w-0">
-                                <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Seller Approved!</span>
-                                <span className="text-[9px] text-blue-600 leading-tight block">Buy a plan to activate</span>
-                            </div>
-                        )}
-                        {sidebarOpen && <ExternalLink size={11} className="ml-auto text-blue-400 shrink-0" />}
-                    </button>
-                ) : (
-                    // Active seller with subscription — show portal link
-                    <button
-                        onClick={() => navigate("/seller-portal")}
-                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${activeTab === 'seller-dashboard' ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
-                        <div className="relative shrink-0">
-                            <ShoppingBag size={15} />
-                        </div>
-                        {sidebarOpen && (
-                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">Open Seller Portal</span>
-                        )}
-                        {sidebarOpen && (
-                            <ExternalLink size={12} className="ml-auto opacity-50" />
-                        )}
-                    </button>
-                )}
+                {/* Seller section */}
+                {sellerSection}
 
-                {/* ── MSME Dropdown ── */}
+                {/* MSME dropdown */}
                 <div>
-                    <button
-                        onClick={handleMsmeToggle}
-                        className={`w-full flex items-center gap-3 px-2 py-2 rounded-sm text-left transition-all ${isMsmeActive ? "bg-[#23471d] text-white" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}>
-                        <div className="relative shrink-0">
-                            <Award size={15} />
-                        </div>
-                        {sidebarOpen && (
-                            <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap flex-1">MSME</span>
-                        )}
-                        {sidebarOpen && (
-                            <ChevronDown
-                                size={12}
-                                className={`ml-auto transition-transform duration-200 ${msmeOpen ? "rotate-180" : ""}`}
-                            />
-                        )}
+                    <button onClick={handleMsmeToggle}
+                        className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white shadow-[0_0_0_1px_rgba(90,255,203,0.45),0_12px_28px_rgba(0,0,0,0.28)]" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                    >
+                        <Award size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
+                        {sidebarOpen && <span className="text-sm font-medium text-white flex-1 whitespace-nowrap">MSME</span>}
+                        {sidebarOpen && <ChevronDown size={12} className={cx("ml-auto transition-transform duration-200", msmeOpen && "rotate-180")} />}
                     </button>
 
-                    <AnimatePresence initial={false}>
-                        {sidebarOpen && msmeOpen && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className="overflow-hidden"
-                            >
-                                <div className="mt-1 mb-1 ml-[17px] border-l-2 border-slate-200 pl-2 space-y-1">
-                                    {msmeSubItems.map(sub => {
-                                        if (sub.isDropdown) {
-                                            const isGroupActive = activeTab === sub.id || sub.subItems?.some(s => s.id === activeTab);
-                                            const isOpen = expandedGroups.includes(sub.id);
-                                            return (
-                                                <div key={sub.id} className="flex flex-col w-full">
-                                                    <button
-                                                        onClick={() => toggleGroup(sub.id)}
-                                                        className={`w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group ${isGroupActive ? "bg-[#23471d]/10 text-[#23471d]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                                                            }`}
-                                                    >
-                                                        <span
-                                                            className={`absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-white ${isGroupActive ? "bg-[#23471d] scale-100" : "bg-slate-300 scale-0 group-hover:scale-100"
-                                                                }`}
-                                                        />
-                                                        <span className={`text-[10px] uppercase tracking-wider whitespace-nowrap flex-1 ${isGroupActive ? "font-bold" : "font-semibold"}`}>
-                                                            {sub.label}
-                                                        </span>
-                                                        {isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                                                    </button>
-
-                                                    <AnimatePresence initial={false}>
-                                                        {isOpen && (
-                                                            <motion.div
-                                                                initial={{ height: 0, opacity: 0 }}
-                                                                animate={{ height: "auto", opacity: 1 }}
-                                                                exit={{ height: 0, opacity: 0 }}
-                                                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                                                className="overflow-hidden"
-                                                            >
-                                                                <div className="mt-1 mb-1 ml-[8px] border-l border-slate-200 pl-2 space-y-0.5">
-                                                                    {sub.subItems?.map(nested => {
-                                                                        if (nested.isDropdown) {
-                                                                            const isNestedOpen = expandedGroups.includes(nested.id);
-                                                                            const isNestedActive = activeTab === nested.id || nested.subItems?.some(s => s.id === activeTab);
-                                                                            return (
-                                                                                <div key={nested.id} className="flex flex-col w-full">
-                                                                                    <button
-                                                                                        onClick={() => toggleGroup(nested.id)}
-                                                                                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all ${isNestedActive ? "text-[#23471d] font-bold" : "text-slate-500 hover:text-slate-800 font-semibold"}`}
-                                                                                    >
-                                                                                        <span className="text-[9px] uppercase tracking-wider whitespace-nowrap">{nested.label}</span>
-                                                                                        {isNestedOpen ? <ChevronDown size={10} className="ml-auto" /> : <ChevronRight size={10} className="ml-auto" />}
-                                                                                    </button>
-                                                                                    <AnimatePresence>
-                                                                                        {isNestedOpen && (
-                                                                                            <motion.div
-                                                                                                initial={{ height: 0, opacity: 0 }}
-                                                                                                animate={{ height: "auto", opacity: 1 }}
-                                                                                                exit={{ height: 0, opacity: 0 }}
-                                                                                                className="ml-2 border-l border-slate-100 pl-2 space-y-0.5"
-                                                                                            >
-                                                                                                {nested.subItems?.map(nn => (
-                                                                                                    <button
-                                                                                                        key={nn.id}
-                                                                                                        onClick={() => setActiveTab(nn.id)}
-                                                                                                        className={`w-full flex items-center gap-2 px-2 py-1 rounded-sm text-left transition-all ${activeTab === nn.id ? "text-[#23471d] font-bold bg-[#23471d]/5" : "text-slate-400 hover:text-slate-700 font-medium"}`}
-                                                                                                    >
-                                                                                                        <span className="text-[8px] uppercase tracking-widest">{nn.label}</span>
-                                                                                                    </button>
-                                                                                                ))}
-                                                                                            </motion.div>
-                                                                                        )}
-                                                                                    </AnimatePresence>
-                                                                                </div>
-                                                                            );
-                                                                        }
-
-                                                                        const nestedActive = activeTab === nested.id;
-                                                                        return (
-                                                                            <button
-                                                                                key={nested.id}
-                                                                                onClick={() => setActiveTab(nested.id)}
-                                                                                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-sm text-left transition-all relative group ${nestedActive ? "text-[#23471d] font-bold" : "text-slate-500 hover:text-slate-800 font-semibold"
-                                                                                    }`}
-                                                                            >
-                                                                                <span className="text-[9px] uppercase tracking-wider whitespace-nowrap">{nested.label}</span>
-                                                                                {nestedActive && <ChevronRight size={10} className="ml-auto" />}
-                                                                            </button>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            </motion.div>
-                                                        )}
-                                                    </AnimatePresence>
-                                                </div>
-                                            );
-                                        }
-
-                                        const active = activeTab === sub.id;
-                                        return (
-                                            <button
-                                                key={sub.id}
-                                                onClick={() => setActiveTab(sub.id)}
-                                                className={`w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group ${active ? "bg-[#23471d]/10 text-[#23471d]" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                                                    }`}
-                                            >
-                                                <span
-                                                    className={`absolute -left-[13px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-all duration-300 ring-2 ring-white ${active ? "bg-[#23471d] scale-100" : "bg-slate-300 scale-0 group-hover:scale-100"
-                                                        }`}
-                                                />
-                                                <span className={`text-[10px] uppercase tracking-wider whitespace-nowrap ${active ? "font-bold" : "font-semibold"}`}>
-                                                    {sub.label}
-                                                </span>
-                                                {active && <ChevronRight size={12} className="ml-auto" />}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    <Collapse open={sidebarOpen && msmeOpen}>
+                        <div className="mt-1 mb-1 ml-[17px] border-l-2 border-white/20 pl-2 space-y-1">
+                            {MSME_ITEMS.map(item => (
+                                <MsmeNode
+                                    key={item.id}
+                                    item={item}
+                                    depth={0}
+                                    activeTab={activeTab}
+                                    setActiveTab={setActiveTab}
+                                    expandedGroups={expandedGroups}
+                                    toggleGroup={toggleGroup}
+                                />
+                            ))}
+                        </div>
+                    </Collapse>
                 </div>
-
             </nav>
-
-            <div className="px-2 pb-4">
-                <button onClick={onChangePwd} className="w-full flex items-center gap-3 px-2 py-2 rounded-sm text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-all">
-                    <Lock size={15} className="shrink-0" />
-                    {sidebarOpen && <span className="text-[11px] font-bold uppercase tracking-wider whitespace-nowrap">Change Password</span>}
-                </button>
-            </div>
         </aside>
     );
 }

@@ -7,8 +7,8 @@ import {
     Lock, CheckCircle2, Truck, CalendarCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import HeroSection from '@/components/home/HeroSection';
-import ExhibitorOverview from '@/components/dashboard/exhibitor/ExhibitorOverview';
+import HeroSection from '@/components/dashboard/exhibitor2/home/HeroSection';
+import ExhibitorOverview from '@/components/dashboard/exhibitor2/home/ExhibitorOverview';
 import AdminApprovalStatus from '@/components/dashboard/seller/AdminApprovalStatus';
 import { API_URL } from '@/lib/api';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
@@ -46,9 +46,9 @@ export default function SellerDashboardHome() {
 
     const cur = data?.participation?.currency === 'USD' ? '$' : '\u20B9';
     const status = STATUS_CONFIG[data?.status] || STATUS_CONFIG.pending;
-    const paid    = data?.amountPaid || 0;
+    const paid = data?.amountPaid || 0;
     // Use financeBreakdown.netPayable as the true contract value (post-GST, post-TDS)
-    const total   = data?.financeBreakdown?.netPayable || data?.participation?.total || 0;
+    const total = data?.financeBreakdown?.netPayable || data?.participation?.total || 0;
     const balance = data?.balanceAmount || 0;
     const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
 
@@ -57,31 +57,31 @@ export default function SellerDashboardHome() {
     const pendingFields = Math.ceil((100 - profileCompletion) / 6.25);
 
     const summaryCards = [
-        { label: 'Stall Booking',      value: data?.participation?.stallFor || 'Not Assigned', subtext: `${data?.participation?.stallSize || 0} sqm`,                                    icon: Package,      color: '#0284c7' },
-        { label: 'Payment Status',     value: `${paidPct}%`,                                   subtext: `${cur}${paid.toLocaleString()} / ${cur}${total.toLocaleString()}`,              icon: CheckCircle2, color: paidPct === 100 ? '#059669' : '#d97706' },
-        { label: 'Pending Due',        value: `${cur}${balance.toLocaleString()}`,              subtext: balance > 0 ? 'Payment Required' : 'Fully Paid',                                icon: CalendarCheck,color: balance > 0 ? '#dc2626' : '#059669' },
-        { label: 'Visitor Leads',      value: stats?.totalLeads || 0,                          subtext: stats?.maxLeads > 0 ? `of ${stats.maxLeads} plan limit` : 'Verified Inquiries',                                                            icon: Users,        color: '#7c3aed' },
-        { label: 'Meeting Requests',   value: stats?.meetingRequests || 0,                     subtext: 'Pending Confirmations',                                                         icon: Handshake,    color: '#ea580c' },
-        { label: 'Sponsorship Status', value: isSubscribed ? 'Active' : 'Inactive',            subtext: isSubscribed ? planDetails?.name : 'No Plan',                                   icon: Award,        color: isSubscribed ? '#059669' : '#64748b' },
-        { label: 'Profile Completion', value: `${profileCompletion}%`,                         subtext: profileCompletion === 100 ? 'Complete' : `${pendingFields} fields pending`,      icon: Users,        color: profileCompletion === 100 ? '#059669' : '#2563eb' },
-        { label: 'Document Status',    value: data?.kycStatus || 'Pending',                    subtext: 'KYC Verification',                                                              icon: Package,      color: data?.kycStatus === 'approved' ? '#059669' : '#d97706' },
+        { label: 'Stall Booking', value: data?.participation?.stallFor || 'Not Assigned', subtext: `${data?.participation?.stallSize || 0} sqm`, icon: Package, color: '#0284c7' },
+        { label: 'Payment Status', value: `${paidPct}%`, subtext: `${cur}${paid.toLocaleString()} / ${cur}${total.toLocaleString()}`, icon: CheckCircle2, color: paidPct === 100 ? '#059669' : '#d97706' },
+        { label: 'Pending Due', value: `${cur}${balance.toLocaleString()}`, subtext: balance > 0 ? 'Payment Required' : 'Fully Paid', icon: CalendarCheck, color: balance > 0 ? '#dc2626' : '#059669' },
+        { label: 'Visitor Leads', value: stats?.totalLeads || 0, subtext: stats?.maxLeads > 0 ? `of ${stats.maxLeads} plan limit` : 'Verified Inquiries', icon: Users, color: '#7c3aed' },
+        { label: 'Meeting Requests', value: stats?.meetingRequests || 0, subtext: 'Pending Confirmations', icon: Handshake, color: '#ea580c' },
+        { label: 'Sponsorship Status', value: isSubscribed ? 'Active' : 'Inactive', subtext: isSubscribed ? planDetails?.name : 'No Plan', icon: Award, color: isSubscribed ? '#059669' : '#64748b' },
+        { label: 'Profile Completion', value: `${profileCompletion}%`, subtext: profileCompletion === 100 ? 'Complete' : `${pendingFields} fields pending`, icon: Users, color: profileCompletion === 100 ? '#059669' : '#2563eb' },
+        { label: 'Document Status', value: data?.kycStatus || 'Pending', subtext: 'KYC Verification', icon: Package, color: data?.kycStatus === 'approved' ? '#059669' : '#d97706' },
     ];
 
     const modules = [
-        { id: 'leads',       label: 'Lead Management',          desc: `${stats?.totalLeads || 0} Verified buyer leads`,  icon: Users,         accent: '#ea580c', light: '#fff7ed', tab: 'leads',          featureKey: 'lead_access' },
-        { id: 'bsm',         label: 'Meeting Scheduler',        desc: '1-on-1 Buyer-Seller Meetings',                    icon: Handshake,     accent: '#d97706', light: '#fffbeb', tab: 'bsm',            featureKey: 'bsm_marketing' },
-        { id: 'export',      label: 'Product Export',           desc: 'Global trade & export desk',                      icon: Send,          accent: '#2563eb', light: '#eff6ff', tab: 'product-export', featureKey: 'export_inquiry' },
-        { id: 'products',    label: 'Manage Products',          desc: 'Catalog & digital showroom',                      icon: Package,       accent: '#059669', light: '#ecfdf5', tab: 'products',       featureKey: 'product_showcase' },
-        { id: 'marketing',   label: 'Marketing Support',        desc: 'Custom promos & social assets',                   icon: Megaphone,     accent: '#e11d48', light: '#fff1f2', tab: 'marketing',      featureKey: 'bsm_marketing' },
+        { id: 'leads', label: 'Lead Management', desc: `${stats?.totalLeads || 0} Verified buyer leads`, icon: Users, accent: '#ea580c', light: '#fff7ed', tab: 'leads', featureKey: 'lead_access' },
+        { id: 'bsm', label: 'Meeting Scheduler', desc: '1-on-1 Buyer-Seller Meetings', icon: Handshake, accent: '#d97706', light: '#fffbeb', tab: 'bsm', featureKey: 'bsm_marketing' },
+        { id: 'export', label: 'Product Export', desc: 'Global trade & export desk', icon: Send, accent: '#2563eb', light: '#eff6ff', tab: 'product-export', featureKey: 'export_inquiry' },
+        { id: 'products', label: 'Manage Products', desc: 'Catalog & digital showroom', icon: Package, accent: '#059669', light: '#ecfdf5', tab: 'products', featureKey: 'product_showcase' },
+        { id: 'marketing', label: 'Marketing Support', desc: 'Custom promos & social assets', icon: Megaphone, accent: '#e11d48', light: '#fff1f2', tab: 'marketing', featureKey: 'bsm_marketing' },
         // { id: 'logistics',   label: 'Logistics & Operations',   desc: 'Booth setup & services',                          icon: Truck,         accent: '#7c3aed', light: '#f5f3ff', tab: 'logistics',      featureKey: 'logistics' },
-        { id: 'conference',  label: 'Conference Participation', desc: 'Sessions & speaker slots',                        icon: CalendarCheck, accent: '#0891b2', light: '#ecfeff', tab: 'conference',     featureKey: 'conference' },
-        { id: 'accessories', label: 'Accessories',              desc: 'Order stall accessories',                         icon: ShoppingBag,   accent: '#d97706', light: '#fffbeb', tab: 'accessories',    featureKey: 'accessories' },
-        { id: 'reports',     label: 'Reports Section',          desc: `${stats?.totalViews || 0} Total views tracked`,   icon: BarChart3,     accent: '#6366f1', light: '#eef2ff', tab: 'reports',        featureKey: 'analytics_dashboard' },
+        { id: 'conference', label: 'Conference Participation', desc: 'Sessions & speaker slots', icon: CalendarCheck, accent: '#0891b2', light: '#ecfeff', tab: 'conference', featureKey: 'conference' },
+        { id: 'accessories', label: 'Accessories', desc: 'Order stall accessories', icon: ShoppingBag, accent: '#d97706', light: '#fffbeb', tab: 'accessories', featureKey: 'accessories' },
+        { id: 'reports', label: 'Reports Section', desc: `${stats?.totalViews || 0} Total views tracked`, icon: BarChart3, accent: '#6366f1', light: '#eef2ff', tab: 'reports', featureKey: 'analytics_dashboard' },
     ];
 
     return (
         <div className="space-y-4 pb-12">
-            <HeroSection onRegisterVisit={() => {}} forceNewTab={true} hideStats={true} />
+            <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
 
             {/* Subscription Status Banner */}
             {isSubscribed && planDetails ? (
@@ -171,11 +171,10 @@ export default function SellerDashboardHome() {
                             <div
                                 key={mod.id}
                                 onClick={() => !isLocked && goTo(mod.tab)}
-                                className={`group relative overflow-hidden border rounded-[3px] p-4 transition-all ${
-                                    isLocked
-                                        ? 'bg-slate-50 border-slate-100 cursor-not-allowed opacity-60'
-                                        : 'bg-white border-slate-200 hover:shadow-md cursor-pointer'
-                                }`}
+                                className={`group relative overflow-hidden border rounded-[3px] p-4 transition-all ${isLocked
+                                    ? 'bg-slate-50 border-slate-100 cursor-not-allowed opacity-60'
+                                    : 'bg-white border-slate-200 hover:shadow-md cursor-pointer'
+                                    }`}
                             >
                                 <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-5 group-hover:opacity-10 transition-all duration-500" style={{ background: mod.accent }} />
                                 <div className="flex items-start justify-between mb-3 relative z-10">

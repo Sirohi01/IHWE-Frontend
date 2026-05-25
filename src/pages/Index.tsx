@@ -1,4 +1,4 @@
-import HeroSection from "@/components/home/HeroSection";
+import HeroSection from "@/components/dashboard/exhibitor2/home/HeroSection";
 import AboutSection from "@/components/home/AboutSection";
 import AttendanceInfo from "@/components/home/AttendanceInfo";
 import EventInfoBanner from "@/components/home/EventInfoBanner";
@@ -54,23 +54,23 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
       <CoreValues />
       <WhyParticipate />
       <ConferenceSeminars />
-    
+
       <ExhibitionCategories />
-         <BeyondExhibition />
-         {/* <MsmePmsSection /> */}
-   
+      <BeyondExhibition />
+      {/* <MsmePmsSection /> */}
+
       <AttendanceInfo />
       <EventInfoBanner />
-   
+
       <SponsorshipSection />
-        <LogoShowcase />
+      <LogoShowcase />
       <HealthcareSectors />
       <MarqueeStrip />
       <BuyerSellerMeet />
       <EventGlimpses />
       {/* <AboutSection /> */}
       {/* <DownloadsSection /> */}
-    
+
       {/* <WhoWeAre /> */}
 
       {/* <IndustryZones /> */}

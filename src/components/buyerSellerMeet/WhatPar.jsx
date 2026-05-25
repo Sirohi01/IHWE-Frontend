@@ -83,7 +83,7 @@ const WhatPar = () => {
                         {[
                             { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
                             { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
-                            { icon: '/bsmeet/bsm3.png', num: '100+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm3.png', num: '150+', label: 'Exhibiting\nBrands' },
                             { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
                         ].map((item, i) => (
                             <React.Fragment key={i}>

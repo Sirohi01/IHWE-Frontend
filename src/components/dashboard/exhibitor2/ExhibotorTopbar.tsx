@@ -4,6 +4,7 @@ import { MessageSquareText, X, Mail, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { settingsApi } from "@/lib/api";
 
+
 const ExhibitorTopbar = () => {
     const [settings, setSettings] = useState<any>(null);
 
@@ -26,8 +27,8 @@ const ExhibitorTopbar = () => {
 
     return (
         <>
-            <div className="bg-[#002511] border-b border-white/5 text-slate-300 text-[11px] relative z-[90] py-1">
-                <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
+            <div className="bg-[#002511] border-b border-white/5 text-slate-300 text-[11px] relative z-[90] py-0.5">
+                <div className="flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
                     {/* Left Section - Contact Info (Compact on mobile) */}
                     <div className="flex items-center justify-center md:justify-start gap-3 md:gap-3 w-full md:w-auto overflow-hidden">
                         {topbarEmails.slice(0, 1).map((item: any, idx: number) => (

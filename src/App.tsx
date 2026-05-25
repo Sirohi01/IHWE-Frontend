@@ -62,7 +62,7 @@ const PaymentPolicy = lazy(() => import("./pages/PaymentPolicy"));
 const CancellationPolicy = lazy(() => import("./pages/CancellationPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
-const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
+const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/home/ExhibitorDashboardHome"));
 const ExhibitorProfilePage = lazy(() => import("./pages/exhibitor/ExhibitorProfilePage"));
 const ExhibitorInvoicesPage = lazy(() => import("./pages/exhibitor/ExhibitorInvoicesPage"));
 const ExhibitorBSMPage = lazy(() => import("./pages/exhibitor/ExhibitorBSMPage"));
