@@ -55,7 +55,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     };
 
     return (
-        <div className={`fixed top-0 right-0 z-[100] h-[58px] bg-white border-b border-slate-200 flex items-center justify-between px-5 shadow-sm print:hidden transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-[72px]'}`}>
+        <div className={`fixed top-0 right-0 z-[100] h-[58px] bg-white flex items-center justify-between px-5  print:hidden transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-[72px]'}`}>
             {/* Left */}
             <div className="flex items-center gap-3">
 

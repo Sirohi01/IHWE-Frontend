@@ -24,16 +24,17 @@ const WelcomeHeader = () => {
                         {companyName}.
                     </h2>
                     <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{
-                            background: 'linear-gradient(135deg,#34d399,#10b981)',
-                            boxShadow: '0 2px 6px rgba(16,185,129,0.4), 0 1px 0 rgba(255,255,255,0.3) inset'
+                            background: 'linear-gradient(135deg, #02a344, #027D34)',
+                            boxShadow: '0 2px 6px rgba(2,125,52,0.4), 0 1px 0 rgba(255,255,255,0.3) inset'
                         }}
                     >
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                             <path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </div>
+
                 </div>
                 <p className="text-xs text-gray-500 leading-relaxed">
                     Here's what's happening with your participation in IHWE 2026.
@@ -43,20 +44,20 @@ const WelcomeHeader = () => {
             <div className="flex gap-4">
                 {/* ── Center Card ── */}
                 <div
-                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-xl px-4 py-1 flex flex-col justify-center"
+                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-sm px-4 py-1.5 flex flex-col justify-center"
                     style={{
                         boxShadow: '0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.06), 0 8px 20px rgba(0,0,0,0.05)',
                         transform: 'perspective(800px) rotateY(-1deg) rotateX(1deg)',
                     }}
                 >
                     {/* Date Row */}
-                    <div className="flex items-center gap-2.5 pb-2 border-b border-gray-100">
-                        <div className="w-[32px] h-[32px] rounded-lg bg-[#eef2fb] flex items-center justify-center flex-shrink-0">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
                             <CalendarDays size={17} className="text-[#1a3a7c]" />
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
+                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
                             >
                                 21 – 23 AUGUST 2026
@@ -66,12 +67,12 @@ const WelcomeHeader = () => {
 
                     {/* Location Row */}
                     <div className="flex items-center gap-2.5 pt-2">
-                        <div className="w-[32px] h-[32px] rounded-lg bg-[#eef2fb] flex items-center justify-center flex-shrink-0">
+                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
                             <MapPin size={17} className="text-[#1a3a7c]" />
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
+                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
                             >
                                 PRAGATI MAIDAN,<br />NEW DELHI, INDIA
@@ -82,27 +83,11 @@ const WelcomeHeader = () => {
 
                 {/* ── Right Banner ── */}
                 <div
-                    className="flex-none w-[260px] rounded-xl overflow-hidden relative flex items-center px-5 py-1"
+                    className="flex-none w-[420px] rounded-sm overflow-hidden relative flex items-center px-5 py-1.5 bg-cover bg-center bg-no-repeat"
                     style={{
-                        background: '#0f2b6e',
-                        transform: 'perspective(800px) rotateY(1deg) rotateX(1deg)',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.15), 0 12px 32px rgba(15,43,110,0.25), 0 1px 0 rgba(255,255,255,0.15) inset',
+                        backgroundImage: "url('/exhibition/topright.png')"
                     }}
                 >
-                    {/* Blobs */}
-                    <div className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-blue-500/20" />
-                    <div className="absolute -bottom-8 -left-5 w-28 h-28 rounded-full bg-blue-500/10" />
-
-                    {/* Cross */}
-                    <div
-                        className="absolute top-3 right-3 z-10 w-9 h-9 bg-white rounded-lg flex items-center justify-center"
-                        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.25)' }}
-                    >
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                            <rect x="7" y="2" width="4" height="14" rx="1.5" fill="#1a3a7c" />
-                            <rect x="2" y="7" width="14" height="4" rx="1.5" fill="#1a3a7c" />
-                        </svg>
-                    </div>
 
                     {/* Building */}
                     <div className="absolute right-0 inset-y-0 w-28 opacity-35 z-[1]">
