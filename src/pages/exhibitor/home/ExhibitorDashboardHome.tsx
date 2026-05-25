@@ -5,11 +5,13 @@ import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/home/Exhibito
 import HeroSection from '@/components/dashboard/exhibitor2/home/HeroSection';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquareText, X } from 'lucide-react';
+import { MessageSquareText } from 'lucide-react';
 import { useState } from 'react';
 import ExhibotorTopbar from "@/components/dashboard/exhibitor2/ExhibotorTopbar";
-import ExEventCountdown from '@/components/dashboard/exhibitor2/ExEventCountdown';
 import WelcomeHeader from '@/components/dashboard/exhibitor2/home/WelcomeHeader';
+import StatCards from '@/components/dashboard/exhibitor2/home/StatCards';
+import DashboardWidgets from '@/components/dashboard/exhibitor2/home/DashboardWidgets';
+import DashboardBottom from '@/components/dashboard/exhibitor2/home/DashboardBottom';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();
@@ -24,13 +26,14 @@ export default function ExhibitorDashboardHome() {
     const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
 
     const isPostExpo = new Date() > new Date('2026-04-20'); // Post-expo phase
-    const [showFeedbackBanner, setShowFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
+    const [showFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
 
     return (
         <>
-            <ExhibotorTopbar />
+            {/* <ExhibotorTopbar /> */}
             <div className="space-y-2 px-8 py-4">
                 <WelcomeHeader />
+                <StatCards />
                 <AnimatePresence>
                     {showFeedbackBanner && (
                         <motion.div
@@ -40,7 +43,6 @@ export default function ExhibitorDashboardHome() {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                             className="bg-white overflow-hidden relative"
                         >
-                            {/* Left accent bar */}
                             <div className="absolute top-0 left-0 w-1 h-full bg-[#d26019]" />
 
                             {/* <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 py-1.5 pl-7">
@@ -71,11 +73,12 @@ export default function ExhibitorDashboardHome() {
                 </AnimatePresence>
 
                 <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
-
+                <DashboardWidgets />
+                <DashboardBottom />
                 <div className="bg-white shadow-sm">
                     <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
                 </div>
-                <ExhibitorOverview data={data} cur={cur} status={status} paidPct={paidPct} paid={paid} total={total} balance={balance} setActiveTab={setActiveTab} />
+                {/* <ExhibitorOverview data={data} cur={cur} status={status} paidPct={paidPct} paid={paid} total={total} balance={balance} setActiveTab={setActiveTab} /> */}
             </div>
         </>
     );

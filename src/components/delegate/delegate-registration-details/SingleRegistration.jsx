@@ -31,8 +31,8 @@ const SingleRegistration = () => {
                                     <Calendar size={18} className="text-[#1a5c1a]" />
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-sm text-[#1a5c1a] ">18 – 20 JUNE 2026</p>
-                                    <p className="text-sm  font-medium text-[#1a5c1a]">Thursday – Saturday</p>
+                                    <p className="font-semibold text-sm text-[#1a5c1a] ">21 – 23 August 2026</p>
+                                    <p className="text-sm  font-medium text-[#1a5c1a]">Friday – Sunday</p>
                                 </div>
                             </div>
 
