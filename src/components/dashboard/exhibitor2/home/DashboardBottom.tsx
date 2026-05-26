@@ -70,84 +70,86 @@ interface DashboardBottomProps {
 
 export default function DashboardBottom({ onViewPayment, onViewDocuments, onViewEvents }: DashboardBottomProps) {
   return (
-    <div className="flex gap-4 w-full">
+    <div className="flex gap-2 w-full">
 
-      {/* ── Payment Overview ── */}
-      <div className="flex-1 bg-white rounded-lg border border-gray-100 shadow-sm px-4 py-3">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Payment Overview</span>
-          <button onClick={onViewPayment} className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View Details</button>
-        </div>
-
-        {/* Top card - single unified */}
-        <div className="bg-[#f0faf5] border border-[#d1f0e0] rounded-lg px-4 py-2 mb-4 flex gap-6">
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-[#1a3a7c] mb-1">Total Paid</p>
-            <p className="text-lg font-semibold text-green-700">{PAYMENT.totalPaid}</p>
+      <div className="w-[64.3%] flex gap-2 flex-row">
+        {/* ── Payment Overview ── */}
+        <div className="flex-1 bg-white rounded-lg border border-gray-100 shadow-sm px-4 py-3">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Payment Overview</span>
+            <button onClick={onViewPayment} className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View Details</button>
           </div>
-          <div className="w-px bg-[#c8e8d8]" />
-          <div className="flex-1">
-            <p className="text-sm font-semibold text-[#1a3a7c] mb-1">Last Payment</p>
-            <p className="text-[13px] font-semibold text-[#1a3a7c]">{PAYMENT.lastPaymentDate}</p>
-            <p className="text-[11px] text-[#1a3a7c]">{PAYMENT.txn}</p>
-          </div>
-        </div>
 
-        {/* Donut + legend */}
-        <div className="flex items-center gap-4">
-          <DonutChart percent={PAYMENT.paid.percent} />
-          <div className="flex-1 space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-green-500 shrink-0" />
-                <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.paid.label}</span>
-              </div>
-              <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.paid.amount} ({PAYMENT.paid.percent}%)</span>
+          {/* Top card - single unified */}
+          <div className="bg-[#f0faf5] border border-[#d1f0e0] rounded-lg px-4 py-2 mb-4 flex gap-6">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-[#1a3a7c] mb-1">Total Paid</p>
+              <p className="text-lg font-semibold text-green-700">{PAYMENT.totalPaid}</p>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm bg-amber-400 shrink-0" />
-                <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.pending.label}</span>
-              </div>
-              <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.pending.amount} ({PAYMENT.pending.percent}%)</span>
-            </div>
-            <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
-              <span className="text-[12px] font-semibold text-[#1a3a7c]">Total Amount</span>
-              <span className="text-sm font-bold text-[#1a3a7c]">{PAYMENT.total}</span>
+            <div className="w-px bg-[#c8e8d8]" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-[#1a3a7c] mb-1">Last Payment</p>
+              <p className="text-[13px] font-semibold text-[#1a3a7c]">{PAYMENT.lastPaymentDate}</p>
+              <p className="text-[11px] text-[#1a3a7c]">{PAYMENT.txn}</p>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* ── Document Status ── */}
-      <div className="flex-1 bg-white rounded-lg  border border-gray-100 shadow-sm  px-4 py-3">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
-          <button onClick={onViewDocuments} className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
-          {DOCUMENTS.map((doc, i) => {
-            const cfg = DOC_STATUS_CONFIG[doc.status];
-            const Icon = cfg.icon;
-            return (
-              <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== DOCUMENTS.length - 1 ? "border-b border-gray-200" : ""}`}>
-                <div className="flex items-center gap-3">
-                  <FileText size={16} className="text-[#8fa3c8] shrink-0" strokeWidth={1.5} />
-                  <span className="text-[14px] font-medium text-[#1a3a7c]">{doc.name}</span>
+          {/* Donut + legend */}
+          <div className="flex items-center gap-4">
+            <DonutChart percent={PAYMENT.paid.percent} />
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-green-500 shrink-0" />
+                  <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.paid.label}</span>
                 </div>
-                <div className={`flex items-center gap-2 ${cfg.color}`}>
-                  <span className="text-[13px] font-medium">{cfg.label}</span>
-                  <Icon size={16} strokeWidth={1.8} />
-                </div>
+                <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.paid.amount} ({PAYMENT.paid.percent}%)</span>
               </div>
-            );
-          })}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-amber-400 shrink-0" />
+                  <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.pending.label}</span>
+                </div>
+                <span className="text-[12px] font-semibold text-[#1a3a7c]">{PAYMENT.pending.amount} ({PAYMENT.pending.percent}%)</span>
+              </div>
+              <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
+                <span className="text-[12px] font-semibold text-[#1a3a7c]">Total Amount</span>
+                <span className="text-sm font-bold text-[#1a3a7c]">{PAYMENT.total}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Document Status ── */}
+        <div className="flex-1 bg-white rounded-lg  border border-gray-100 shadow-sm  px-4 py-3">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
+            <button onClick={onViewDocuments} className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
+          </div>
+
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
+            {DOCUMENTS.map((doc, i) => {
+              const cfg = DOC_STATUS_CONFIG[doc.status];
+              const Icon = cfg.icon;
+              return (
+                <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== DOCUMENTS.length - 1 ? "border-b border-gray-200" : ""}`}>
+                  <div className="flex items-center gap-3">
+                    <FileText size={16} className="text-[#8fa3c8] shrink-0" strokeWidth={1.5} />
+                    <span className="text-[14px] font-medium text-[#1a3a7c]">{doc.name}</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${cfg.color}`}>
+                    <span className="text-[13px] font-medium">{cfg.label}</span>
+                    <Icon size={16} strokeWidth={1.8} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* ── Upcoming Events ── */}
-      <div className="flex-1 bg-white rounded-lg  border border-gray-100 shadow-sm  px-4 py-3">
+      <div className="w-[35%] flex-1 bg-white rounded-lg  border border-gray-100 shadow-sm  px-4 py-3">
         <div className="flex items-center justify-between mb-5">
           <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Upcoming Events</span>
           <button onClick={onViewEvents} className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
