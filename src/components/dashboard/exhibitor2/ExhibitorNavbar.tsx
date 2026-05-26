@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Menu, X, ShieldCheck, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { LogOut, Menu, X, ShieldCheck, User, Phone, Mail, MessageSquare, Sun, Sunset, Moon, Sparkles } from 'lucide-react';
 import { SERVER_URL, API_URL } from '@/lib/api';
 import { BiSupport } from "react-icons/bi";
 import { RiContactsLine, RiListCheck2, RiAlarmWarningLine, RiUserAddLine } from "react-icons/ri";
@@ -29,6 +29,27 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     const rmName = data?.spokenWith || data?.referredBy || null;
     const navigate = useNavigate();
 
+    const [timeContext, setTimeContext] = useState<{ greeting: string; icon: any; iconColor: string }>({
+        greeting: "Welcome back",
+        icon: Sparkles,
+        iconColor: "text-amber-500"
+    });
+
+    useEffect(() => {
+        const hr = new Date().getHours();
+        if (hr >= 5 && hr < 12) {
+            setTimeContext({ greeting: "Good morning", icon: Sun, iconColor: "text-amber-500 animate-pulse" });
+        } else if (hr >= 12 && hr < 17) {
+            setTimeContext({ greeting: "Good afternoon", icon: Sun, iconColor: "text-amber-500" });
+        } else if (hr >= 17 && hr < 22) {
+            setTimeContext({ greeting: "Good evening", icon: Sunset, iconColor: "text-orange-500" });
+        } else {
+            setTimeContext({ greeting: "Welcome back", icon: Moon, iconColor: "text-indigo-400" });
+        }
+    }, []);
+
+    const TimeIcon = timeContext.icon;
+
     useEffect(() => {
         if (!rmName) return;
         fetch(`${API_URL}/admin/by-username/${encodeURIComponent(rmName)}`)
@@ -55,9 +76,10 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     };
 
     return (
-        <div className={`fixed top-0 right-0 z-[100] h-[58px] bg-white flex items-center justify-between px-5  print:hidden transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-[72px]'}`}>
+        <div className={`fixed top-0 right-0 z-[100] h-[64px] bg-gradient-to-r from-[#051c47] via-[#082b6b] to-[#051c47] border-b border-blue-900/50 shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-between px-6 print:hidden transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-[72px]'}`}>
             {/* Left */}
             <div className="flex items-center gap-3">
+                <h2 className="text-white text-lg font-semibold tracking-tight">Exhibitor Dashboard</h2>
 
             </div>
 
@@ -65,65 +87,64 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
             <div className="flex items-center gap-3">
                 {/* Relationship Manager */}
                 {rmName && (
-                    <div className="relative group bg-gray-100 rounded-full">
+                    <div className="relative group">
                         <button onClick={() => navigate('/exhibitor-dashboard/relationship-manager')}
-                            className="relative p-2 rounded-full hover:bg-slate-200 transition-colors text-[#23471d]">
-                            <RiContactsLine size={16} />
+                            className="relative p-2 rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-sm">
+                            <RiContactsLine size={15} />
                         </button>
                         {/* Custom Tooltip */}
-                        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-50">
+                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 shadow-md">
                             Relationship Manager
                         </span>
                     </div>
                 )}
 
-
-
                 {/* Reminder List */}
-                <div className="relative hidden sm:block group bg-gray-100 rounded-full">
-                    <button onClick={() => navigate('/exhibitor-dashboard/reminders')} className="relative p-2 rounded-full hover:bg-slate-200 transition-colors">
-                        <RiAlarmWarningLine size={16} className="text-[#23471d]" />
+                <div className="relative hidden sm:block group">
+                    <button onClick={() => navigate('/exhibitor-dashboard/reminders')}
+                        className="relative p-2 rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-sm">
+                        <RiAlarmWarningLine size={15} className="text-slate-300 hover:text-white" />
                         {data?.balanceAmount > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-red-600 border border-white text-white text-[9px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-black shadow-sm">
+                            <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-orange-600 border border-white text-white text-[9px] min-w-[15px] h-3.5 px-0.5 rounded-full flex items-center justify-center font-black shadow-sm">
                                 1
                             </span>
                         )}
                     </button>
-                    <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-50">
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 shadow-md">
                         Payment Reminders
                     </span>
                 </div>
 
                 {/* Notification */}
-                <div className="relative group bg-gray-100 rounded-full">
-                    <button onClick={() => navigate('/exhibitor-dashboard/notification')} className="relative p-2 rounded-full hover:bg-slate-200 transition-colors">
-                        <IoNotificationsOutline size={16} className="text-[#23471d]" />
-                        {/* Dynamic Notification Badge: Payment (1 if unpaid) + 2 unread mocks */}
-                        <span className="absolute -top-1 -right-1 bg-red-600 border border-white text-white text-[9px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-black shadow-sm">
+                <div className="relative group">
+                    <button onClick={() => navigate('/exhibitor-dashboard/notification')}
+                        className="relative p-2 rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-sm">
+                        <IoNotificationsOutline size={15} className="text-slate-300 hover:text-white" />
+                        {/* Dynamic Notification Badge */}
+                        <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-orange-600 border border-white text-white text-[9px] min-w-[15px] h-3.5 px-0.5 rounded-full flex items-center justify-center font-black shadow-sm">
                             {(data?.balanceAmount > 0 ? 1 : 0) + 2}
                         </span>
                     </button>
-                    <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-50">
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 shadow-md">
                         Notifications
                     </span>
                 </div>
 
                 {/* Support (Live Chat Popup) */}
                 <div className="relative">
-                    <div className="relative group bg-gray-100 rounded-full">
+                    <div className="relative group">
                         <button
                             onClick={() => setShowChatPopup(p => !p)}
-                            className="relative p-2 rounded-full hover:bg-slate-100 transition-colors"
+                            className="relative p-2 rounded-full border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-sm"
                         >
-                            <BiSupport size={16} className="text-[#23471d]" />
+                            <BiSupport size={15} className="text-slate-300 hover:text-white" />
                             {unreadChat > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-[#d26019] text-white text-[9px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-black">
+                                <span className="absolute -top-1 -right-1 bg-gradient-to-br from-orange-500 to-red-600 text-white text-[9px] min-w-[15px] h-3.5 px-0.5 rounded-full flex items-center justify-center font-black shadow-sm">
                                     {unreadChat > 9 ? '9+' : unreadChat}
                                 </span>
                             )}
                         </button>
-                        {/* Custom Tooltip */}
-                        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-100 pointer-events-none z-50">
+                        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] font-bold px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 shadow-md">
                             Live Chat
                         </span>
                     </div>
@@ -132,7 +153,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                         <>
                             {/* Backdrop */}
                             <div className="fixed inset-0 z-40" onClick={() => setShowChatPopup(false)} />
-                            <div className="absolute right-0 top-10 w-[350px] bg-white border border-slate-200 shadow-xl rounded-sm z-50 overflow-hidden" style={{ height: '520px' }}>
+                            <div className="absolute right-0 top-11 w-[350px] bg-white border border-slate-200 shadow-2xl rounded-lg z-50 overflow-hidden" style={{ height: '520px' }}>
                                 <ExhibitorChatTab data={data} inNavbar={true} />
                             </div>
                         </>
@@ -143,18 +164,17 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                 <div className="relative group">
                     <button
                         onClick={() => setShowUserMenu(!showUserMenu)}
-                        className="flex items-center gap-2 pl-3 pr-1 py-1 bg-slate-50 border border-slate-200 rounded-full hover:bg-slate-100 transition-all shadow-sm"
+                        className="flex items-center gap-2 pl-2 pr-1.5 py-1 bg-white/5 border border-white/10 rounded-full hover:shadow-md hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-sm"
                         id="user-profile-trigger"
                     >
-                        <div className="w-7 h-7 rounded-full bg-[#23471d] flex items-center justify-center text-white text-[10px] font-bold shadow-sm">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-[10px] font-black shadow-sm">
                             {data?.exhibitorName?.charAt(0) || 'E'}
                         </div>
-                        <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest hidden md:block max-w-[120px] truncate">
-                            {/* {data?.exhibitorName || 'Exhibitor'} */}
+                        <span className="text-[10px] font-extrabold text-slate-200 uppercase tracking-widest hidden md:block max-w-[120px] truncate">
                             My Profile
                         </span>
-                        <div className="p-1 text-slate-400">
-                            <Menu size={14} />
+                        <div className="p-0.5 text-slate-400">
+                            <Menu size={13} className="text-slate-300" />
                         </div>
                     </button>
 

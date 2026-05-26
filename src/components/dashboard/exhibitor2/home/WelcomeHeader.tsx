@@ -44,7 +44,7 @@ const WelcomeHeader = () => {
             <div className="flex gap-4">
                 {/* ── Center Card ── */}
                 <div
-                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-md px-4 py-1.5 flex flex-col justify-center"
+                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-md px-4 py-0.5 flex flex-col justify-center"
                     style={{
                         boxShadow: '0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.06), 0 8px 20px rgba(0,0,0,0.05)',
                         transform: 'perspective(800px) rotateY(-1deg) rotateX(1deg)',
@@ -66,7 +66,7 @@ const WelcomeHeader = () => {
                     </div>
 
                     {/* Location Row */}
-                    <div className="flex items-center gap-2.5 pt-1">
+                    <div className="flex items-center gap-2.5 pt-0.5">
                         <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
                             <MapPin size={17} className="text-[#1a3a7c]" />
                         </div>
@@ -83,7 +83,7 @@ const WelcomeHeader = () => {
 
                 {/* ── Right Banner ── */}
                 <div
-                    className="flex-none w-[420px] rounded-md overflow-hidden relative flex items-center px-5 py-1.5"
+                    className="flex-none w-[420px] rounded-md overflow-hidden relative flex items-center px-5 py-1"
                     style={{
                         backgroundImage: "url('/exhibition/topright.png')",
                         backgroundSize: "cover",
@@ -99,7 +99,7 @@ const WelcomeHeader = () => {
 
                     {/* Text */}
                     <div className="relative z-[2] max-w-[150px]">
-                        <p className="text-[11px] text-white/75 mb-1 leading-relaxed">
+                        <p className="text-[11px] text-white/75 mb-0.5 leading-relaxed">
                             Be a part of the world's leading platform for
                         </p>
                         <p
