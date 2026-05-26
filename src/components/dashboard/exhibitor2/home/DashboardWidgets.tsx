@@ -1,16 +1,17 @@
 import { Building2, FileText, CreditCard, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // ─── Quick Access Data ────────────────────────────────────────────────────────
 
 const QUICK_ACCESS = [
-    { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
-    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
-    { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
-    { id: "documentation", label: "Documentation", sub: "Upload & manage", icon: FolderOpen, iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
-    { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
-    { id: "exhibitions", label: "My Events", sub: "Your schedule", icon: CalendarDays, iconBg: "bg-gradient-to-br from-[#f59e0b] to-[#d97706]" },
-    { id: "bsm", label: "Buyer Connect", sub: "Connect with buyers", icon: UsersRound, iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
-    { id: "chat", label: "Chat Support", sub: "Get instant help", icon: MessageSquare, iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
+    { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, link: "/exhibitor-dashboard/ex-profile", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
+    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, link: "/exhibitor-dashboard/finances", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
+    { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
+    { id: "documentation", label: "Documentation", sub: "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/documentation", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
+    { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
+    { id: "exhibitions", label: "My Events", sub: "Your schedule", icon: CalendarDays, link: "/exhibitor-dashboard/exhibitions", iconBg: "bg-gradient-to-br from-[#f59e0b] to-[#d97706]" },
+    { id: "bsm", label: "Buyer Connect", sub: "Connect with buyers", icon: UsersRound, link: "/exhibitor-dashboard/bsm", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
+    { id: "chat", label: "Chat Support", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
 ];
 
 // ─── Important Updates Data ───────────────────────────────────────────────────
@@ -52,9 +53,8 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                     {QUICK_ACCESS.map(item => {
                         const Icon = item.icon;
                         return (
-                            <button
-                                key={item.id}
-                                onClick={() => onNavigate?.(item.id)}
+                            <Link
+                                to={item.link}
                                 className="flex items-center gap-3 py-3 px-2 border border-gray-100 rounded-xl hover:bg-gray-50 transition-all group text-left"
                             >
                                 <div className={`${item.iconBg} rounded-xl p-2.5 shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
@@ -64,7 +64,7 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                                     <p className="text-[12px] font-semibold text-[#1a3a7c] leading-tight truncate">{item.label}</p>
                                     <p className="text-[11px] text-[#1a3a7c] mt-0.5 truncate">{item.sub}</p>
                                 </div>
-                            </button>
+                            </Link>
                         );
                     })}
                 </div>

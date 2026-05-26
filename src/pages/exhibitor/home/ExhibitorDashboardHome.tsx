@@ -52,7 +52,7 @@ export default function ExhibitorDashboardHome() {
                 <DashboardWidgets />
                 <DashboardBottom />
                 <div className="bg-white shadow-sm">
-                    <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} />
+                    {/* <ExhibitorModuleGrid data={data} cur={cur} paid={paid} total={total} balance={balance} paidPct={paidPct} setActiveTab={setActiveTab} /> */}
                 </div>
                 {/* <ExhibitorOverview data={data} cur={cur} status={status} paidPct={paidPct} paid={paid} total={total} balance={balance} setActiveTab={setActiveTab} /> */}
             </div>
