@@ -39,30 +39,30 @@ interface DashboardWidgetsProps {
 
 export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) {
     return (
-        <div className="flex gap-4 w-full">
+        <div className="flex gap-2 w-full">
 
             {/* Quick Access */}
-            <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
                 <div className="flex items-center gap-2 mb-4">
-                    <span className="text-sm font-bold text-gray-800 uppercase tracking-wider">Quick Access</span>
+                    <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Quick Access</span>
                     <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
                 </div>
 
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-1.5">
                     {QUICK_ACCESS.map(item => {
                         const Icon = item.icon;
                         return (
                             <button
                                 key={item.id}
                                 onClick={() => onNavigate?.(item.id)}
-                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-all group text-left"
+                                className="flex items-center gap-3 py-3 px-2 border border-gray-100 rounded-xl hover:bg-gray-50 transition-all group text-left"
                             >
                                 <div className={`${item.iconBg} rounded-xl p-2.5 shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
-                                    <Icon size={18} className="text-white" strokeWidth={1.8} />
+                                    <Icon size={14} className="text-white" strokeWidth={1.8} />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[13px] font-semibold text-gray-700 leading-tight truncate">{item.label}</p>
-                                    <p className="text-[11px] text-gray-400 leading-tight mt-0.5 truncate">{item.sub}</p>
+                                    <p className="text-[12px] font-semibold text-[#1a3a7c] leading-tight truncate">{item.label}</p>
+                                    <p className="text-[11px] text-[#1a3a7c] mt-0.5 truncate">{item.sub}</p>
                                 </div>
                             </button>
                         );
@@ -71,27 +71,27 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
             </div>
 
             {/* Important Updates */}
-            <div className="w-[340px] shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className=" shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-gray-800 uppercase tracking-wider">Important Updates</span>
+                        <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Important Updates</span>
                         <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
                     </div>
                     <button className="text-[12px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-2.5">
                     {UPDATES.map((u, i) => (
                         <div key={i} className="flex items-start gap-3">
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 mt-0.5 ${BADGE_STYLES[u.badge]}`}>
+                            <span className={`text-[9px] font-semibold px-2 py-0.5 rounded-md shrink-0 mt-0.5 ${BADGE_STYLES[u.badge]}`}>
                                 {u.badge}
                             </span>
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-2">
-                                    <p className="text-[13px] font-semibold text-gray-800 leading-tight">{u.title}</p>
-                                    <span className="text-[11px] text-gray-400 shrink-0 whitespace-nowrap">{u.date}</span>
+                            <div className="flex-1 min-w-0 ">
+                                <div className="flex items-start justify-between gap-8">
+                                    <p className="text-xs font-semibold text-[#1a3a7c] leading-tight">{u.title}</p>
+                                    <span className="text-[11px] text-gray-500 shrink-0 whitespace-nowrap">{u.date}</span>
                                 </div>
-                                <p className="text-[11px] text-gray-400 mt-0.5 leading-tight">{u.desc}</p>
+                                <p className="text-[11px] text-[#1a3a7c] mt-0.5 ">{u.desc}</p>
                             </div>
                         </div>
                     ))}

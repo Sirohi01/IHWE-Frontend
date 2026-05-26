@@ -44,30 +44,6 @@ export default function ExhibitorDashboardHome() {
                             className="bg-white overflow-hidden relative"
                         >
                             <div className="absolute top-0 left-0 w-1 h-full bg-[#d26019]" />
-
-                            {/* <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-4 py-1.5 pl-7">
-
-                               
-                                <div className="flex items-center gap-3 flex-1 min-w-0">
-                                    <div className="w-10 h-10 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center flex-shrink-0">
-                                        <MessageSquareText size={20} className="text-[#d26019]" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <p className="text-[13px] font-semibold text-gray-900 leading-snug">
-                                            Your feedback matters
-                                        </p>
-                                        <p className="text-[12px] text-gray-500 truncate">
-                                            Share your experience at IHWE 2026 to help us improve.
-                                        </p>
-                                    </div>
-                                </div>
-
-                       
-                                <div className="flex items-center justify-center w-full md:w-auto flex-shrink-0 pb-1 md:pb-0">
-                                    <ExEventCountdown />
-                                </div>
-
-                            </div> */}
                         </motion.div>
                     )}
                 </AnimatePresence>

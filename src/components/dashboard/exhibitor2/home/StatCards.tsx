@@ -69,19 +69,19 @@ export default function StatCards() {
                 return (
                     <div
                         key={stat.id}
-                        className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100 min-w-[170px] flex-1"
+                        className="flex items-center gap-3 bg-white rounded-md px-4 py-3 shadow-sm border border-gray-100 min-w-[170px] flex-1"
                     >
                         <div className={`${stat.iconBg} rounded-xl p-3 shrink-0`}>
-                            <Icon size={22} className="text-white" strokeWidth={1.8} />
+                            <Icon size={18} className="text-white" strokeWidth={1.8} />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider leading-none mb-1">
+                            <p className="text-[11px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none mb-1">
                                 {stat.label}
                             </p>
                             <p className={`text-lg font-medium leading-tight ${stat.valueColor}`}>
                                 {stat.value}
                             </p>
-                            <p className="text-[11px] text-gray-400 mt-0.5 leading-tight">
+                            <p className="text-[11px] text-[#1a3a7c] mt-0.5 leading-tight">
                                 {stat.sub}
                             </p>
                         </div>
