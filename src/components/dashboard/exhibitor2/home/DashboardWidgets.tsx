@@ -39,10 +39,10 @@ interface DashboardWidgetsProps {
 
 export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) {
     return (
-        <div className="flex gap-2 w-full">
+        <div className="flex flex-row gap-2 w-full">
 
             {/* Quick Access */}
-            <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
+            <div className="w-[65%] bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
                 <div className="flex items-center gap-2 mb-4">
                     <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Quick Access</span>
                     <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
@@ -71,7 +71,7 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
             </div>
 
             {/* Important Updates */}
-            <div className=" shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
+            <div className="w-[35%]  shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm p-2">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-[#1a3a7c] uppercase tracking-wider">Important Updates</span>

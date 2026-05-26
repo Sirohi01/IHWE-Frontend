@@ -1,17 +1,37 @@
 import { Store, CheckCircle, FileText, Megaphone, CalendarDays } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useExhibitorCtx } from "@/context/ExhibitorContext";
 
 
 export default function StatCards() {
-    const [daysLeft, setDaysLeft] = useState(0);
+    const { data } = useExhibitorCtx();
+    const [timeLeft, setTimeLeft] = useState({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+    });
 
     useEffect(() => {
         const targetDate = new Date("2026-08-21T00:00:00");
-        const difference = targetDate.getTime() - new Date().getTime();
 
-        if (difference > 0) {
-            setDaysLeft(Math.floor(difference / (1000 * 60 * 60 * 24)));
-        }
+        const updateTimer = () => {
+            const difference = targetDate.getTime() - new Date().getTime();
+            if (difference > 0) {
+                setTimeLeft({
+                    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60)
+                });
+            } else {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+            }
+        };
+
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+        return () => clearInterval(timer);
     }, []);
 
     const stats = [
@@ -20,8 +40,8 @@ export default function StatCards() {
             icon: Store,
             iconBg: "bg-gradient-to-br from-[#7c6ef5] to-[#5b4fcf]",
             label: "STALL NUMBER",
-            value: "98",
-            sub: "Raw Space – 9 SQM",
+            value: data?.participation?.stallFor || "TBA",
+            sub: `${data?.participation?.stallType || "Space"} – ${data?.participation?.stallSize || 0} SQM`,
             valueColor: "text-gray-800",
         },
         {
@@ -29,8 +49,8 @@ export default function StatCards() {
             icon: CheckCircle,
             iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]",
             label: "PAYMENT STATUS",
-            value: "Paid",
-            sub: "Total Paid: INR 11.00",
+            value: data?.status || "Pending",
+            sub: `Total Paid: ${data?.participation?.currency || 'INR'} ${data?.amountPaid?.toLocaleString() || '0'}`,
             valueColor: "text-[#22a96a]",
         },
         {
@@ -56,34 +76,73 @@ export default function StatCards() {
             icon: CalendarDays,
             iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]",
             label: "EVENT COUNTDOWN",
-            value: daysLeft.toString(),
-            sub: "Days to go!",
+            value: "",
+            sub: "Remaining Time",
             valueColor: "text-gray-800",
         },
     ];
 
     return (
-        <div className="flex gap-3 w-full overflow-x-auto pb-1">
+        <div className="flex gap-3 w-full overflow-x-auto">
             {stats.map((stat, i) => {
                 const Icon = stat.icon;
                 return (
                     <div
                         key={stat.id}
-                        className="flex items-center gap-3 bg-white rounded-md px-4 py-3 shadow-sm border border-gray-100 min-w-[170px] flex-1"
+                        className={`flex items-center gap-3 bg-white rounded-md px-4 py-1 shadow-sm border border-gray-100 flex-1 transform translate-y-0 transition-all duration-300 ease-out hover:translate-y-[2.5px] hover:bg-slate-50/90 ${stat.id === "countdown" ? "min-w-[240px]" : "min-w-[170px]"
+                            }`}
                     >
                         <div className={`${stat.iconBg} rounded-xl p-3 shrink-0`}>
                             <Icon size={18} className="text-white" strokeWidth={1.8} />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                             <p className="text-[11px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none mb-1">
                                 {stat.label}
                             </p>
-                            <p className={`text-lg font-medium leading-tight ${stat.valueColor}`}>
-                                {stat.value}
-                            </p>
-                            <p className="text-[11px] text-[#1a3a7c] mt-0.5 leading-tight">
-                                {stat.sub}
-                            </p>
+                            {stat.id === "countdown" ? (
+                                <div className="flex items-center gap-1 mt-2">
+                                    {/* Days */}
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                            {timeLeft.days}
+                                        </span>
+                                        <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Days</span>
+                                    </div>
+                                    <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                    {/* Hours */}
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                            {String(timeLeft.hours).padStart(2, '0')}
+                                        </span>
+                                        <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Hours</span>
+                                    </div>
+                                    <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                    {/* Minutes */}
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                            {String(timeLeft.minutes).padStart(2, '0')}
+                                        </span>
+                                        <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Mins</span>
+                                    </div>
+                                    <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                    {/* Seconds */}
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                            {String(timeLeft.seconds).padStart(2, '0')}
+                                        </span>
+                                        <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Secs</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className={`text-[14px] font-semibold leading-tight ${stat.valueColor}`}>
+                                        {stat.value}
+                                    </div>
+                                    <p className="text-[11px] text-[#1a3a7c] mt-0 leading-tight">
+                                        {stat.sub}
+                                    </p>
+                                </>
+                            )}
                         </div>
                     </div>
                 );
