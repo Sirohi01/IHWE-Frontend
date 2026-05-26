@@ -44,7 +44,7 @@ const WelcomeHeader = () => {
             <div className="flex gap-4">
                 {/* ── Center Card ── */}
                 <div
-                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-sm px-4 py-1.5 flex flex-col justify-center"
+                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-md px-4 py-1.5 flex flex-col justify-center"
                     style={{
                         boxShadow: '0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.06), 0 8px 20px rgba(0,0,0,0.05)',
                         transform: 'perspective(800px) rotateY(-1deg) rotateX(1deg)',
@@ -57,7 +57,7 @@ const WelcomeHeader = () => {
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
+                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
                             >
                                 21 – 23 AUGUST 2026
@@ -66,13 +66,13 @@ const WelcomeHeader = () => {
                     </div>
 
                     {/* Location Row */}
-                    <div className="flex items-center gap-2.5 pt-2">
+                    <div className="flex items-center gap-2.5 pt-1">
                         <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
                             <MapPin size={17} className="text-[#1a3a7c]" />
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-semibold text-[#1a3a7c] leading-snug"
+                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
                             >
                                 PRAGATI MAIDAN,<br />NEW DELHI, INDIA
@@ -83,9 +83,12 @@ const WelcomeHeader = () => {
 
                 {/* ── Right Banner ── */}
                 <div
-                    className="flex-none w-[420px] rounded-sm overflow-hidden relative flex items-center px-5 py-1.5 bg-cover bg-center bg-no-repeat"
+                    className="flex-none w-[420px] rounded-md overflow-hidden relative flex items-center px-5 py-1.5"
                     style={{
-                        backgroundImage: "url('/exhibition/topright.png')"
+                        backgroundImage: "url('/exhibition/topright.png')",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
                     }}
                 >
 
