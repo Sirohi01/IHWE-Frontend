@@ -196,7 +196,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                     </div>
                                     <div className="p-1">
                                         <button
-                                            onClick={() => { navigate('/exhibitor-dashboard/ex-profile'); setShowUserMenu(false); }}
+                                            onClick={() => { navigate('/exhibitor-dashboard/ex-profile1'); setShowUserMenu(false); }}
                                             className="w-full flex items-center gap-3 px-3 py-2.5 text-[11px] font-bold text-slate-600 hover:text-[#23471d] hover:bg-emerald-50 rounded-sm transition-all"
                                         >
                                             <User size={14} />
