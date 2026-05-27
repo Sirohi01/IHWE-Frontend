@@ -8,9 +8,7 @@ import {
     MapPin,
     ShieldCheck,
     ExternalLink,
-    CreditCard,
     Award,
-    Calendar,
     Globe,
     FileText,
     BadgeCheck,
@@ -27,15 +25,27 @@ import {
     ChevronRight,
     Printer,
     Download,
-    Check
+    Check,
+    Activity,
+    HeartPulse,
+    Stethoscope,
+    Bed,
+    Syringe,
+    Heart,
+    Package,
+    UserPlus,
+    Users,
+    Plus,
+    Trash2,
+    Eye
+
 } from 'lucide-react';
+import { Link } from "react-router-dom";
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
-
-import DashboardHero from '@/components/dashboard/DashboardHero';
-
 const DEFAULT_PLACEHOLDER = "https://placehold.co/400x400?text=No+Logo";
+const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80";
 
 const fixUrl = (url) => {
     if (!url || url === 'undefined' || url === 'null' || url === '') return DEFAULT_PLACEHOLDER;
@@ -44,564 +54,1121 @@ const fixUrl = (url) => {
     return url.includes('res.cloudinary.com') ? url : `${SERVER_URL}${cleanPath}`;
 };
 
-export default function ExProfile() {
-    const { data, setData } = useExhibitorCtx();
-    const [isEditing, setIsEditing] = useState(false);
-    const [saving, setSaving] = useState(false);
+// Fallback dynamic lists matching the mockup screenshot
+const MOCK_CATEGORIES = [
+    { id: 'Medical Devices', name: 'Medical Devices', color: 'text-blue-600 bg-blue-50 border-blue-100', icon: Activity },
+    { id: 'Diagnostic Equipment', name: 'Diagnostic Equipment', color: 'text-green-600 bg-green-50 border-green-100', icon: Stethoscope },
+    { id: 'Hospital Furniture', name: 'Hospital Furniture', color: 'text-teal-600 bg-teal-50 border-teal-100', icon: Bed },
+    { id: 'Disposables & Consumables', name: 'Disposables & Consumables', color: 'text-indigo-600 bg-indigo-50 border-indigo-100', icon: Syringe },
+    { id: 'Health & Wellness Products', name: 'Health & Wellness Products', color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: Heart }
+];
 
-    // Form State
-    const [form, setForm] = useState({
+const MOCK_CERTIFICATES = [
+    { name: 'ISO 13485:2016 Certified', code: 'ISO' },
+    { name: 'CE Certified', code: 'CE' },
+    { name: 'ISO 9001:2015 Certified', code: 'ISO' },
+    { name: 'GMP Certified', code: 'GMP' }
+];
+
+const MOCK_TEAM = [
+    { name: 'Neha Patel', designation: 'Marketing Head', email: 'neha.patel@abchealthcare.com', mobile: '+91 91234 56789', isPrimary: true, photoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80' },
+    { name: 'Vikram Mehta', designation: 'Sales Manager', email: 'vikram.mehta@abchealthcare.com', mobile: '+91 99876 54321', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80' },
+    { name: 'Pooja Nair', designation: 'Product Specialist', email: 'pooja.nair@abchealthcare.com', mobile: '+91 88776 65544', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80' },
+    { name: 'Arjun Verma', designation: 'Technical Support', email: 'arjun.verma@abchealthcare.com', mobile: '+91 77665 44332', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80' }
+];
+
+export default function ExProfile() {
+    const { data, setData, fetchDashboard } = useExhibitorCtx();
+
+    // Modals Control State
+    const [activeModal, setActiveModal] = useState(null); // 'profile' | 'categories' | 'certificates' | 'contact' | 'team'
+    const [saving, setSaving] = useState(false);
+    const [selectedTeamMember, setSelectedTeamMember] = useState(null);
+
+    // Form inputs state
+    const [profileForm, setProfileForm] = useState({
+        brandName: '',
         website: '',
         address: '',
         city: '',
         state: '',
         country: '',
         pincode: '',
-        landlineNo: '',
-        fasciaName: '',
-        gstNo: '',
-        panNo: '',
-        natureOfBusiness: '',
-        brandName: '',
-        contact1: {
-            title: 'Mr.',
-            firstName: '',
-            lastName: '',
-            email: '',
-            designation: '',
-            mobile: '',
-            alternateNo: '',
-        },
-        contact2: {
-            title: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            designation: '',
-            mobile: '',
-            alternateNo: '',
-        },
+        companyDescription: '',
     });
 
-    const [files, setFiles] = useState({});
-    const [previews, setPreviews] = useState({});
+    const [contactForm, setContactForm] = useState({
+        title: 'Mr.',
+        firstName: '',
+        lastName: '',
+        email: '',
+        designation: '',
+        mobile: '',
+    });
 
+    const [teamMemberForm, setTeamMemberForm] = useState({
+        name: '',
+        designation: '',
+        email: '',
+        mobile: '',
+        isPrimary: false,
+        photoUrl: '',
+    });
+
+    const [categorySelection, setCategorySelection] = useState([]);
+    const [certificateList, setCertificateList] = useState([]);
+    const [teamList, setTeamList] = useState([]);
+    const [newCertName, setNewCertName] = useState('');
+
+    const logoInputRef = useRef(null);
+
+    // Initialize forms from context data
     useEffect(() => {
         if (data) {
-            setForm({
+            setProfileForm({
+                brandName: data.brandName || data.exhibitorName || '',
                 website: data.website || '',
                 address: data.address || '',
                 city: data.city || '',
                 state: data.state || '',
-                country: data.country || '',
+                country: data.country || 'India',
                 pincode: data.pincode || '',
-                landlineNo: data.landlineNo || '',
-                fasciaName: data.fasciaName || '',
-                gstNo: data.gstNo || '',
-                panNo: data.panNo || '',
-                natureOfBusiness: data.natureOfBusiness || '',
-                brandName: data.brandName || '',
-                contact1: {
-                    title: data.contact1?.title || 'Mr.',
-                    firstName: data.contact1?.firstName || '',
-                    lastName: data.contact1?.lastName || '',
-                    email: data.contact1?.email || '',
-                    designation: data.contact1?.designation || '',
-                    mobile: data.contact1?.mobile || '',
-                    alternateNo: data.contact1?.alternateNo || '',
-                },
-                contact2: {
-                    title: data.contact2?.title || '',
-                    firstName: data.contact2?.firstName || '',
-                    lastName: data.contact2?.lastName || '',
-                    email: data.contact2?.email || '',
-                    designation: data.contact2?.designation || '',
-                    mobile: data.contact2?.mobile || '',
-                    alternateNo: data.contact2?.alternateNo || '',
-                },
+                companyDescription: data.companyDescription || 'ABC Healthcare Pvt. Ltd. is a leading manufacturer and supplier of advanced medical equipment and healthcare solutions. With over 15 years of excellence, we serve hospitals, clinics and healthcare professionals across India and abroad.',
             });
+
+            setContactForm({
+                title: data.contact1?.title || 'Mr.',
+                firstName: data.contact1?.firstName || 'Rahul',
+                lastName: data.contact1?.lastName || 'Sharma',
+                email: data.contact1?.email || 'rahul.sharma@abchealthcare.com',
+                designation: data.contact1?.designation || 'Manager - Business Development',
+                mobile: data.contact1?.mobile || '+91 98765 43210',
+            });
+
+            // Set categories, certificates, and team members dynamically (with mock fallbacks)
+            setCategorySelection(data.productCategories?.length > 0 ? data.productCategories : MOCK_CATEGORIES.map(c => c.id));
+            setCertificateList(data.certificates?.length > 0 ? data.certificates : MOCK_CERTIFICATES);
+            setTeamList(data.teamMembers?.length > 0 ? data.teamMembers : MOCK_TEAM);
         }
     }, [data]);
 
-    // const handleFileChange = (field, file) => {
-    //     if (!file) {
-    //         setFiles(prev => { const next = { ...prev }; delete next[field]; return next; });
-    //         setPreviews(prev => { const next = { ...prev }; delete next[field]; return next; });
-    //         return;
-    //     }
-    //     if (file.size > 5 * 1024 * 1024) {
-    //         toast.error('File size should be less than 5MB');
-    //         return;
-    //     }
-    //     setFiles(prev => ({ ...prev, [field]: file }));
-    //     const url = URL.createObjectURL(file);
-    //     setPreviews(prev => ({ ...prev, [field]: url }));
-    // };
-    const handleFileChange = (field, file) => {
-        if (!file) {
-            setFiles(prev => { const next = { ...prev }; delete next[field]; return next; });
-            setPreviews(prev => { const next = { ...prev }; delete next[field]; return next; });
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error('File size should be less than 5MB');
-            return;
-        }
-        // ✅ All image types allowed including webp, avif, svg
-        if (!file.type.startsWith('image/')) {
-            toast.error('Only image files are allowed');
-            return;
-        }
-        setFiles(prev => ({ ...prev, [field]: file }));
-        const url = URL.createObjectURL(file);
-        setPreviews(prev => ({ ...prev, [field]: url }));
-    };
-
-    const handleSave = async () => {
+    // Handle profile fields save
+    const saveProfileData = async (payload) => {
         setSaving(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
             const formData = new FormData();
-            Object.entries(form).forEach(([key, value]) => {
-                if (typeof value === 'object') formData.append(key, JSON.stringify(value));
-                else formData.append(key, value);
+
+            // Format contact object and other details
+            Object.entries(payload).forEach(([key, value]) => {
+                if (typeof value === 'object') {
+                    formData.append(key, JSON.stringify(value));
+                } else {
+                    formData.append(key, value);
+                }
             });
-            const multerFieldMap = {
-                companyLogo: 'companyLogo',
-                panCardFront: 'panCardFront',
-                aadhaarCardFront: 'aadhaarCardFront',
-                aadhaarCardBack: 'aadhaarCardBack',
-                gstCertificate: 'gstCertificate',
-                cancelledCheque: 'cancelledCheque',
-                representativePhoto: 'representativePhoto'
-            };
-            Object.entries(files).forEach(([field, file]) => {
-                formData.append(multerFieldMap[field] || field, file);
-            });
+
             const res = await fetch(`${API_URL}/exhibitor-auth/update-profile?id=${data._id}`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData,
             });
+
             const result = await res.json();
             if (result.success) {
-                toast.success('Profile Updated Successfully!');
+                toast.success('Profile Saved Successfully!');
                 if (result.data) setData(result.data);
-                setIsEditing(false);
-            } else toast.error(result.message || 'Update failed');
+                setActiveModal(null);
+                await fetchDashboard();
+            } else {
+                toast.error(result.message || 'Saving failed');
+            }
         } catch (error) {
-            toast.error('Error updating profile');
+            toast.error('Error saving data');
+            console.error(error);
         } finally {
             setSaving(false);
         }
     };
 
-    const handlePrint = () => window.print();
+    // Trigger company logo file upload
+    const handleLogoUpload = async (file) => {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error('File size should be less than 5MB');
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            toast.error('Only image files are allowed');
+            return;
+        }
 
-    const formatRupee = (amount) => {
-        return new Intl.NumberFormat('en-IN', {
-            style: 'currency',
-            currency: 'INR',
-            maximumFractionDigits: 0
-        }).format(amount);
+        const loadingToast = toast.loading('Uploading company logo...');
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const formData = new FormData();
+            formData.append('companyLogo', file);
+
+            const res = await fetch(`${API_URL}/exhibitor-auth/update-profile?id=${data._id}`, {
+                method: 'PUT',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+
+            const result = await res.json();
+            toast.dismiss(loadingToast);
+            if (result.success) {
+                toast.success('Logo Uploaded Successfully!');
+                if (result.data) setData(result.data);
+                await fetchDashboard();
+            } else {
+                toast.error(result.message || 'Logo upload failed');
+            }
+        } catch (error) {
+            toast.dismiss(loadingToast);
+            toast.error('Error uploading logo');
+        }
     };
 
+    // Calculate completeness metric dynamically
+    const calculateCompleteness = () => {
+        let completed = 0;
+        let total = 6;
+
+        if (data?.companyLogoUrl) completed++;
+        if (profileForm.brandName) completed++;
+        if (profileForm.companyDescription) completed++;
+        if (categorySelection.length > 0) completed++;
+        if (certificateList.length > 0) completed++;
+        if (contactForm.firstName && contactForm.email) completed++;
+
+        const percentage = Math.round((completed / total) * 100);
+        return { percentage, completed, total };
+    };
+
+    const completeness = calculateCompleteness();
+
+    // Toggle categories list selection
+    const handleCategoryToggle = (catId) => {
+        setCategorySelection(prev => {
+            const next = prev.includes(catId)
+                ? prev.filter(c => c !== catId)
+                : [...prev, catId];
+            return next;
+        });
+    };
+
+    const saveCategories = () => {
+        saveProfileData({ productCategories: categorySelection });
+    };
+
+    // Add key certificates
+    const addCertificate = () => {
+        if (!newCertName.trim()) return;
+        const newCert = {
+            name: newCertName.trim(),
+            code: newCertName.toUpperCase().includes('ISO') ? 'ISO' : newCertName.toUpperCase().includes('CE') ? 'CE' : 'GMP'
+        };
+        const updatedList = [...certificateList, newCert];
+        setCertificateList(updatedList);
+        setNewCertName('');
+        saveProfileData({ certificates: updatedList });
+    };
+
+    const deleteCertificate = (index) => {
+        const updatedList = certificateList.filter((_, i) => i !== index);
+        setCertificateList(updatedList);
+        saveProfileData({ certificates: updatedList });
+    };
+
+    // Team Member actions
+    const openAddTeamMember = () => {
+        setSelectedTeamMember(null);
+        setTeamMemberForm({
+            name: '',
+            designation: '',
+            email: '',
+            mobile: '',
+            isPrimary: false,
+            photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+        });
+        setActiveModal('team');
+    };
+
+    const openEditTeamMember = (index, member) => {
+        setSelectedTeamMember(index);
+        setTeamMemberForm({ ...member });
+        setActiveModal('team');
+    };
+
+    const saveTeamMember = () => {
+        if (!teamMemberForm.name.trim() || !teamMemberForm.designation.trim()) {
+            toast.error('Name and designation are required.');
+            return;
+        }
+
+        let updatedList = [...teamList];
+
+        // Handle setting primary (only one member should be primary)
+        if (teamMemberForm.isPrimary) {
+            updatedList = updatedList.map(m => ({ ...m, isPrimary: false }));
+        }
+
+        if (selectedTeamMember !== null) {
+            // Edit existing
+            updatedList[selectedTeamMember] = teamMemberForm;
+        } else {
+            // Add new
+            updatedList.push(teamMemberForm);
+        }
+
+        setTeamList(updatedList);
+        saveProfileData({ teamMembers: updatedList });
+    };
+
+    const deleteTeamMember = (index) => {
+        const updatedList = teamList.filter((_, i) => i !== index);
+        setTeamList(updatedList);
+        saveProfileData({ teamMembers: updatedList });
+    };
+
+    // Save Primary Contact Form
+    const saveContact = () => {
+        if (!contactForm.firstName.trim() || !contactForm.email.trim()) {
+            toast.error('First Name and Email are required.');
+            return;
+        }
+        saveProfileData({ contact1: contactForm });
+    };
+
+    // Print Handler
+    const handlePrint = () => window.print();
+
     return (
-        <div className="w-full pb-2 min-h-screen bg-white font-sans text-slate-900 space-y-6">
-            <DashboardHero 
-                pageId="ex-profile" 
-                defaultTitle="Exhibitor Profile" 
-                defaultSubtitle="Manage your corporate identity and official participation records"
-                type="exhibitor" 
-            />
-            {/* Optimized Document Print CSS - Fixed for Tables */}
-            <style dangerouslySetInnerHTML={{
-                __html: `
-    @media print {
-        @page { size: A4; margin: 10mm; }
-        body { background: white !important; font-size: 10px !important; }
-        .no-print { display: none !important; }
-        .print-container { width: 100% !important; padding: 0 !important; margin: 0 !important; }
-        
-        table { width: 100% !important; border-collapse: collapse !important; margin-bottom: 10px !important; }
-        th, td { 
-            border: 0.5pt solid black !important; 
-            padding: 4px 6px !important; 
-            text-align: left !important;
-            vertical-align: middle !important;
-        }
-        th { background-color: #f8fafc !important; font-weight: 800 !important; color: black !important; text-transform: uppercase !important; font-size: 8px !important; }
-        .participation-row td { text-align: center !important; }
-        
-        .print-header { 
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            border-bottom: 2pt solid black !important;
-            margin-bottom: 15px !important;
-            padding-bottom: 10px !important;
-        }
-    }
-`}} />
+        <div className="w-full pb-4 min-h-screen bg-[#f6f8fb] font-sans text-[#14234a]">
 
-            <div className="max-w-6xl mx-auto print-container px-4 py-4">
 
-                {/* Header Section */}
-                <div className="print-header flex flex-col md:flex-row items-center gap-6 mb-2 border-b border-slate-200 pb-4">
-                    <div className="w-20 h-20 rounded-full bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm relative shrink-0">
-                        <img src={previews.companyLogo || fixUrl(data?.companyLogoUrl)} alt="Logo" className="w-full h-full object-cover" />
-                        {isEditing && (
-                            <label className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer no-print opacity-0 hover:opacity-100 transition-opacity">
-                                <Camera className="text-white" size={18} />
-                                <input type="file" className="hidden" accept="image/*,image/webp,image/avif" onChange={(e) => handleFileChange('companyLogo', e.target.files[0])} />
-                            </label>
-                        )}
+            <div className="max-w-[1540px] mx-auto p-4 grid grid-cols-1 xl:grid-cols-3 gap-4 print:p-0 print:bg-white">
+
+                {/* 1. Header Cover Profile Card */}
+                <div className="bg-white rounded-xl overflow-hidden shadow-[0_1px_8px_rgba(15,23,42,0.08)] border border-[#e5eaf2] relative xl:col-span-2 print:border-none print:shadow-none">
+
+                    {/* Healthcare Abstract Grid Overlay Header Banner */}
+                    <div className="h-[100px] md:h-[104px] w-full bg-gradient-to-r from-cyan-600 via-blue-800 to-blue-950 relative overflow-hidden flex items-center">
+                        <div className="absolute inset-0 opacity-20 bg-[linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:34px_34px]"></div>
+                        <div className="absolute inset-y-0 right-0 w-3/4 opacity-20 bg-[radial-gradient(circle_at_20%_35%,#fff_2px,transparent_3px),radial-gradient(circle_at_70%_65%,#fff_2px,transparent_3px)] [background-size:120px_90px]"></div>
+
+                        {/* Decorative medical elements mock */}
+                        <div className="absolute right-12 bottom-0 hidden md:flex items-center gap-8 text-white/15 select-none">
+                            <Plus size={34} strokeWidth={4} />
+                            <HeartPulse size={96} strokeWidth={1.2} />
+                            <Plus size={34} strokeWidth={4} />
+                            <ShieldCheck size={46} strokeWidth={1.4} />
+                        </div>
+                        <span className="absolute left-[260px] top-[58px] hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold bg-white/95 text-blue-700 shadow-sm">
+                            <ShieldCheck size={15} className="text-emerald-500" />
+                            Verified Exhibitor
+                        </span>
                     </div>
 
-                    <div className="flex-1 text-center md:text-left space-y-1">
-                        <h2 className="text-xl font-medium uppercase tracking-tight text-slate-900 leading-none">
-                            {data?.brandName || data?.exhibitorName || 'Official Profile'}
-                        </h2>
-                        <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">
-                            9th India Handicrafts & Gifts Fair (IHWE) 2026
-                        </p>
-                        <div className="flex flex-wrap justify-center md:justify-start gap-4 text-[10px] font-medium uppercase text-slate-400">
-                            <span className="flex items-center gap-1"><Hash size={10} /> ID: {data?.registrationId}</span>
-                            <span className="flex items-center gap-1"><Briefcase size={10} /> Sector: {data?.industrySector}</span>
+                    {/* Logo & Core Info Area */}
+                    <div className="px-7 pb-7 pt-4 relative flex flex-col md:flex-row gap-6">
+
+                        {/* Interactive Overlapping Avatar Logo Container */}
+                        <div className="w-[172px] h-[172px] rounded-full bg-white border-[6px] border-white shadow-[0_10px_28px_rgba(15,23,42,0.16)] flex items-center justify-center overflow-hidden shrink-0 -mt-[82px] relative group z-10">
+                            <img
+                                src={data?.companyLogoUrl ? fixUrl(data.companyLogoUrl) : DEFAULT_PLACEHOLDER}
+                                alt="Company Logo"
+                                className="w-full h-full object-contain p-3"
+                            />
+                            <div
+                                onClick={() => logoInputRef.current?.click()}
+                                className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-250 text-white z-20"
+                            >
+                                <Camera size={24} className="mb-1" />
+                                <span className="text-[10px] font-semibold uppercase tracking-wider">Upload Logo</span>
+                                <input
+                                    type="file"
+                                    ref={logoInputRef}
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={(e) => handleLogoUpload(e.target.files[0])}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Text details column */}
+                        <div className="flex-1 space-y-3 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <h1 className="text-[26px] md:text-[30px] leading-tight font-extrabold text-[#12245a]">
+                                    {profileForm.brandName}
+                                </h1>
+                                <span className="md:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                    <ShieldCheck size={14} className="text-emerald-600" />
+                                    Verified Exhibitor
+                                </span>
+
+                                <button
+                                    onClick={() => {
+                                        setProfileForm({
+                                            brandName: data?.brandName || data?.exhibitorName || '',
+                                            website: data?.website || '',
+                                            address: data?.address || '',
+                                            city: data?.city || '',
+                                            state: data?.state || '',
+                                            country: data?.country || 'India',
+                                            pincode: data?.pincode || '',
+                                            companyDescription: data?.companyDescription || '',
+                                        });
+                                        setActiveModal('profile');
+                                    }}
+                                    className="p-1 text-[#253a68] hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors print:hidden"
+                                >
+                                    <Edit2 size={16} />
+                                </button>
+                            </div>
+
+                            <p className="text-[#2a3658] font-semibold text-[15px]">
+                                Healthcare Equipment & Medical Devices
+                            </p>
+
+                            <div className="flex flex-wrap gap-x-7 gap-y-2 text-[#27365f] text-sm font-semibold">
+                                <span className="flex items-center gap-2">
+                                    <MapPin size={17} className="text-[#24345f]" />
+                                    {profileForm.city ? `${profileForm.city}, ${profileForm.state}, ${profileForm.country}` : 'Mumbai, Maharashtra, India'}
+                                </span>
+                                <span className="flex items-center gap-2">
+                                    <ExternalLink size={17} className="text-[#24345f]" />
+                                    <a
+                                        href={profileForm.website ? (profileForm.website.startsWith('http') ? profileForm.website : `https://${profileForm.website}`) : '#'}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-[#236ee8] hover:underline"
+                                    >
+                                        {profileForm.website || 'www.abchealthcare.com'}
+                                    </a>
+                                </span>
+                                <span className="flex items-center gap-2">
+                                    <Globe size={17} className="text-[#24345f]" />
+                                    {profileForm.country || 'India'}
+                                </span>
+                            </div>
+
+                            <p className="text-[#1f2d52] text-[15px] leading-7 max-w-[720px] pt-1 font-medium">
+                                {profileForm.companyDescription}
+                            </p>
+
+                            <div className="flex flex-wrap items-center gap-3 pt-3 print:hidden">
+                                <button
+                                    onClick={() => setActiveModal('profile')}
+                                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold bg-[#12b59d] hover:bg-[#0ea68f] text-white transition-all shadow-sm"
+                                >
+                                    <Edit2 size={16} />
+                                    Edit Profile
+                                </button>
+                                <button
+                                    onClick={handlePrint}
+                                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold border border-[#d8dee9] hover:border-slate-300 hover:bg-slate-50 text-[#17264e] transition-all bg-white"
+                                >
+                                    <Eye size={16} />
+                                    View Public Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2-Column Responsive Body Section */}
+                <div className="contents">
+
+                    {/* LEFT COLUMN: Categories & Certificates (2 cols span on desktop) */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-4 xl:col-span-2">
+
+                        {/* PRODUCT CATEGORIES CARD */}
+                        <div className="bg-white rounded-xl p-6 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-6 relative">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-xl font-extrabold text-[#14234a]">
+                                    Product Categories
+                                </h3>
+                                <button
+                                    onClick={() => setActiveModal('categories')}
+                                    className="text-sm font-extrabold text-[#236ee8] hover:text-blue-700 print:hidden"
+                                >
+                                    Manage
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
+                                {MOCK_CATEGORIES.map((cat) => {
+                                    const isSelected = categorySelection.includes(cat.id);
+                                    if (!isSelected) return null;
+                                    const Icon = cat.icon;
+                                    return (
+                                        <div
+                                            key={cat.id}
+                                            className="flex flex-col items-center justify-start text-center gap-3 transition-all duration-200"
+                                        >
+                                            <div className={`w-[82px] h-[76px] rounded-lg border flex items-center justify-center shadow-sm ${cat.color}`}>
+                                                <Icon size={32} strokeWidth={1.8} />
+                                            </div>
+                                            <span className="text-xs font-extrabold text-[#1d2a4c] leading-[1.25] min-h-[32px]">
+                                                {cat.name}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                                {categorySelection.length === 0 && (
+                                    <div className="col-span-full py-6 text-center text-slate-400 text-xs font-medium">
+                                        No categories selected. Click 'Manage' to choose.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* KEY CERTIFICATES CARD */}
+                        <div className="bg-white rounded-xl p-6 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-6 relative">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-[#0A143D]">
+                                    Key Certificates
+                                </h3>
+                                <button
+                                    onClick={() => setActiveModal('certificates')}
+                                    className="text-sm font-extrabold text-[#236ee8] hover:text-blue-700 print:hidden"
+                                >
+                                    Manage
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+                                {certificateList.map((cert, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex flex-col items-center text-center justify-start gap-3"
+                                    >
+                                        <div className="w-[82px] h-[76px] bg-white border border-[#e5eaf2] rounded-lg flex items-center justify-center shadow-sm">
+                                            <span className={`${cert.code === 'CE' ? 'text-4xl font-normal text-black' : cert.code === 'GMP' ? 'text-sm font-black text-white bg-[#22ad7a] rounded-full w-11 h-11 flex items-center justify-center' : 'text-lg font-black text-blue-800'} leading-none`}>
+                                                {cert.code || 'ISO'}
+                                            </span>
+                                        </div>
+                                        <p className="text-xs font-extrabold text-[#1d2a4c] leading-[1.35]">
+                                            {cert.name}
+                                        </p>
+                                    </div>
+                                ))}
+                                {certificateList.length === 0 && (
+                                    <div className="col-span-full py-6 text-center text-slate-400 text-xs font-medium">
+                                        No certificates added yet. Click 'Manage' to upload.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 no-print">
-                        <button
-                            onClick={handlePrint}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-700 hover:border-slate-300 transition-all duration-150"
-                        >
-                            <Printer size={13} />
-                            Print
-                        </button>
+                    {/* RIGHT COLUMN: Completeness & Quick Actions & Primary Contact */}
+                    <div className="space-y-4 xl:col-start-3 xl:row-start-1 xl:row-span-2">
 
-                        <div className="w-px h-6 bg-slate-200" />
+                        {/* 1. Profile Completeness Widget */}
+                        <div className="bg-white rounded-xl p-6 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-4">
+                            <h3 className="text-xl font-extrabold text-[#14234a]">
+                                Profile Completeness
+                            </h3>
 
-                        {isEditing ? (
-                            <button
-                                onClick={handleSave}
-                                disabled={saving}
-                                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-white transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                                style={{ background: saving ? '#6ee7b7' : '#059669' }}
-                            >
-                                <Check size={13} />
-                                {saving ? 'Saving...' : 'Update'}
-                            </button>
-                        ) : (
-                            <button
-                                onClick={() => setIsEditing(true)}
-                                className="inline-flex items-center gap-2 px-5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-white bg-slate-900 hover:bg-slate-700 transition-all duration-150"
-                            >
-                                <Edit2 size={13} />
-                                Edit Profile
-                            </button>
-                        )}
-                    </div>
-                </div>
+                            <div className="flex items-center gap-7">
+                                {/* SVG Circular Progress */}
+                                <div className="relative w-[132px] h-[132px] shrink-0">
+                                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 132 132">
+                                        {/* Background Track */}
+                                        <circle
+                                            cx="66"
+                                            cy="66"
+                                            r="52"
+                                            className="stroke-slate-100"
+                                            strokeWidth="9"
+                                            fill="transparent"
+                                        />
+                                        {/* Active Circle Progress */}
+                                        <circle
+                                            cx="66"
+                                            cy="66"
+                                            r="52"
+                                            className="stroke-[#16b89d] transition-all duration-500 ease-out"
+                                            strokeWidth="9"
+                                            fill="transparent"
+                                            strokeDasharray={`${2 * Math.PI * 52}`}
+                                            strokeDashoffset={`${2 * Math.PI * 52 * (1 - completeness.percentage / 100)}`}
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-[#111827] leading-none">
+                                        <span className="text-[27px] font-extrabold">{completeness.percentage}%</span>
+                                        <span className="text-sm font-extrabold text-[#17ae94] mt-2">Complete</span>
+                                    </div>
+                                </div>
 
-                {/* Table Formatted Sections */}
-                <div className="space-y-4">
-
-                    {/* 01. Participation Summary */}
-                    {/* <TableSection title="01. Participation & Financial Summary">
-                        <table className="w-full border border-slate-200 rounded-lg overflow-hidden">
-                            <thead>
-                                <tr className="bg-slate-50 text-[10px] font-black uppercase text-slate-500 border-b border-slate-200">
-                                    <th className="p-1 border-r border-slate-200 text-left px-2">Stall Type</th>
-                                    <th className="p-1 border-r border-slate-200 text-left px-2">Category</th>
-                                    <th className="p-1 border-r border-slate-200 text-left px-2">Reg Ref</th>
-                                    <th className="p-1 border-r border-slate-200 text-left px-2">Total Cost</th>
-                                    <th className="p-1 border-r border-slate-200 text-emerald-600 text-left px-2">Amt Paid</th>
-                                    <th className="p-1 text-orange-500 text-left px-2">Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="participation-row text-center font-bold text-slate-900">
-                                    <td className="p-3 border-r border-slate-200">{data?.participation?.stallType || '—'}</td>
-                                    <td className="p-3 border-r border-slate-200">{data?.participation?.currency === 'INR' ? 'Domestic' : 'International'}</td>
-                                    <td className="p-3 border-r border-slate-200 font-mono text-[10px]">{data?.registrationId}</td>
-                                    <td className="p-3 border-r border-slate-200">{formatRupee(data?.participation?.total || 0)}</td>
-                                    <td className="p-3 border-r border-slate-200 text-emerald-600">{formatRupee(data?.amountPaid || 0)}</td>
-                                    <td className={`p-3 ${data?.balanceAmount > 0 ? 'text-orange-500' : 'text-slate-300'}`}>{formatRupee(data?.balanceAmount || 0)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </TableSection> */}
-
-                    {/* 01. Business Identity */}
-                    <TableSection title="01. Official Business Identity">
-                        <table className="w-full border border-slate-200 table-fixed">
-                            <tbody>
-                                <DataRowTriple
-                                    l1="Legal Entity Name" v1={data?.exhibitorName}
-                                    l2="Brand / Fascia" v2={form.fasciaName}
-                                    l3="Nature of Business" v3={form.natureOfBusiness}
-                                    edit={isEditing}
-                                    onV2={(v) => setForm({ ...form, fasciaName: v })}
-                                    onV3={(v) => setForm({ ...form, natureOfBusiness: v })}
-                                />
-                                <DataRowTriple
-                                    l1="GSTIN Number" v1={form.gstNo}
-                                    l2="PAN Number" v2={form.panNo}
-                                    l3="Corporate Website" v3={form.website}
-                                    edit={isEditing}
-                                    onV1={(v) => setForm({ ...form, gstNo: v })}
-                                    onV2={(v) => setForm({ ...form, panNo: v })}
-                                    onV3={(v) => setForm({ ...form, website: v })}
-                                />
-                            </tbody>
-                        </table>
-                    </TableSection>
-
-                    <TableSection title="02. Registered Address & Communication">
-                        <table className="w-full border border-slate-200 table-fixed">
-                            <tbody>
-                                <tr>
-                                    <th className="w-[12%] bg-slate-50 p-2 text-[12px] uppercase font-medium text-slate-500 border border-slate-200 text-left">Mailing Address</th>
-                                    <td colSpan={3} className="px-2 py-1 border border-slate-200 bg-white">
-                                        {isEditing ? (
-                                            <div className="space-y-1">
-                                                <textarea
-                                                    className="w-full bg-slate-50 p-1 font-medium text-xs outline-none border border-slate-100 rounded focus:border-slate-300"
-                                                    value={form.address}
-                                                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                                                    rows={2}
-                                                    placeholder="Street Address..."
-                                                />
-                                                <div className="flex gap-1">
-                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" />
-                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} placeholder="State" />
-                                                    <input className="w-16 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.pincode} onChange={(e) => setForm({ ...form, pincode: e.target.value })} placeholder="Zip" />
-                                                    <input className="flex-1 bg-slate-50 p-1 font-medium text-[10px] outline-none border border-slate-100 rounded" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} placeholder="Country" />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="font-medium text-xs leading-relaxed">
-                                                {form.address}{form.city && `, ${form.city}`}{form.state && `, ${form.state}`}{form.pincode && ` - ${form.pincode}`}{form.country && `, ${form.country}`}
-                                            </div>
-                                        )}
-                                    </td>
-                                    <th className="w-[12%] bg-slate-50 px-2 py-1 text-[10px] uppercase font-semibold text-slate-500 border border-slate-200 text-left">Landline No.</th>
-                                    <td className="px-2 py-1 border border-slate-200 bg-white">
-                                        {isEditing ? (
-                                            <input className="w-full bg-slate-50 p-1 font-medium text-xs outline-none border border-slate-100 rounded focus:border-slate-300" value={form.landlineNo} onChange={(e) => setForm({ ...form, landlineNo: e.target.value })} placeholder="Landline..." />
-                                        ) : <span className="font-medium text-xs">{form.landlineNo || '—'}</span>}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </TableSection>
-
-                    {/* 03. Authorized Personnel */}
-                    <TableSection title="03. Authorized Personnel Details">
-                        <table className="w-full border border-slate-200 mt-2">
-                            <thead>
-                                <tr className="bg-slate-50 text-[10px] font-black uppercase text-slate-500 border-b border-slate-200">
-                                    <th className="w-[30%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Official Name</th>
-                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Designation</th>
-                                    <th className="w-[20%] p-1 text-[11px] border-r border-slate-200 text-left px-2">Mobile No</th>
-                                    <th className="w-[30%] p-1 text-[11px] text-left px-2">Email ID</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* Primary Contact */}
-                                <tr className="border-b border-slate-200">
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? (
-                                            <div className="flex gap-1">
-                                                <select className="bg-slate-50 text-[11px]" value={form.contact1.title} onChange={(e) => setForm({ ...form, contact1: { ...form.contact1, title: e.target.value } })}>
-                                                    <option value="Mr.">Mr.</option><option value="Ms.">Ms.</option>
-                                                </select>
-                                                <input className="w-full bg-slate-50 p-1 font-medium text-[11px] outline-none" value={`${form.contact1.firstName} ${form.contact1.lastName}`} onChange={(e) => {
-                                                    const p = e.target.value.split(' '); setForm({ ...form, contact1: { ...form.contact1, firstName: p[0] || '', lastName: p.slice(1).join(' ') || '' } });
-                                                }} />
-                                            </div>
-                                        ) : <span className="font-medium text-xs">{form.contact1.title} {form.contact1.firstName} {form.contact1.lastName}</span>}
-                                    </td>
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact1.designation} onChange={(e) => setForm({ ...form, contact1: { ...form.contact1, designation: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact1.designation || '—'}</span>}
-                                    </td>
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact1.mobile} onChange={(e) => setForm({ ...form, contact1: { ...form.contact1, mobile: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact1.mobile || '—'}</span>}
-                                    </td>
-                                    <td className="p-1">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact1.email} onChange={(e) => setForm({ ...form, contact1: { ...form.contact1, email: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact1.email || '—'}</span>}
-                                    </td>
-                                </tr>
-                                {/* Secondary Contact */}
-                                <tr>
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? (
-                                            <div className="flex gap-1">
-                                                <select className="bg-slate-50 text-[11px]" value={form.contact2.title} onChange={(e) => setForm({ ...form, contact2: { ...form.contact2, title: e.target.value } })}>
-                                                    <option value="">N/A</option><option value="Mr.">Mr.</option><option value="Ms.">Ms.</option>
-                                                </select>
-                                                <input className="w-full bg-slate-50 p-1 font-medium text-[11px] outline-none" value={`${form.contact2.firstName} ${form.contact2.lastName}`} onChange={(e) => {
-                                                    const p = e.target.value.split(' '); setForm({ ...form, contact2: { ...form.contact2, firstName: p[0] || '', lastName: p.slice(1).join(' ') || '' } });
-                                                }} />
-                                            </div>
-                                        ) : <span className="font-medium text-xs">{form.contact2.title ? `${form.contact2.title} ` : ''}{form.contact2.firstName} {form.contact2.lastName || '—'}</span>}
-                                    </td>
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact2.designation} onChange={(e) => setForm({ ...form, contact2: { ...form.contact2, designation: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact2.designation || '—'}</span>}
-                                    </td>
-                                    <td className="p-1 border-r border-slate-200">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact2.mobile} onChange={(e) => setForm({ ...form, contact2: { ...form.contact2, mobile: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact2.mobile || '—'}</span>}
-                                    </td>
-                                    <td className="p-1">
-                                        {isEditing ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={form.contact2.email} onChange={(e) => setForm({ ...form, contact2: { ...form.contact2, email: e.target.value } })} />
-                                            : <span className="font-medium text-xs text-slate-600">{form.contact2.email || '—'}</span>}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </TableSection>
-
-                    {/* 04. Assets */}
-                    <div className="no-print">
-                        <TableSection title="04. Digital Assets & KYC Documents ">
-                            <div className="border border-slate-200 rounded-lg px-3 py-3 bg-slate-50/50 flex flex-wrap justify-between gap-4">
-                                <AssetItem label="PAN CARD" url={data?.panCardFrontUrl} preview={previews.panCardFront} field="panCardFront" edit={isEditing} onChange={handleFileChange} />
-                                <AssetItem label="GST CERT" url={data?.gstCertificateUrl} preview={previews.gstCertificate} field="gstCertificate" edit={isEditing} onChange={handleFileChange} />
-                                <AssetItem label="AADHAAR F" url={data?.aadhaarCardFrontUrl} preview={previews.aadhaarCardFront} field="aadhaarCardFront" edit={isEditing} onChange={handleFileChange} />
-                                <AssetItem label="AADHAAR B" url={data?.aadhaarCardBackUrl} preview={previews.aadhaarCardBack} field="aadhaarCardBack" edit={isEditing} onChange={handleFileChange} />
-                                <AssetItem label="CANCEL CHQ" url={data?.cancelledChequeUrl} preview={previews.cancelledCheque} field="cancelledCheque" edit={isEditing} onChange={handleFileChange} />
-                                <AssetItem label="PRO PHOTO" url={data?.representativePhotoUrl} preview={previews.representativePhoto} field="representativePhoto" edit={isEditing} onChange={handleFileChange} />
+                                <div className="space-y-4 flex-1 min-w-0">
+                                    <p className="text-[15px] text-[#1f2d52] font-bold leading-6">
+                                        Great! Your profile is almost complete. Add more details to improve your visibility.
+                                    </p>
+                                    {/* Mini line progress bar */}
+                                    <div className="w-full h-1.5 bg-[#edf1f5] rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-[#16b89d] rounded-full transition-all duration-500"
+                                            style={{ width: `${completeness.percentage}%` }}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between gap-3">
+                                        <span className="text-xs font-bold text-[#68758f]">
+                                            {completeness.completed} of {completeness.total} sections completed
+                                        </span>
+                                        <button
+                                            onClick={() => setActiveModal('profile')}
+                                            className="inline-flex items-center gap-1 text-xs font-extrabold text-[#236ee8] hover:text-blue-700 whitespace-nowrap print:hidden"
+                                        >
+                                            Complete Now <ChevronRight size={14} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </TableSection>
-                    </div>
+                        </div>
 
+                        {/* 2. Quick Actions Grid */}
+                        <div className="bg-white rounded-xl p-5 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-4">
+                            <h3 className="text-xl font-extrabold text-[#14234a]">
+                                Quick Actions
+                            </h3>
+
+                            <div className="grid grid-cols-3 gap-2.5 print:hidden">
+                                <button
+                                    onClick={() => logoInputRef.current?.click()}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-blue-200 hover:bg-blue-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <Upload size={26} className="text-[#2374ff] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Upload Logo</span>
+                                </button>
+
+                                <button
+                                    onClick={() => toast.info('Products can be added via the Seller Portal on your sidebar.')}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-emerald-200 hover:bg-emerald-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <Package size={26} className="text-[#31b884] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Add Product</span>
+                                </button>
+
+                                <button
+                                    onClick={openAddTeamMember}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-purple-200 hover:bg-purple-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <UserPlus size={26} className="text-[#5630d8] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Add Team Member</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveModal('certificates')}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-amber-200 hover:bg-amber-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <ShieldCheck size={26} className="text-[#f2a31b] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Add Certificate</span>
+                                </button>
+
+                                <button
+                                    onClick={() => toast.info('Documents and Brochures can be managed via the Documentation tab.')}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-indigo-200 hover:bg-indigo-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <FileText size={26} className="text-[#2d74ea] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Upload Brochure</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveModal('profile')}
+                                    className="min-h-[78px] flex flex-col items-center justify-center p-3 rounded-lg border border-[#e7ebf2] hover:border-purple-200 hover:bg-purple-50/30 text-center gap-2 transition-all group"
+                                >
+                                    <Edit2 size={26} className="text-[#6a37e6] group-hover:scale-105 transition-transform" />
+                                    <span className="text-[11px] font-extrabold text-[#17264e] leading-tight">Update Details</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 3. Primary Contact Card */}
+                        <div className="bg-white rounded-xl p-6 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-base font-extrabold text-[#14234a]">
+                                    Primary Contact
+                                </h3>
+                                <button
+                                    onClick={() => {
+                                        setContactForm({
+                                            title: data?.contact1?.title || 'Mr.',
+                                            firstName: data?.contact1?.firstName || '',
+                                            lastName: data?.contact1?.lastName || '',
+                                            email: data?.contact1?.email || '',
+                                            designation: data?.contact1?.designation || '',
+                                            mobile: data?.contact1?.mobile || '',
+                                        });
+                                        setActiveModal('contact');
+                                    }}
+                                    className="text-sm font-extrabold text-[#236ee8] hover:text-blue-700 print:hidden"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+
+                            <div className="flex items-center gap-5">
+                                <div className="w-[72px] h-[72px] rounded-full bg-slate-100 overflow-hidden shrink-0 border border-slate-100">
+                                    <img
+                                        src={data?.representativePhotoUrl ? fixUrl(data.representativePhotoUrl) : DEFAULT_AVATAR}
+                                        alt="Contact"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <div className="space-y-2 text-[#26365f] text-sm font-semibold min-w-0">
+                                    <div>
+                                        <h4 className="text-base font-extrabold text-[#14234a]">
+                                            {contactForm.title} {contactForm.firstName} {contactForm.lastName}
+                                        </h4>
+                                        <p className="text-[#495775] font-semibold text-sm">
+                                            {contactForm.designation}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2 text-[#24345f]">
+                                            <Phone size={16} className="text-[#173166]" />
+                                            <span>{contactForm.mobile}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-[#24345f]">
+                                            <Mail size={16} className="text-[#173166]" />
+                                            <span className="truncate max-w-[260px]">{contactForm.email}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
-                {/* Footer */}
-                <div className="mt-2 text-center text-[10px] font-black uppercase text-slate-300 tracking-widest border-t border-slate-100 pt-2 no-print">
-                    India Handicrafts & Gifts Fair • Confidential Participation Record
+                {/* 3. BOTTOM ROW: TEAM MEMBERS */}
+                <div className="bg-white rounded-xl p-5 border border-[#e5eaf2] shadow-[0_1px_8px_rgba(15,23,42,0.08)] space-y-5 relative xl:col-span-3">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-xl font-extrabold text-[#14234a]">
+                            Team Members ({teamList.length})
+                        </h3>
+                        <button
+                            onClick={openAddTeamMember}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold bg-[#08245b] hover:bg-[#071f4e] text-white transition-all print:hidden"
+                        >
+                            <UserPlus size={14} />
+                            Manage Team
+                        </button>
+                    </div>
+
+                    {/* Team Members Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                        {teamList.map((member, index) => (
+                            <div
+                                key={index}
+                                className="bg-white border border-[#e5eaf2] rounded-lg p-4 flex items-center gap-4 hover:shadow-sm hover:border-slate-200 transition-all group relative min-h-[112px]"
+                            >
+                                {/* Edit buttons on hover */}
+                                <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity print:hidden">
+                                    <button
+                                        onClick={() => openEditTeamMember(index, member)}
+                                        className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+                                    >
+                                        <Edit2 size={12} />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            if (confirm('Delete this team member?')) deleteTeamMember(index);
+                                        }}
+                                        className="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded"
+                                    >
+                                        <Trash2 size={12} />
+                                    </button>
+                                </div>
+
+                                <div className="w-[60px] h-[60px] rounded-full overflow-hidden shrink-0 border border-slate-100">
+                                    <img
+                                        src={member.photoUrl || DEFAULT_AVATAR}
+                                        alt={member.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                <div className="space-y-2 min-w-0 text-sm text-[#26365f] font-semibold">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <h4 className="text-sm font-extrabold text-[#14234a] truncate max-w-[135px]">
+                                            {member.name}
+                                        </h4>
+                                        {member.isPrimary && (
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-extrabold bg-[#d9f4e9] text-[#158568]">
+                                                Primary
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm font-medium text-[#2e3a5d] truncate">
+                                        {member.designation}
+                                    </p>
+                                    <div className="truncate text-xs">
+                                        {member.email}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-[#172f68] text-xs">
+                                        <Phone size={14} className="text-[#173166] shrink-0" />
+                                        <span>{member.mobile}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="flex justify-center pt-3 print:hidden">
+                        <button
+                            onClick={openAddTeamMember}
+                            className="inline-flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline"
+                        >
+                            + Add Team Member
+                        </button>
+                    </div>
+                </div>
+
+                {/* Footer Section */}
+                <div className="hidden text-center text-[10px] font-bold uppercase text-slate-300 tracking-widest pt-4 border-t border-slate-100 xl:col-span-3">
+                    9th India Handicrafts & Gifts Fair (IHWE) • Exhibitor Admin Portal
                 </div>
             </div>
-        </div>
-    );
-}
 
-// Internal Helper Components
-function TableSection({ title, children }) {
-    return (
-        <div className="space-y-1">
-            <h2 className="text-[12px] font-semibold uppercase tracking-tight text-slate-800 flex items-center gap-2 border-l-4 border-slate-900 pl-3 leading-none py-1">
-                {title}
-            </h2>
-            {children}
-        </div>
-    );
-}
+            {/* DYNAMIC MODALS SECTION */}
+            <AnimatePresence>
+                {activeModal && (
+                    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col"
+                        >
+                            {/* Modal Header */}
+                            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                <h3 className="font-extrabold text-slate-900 text-lg uppercase tracking-tight">
+                                    {activeModal === 'profile' && 'Update Corporate Identity'}
+                                    {activeModal === 'categories' && 'Manage Product Sectors'}
+                                    {activeModal === 'certificates' && 'Key Exhibitor Certificates'}
+                                    {activeModal === 'contact' && 'Primary Contact Details'}
+                                    {activeModal === 'team' && (selectedTeamMember !== null ? 'Modify Team Member' : 'Enlist New Team Member')}
+                                </h3>
+                                <button
+                                    onClick={() => setActiveModal(null)}
+                                    className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
 
-function DataRowQuad({ l1, v1, l2, v2, l3, v3, l4, v4, edit, onV1, onV2, onV3, onV4 }) {
-    return (
-        <tr>
-            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l1}</th>
-            <td className="w-[30%] p-1 border border-slate-200">
-                {edit && onV1 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v1} onChange={(e) => onV1(e.target.value)} /> : <span className="font-medium text-[11px]">{v1 || '—'}</span>}
-            </td>
-            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l2}</th>
-            <td className="w-[10%] p-1 border border-slate-200">
-                {edit && onV2 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} /> : <span className="font-medium text-[11px]">{v2 || '—'}</span>}
-            </td>
-            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l3}</th>
-            <td className="w-[10%] p-1 border border-slate-200">
-                {edit && onV3 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v3} onChange={(e) => onV3(e.target.value)} /> : <span className="font-medium text-[11px]">{v3 || '—'}</span>}
-            </td>
-            <th className="w-[10%] bg-slate-50 p-1 text-[10px] uppercase font-medium text-slate-500 border border-slate-200">{l4}</th>
-            <td className="w-[10%] p-1 border border-slate-200">
-                {edit && onV4 ? <input className="w-full bg-slate-50 p-0.5 font-medium text-[11px] outline-none" value={v4} onChange={(e) => onV4(e.target.value)} /> : <span className="font-medium text-[11px]">{v4 || '—'}</span>}
-            </td>
-        </tr>
-    );
-}
+                            {/* Modal Content */}
+                            <div className="p-6 overflow-y-auto space-y-4 flex-1 text-slate-700 text-sm font-medium">
 
-function DataRowTriple({ l1, v1, l2, v2, l3, v3, edit, onV1, onV2, onV3 }) {
-    return (
-        <tr>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l1}</th>
-            <td className="w-[21%] p-1 border border-slate-200">
-                {edit && onV1 ? (
-                    <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v1} onChange={(e) => onV1(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v1 || '—'}</span>}
-            </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l2}</th>
-            <td className="w-[21%] p-1 border border-slate-200">
-                {edit && onV2 ? (
-                    <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v2 || '—'}</span>}
-            </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l3}</th>
-            <td className="w-[21%] p-1 border border-slate-200">
-                {edit && onV3 ? (
-                    <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v3} onChange={(e) => onV3(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v3 || '—'}</span>}
-            </td>
-        </tr>
-    );
-}
+                                {/* 1. PROFILE DETAILS EDIT FORM */}
+                                {activeModal === 'profile' && (
+                                    <div className="space-y-4">
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Exhibitor Brand Name</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={profileForm.brandName}
+                                                onChange={(e) => setProfileForm({ ...profileForm, brandName: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Website Address</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={profileForm.website}
+                                                onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Exhibitor Bio Description</label>
+                                            <textarea
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                rows={4}
+                                                value={profileForm.companyDescription}
+                                                onChange={(e) => setProfileForm({ ...profileForm, companyDescription: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">City</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                    value={profileForm.city}
+                                                    onChange={(e) => setProfileForm({ ...profileForm, city: e.target.value })}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">State</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                    value={profileForm.state}
+                                                    onChange={(e) => setProfileForm({ ...profileForm, state: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
-function DataRow({ l1, v1, l2, v2, edit, onV1, onV2 }) {
-    return (
-        <tr>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l1}</th>
-            <td colSpan={2} className="w-[38%] p-1 border border-slate-200">
-                {edit && onV1 ? (
-                    <input className="w-full bg-slate-50 p-1 font-bold text-xs outline-none" value={v1} onChange={(e) => onV1(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v1 || '—'}</span>}
-            </td>
-            <th className="w-[12%] bg-slate-50 p-1 text-[11px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l2}</th>
-            <td colSpan={2} className="w-[38%] p-1 border border-slate-200">
-                {edit && onV2 ? (
-                    <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v2} onChange={(e) => onV2(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v2 || '—'}</span>}
-            </td>
-        </tr>
-    );
-}
+                                {/* 2. CATEGORIES SELECTOR FORM */}
+                                {activeModal === 'categories' && (
+                                    <div className="space-y-2">
+                                        <p className="text-xs text-slate-400 font-bold uppercase mb-4 tracking-wider">
+                                            Select product categories to show on your public profile:
+                                        </p>
+                                        <div className="space-y-2">
+                                            {MOCK_CATEGORIES.map(cat => {
+                                                const isSelected = categorySelection.includes(cat.id);
+                                                return (
+                                                    <label
+                                                        key={cat.id}
+                                                        className={`flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all ${isSelected ? 'border-blue-500 bg-blue-50/40 text-blue-900 font-bold' : 'border-slate-100 hover:bg-slate-50 text-slate-600'}`}
+                                                        onClick={() => handleCategoryToggle(cat.id)}
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`p-1.5 rounded-md ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
+                                                                {React.createElement(cat.icon, { size: 16 })}
+                                                            </div>
+                                                            <span className="text-sm font-semibold">{cat.name}</span>
+                                                        </div>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={isSelected}
+                                                            onChange={() => { }} // handled by click
+                                                            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                                        />
+                                                    </label>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
 
-function DataRowSingle({ l, v, edit, onV }) {
-    return (
-        <tr>
-            <th className="w-1/3 bg-slate-50 p-1 text-[12px] uppercase font-medium text-slate-500 border border-slate-200 text-left px-2">{l}</th>
-            <td className="p-1 border border-slate-200">
-                {edit ? (
-                    <input className="w-full bg-slate-50 p-1 font-medium text-[12px] outline-none" value={v} onChange={(e) => onV(e.target.value)} />
-                ) : <span className="font-medium text-[12px]">{v || '—'}</span>}
-            </td>
-        </tr>
-    );
-}
+                                {/* 3. CERTIFICATES LIST MANAGER */}
+                                {activeModal === 'certificates' && (
+                                    <div className="space-y-4">
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                placeholder="e.g. ISO 9001:2015 Certified"
+                                                className="flex-1 rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={newCertName}
+                                                onChange={(e) => setNewCertName(e.target.value)}
+                                            />
+                                            <button
+                                                onClick={addCertificate}
+                                                disabled={saving}
+                                                className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-5 rounded-xl text-sm font-bold shadow-sm"
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
 
-function AssetItem({ label, url, preview, field, edit, onChange }) {
-    const inputRef = useRef(null);
-    const hasDoc = url || preview;
-    return (
-        <div className="flex flex-col items-center gap-2">
-            <span className="text-[8px] font-black text-slate-400 uppercase">{label}</span>
-            <div className="w-16 h-16 bg-white border border-slate-200 rounded-lg overflow-hidden relative group">
-                <img src={preview || fixUrl(url)} alt={label} className="w-full h-full object-contain p-1" />
-                {edit && (
-                    <div onClick={() => inputRef.current?.click()} className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer no-print transition-opacity">
-                        <Upload size={16} className="text-white" />
-                        <input type="file" ref={inputRef} className="hidden" onChange={(e) => onChange(field, e.target.files[0])} />
+                                        <div className="space-y-2 pt-2">
+                                            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Current Certificates</span>
+                                            <div className="border border-slate-100 rounded-xl overflow-hidden divide-y divide-slate-100">
+                                                {certificateList.map((cert, index) => (
+                                                    <div key={index} className="flex items-center justify-between p-3 bg-white">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 rounded-full bg-slate-50 border flex items-center justify-center text-[10px] font-bold text-indigo-700">
+                                                                {cert.code || 'ISO'}
+                                                            </div>
+                                                            <span className="text-xs font-bold text-slate-700">{cert.name}</span>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => deleteCertificate(index)}
+                                                            className="p-1.5 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded"
+                                                        >
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                {certificateList.length === 0 && (
+                                                    <div className="p-6 text-center text-slate-400 text-xs font-medium">
+                                                        No certificates registered.
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 4. PRIMARY CONTACT FORM */}
+                                {activeModal === 'contact' && (
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <div className="space-y-1">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Title</label>
+                                                <select
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 bg-white"
+                                                    value={contactForm.title}
+                                                    onChange={(e) => setContactForm({ ...contactForm, title: e.target.value })}
+                                                >
+                                                    <option value="Mr.">Mr.</option>
+                                                    <option value="Ms.">Ms.</option>
+                                                    <option value="Dr.">Dr.</option>
+                                                    <option value="Mrs.">Mrs.</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-span-2 space-y-1">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">First Name</label>
+                                                <input
+                                                    type="text"
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                    value={contactForm.firstName}
+                                                    onChange={(e) => setContactForm({ ...contactForm, firstName: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Last Name</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.lastName}
+                                                onChange={(e) => setContactForm({ ...contactForm, lastName: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Corporate Designation</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.designation}
+                                                onChange={(e) => setContactForm({ ...contactForm, designation: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Registered Mobile</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.mobile}
+                                                onChange={(e) => setContactForm({ ...contactForm, mobile: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Registered Email Address</label>
+                                            <input
+                                                type="email"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.email}
+                                                onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 5. TEAM MEMBERS DETAILS SLIDER */}
+                                {activeModal === 'team' && (
+                                    <div className="space-y-4">
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Full Name</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.name}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, name: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Company Role / Designation</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.designation}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, designation: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Email</label>
+                                            <input
+                                                type="email"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.email}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, email: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Number</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.mobile}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, mobile: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.photoUrl}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, photoUrl: e.target.value })}
+                                            />
+                                        </div>
+                                        <label className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={teamMemberForm.isPrimary}
+                                                onChange={(e) => setTeamMemberForm({ ...teamMemberForm, isPrimary: e.target.checked })}
+                                                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                            />
+                                            <div>
+                                                <span className="text-sm font-bold text-slate-900 block leading-tight">Designate as Primary Contact</span>
+                                                <span className="text-[10px] text-slate-400 font-semibold block pt-0.5">This person will appear as the lead representative for team-specific inquiries.</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+                                <button
+                                    onClick={() => setActiveModal(null)}
+                                    className="px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        if (activeModal === 'profile') saveProfileData(profileForm);
+                                        if (activeModal === 'categories') saveCategories();
+                                        if (activeModal === 'contact') saveContact();
+                                        if (activeModal === 'team') saveTeamMember();
+                                    }}
+                                    disabled={saving}
+                                    className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-sm"
+                                >
+                                    {saving ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Check size={16} />
+                                            Save Changes
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </motion.div>
                     </div>
                 )}
-            </div>
-            {!edit && hasDoc && (
-                <a href={preview || fixUrl(url)} target="_blank" rel="noreferrer" className="text-[8px] font-medium text-slate-300 hover:text-slate-900 transition-colors tracking-tighter no-print">View</a>
-            )}
+            </AnimatePresence>
         </div>
     );
 }

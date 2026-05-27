@@ -131,6 +131,7 @@ const PaymentReminders = lazy(() => import("@/pages/navbar_page/PaymentReminders
 const Notification = lazy(() => import("@/pages/navbar_page/Notification"));
 const RelationshipManager = lazy(() => import("@/pages/navbar_page/RelationshipManager"));
 const ExProfile = lazy(() => import("@/pages/navbar_page/ExProfile"));
+import Overview from "@/pages/exhibitor/profile_page/Overview";
 const AddInternationalVistor = lazy(() => import("@/pages/visitors/international_vistor/AddInternationalVistor"));
 const SellerFeedbackForm = lazy(() => import("./pages/feedbacks/SellerFeedbackForm"));
 const WhyVisit = lazy(() => import("@/pages/why_visit/WhyVisit"));
@@ -143,6 +144,7 @@ const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistr
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 
 import { SERVER_URL } from "./lib/api";
+
 
 const SitemapRedirect = () => {
   useEffect(() => {
@@ -283,6 +285,7 @@ const App = () => {
                     <Route path="relationship-manager" element={<RelationshipManager />} />
                     <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                     <Route path="ex-profile" element={<ExProfile />} />
+                    <Route path="ex-profile1" element={<Overview />} />
 
                     {/* Seller Specific Routes */}
                     <Route path="become-seller" element={<ExhibitorSellerRegistrationPage />} />
