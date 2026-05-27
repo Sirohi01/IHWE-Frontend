@@ -156,10 +156,9 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
     const removeFromCart = (id: string) => setCart(prev => prev.filter(c => c.accessoryId !== id));
 
-    const cartTotal = cart.reduce((sum, c) => {
-        const base = c.unitPrice * c.qty;
-        return sum + base + (base * c.gstPercent) / 100;
-    }, 0);
+    const cartBaseTotal = cart.reduce((sum, c) => sum + (c.unitPrice * c.qty), 0);
+    const cartGstTotal = cart.reduce((sum, c) => sum + ((c.unitPrice * c.qty * c.gstPercent) / 100), 0);
+    const cartTotal = cartBaseTotal + cartGstTotal;
 
     // 2.5% Razorpay gateway fee added on top for online payment
     const GATEWAY_FEE_PCT = 2.5;
@@ -497,7 +496,9 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                     {cart.map(item => {
                                         const catalogItem = catalog.find(c => c._id === item.accessoryId);
                                         const finalImageUrl = item.imageUrl || catalogItem?.imageUrl;
-                                        const base = item.unitPrice * item.qty;
+                                        const itemBase = item.unitPrice * item.qty;
+                                        const itemGst = (itemBase * item.gstPercent) / 100;
+                                        const itemTotal = itemBase + itemGst;
                                         return (
                                             <div key={item.accessoryId} className="relative bg-white p-2 border border-slate-100 rounded-xl shadow-sm flex items-start gap-2">
                                                 <div className="w-10 h-10 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
@@ -522,7 +523,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                                 <Plus size={10} />
                                                             </button>
                                                         </div>
-                                                        <span className="text-[12px] font-black text-slate-800">{fmt(base)}</span>
+                                                        <span className="text-[12px] font-black text-slate-800">{fmt(itemTotal)}</span>
                                                     </div>
                                                 </div>
                                                 <button onClick={() => removeFromCart(item.accessoryId)} className="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors bg-white">
@@ -540,7 +541,11 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             <div className="space-y-0.5 mb-2">
                                 <div className="flex justify-between text-[13px]">
                                     <span className="text-slate-500">Subtotal</span>
-                                    <span className="font-semibold font-md text-slate-800">{fmt(cartTotal)}</span>
+                                    <span className="font-semibold font-md text-slate-800">{fmt(cartBaseTotal)}</span>
+                                </div>
+                                <div className="flex justify-between text-[13px]">
+                                    <span className="text-slate-500">GST</span>
+                                    <span className="font-semibold font-md text-slate-800">{fmt(cartGstTotal)}</span>
                                 </div>
                                 <div className="flex justify-between text-[13px]">
                                     <span className="text-slate-500">Gateway Fee (2.5%)</span>
