@@ -579,7 +579,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 </div>
                                 <div>
                                     <h4 className="text-[10px] font-bold text-[#1e293b]">Need Something Else?</h4>
-                                    <p className="text-[10px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
+                                    <p className="text-[9px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
                                     <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:underline">
                                         <Phone size={9} /> Contact Support
                                     </a>
