@@ -1,9 +1,10 @@
-import { Building2, FileText, CreditCard, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare } from "lucide-react";
+import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // ─── Quick Access Data ────────────────────────────────────────────────────────
 
 const QUICK_ACCESS = [
+    { id: "my-event", label: "My Event", sub: "View event details", icon: Calendar, link: "/exhibitor-dashboard/my-event", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
     { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, link: "/exhibitor-dashboard/ex-profile", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
     { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, link: "/exhibitor-dashboard/finances", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
     { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },

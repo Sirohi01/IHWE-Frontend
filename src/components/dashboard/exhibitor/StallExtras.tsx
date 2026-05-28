@@ -385,7 +385,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 const inCart = cart.find(c => c.accessoryId === item._id);
                                 return (
                                     <div key={item._id} className={`bg-white border rounded-md overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
-                                        <div className="h-20 bg-slate-50 border-b border-slate-100 flex items-center justify-center px-1 py-0.5 relative group">
+                                        <div className="h-20 bg-slate-50 border-b border-slate-100 flex items-center justify-center px-0.5 py-0.5 relative group">
                                             {item.imageUrl ? (
                                                 <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-contain" />
                                             ) : (
