@@ -145,6 +145,7 @@ const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"
 
 import { SERVER_URL } from "./lib/api";
 import ProductServices from "./pages/exhibitor/ProductServices";
+const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
 
 
 const SitemapRedirect = () => {
@@ -270,6 +271,7 @@ const App = () => {
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
                     <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="product" element={<ProductServices />} />
+                    <Route path="stall-information" element={<StallInformation />} />
                     <Route path="psm-claim">
                       <Route index element={<ExhibitorMSMEPage />} />
                       <Route path="reports" element={<PsmReports />} />

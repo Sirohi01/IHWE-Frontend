@@ -144,99 +144,99 @@ export default function ProductServices() {
     };
 
     return (
-        <div className="w-full bg-white h-[calc(100vh-56px)] font-sans relative p-2 sm:p-4 flex flex-col overflow-hidden">
+        <div className="w-full bg-white min-h-screen font-sans relative p-4 lg:p-5">
 
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1.5 gap-1.5 shrink-0">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 ">
                 <div>
-                    <h1 className="text-sm sm:text-lg font-bold text-blue-900 leading-none">Products & Services</h1>
-                    <div className="text-[9px] sm:text-[10px] text-slate-500 mt-0.5 flex items-center gap-1">
+                    <h1 className="text-xl lg:text-2xl font-bold text-blue-900">Products & Services</h1>
+                    <div className="text-xs lg:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
                         <span>Home</span>
-                        <ChevronRight size={10} />
+                        <ChevronRight size={12} />
                         <span className="text-slate-700">Products & Services</span>
                     </div>
                 </div>
-                <Button onClick={openNewModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1 px-2 py-0 h-6 text-[9px] sm:text-[10px] rounded-md">
-                    <Plus size={12} />
+                <Button onClick={openNewModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-3 py-0.5 h-8 text-sm">
+                    <Plus size={14} />
                     Add New Product / Service
                 </Button>
             </div>
 
             {/* Banner Section */}
-            <div className="rounded-lg px-3 mb-1.5 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70 shrink-0 min-h-[45px]">
-                <div className="md:w-1/2 py-1.5 relative z-10">
-                    <h2 className="text-xs md:text-sm font-bold text-[#1a2b3c] mb-0.5 max-w-sm leading-tight">
+            <div className="rounded-2xl px-4 md:px-5 mb-3 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
+                <div className="md:w-1/2 py-3 relative z-10">
+                    <h2 className="text-base md:text-lg font-semibold text-[#1a2b3c] mb-1 max-w-sm leading-tight ">
                         Showcase your innovative healthcare products & services
                     </h2>
-                    <p className="text-[8px] sm:text-[9px] text-slate-600 max-w-md leading-tight hidden sm:block">
+                    <p className="text-[11px] md:text-xs text-slate-500 max-w-md leading-relaxed">
                         Add products and services to attract more buyers and generate quality leads at IHWE 2026.
                     </p>
                 </div>
-                <div className="md:w-1/2 flex justify-center items-end relative z-10 pt-1">
-                    <img src={productImage} alt="Healthcare Products" className="h-10 md:h-14 object-contain" />
+                <div className="md:w-1/2 flex justify-center items-end relative z-10">
+                    <img src={productImage} alt="Healthcare Products" className="h-20 md:h-28 object-contain" />
                 </div>
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-1.5 mb-1.5 shrink-0">
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 bg-teal-50 text-teal-600">
-                        <Package size={14} />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 mb-2">
+                <div className="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+                        <Package size={20} />
                     </div>
                     <div>
-                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Products</p>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-none">{totalProducts}</h3>
-                        <p className="text-[7px] text-slate-400 hidden sm:block mt-0.5">Published Products</p>
+                        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Total Products</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-800">{totalProducts}</h3>
+                        <p className="text-[9px] text-slate-400">Published Products</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 bg-purple-50 text-purple-600">
-                        <Layers size={14} />
+                <div className="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                        <Layers size={20} />
                     </div>
                     <div>
-                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Services</p>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-none">{totalServices}</h3>
-                        <p className="text-[7px] text-slate-400 hidden sm:block mt-0.5">Published Services</p>
+                        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Total Services</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-800">{totalServices}</h3>
+                        <p className="text-[9px] text-slate-400">Published Services</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 bg-amber-50 text-amber-500">
-                        <Eye size={14} />
+                <div className="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                        <Eye size={20} />
                     </div>
                     <div>
-                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Views</p>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-none">{totalViews.toLocaleString()}</h3>
-                        <p className="text-[7px] text-slate-400 hidden sm:block mt-0.5">All Time Views</p>
+                        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Total Views</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-800">{totalViews.toLocaleString()}</h3>
+                        <p className="text-[9px] text-slate-400">All Time Views</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 bg-blue-50 text-blue-500">
-                        <Users size={14} />
+                <div className="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                        <Users size={20} />
                     </div>
                     <div>
-                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Total Inquiries</p>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-none">{totalInquiries}</h3>
-                        <p className="text-[7px] text-slate-400 hidden sm:block mt-0.5">Received Inquiries</p>
+                        <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Total Inquiries</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-800">{totalInquiries}</h3>
+                        <p className="text-[9px] text-slate-400">Received Inquiries</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-1.5">
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 bg-green-50 text-green-500">
-                        <TrendingUp size={14} />
+                <div className="bg-white p-2 md:p-2.5 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-green-50 text-green-500 flex items-center justify-center shrink-0">
+                        <TrendingUp size={20} />
                     </div>
                     <div>
-                        <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 uppercase whitespace-nowrap tracking-wider mb-0.5">Conversion Leads</p>
-                        <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-none">{Math.floor(totalInquiries * 0.4)}</h3>
-                        <p className="text-[7px] text-slate-400 hidden sm:block mt-0.5">Qualified Leads</p>
+                        <p className="text-[10px] font-semibold text-slate-500 uppercase whitespace-nowrap tracking-wider">Conversion Leads</p>
+                        <h3 className="text-lg md:text-xl font-semibold text-slate-800">{Math.floor(totalInquiries * 0.4)}</h3>
+                        <p className="text-[9px] text-slate-400">Qualified Leads</p>
                     </div>
                 </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-slate-100 p-1 mb-1.5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-1.5 shrink-0">
-                <div className="flex space-x-1 sm:space-x-2 w-full overflow-x-auto no-scrollbar scroll-smooth px-1">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-1.5 md:p-2 mb-2 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2">
+                <div className="flex space-x-3 sm:space-x-5 w-full overflow-x-auto no-scrollbar scroll-smooth px-1">
                     {['All Items', 'Products', 'Services', 'Drafts'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
-                            className={`py-0.5 px-1 text-[9px] sm:text-[10px] font-bold transition-colors border-b-2 whitespace-nowrap ${activeTab === tab
+                            className={`py-0.5 px-1 text-[13px] font-semibold transition-colors border-b-2 whitespace-nowrap ${activeTab === tab
                                 ? "border-[#10b981] text-[#10b981]"
                                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
                                 }`}
@@ -245,94 +245,96 @@ export default function ProductServices() {
                         </button>
                     ))}
                 </div>
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full xl:w-auto pr-1">
-                    <div className="relative w-full sm:w-auto shrink-0">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full xl:w-auto pr-1">
+                    <div className="relative w-full sm:w-auto">
                         <select
                             value={categoryFilter}
                             onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                            className="appearance-none bg-white border border-slate-200 rounded text-[10px] sm:text-xs pl-2 pr-6 py-1 font-medium text-slate-600 focus:outline-none focus:ring-1 focus:ring-green-500/20 w-full min-w-[120px]"
+                            className="appearance-none bg-white border border-slate-200 rounded-lg pl-2 pr-7 py-1 text-[13px] font-medium text-slate-600 focus:outline-none focus:ring-2 focus:ring-green-500/20 w-full h-8"
                         >
                             <option>All Categories</option>
                             {categoryOptions.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                     </div>
-                    <div className="relative flex-1 min-w-[130px] sm:w-48">
-                        <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <div className="relative flex-1 sm:w-52">
+                        <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <Input
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                            placeholder="Search..."
-                            className="pl-6 h-6 sm:h-7 bg-white border-slate-200 text-[10px] sm:text-xs py-0 rounded focus-visible:ring-green-500/20 w-full"
+                            placeholder="Search products..."
+                            className="pl-8 h-8 bg-white border-slate-200 text-[13px] focus-visible:ring-green-500/20"
                         />
                     </div>
-                    <Button variant="outline" className="h-6 sm:h-7 bg-white border-slate-200 text-slate-600 font-medium shrink-0 text-[10px] sm:text-xs px-2 py-0 rounded flex items-center">
-                        <Filter size={12} className="mr-1" />
+                    <Button variant="outline" className="h-8 bg-white border-slate-200 text-slate-600 font-medium shrink-0 text-[13px]">
+                        <Filter size={13} className="mr-1.5" />
                         Filters
                     </Button>
                 </div>
             </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-1.5 sm:gap-2 overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
 
                 {/* Left Column - Table Area */}
-                <div className="lg:col-span-2 flex flex-col min-h-0 h-full">
+                <div className="lg:col-span-2">
+                    {/* Tabs and Filters */}
+
 
                     {/* Table Container */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 flex flex-col h-full min-h-0 overflow-hidden">
-                        <div className="p-1.5 border-b border-slate-100 flex justify-between items-center shrink-0">
-                            <h3 className="font-bold text-[#1a2b3c] text-[11px] sm:text-[12px]">Your Products & Services</h3>
-                            <span className="text-[8px] font-bold bg-slate-100 text-slate-500 py-0.5 px-1.5 rounded">{filteredItems.length} Total</span>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-2 md:p-3 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="font-semibold text-[#1a2b3c] text-[15px] md:text-base">Your Products & Services</h3>
+                            <span className="text-[11px] font-semibold bg-slate-100 text-slate-500 py-0.5 px-2 rounded-lg"></span>
                         </div>
 
-                        <div className="flex-1 min-h-0 flex flex-col divide-y divide-slate-100 overflow-hidden">
+                        <div className="divide-y divide-slate-100">
                             {paginatedItems.length === 0 ? (
-                                <div className="p-4 text-center text-[10px] text-slate-500 m-auto">No items found matching your criteria.</div>
+                                <div className="p-4 md:p-5 text-center text-slate-500 text-sm">No items found matching your criteria.</div>
                             ) : paginatedItems.map((item) => (
-                                <div key={item.id} className="flex-1 flex flex-col sm:flex-row items-center justify-between hover:bg-slate-50 transition-colors gap-1.5 p-1 sm:px-1.5 min-h-[40px]">
-                                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                                        <div className="w-8 h-6 sm:w-12 sm:h-8 bg-slate-100 rounded overflow-hidden shrink-0 border border-slate-200">
+                                <div key={item.id} className="p-2 md:p-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-slate-50 transition-colors gap-2 md:gap-3">
+                                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                        <div className="w-14 h-10 sm:w-16 sm:h-12 bg-slate-100 rounded-lg overflow-hidden shrink-0 border border-slate-200">
                                             <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                                         </div>
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex items-center gap-1 mb-0.5">
-                                                <h4 className="font-bold text-[#1a2b3c] text-[9px] sm:text-[10px] truncate">{item.title}</h4>
-                                                <span className={`text-[6px] sm:text-[7px] px-1 py-0 rounded-[2px] font-bold uppercase tracking-wider shrink-0 ${item.type === 'Product'
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-2 mb-0.5">
+                                                <h4 className="font-medium text-[#1a2b3c] text-[12px] sm:text-[13px]">{item.title}</h4>
+                                                <span className={`text-[9px] px-1.5 py-0.5 rounded-sm font-bold uppercase tracking-wider shrink-0 ${item.type === 'Product'
                                                     ? 'bg-[#10b981]/10 text-[#10b981]'
                                                     : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {item.type}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center text-[7px] sm:text-[8px] text-slate-500 font-medium">
-                                                <Settings size={8} className="mr-0.5 opacity-50 shrink-0" />
+                                            <div className="flex items-center text-[11px] text-slate-500 font-medium">
+                                                <Settings size={10} className="mr-1 opacity-50" />
                                                 <span className="truncate">{item.category}</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
-                                        <div className="flex gap-2 sm:gap-3 text-right">
+                                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-5 w-full sm:w-auto mt-1 sm:mt-0">
+                                        <div className="flex gap-3 sm:gap-5">
                                             <div>
-                                                <p className="text-[6px] sm:text-[7px] text-slate-400 font-bold uppercase leading-none mb-0.5">Views</p>
-                                                <p className="font-bold text-slate-800 text-[8px] sm:text-[9px] leading-none">{item.views}</p>
+                                                <p className="text-[9px] text-slate-400 font-semibold uppercase mb-0.5">Views</p>
+                                                <p className="font-medium text-slate-800 text-[11px] sm:text-[13px]">{item.views}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[6px] sm:text-[7px] text-slate-400 font-bold uppercase leading-none mb-0.5">Inquiries</p>
-                                                <p className="font-bold text-slate-800 text-[8px] sm:text-[9px] leading-none">{item.inquiries}</p>
+                                                <p className="text-[9px] text-slate-400 font-semibold uppercase mb-0.5">Inquiries</p>
+                                                <p className="font-medium text-slate-800 text-[11px] sm:text-[13px]">{item.inquiries}</p>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-0.5 ml-auto sm:ml-1.5">
-                                            <Button onClick={() => setViewItem(item)} variant="ghost" size="icon" className="h-5 w-5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white rounded-[4px]">
-                                                <Eye size={10} />
+                                        <div className="flex items-center gap-1 ml-auto sm:ml-3">
+                                            <Button onClick={() => setViewItem(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
+                                                <Eye size={12} />
                                             </Button>
-                                            <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-5 w-5 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white rounded-[4px]">
-                                                <Edit2 size={10} />
+                                            <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white">
+                                                <Edit2 size={12} />
                                             </Button>
-                                            <Button onClick={() => handleDelete(item.id)} variant="ghost" size="icon" className="h-5 w-5 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white rounded-[4px]">
-                                                <Trash2 size={10} />
+                                            <Button onClick={() => handleDelete(item.id)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white">
+                                                <Trash2 size={12} />
                                             </Button>
                                         </div>
                                     </div>
@@ -341,16 +343,16 @@ export default function ProductServices() {
                         </div>
 
                         {filteredItems.length > 0 && (
-                            <div className="p-1 sm:p-1.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-1 text-[8px] sm:text-[9px] font-bold text-slate-500 shrink-0">
-                                <div>Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredItems.length)} of {filteredItems.length}</div>
-                                <div className="flex items-center gap-0.5">
-                                    <button
+                            <div className="p-2 md:p-2.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] font-medium text-slate-500">
+                                <div>Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredItems.length)} of {filteredItems.length} entries</div>
+                                <div className="flex items-center gap-1">
+                                    <Button
+                                        variant="outline" size="icon" className="h-7 w-7 border-slate-200"
                                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                         disabled={currentPage === 1}
-                                        className="h-5 w-5 flex items-center justify-center rounded-[4px] border border-slate-200 bg-white text-slate-600 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                     >
-                                        <ChevronLeft size={10} strokeWidth={2.5} />
-                                    </button>
+                                        <ChevronLeft size={12} />
+                                    </Button>
 
                                     {(() => {
                                         const pages = [];
@@ -358,19 +360,18 @@ export default function ProductServices() {
                                         for (let i = 1; i <= totalPages; i++) {
                                             if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
                                                 if (lastAdded < i - 1) {
-                                                    pages.push(<span key={`ellipsis-${i}`} className="px-0.5 text-slate-400 font-bold">...</span>);
+                                                    pages.push(<span key={`ellipsis-${i}`} className="px-1 text-slate-400 text-[12px]">...</span>);
                                                 }
                                                 pages.push(
-                                                    <button
+                                                    <Button
                                                         key={i}
+                                                        variant="outline"
+                                                        size="icon"
                                                         onClick={() => setCurrentPage(i)}
-                                                        className={`h-5 w-5 flex items-center justify-center rounded-[4px] text-[9px] font-bold shadow-sm transition-all ${currentPage === i
-                                                                ? "bg-[#10b981] text-white border border-[#10b981]"
-                                                                : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                                                            }`}
+                                                        className={`h-7 w-7 text-[12px] ${currentPage === i ? "bg-[#10b981] text-white hover:bg-[#059669] hover:text-white border-transparent" : "border-slate-200"}`}
                                                     >
                                                         {i}
-                                                    </button>
+                                                    </Button>
                                                 );
                                                 lastAdded = i;
                                             }
@@ -378,13 +379,13 @@ export default function ProductServices() {
                                         return pages;
                                     })()}
 
-                                    <button
+                                    <Button
+                                        variant="outline" size="icon" className="h-7 w-7 border-slate-200"
                                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                         disabled={currentPage === totalPages}
-                                        className="h-5 w-5 flex items-center justify-center rounded-[4px] border border-slate-200 bg-white text-slate-600 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                     >
-                                        <ChevronRight size={10} strokeWidth={2.5} />
-                                    </button>
+                                        <ChevronRight size={12} />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -392,23 +393,23 @@ export default function ProductServices() {
                 </div>
 
                 {/* Right Column - Widgets */}
-                <div className="flex flex-col gap-1.5 sm:gap-2 overflow-y-auto no-scrollbar pb-0.5 min-h-0 h-full">
+                <div className="space-y-3 md:space-y-4">
                     {/* Categories Widget */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden shrink-0">
-                        <div className="p-1.5 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="font-bold text-[#1a2b3c] text-[10px] sm:text-[11px]">Categories</h3>
-                            <button className="text-[8px] font-bold text-blue-600 hover:text-blue-700">Manage Categories</button>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-2 md:p-3 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="font-semibold text-[#1a2b3c] text-[14px]">Categories</h3>
+                            <button className="text-[10px] font-bold text-blue-600 hover:text-blue-700">Manage Categories</button>
                         </div>
-                        <div className="p-1.5 space-y-1">
+                        <div className="p-2 md:p-3 space-y-2 md:space-y-2.5">
                             {categories.map((cat, i) => {
                                 const Icon = cat.icon;
                                 return (
-                                    <div key={i} className="flex justify-between items-center text-[9px] sm:text-[10px]">
-                                        <div className="flex items-center gap-1 text-slate-600 font-bold">
-                                            <Icon size={10} className="text-slate-400" />
+                                    <div key={i} className="flex justify-between items-center text-[12px] md:text-[13px]">
+                                        <div className="flex items-center gap-2 text-slate-600 font-medium">
+                                            <Icon size={14} className="text-slate-400" />
                                             <span>{cat.name}</span>
                                         </div>
-                                        <span className="font-bold text-slate-800 bg-slate-50 w-4 h-4 rounded-[3px] flex items-center justify-center text-[8px]">{cat.count}</span>
+                                        <span className="font-bold text-slate-800 bg-slate-50 w-5 h-5 md:w-6 md:h-6 rounded-md flex items-center justify-center text-[10px] md:text-[11px]">{cat.count}</span>
                                     </div>
                                 )
                             })}
@@ -416,26 +417,26 @@ export default function ProductServices() {
                     </div>
 
                     {/* Tips Widget */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden shrink-0">
-                        <div className="p-1.5 border-b border-slate-100">
-                            <h3 className="font-bold text-[#1a2b3c] text-[10px] sm:text-[11px]">Tips to Get More Leads</h3>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-2 md:p-3 border-b border-slate-100">
+                            <h3 className="font-semibold text-[#1a2b3c] text-[14px]">Tips to Get More Leads</h3>
                         </div>
-                        <div className="p-1.5 space-y-1">
+                        <div className="p-2 md:p-3 space-y-2 md:space-y-2.5">
                             {[
                                 "Add high quality images and videos",
                                 "Write detailed product descriptions",
                                 "Keep your information up to date",
                                 "Add brochures and specifications"
                             ].map((tip, i) => (
-                                <div key={i} className="flex items-start gap-1 text-[9px] text-slate-600 font-bold">
-                                    <CheckCircle2 size={10} className="text-[#10b981] shrink-0 mt-[1px]" />
+                                <div key={i} className="flex items-start gap-1.5 md:gap-2 text-[12px] md:text-[13px] text-slate-600 font-medium">
+                                    <CheckCircle2 size={14} className="text-[#10b981] shrink-0 mt-0.5" />
                                     <span>{tip}</span>
                                 </div>
                             ))}
 
-                            <Button variant="outline" className="w-full mt-1 border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold gap-1 h-5 text-[8px] rounded py-0">
+                            <Button variant="outline" className="w-full mt-1.5 border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold gap-1.5 h-8 text-[12px]">
                                 View Best Practices
-                                <ExternalLink size={10} />
+                                <ExternalLink size={12} />
                             </Button>
                         </div>
                     </div>
