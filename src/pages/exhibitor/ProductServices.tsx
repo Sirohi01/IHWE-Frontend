@@ -144,99 +144,99 @@ export default function ProductServices() {
     };
 
     return (
-        <div className="w-full bg-white min-h-[calc(100vh-60px)] font-sans relative p-2 sm:p-4">
+        <div className="w-full bg-white min-h-screen font-sans relative p-6">
 
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1.5 gap-2">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
                 <div>
-                    <h1 className="text-xl font-bold text-blue-900 leading-tight">Products & Services</h1>
-                    <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
+                    <h1 className="text-2xl font-bold text-blue-900">Products & Services</h1>
+                    <div className="text-sm text-slate-500 mt-1 flex items-center gap-2">
                         <span>Home</span>
-                        <ChevronRight size={12} />
+                        <ChevronRight size={14} />
                         <span className="text-slate-700">Products & Services</span>
                     </div>
                 </div>
-                <Button onClick={openNewModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-2 py-0.5 text-xs h-7">
-                    <Plus size={13} />
+                <Button onClick={openNewModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-2 px-3 py-0.5">
+                    <Plus size={16} />
                     Add New Product / Service
                 </Button>
             </div>
 
             {/* Banner Section */}
-            <div className="rounded-xl px-4 md:px-5 mb-2 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
-                <div className="md:w-1/2 py-1 relative z-10">
-                    <h2 className="text-base md:text-lg font-semibold text-[#1a2b3c] mb-0.5 max-w-sm leading-tight ">
+            <div className="rounded-2xl px-4 md:px-6 mb-4 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
+                <div className="md:w-1/2 py-4 relative z-10">
+                    <h2 className="text-lg md:text-xl font-semibold text-[#1a2b3c] mb-1 max-w-sm leading-tight ">
                         Showcase your innovative healthcare products & services
                     </h2>
-                    <p className="text-[10px] text-slate-600 max-w-md leading-snug">
-                        Add products and services to attract more buyers and <br /> generate quality leads at IHWE 2026.
+                    <p className="text-xs text-slate-500 max-w-md leading-relaxed">
+                        Add products and services to attract more buyers and generate quality leads at IHWE 2026.
                     </p>
                 </div>
                 <div className="md:w-1/2 flex justify-center items-end relative z-10">
-                    <img src={productImage} alt="Healthcare Products" className="h-16 md:h-20 object-contain" />
+                    <img src={productImage} alt="Healthcare Products" className="h-24 md:h-36 object-contain" />
                 </div>
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-1.5">
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
-                        <Package size={16} />
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-2">
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+                        <Package size={24} />
                     </div>
                     <div>
-                        <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider leading-none mb-0.5">Total Products</p>
-                        <h3 className="text-base font-semibold text-slate-800 leading-none mb-0.5">{totalProducts}</h3>
-                        <p className="text-[8px] text-slate-400 leading-none">Published Products</p>
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Products</p>
+                        <h3 className="text-xl font-semibold text-slate-800">{totalProducts}</h3>
+                        <p className="text-[10px] text-slate-400">Published Products</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                        <Layers size={16} />
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                        <Layers size={24} />
                     </div>
                     <div>
-                        <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider leading-none mb-0.5">Total Services</p>
-                        <h3 className="text-base font-semibold text-slate-800 leading-none mb-0.5">{totalServices}</h3>
-                        <p className="text-[8px] text-slate-400 leading-none">Published Services</p>
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Services</p>
+                        <h3 className="text-xl font-semibold text-slate-800">{totalServices}</h3>
+                        <p className="text-[10px] text-slate-400">Published Services</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
-                        <Eye size={16} />
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                        <Eye size={24} />
                     </div>
                     <div>
-                        <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider leading-none mb-0.5">Total Views</p>
-                        <h3 className="text-base font-semibold text-slate-800 leading-none mb-0.5">{totalViews.toLocaleString()}</h3>
-                        <p className="text-[8px] text-slate-400 leading-none">All Time Views</p>
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Views</p>
+                        <h3 className="text-xl font-semibold text-slate-800">{totalViews.toLocaleString()}</h3>
+                        <p className="text-[10px] text-slate-400">All Time Views</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
-                        <Users size={16} />
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                        <Users size={24} />
                     </div>
                     <div>
-                        <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider leading-none mb-0.5">Total Inquiries</p>
-                        <h3 className="text-base font-semibold text-slate-800 leading-none mb-0.5">{totalInquiries}</h3>
-                        <p className="text-[8px] text-slate-400 leading-none">Received Inquiries</p>
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total Inquiries</p>
+                        <h3 className="text-xl font-semibold text-slate-800">{totalInquiries}</h3>
+                        <p className="text-[10px] text-slate-400">Received Inquiries</p>
                     </div>
                 </div>
-                <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-green-50 text-green-500 flex items-center justify-center shrink-0">
-                        <TrendingUp size={16} />
+                <div className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-green-50 text-green-500 flex items-center justify-center shrink-0">
+                        <TrendingUp size={24} />
                     </div>
                     <div>
-                        <p className="text-[9px] font-semibold text-slate-500 uppercase whitespace-nowrap tracking-wider leading-none mb-0.5">Conversion Leads</p>
-                        <h3 className="text-base font-semibold text-slate-800 leading-none mb-0.5">{Math.floor(totalInquiries * 0.4)}</h3>
-                        <p className="text-[8px] text-slate-400 leading-none">Qualified Leads</p>
+                        <p className="text-[11px] font-semibold text-slate-500 uppercase whitespace-nowrap tracking-wider">Conversion Leads</p>
+                        <h3 className="text-xl font-semibold text-slate-800">{Math.floor(totalInquiries * 0.4)}</h3>
+                        <p className="text-[10px] text-slate-400">Qualified Leads</p>
                     </div>
                 </div>
             </div>
-            <div className="bg-white rounded-lg shadow-sm border border-slate-100 p-1 mb-1.5 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-2">
-                <div className="flex space-x-2 sm:space-x-4 w-full overflow-x-auto no-scrollbar scroll-smooth px-1">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-2 mb-2 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3">
+                <div className="flex space-x-4 sm:space-x-6 w-full overflow-x-auto no-scrollbar scroll-smooth px-1">
                     {['All Items', 'Products', 'Services', 'Drafts'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
-                            className={`py-0.5 px-1 text-xs font-semibold transition-colors border-b-2 whitespace-nowrap ${activeTab === tab
+                            className={`py-1 px-1 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${activeTab === tab
                                 ? "border-[#10b981] text-[#10b981]"
                                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
                                 }`}
@@ -245,36 +245,36 @@ export default function ProductServices() {
                         </button>
                     ))}
                 </div>
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 w-full xl:w-auto pr-1">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full xl:w-auto pr-1">
                     <div className="relative w-full sm:w-auto">
                         <select
                             value={categoryFilter}
                             onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                            className="appearance-none bg-white border border-slate-200 rounded text-xs pl-2 pr-6 py-0.5 font-medium text-slate-600 focus:outline-none focus:ring-1 focus:ring-green-500/20 w-full"
+                            className="appearance-none bg-white border border-slate-200 rounded-lg pl-3 pr-8 py-1 text-sm font-medium text-slate-600 focus:outline-none focus:ring-2 focus:ring-green-500/20 w-full"
                         >
                             <option>All Categories</option>
                             {categoryOptions.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
-                        <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                     </div>
-                    <div className="relative flex-1 sm:w-48">
-                        <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <div className="relative flex-1 sm:w-56">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                         <Input
                             value={searchQuery}
                             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                             placeholder="Search products..."
-                            className="pl-7 h-6 text-xs bg-white border-slate-200 focus-visible:ring-green-500/20 rounded"
+                            className="pl-9 h-9 bg-white border-slate-200 text-sm focus-visible:ring-green-500/20"
                         />
                     </div>
-                    <Button variant="outline" className="h-6 text-xs px-2 py-0 bg-white border-slate-200 text-slate-600 font-medium shrink-0 rounded">
-                        <Filter size={12} className="mr-1" />
+                    <Button variant="outline" className="h-9 bg-white border-slate-200 text-slate-600 font-medium shrink-0">
+                        <Filter size={14} className="mr-2" />
                         Filters
                     </Button>
                 </div>
             </div>
 
             {/* Main Content Area */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
                 {/* Left Column - Table Area */}
                 <div className="lg:col-span-2">
@@ -282,59 +282,59 @@ export default function ProductServices() {
 
 
                     {/* Table Container */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden">
-                        <div className="p-1.5 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="font-semibold text-[#1a2b3c] text-[13px]">Your Products & Services</h3>
-                            <span className="text-[10px] font-semibold bg-slate-100 text-slate-500 py-0.5 px-1.5 rounded-md">{filteredItems.length} Total</span>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-3 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="font-semibold text-[#1a2b3c] text-lg">Your Products & Services</h3>
+                            <span className="text-xs font-semibold bg-slate-100 text-slate-500 py-1 px-2 rounded-lg">{filteredItems.length} Total</span>
                         </div>
 
                         <div className="divide-y divide-slate-100">
                             {paginatedItems.length === 0 ? (
-                                <div className="p-3 text-center text-xs text-slate-500">No items found matching your criteria.</div>
+                                <div className="p-6 text-center text-slate-500">No items found matching your criteria.</div>
                             ) : paginatedItems.map((item) => (
-                                <div key={item.id} className="p-1.5 flex flex-col sm:flex-row items-center justify-between hover:bg-slate-50 transition-colors gap-2">
-                                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                                        <div className="w-12 h-8 bg-slate-100 rounded overflow-hidden shrink-0 border border-slate-200">
+                                <div key={item.id} className="p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-slate-50 transition-colors gap-3">
+                                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                                        <div className="w-16 h-12 sm:w-20 sm:h-14 bg-slate-100 rounded-lg overflow-hidden shrink-0 border border-slate-200">
                                             <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                                         </div>
                                         <div className="min-w-0">
-                                            <div className="flex items-center gap-1.5 mb-0.5">
-                                                <h4 className="font-medium text-[#1a2b3c] text-[11px] truncate">{item.title}</h4>
-                                                <span className={`text-[8px] px-1.5 py-0 rounded-sm font-bold uppercase tracking-wider shrink-0 ${item.type === 'Product'
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <h4 className="font-medium text-[#1a2b3c]  text-[12px] sm:text-[14px]">{item.title}</h4>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-sm font-bold uppercase tracking-wider shrink-0 ${item.type === 'Product'
                                                     ? 'bg-[#10b981]/10 text-[#10b981]'
                                                     : 'bg-blue-100 text-blue-700'
                                                     }`}>
                                                     {item.type}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center text-[10px] text-slate-500 font-medium">
-                                                <Settings size={10} className="mr-1 opacity-50" />
+                                            <div className="flex items-center text-xs text-slate-500 font-medium">
+                                                <Settings size={12} className="mr-1 opacity-50" />
                                                 <span className="truncate">{item.category}</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-end gap-3 w-auto">
-                                        <div className="flex gap-3 text-right">
+                                    <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto mt-1 sm:mt-0">
+                                        <div className="flex gap-4 sm:gap-6">
                                             <div>
-                                                <p className="text-[8px] text-slate-400 font-semibold uppercase leading-none mb-0.5">Views</p>
-                                                <p className="font-medium text-slate-800 text-[11px] leading-none">{item.views}</p>
+                                                <p className="text-[10px] text-slate-400 font-semibold uppercase mb-0.5">Views</p>
+                                                <p className="font-medium text-slate-800 text-[12px] sm:text-[15px]">{item.views}</p>
                                             </div>
                                             <div>
-                                                <p className="text-[8px] text-slate-400 font-semibold uppercase leading-none mb-0.5">Inquiries</p>
-                                                <p className="font-medium text-slate-800 text-[11px] leading-none">{item.inquiries}</p>
+                                                <p className="text-[10px] text-slate-400 font-semibold uppercase mb-0.5">Inquiries</p>
+                                                <p className="font-medium text-slate-800 text-[12px] sm:text-[15px]">{item.inquiries}</p>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-1 ml-2">
-                                            <Button onClick={() => setViewItem(item)} variant="ghost" size="icon" className="h-6 w-6 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white rounded">
-                                                <Eye size={12} />
+                                        <div className="flex items-center gap-1.5 ml-auto sm:ml-4">
+                                            <Button onClick={() => setViewItem(item)} variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
+                                                <Eye size={14} />
                                             </Button>
-                                            <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-6 w-6 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white rounded">
-                                                <Edit2 size={12} />
+                                            <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white">
+                                                <Edit2 size={14} />
                                             </Button>
-                                            <Button onClick={() => handleDelete(item.id)} variant="ghost" size="icon" className="h-6 w-6 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white rounded">
-                                                <Trash2 size={12} />
+                                            <Button onClick={() => handleDelete(item.id)} variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white">
+                                                <Trash2 size={14} />
                                             </Button>
                                         </div>
                                     </div>
@@ -343,16 +343,16 @@ export default function ProductServices() {
                         </div>
 
                         {filteredItems.length > 0 && (
-                            <div className="p-1.5 border-t border-slate-100 flex items-center justify-between gap-2 text-[11px] font-medium text-slate-500">
-                                <div>Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredItems.length)} of {filteredItems.length}</div>
-                                <div className="flex items-center gap-1.5">
-                                    <button
+                            <div className="p-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm font-medium text-slate-500">
+                                <div>Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, filteredItems.length)} of {filteredItems.length} entries</div>
+                                <div className="flex items-center gap-1">
+                                    <Button
+                                        variant="outline" size="icon" className="h-8 w-8 border-slate-200"
                                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                         disabled={currentPage === 1}
-                                        className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                     >
-                                        <ChevronLeft size={14} strokeWidth={2.5} />
-                                    </button>
+                                        <ChevronLeft size={14} />
+                                    </Button>
 
                                     {(() => {
                                         const pages = [];
@@ -360,19 +360,18 @@ export default function ProductServices() {
                                         for (let i = 1; i <= totalPages; i++) {
                                             if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
                                                 if (lastAdded < i - 1) {
-                                                    pages.push(<span key={`ellipsis-${i}`} className="px-1 text-slate-400 font-bold">...</span>);
+                                                    pages.push(<span key={`ellipsis-${i}`} className="px-1 text-slate-400">...</span>);
                                                 }
                                                 pages.push(
-                                                    <button
+                                                    <Button
                                                         key={i}
+                                                        variant="outline"
+                                                        size="icon"
                                                         onClick={() => setCurrentPage(i)}
-                                                        className={`h-7 w-7 flex items-center justify-center rounded-md text-xs font-semibold shadow-sm transition-all ${currentPage === i
-                                                            ? "bg-[#10b981] text-white border border-[#10b981]"
-                                                            : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                                                            }`}
+                                                        className={`h-8 w-8 ${currentPage === i ? "bg-[#10b981] text-white hover:bg-[#059669] hover:text-white border-transparent" : "border-slate-200"}`}
                                                     >
                                                         {i}
-                                                    </button>
+                                                    </Button>
                                                 );
                                                 lastAdded = i;
                                             }
@@ -380,13 +379,13 @@ export default function ProductServices() {
                                         return pages;
                                     })()}
 
-                                    <button
+                                    <Button
+                                        variant="outline" size="icon" className="h-8 w-8 border-slate-200"
                                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                         disabled={currentPage === totalPages}
-                                        className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
                                     >
-                                        <ChevronRight size={14} strokeWidth={2.5} />
-                                    </button>
+                                        <ChevronRight size={14} />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -394,23 +393,23 @@ export default function ProductServices() {
                 </div>
 
                 {/* Right Column - Widgets */}
-                <div className="space-y-2">
+                <div className="space-y-4">
                     {/* Categories Widget */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden">
-                        <div className="p-1.5 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="font-semibold text-[#1a2b3c] text-[12px]">Categories</h3>
-                            <button className="text-[9px] font-bold text-blue-600 hover:text-blue-700">Manage Categories</button>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-3 border-b border-slate-100 flex justify-between items-center">
+                            <h3 className="font-semibold text-[#1a2b3c] text-[15px]">Categories</h3>
+                            <button className="text-[11px] font-bold text-blue-600 hover:text-blue-700">Manage Categories</button>
                         </div>
-                        <div className="px-1.5 py-1 space-y-0.5">
+                        <div className="p-3 space-y-3">
                             {categories.map((cat, i) => {
                                 const Icon = cat.icon;
                                 return (
-                                    <div key={i} className="flex justify-between items-center text-[11px]">
-                                        <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-                                            <Icon size={12} className="text-slate-400" />
+                                    <div key={i} className="flex justify-between items-center text-sm">
+                                        <div className="flex items-center gap-2 text-slate-600 font-medium">
+                                            <Icon size={16} className="text-slate-400" />
                                             <span>{cat.name}</span>
                                         </div>
-                                        <span className="font-bold text-slate-800 bg-slate-50 w-5 h-5 rounded flex items-center justify-center text-[9px]">{cat.count}</span>
+                                        <span className="font-bold text-slate-800 bg-slate-50 w-6 h-6 rounded-md flex items-center justify-center text-[11px]">{cat.count}</span>
                                     </div>
                                 )
                             })}
@@ -418,26 +417,26 @@ export default function ProductServices() {
                     </div>
 
                     {/* Tips Widget */}
-                    <div className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden">
-                        <div className="p-1.5 border-b border-slate-100">
-                            <h3 className="font-semibold text-[#1a2b3c] text-[12px]">Tips to Get More Leads</h3>
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="p-3 border-b border-slate-100">
+                            <h3 className="font-semibold text-[#1a2b3c] text-[15px]">Tips to Get More Leads</h3>
                         </div>
-                        <div className="p-1.5 space-y-1.5">
+                        <div className="p-3 space-y-3">
                             {[
                                 "Add high quality images and videos",
                                 "Write detailed product descriptions",
                                 "Keep your information up to date",
                                 "Add brochures and specifications"
                             ].map((tip, i) => (
-                                <div key={i} className="flex items-start gap-1.5 text-[11px] text-slate-600 font-medium leading-tight">
-                                    <CheckCircle2 size={12} className="text-[#10b981] shrink-0 mt-0.5" />
+                                <div key={i} className="flex items-start gap-2 text-sm text-slate-600 font-medium">
+                                    <CheckCircle2 size={16} className="text-[#10b981] shrink-0 mt-0.5" />
                                     <span>{tip}</span>
                                 </div>
                             ))}
 
-                            <Button variant="outline" className="w-full mt-1.5 border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold gap-1 h-7 text-[10px] rounded">
+                            <Button variant="outline" className="w-full mt-2 border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold gap-2">
                                 View Best Practices
-                                <ExternalLink size={12} />
+                                <ExternalLink size={14} />
                             </Button>
                         </div>
                     </div>
