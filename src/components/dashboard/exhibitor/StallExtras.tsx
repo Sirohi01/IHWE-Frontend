@@ -322,7 +322,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     key={cat.name}
                                     onClick={() => { setActiveTab(cat.name); setCurrentPage(1); }}
-                                    className={`flex items-center justify-center gap-1 px-2 py-2 rounded-md whitespace-nowrap transition-all border ${isActive
+                                    className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md whitespace-nowrap transition-all border ${isActive
                                         ? 'border-green-100 bg-[#f0fdf4] text-[#16a34a] font-semibold shadow-sm'
                                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium'
                                         }`}
