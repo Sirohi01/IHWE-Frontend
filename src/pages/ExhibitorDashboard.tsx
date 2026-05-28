@@ -60,7 +60,8 @@ const TAB_ROUTES: Record<string, string> = {
     'seller-reports': '/exhibitor-dashboard/seller-dashboard/reports',
     documentation: '/exhibitor-dashboard/documentation',
     exhibitions: '/exhibitor-dashboard/exhibitions',
-    epromotion: '/exhibitor-dashboard/epromotion'
+    epromotion: '/exhibitor-dashboard/epromotion',
+    product: '/exhibitor-dashboard/product'
 };
 
 const ROUTE_TABS: Record<string, string> = Object.fromEntries(
