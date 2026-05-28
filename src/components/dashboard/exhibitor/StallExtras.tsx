@@ -436,7 +436,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     )}
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
+                    {totalPages > 0 && (
                         <div className="mt-1 flex justify-center gap-1">
                             <button
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
@@ -473,7 +473,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
 
                         {/* Cart Header */}
-                        <div className="px-4 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+                        <div className="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
                             <div className="flex items-center gap-2">
                                 <ShoppingCart size={16} className="text-[#1e293b]" />
                                 <h3 className="text-[14px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
@@ -562,12 +562,12 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     onClick={handlePay}
                                     disabled={paying || cart.length === 0}
-                                    className="w-full py-1.5 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                    className="w-full py-2.5 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 shadow-sm"
                                 >
                                     {paying ? <Loader2 size={14} className="animate-spin" /> : null}
                                     {paying ? 'Processing...' : 'Proceed to Checkout →'}
                                 </button>
-                                <button className="w-full py-1 bg-white border border-blue-700 text-blue-700 text-[11px] font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                                <button className="w-full py-2 bg-white border border-blue-700 text-blue-700 text-[11px] font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
                                     <FileText size={12} /> Request Custom Item
                                 </button>
                             </div>
@@ -578,34 +578,34 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                     <Phone size={11} />
                                 </div>
                                 <div>
-                                    <h4 className="text-[10px] font-bold text-[#1e293b]">Need Something Else?</h4>
-                                    <p className="text-[9px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
-                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:underline">
+                                    <h4 className="text-[11px] font-bold text-[#1e293b]">Need Something Else?</h4>
+                                    <p className="text-[10px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
+                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 hover:underline">
                                         <Phone size={9} /> Contact Support
                                     </a>
                                 </div>
                             </div>
 
                             <div className="mt-2 flex flex-col items-center justify-center gap-1.5">
-                                <div className="flex items-center gap-1.5 text-[9px] font-medium text-slate-400">
+                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
                                     <Lock size={9} /> All payments are secure and encrypted
                                 </div>
-                                <div className="flex items-center gap-2.5">
+                                <div className="flex items-center gap-3">
                                     {/* Visa */}
-                                    <span className="text-[#1434CB] font-black text-[12px] tracking-tighter italic">VISA</span>
+                                    <span className="text-[#1434CB] font-black text-[15px] tracking-tighter italic">VISA</span>
                                     {/* Mastercard */}
-                                    <div className="relative flex items-center w-[24px] h-3">
-                                        <div className="w-3 h-3 bg-[#EB001B] rounded-full absolute left-0 z-10"></div>
-                                        <div className="w-3 h-3 bg-[#F79E1B] rounded-full absolute left-1.5 z-20 mix-blend-multiply"></div>
+                                    <div className="relative flex items-center w-[30px] h-4">
+                                        <div className="w-4 h-4 bg-[#EB001B] rounded-full absolute left-0 z-10"></div>
+                                        <div className="w-4 h-4 bg-[#F79E1B] rounded-full absolute left-2 z-20 mix-blend-multiply"></div>
                                     </div>
                                     {/* RuPay */}
                                     <div className="flex items-center">
-                                        <span className="text-[#038554] font-black text-[11px] tracking-tight italic">Ru</span>
-                                        <span className="text-[#F27221] font-black text-[11px] tracking-tight italic">Pay</span>
-                                        <span className="text-[7px] -translate-y-1 text-[#F27221]">▶</span>
+                                        <span className="text-[#038554] font-black text-[13px] tracking-tight italic">Ru</span>
+                                        <span className="text-[#F27221] font-black text-[13px] tracking-tight italic">Pay</span>
+                                        <span className="text-[8px] -translate-y-1 text-[#F27221]">▶</span>
                                     </div>
                                     {/* UPI */}
-                                    <span className="text-slate-800 font-black text-[11px] tracking-widest italic ml-1">UPI</span>
+                                    <span className="text-slate-800 font-black text-[13px] tracking-widest italic ml-1">UPI</span>
                                 </div>
                             </div>
                         </div>
