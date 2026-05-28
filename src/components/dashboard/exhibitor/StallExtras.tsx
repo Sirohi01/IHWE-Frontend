@@ -4,7 +4,7 @@ import {
     Gift, ShoppingCart, Package, ExternalLink,
     Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2, Image as ImageIcon,
     LayoutGrid, Armchair, Zap, Megaphone, Monitor, Wrench, Coffee, MoreHorizontal,
-    Search, ChevronDown, Info, Lock, FileText, HelpCircle, Phone
+    Search, ChevronDown, Info, Lock, FileText, HelpCircle, Phone, Users
 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
@@ -42,7 +42,7 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
 // ── shared UI ──────────────────────────────────────────────────────────────────
 function Section({ title, icon: Icon, children }: any) {
     return (
-        <div className="mb-6">
+        <div className="mb-2">
             <div className="flex items-center gap-2 mb-2 pb-1 border-b border-slate-100">
                 <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
                 <Icon size={13} className="text-[#23471d]" />
@@ -85,7 +85,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
     const [activeTab, setActiveTab] = useState('All Items');
     const [sortOption, setSortOption] = useState('Popular');
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 8;
+    const ITEMS_PER_PAGE = 12;
 
     const token = localStorage.getItem('exhibitorToken') || '';
 
@@ -277,13 +277,14 @@ export default function StallExtras({ data }: StallExtrasProps) {
         { name: 'Technology', icon: Monitor },
         { name: 'Utilities', icon: Wrench },
         { name: 'Hospitality', icon: Coffee },
+        { name: 'Manpower', icon: Users },
         { name: 'Others', icon: MoreHorizontal },
     ];
 
     const totalCartQty = cart.reduce((s, c) => s + c.qty, 0);
 
     return (
-        <motion.div key="stall-extras" className="px-4 md:px-8 pt-5 pb-4 bg-slate-50/30" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+        <motion.div key="stall-extras" className="px-4 md:px-8 pt-5 pb-2 bg-slate-50/30" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             {/* Header Area replacing DashboardHero */}
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-1.5">
                 <div>
@@ -379,12 +380,12 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             <p className="text-[12px] text-slate-400 mt-1">Try adjusting your search or filters.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
                             {paginatedItems.map((item: any) => {
                                 const inCart = cart.find(c => c.accessoryId === item._id);
                                 return (
-                                    <div key={item._id} className={`aspect-square bg-white border rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
-                                        <div className="flex-1 min-h-0 bg-slate-50 border-b border-slate-100 flex items-center justify-center p-3 relative group">
+                                    <div key={item._id} className={`bg-white border rounded-md overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
+                                        <div className="h-20 bg-slate-50 border-b border-slate-100 flex items-center justify-center px-1 py-0.5 relative group">
                                             {item.imageUrl ? (
                                                 <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-contain" />
                                             ) : (
@@ -396,35 +397,35 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="p-2.5 flex flex-col">
-                                            <h3 className="text-[12px] font-semibold text-slate-800 line-clamp-1 leading-snug" title={item.name}>{item.name}</h3>
+                                        <div className="p-1.5 flex flex-col">
+                                            <h3 className="text-[11px] font-semibold text-slate-800 line-clamp-1 leading-snug" title={item.name}>{item.name}</h3>
                                             <div className="mt-0.5 flex items-baseline gap-1">
-                                                <span className="text-[13px] font-md font-bold text-slate-900">{fmt(item.price)}</span>
-                                                <span className="text-[9px] font-semibold text-slate-500">/ {item.unit || 'Unit'}</span>
+                                                <span className="text-[12px] font-md font-bold text-slate-900">{fmt(item.price)}</span>
+                                                <span className="text-[8.5px] font-semibold text-slate-500">/ {item.unit || 'Unit'}</span>
                                             </div>
 
-                                            <div className="mt-2 flex items-center gap-2">
+                                            <div className="mt-1.5 relative flex items-center justify-center h-6 w-full">
                                                 {inCart ? (
-                                                    <div className="flex-1 flex items-center justify-between border border-[#16a34a] rounded-lg overflow-hidden h-7 bg-green-50/50">
-                                                        <button onClick={() => updateQty(item._id, -1)} className="w-7 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 transition-colors">
-                                                            <Minus size={12} />
+                                                    <div className="w-32 flex items-center justify-between border border-[#16a34a] rounded-sm overflow-hidden h-6 bg-green-50/50">
+                                                        <button onClick={() => updateQty(item._id, -1)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 transition-colors">
+                                                            <Minus size={10} />
                                                         </button>
-                                                        <span className="text-[12px] font-black text-[#16a34a]">{inCart.qty}</span>
-                                                        <button onClick={() => updateQty(item._id, 1)} disabled={inCart.qty >= (item.availableQty || 0)} className="w-7 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                                                            <Plus size={12} />
+                                                        <span className="text-[11px] font-black text-[#16a34a]">{inCart.qty}</span>
+                                                        <button onClick={() => updateQty(item._id, 1)} disabled={inCart.qty >= (item.availableQty || 0)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                                                            <Plus size={10} />
                                                         </button>
                                                     </div>
                                                 ) : (
                                                     <button
                                                         onClick={() => addToCart(item)}
                                                         disabled={(item.availableQty || 0) <= 0}
-                                                        className="flex-1 h-7 flex items-center justify-center gap-1.5 border border-[#16a34a] text-[#16a34a] text-[11px] font-bold rounded-lg hover:bg-[#16a34a]/5 disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 transition-colors"
+                                                        className="w-32 h-6 flex items-center justify-center gap-1 border border-[#16a34a] text-[#16a34a] text-[10px] font-bold rounded-sm hover:bg-[#16a34a]/5 disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 transition-colors"
                                                     >
-                                                        <ShoppingCart size={12} /> {(item.availableQty || 0) <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                                                        <ShoppingCart size={10} /> {(item.availableQty || 0) <= 0 ? 'Out of Stock' : 'Add to Cart'}
                                                     </button>
                                                 )}
-                                                <button className="w-7 h-7 flex items-center justify-center border border-slate-200 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors flex-shrink-0 tooltip-trigger" title={item.description || "More info"}>
-                                                    <Info size={12} />
+                                                <button className="absolute right-0 w-6 h-6 flex items-center justify-center border border-slate-200 rounded-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors flex-shrink-0 tooltip-trigger" title={item.description || "More info"}>
+                                                    <Info size={11} />
                                                 </button>
                                             </div>
                                         </div>
@@ -436,7 +437,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="mt-2 flex justify-center gap-1">
+                        <div className="mt-1 flex justify-center gap-1">
                             <button
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
@@ -472,7 +473,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
 
                         {/* Cart Header */}
-                        <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-white">
+                        <div className="px-4 py-4 border-b border-slate-100 flex items-center justify-between bg-white">
                             <div className="flex items-center gap-2">
                                 <ShoppingCart size={16} className="text-[#1e293b]" />
                                 <h3 className="text-[14px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
