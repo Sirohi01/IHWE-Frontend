@@ -142,10 +142,10 @@ const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
-
 import { SERVER_URL } from "./lib/api";
 import ProductServices from "./pages/exhibitor/ProductServices";
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
+import MyEvent from "./pages/exhibitor/home/MyEvent";
 
 
 const SitemapRedirect = () => {
@@ -290,6 +290,7 @@ const App = () => {
                     <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                     <Route path="ex-profile" element={<ExProfile />} />
                     <Route path="ex-profile1" element={<Overview />} />
+                    <Route path="my-event" element={<MyEvent />} />
 
                     {/* Seller Specific Routes */}
                     <Route path="become-seller" element={<ExhibitorSellerRegistrationPage />} />

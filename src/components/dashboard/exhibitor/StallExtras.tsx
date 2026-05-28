@@ -4,7 +4,7 @@ import {
     Gift, ShoppingCart, Package, ExternalLink,
     Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2, Image as ImageIcon,
     LayoutGrid, Armchair, Zap, Megaphone, Monitor, Wrench, Coffee, MoreHorizontal,
-    Search, ChevronDown, Info, Lock, FileText, HelpCircle, Phone
+    Search, ChevronDown, Info, Lock, FileText, HelpCircle, Phone, Users
 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
@@ -42,7 +42,7 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
 // ── shared UI ──────────────────────────────────────────────────────────────────
 function Section({ title, icon: Icon, children }: any) {
     return (
-        <div className="mb-6">
+        <div className="mb-2">
             <div className="flex items-center gap-2 mb-2 pb-1 border-b border-slate-100">
                 <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
                 <Icon size={13} className="text-[#23471d]" />
@@ -85,7 +85,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
     const [activeTab, setActiveTab] = useState('All Items');
     const [sortOption, setSortOption] = useState('Popular');
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 8;
+    const ITEMS_PER_PAGE = 12;
 
     const token = localStorage.getItem('exhibitorToken') || '';
 
@@ -277,43 +277,44 @@ export default function StallExtras({ data }: StallExtrasProps) {
         { name: 'Technology', icon: Monitor },
         { name: 'Utilities', icon: Wrench },
         { name: 'Hospitality', icon: Coffee },
+        { name: 'Manpower', icon: Users },
         { name: 'Others', icon: MoreHorizontal },
     ];
 
     const totalCartQty = cart.reduce((s, c) => s + c.qty, 0);
 
     return (
-        <motion.div key="stall-extras" className="px-4 md:px-8 py-6 pb-12 bg-slate-50/30" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+        <motion.div key="stall-extras" className="px-4 md:px-8 pt-5 pb-2 bg-slate-50/30" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             {/* Header Area replacing DashboardHero */}
-            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-1.5">
                 <div>
-                    <h1 className="font-md text-[22px]  font-bold text-[#1e293b] tracking-tight flex items-center gap-2">
+                    <h1 className="font-md text-[18px] font-bold text-[#1e293b] tracking-tight flex items-center gap-2">
                         Add On Services
                     </h1>
-                    <p className="text-[13px] text-slate-500 font-medium mt-0.5">
+                    <p className="text-[12px] text-slate-500 font-medium mt-0.5">
                         Enhance your stall with premium add-on facilities and amenities.
                     </p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-blue-200 text-blue-700 text-[13px] font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
-                        <FileText size={16} /> Service Guidelines
+                <div className="flex items-center gap-3 mt-1 md:mt-0">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-blue-200 text-blue-700 text-[12px] font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                        <FileText size={14} /> Service Guidelines
                     </button>
                     {/* Cart Toggle */}
                     <button
                         onClick={() => setShowCartMobile(true)}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-[#16a34a] text-white text-[13px] font-bold rounded-lg hover:bg-[#15803d] transition-colors shadow-sm relative"
+                        className="flex items-center gap-2 px-4 py-2 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] transition-colors shadow-sm relative"
                     >
-                        <ShoppingCart size={16} /> My Selected Items ({totalCartQty})
+                        <ShoppingCart size={14} /> My Selected Items ({totalCartQty})
                     </button>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
                 {/* ── LEFT COLUMN: MAIN BROWSER ── */}
-                <div className="lg:col-span-8 xl:col-span-9 bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col gap-4 relative z-0">
+                <div className="lg:col-span-8 xl:col-span-9 bg-white rounded-xl shadow-sm border border-slate-100 p-3 flex flex-col gap-1.5 relative z-0">
 
                     {/* Tabs */}
-                    <div className="flex overflow-x-auto pb-2 gap-1.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <div className="flex overflow-x-auto gap-1.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                         {CATEGORIES.map(cat => {
                             const Icon = cat.icon;
                             const isActive = activeTab === cat.name;
@@ -321,13 +322,13 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     key={cat.name}
                                     onClick={() => { setActiveTab(cat.name); setCurrentPage(1); }}
-                                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg whitespace-nowrap transition-all border ${isActive
+                                    className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md whitespace-nowrap transition-all border ${isActive
                                         ? 'border-green-100 bg-[#f0fdf4] text-[#16a34a] font-semibold shadow-sm'
                                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium'
                                         }`}
                                 >
-                                    <Icon size={12} className={isActive ? "text-[#16a34a]" : "text-slate-500"} />
-                                    <span className="text-[11px]">{cat.name}</span>
+                                    <Icon size={11} className={isActive ? "text-[#16a34a]" : "text-slate-500"} />
+                                    <span className="text-[10px]">{cat.name}</span>
                                 </button>
                             );
                         })}
@@ -337,7 +338,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     <div className="flex flex-col sm:flex-row gap-3">
                         <div className="relative w-full sm:w-48">
                             <select
-                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-2.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
+                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-1.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
                                 onChange={(e) => { setActiveTab(e.target.value); setCurrentPage(1); }}
                                 value={activeTab}
                             >
@@ -347,7 +348,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         </div>
                         <div className="relative w-full sm:w-48">
                             <select
-                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-2.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
+                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-1.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
                                 value={sortOption}
                                 onChange={(e) => setSortOption(e.target.value)}
                             >
@@ -364,7 +365,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 placeholder="Search add-on items..."
                                 value={searchQuery}
                                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                                className="w-full bg-white border border-slate-200 text-slate-800 text-[12px] py-2.5 pl-9 pr-3 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 placeholder-slate-400"
+                                className="w-full bg-white border border-slate-200 text-slate-800 text-[12px] py-1.5 pl-9 pr-3 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 placeholder-slate-400"
                             />
                         </div>
                     </div>
@@ -379,12 +380,12 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             <p className="text-[12px] text-slate-400 mt-1">Try adjusting your search or filters.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
                             {paginatedItems.map((item: any) => {
                                 const inCart = cart.find(c => c.accessoryId === item._id);
                                 return (
-                                    <div key={item._id} className={`bg-white border rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
-                                        <div className="h-36 bg-slate-50 border-b border-slate-100 flex items-center justify-center p-4 relative group">
+                                    <div key={item._id} className={`bg-white border rounded-md overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
+                                        <div className="h-20 bg-slate-50 border-b border-slate-100 flex items-center justify-center px-0.5 py-0.5 relative group">
                                             {item.imageUrl ? (
                                                 <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-contain" />
                                             ) : (
@@ -396,35 +397,35 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="p-3 flex flex-col flex-1">
-                                            <h3 className="text-[13px] font-semibold text-slate-800 line-clamp-2 leading-snug">{item.name}</h3>
-                                            <div className="mt-1 flex items-baseline gap-1">
-                                                <span className="text-[14px] font-md font-bold text-slate-900">{fmt(item.price)}</span>
-                                                <span className="text-[10px] font-semibold text-slate-500">/ {item.unit || 'Unit'}</span>
+                                        <div className="p-1.5 flex flex-col">
+                                            <h3 className="text-[11px] font-semibold text-slate-800 line-clamp-1 leading-snug" title={item.name}>{item.name}</h3>
+                                            <div className="mt-0.5 flex items-baseline gap-1">
+                                                <span className="text-[12px] font-md font-bold text-slate-900">{fmt(item.price)}</span>
+                                                <span className="text-[8.5px] font-semibold text-slate-500">/ {item.unit || 'Unit'}</span>
                                             </div>
 
-                                            <div className="mt-auto pt-3 flex items-center gap-2">
+                                            <div className="mt-1.5 relative flex items-center justify-center h-6 w-full">
                                                 {inCart ? (
-                                                    <div className="flex-1 flex items-center justify-between border border-[#16a34a] rounded-lg overflow-hidden h-9 bg-green-50/50">
-                                                        <button onClick={() => updateQty(item._id, -1)} className="w-8 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 transition-colors">
-                                                            <Minus size={14} />
+                                                    <div className="w-32 flex items-center justify-between border border-[#16a34a] rounded-sm overflow-hidden h-6 bg-green-50/50">
+                                                        <button onClick={() => updateQty(item._id, -1)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 transition-colors">
+                                                            <Minus size={10} />
                                                         </button>
-                                                        <span className="text-[13px] font-black text-[#16a34a]">{inCart.qty}</span>
-                                                        <button onClick={() => updateQty(item._id, 1)} disabled={inCart.qty >= (item.availableQty || 0)} className="w-8 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                                                            <Plus size={14} />
+                                                        <span className="text-[11px] font-black text-[#16a34a]">{inCart.qty}</span>
+                                                        <button onClick={() => updateQty(item._id, 1)} disabled={inCart.qty >= (item.availableQty || 0)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                                                            <Plus size={10} />
                                                         </button>
                                                     </div>
                                                 ) : (
                                                     <button
                                                         onClick={() => addToCart(item)}
                                                         disabled={(item.availableQty || 0) <= 0}
-                                                        className="flex-1 h-9 flex items-center justify-center gap-1.5 border border-[#16a34a] text-[#16a34a] text-[12px] font-bold rounded-lg hover:bg-[#16a34a]/5 disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 transition-colors"
+                                                        className="w-32 h-6 flex items-center justify-center gap-1 border border-[#16a34a] text-[#16a34a] text-[10px] font-bold rounded-sm hover:bg-[#16a34a]/5 disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 transition-colors"
                                                     >
-                                                        <ShoppingCart size={14} /> {(item.availableQty || 0) <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                                                        <ShoppingCart size={10} /> {(item.availableQty || 0) <= 0 ? 'Out of Stock' : 'Add to Cart'}
                                                     </button>
                                                 )}
-                                                <button className="w-9 h-9 flex items-center justify-center border border-slate-200 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors flex-shrink-0 tooltip-trigger" title={item.description || "More info"}>
-                                                    <Info size={14} />
+                                                <button className="absolute right-0 w-6 h-6 flex items-center justify-center border border-slate-200 rounded-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors flex-shrink-0 tooltip-trigger" title={item.description || "More info"}>
+                                                    <Info size={11} />
                                                 </button>
                                             </div>
                                         </div>
@@ -435,12 +436,12 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     )}
 
                     {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className="mt-4 flex justify-center gap-1">
+                    {totalPages > 0 && (
+                        <div className="mt-1 flex justify-center gap-1">
                             <button
                                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                 disabled={currentPage === 1}
-                                className="w-8 h-8 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50"
+                                className="w-6 h-6 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50 text-[10px]"
                             >
                                 &lt;
                             </button>
@@ -448,7 +449,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     key={i}
                                     onClick={() => setCurrentPage(i + 1)}
-                                    className={`w-8 h-8 flex items-center justify-center rounded-md text-[12px] font-bold ${currentPage === i + 1
+                                    className={`w-6 h-6 flex items-center justify-center rounded-md text-[11px] font-bold ${currentPage === i + 1
                                         ? 'bg-[#16a34a] text-white border border-[#16a34a]'
                                         : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                                         }`}
@@ -459,7 +460,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             <button
                                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                 disabled={currentPage === totalPages}
-                                className="w-8 h-8 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50"
+                                className="w-6 h-6 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50 text-[10px]"
                             >
                                 &gt;
                             </button>
@@ -469,13 +470,13 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
                 {/* ── RIGHT COLUMN: CART SIDEBAR ── */}
                 <div className={`lg:col-span-4 xl:col-span-3 ${showCartMobile ? 'fixed inset-0 z-50 bg-black/50 flex justify-end' : 'hidden lg:block'} sticky top-3`}>
-                    <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col h-full lg:h-[calc(100vh-24px)] w-full sm:w-96 lg:w-full lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
+                    <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
 
                         {/* Cart Header */}
-                        <div className="px-5 py-6 border-b border-slate-100 flex items-center justify-between bg-white">
+                        <div className="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
                             <div className="flex items-center gap-2">
                                 <ShoppingCart size={16} className="text-[#1e293b]" />
-                                <h3 className="text-[14px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
+                                <h3 className="text-[13px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
                             </div>
                             {showCartMobile && (
                                 <button onClick={() => setShowCartMobile(false)} className="lg:hidden text-slate-400 hover:text-slate-600">
@@ -485,14 +486,14 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         </div>
 
                         {/* Cart Items List */}
-                        <div className="flex-1 overflow-y-auto px-2.5 py-3 bg-slate-50">
+                        <div className="overflow-y-auto px-2.5 py-1.5 bg-slate-50 max-h-[250px] min-h-[250px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
                                     <ShoppingCart size={40} className="text-slate-200" />
                                     <p className="text-[12px]">Your cart is empty</p>
                                 </div>
                             ) : (
-                                <div className="space-y-1.5">
+                                <div className="space-y-1">
                                     {cart.map(item => {
                                         const catalogItem = catalog.find(c => c._id === item.accessoryId);
                                         const finalImageUrl = item.imageUrl || catalogItem?.imageUrl;
@@ -500,34 +501,34 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                         const itemGst = (itemBase * item.gstPercent) / 100;
                                         const itemTotal = itemBase + itemGst;
                                         return (
-                                            <div key={item.accessoryId} className="relative bg-white p-2 border border-slate-100 rounded-xl shadow-sm flex items-start gap-2">
-                                                <div className="w-10 h-10 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
+                                            <div key={item.accessoryId} className="relative bg-white p-1 border border-slate-100 rounded-xl shadow-sm flex items-start gap-1.5">
+                                                <div className="w-7 h-7 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
                                                     {finalImageUrl ? (
                                                         <img src={finalImageUrl.startsWith('http') ? finalImageUrl : `${SERVER_URL}${finalImageUrl}`} alt={item.name} className="w-full h-full object-cover rounded-md" />
                                                     ) : (
-                                                        <ImageIcon size={16} className="text-slate-300" />
+                                                        <ImageIcon size={14} className="text-slate-300" />
                                                     )}
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <div className="flex justify-between items-start pr-5">
-                                                        <h4 className="text-[11.5px] font-bold text-slate-800 line-clamp-1">{item.name}</h4>
-                                                        <p className="text-[11px] font-semibold text-[#16a34a] whitespace-nowrap">{fmt(item.unitPrice)}</p>
+                                                    <div className="flex justify-between items-start pr-4">
+                                                        <h4 className="text-[10px] font-bold text-slate-800 line-clamp-1">{item.name}</h4>
+                                                        <p className="text-[9px] font-semibold text-[#16a34a] whitespace-nowrap">{fmt(item.unitPrice)}</p>
                                                     </div>
-                                                    <div className="flex items-center justify-between mt-1">
+                                                    <div className="flex items-center justify-between">
                                                         <div className="flex items-center border border-slate-200 rounded-md">
-                                                            <button onClick={() => updateQty(item.accessoryId, -1)} className="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50">
-                                                                <Minus size={10} />
+                                                            <button onClick={() => updateQty(item.accessoryId, -1)} className="w-5 h-5 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+                                                                <Minus size={9} />
                                                             </button>
-                                                            <span className="w-6 text-center text-[11px] font-black">{item.qty}</span>
-                                                            <button onClick={() => updateQty(item.accessoryId, 1)} className="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50">
-                                                                <Plus size={10} />
+                                                            <span className="w-5 text-center text-[10px] font-black">{item.qty}</span>
+                                                            <button onClick={() => updateQty(item.accessoryId, 1)} className="w-5 h-5 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+                                                                <Plus size={9} />
                                                             </button>
                                                         </div>
-                                                        <span className="text-[12px] font-black text-slate-800">{fmt(itemTotal)}</span>
+                                                        <span className="text-[11px] font-black text-slate-800">{fmt(itemTotal)}</span>
                                                     </div>
                                                 </div>
-                                                <button onClick={() => removeFromCart(item.accessoryId)} className="absolute top-3 right-3 text-slate-300 hover:text-red-500 transition-colors bg-white">
-                                                    <Trash2 size={13} />
+                                                <button onClick={() => removeFromCart(item.accessoryId)} className="absolute top-2 right-2 text-slate-300 hover:text-red-500 transition-colors bg-white">
+                                                    <Trash2 size={11} />
                                                 </button>
                                             </div>
                                         );
@@ -537,21 +538,21 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         </div>
 
                         {/* Cart Summary */}
-                        <div className="px-4 py-3 border-t border-slate-100 bg-white">
-                            <div className="space-y-0.5 mb-2">
-                                <div className="flex justify-between text-[13px]">
+                        <div className="px-3 py-2.5 border-t border-slate-100 bg-white">
+                            <div className="space-y-0.5 mb-1.5">
+                                <div className="flex justify-between text-[11px]">
                                     <span className="text-slate-500">Subtotal</span>
                                     <span className="font-semibold font-md text-slate-800">{fmt(cartBaseTotal)}</span>
                                 </div>
-                                <div className="flex justify-between text-[13px]">
+                                <div className="flex justify-between text-[11px]">
                                     <span className="text-slate-500">GST</span>
                                     <span className="font-semibold font-md text-slate-800">{fmt(cartGstTotal)}</span>
                                 </div>
-                                <div className="flex justify-between text-[13px]">
+                                <div className="flex justify-between text-[11px]">
                                     <span className="text-slate-500">Gateway Fee (2.5%)</span>
                                     <span className="font-semibold font-md text-slate-800">{fmt(gatewayFee)}</span>
                                 </div>
-                                <div className="flex justify-between text-[15px] pt-1.5 border-t border-slate-100 mt-1.5">
+                                <div className="flex justify-between text-[13px] pt-1 border-t border-slate-100 mt-1">
                                     <span className="font-black text-[#1e293b]">Total</span>
                                     <span className="font-semibold font-md text-[#16a34a]">{fmt(cartTotalWithFee)}</span>
                                 </div>
@@ -561,37 +562,37 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     onClick={handlePay}
                                     disabled={paying || cart.length === 0}
-                                    className="w-full py-2 bg-[#16a34a] text-white text-[13px] font-bold rounded-lg hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                    className="w-full py-2.5 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 shadow-sm"
                                 >
-                                    {paying ? <Loader2 size={16} className="animate-spin" /> : null}
+                                    {paying ? <Loader2 size={14} className="animate-spin" /> : null}
                                     {paying ? 'Processing...' : 'Proceed to Checkout →'}
                                 </button>
-                                <button className="w-full py-1.5 bg-white border border-blue-700 text-blue-700 text-[12px] font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-                                    <FileText size={14} /> Request Custom Item
+                                <button className="w-full py-2 bg-white border border-blue-700 text-blue-700 text-[11px] font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                                    <FileText size={12} /> Request Custom Item
                                 </button>
                             </div>
 
                             {/* Help / Support Block */}
-                            <div className="mt-2 p-2 bg-[#f8fafc] rounded-xl border border-slate-200 flex items-start gap-2.5">
-                                <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-700">
-                                    <Phone size={13} />
+                            <div className="mt-2 p-1.5 bg-[#f8fafc] rounded-xl border border-slate-200 flex items-start gap-2">
+                                <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-700">
+                                    <Phone size={11} />
                                 </div>
                                 <div>
-                                    <h4 className="text-[11.5px] font-bold text-[#1e293b]">Need Something Else?</h4>
-                                    <p className="text-[10px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
-                                    <a href="tel:+919654900525" className="mt-1 inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 hover:underline">
-                                        <Phone size={11} /> Contact Support
+                                    <h4 className="text-[10px] font-bold text-[#1e293b]">Need Something Else?</h4>
+                                    <p className="text-[9px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
+                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:underline">
+                                        <Phone size={9} /> Contact Support
                                     </a>
                                 </div>
                             </div>
 
                             <div className="mt-2 flex flex-col items-center justify-center gap-1.5">
-                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
-                                    <Lock size={10} /> All payments are secure and encrypted
+                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
+                                    <Lock size={9} /> All payments are secure and encrypted
                                 </div>
                                 <div className="flex items-center gap-3">
                                     {/* Visa */}
-                                    <span className="text-[#1434CB] font-black text-[14px] tracking-tighter italic">VISA</span>
+                                    <span className="text-[#1434CB] font-black text-[15px] tracking-tighter italic">VISA</span>
                                     {/* Mastercard */}
                                     <div className="relative flex items-center w-[30px] h-4">
                                         <div className="w-4 h-4 bg-[#EB001B] rounded-full absolute left-0 z-10"></div>
