@@ -486,14 +486,14 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         </div>
 
                         {/* Cart Items List */}
-                        <div className="overflow-y-auto px-2.5 py-3 bg-slate-50 max-h-[250px] min-h-[250px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
+                        <div className="overflow-y-auto px-2.5 py-1.5 bg-slate-50 max-h-[250px] min-h-[250px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
                                     <ShoppingCart size={40} className="text-slate-200" />
                                     <p className="text-[12px]">Your cart is empty</p>
                                 </div>
                             ) : (
-                                <div className="space-y-1.5">
+                                <div className="space-y-1">
                                     {cart.map(item => {
                                         const catalogItem = catalog.find(c => c._id === item.accessoryId);
                                         const finalImageUrl = item.imageUrl || catalogItem?.imageUrl;
@@ -501,8 +501,8 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                         const itemGst = (itemBase * item.gstPercent) / 100;
                                         const itemTotal = itemBase + itemGst;
                                         return (
-                                            <div key={item.accessoryId} className="relative bg-white p-1.5 border border-slate-100 rounded-xl shadow-sm flex items-start gap-1.5">
-                                                <div className="w-8 h-8 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
+                                            <div key={item.accessoryId} className="relative bg-white p-1 border border-slate-100 rounded-xl shadow-sm flex items-start gap-1.5">
+                                                <div className="w-7 h-7 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
                                                     {finalImageUrl ? (
                                                         <img src={finalImageUrl.startsWith('http') ? finalImageUrl : `${SERVER_URL}${finalImageUrl}`} alt={item.name} className="w-full h-full object-cover rounded-md" />
                                                     ) : (
@@ -514,7 +514,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                         <h4 className="text-[10px] font-bold text-slate-800 line-clamp-1">{item.name}</h4>
                                                         <p className="text-[9px] font-semibold text-[#16a34a] whitespace-nowrap">{fmt(item.unitPrice)}</p>
                                                     </div>
-                                                    <div className="flex items-center justify-between mt-0.5">
+                                                    <div className="flex items-center justify-between">
                                                         <div className="flex items-center border border-slate-200 rounded-md">
                                                             <button onClick={() => updateQty(item.accessoryId, -1)} className="w-5 h-5 flex items-center justify-center text-slate-500 hover:bg-slate-50">
                                                                 <Minus size={9} />
