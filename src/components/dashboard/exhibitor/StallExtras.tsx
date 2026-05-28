@@ -322,7 +322,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     key={cat.name}
                                     onClick={() => { setActiveTab(cat.name); setCurrentPage(1); }}
-                                    className={`flex items-center justify-center gap-1 px-2 py-1 rounded-md whitespace-nowrap transition-all border ${isActive
+                                    className={`flex items-center justify-center gap-1 px-2 py-2 rounded-md whitespace-nowrap transition-all border ${isActive
                                         ? 'border-green-100 bg-[#f0fdf4] text-[#16a34a] font-semibold shadow-sm'
                                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium'
                                         }`}
@@ -476,7 +476,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         <div className="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
                             <div className="flex items-center gap-2">
                                 <ShoppingCart size={16} className="text-[#1e293b]" />
-                                <h3 className="text-[14px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
+                                <h3 className="text-[13px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
                             </div>
                             {showCartMobile && (
                                 <button onClick={() => setShowCartMobile(false)} className="lg:hidden text-slate-400 hover:text-slate-600">
@@ -578,16 +578,16 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                     <Phone size={11} />
                                 </div>
                                 <div>
-                                    <h4 className="text-[11px] font-bold text-[#1e293b]">Need Something Else?</h4>
-                                    <p className="text-[10px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
-                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 hover:underline">
+                                    <h4 className="text-[10px] font-bold text-[#1e293b]">Need Something Else?</h4>
+                                    <p className="text-[9px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
+                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:underline">
                                         <Phone size={9} /> Contact Support
                                     </a>
                                 </div>
                             </div>
 
                             <div className="mt-2 flex flex-col items-center justify-center gap-1.5">
-                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
+                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
                                     <Lock size={9} /> All payments are secure and encrypted
                                 </div>
                                 <div className="flex items-center gap-3">
