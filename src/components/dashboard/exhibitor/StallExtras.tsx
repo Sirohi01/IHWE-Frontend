@@ -587,7 +587,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             </div>
 
                             <div className="mt-2 flex flex-col items-center justify-center gap-1.5">
-                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
+                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
                                     <Lock size={9} /> All payments are secure and encrypted
                                 </div>
                                 <div className="flex items-center gap-3">
