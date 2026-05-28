@@ -253,7 +253,7 @@ export default function ExhibitorSidebar({
     })();
 
     return (
-        <aside className={cx("fixed top-0 left-0 bottom-0 z-50 flex flex-col transition-all duration-300 overflow-hidden print:hidden", sidebarOpen ? "w-64" : "w-[72px]")}>
+        <aside className={cx("fixed top-0 left-0 bottom-0 z-50 flex flex-col transition-all duration-300 overflow-hidden print:hidden", sidebarOpen ? "w-56" : "w-[72px]")}>
             {/* Backgrounds */}
             <div className="absolute inset-0 bg-[#061d49]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_88%,rgba(21,220,173,0.36),transparent_26%),radial-gradient(circle_at_78%_8%,rgba(37,112,255,0.22),transparent_24%),linear-gradient(180deg,#08204d_0%,#031b47_58%,#06306b_100%)]" />

@@ -44,7 +44,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
 
                 <main
                     className={`flex-1 transition-all duration-300 overflow-hidden print:overflow-visible print:p-0
-                        ${sidebarOpen ? 'lg:ml-64 print:ml-0' : 'lg:ml-14 print:ml-0'}
+                        ${sidebarOpen ? 'lg:ml-56 print:ml-0' : 'lg:ml-14 print:ml-0'}
                     `}
                 >
                     <div className="w-full bg-white">

@@ -76,10 +76,10 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     };
 
     return (
-        <div className={`fixed top-0 right-0 z-[100] h-[64px] bg-gradient-to-r from-[#051c47] via-[#082b6b] to-[#051c47] border-b border-blue-900/50 shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-between px-6 print:hidden transition-all duration-300 ${sidebarOpen ? 'left-64' : 'left-[72px]'}`}>
+        <div className={`fixed top-0 right-0 z-[100] h-[64px] bg-gradient-to-r from-[#051c47] via-[#082b6b] to-[#051c47] border-b border-blue-900/50 shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-between px-6 print:hidden transition-all duration-300 ${sidebarOpen ? 'left-56' : 'left-[72px]'}`}>
             {/* Left */}
             <div className="flex items-center gap-3">
-                <h2 className="text-white text-lg font-semibold tracking-tight">Exhibitor Dashboard</h2>
+                <h2 className="text-white text-lg uppercase font-semibold tracking-tight">Exhibitor Interface</h2>
 
             </div>
 
@@ -196,7 +196,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                     </div>
                                     <div className="p-1">
                                         <button
-                                            onClick={() => { navigate('/exhibitor-dashboard/ex-profile'); setShowUserMenu(false); }}
+                                            onClick={() => { navigate('/exhibitor-dashboard/ex-profile1'); setShowUserMenu(false); }}
                                             className="w-full flex items-center gap-3 px-3 py-2.5 text-[11px] font-bold text-slate-600 hover:text-[#23471d] hover:bg-emerald-50 rounded-sm transition-all"
                                         >
                                             <User size={14} />

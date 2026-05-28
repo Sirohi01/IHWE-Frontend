@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     Gift, ShoppingCart, Package, ExternalLink,
-    Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2, Image as ImageIcon
+    Plus, Minus, Trash2, CreditCard, CheckCircle2, X, Loader2, Image as ImageIcon,
+    LayoutGrid, Armchair, Zap, Megaphone, Monitor, Wrench, Coffee, MoreHorizontal,
+    Search, ChevronDown, Info, Lock, FileText, HelpCircle, Phone, Users
 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
@@ -40,7 +42,7 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
 // ── shared UI ──────────────────────────────────────────────────────────────────
 function Section({ title, icon: Icon, children }: any) {
     return (
-        <div className="mb-6">
+        <div className="mb-2">
             <div className="flex items-center gap-2 mb-2 pb-1 border-b border-slate-100">
                 <div className="w-1.5 h-4 bg-[#23471d] rounded-full" />
                 <Icon size={13} className="text-[#23471d]" />
@@ -59,7 +61,6 @@ const STATUS: Record<string, string> = {
     pending: 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
-// ── Cart item type ─────────────────────────────────────────────────────────────
 interface CartItem {
     accessoryId: string;
     name: string;
@@ -67,6 +68,7 @@ interface CartItem {
     qty: number;
     unitPrice: number;
     gstPercent: number;
+    imageUrl?: string;
 }
 
 export default function StallExtras({ data }: StallExtrasProps) {
@@ -75,8 +77,15 @@ export default function StallExtras({ data }: StallExtrasProps) {
     const [loadingCatalog, setLoadingCatalog] = useState(true);
     const [loadingOrders, setLoadingOrders] = useState(true);
     const [cart, setCart] = useState<CartItem[]>([]);
-    const [showCart, setShowCart] = useState(false);
+    const [showCartMobile, setShowCartMobile] = useState(false);
     const [paying, setPaying] = useState(false);
+
+    // New UI states
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeTab, setActiveTab] = useState('All Items');
+    const [sortOption, setSortOption] = useState('Popular');
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 12;
 
     const token = localStorage.getItem('exhibitorToken') || '';
 
@@ -147,10 +156,9 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
     const removeFromCart = (id: string) => setCart(prev => prev.filter(c => c.accessoryId !== id));
 
-    const cartTotal = cart.reduce((sum, c) => {
-        const base = c.unitPrice * c.qty;
-        return sum + base + (base * c.gstPercent) / 100;
-    }, 0);
+    const cartBaseTotal = cart.reduce((sum, c) => sum + (c.unitPrice * c.qty), 0);
+    const cartGstTotal = cart.reduce((sum, c) => sum + ((c.unitPrice * c.qty * c.gstPercent) / 100), 0);
+    const cartTotal = cartBaseTotal + cartGstTotal;
 
     // 2.5% Razorpay gateway fee added on top for online payment
     const GATEWAY_FEE_PCT = 2.5;
@@ -219,7 +227,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         if (verifyRes.success) {
                             toast.success('Payment successful! Receipt sent to your email.');
                             setCart([]);
-                            setShowCart(false);
+                            setShowCartMobile(false);
                             loadOrders();
                             loadCatalog();
                         } else {
@@ -246,310 +254,466 @@ export default function StallExtras({ data }: StallExtrasProps) {
     const complimentaryItems = catalog.filter(i => i.type === 'complimentary' && i.isActive);
     const totalSpent = orders.filter(o => o.paymentStatus === 'paid').reduce((s, o) => s + (o.grandTotal || 0), 0);
 
+    // Filter, Sort, Paginate
+    let filteredItems = purchasableItems;
+    if (activeTab !== 'All Items') {
+        filteredItems = filteredItems.filter(i => i.category === activeTab);
+    }
+    if (searchQuery) {
+        filteredItems = filteredItems.filter(i => i.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
+    if (sortOption === 'Price: Low to High') filteredItems.sort((a, b) => a.price - b.price);
+    if (sortOption === 'Price: High to Low') filteredItems.sort((a, b) => b.price - a.price);
+
+    const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1;
+    const paginatedItems = filteredItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+    const CATEGORIES = [
+        { name: 'All Items', icon: LayoutGrid },
+        { name: 'Furniture', icon: Armchair },
+        { name: 'Electrical', icon: Zap },
+        { name: 'Branding', icon: Megaphone },
+        { name: 'Technology', icon: Monitor },
+        { name: 'Utilities', icon: Wrench },
+        { name: 'Hospitality', icon: Coffee },
+        { name: 'Manpower', icon: Users },
+        { name: 'Others', icon: MoreHorizontal },
+    ];
+
+    const totalCartQty = cart.reduce((s, c) => s + c.qty, 0);
+
     return (
-        <motion.div key="stall-extras" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="bg-white shadow-md p-4">
-
-                {/* Header */}
-                <div className="pb-3 border-b border-gray-100 mb-4 flex items-start justify-between">
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-900 uppercase tracking-tight">Product and Services</h1>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                            Complimentary inclusions & purchasable extras · {data?.registrationId}
-                        </p>
-                    </div>
-                    {cart.length > 0 && (
-                        <button onClick={() => setShowCart(true)}
-                            className="relative flex items-center gap-2 px-4 py-2 bg-[#23471d] text-white text-[11px] font-black uppercase tracking-wider hover:bg-[#1a3516] transition-all">
-                            <ShoppingCart size={13} />
-                            Cart ({cart.length})
-                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#d26019] rounded-full text-[9px] font-black flex items-center justify-center">
-                                {cart.reduce((s, c) => s + c.qty, 0)}
-                            </span>
-                        </button>
-                    )}
+        <motion.div key="stall-extras" className="px-4 md:px-8 pt-5 pb-2 bg-slate-50/30" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            {/* Header Area replacing DashboardHero */}
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-1.5">
+                <div>
+                    <h1 className="font-md text-[18px] font-bold text-[#1e293b] tracking-tight flex items-center gap-2">
+                        Add On Services
+                    </h1>
+                    <p className="text-[12px] text-slate-500 font-medium mt-0.5">
+                        Enhance your stall with premium add-on facilities and amenities.
+                    </p>
                 </div>
-
-                {/* Stats using InfoGrid */}
-                <div className="mb-5">
-                    <InfoGrid rows={[
-                        ['Free Inclusions', complimentaryItems.length],
-                        ['My Orders', orders.length],
-                        ['Total Spent', fmt(totalSpent)],
-                        ['Stall ID', data?.registrationId || '—'],
-                    ]} />
+                <div className="flex items-center gap-3 mt-1 md:mt-0">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-blue-200 text-blue-700 text-[12px] font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
+                        <FileText size={14} /> Service Guidelines
+                    </button>
+                    {/* Cart Toggle */}
+                    <button
+                        onClick={() => setShowCartMobile(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] transition-colors shadow-sm relative"
+                    >
+                        <ShoppingCart size={14} /> My Selected Items ({totalCartQty})
+                    </button>
                 </div>
-
-                {/* Complimentary */}
-                <Section title="Complimentary Inclusions (Free with your stall)" icon={Gift}>
-                    {loadingCatalog ? (
-                        <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
-                    ) : complimentaryItems.length === 0 ? (
-                        <div className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase border border-slate-200 rounded-[2px]">
-                            No complimentary items configured yet
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {complimentaryItems.map((item: any) => (
-                                <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
-                                    <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                        {item.imageUrl ? (
-                                            <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <Gift size={14} className="text-emerald-400" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
-                                        {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
-                                        {item.dimensionUnit && (item.length || item.width || item.height) && (
-                                            <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
-                                                Size: {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
-                                            </p>
-                                        )}
-                                        <div className="flex items-center gap-2 mt-1.5">
-                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
-                                            <span className="text-[10px] text-slate-500">Qty: {item.includedQty} {item.unit}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </Section>
-
-                {/* Purchasable Extras */}
-                <Section title="Purchasable Extras" icon={ShoppingCart}>
-                    {loadingCatalog ? (
-                        <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
-                    ) : purchasableItems.length === 0 ? (
-                        <div className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase border border-slate-200 rounded-[2px]">
-                            No extras available right now
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {purchasableItems.map((item: any) => {
-                                const gstAmt = (item.price * (item.gstPercent || 18)) / 100;
-                                const totalPerUnit = item.price + gstAmt;
-                                const inCart = cart.find(c => c.accessoryId === item._id);
-                                return (
-                                    <div key={item._id} className={`border rounded-[2px] p-3 flex flex-col gap-2 transition-all ${inCart ? 'border-[#23471d] bg-green-50/30' : 'border-slate-200 bg-white hover:border-slate-300'}`}>
-                                        <div className="flex gap-3">
-                                            <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                                {item.imageUrl ? (
-                                                    <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <ImageIcon size={18} className="text-slate-200" />
-                                                )}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-[12px] font-bold text-slate-800 line-clamp-1">{item.name}</p>
-                                                {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
-                                                {item.dimensionUnit && (item.length || item.width || item.height) && (
-                                                    <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
-                                                        {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
-                                                    </p>
-                                                )}
-                                                {item.category && (
-                                                    <span className="inline-block mt-1 px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-bold uppercase rounded-full">{item.category}</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-100">
-                                            <div>
-                                                <p className="text-[10px] text-slate-400">Base: {fmt(item.price)}</p>
-                                                <p className="text-[13px] font-black text-[#23471d]">{fmt(totalPerUnit)} <span className="text-[9px] font-bold text-slate-400">/ {item.unit}</span></p>
-                                                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Stock Left: {item.availableQty || 0}</p>
-                                            </div>
-                                            {inCart ? (
-                                                <div className="flex items-center gap-1">
-                                                    <button onClick={() => updateQty(item._id, -1)}
-                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100 transition-colors">
-                                                        <Minus size={10} />
-                                                    </button>
-                                                    <span className="w-7 text-center text-[12px] font-black text-slate-800">{inCart.qty}</span>
-                                                    <button onClick={() => updateQty(item._id, 1)}
-                                                        disabled={inCart.qty >= (item.availableQty || 0)}
-                                                        className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
-                                                        <Plus size={10} />
-                                                    </button>
-                                                    <button onClick={() => removeFromCart(item._id)}
-                                                        className="w-6 h-6 flex items-center justify-center text-red-400 hover:text-red-600 ml-1 transition-colors">
-                                                        <Trash2 size={11} />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <button onClick={() => addToCart(item)}
-                                                    disabled={(item.availableQty || 0) <= 0}
-                                                    className="flex items-center gap-1 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-black uppercase rounded-[2px] hover:bg-[#1a3516] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all">
-                                                    {(item.availableQty || 0) <= 0 ? 'Out of Stock' : (
-                                                        <><Plus size={11} /> Add</>
-                                                    )}
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-
-                    {/* Floating cart bar */}
-                    {cart.length > 0 && (
-                        <div className="mt-4 flex items-center justify-between p-3 bg-[#23471d] text-white rounded-[2px]">
-                            <div>
-                                <p className="text-[10px] font-bold uppercase tracking-wider opacity-70">
-                                    {cart.reduce((s, c) => s + c.qty, 0)} item(s) in cart
-                                </p>
-                                <p className="text-base font-black">{fmt(cartTotalWithFee)} <span className="text-[10px] font-normal opacity-70">incl. 2.5% fee</span></p>
-                            </div>
-                            <button onClick={() => setShowCart(true)}
-                                className="flex items-center gap-2 px-4 py-2 bg-[#d26019] text-white text-[11px] font-black uppercase hover:bg-[#b8521a] transition-all">
-                                <CreditCard size={13} /> Proceed to Pay
-                            </button>
-                        </div>
-                    )}
-                </Section>
-
-                {/* My Orders using InfoGrid for table */}
-                <Section title="My Purchase Orders" icon={Package}>
-                    {loadingOrders ? (
-                        <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
-                    ) : orders.length === 0 ? (
-                        <div className="py-8 text-center border border-slate-200 rounded-[2px]">
-                            <Package className="w-10 h-10 text-slate-200 mx-auto mb-2" />
-                            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">No orders yet</p>
-                        </div>
-                    ) : (
-                        <div className="border border-slate-200 rounded-md overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm">
-                                    <thead>
-                                        <tr className="bg-[#23471d] text-white">
-                                            {['Order No', 'Items', 'Total', 'Status', 'Txn ID', 'Date', 'Receipt'].map(h => (
-                                                <th key={h} className="py-2.5 px-4 text-[10px] font-black uppercase tracking-wider text-left whitespace-nowrap">{h}</th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-100">
-                                        {orders.map((order: any, i: number) => (
-                                            <tr key={order._id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}>
-                                                <td className="py-2.5 px-4 text-[11px] font-bold text-[#23471d] font-mono whitespace-nowrap">{order.orderNo}</td>
-                                                <td className="py-2.5 px-4">
-                                                    {order.items?.map((item: any, j: number) => (
-                                                        <div key={j} className="flex items-center gap-1">
-                                                            <CheckCircle2 size={9} className="text-emerald-500 flex-shrink-0" />
-                                                            <span className="text-[10px] text-slate-600">{item.qty}× {item.name}</span>
-                                                        </div>
-                                                    ))}
-                                                </td>
-                                                <td className="py-2.5 px-4 text-[11px] font-black text-slate-800 whitespace-nowrap">{fmt(order.grandTotal)}</td>
-                                                <td className="py-2.5 px-4 whitespace-nowrap">
-                                                    <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded-full border ${STATUS[order.paymentStatus] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
-                                                        {order.paymentStatus}
-                                                    </span>
-                                                </td>
-                                                <td className="py-2.5 px-4 text-[10px] text-slate-500 font-mono whitespace-nowrap">{order.transactionId || '—'}</td>
-                                                <td className="py-2.5 px-4 text-[10px] text-slate-500 whitespace-nowrap">
-                                                    {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                                </td>
-                                                <td className="py-2.5 px-4 whitespace-nowrap">
-                                                    {order.receiptUrl ? (
-                                                        <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer"
-                                                            className="flex items-center gap-1 text-[10px] font-bold text-[#23471d] hover:underline">
-                                                            <ExternalLink size={11} /> PDF
-                                                        </a>
-                                                    ) : <span className="text-[10px] text-slate-400">—</span>}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    )}
-                </Section>
             </div>
 
-            {/* ── Cart / Checkout Modal ─────────────────────────────────────────── */}
-            {showCart && (
-                <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-                    <div className="bg-white w-full sm:max-w-md max-h-[90vh] overflow-y-auto shadow-2xl rounded-t-2xl sm:rounded-[2px]">
-                        <div className="flex items-center justify-between px-5 py-3 bg-[#23471d] sticky top-0">
-                            <div className="flex items-center gap-2">
-                                <ShoppingCart size={14} className="text-white" />
-                                <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Your Cart</h3>
-                            </div>
-                            <button onClick={() => setShowCart(false)} className="text-white/70 hover:text-white"><X size={16} /></button>
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+                {/* ── LEFT COLUMN: MAIN BROWSER ── */}
+                <div className="lg:col-span-8 xl:col-span-9 bg-white rounded-xl shadow-sm border border-slate-100 p-3 flex flex-col gap-1.5 relative z-0">
 
-                        <div className="p-4 space-y-3">
-                            {cart.map(item => {
-                                const base = item.unitPrice * item.qty;
-                                const gst = (base * item.gstPercent) / 100;
+                    {/* Tabs */}
+                    <div className="flex overflow-x-auto gap-1.5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {CATEGORIES.map(cat => {
+                            const Icon = cat.icon;
+                            const isActive = activeTab === cat.name;
+                            return (
+                                <button
+                                    key={cat.name}
+                                    onClick={() => { setActiveTab(cat.name); setCurrentPage(1); }}
+                                    className={`flex items-center justify-center gap-1 px-2 py-1.5 rounded-md whitespace-nowrap transition-all border ${isActive
+                                        ? 'border-green-100 bg-[#f0fdf4] text-[#16a34a] font-semibold shadow-sm'
+                                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium'
+                                        }`}
+                                >
+                                    <Icon size={11} className={isActive ? "text-[#16a34a]" : "text-slate-500"} />
+                                    <span className="text-[10px]">{cat.name}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Filters Row */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="relative w-full sm:w-48">
+                            <select
+                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-1.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
+                                onChange={(e) => { setActiveTab(e.target.value); setCurrentPage(1); }}
+                                value={activeTab}
+                            >
+                                {CATEGORIES.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                            </select>
+                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        </div>
+                        <div className="relative w-full sm:w-48">
+                            <select
+                                className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-[12px] font-semibold py-1.5 pl-3 pr-8 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 cursor-pointer"
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                            >
+                                <option>Popular</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                            </select>
+                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        </div>
+                        <div className="relative flex-1">
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <input
+                                type="text"
+                                placeholder="Search add-on items..."
+                                value={searchQuery}
+                                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                                className="w-full bg-white border border-slate-200 text-slate-800 text-[12px] py-1.5 pl-9 pr-3 rounded-lg outline-none focus:border-[#16a34a] focus:ring-1 focus:ring-[#16a34a]/20 placeholder-slate-400"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Products Grid */}
+                    {loadingCatalog ? (
+                        <div className="py-20 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#16a34a]" /></div>
+                    ) : paginatedItems.length === 0 ? (
+                        <div className="py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-xl">
+                            <Package className="w-12 h-12 text-slate-300 mb-3" />
+                            <p className="text-[14px] text-slate-500 font-semibold">No items found</p>
+                            <p className="text-[12px] text-slate-400 mt-1">Try adjusting your search or filters.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2">
+                            {paginatedItems.map((item: any) => {
+                                const inCart = cart.find(c => c.accessoryId === item._id);
                                 return (
-                                    <div key={item.accessoryId} className="flex items-center gap-3 p-3 border border-slate-200 rounded-[2px]">
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-[12px] font-bold text-slate-800 truncate">{item.name}</p>
-                                            <p className="text-[10px] text-slate-400">{fmt(item.unitPrice)} × {item.qty} + {item.gstPercent}% GST</p>
+                                    <div key={item._id} className={`bg-white border rounded-md overflow-hidden flex flex-col transition-all hover:shadow-md ${inCart ? 'border-[#16a34a] ring-1 ring-[#16a34a]' : 'border-slate-200 hover:border-slate-300'}`}>
+                                        <div className="h-20 bg-slate-50 border-b border-slate-100 flex items-center justify-center px-1 py-0.5 relative group">
+                                            {item.imageUrl ? (
+                                                <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-contain" />
+                                            ) : (
+                                                <ImageIcon size={32} className="text-slate-200" />
+                                            )}
+                                            {item.label && (
+                                                <span className="absolute top-2 left-2 bg-[#16a34a] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-sm tracking-wider">
+                                                    {item.label}
+                                                </span>
+                                            )}
                                         </div>
-                                        <div className="flex items-center gap-1 flex-shrink-0">
-                                            <button onClick={() => updateQty(item.accessoryId, -1)}
-                                                className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100">
-                                                <Minus size={10} />
-                                            </button>
-                                            <span className="w-7 text-center text-[12px] font-black">{item.qty}</span>
-                                            <button onClick={() => updateQty(item.accessoryId, 1)}
-                                                className="w-6 h-6 flex items-center justify-center border border-slate-300 rounded-[2px] hover:bg-slate-100">
-                                                <Plus size={10} />
-                                            </button>
+                                        <div className="p-1.5 flex flex-col">
+                                            <h3 className="text-[11px] font-semibold text-slate-800 line-clamp-1 leading-snug" title={item.name}>{item.name}</h3>
+                                            <div className="mt-0.5 flex items-baseline gap-1">
+                                                <span className="text-[12px] font-md font-bold text-slate-900">{fmt(item.price)}</span>
+                                                <span className="text-[8.5px] font-semibold text-slate-500">/ {item.unit || 'Unit'}</span>
+                                            </div>
+
+                                            <div className="mt-1.5 relative flex items-center justify-center h-6 w-full">
+                                                {inCart ? (
+                                                    <div className="w-32 flex items-center justify-between border border-[#16a34a] rounded-sm overflow-hidden h-6 bg-green-50/50">
+                                                        <button onClick={() => updateQty(item._id, -1)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 transition-colors">
+                                                            <Minus size={10} />
+                                                        </button>
+                                                        <span className="text-[11px] font-black text-[#16a34a]">{inCart.qty}</span>
+                                                        <button onClick={() => updateQty(item._id, 1)} disabled={inCart.qty >= (item.availableQty || 0)} className="w-6 h-full flex items-center justify-center text-[#16a34a] hover:bg-[#16a34a]/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                                                            <Plus size={10} />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => addToCart(item)}
+                                                        disabled={(item.availableQty || 0) <= 0}
+                                                        className="w-32 h-6 flex items-center justify-center gap-1 border border-[#16a34a] text-[#16a34a] text-[10px] font-bold rounded-sm hover:bg-[#16a34a]/5 disabled:border-slate-200 disabled:text-slate-400 disabled:bg-slate-50 transition-colors"
+                                                    >
+                                                        <ShoppingCart size={10} /> {(item.availableQty || 0) <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                                                    </button>
+                                                )}
+                                                <button className="absolute right-0 w-6 h-6 flex items-center justify-center border border-slate-200 rounded-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors flex-shrink-0 tooltip-trigger" title={item.description || "More info"}>
+                                                    <Info size={11} />
+                                                </button>
+                                            </div>
                                         </div>
-                                        <p className="text-[12px] font-black text-[#23471d] w-20 text-right flex-shrink-0">{fmt(base + gst)}</p>
-                                        <button onClick={() => removeFromCart(item.accessoryId)} className="text-red-400 hover:text-red-600 flex-shrink-0">
-                                            <Trash2 size={13} />
-                                        </button>
                                     </div>
                                 );
                             })}
+                        </div>
+                    )}
 
-                            {/* Totals */}
-                            <div className="border-t border-slate-200 pt-3 space-y-1.5">
-                                {cart.map(item => {
-                                    const base = item.unitPrice * item.qty;
-                                    const gst = (base * item.gstPercent) / 100;
-                                    return (
-                                        <div key={item.accessoryId} className="flex justify-between text-[10px] text-slate-500">
-                                            <span>{item.name} (GST {item.gstPercent}%)</span>
-                                            <span>{fmt(gst)}</span>
-                                        </div>
-                                    );
-                                })}
-                                <div className="flex justify-between text-[11px] text-slate-600 pt-1">
-                                    <span>Subtotal (incl. GST)</span>
-                                    <span className="font-bold">{fmt(cartTotal)}</span>
+                    {/* Pagination */}
+                    {totalPages > 0 && (
+                        <div className="mt-1 flex justify-center gap-1">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="w-6 h-6 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50 text-[10px]"
+                            >
+                                &lt;
+                            </button>
+                            {Array.from({ length: totalPages }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    className={`w-6 h-6 flex items-center justify-center rounded-md text-[11px] font-bold ${currentPage === i + 1
+                                        ? 'bg-[#16a34a] text-white border border-[#16a34a]'
+                                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                                        }`}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="w-6 h-6 flex items-center justify-center border border-slate-200 rounded-md text-slate-500 hover:bg-slate-50 disabled:opacity-50 text-[10px]"
+                            >
+                                &gt;
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {/* ── RIGHT COLUMN: CART SIDEBAR ── */}
+                <div className={`lg:col-span-4 xl:col-span-3 ${showCartMobile ? 'fixed inset-0 z-50 bg-black/50 flex justify-end' : 'hidden lg:block'} sticky top-3`}>
+                    <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
+
+                        {/* Cart Header */}
+                        <div className="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
+                            <div className="flex items-center gap-2">
+                                <ShoppingCart size={16} className="text-[#1e293b]" />
+                                <h3 className="text-[13px] font-md font-bold text-[#1e293b]">Your Selected Items ({totalCartQty})</h3>
+                            </div>
+                            {showCartMobile && (
+                                <button onClick={() => setShowCartMobile(false)} className="lg:hidden text-slate-400 hover:text-slate-600">
+                                    <X size={20} />
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Cart Items List */}
+                        <div className="overflow-y-auto px-2.5 py-1.5 bg-slate-50 max-h-[250px] min-h-[250px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
+                            {cart.length === 0 ? (
+                                <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
+                                    <ShoppingCart size={40} className="text-slate-200" />
+                                    <p className="text-[12px]">Your cart is empty</p>
                                 </div>
-                                <div className="flex justify-between text-[11px] text-slate-500">
-                                    <span>Gateway Fee (2.5%)</span>
-                                    <span className="font-bold text-[#d26019]">+ {fmt(gatewayFee)}</span>
+                            ) : (
+                                <div className="space-y-1">
+                                    {cart.map(item => {
+                                        const catalogItem = catalog.find(c => c._id === item.accessoryId);
+                                        const finalImageUrl = item.imageUrl || catalogItem?.imageUrl;
+                                        const itemBase = item.unitPrice * item.qty;
+                                        const itemGst = (itemBase * item.gstPercent) / 100;
+                                        const itemTotal = itemBase + itemGst;
+                                        return (
+                                            <div key={item.accessoryId} className="relative bg-white p-1 border border-slate-100 rounded-xl shadow-sm flex items-start gap-1.5">
+                                                <div className="w-7 h-7 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center flex-shrink-0 p-0.5">
+                                                    {finalImageUrl ? (
+                                                        <img src={finalImageUrl.startsWith('http') ? finalImageUrl : `${SERVER_URL}${finalImageUrl}`} alt={item.name} className="w-full h-full object-cover rounded-md" />
+                                                    ) : (
+                                                        <ImageIcon size={14} className="text-slate-300" />
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex justify-between items-start pr-4">
+                                                        <h4 className="text-[10px] font-bold text-slate-800 line-clamp-1">{item.name}</h4>
+                                                        <p className="text-[9px] font-semibold text-[#16a34a] whitespace-nowrap">{fmt(item.unitPrice)}</p>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center border border-slate-200 rounded-md">
+                                                            <button onClick={() => updateQty(item.accessoryId, -1)} className="w-5 h-5 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+                                                                <Minus size={9} />
+                                                            </button>
+                                                            <span className="w-5 text-center text-[10px] font-black">{item.qty}</span>
+                                                            <button onClick={() => updateQty(item.accessoryId, 1)} className="w-5 h-5 flex items-center justify-center text-slate-500 hover:bg-slate-50">
+                                                                <Plus size={9} />
+                                                            </button>
+                                                        </div>
+                                                        <span className="text-[11px] font-black text-slate-800">{fmt(itemTotal)}</span>
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => removeFromCart(item.accessoryId)} className="absolute top-2 right-2 text-slate-300 hover:text-red-500 transition-colors bg-white">
+                                                    <Trash2 size={11} />
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                                <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                                    <span className="text-[11px] font-black text-slate-700 uppercase">You Pay</span>
-                                    <span className="text-lg font-black text-[#23471d]">{fmt(cartTotalWithFee)}</span>
+                            )}
+                        </div>
+
+                        {/* Cart Summary */}
+                        <div className="px-3 py-2.5 border-t border-slate-100 bg-white">
+                            <div className="space-y-0.5 mb-1.5">
+                                <div className="flex justify-between text-[11px]">
+                                    <span className="text-slate-500">Subtotal</span>
+                                    <span className="font-semibold font-md text-slate-800">{fmt(cartBaseTotal)}</span>
+                                </div>
+                                <div className="flex justify-between text-[11px]">
+                                    <span className="text-slate-500">GST</span>
+                                    <span className="font-semibold font-md text-slate-800">{fmt(cartGstTotal)}</span>
+                                </div>
+                                <div className="flex justify-between text-[11px]">
+                                    <span className="text-slate-500">Gateway Fee (2.5%)</span>
+                                    <span className="font-semibold font-md text-slate-800">{fmt(gatewayFee)}</span>
+                                </div>
+                                <div className="flex justify-between text-[13px] pt-1 border-t border-slate-100 mt-1">
+                                    <span className="font-black text-[#1e293b]">Total</span>
+                                    <span className="font-semibold font-md text-[#16a34a]">{fmt(cartTotalWithFee)}</span>
                                 </div>
                             </div>
 
-                            <button
-                                onClick={handlePay}
-                                disabled={paying}
-                                className="w-full flex items-center justify-center gap-2 py-3 bg-[#d26019] text-white text-[12px] font-black uppercase tracking-wider hover:bg-[#b8521a] disabled:opacity-60 transition-all mt-2"
-                            >
-                                {paying ? <Loader2 size={14} className="animate-spin" /> : <CreditCard size={14} />}
-                                {paying ? 'Processing...' : `Pay ${fmt(cartTotalWithFee)} via Razorpay`}
-                            </button>
+                            <div className="flex flex-col gap-1.5">
+                                <button
+                                    onClick={handlePay}
+                                    disabled={paying || cart.length === 0}
+                                    className="w-full py-2.5 bg-[#16a34a] text-white text-[12px] font-bold rounded-lg hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 shadow-sm"
+                                >
+                                    {paying ? <Loader2 size={14} className="animate-spin" /> : null}
+                                    {paying ? 'Processing...' : 'Proceed to Checkout →'}
+                                </button>
+                                <button className="w-full py-2 bg-white border border-blue-700 text-blue-700 text-[11px] font-semibold rounded-lg hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                                    <FileText size={12} /> Request Custom Item
+                                </button>
+                            </div>
 
-                            <p className="text-[10px] text-slate-400 text-center">
-                                Secure payment · Receipt sent to your registered email
-                            </p>
+                            {/* Help / Support Block */}
+                            <div className="mt-2 p-1.5 bg-[#f8fafc] rounded-xl border border-slate-200 flex items-start gap-2">
+                                <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-700">
+                                    <Phone size={11} />
+                                </div>
+                                <div>
+                                    <h4 className="text-[10px] font-bold text-[#1e293b]">Need Something Else?</h4>
+                                    <p className="text-[9px] text-slate-600 leading-[1.3]">Can't find what you're looking for? Let us know.</p>
+                                    <a href="tel:+919654900525" className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 hover:underline">
+                                        <Phone size={9} /> Contact Support
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div className="mt-2 flex flex-col items-center justify-center gap-1.5">
+                                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
+                                    <Lock size={9} /> All payments are secure and encrypted
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    {/* Visa */}
+                                    <span className="text-[#1434CB] font-black text-[15px] tracking-tighter italic">VISA</span>
+                                    {/* Mastercard */}
+                                    <div className="relative flex items-center w-[30px] h-4">
+                                        <div className="w-4 h-4 bg-[#EB001B] rounded-full absolute left-0 z-10"></div>
+                                        <div className="w-4 h-4 bg-[#F79E1B] rounded-full absolute left-2 z-20 mix-blend-multiply"></div>
+                                    </div>
+                                    {/* RuPay */}
+                                    <div className="flex items-center">
+                                        <span className="text-[#038554] font-black text-[13px] tracking-tight italic">Ru</span>
+                                        <span className="text-[#F27221] font-black text-[13px] tracking-tight italic">Pay</span>
+                                        <span className="text-[8px] -translate-y-1 text-[#F27221]">▶</span>
+                                    </div>
+                                    {/* UPI */}
+                                    <span className="text-slate-800 font-black text-[13px] tracking-widest italic ml-1">UPI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* My Orders and Complimentary Inclusions (moved to bottom) */}
+            {false && (orders.length > 0 || complimentaryItems.length > 0) && (
+                <div className="mt-12 pt-8 border-t border-slate-200">
+                    <h2 className="text-[18px] font-black text-[#1e293b] mb-6">My Inclusions & Orders</h2>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* My Orders using InfoGrid for table */}
+                        <div>
+                            <Section title="My Purchase Orders" icon={Package}>
+                                {loadingOrders ? (
+                                    <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
+                                ) : orders.length === 0 ? (
+                                    <div className="py-8 text-center border border-slate-200 rounded-[2px]">
+                                        <Package className="w-10 h-10 text-slate-200 mx-auto mb-2" />
+                                        <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">No orders yet</p>
+                                    </div>
+                                ) : (
+                                    <div className="border border-slate-200 rounded-md overflow-hidden">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-sm">
+                                                <thead>
+                                                    <tr className="bg-[#23471d] text-white">
+                                                        {['Order No', 'Items', 'Total', 'Status', 'Receipt'].map(h => (
+                                                            <th key={h} className="py-2 px-3 text-[10px] font-black uppercase tracking-wider text-left whitespace-nowrap">{h}</th>
+                                                        ))}
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-slate-100">
+                                                    {orders.map((order: any, i: number) => (
+                                                        <tr key={order._id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40'}>
+                                                            <td className="py-2.5 px-3 text-[11px] font-bold text-[#23471d] font-mono whitespace-nowrap">{order.orderNo}</td>
+                                                            <td className="py-2.5 px-3">
+                                                                {order.items?.map((item: any, j: number) => (
+                                                                    <div key={j} className="flex items-center gap-1">
+                                                                        <CheckCircle2 size={9} className="text-emerald-500 flex-shrink-0" />
+                                                                        <span className="text-[10px] text-slate-600">{item.qty}× {item.name}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </td>
+                                                            <td className="py-2.5 px-3 text-[11px] font-black text-slate-800 whitespace-nowrap">{fmt(order.grandTotal)}</td>
+                                                            <td className="py-2.5 px-3 whitespace-nowrap">
+                                                                <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded-full border ${STATUS[order.paymentStatus] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                                                                    {order.paymentStatus}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-2.5 px-3 whitespace-nowrap">
+                                                                {order.receiptUrl ? (
+                                                                    <a href={order.receiptUrl} target="_blank" rel="noopener noreferrer"
+                                                                        className="flex items-center gap-1 text-[10px] font-bold text-[#23471d] hover:underline">
+                                                                        <ExternalLink size={11} /> PDF
+                                                                    </a>
+                                                                ) : <span className="text-[10px] text-slate-400">—</span>}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </Section>
+                        </div>
+
+                        {/* Complimentary */}
+                        <div>
+                            <Section title="Complimentary Inclusions (Free with your stall)" icon={Gift}>
+                                {loadingCatalog ? (
+                                    <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
+                                ) : complimentaryItems.length === 0 ? (
+                                    <div className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase border border-slate-200 rounded-[2px]">
+                                        No complimentary items configured yet
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {complimentaryItems.map((item: any) => (
+                                            <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
+                                                <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                                    {item.imageUrl ? (
+                                                        <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <Gift size={14} className="text-emerald-400" />
+                                                    )}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
+                                                    {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
+                                                    {item.dimensionUnit && (item.length || item.width || item.height) && (
+                                                        <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
+                                                            Size: {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
+                                                        </p>
+                                                    )}
+                                                    <div className="flex items-center gap-2 mt-1.5">
+                                                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
+                                                        <span className="text-[10px] text-slate-500">Qty: {item.includedQty} {item.unit}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </Section>
                         </div>
                     </div>
                 </div>
