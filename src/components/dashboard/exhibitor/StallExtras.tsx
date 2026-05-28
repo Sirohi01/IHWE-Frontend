@@ -322,13 +322,13 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                 <button
                                     key={cat.name}
                                     onClick={() => { setActiveTab(cat.name); setCurrentPage(1); }}
-                                    className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg whitespace-nowrap transition-all border ${isActive
+                                    className={`flex items-center justify-center gap-1 px-2 py-1 rounded-md whitespace-nowrap transition-all border ${isActive
                                         ? 'border-green-100 bg-[#f0fdf4] text-[#16a34a] font-semibold shadow-sm'
                                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium'
                                         }`}
                                 >
-                                    <Icon size={12} className={isActive ? "text-[#16a34a]" : "text-slate-500"} />
-                                    <span className="text-[11px]">{cat.name}</span>
+                                    <Icon size={11} className={isActive ? "text-[#16a34a]" : "text-slate-500"} />
+                                    <span className="text-[10px]">{cat.name}</span>
                                 </button>
                             );
                         })}
