@@ -45,6 +45,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: "bsm", label: "Buyer Connect", icon: UsersRound, isNew: true },
     { id: "feedback", label: "Feedback", icon: MessageSquare },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
+    { id: "product", label: "Product and Services", icon: MessageSquare },
 ];
 
 const PSM_REPORT_IDS = [

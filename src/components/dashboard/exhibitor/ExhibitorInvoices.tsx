@@ -99,7 +99,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
             const date = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
             const time = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
             return `${date}, ${time}`;
-          })()
+        })()
         : regDate;
 
     const handlePrint = () => {
@@ -108,7 +108,7 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
-        
+
         const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
         if (!iframeDoc) return;
         const htmlContent = `<!DOCTYPE html>
@@ -293,7 +293,7 @@ ${content.innerHTML}
         iframeDoc.open();
         iframeDoc.write(htmlContent);
         iframeDoc.close();
-        
+
         // Wait for content to fully load
         setTimeout(() => {
             iframe.contentWindow?.print();
@@ -308,14 +308,14 @@ ${content.innerHTML}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
+            {/* <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
                 <button onClick={handlePrint}
                     className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
                     <Printer size={14} /> Print Tax Invoice
                 </button>
                 {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
                 {data.receiptPdfUrl && <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />}
-            </div>
+            </div> */}
 
             {/* Printable Invoice */}
             <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif' }}>
@@ -354,7 +354,7 @@ ${content.innerHTML}
                             </td>
                             {/* Shipment */}
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
-                                <div style={{ fontWeight: 700, textTransform: 'uppercase'  }}>{data.eventId?.name || '9th IHWE 2026'}</div>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.eventId?.name || '9th IHWE 2026'}</div>
                                 <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
                                 {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN.: {data.gstNo}</div>}
                             </td>
@@ -421,7 +421,7 @@ ${content.innerHTML}
                             <td style={{ border: '1px solid #ccc', padding: '6px' }}>
                                 <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.eventId?.name || 'IHWE 2026'}</div>
                                 <div style={{ fontSize: 10, color: '#555' }}>Exhibition Stall | {p.stallType} | Stall No. {p.stallFor} | {p.stallScheme} {p.dimension} |  Hall No. 8, 9, 10 Pragati
-Maidan, New Delhi, Bharat - 110001</div>
+                                    Maidan, New Delhi, Bharat - 110001</div>
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>998596</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
