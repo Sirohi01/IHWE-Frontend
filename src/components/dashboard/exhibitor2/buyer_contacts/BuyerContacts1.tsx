@@ -64,11 +64,15 @@ const statusStyles: Record<Status, string> = {
 
 const tabs: Tab[] = ["All Leads", "New Leads", "Contacted", "In Discussion", "Meetings Scheduled", "Converted", "Archived"];
 
-const StatCard = ({ icon, value, label, growth, bg }: { icon: string; value: number; label: string; growth: string; bg: string }) => (
-    <div className={`flex items-center gap-4 px-5 py-4 rounded-2xl ${bg} flex-1 min-w-0`}>
-        <span className="text-2xl">{icon}</span>
+const StatCard = ({ icon, value, label, growth, bg, iconBorder }: {
+    icon: string; value: number; label: string; growth: string; bg: string; iconBorder: string
+}) => (
+    <div className={`flex items-center gap-2 p-2 rounded-xl ${bg} flex-1 min-w-0`}>
+        <span className={`text-lg w-10 h-10 flex items-center justify-center rounded-full border ${iconBorder} shrink-0`}>
+            {icon}
+        </span>
         <div>
-            <div className="text-2xl font-bold text-gray-800 leading-tight">{value}</div>
+            <div className="text-[15px] font-semibold text-gray-800 leading-tight">{value}</div>
             <div className="text-xs text-gray-500 font-medium">{label}</div>
             <div className="text-xs text-green-600 font-semibold mt-0.5">↑ {growth}</div>
         </div>
@@ -121,19 +125,17 @@ const BuyerContacts1: React.FC = () => {
 
     return (
         <div className=" font-sans">
-            <div className="max-w-screen-xl mx-auto flex gap-5">
+            <div className="w-full flex gap-5 mt-2">
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col gap-5 min-w-0">
+                <div className="flex-1 flex flex-col gap-2 min-w-0">
 
                     {/* Stats Row */}
-                    <div className="flex gap-3 flex-wrap">
-                        <StatCard icon="👥" value={128} label="Total Leads" growth="15% this week" bg="bg-green-50" />
-                        <StatCard icon="✉️" value={62} label="New Leads" growth="8% this week" bg="bg-blue-50" />
-                        <StatCard icon="👁️" value={34} label="Viewed Profile" growth="12% this week" bg="bg-amber-50" />
-                        <StatCard icon="💬" value={18} label="Conversations" growth="10% this week" bg="bg-purple-50" />
-                        <StatCard icon="📅" value={9} label="Meetings Booked" growth="6% this week" bg="bg-teal-50" />
-                    </div>
+                    <div className="flex  bg-white  rounded-lg flex-wrap gap-2 justify-between border border-gray-100 p-2"> <StatCard icon="👥" value={128} label="Total Leads" growth="15% this week" bg="bg-green-50" iconBorder="border-green-300" />
+                        <StatCard icon="✉️" value={62} label="New Leads" growth="8% this week" bg="bg-blue-50" iconBorder="border-blue-300" />
+                        <StatCard icon="👁️" value={34} label="Viewed Profile" growth="12% this week" bg="bg-amber-50" iconBorder="border-amber-300" />
+                        <StatCard icon="💬" value={18} label="Conversations" growth="10% this week" bg="bg-purple-50" iconBorder="border-purple-300" />
+                        <StatCard icon="📅" value={9} label="Meetings Booked" growth="6% this week" bg="bg-teal-50" iconBorder="border-teal-300" /></div>
 
                     {/* Leads Table Card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
