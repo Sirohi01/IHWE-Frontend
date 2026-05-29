@@ -23,7 +23,7 @@ const announcements = [
 
 // --- Icons ---
 const MegaphoneIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 11l19-9-9 19-2-8-8-2z" />
   </svg>
 );
@@ -70,11 +70,11 @@ const AnnouncementCard = () => {
   const ann = announcements[active];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
+    <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-          <span className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
+          <span className="w-8 h-8 rounded-full font-medium bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <MegaphoneIcon />
           </span>
           Important Announcements
@@ -85,7 +85,7 @@ const AnnouncementCard = () => {
       </div>
 
       {/* Banner */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-3">
+      <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 flex items-start gap-3">
         <div className="flex-1">
           <p className="text-xs font-semibold text-emerald-900 mb-1">{ann.title}</p>
           <p className="text-xs text-emerald-700 leading-relaxed">{ann.desc}</p>
@@ -103,14 +103,13 @@ const AnnouncementCard = () => {
       </div>
 
       {/* Dots */}
-      <div className="flex gap-2 mt-3">
+      <div className="flex justify-center gap-2 mt-3">
         {announcements.map((_, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              i === active ? "bg-emerald-600" : "bg-gray-300"
-            }`}
+            className={`w-2 h-2 rounded-full transition-colors ${i === active ? "bg-emerald-600" : "bg-gray-300"
+              }`}
             aria-label={`Announcement ${i + 1}`}
           />
         ))}
@@ -121,7 +120,7 @@ const AnnouncementCard = () => {
 
 // --- Documents Card ---
 const DocumentsCard = () => (
-  <div className="bg-white border border-gray-200 rounded-xl p-5">
+  <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
@@ -195,7 +194,7 @@ const HelpCard = () => (
 // --- Main Component ---
 export default function EventDashboard1() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 font-sans">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4  py-2 font-sans">
       <AnnouncementCard />
       <DocumentsCard />
       <HelpCard />
