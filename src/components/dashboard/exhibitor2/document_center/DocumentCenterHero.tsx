@@ -66,61 +66,6 @@ const IconRejected = () => (
     </svg>
 );
 
-// ── Hero Illustration (matches screenshot closely) ─────────────────────────
-const HeroIllustration = () => (
-    <svg width="280" height="190" viewBox="0 0 280 190" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Light bg blobs */}
-        <ellipse cx="145" cy="105" rx="105" ry="72" fill="#e8f5ee" opacity="0.7" />
-        <ellipse cx="100" cy="140" rx="60" ry="32" fill="#d1ead9" opacity="0.45" />
-        {/* Dashed circle top-right */}
-        <circle cx="210" cy="48" r="28" stroke="#b6d9c4" strokeWidth="1.2" strokeDasharray="4 4" fill="none" />
-
-        {/* ── Folder ── */}
-        {/* Tab */}
-        <path d="M72 75 Q72 66 80 66 H112 L122 75 Z" fill="#0b4f2e" />
-        {/* Body */}
-        <rect x="72" y="75" width="128" height="88" rx="7" fill="#0f6840" />
-        {/* Lighter inner area */}
-        <rect x="72" y="88" width="128" height="75" rx="0" fill="#0f6840" />
-
-        {/* ── White paper 1 (back) ── */}
-        <rect x="88" y="62" width="52" height="72" rx="4" fill="white" opacity="0.97" />
-        <rect x="94" y="72" width="40" height="4" rx="2" fill="#d1d5db" />
-        <rect x="94" y="80" width="32" height="4" rx="2" fill="#d1d5db" />
-        <rect x="94" y="88" width="36" height="4" rx="2" fill="#d1d5db" />
-        <rect x="94" y="96" width="24" height="4" rx="2" fill="#e5e7eb" />
-
-        {/* ── White paper 2 (front, slightly offset) ── */}
-        <rect x="108" y="56" width="52" height="72" rx="4" fill="white" opacity="0.93" />
-        <rect x="114" y="66" width="40" height="4" rx="2" fill="#d1d5db" />
-        <rect x="114" y="74" width="32" height="4" rx="2" fill="#d1d5db" />
-        <rect x="114" y="82" width="36" height="4" rx="2" fill="#d1d5db" />
-
-        {/* ── Cloud upload ── */}
-        <ellipse cx="188" cy="142" rx="24" ry="16" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1.4" />
-        <ellipse cx="174" cy="148" rx="15" ry="11" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1" />
-        <ellipse cx="200" cy="148" rx="14" ry="10" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1" />
-        <ellipse cx="188" cy="144" rx="20" ry="14" fill="white" stroke="#94a3b8" strokeWidth="1.2" />
-        {/* Up arrow */}
-        <line x1="188" y1="154" x2="188" y2="140" stroke="#0f6840" strokeWidth="2.2" strokeLinecap="round" />
-        <polyline points="182,146 188,140 194,146" stroke="#0f6840" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-
-        {/* ── Shield ── */}
-        <path d="M90 142 Q90 126 104 122 Q118 126 118 142 Q118 156 104 162 Q90 156 90 142Z" fill="#0f6840" />
-        <path d="M97 142 l5 5 l10 -10" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-
-        {/* ── Leaf ── */}
-        <path d="M44 170 Q32 144 52 126 Q58 144 44 170Z" fill="#22c55e" opacity="0.75" />
-        <path d="M44 170 Q58 146 70 136 Q66 152 44 170Z" fill="#16a34a" opacity="0.7" />
-        <line x1="44" y1="170" x2="60" y2="134" stroke="#14532d" strokeWidth="1.2" strokeLinecap="round" />
-
-        {/* Dots */}
-        <circle cx="224" cy="72" r="3.5" fill="#4ade80" opacity="0.5" />
-        <circle cx="236" cy="60" r="2.2" fill="#4ade80" opacity="0.35" />
-        <circle cx="230" cy="84" r="1.8" fill="#4ade80" opacity="0.4" />
-    </svg>
-);
-
 // ── Main Component ─────────────────────────────────────────────────────────
 const DocumentCenterHero: React.FC = () => {
     return (
@@ -143,7 +88,6 @@ const DocumentCenterHero: React.FC = () => {
                         </p>
                     </div>
                     <div className="flex-shrink-0 flex items-center justify-center">
-                        {/* <HeroIllustration /> */}
                         <img src={Hero} alt="" className="h-[200px] w-[280px]" />
                     </div>
                 </div>
@@ -168,7 +112,7 @@ const DocumentCenterHero: React.FC = () => {
 
                     {/* Guidelines row */}
                     <button className="w-full flex items-center justify-between border border-gray-200 rounded-lg px-4 py-1.5 hover:bg-emerald-50 hover:border-emerald-300 transition-all group">
-                        <div className="flex items-center gap-2 text-sm font-medium text-gray-700 group-hover:text-emerald-700">
+                        <div className="flex items-center gap-2 text-[13px] font-medium text-gray-700 group-hover:text-emerald-700">
                             {/* File icon */}
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
