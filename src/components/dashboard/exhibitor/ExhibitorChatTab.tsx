@@ -61,7 +61,22 @@ function HistoryIcon({ type, callType }: { type: string; callType?: string }) {
   if (type === "Chat")
     return (
       <div className="w-9 h-9 rounded-full bg-[#23471d]/10 flex items-center justify-center flex-shrink-0">
-        <MessageCircle size={16} className="text-[#23471d]" />
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-[#23471d]"
+        >
+          <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          <path d="M8 12h.01" strokeWidth="3.2" />
+          <path d="M12 12h.01" strokeWidth="3.2" />
+          <path d="M16 12h.01" strokeWidth="3.2" />
+        </svg>
       </div>
     );
   if (type === "Email")
@@ -317,7 +332,21 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-[#108c2d] flex items-center justify-center flex-shrink-0 shadow-sm">
-                  <MessageCircle size={16} className="text-white" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="19"
+                    height="19"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                    <path d="M8 12h.01" strokeWidth="3.2" />
+                    <path d="M12 12h.01" strokeWidth="3.2" />
+                    <path d="M16 12h.01" strokeWidth="3.2" />
+                  </svg>
                 </div>
                 <div>
                   <p className="text-[12px] font-black text-slate-800 leading-tight">Live Chat</p>
@@ -741,7 +770,22 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                           {/* Circle Icon */}
                           {isChat && (
                             <div className="w-8 h-8 rounded-full bg-[#e6f7ec] flex items-center justify-center flex-shrink-0 shadow-sm">
-                              <MessageCircle size={15} className="text-[#108c2d]" />
+                              <svg
+                                viewBox="0 0 24 24"
+                                width="15"
+                                height="15"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-[#108c2d]"
+                              >
+                                <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                <path d="M8 12h.01" strokeWidth="3.2" />
+                                <path d="M12 12h.01" strokeWidth="3.2" />
+                                <path d="M16 12h.01" strokeWidth="3.2" />
+                              </svg>
                             </div>
                           )}
                           {isEmail && (
