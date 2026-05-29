@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import productImage from '../../assets/productImage7.jpeg'
+import productImage from '../../assets/productImage7.png'
 import image1 from '../../assets/awards_hero_bg_new.png'
 import image2 from '../../assets/cara111.jpg'
 import image3 from '../../assets/cara12.png'
