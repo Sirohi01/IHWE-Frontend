@@ -1,17 +1,10 @@
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorChatTab from '@/components/dashboard/exhibitor/ExhibitorChatTab';
-import DashboardHero from '@/components/dashboard/DashboardHero';
 
 export default function ExhibitorChatPage() {
     const { data } = useExhibitorCtx();
     return (
-        <div className="space-y-6">
-            <DashboardHero 
-                pageId="ex-chat" 
-                defaultTitle="Exhibitor Chat" 
-                defaultSubtitle="Connect with buyers and organizers in real-time"
-                type="exhibitor" 
-            />
+        <div className="h-[calc(100vh-56px)] flex flex-col bg-[#f8fafc] py-2 px-3 lg:py-3 lg:px-4 overflow-hidden">
             <ExhibitorChatTab data={data} />
         </div>
     );

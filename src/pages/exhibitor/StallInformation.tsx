@@ -137,7 +137,7 @@ export default function StallInformation() {
                                 <img src={rightimage} alt="" className='w-full h-full object-fit' />
                             </div>
                             {/* Legend */}
-                            <div className="flex flex-wrap justify-center items-center gap-x-3 gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-1.5">
+                            <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-200/60"></span> Available</div>
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#0052cc]"></span> Booked</div>
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall</div>
@@ -234,7 +234,7 @@ export default function StallInformation() {
                                     { name: 'Banner Hanging', status: 'Pending', type: 'amber' },
                                 ].map((req, i) => (
                                     <div key={i} className="flex flex-col items-center justify-center border border-slate-100 rounded-xl p-1.5 min-w-[90px] flex-1 bg-white shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
-                                        <p className="text-[10px] font-bold text-slate-700 text-center mb-1 h-5 flex items-center justify-center leading-tight ">{req.name}</p>
+                                        <p className="text-[10px] font-bold text-slate-700 text-center mb-1 h-5 flex items-center justify-center leading-tight whitespace-nowrap">{req.name}</p>
                                         <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md w-full text-center tracking-wide ${req.type === 'green'
                                             ? 'bg-[#ecfdf5] text-[#059669] border border-[#d1fae5]'
                                             : 'bg-[#fffbeb] text-[#d97706] border border-[#fef3c7]'
@@ -261,13 +261,13 @@ export default function StallInformation() {
                                     { name: 'Decoration Completion', date: '20 Aug 2026', time: 'By 06:00 PM', icon: Calendar },
                                     { name: 'Stall Dismantling', date: '23 Aug 2026', time: 'After 06:00 PM', icon: Calendar },
                                 ].map((dl, i) => (
-                                    <div key={i} className="flex items-start gap-2">
-                                        <div className="w-6 h-6 rounded-full bg-blue-50/80 text-[#0052cc] flex items-center justify-center shrink-0 border border-blue-100 mt-0.5">
-                                            <dl.icon size={12} strokeWidth={2.5} />
+                                    <div key={i} className="flex items-center gap-2 pb-2.5 border-b border-slate-100 last:border-0 last:pb-0">
+                                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0052cc] flex items-center justify-center shrink-0 border border-blue-100">
+                                            <dl.icon size={14} strokeWidth={2} />
                                         </div>
-                                        <div className="flex-1 pb-2.5 border-b border-slate-100 last:border-0 last:pb-0">
-                                            <p className="text-[9px] font-semibold text-slate-500 mb-0.5">{dl.name}</p>
-                                            <p className="text-[11px] font-semibold text-slate-900 tracking-tight">{dl.date}</p>
+                                        <p className="text-[11px] font-semibold text-slate-700 flex-1 leading-tight">{dl.name}</p>
+                                        <div className="text-right shrink-0">
+                                            <p className="text-[11px] font-bold text-slate-900 tracking-tight">{dl.date}</p>
                                             {dl.time && <p className="text-[8px] text-slate-500 font-bold mt-0">{dl.time}</p>}
                                         </div>
                                     </div>
