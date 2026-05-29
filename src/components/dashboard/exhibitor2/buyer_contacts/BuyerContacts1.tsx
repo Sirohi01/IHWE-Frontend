@@ -138,15 +138,15 @@ const BuyerContacts1: React.FC = () => {
                         <StatCard icon="📅" value={9} label="Meetings Booked" growth="6% this week" bg="bg-teal-50" iconBorder="border-teal-300" /></div>
 
                     {/* Leads Table Card */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
                         {/* Tabs + Search */}
-                        <div className="flex items-center justify-between px-5 pt-4 border-b border-gray-100 gap-3 flex-wrap">
+                        <div className="flex items-center justify-between px-2 pt-2 border-b border-gray-100 gap-1 flex-wrap">
                             <div className="flex gap-1 overflow-x-auto">
                                 {tabs.map(tab => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-t-lg transition-colors ${activeTab === tab
+                                        className={`px-1  py-2 text-sm font-normal whitespace-nowrap rounded-t-lg transition-colors ${activeTab === tab
                                             ? "text-green-600 border-b-2 border-green-600 bg-white"
                                             : "text-gray-500 hover:text-gray-700"
                                             }`}
@@ -155,8 +155,8 @@ const BuyerContacts1: React.FC = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="flex items-center gap-2 pb-2">
-                                <div className="flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-1.5 bg-gray-50">
+                            <div className="flex items-center gap-1 pb-2">
+                                <div className="flex items-center gap-1 border border-gray-200 rounded-lg px-2 py-1 bg-gray-50">
                                     <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                                     </svg>
@@ -165,7 +165,7 @@ const BuyerContacts1: React.FC = () => {
                                         placeholder="Search by name, company..."
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
-                                        className="text-sm bg-transparent outline-none w-48 text-gray-700 placeholder-gray-400"
+                                        className="text-sm bg-transparent outline-none w-28 text-gray-700 placeholder-gray-400"
                                     />
                                 </div>
                                 <button className="p-2 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500">
