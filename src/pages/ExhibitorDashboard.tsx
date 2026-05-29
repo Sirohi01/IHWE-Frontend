@@ -22,7 +22,7 @@ const TAB_ROUTES: Record<string, string> = {
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
     annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
-    'stall-management': '/exhibitor-dashboard/stall-management',
+    'stall-management': '/exhibitor-dashboard/stall-information',
     psm_reports: '/exhibitor-dashboard/psm-claim/reports',
     psm_reports_table: '/exhibitor-dashboard/psm-claim/reports-table',
     annexure_c_table: '/exhibitor-dashboard/psm-claim/reports-table/annexure-c',
