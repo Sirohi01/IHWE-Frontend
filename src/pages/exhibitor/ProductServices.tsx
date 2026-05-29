@@ -7,7 +7,12 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import productImage from '../../assets/productImage6.jpg'
+import productImage from '../../assets/productImage7.png'
+import image1 from '../../assets/awards_hero_bg_new.png'
+import image2 from '../../assets/cara111.jpg'
+import image3 from '../../assets/cara12.png'
+import image4 from '../../assets/cara222.jpg'
+import image5 from '../../assets/cara14.jpg'
 
 
 const initialProducts = [
@@ -18,7 +23,7 @@ const initialProducts = [
         type: "Product",
         views: 356,
         inquiries: 24,
-        image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=80&h=80"
+        image: image1
     },
     {
         id: 2,
@@ -27,7 +32,7 @@ const initialProducts = [
         type: "Product",
         views: 289,
         inquiries: 18,
-        image: "https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&q=80&w=80&h=80"
+        image: image2
     },
     {
         id: 3,
@@ -36,7 +41,7 @@ const initialProducts = [
         type: "Product",
         views: 210,
         inquiries: 12,
-        image: "https://images.unsplash.com/photo-1551076805-e1869043e560?auto=format&fit=crop&q=80&w=80&h=80"
+        image: image3
     },
     {
         id: 4,
@@ -45,7 +50,7 @@ const initialProducts = [
         type: "Service",
         views: 165,
         inquiries: 9,
-        image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&q=80&w=80&h=80"
+        image: image4
     },
     {
         id: 5,
@@ -54,7 +59,7 @@ const initialProducts = [
         type: "Service",
         views: 135,
         inquiries: 8,
-        image: "https://images.unsplash.com/photo-1576091160550-2173ff9e5eb3?auto=format&fit=crop&q=80&w=80&h=80"
+        image: image5
     }
 ];
 
@@ -149,8 +154,8 @@ export default function ProductServices() {
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 ">
                 <div>
-                    <h1 className="text-xl lg:text-2xl font-bold text-blue-900">Products & Services</h1>
-                    <div className="text-xs lg:text-sm text-slate-500 mt-0.5 flex items-center gap-1.5">
+                    <h2 className="text-[18px] lg:text-[20px] leading-none font-bold text-blue-900">My Products & Services</h2>
+                    <div className="text-xs lg:text-sm text-slate-500  flex items-center gap-1.5">
                         <span>Home</span>
                         <ChevronRight size={12} />
                         <span className="text-slate-700">Products & Services</span>
@@ -163,7 +168,10 @@ export default function ProductServices() {
             </div>
 
             {/* Banner Section */}
-            <div className="rounded-2xl px-4 md:px-5 mb-3 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
+            <div className='rounded-2xl overflow-hidden mb-3'>
+                <img src={productImage} alt="Products & Services" className="w-full h-full object-cover" />
+            </div>
+            {/* <div className="rounded-2xl px-4 md:px-5 mb-3 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
                 <div className="md:w-1/2 py-3 relative z-10">
                     <h2 className="text-base md:text-lg font-semibold text-[#1a2b3c] mb-1 max-w-sm leading-tight ">
                         Showcase your innovative healthcare products & services
@@ -175,7 +183,7 @@ export default function ProductServices() {
                 <div className="md:w-1/2 flex justify-center items-end relative z-10">
                     <img src={productImage} alt="Healthcare Products" className="h-20 md:h-28 object-contain" />
                 </div>
-            </div>
+            </div> */}
 
             {/* Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 mb-2">
@@ -396,11 +404,11 @@ export default function ProductServices() {
                 <div className="space-y-3 md:space-y-4">
                     {/* Categories Widget */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                        <div className="p-2 md:p-3 border-b border-slate-100 flex justify-between items-center">
+                        <div className="px-2 md:px-3 py-1 md:py-1.5 border-b border-slate-100 flex justify-between items-center">
                             <h3 className="font-semibold text-[#1a2b3c] text-[14px]">Categories</h3>
                             <button className="text-[10px] font-bold text-blue-600 hover:text-blue-700">Manage Categories</button>
                         </div>
-                        <div className="p-2 md:p-3 space-y-2 md:space-y-2.5">
+                        <div className="p-2 md:p-3 space-y-1 md:space-y-1.5">
                             {categories.map((cat, i) => {
                                 const Icon = cat.icon;
                                 return (
@@ -418,10 +426,10 @@ export default function ProductServices() {
 
                     {/* Tips Widget */}
                     <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                        <div className="p-2 md:p-3 border-b border-slate-100">
+                        <div className="px-2 md:px-3 py-1 md:py-1.5 border-b border-slate-100">
                             <h3 className="font-semibold text-[#1a2b3c] text-[14px]">Tips to Get More Leads</h3>
                         </div>
-                        <div className="p-2 md:p-3 space-y-2 md:space-y-2.5">
+                        <div className="p-2 md:p-3 space-y-1 md:space-y-1.5">
                             {[
                                 "Add high quality images and videos",
                                 "Write detailed product descriptions",
