@@ -23,13 +23,13 @@ const announcements = [
 
 // --- Icons ---
 const MegaphoneIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 11l19-9-9 19-2-8-8-2z" />
   </svg>
 );
 
 const FolderIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
   </svg>
 );
@@ -70,11 +70,11 @@ const AnnouncementCard = () => {
   const ann = announcements[active];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
+    <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-          <span className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
+          <span className="w-8 h-8 rounded-full font-medium bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <MegaphoneIcon />
           </span>
           Important Announcements
@@ -85,7 +85,7 @@ const AnnouncementCard = () => {
       </div>
 
       {/* Banner */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex items-start gap-3">
+      <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 flex items-start gap-3">
         <div className="flex-1">
           <p className="text-xs font-semibold text-emerald-900 mb-1">{ann.title}</p>
           <p className="text-xs text-emerald-700 leading-relaxed">{ann.desc}</p>
@@ -103,14 +103,13 @@ const AnnouncementCard = () => {
       </div>
 
       {/* Dots */}
-      <div className="flex gap-2 mt-3">
+      <div className="flex justify-center gap-2 mt-3">
         {announcements.map((_, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              i === active ? "bg-emerald-600" : "bg-gray-300"
-            }`}
+            className={`w-2 h-2 rounded-full transition-colors ${i === active ? "bg-emerald-600" : "bg-gray-300"
+              }`}
             aria-label={`Announcement ${i + 1}`}
           />
         ))}
@@ -121,11 +120,11 @@ const AnnouncementCard = () => {
 
 // --- Documents Card ---
 const DocumentsCard = () => (
-  <div className="bg-white border border-gray-200 rounded-xl p-5">
+  <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
     {/* Header */}
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-        <span className="w-9 h-9 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
+        <span className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
           <FolderIcon />
         </span>
         Event Documents
@@ -138,7 +137,7 @@ const DocumentsCard = () => (
     {/* Doc Rows */}
     <div className="divide-y divide-gray-100">
       {documents.map((doc, i) => (
-        <div key={i} className="flex items-center justify-between py-2.5">
+        <div key={i} className="flex items-center justify-between py-1.5">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">
               <FileIcon />
@@ -172,12 +171,12 @@ const HelpCard = () => (
         <p className="text-xs text-gray-500 leading-relaxed mb-4">
           Our support team is here to help you through your event journey.
         </p>
-        <button className="inline-flex items-center gap-2 bg-emerald-950 hover:bg-emerald-900 text-white text-xs font-medium rounded-md px-4 py-2.5 transition-colors">
+        <button className="inline-flex items-center gap-2 mt-2 bg-emerald-950 hover:bg-emerald-900 text-white text-xs font-medium rounded-md px-4 py-2.5 transition-colors">
           Contact Support <ArrowRightIcon size={13} />
         </button>
       </div>
       <div className="flex-shrink-0">
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="100" height="100" viewBox="0 0 80 80" fill="none">
           <circle cx="40" cy="34" r="20" fill="#e6f1fb" />
           <path d="M24 34 Q24 16 40 16 Q56 16 56 34" stroke="#185fa5" strokeWidth="3" strokeLinecap="round" fill="none" />
           <rect x="19" y="31" width="9" height="14" rx="4.5" fill="#0f3d2e" />
@@ -195,7 +194,7 @@ const HelpCard = () => (
 // --- Main Component ---
 export default function EventDashboard1() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 font-sans">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4  py-2 font-sans">
       <AnnouncementCard />
       <DocumentsCard />
       <HelpCard />
