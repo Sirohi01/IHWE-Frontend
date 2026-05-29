@@ -29,7 +29,7 @@ const MegaphoneIcon = () => (
 );
 
 const FolderIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
   </svg>
 );
@@ -72,7 +72,7 @@ const AnnouncementCard = () => {
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
           <span className="w-8 h-8 rounded-full font-medium bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <MegaphoneIcon />
@@ -122,9 +122,9 @@ const AnnouncementCard = () => {
 const DocumentsCard = () => (
   <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
     {/* Header */}
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-        <span className="w-9 h-9 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
+        <span className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
           <FolderIcon />
         </span>
         Event Documents
@@ -137,7 +137,7 @@ const DocumentsCard = () => (
     {/* Doc Rows */}
     <div className="divide-y divide-gray-100">
       {documents.map((doc, i) => (
-        <div key={i} className="flex items-center justify-between py-2.5">
+        <div key={i} className="flex items-center justify-between py-1.5">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">
               <FileIcon />
@@ -171,12 +171,12 @@ const HelpCard = () => (
         <p className="text-xs text-gray-500 leading-relaxed mb-4">
           Our support team is here to help you through your event journey.
         </p>
-        <button className="inline-flex items-center gap-2 bg-emerald-950 hover:bg-emerald-900 text-white text-xs font-medium rounded-md px-4 py-2.5 transition-colors">
+        <button className="inline-flex items-center gap-2 mt-2 bg-emerald-950 hover:bg-emerald-900 text-white text-xs font-medium rounded-md px-4 py-2.5 transition-colors">
           Contact Support <ArrowRightIcon size={13} />
         </button>
       </div>
       <div className="flex-shrink-0">
-        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <svg width="100" height="100" viewBox="0 0 80 80" fill="none">
           <circle cx="40" cy="34" r="20" fill="#e6f1fb" />
           <path d="M24 34 Q24 16 40 16 Q56 16 56 34" stroke="#185fa5" strokeWidth="3" strokeLinecap="round" fill="none" />
           <rect x="19" y="31" width="9" height="14" rx="4.5" fill="#0f3d2e" />

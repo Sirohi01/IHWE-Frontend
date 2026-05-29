@@ -146,6 +146,7 @@ import { SERVER_URL } from "./lib/api";
 import ProductServices from "./pages/exhibitor/ProductServices";
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
 import MyEvent from "./pages/exhibitor/home/MyEvent";
+import DocumentCenter from "./pages/exhibitor/home/DocumentCenter";
 
 
 const SitemapRedirect = () => {
@@ -291,7 +292,7 @@ const App = () => {
                     <Route path="ex-profile" element={<ExProfile />} />
                     <Route path="ex-profile1" element={<Overview />} />
                     <Route path="my-event" element={<MyEvent />} />
-
+                    <Route path="document-center" element={<DocumentCenter />} />
                     {/* Seller Specific Routes */}
                     <Route path="become-seller" element={<ExhibitorSellerRegistrationPage />} />
                   </Route>
