@@ -37,7 +37,7 @@ export default function StallInformation() {
                 </div>
 
                 {/* TOP ROW: Stall Details + Stall Location */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-3">
                     {/* Stall Details Card */}
                     <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
                         {/* Left Image Section */}
@@ -150,9 +150,9 @@ export default function StallInformation() {
                 </div>
 
                 {/* STATE BANNERS ROW */}
-                <div className="flex flex-col lg:flex-row gap-3 md:gap-4 mt-2.5 lg:w-2/3">
+                <div className="flex flex-col lg:flex-row gap-3 md:gap-3 mt-2.5 lg:w-2/3">
                     {/* Green Banner */}
-                    <div className="flex-[1.3] bg-[#ecfdf5] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                    <div className="flex-[1.3] bg-[#ecfdf5] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)] border border-slate-200">
                         <div className="flex items-center justify-center shrink-0">
                             <ShieldCheck size={44} fill="#10b981" color="white" strokeWidth={1.5} />
                         </div>
@@ -163,7 +163,7 @@ export default function StallInformation() {
                     </div>
 
                     {/* Purple Banner */}
-                    <div className="flex-[1.1] bg-[#f5f3ff] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                    <div className="flex-[1.1] bg-[#f5f3ff] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)] border border-slate-200">
                         <div className="w-11 h-11 bg-[#e0d8fe] rounded-xl flex items-center justify-center shrink-0">
                             <CalendarIcon size={20} className="text-[#6d28d9]" strokeWidth={2.5} />
                         </div>
@@ -175,7 +175,7 @@ export default function StallInformation() {
                     </div>
 
                     {/* Yellow Banner */}
-                    <div className="flex-[1.1] bg-[#fffbeb] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                    <div className="flex-[1.1] bg-[#fffbeb] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)] border border-slate-200">
                         <div className="w-11 h-11 bg-[#fde68a] rounded-xl flex items-center justify-center shrink-0">
                             <CalendarIcon size={20} className="text-[#d97706]" strokeWidth={2.5} />
                         </div>
@@ -188,7 +188,7 @@ export default function StallInformation() {
                 </div>
 
                 {/* MAIN CONTENT: 3-COLUMN LAYOUT */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4 mt-2.5">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-3 mt-2.5">
 
                     {/* LEFT COLUMN: Green Banner + Services + Requirements */}
                     <div className="lg:col-span-6 flex flex-col gap-2.5">
@@ -207,7 +207,7 @@ export default function StallInformation() {
                                     { name: 'Spot Lights', sub: '(4 Nos.)', icon: LightbulbIcon },
                                     { name: 'Dustbin', sub: '(1 No.)', icon: Trash2 },
                                 ].map((service, i) => (
-                                    <div key={i} className="flex flex-col items-center justify-center border border-slate-100 rounded-xl p-1.5 min-w-[70px] flex-1 relative bg-white hover:border-slate-300 transition-colors shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
+                                    <div key={i} className="flex flex-col items-center justify-center border border-slate-100 rounded-xl p-1.5 min-w-[70px] flex-1 relative bg-white transition-colors shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
                                         <div className="absolute -top-1 -right-1 bg-[#10b981] text-white rounded-full p-0.5 shadow-sm border-2 border-white">
                                             <Check size={8} strokeWidth={3} />
                                         </div>
@@ -277,10 +277,10 @@ export default function StallInformation() {
                     </div>
 
                     {/* RIGHT COLUMN: Stall Overview + Useful Documents */}
-                    <div className="lg:col-span-3 flex flex-col gap-2.5 lg:-mt-[80px]">
+                    <div className="lg:col-span-3 flex flex-col gap-2.5 lg:-mt-[82px]">
                         {/* Stall Overview */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 px-3.5 py-1.5">
-                            <h3 className="text-sm font-bold text-slate-800 mb-1">Stall Overview</h3>
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5 ">
+                            <h3 className="text-sm font-bold text-slate-800 mb-2">Stall Overview</h3>
                             <div className="space-y-0.5">
                                 {[
                                     { label: 'Hall Number', value: 'Hall 3', icon: Map },
@@ -310,8 +310,8 @@ export default function StallInformation() {
                         </div>
 
                         {/* Useful Documents */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 py-1.5 px-3.5 h-full">
-                            <h3 className="text-sm font-bold text-slate-800 mb-1">Useful Documents</h3>
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5 h-full">
+                            <h3 className="text-sm font-bold text-slate-800 mb-2">Useful Documents</h3>
                             <div className="space-y-0.5">
                                 {[
                                     { name: 'Booth Guidelines' },
