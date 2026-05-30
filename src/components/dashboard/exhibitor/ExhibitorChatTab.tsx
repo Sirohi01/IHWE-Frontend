@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Send, MessageSquare, Loader2, Check, CheckCheck,
   Phone, Mail, PhoneCall, Filter, MessageCircle,
@@ -98,6 +99,7 @@ function HistoryIcon({ type, callType }: { type: string; callType?: string }) {
    MAIN COMPONENT
    ═══════════════════════════════════════════════════════════════════════════ */
 export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
+  const navigate = useNavigate();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
@@ -396,7 +398,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
               </div>
             </div>
             <button
-              onClick={() => window.open(`tel:${rmMobile || "+919654900525"}`, "_self")}
+              onClick={() => navigate("/exhibitor-dashboard/relationship-manager")}
               className="w-full h-8 rounded-full bg-white hover:bg-slate-50 text-[#ea580c] text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all duration-200"
             >
               Call Now <ArrowRight size={12} className="text-[#ea580c]" />
@@ -423,7 +425,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                 <div className="relative flex-shrink-0">
                   <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md bg-slate-100">
                     <img
-                      src={exhibitorContactImg}
+                      src={rmDetails?.hodImage || exhibitorContactImg}
                       alt={rmDisplayName}
                       className="w-full h-full object-cover object-top"
                     />
@@ -625,7 +627,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                           <div key={msg._id || i} className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}>
                             {!isMe && (
                               <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 mr-2 mt-1 shadow-sm border border-slate-100 bg-[#e6f4ea] flex items-center justify-center">
-                                <img src={exhibitorContactImg} alt="RM" className="w-full h-full object-cover object-top" />
+                                <img src={rmDetails?.hodImage || exhibitorContactImg} alt="RM" className="w-full h-full object-cover object-top" />
                               </div>
                             )}
                             <div className={`max-w-[75%] flex flex-col gap-0.5 ${isMe ? "items-end" : "items-start"}`}>
@@ -657,7 +659,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                 {(adminTyping || messages.length === 0) && (
                   <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex justify-start items-end gap-2 mb-3">
                     <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-slate-100 bg-[#e6f4ea] flex items-center justify-center shadow-sm">
-                      <img src={exhibitorContactImg} alt="RM" className="w-full h-full object-cover object-top" />
+                      <img src={rmDetails?.hodImage || exhibitorContactImg} alt="RM" className="w-full h-full object-cover object-top" />
                     </div>
                     <div className="bg-white border border-slate-150 shadow-sm px-4 py-3 rounded-2xl rounded-bl-sm flex items-center justify-center">
                       <div className="flex gap-1 items-center">
