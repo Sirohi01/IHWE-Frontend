@@ -1,6 +1,5 @@
 import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare, Ticket } from "lucide-react";
 import { Link } from "react-router-dom";
-import Hero from "@/assets/exhibitor/myeventhero2.png";
 
 // ─── Quick Access Data ────────────────────────────────────────────────────────
 
