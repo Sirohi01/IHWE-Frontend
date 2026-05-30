@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import {
-    Plus, Package, Layers, Eye, Users, TrendingUp,
+    Plus, Layers, Users, TrendingUp,
     Search, Filter, ChevronDown, ChevronLeft, ChevronRight,
     Edit2, Settings, Briefcase, Pill, Monitor,
-    ExternalLink, CheckCircle2, PenTool, Microscope, Trash2, X
+    ExternalLink, CheckCircle2, PenTool, Microscope, Trash2, Eye, Package
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,11 +75,7 @@ export default function ProductServices() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Modal State
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [viewItem, setViewItem] = useState<any>(null);
-    const [editingItem, setEditingItem] = useState<any>(null);
-    const [formData, setFormData] = useState({ title: '', category: 'Medical Equipment', type: 'Product', image: '' });
+
 
     // Computed Filtering
     const filteredItems = useMemo(() => {
@@ -111,28 +107,8 @@ export default function ProductServices() {
     ];
 
     // Actions
-    const handleSave = () => {
-        if (!formData.title.trim()) return alert("Title is required!");
-
-        if (editingItem) {
-            setItems(items.map(i => i.id === editingItem.id ? { ...i, ...formData } : i));
-        } else {
-            const newItem = {
-                id: Date.now(),
-                ...formData,
-                views: 0,
-                inquiries: 0,
-                image: formData.image || "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=80&h=80"
-            };
-            setItems([newItem, ...items]);
-        }
-        setIsModalOpen(false);
-    };
-
     const handleEdit = (item: any) => {
-        setEditingItem(item);
-        setFormData({ title: item.title, category: item.category, type: item.type, image: item.image });
-        setIsModalOpen(true);
+        // edit action placeholder
     };
 
     const handleDelete = (id: number) => {
@@ -140,12 +116,6 @@ export default function ProductServices() {
             setItems(items.filter(i => i.id !== id));
             if (paginatedItems.length === 1 && currentPage > 1) setCurrentPage(currentPage - 1);
         }
-    };
-
-    const openNewModal = () => {
-        setEditingItem(null);
-        setFormData({ title: '', category: 'Medical Equipment', type: 'Product', image: '' });
-        setIsModalOpen(true);
     };
 
     return (
@@ -161,7 +131,7 @@ export default function ProductServices() {
                         <span className="text-slate-700">Products & Services</span>
                     </div>
                 </div>
-                <Button onClick={openNewModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-3 py-0.5 h-8 text-sm">
+                <Button className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-3 py-0.5 h-8 text-sm">
                     <Plus size={14} />
                     Add New Product / Service
                 </Button>
@@ -335,7 +305,7 @@ export default function ProductServices() {
                                         </div>
 
                                         <div className="flex items-center gap-1 ml-auto sm:ml-3">
-                                            <Button onClick={() => setViewItem(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
+                                            <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
                                                 <Eye size={12} />
                                             </Button>
                                             <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white">
@@ -453,155 +423,9 @@ export default function ProductServices() {
             </div>
 
 
-            {/* Modal for Add / Edit */}
-            {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-3">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
-                        {/* Modal Header */}
-                        <div className="px-4 py-1 border-b border-slate-200 flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-800">
-                                {editingItem ? 'Edit Item' : 'Add New Product / Service'}
-                            </h3>
-                            <button onClick={() => setIsModalOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors">
-                                <X size={18} />
-                            </button>
-                        </div>
 
-                        {/* Modal Body */}
-                        <div className="px-4 py-1 space-y-3">
-                            {/* Title */}
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Title</label>
-                                <input
-                                    value={formData.title}
-                                    onChange={e => setFormData({ ...formData, title: e.target.value })}
-                                    placeholder="Enter product or service title..."
-                                    className="w-full border border-slate-300 rounded-lg px-3 py-1 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#10b981]/30 focus:border-[#10b981] transition-colors"
-                                />
-                            </div>
 
-                            {/* Type & Category */}
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Type</label>
-                                    <select
-                                        value={formData.type}
-                                        onChange={e => setFormData({ ...formData, type: e.target.value })}
-                                        className="w-full border border-slate-300 rounded-lg px-3 py-1 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/30 focus:border-[#10b981] transition-colors"
-                                    >
-                                        <option value="Product">Product</option>
-                                        <option value="Service">Service</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Category</label>
-                                    <select
-                                        value={formData.category}
-                                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                                        className="w-full border border-slate-300 rounded-lg px-3 py-1 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#10b981]/30 focus:border-[#10b981] transition-colors"
-                                    >
-                                        {categoryOptions.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                </div>
-                            </div>
 
-                            {/* File Upload */}
-                            <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Upload Image</label>
-                                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-[#10b981] hover:bg-[#10b981]/5 transition-colors group">
-                                    {formData.image ? (
-                                        <div className="flex items-center gap-3">
-                                            <img src={formData.image} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-slate-200" />
-                                            <div className="text-sm">
-                                                <p className="font-semibold text-slate-700">Image selected</p>
-                                                <p className="text-xs text-[#10b981]">Click to change</p>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="flex flex-col items-center gap-2 text-slate-400 group-hover:text-[#10b981]">
-                                            <Plus size={28} className="opacity-60" />
-                                            <p className="text-sm font-medium">Click to upload image</p>
-                                            <p className="text-[10px] text-slate-400">PNG, JPG, WEBP up to 5MB</p>
-                                        </div>
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={e => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                                const url = URL.createObjectURL(file);
-                                                setFormData({ ...formData, image: url });
-                                            }
-                                        }}
-                                    />
-                                </label>
-                            </div>
-                        </div>
-
-                        {/* Modal Footer */}
-                        <div className="px-4 py-1 border-t border-slate-200 flex justify-end gap-2">
-                            <Button variant="outline" onClick={() => setIsModalOpen(false)} className="border-slate-300 text-slate-600 hover:bg-slate-50">Cancel</Button>
-                            <Button onClick={handleSave} className="bg-[#10b981] hover:bg-[#059669] text-white px-6">Save Item</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal for View Details */}
-            {viewItem && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-3">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
-                        {/* Modal Header */}
-                        <div className="px-4 py-2 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-                            <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2">
-                                <Package size={18} className="text-[#10b981]" />
-                                Item Details
-                            </h3>
-                            <button onClick={() => setViewItem(null)} className="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors">
-                                <X size={18} />
-                            </button>
-                        </div>
-
-                        {/* Modal Body */}
-                        <div className="p-4 space-y-4">
-                            <div className="w-full h-40 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-                                <img src={viewItem.image} alt={viewItem.title} className="w-full h-full object-cover" />
-                            </div>
-
-                            <div>
-                                <h4 className="text-xl font-bold text-[#1a2b3c]">{viewItem.title}</h4>
-                                <div className="flex items-center gap-2 mt-1">
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-sm font-bold uppercase tracking-wider ${viewItem.type === 'Product' ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-blue-100 text-blue-700'}`}>
-                                        {viewItem.type}
-                                    </span>
-                                    <div className="flex items-center text-xs text-slate-500 font-medium">
-                                        <Settings size={12} className="mr-1 opacity-50" />
-                                        <span>{viewItem.category}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
-                                <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase mb-1 flex items-center gap-1"><Eye size={12} /> Total Views</p>
-                                    <p className="font-bold text-slate-800 text-lg">{viewItem.views}</p>
-                                </div>
-                                <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase mb-1 flex items-center gap-1"><Users size={12} /> Total Inquiries</p>
-                                    <p className="font-bold text-slate-800 text-lg">{viewItem.inquiries}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Modal Footer */}
-                        <div className="px-4 py-2 border-t border-slate-200 flex justify-end">
-                            <Button onClick={() => setViewItem(null)} className="bg-slate-800 hover:bg-slate-700 text-white px-6">Close</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
