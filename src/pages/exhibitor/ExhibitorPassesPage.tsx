@@ -1,0 +1,446 @@
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import {
+    Users, UserCheck, Car, Wrench, ShieldCheck,
+    ArrowRight, Check, Sparkles, FileText, Phone, Gift
+} from "lucide-react";
+import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import passesImg from "@/assets/passes1.png";
+import thaliImg from "@/assets/thali.png";
+import bottleImg from "@/assets/bottle.png";
+import howitworksImg from "@/assets/howitworks.png";
+import notepadImg from "@/assets/notepad.png";
+import shoppingImg from "@/assets/shopping.png";
+
+export default function ExhibitorPassesPage() {
+    const { data } = useExhibitorCtx();
+    const navigate = useNavigate();
+
+    // Rates and allocations matching the specifications
+    const passes = [
+        {
+            id: "visitor",
+            title: "Visitor Pass",
+            subtitle: "For Invited Visitors",
+            icon: Users,
+            complimentary: 10,
+            used: 2,
+            remaining: 8,
+            price: 200,
+            color: "blue",
+            themeClasses: {
+                bg: "bg-[#f0f7ff]",
+                border: "border-blue-100 hover:border-blue-300",
+                text: "text-[#1a3a7c]",
+                iconBg: "bg-gradient-to-tr from-[#1e40af] to-[#3b82f6]",
+                badgeBg: "bg-blue-50 text-blue-700 border-blue-100",
+                btnBg: "bg-[#1a3a7c] hover:bg-[#112754] text-white shadow-blue-900/10",
+                statsBorder: "border-blue-100/60"
+            }
+        },
+        {
+            id: "exhibitor",
+            title: "Exhibitor Pass",
+            subtitle: "For Your Team Members",
+            icon: UserCheck,
+            complimentary: 2,
+            used: 0,
+            remaining: 2,
+            price: 150,
+            color: "orange",
+            themeClasses: {
+                bg: "bg-[#fffaf5]",
+                border: "border-orange-100 hover:border-orange-300",
+                text: "text-[#ea580c]",
+                iconBg: "bg-gradient-to-tr from-[#c2410c] to-[#f97316]",
+                badgeBg: "bg-orange-50 text-orange-700 border-orange-100",
+                btnBg: "bg-[#ea580c] hover:bg-[#c2410c] text-white shadow-orange-900/10",
+                statsBorder: "border-orange-100/60"
+            }
+        },
+        {
+            id: "vehicle",
+            title: "Vehicle Pass",
+            subtitle: "For Exhibitor Vehicles",
+            icon: Car,
+            complimentary: 2,
+            used: 0,
+            remaining: 2,
+            price: 500,
+            color: "green",
+            themeClasses: {
+                bg: "bg-[#f5fbf7]",
+                border: "border-emerald-100 hover:border-emerald-300",
+                text: "text-[#15803d]",
+                iconBg: "bg-gradient-to-tr from-[#047857] to-[#10b981]",
+                badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-100",
+                btnBg: "bg-[#15803d] hover:bg-[#0f6b30] text-white shadow-emerald-900/10",
+                statsBorder: "border-emerald-100/60"
+            }
+        },
+        {
+            id: "service",
+            title: "Service Pass",
+            subtitle: "For Staff, Workers & Contractors",
+            icon: Wrench,
+            complimentary: 4,
+            used: 0,
+            remaining: 4,
+            price: 150,
+            color: "purple",
+            themeClasses: {
+                bg: "bg-[#faf5ff]",
+                border: "border-purple-100 hover:border-purple-300",
+                text: "text-[#6b21a8]",
+                iconBg: "bg-gradient-to-tr from-[#7e22ce] to-[#a855f7]",
+                badgeBg: "bg-purple-50 text-purple-700 border-purple-100",
+                btnBg: "bg-[#6b21a8] hover:bg-[#581c87] text-white shadow-purple-900/10",
+                statsBorder: "border-purple-100/60"
+            }
+        }
+    ];
+
+    const notes = [
+        "Use complimentary quota first.",
+        "Extra passes, lunch and water bottles can be purchased online.",
+        "All passes are non-transferable.",
+        "Valid only for the event duration.",
+        "Lunch & Water Bottle entitlement for Exhibitor Team (2 persons per day)."
+    ];
+
+    return (
+        <motion.div
+            key="exhibitor-passes-v1"
+            className="px-4 md:px-8 pt-5 pb-8 bg-[#f8fafc]/50 min-h-screen"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+        >
+            {/* ─── TOP HEADER SECTION ─── */}
+            <div className="flex flex-col xl:flex-row items-stretch justify-between gap-3.5 mb-1">
+                {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
+                <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
+                    <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-cover" />
+                </div>
+
+                {/* Right: Complimentary Quota Summary */}
+                <div className="w-full xl:w-[480px] bg-[#f7fbf8] rounded-2xl border border-[#e2edd9] shadow-sm flex flex-col justify-between shrink-0 mt-3 xl:mt-0 p-4 xl:h-[220px]">
+                    {/* Card Title */}
+                    <div className="flex items-center gap-2 mb-1.5 px-1">
+                        <Gift size={18} className="text-[#15803d] shrink-0" strokeWidth={2.5} />
+                        <h3 className="text-[13px] font-black text-[#11381e] tracking-tight">
+                            Complimentary Quota <span className="text-slate-500 font-bold text-xs leading-none">(Use First)</span>
+                        </h3>
+                    </div>
+
+                    {/* Inner White Card Grid with Dividers */}
+                    <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-4 divide-x divide-slate-300 shadow-sm mb-1.5">
+                        {/* Col 1 */}
+                        <div className="flex flex-col items-center justify-center text-center px-1">
+                            <Users size={28} className="text-[#1a3a7c] shrink-0" />
+                            <span className="text-[22px] font-black text-[#1a3a7c] tracking-tight mt-1.5 leading-none">10</span>
+                            <span className="text-[9.5px] font-extrabold text-[#1a3a7c] mt-1.5 uppercase tracking-wide">Visitor Pass</span>
+                        </div>
+                        {/* Col 2 */}
+                        <div className="flex flex-col items-center justify-center text-center px-1">
+                            <UserCheck size={28} className="text-[#ea580c] shrink-0" />
+                            <span className="text-[22px] font-black text-[#ea580c] tracking-tight mt-1.5 leading-none">2</span>
+                            <span className="text-[9.5px] font-extrabold text-[#ea580c] mt-1.5 uppercase tracking-wide">Exhibitor Pass</span>
+                        </div>
+                        {/* Col 3 */}
+                        <div className="flex flex-col items-center justify-center text-center px-1">
+                            <Car size={28} className="text-[#15803d] shrink-0" />
+                            <span className="text-[22px] font-black text-[#15803d] tracking-tight mt-1.5 leading-none">2</span>
+                            <span className="text-[9.5px] font-extrabold text-[#15803d] mt-1.5 uppercase tracking-wide">Vehicle Pass</span>
+                        </div>
+                        {/* Col 4 */}
+                        <div className="flex flex-col items-center justify-center text-center px-1">
+                            <Wrench size={28} className="text-[#6b21a8] shrink-0" />
+                            <span className="text-[22px] font-black text-[#6b21a8] tracking-tight mt-1.5 leading-none">4</span>
+                            <span className="text-[9.5px] font-extrabold text-[#6b21a8] mt-1.5 uppercase tracking-wide">Service Pass</span>
+                        </div>
+                    </div>
+
+                    {/* Bottom Info text */}
+                    <p className="text-[10px] text-slate-800 font-extrabold tracking-tight text-center leading-normal mb-0.5">
+                        Extra passes can be purchased online after using complimentary quota.
+                    </p>
+                </div>
+            </div>
+
+            {/* ─── 4 MAIN PASS CARDS ─── */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 mb-1">
+                {passes.map((pass) => {
+                    const Icon = pass.icon;
+                    return (
+                        <div
+                            key={pass.id}
+                            className={`rounded-xl border ${pass.themeClasses.bg} p-3 pt-3 pb-2.5 flex flex-col justify-between transition-all duration-300 hover:shadow-md ${pass.themeClasses.border}`}
+                        >
+                            <div>
+                                {/* Icon + Text + Badge */}
+                                <div className="flex items-start justify-between gap-1.5 mb-2.5">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <div className={`w-9 h-9 rounded-full ${pass.themeClasses.iconBg} flex items-center justify-center text-white shadow-sm flex-shrink-0`}>
+                                            <Icon size={17} />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h3 className="text-[13px] font-black text-slate-800 tracking-tight leading-tight">
+                                                {pass.title}
+                                            </h3>
+                                            <p className="text-[10px] text-slate-500 font-bold mt-0.5 truncate">
+                                                {pass.subtitle}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span className={`inline-flex px-1.5 py-0.5 rounded text-[8.5px] font-extrabold border shrink-0 mt-0.5 ${pass.themeClasses.badgeBg}`}>
+                                        {pass.complimentary} Complimentary
+                                    </span>
+                                </div>
+
+                                {/* Statistics Table - Mockup style without outer border */}
+                                <div className="grid grid-cols-3 divide-x divide-slate-200/80 mb-2 text-center">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Used</span>
+                                        <span className="text-[13px] font-black text-slate-800 mt-1">{pass.used}</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Remaining</span>
+                                        <span className="text-[13px] font-black text-slate-800 mt-1">{pass.remaining}</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Extra Price</span>
+                                        <span className="text-[9.5px] font-black text-slate-800 mt-1">₹{pass.price} / Pass</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Button */}
+                            <button
+                                onClick={() => navigate("/exhibitor-dashboard/accessories")}
+                                className={`w-full h-7 px-2.5 rounded-md text-[10px] font-extrabold transition-all duration-200 flex items-center justify-between shadow-sm hover:shadow-md ${pass.themeClasses.btnBg}`}
+                            >
+                                <span className="flex-1 text-center">Request / Purchase Extra</span>
+                                <ArrowRight size={11} className="shrink-0" />
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* ─── BOTTOM SECTION: 3 COLUMNS ─── */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-1 mb-1">
+                {/* Column 1: Exhibitor Entitlement */}
+                <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2 pb-1 border-b border-slate-50">
+                            <Gift size={16} className="text-[#15803d]" strokeWidth={2.5} />
+                            <h3 className="font-extrabold text-[12px] text-[#11381e]">
+                                Exhibitor Entitlement <span className="text-slate-500 font-bold text-[9.5px] lowercase tracking-normal">(daily for all 3 days)</span>
+                            </h3>
+                        </div>
+
+                        {/* Entitlement Items */}
+                        <div className="grid grid-cols-2 gap-1 mb-2">
+                            {/* Lunch */}
+                            <div className="bg-[#fbfcfa] border border-[#e2edd9] rounded-xl p-2 flex flex-col justify-between">
+                                <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Packed Thali Lunch</span>
+                                <div className="flex items-center justify-between gap-1">
+                                    <img src={thaliImg} alt="Packed Thali Lunch" className="w-[50px] h-[40px] object-contain shrink-0" />
+                                    <div className="text-center flex-1">
+                                        <span className="text-[18px] font-black text-[#15803d] leading-none block">2</span>
+                                        <span className="text-[7.5px] font-bold text-slate-400 block leading-tight mt-0.5 uppercase tracking-wide">Persons<br />Per Day</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Water Bottle */}
+                            <div className="bg-[#f7fbff] border border-[#e3efff] rounded-xl p-2 flex flex-col justify-between">
+                                <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Water Bottle</span>
+                                <div className="flex items-center justify-between gap-1">
+                                    <img src={bottleImg} alt="Water Bottle" className="w-[50px] h-[40px] object-contain shrink-0" />
+                                    <div className="text-center flex-1">
+                                        <span className="text-[18px] font-black text-blue-600 leading-none block">2</span>
+                                        <span className="text-[7.5px] font-bold text-slate-400 block leading-tight mt-0.5 uppercase tracking-wide">Bottles<br />Per Day</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        {/* Period Badge */}
+                        <div className="w-full bg-[#f4fbf6] border border-[#d2edd9] py-1 px-1.5 rounded-lg flex items-center justify-center gap-1.5 mb-1.5">
+                            <span className="text-[9px] font-black text-[#15803d] flex items-center gap-1">
+                                📅 Provided for ALL 3 DAYS (21 – 23 August 2026)
+                            </span>
+                        </div>
+                        {/* Needs block */}
+                        <div className="w-full bg-[#fcfdfc] border border-dashed border-[#15803d]/30 py-1 px-1.5 rounded-lg flex items-center justify-center gap-1">
+                            <span className="text-[9px] font-extrabold text-[#15803d] flex items-center gap-1">
+                                🛒 Need more? Extra lunch and water bottles can be purchased online.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Column 2: How It Works */}
+                <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div className="flex flex-col gap-0.5 mb-1.5">
+                            <h3 className="font-extrabold text-[12px] text-[#11381e]">How It Works</h3>
+                            <div className="w-8 h-0.5 bg-[#15803d] rounded-full" />
+                        </div>
+
+                        {/* Steps Image */}
+                        <div className="flex items-center justify-center py-0.5">
+                            <img src={howitworksImg} alt="How it Works" className="w-[95%] h-auto object-contain max-h-[64px]" />
+                        </div>
+
+                        {/* Steps Text Grid */}
+                        <div className="grid grid-cols-4 gap-0.5 text-center mt-1.5 mb-1.5">
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black text-slate-800 leading-tight">Apply Online</span>
+                                <span className="text-[7.5px] text-slate-500 font-bold mt-0.5 leading-tight">Select the<br />pass type</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black text-slate-800 leading-tight">Make Payment</span>
+                                <span className="text-[7.5px] text-slate-500 font-bold mt-0.5 leading-tight">Secure online<br />payment</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black text-slate-800 leading-tight">Get Approved</span>
+                                <span className="text-[7.5px] text-slate-500 font-bold mt-0.5 leading-tight">Quick verification<br />& approval</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black text-slate-800 leading-tight">Receive Pass</span>
+                                <span className="text-[7.5px] text-slate-500 font-bold mt-0.5 leading-tight">Instant digital<br />pass on email</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-[#f4fbf6] border border-[#d2edd9] rounded-lg p-2 flex items-start gap-1.5 mt-auto">
+                        <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[9px]">
+                            <Check size={9} strokeWidth={3.5} />
+                        </div>
+                        <p className="text-[9px] text-[#15803d] font-bold leading-tight">
+                            All passes are digital with QR code and will be sent to your email.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Column 3: Important Notes */}
+                <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2 pb-1 border-b border-slate-50">
+                            <svg viewBox="0 0 24 24" width="16" height="16" className="text-amber-500 shrink-0 fill-amber-500">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <h3 className="font-extrabold text-[12px] text-[#11381e]">Important Notes</h3>
+                        </div>
+
+                        {/* Content Area */}
+                        <div className="flex items-start gap-1.5 flex-1 justify-between">
+                            {/* Checklist */}
+                            <div className="space-y-1.5 flex-1">
+                                {notes.map((note, i) => (
+                                    <div key={i} className="flex items-start gap-1 group">
+                                        <div className="w-3.5 h-3.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <Check size={9} strokeWidth={3.5} />
+                                        </div>
+                                        <span className="text-[10px] text-slate-700 font-extrabold leading-tight">
+                                            {note}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Notepad Clipboard image */}
+                            <div className="w-[95px] shrink-0 flex items-center justify-center self-center">
+                                <img src={notepadImg} alt="Notepad Clipboard" className="max-w-full h-auto object-contain max-h-[105px]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* ─── BOTTOM TWO BANNERS ─── */}
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-3.5">
+                {/* Left Banner: Complimentary Entitlement Detail */}
+                <div className="xl:col-span-7 bg-[#f4faf5] border border-[#e2ede4] text-slate-800 rounded-xl shadow-sm p-3 flex items-center gap-3 relative overflow-hidden group">
+                    {/* Serrated Starburst FREE Badge */}
+                    <div className="shrink-0 transform hover:scale-105 transition-all duration-300">
+                        <svg viewBox="0 0 100 100" width="58" height="58">
+                            <polygon points="50,5 57,14 68,10 72,21 82,21 82,32 90,36 86,47 95,50 86,53 90,64 82,68 82,79 72,79 68,90 57,86 50,95 43,86 32,90 28,79 18,79 18,68 10,64 14,53 5,50 14,47 10,36 18,32 18,21 28,21 32,10 43,14" fill="#3ca353" />
+                            <polygon points="50,8 55,16 65,12 69,22 79,22 79,32 87,36 83,46 91,49 83,52 87,62 79,66 79,76 69,76 65,86 55,82 50,90 45,82 35,86 31,76 21,76 21,66 13,62 17,52 9,49 17,46 13,36 21,32 21,22 31,22 35,12 45,16" fill="#2d9444" />
+                            <text x="50" y="58" fontSize="20" fontWeight="900" fill="#ffffff" textAnchor="middle" letterSpacing="0.5" fontFamily="sans-serif">FREE</text>
+                        </svg>
+                    </div>
+
+                    <div className="flex-1">
+                        <h4 className="text-[12px] font-black text-[#15803d] uppercase tracking-wide">
+                            Your Complimentary Entitlement
+                        </h4>
+
+                        {/* Passes list row */}
+                        <div className="grid grid-cols-4 gap-1.5 mt-1.5 pb-1.5 border-b border-dashed border-[#d8e6da]">
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <Users size={11} className="text-[#1a3a7c] shrink-0" /> 10 Visitor Passes
+                            </span>
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <UserCheck size={11} className="text-[#ea580c] shrink-0" /> 2 Exhibitor Passes
+                            </span>
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <Car size={11} className="text-[#15803d] shrink-0" /> 2 Vehicle Passes
+                            </span>
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <Wrench size={11} className="text-[#6b21a8] shrink-0" /> 4 Service Passes
+                            </span>
+                        </div>
+
+                        {/* Lunch and Water Bottles row */}
+                        <div className="mt-1.5 flex items-center gap-4 text-[9px] font-black text-slate-700">
+                            <span className="flex items-center gap-1">
+                                + <img src={thaliImg} alt="Lunch" className="w-[16px] h-[16px] object-contain shrink-0" /> 2 Packed Thali Lunch (2 Persons Per Day)
+                            </span>
+                            <span className="text-slate-300 font-normal">|</span>
+                            <span className="flex items-center gap-1">
+                                + <img src={bottleImg} alt="Water" className="w-[16px] h-[16px] object-contain shrink-0" /> 2 Water Bottles (2 Per Day)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Banner: Need Extra Purchase CTA */}
+                <div className="xl:col-span-5 bg-[#fafafb] border border-slate-100 text-slate-800 rounded-xl shadow-sm p-1 flex items-center justify-between gap-3">
+                    <div className="flex-1">
+                        <h4 className="text-[12px] font-black tracking-tight text-[#11381e] leading-tight">
+                            Need Extra Passes, Lunch or Water?
+                        </h4>
+                        <p className="text-slate-500 text-[9px] font-black mt-0.5 uppercase tracking-wide">
+                            Purchase instantly online as per your need.
+                        </p>
+                        <button
+                            onClick={() => navigate("/exhibitor-dashboard/accessories")}
+                            className="mt-2 h-6 px-3 bg-[#15803d] hover:bg-[#0f6b30] text-white text-[10px] font-black tracking-wide rounded-lg flex items-center justify-center gap-1.5 shadow-sm transition-all hover:scale-102"
+                        >
+                            Purchase Extra Now
+                            <ArrowRight size={11} />
+                        </button>
+                    </div>
+
+                    {/* Shopping Cart image */}
+                    <div className="w-[130px] shrink-0 flex items-center justify-center">
+                        <img src={shoppingImg} alt="Shopping Cart" className="max-w-full h-auto object-contain max-h-[78px]" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer details */}
+            <div className="w-full bg-[#f5f7fc] border border-[#e3e7f2] py-1 px-2.5 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-1 text-[9px] text-slate-500 font-extrabold mt-1">
+                <p className="flex items-center gap-1">ⓘ All rates are inclusive of taxes. Terms & conditions apply.</p>
+                <a href="/terms-of-service" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 flex items-center gap-1 hover:underline">
+                    View Terms & Conditions <ArrowRight size={11} className="shrink-0" />
+                </a>
+            </div>
+        </motion.div>
+    );
+}
