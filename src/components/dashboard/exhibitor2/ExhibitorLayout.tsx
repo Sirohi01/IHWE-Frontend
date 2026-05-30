@@ -30,8 +30,8 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
                 onChatClick={() => setActiveTab('chat')}
                 unreadChat={unreadChat}
             />
-            <SocialSidebar />
-            <AdminWhatsAppFloat data={data} />
+            {/* <SocialSidebar /> */}
+            {/* <AdminWhatsAppFloat data={data} /> */}
             <div className="flex pt-14 print:pt-0 flex-1">
                 <ExhibitorSidebar
                     data={data}
