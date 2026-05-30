@@ -23,7 +23,7 @@ interface Lead {
 const leads: Lead[] = [
     {
         id: 1, initials: "RK", color: "bg-orange-400", name: "Rahul Kapoor", role: "Procurement Manager",
-        company: "MediCare Solutions Pvt. Ltd.", countryFlag: "🇮🇳", country: "India",
+        company: "MediCare Solutions Pvt.", countryFlag: "🇮🇳", country: "India",
         interestIcon: "🩺", interest: "Medical Devices", interestColor: "text-green-600 bg-green-50 border-green-200",
         status: "New", lastContact: "15 May 2026", lastContactTime: "11:45 AM",
     },
@@ -125,7 +125,7 @@ const BuyerContacts1: React.FC = () => {
 
     return (
         <div className=" font-sans">
-            <div className="w-full flex gap-5 mt-2">
+            <div className="w-full flex gap-2 mt-2">
 
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col gap-2 min-w-0">
@@ -146,7 +146,7 @@ const BuyerContacts1: React.FC = () => {
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab)}
-                                        className={`px-1  py-2 text-sm font-normal whitespace-nowrap rounded-t-lg transition-colors ${activeTab === tab
+                                        className={`px-2  py-2 text-sm font-normal whitespace-nowrap rounded-t-lg transition-colors ${activeTab === tab
                                             ? "text-green-600 border-b-2 border-green-600 bg-white"
                                             : "text-gray-500 hover:text-gray-700"
                                             }`}
@@ -185,51 +185,51 @@ const BuyerContacts1: React.FC = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
-                                    <tr className="text-gray-500 text-xs font-semibold uppercase tracking-wide border-b border-gray-100">
-                                        <th className="px-5 py-3 text-left">Buyer Name</th>
-                                        <th className="px-4 py-3 text-left">Company & Designation</th>
-                                        <th className="px-4 py-3 text-left">Country</th>
-                                        <th className="px-4 py-3 text-left">Interest In</th>
-                                        <th className="px-4 py-3 text-left">Status</th>
-                                        <th className="px-4 py-3 text-left">Last Contact</th>
-                                        <th className="px-4 py-3 text-left">Action</th>
+                                    <tr className="text-gray-500 text-xs font-medium uppercase tracking-wide border-b border-gray-100">
+                                        <th className="px-4 py-3 text-left text-[10px]">Buyer Name</th>
+                                        <th className="px-1 py-3 text-left text-[10px]">Company & Designation</th>
+                                        <th className="px-1 py-3 text-left text-[10px]">Country</th>
+                                        <th className="px-1 py-3 text-left text-[10px]">Interest In</th>
+                                        <th className="px-1 py-3 text-left text-[10px]">Status</th>
+                                        <th className="px-1 py-3 text-left text-[10px]">Last Contact</th>
+                                        <th className="px-1 py-3 text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-50">
                                     {filtered.map(lead => (
                                         <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-5 py-3.5">
+                                            <td className="px-2 py-3">
                                                 <div className="flex items-center gap-3">
                                                     <div className={`w-9 h-9 rounded-full ${lead.color} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
                                                         {lead.initials}
                                                     </div>
                                                     <div>
-                                                        <div className="font-semibold text-gray-800">{lead.name}</div>
-                                                        <div className="text-xs text-gray-400">{lead.role}</div>
+                                                        <div className="font-semibold text-xs  text-gray-800">{lead.name}</div>
+                                                        <div className="text-[10px] text-gray-400">{lead.role}</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3.5 text-gray-600">{lead.company}</td>
-                                            <td className="px-4 py-3.5">
-                                                <span className="flex items-center gap-1.5 text-gray-700">
+                                            <td className="px-2 py-2.5 text-xs text-gray-600">{lead.company}</td>
+                                            <td className="px-1 py-2.5">
+                                                <span className="flex text-xs items-center gap-1.5 text-gray-700">
                                                     <span>{lead.countryFlag}</span>{lead.country}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3.5">
+                                            <td className="px-2 py-2.5">
                                                 <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${lead.interestColor}`}>
                                                     <span>{lead.interestIcon}</span> {lead.interest}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3.5">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyles[lead.status]}`}>
+                                            <td className="px-2 py-2.5">
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusStyles[lead.status]}`}>
                                                     {lead.status}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3.5">
-                                                <div className="text-gray-700 font-medium">{lead.lastContact}</div>
+                                            <td className="px-2 py-2.5">
+                                                <div className="text-gray-700 text-xs font-medium">{lead.lastContact}</div>
                                                 <div className="text-xs text-gray-400">{lead.lastContactTime}</div>
                                             </td>
-                                            <td className="px-4 py-3.5">
+                                            <td className="px-2 py-2.5">
                                                 <div className="flex items-center gap-2">
                                                     <button className="p-1.5 rounded-lg border border-gray-200 hover:bg-green-50 hover:border-green-200 text-green-600 transition-colors">
                                                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -278,11 +278,11 @@ const BuyerContacts1: React.FC = () => {
                 </div>
 
                 {/* Right Sidebar */}
-                <div className="w-64 shrink-0 flex flex-col gap-4">
+                <div className="w-56 shrink-0 flex flex-col gap-4">
                     {/* Filter Panel */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2 font-semibold text-gray-800">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 py-2">
+                        <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
                                 <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 .8 1.6L13 9v5.586l-2 2V9L3.2 4.6A1 1 0 0 1 3 4V3z" clipRule="evenodd" />
                                 </svg>
@@ -296,14 +296,14 @@ const BuyerContacts1: React.FC = () => {
                             { label: "Status", placeholder: "All Status" },
                             { label: "Last Contact", placeholder: "Any Time" },
                         ].map(f => (
-                            <div key={f.label} className="mb-3">
-                                <label className="block text-xs font-semibold text-gray-700 mb-1">{f.label}</label>
-                                <select className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-600 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-200 appearance-none">
+                            <div key={f.label} className="mb-2">
+                                <label className="block text-xs font-medium text-gray-700 mb-1">{f.label}</label>
+                                <select className="w-full border border-gray-200 rounded-lg px-3 py-1 text-xs text-gray-600 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-200 appearance-none">
                                     <option>{f.placeholder}</option>
                                 </select>
                             </div>
                         ))}
-                        <button className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-2.5 text-sm font-semibold transition-colors flex items-center justify-center gap-2 mt-1">
+                        <button className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-1 text-xs font-medium transition-colors flex items-center justify-center gap-2 mt-1">
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 .8 1.6L13 9v5.586l-2 2V9L3.2 4.6A1 1 0 0 1 3 4V3z" clipRule="evenodd" />
                             </svg>
