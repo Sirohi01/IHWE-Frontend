@@ -1,4 +1,4 @@
-import HeroSection from "@/components/dashboard/exhibitor2/home/HeroSection";
+import HeroSection from "@/components/dashboard/exhibitor/home/HeroSection";
 import AboutSection from "@/components/home/AboutSection";
 import AttendanceInfo from "@/components/home/AttendanceInfo";
 import EventInfoBanner from "@/components/home/EventInfoBanner";

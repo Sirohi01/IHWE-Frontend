@@ -2,72 +2,13 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { toast } from 'sonner';
 import { API_URL, settingsApi } from '@/lib/api';
-import ExhibitorLayout from '@/components/dashboard/exhibitor2/ExhibitorLayout';
+import ExhibitorLayout from '@/components/dashboard/exhibitor/ExhibitorLayout';
 import SecurityModal from '@/components/dashboard/exhibitor/SecurityModal';
 import PrintCertificate from '@/components/dashboard/exhibitor/PrintCertificate';
 import { AnimatePresence } from 'framer-motion';
 import { ExhibitorCtx } from '@/context/ExhibitorContext';
 
-const TAB_ROUTES: Record<string, string> = {
-    dashboard: '/exhibitor-dashboard',
-    profile: '/exhibitor-dashboard/ex-profile',
-    invoices: '/exhibitor-dashboard/invoices',
-    payments: '/exhibitor-dashboard/payments',
-    'exhibitor-pass': '/exhibitor-dashboard/exhibitor-pass',
-    accessories: '/exhibitor-dashboard/accessories',
-    marketing: '/exhibitor-dashboard/marketing',
-    bsm: '/exhibitor-dashboard/bsm',
-    calendar: '/exhibitor-dashboard/calendar',
-    chat: '/exhibitor-dashboard/chat',
-    feedback: '/exhibitor-dashboard/feedback',
-    msme: '/exhibitor-dashboard/msme',
-    psm_claim: '/exhibitor-dashboard/psm-claim',
-    annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
-    'stall-management': '/exhibitor-dashboard/stall-information',
-    psm_reports: '/exhibitor-dashboard/psm-claim/reports',
-    psm_reports_table: '/exhibitor-dashboard/psm-claim/reports-table',
-    annexure_c_table: '/exhibitor-dashboard/psm-claim/reports-table/annexure-c',
-    annexure_d_table: '/exhibitor-dashboard/psm-claim/reports-table/annexure-d',
-    declaration_table: '/exhibitor-dashboard/psm-claim/reports-table/declaration',
-    feedback_report_table: '/exhibitor-dashboard/psm-claim/reports-table/feedback-report',
-    undertaking_table: '/exhibitor-dashboard/psm-claim/reports-table/undertaking',
-    pre_receipt_table: '/exhibitor-dashboard/psm-claim/reports-table/pre-receipt',
-    mandate_form_table: '/exhibitor-dashboard/psm-claim/reports-table/mandate-form',
-    pfms_details_table: '/exhibitor-dashboard/psm-claim/reports-table/pfms-details',
-    covering_letter_table: '/exhibitor-dashboard/psm-claim/reports-table/covering-letter',
-    narrative_feedback_table: '/exhibitor-dashboard/psm-claim/reports-table/narrative-feedback',
-    annexure_c: '/exhibitor-dashboard/psm-claim/reports/annexure-c',
-    declaration: '/exhibitor-dashboard/psm-claim/reports/declaration',
-    feedback_report: '/exhibitor-dashboard/psm-claim/reports/feedback-report',
-    undertaking: '/exhibitor-dashboard/psm-claim/reports/undertaking',
-    pre_receipt: '/exhibitor-dashboard/psm-claim/reports/pre-receipt',
-    mandate_form: '/exhibitor-dashboard/psm-claim/reports/mandate-form',
-    pfms_details: '/exhibitor-dashboard/psm-claim/reports/pfms-details',
-    covering_letter: '/exhibitor-dashboard/psm-claim/reports/covering-letter',
-    narrative_feedback: '/exhibitor-dashboard/psm-claim/reports/narrative-feedback',
-    relationship_manager: '/exhibitor-dashboard/relationship-manager',
-    'ex-profile': '/exhibitor-dashboard/ex-profile',
-    'become-seller': '/exhibitor-dashboard/become-seller',
-    'seller-dashboard': '/exhibitor-dashboard/seller-dashboard',
-    'seller-products': '/exhibitor-dashboard/seller-dashboard/products',
-    'seller-bsm': '/exhibitor-dashboard/seller-dashboard/bsm',
-    'product-export': '/exhibitor-dashboard/seller-dashboard/product-export',
-    'seller-marketing': '/exhibitor-dashboard/seller-dashboard/marketing',
-    'seller-leads': '/exhibitor-dashboard/seller-dashboard/leads',
-    'seller-sponsorship': '/exhibitor-dashboard/seller-dashboard/sponsorship',
-    'seller-conference': '/exhibitor-dashboard/seller-dashboard/conference',
-    'seller-logistics': '/exhibitor-dashboard/seller-dashboard/logistics',
-    'seller-helpdesk': '/exhibitor-dashboard/seller-dashboard/helpdesk',
-    'seller-reports': '/exhibitor-dashboard/seller-dashboard/reports',
-    documentation: '/exhibitor-dashboard/documentation',
-    exhibitions: '/exhibitor-dashboard/exhibitions',
-    epromotion: '/exhibitor-dashboard/epromotion',
-    product: '/exhibitor-dashboard/product'
-};
-
-const ROUTE_TABS: Record<string, string> = Object.fromEntries(
-    Object.entries(TAB_ROUTES).map(([k, v]) => [v, k])
-);
+import { TAB_ROUTES, ROUTE_TABS } from '@/components/dashboard/exhibitor/routes';
 
 export default function ExhibitorDashboard() {
     const navigate = useNavigate();

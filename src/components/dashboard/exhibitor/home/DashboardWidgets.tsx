@@ -10,7 +10,7 @@ const QUICK_ACCESS = [
     { id: "buyer-contacts", label: "Buyer Contacts", sub: "View buyer contacts", icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
     { id: "exhibitor-pass", label: "Exhibitor Pass", sub: "View & download pass", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },
     { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, link: "/exhibitor-dashboard/ex-profile", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
-    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, link: "/exhibitor-dashboard/finances", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
+    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, link: "/exhibitor-dashboard/invoices", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
     { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
     { id: "documentation", label: "Documentation", sub: "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/documentation", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
     { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },

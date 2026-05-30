@@ -1,17 +1,17 @@
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
-import ExhibitorOverview from '@/components/dashboard/exhibitor2/home/ExhibitorOverview';
-import ExhibitorModuleGrid from '@/components/dashboard/exhibitor2/home/ExhibitorModuleGrid';
-import HeroSection from '@/components/dashboard/exhibitor2/home/HeroSection';
+import ExhibitorOverview from '@/components/dashboard/exhibitor/home/ExhibitorOverview';
+import ExhibitorModuleGrid from '@/components/dashboard/exhibitor/home/ExhibitorModuleGrid';
+import HeroSection from '@/components/dashboard/exhibitor/home/HeroSection';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareText } from 'lucide-react';
 import { useState } from 'react';
-import ExhibotorTopbar from "@/components/dashboard/exhibitor2/ExhibotorTopbar";
-import WelcomeHeader from '@/components/dashboard/exhibitor2/home/WelcomeHeader';
-import StatCards from '@/components/dashboard/exhibitor2/home/StatCards';
-import DashboardWidgets from '@/components/dashboard/exhibitor2/home/DashboardWidgets';
-import DashboardBottom from '@/components/dashboard/exhibitor2/home/DashboardBottom';
+import ExhibotorTopbar from "@/components/dashboard/exhibitor/ExhibotorTopbar";
+import WelcomeHeader from '@/components/dashboard/exhibitor/home/WelcomeHeader';
+import StatCards from '@/components/dashboard/exhibitor/home/StatCards';
+import DashboardWidgets from '@/components/dashboard/exhibitor/home/DashboardWidgets';
+import DashboardBottom from '@/components/dashboard/exhibitor/home/DashboardBottom';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();

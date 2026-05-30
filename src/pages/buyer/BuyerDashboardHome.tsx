@@ -1,7 +1,7 @@
 import { useBuyerCtx } from '@/context/BuyerContext';
 import BuyerOverview from '@/components/dashboard/buyer/BuyerOverview';
 import BuyerModuleGrid from '@/components/dashboard/buyer/BuyerModuleGrid';
-import HeroSection from '@/components/dashboard/exhibitor2/home/HeroSection';
+import HeroSection from '@/components/dashboard/exhibitor/home/HeroSection';
 import { useNavigate } from 'react-router-dom';
 
 export default function BuyerDashboardHome() {

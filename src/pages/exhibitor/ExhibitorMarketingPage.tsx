@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
-import MarketingToolkit from '@/components/dashboard/exhibitor2/MarketingToolkit';
+import MarketingToolkit from '@/components/dashboard/exhibitor/MarketingToolkit';
 import DashboardHero from '@/components/dashboard/DashboardHero';
 
 export default function ExhibitorMarketingPage() {

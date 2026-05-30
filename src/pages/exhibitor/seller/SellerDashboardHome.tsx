@@ -7,8 +7,8 @@ import {
     Lock, CheckCircle2, Truck, CalendarCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import HeroSection from '@/components/dashboard/exhibitor2/home/HeroSection';
-import ExhibitorOverview from '@/components/dashboard/exhibitor2/home/ExhibitorOverview';
+import HeroSection from '@/components/dashboard/exhibitor/home/HeroSection';
+import ExhibitorOverview from '@/components/dashboard/exhibitor/home/ExhibitorOverview';
 import AdminApprovalStatus from '@/components/dashboard/seller/AdminApprovalStatus';
 import { API_URL } from '@/lib/api';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';

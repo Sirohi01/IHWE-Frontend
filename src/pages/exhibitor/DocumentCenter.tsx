@@ -1,5 +1,5 @@
-import DocumentCenterHero from "@/components/dashboard/exhibitor2/document_center/DocumentCenterHero";
-import DocumentsCenter1 from "@/components/dashboard/exhibitor2/document_center/Documentscenter1";
+import DocumentCenterHero from "@/components/dashboard/exhibitor/document_center/DocumentCenterHero";
+import DocumentsCenter1 from "@/components/dashboard/exhibitor/document_center/Documentscenter1";
 import React from "react";
 
 const DocumentCenter = () => {

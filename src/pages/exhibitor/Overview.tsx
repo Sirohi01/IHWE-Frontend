@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ExTab from "@/components/dashboard/exhibitor2/ex_profile/ExTab";
-import OverviewStart from "@/components/dashboard/exhibitor2/ex_profile/OverviewStart";
+import ExTab from "@/components/dashboard/exhibitor/ex_profile/ExTab";
+import OverviewStart from "@/components/dashboard/exhibitor/ex_profile/OverviewStart";
 const Overview = () => {
     const [activeTab, setActiveTab] = useState("overview");
 
