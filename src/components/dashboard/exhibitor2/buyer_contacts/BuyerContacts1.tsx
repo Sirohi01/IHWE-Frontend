@@ -278,9 +278,9 @@ const BuyerContacts1: React.FC = () => {
                 </div>
 
                 {/* Right Sidebar */}
-                <div className="w-56 shrink-0 flex flex-col gap-4">
+                <div className="w-56 shrink-0 flex flex-col gap-2">
                     {/* Filter Panel */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 py-2">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 px-4 py-2">
                         <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
                                 <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -304,7 +304,7 @@ const BuyerContacts1: React.FC = () => {
                             </div>
                         ))}
                         <button className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-1 text-xs font-medium transition-colors flex items-center justify-center gap-2 mt-1">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg className="w-3 h-33" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M3 3a1 1 0 0 1 1-1h12a1 1 0 0 1 .8 1.6L13 9v5.586l-2 2V9L3.2 4.6A1 1 0 0 1 3 4V3z" clipRule="evenodd" />
                             </svg>
                             Apply Filters
@@ -312,13 +312,13 @@ const BuyerContacts1: React.FC = () => {
                     </div>
 
                     {/* Lead Source Overview */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                        <div className="font-semibold text-gray-800 mb-3 text-sm">Lead Source Overview</div>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 px-4 py-1">
+                        <div className="font-semibold text-gray-800 mb-2 text-sm">Lead Source Overview</div>
                         <DonutChart />
                     </div>
 
                     {/* CTA Banner */}
-                    <div className="bg-green-50 rounded-2xl border border-green-100 p-4 flex items-start gap-3">
+                    <div className="bg-green-50 rounded-lg border border-green-100 px-2 py-2 flex items-start gap-2">
                         <div>
                             <div className="font-semibold text-gray-800 text-sm">Grow your connections!</div>
                             <div className="text-xs text-gray-500 mt-1">Respond to leads quickly and convert more opportunities.</div>
