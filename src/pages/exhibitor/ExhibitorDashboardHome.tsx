@@ -2,7 +2,7 @@ import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { STATUS_CONFIG } from '@/components/dashboard/exhibitor/types';
 import ExhibitorOverview from '@/components/dashboard/exhibitor/home/ExhibitorOverview';
 import ExhibitorModuleGrid from '@/components/dashboard/exhibitor/home/ExhibitorModuleGrid';
-import HeroSection from '@/components/dashboard/exhibitor/home/HeroSection';
+import ExhibitorHeroSlider from '@/components/dashboard/exhibitor/home/ExhibitorHeroSlider';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareText } from 'lucide-react';
@@ -13,6 +13,7 @@ import StatCards from '@/components/dashboard/exhibitor/home/StatCards';
 import DashboardWidgets from '@/components/dashboard/exhibitor/home/DashboardWidgets';
 import DashboardBottom from '@/components/dashboard/exhibitor/home/DashboardBottom';
 import ReferralPopup from '@/components/dashboard/exhibitor/home/ReferralPopup';
+import SellerPopup from '@/components/dashboard/exhibitor/home/SellerPopup';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();
@@ -29,10 +30,15 @@ export default function ExhibitorDashboardHome() {
     const isPostExpo = new Date() > new Date('2026-04-20'); // Post-expo phase
     const [showFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
     const [isReferralPopupOpen, setIsReferralPopupOpen] = useState(true);
+    const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
 
     return (
         <>
-            <ReferralPopup isOpen={isReferralPopupOpen} onClose={() => setIsReferralPopupOpen(false)} />
+            <ReferralPopup isOpen={isReferralPopupOpen} onClose={() => {
+                setIsReferralPopupOpen(false);
+                setIsSellerPopupOpen(true);
+            }} />
+            <SellerPopup isOpen={isSellerPopupOpen} onClose={() => setIsSellerPopupOpen(false)} />
             {/* <ExhibotorTopbar /> */}
             <div className="space-y-2 px-8 pt-1 pb-4">
                 <WelcomeHeader />
@@ -52,7 +58,7 @@ export default function ExhibitorDashboardHome() {
                 </AnimatePresence>
 
                 <div style={{ marginTop: '-10px' }} className="relative z-10">
-                    <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
+                    <ExhibitorHeroSlider />
                 </div>
                 <DashboardWidgets />
                 <DashboardBottom />

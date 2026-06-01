@@ -45,7 +45,7 @@ export default function ExhibitorLayout({ logo, data, activeTab, setActiveTab, h
             <div className="hidden lg:block">
                 <SocialSidebar />
             </div>
-            {/* <AdminWhatsAppFloat data={data} /> */}
+            <AdminWhatsAppFloat data={data} />
             <div className="flex pt-14 print:pt-0 flex-1 relative">
                 {/* Mobile Backdrop */}
                 {sidebarOpen && (

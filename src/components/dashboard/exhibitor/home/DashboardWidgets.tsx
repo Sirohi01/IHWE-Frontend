@@ -1,5 +1,8 @@
-import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare, Ticket, ShoppingBag, Package, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare, Ticket, ShoppingBag, Package, ArrowRight, Headset, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { API_URL } from "@/lib/api";
 
 const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
     <span
@@ -35,24 +38,16 @@ const QUICK_ACCESS = [
 
 
     { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
-    // { id: "documentation", label: "Documentation", sub: "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/documentation", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
     { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
-    // { id: "exhibitions", label: "My Events", sub: "Your schedule", icon: CalendarDays, link: "/exhibitor-dashboard/exhibitions", iconBg: "bg-gradient-to-br from-[#f59e0b] to-[#d97706]" },
-    // { id: "bsm", label: "Buyer Connect", sub: "Connect with buyers", icon: UsersRound, link: "/exhibitor-dashboard/bsm", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
-    { id: "chat", label: "Chat Support", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
+    { id: "chat", label: "Customer Care", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
+    { id: "relationship-manager", label: "Relationship Manager", sub: "Your dedicated contact", icon: Headset, link: "/exhibitor-dashboard/relationship-manager", iconBg: "bg-gradient-to-br from-[#059669] to-[#047857]" },
 ];
 
 // ─── Important Updates Data ───────────────────────────────────────────────────
 
 type BadgeType = "New" | "Info" | "Alert";
 
-const UPDATES: { badge: BadgeType; title: string; desc: string; date: string }[] = [
-    { badge: "New", title: "Buyer Seller Meet Registrations Open", desc: "Register now to connect with quality buyers.", date: "20 May 2026" },
-    { badge: "Info", title: "Last Date for Stall Setup", desc: "Stall setup begins from 19 August 2026.", date: "18 May 2026" },
-    { badge: "Alert", title: "Submit Your Documents", desc: "Please complete remaining documents.", date: "15 May 2026" },
-];
-
-const BADGE_STYLES: Record<BadgeType, string> = {
+const BADGE_STYLES: Record<string, string> = {
     New: "bg-blue-100 text-blue-600 border border-blue-200",
     Info: "bg-amber-100 text-amber-600 border border-amber-200",
     Alert: "bg-red-100 text-red-600 border border-red-200",
@@ -67,8 +62,73 @@ interface DashboardWidgetsProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) {
+    const { data } = useExhibitorCtx();
+    const [updates, setUpdates] = useState<any[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loadingUpdates, setLoadingUpdates] = useState(true);
+
+    useEffect(() => {
+        const fetchUpdates = async () => {
+            if (!data?._id) return;
+            setLoadingUpdates(true);
+            try {
+                const token = localStorage.getItem('exhibitorToken');
+                const res = await fetch(`${API_URL}/exhibitor-auth/updates?id=${data._id}&page=${page}&limit=3`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const result = await res.json();
+                if (result.success) {
+                    setUpdates(result.data);
+                    setTotalPages(result.pagination.totalPages);
+                }
+            } catch (err) {
+                console.error("Failed to fetch updates", err);
+            } finally {
+                setLoadingUpdates(false);
+            }
+        };
+        fetchUpdates();
+    }, [data?._id, page]);
     return (
         <div className="flex flex-col lg:flex-row items-start gap-2 w-full">
+            <style>{`
+                @keyframes goldShift {
+                    0%   { background-position: 0% 50%; }
+                    50%  { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                @keyframes shimmer {
+                    0%   { left: -75%; }
+                    100% { left: 150%; }
+                }
+                @keyframes sparkleAnim {
+                    0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+                    40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+                    80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+                    100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+                }
+                .golden-btn-hero {
+                    background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+                    background-size: 200% 200%;
+                    animation: goldShift 2.5s ease infinite;
+                    box-shadow: 0 0 10px 2px rgba(255,200,0,0.3);
+                    position: relative;
+                    overflow: hidden;
+                    border: 1px solid rgba(255,255,255,0.5) !important;
+                }
+                .golden-btn-hero::before {
+                    content: '';
+                    position: absolute;
+                    top: -50%;
+                    left: -75%;
+                    width: 50%;
+                    height: 200%;
+                    background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+                    transform: skewX(-20deg);
+                    animation: shimmer 2s infinite;
+                }
+            `}</style>
 
             {/* Quick Access */}
             <div
@@ -138,32 +198,63 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
 
             {/* Important Updates */}
             <div
-                className="w-full lg:w-[35%] shrink-0 bg-white rounded-2xl p-2 pb-2"
-                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+                className="w-full lg:w-[35%] shrink-0 bg-white rounded-2xl p-2 pb-2 flex flex-col justify-between"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", minHeight: "200px" }}
             >
-                <div className="flex items-center justify-between mb-2 px-2">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Important Updates</span>
-                        <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
-                    </div>
-                    <button className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
-                </div>
-
-                <div className="space-y-2">
-                    {UPDATES.map((u, i) => (
-                        <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-gray-50 transition-colors" style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}>
-                            <span className={`w-[34px] text-center text-[9px] font-semibold px-1 py-0.5 rounded-md shrink-0 mt-0.5 ${BADGE_STYLES[u.badge]}`}>
-                                {u.badge}
-                            </span>
-                            <div className="flex-1 min-w-0 ">
-                                <div className="flex items-center justify-between gap-1 mb-1">
-                                    <p className="text-[10px] font-semibold text-[#1a3a7c] leading-tight whitespace-nowrap tracking-tight">{u.title}</p>
-                                    <span className="text-[8px] text-black shrink-0 whitespace-nowrap">{u.date}</span>
-                                </div>
-                                <p className="text-[8px] text-[#1a3a7c] mt-0.5">{u.desc}</p>
-                            </div>
+                <div>
+                    <div className="flex items-center justify-between mb-2 px-2">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Important Updates</span>
+                            <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
                         </div>
-                    ))}
+                        {/* Pagination Controls in Header */}
+                        {!loadingUpdates && totalPages > 1 && (
+                            <div className="flex items-center gap-2">
+                                <button 
+                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                    className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
+                                >
+                                    <ChevronLeft size={14} />
+                                </button>
+                                <span className="text-[9px] font-medium text-gray-500 whitespace-nowrap">
+                                    {page} / {totalPages}
+                                </span>
+                                <button 
+                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                    className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
+                                >
+                                    <ChevronRight size={14} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        {loadingUpdates ? (
+                            <div className="flex justify-center py-4">
+                                <div className="w-5 h-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                            </div>
+                        ) : updates.length > 0 ? (
+                            updates.map((u, i) => (
+                                <div key={i} className="flex items-start gap-3 p-2 rounded-xl hover:bg-gray-50 transition-colors" style={{ boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px" }}>
+                                    <span className={`w-[34px] text-center text-[9px] font-semibold px-1 py-0.5 rounded-md shrink-0 mt-0.5 ${BADGE_STYLES[u.badge] || 'bg-gray-100 text-gray-600'}`}>
+                                        {u.badge}
+                                    </span>
+                                    <div className="flex-1 min-w-0 ">
+                                        <div className="flex items-center justify-between gap-1 mb-1">
+                                            <p className="text-[10px] font-semibold text-[#1a3a7c] leading-tight whitespace-nowrap tracking-tight">{u.title}</p>
+                                            <span className="text-[8px] text-black shrink-0 whitespace-nowrap">{u.date}</span>
+                                        </div>
+                                        <p className="text-[8px] text-[#1a3a7c] mt-0.5 leading-snug">{u.desc}</p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center text-xs text-gray-500 py-4">No updates right now.</div>
+                        )}
+                    </div>
                 </div>
             </div>
 

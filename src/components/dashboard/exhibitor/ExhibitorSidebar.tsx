@@ -48,7 +48,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: "payments", label: "Make Payment", icon: CreditCard },
     { id: "epromotion", label: "E-Promotion", icon: Megaphone },
     { id: "feedback", label: "Feedback", icon: MessageSquare },
-    { id: "chat", label: "Chat Support", icon: MessageSquare },
+    { id: "chat", label: "Customer Care", icon: MessageSquare },
 ];
 
 const PSM_REPORT_IDS = [

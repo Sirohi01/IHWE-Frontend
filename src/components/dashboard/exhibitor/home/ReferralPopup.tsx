@@ -49,14 +49,14 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                 {/* Row 1 */}
                                 <div className="grid grid-cols-2 gap-1.5">
                                     <div>
-                                        <label className="block text-[8px] font-bold text-black mb-0">Company Name <span className="text-red-500">*</span></label>
+                                        <label className="block text-[9px] font-bold text-black mb-0">Company Name <span className="text-red-500">*</span></label>
                                         <div className="relative">
                                             <Building2 size={10} className="absolute left-2 top-1/2 -translate-y-1/2 text-green-700 pointer-events-none" />
                                             <input type="text" placeholder="Enter Company Name" className="w-full pl-6 pr-2 py-1 text-[9px] border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-600/30 focus:border-green-600 outline-none" />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-[8px] font-bold text-black mb-0">Contact Person <span className="text-red-500">*</span></label>
+                                        <label className="block text-[9px] font-bold text-black mb-0">Contact Person <span className="text-red-500">*</span></label>
                                         <div className="relative">
                                             <User size={10} className="absolute left-2 top-1/2 -translate-y-1/2 text-green-700 pointer-events-none" />
                                             <input type="text" placeholder="Enter Contact Person" className="w-full pl-6 pr-2 py-1 text-[9px] border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-600/30 focus:border-green-600 outline-none" />
@@ -67,7 +67,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                 {/* Row 2 */}
                                 <div className="grid grid-cols-2 gap-1.5">
                                     <div>
-                                        <label className="block text-[8px] font-bold text-black mb-0">Mobile Number <span className="text-red-500">*</span></label>
+                                        <label className="block text-[9px] font-bold text-black mb-0">Mobile Number <span className="text-red-500">*</span></label>
                                         <div className="flex border border-gray-200 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-green-600/30 focus-within:border-green-600">
                                             <div className="bg-gray-50 px-1 flex items-center border-r border-gray-200 gap-1">
                                                 <Phone size={9} className="text-green-700" />
@@ -77,7 +77,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-[8px] font-bold text-black mb-0">Email ID</label>
+                                        <label className="block text-[9px] font-bold text-black mb-0">Email ID</label>
                                         <div className="relative">
                                             <Mail size={10} className="absolute left-2 top-1/2 -translate-y-1/2 text-green-700 pointer-events-none" />
                                             <input type="email" placeholder="Enter Email Address" className="w-full pl-6 pr-2 py-1 text-[9px] border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-600/30 focus:border-green-600 outline-none" />
@@ -87,7 +87,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
 
                                 {/* Category */}
                                 <div>
-                                    <label className="block text-[8px] font-bold text-black mb-0">Product / Service Category</label>
+                                    <label className="block text-[9px] font-bold text-black mb-0">Product / Service Category</label>
                                     <div className="relative">
                                         <Tag size={10} className="absolute left-2 top-1/2 -translate-y-1/2 text-green-700 pointer-events-none" />
                                         <select className="w-full pl-6 pr-5 py-1 text-[9px] border border-gray-200 rounded-lg focus:ring-1 focus:ring-green-600/30 focus:border-green-600 outline-none appearance-none text-gray-500">
@@ -103,7 +103,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                 {/* Remarks */}
                                 <div>
                                     <div className="flex justify-between items-end mb-0">
-                                        <label className="block text-[8px] font-bold text-black">Remarks <span className="text-gray-400 font-normal">(Optional)</span></label>
+                                        <label className="block text-[9px] font-bold text-black">Remarks <span className="text-gray-400 font-normal">(Optional)</span></label>
                                         <span className="text-[7px] text-gray-400">0/300</span>
                                     </div>
                                     <div className="relative">
@@ -117,7 +117,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                     <div className="bg-green-700 rounded-full p-0.5 shrink-0">
                                         <ShieldCheck size={9} className="text-white" />
                                     </div>
-                                    <p className="text-[7.5px] text-gray-700 leading-tight">
+                                    <p className="text-[7.5px] text-gray-900 font-bold leading-tight">
                                         Bonus applicable only on <span className="font-bold text-green-800">new clients</span>, after <span className="font-bold text-green-800">payment realization</span> &amp; <span className="font-bold text-green-800">verification</span>.
                                     </p>
                                 </div>

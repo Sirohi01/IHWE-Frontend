@@ -1,9 +1,8 @@
-import { CheckCircle, Clock, MinusCircle, FileText, MapPin } from "lucide-react";
+import { CheckCircle, Clock, MinusCircle, FileText, MapPin, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type DocStatus = "Completed" | "Pending" | "Not Uploaded";
-type EventColor = "blue" | "green" | "purple";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -26,13 +25,6 @@ const DOCUMENTS: { name: string; status: DocStatus }[] = [
   { name: "Other Documents", status: "Not Uploaded" },
 ];
 
-const EVENTS: { day: string; month: string; title: string; date: string; time?: string; venue: string; color: EventColor }[] = [
-  { day: "19", month: "AUG", title: "Stall Setup Begins", date: "19 August 2026", venue: "Pragati Maidan, New Delhi", color: "blue" },
-  { day: "21", month: "AUG", title: "Expo Inauguration", date: "21 August 2026", time: "10:00 AM", venue: "Main Auditorium, Hall No. 1", color: "green" },
-  { day: "23", month: "AUG", title: "Expo Closing", date: "23 August 2026", time: "06:00 PM", venue: "Pragati Maidan, New Delhi", color: "purple" },
-  { day: "24", month: "AUG", title: "Stall Dismantling", date: "24 August 2026", time: "10:00 AM", venue: "Pragati Maidan, New Delhi", color: "blue" },
-];
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon: any }> = {
@@ -41,15 +33,9 @@ const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon:
   "Not Uploaded": { label: "Not Uploaded", color: "text-gray-400", icon: MinusCircle },
 };
 
-const EVENT_COLORS: Record<EventColor, { day: string; month: string; bg: string }> = {
-  blue: { day: "text-[#1a3a7c]", month: "text-[#4169c8]", bg: "bg-[#eef2ff]" },
-  green: { day: "text-green-700", month: "text-green-500", bg: "bg-[#f0faf5]" },
-  purple: { day: "text-purple-700", month: "text-purple-500", bg: "bg-[#f5f0ff]" },
-};
-
-
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { API_URL } from "@/lib/api";
 
 function DonutChart({ segments }: { segments: { percent: number; color: string; label: string; amount: string }[] }) {
   const r = 36, cx = 44, cy = 44;
@@ -110,6 +96,32 @@ interface DashboardBottomProps {
 export default function DashboardBottom({ onViewPayment, onViewDocuments, onViewEvents }: DashboardBottomProps) {
   const { data } = useExhibitorCtx();
 
+  const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
+  const [eventPage, setEventPage] = useState(1);
+  const eventsPerPage = 5;
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoadingEvents(true);
+      try {
+        const res = await fetch(`${API_URL}/upcoming-events`);
+        const result = await res.json();
+        if (result.success) {
+          setUpcomingEvents(result.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch upcoming events:", err);
+      } finally {
+        setIsLoadingEvents(false);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const totalEventPages = Math.ceil(upcomingEvents.length / eventsPerPage);
+  const paginatedEvents = upcomingEvents.slice((eventPage - 1) * eventsPerPage, eventPage * eventsPerPage);
+
   // Dynamic Payment Setup
   const currencySymbol = data?.participation?.currency === 'USD' ? '$' : '₹';
   const formatAmt = (num: number) => `${currencySymbol} ${num?.toLocaleString('en-IN') || '0'}`;
@@ -143,12 +155,12 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
   // Dynamic Documents Setup
   const dDocs = useMemo(() => {
       return [
-        { name: "Company Logo", status: data?.companyLogoUrl ? "Completed" : "Pending" },
-        { name: "GST Certificate", status: data?.gstCertificateUrl || data?.kycDocuments?.gstCertificate ? "Completed" : "Pending" },
-        { name: "PAN Card", status: data?.panCardFrontUrl || data?.kycDocuments?.panCard ? "Completed" : "Pending" },
-        { name: "Representative Photo", status: data?.representativePhotoUrl ? "Completed" : "Pending" },
-        { name: "Cancelled Cheque", status: data?.cancelledChequeUrl ? "Completed" : "Not Uploaded" },
-        { name: "Product Brochure", status: data?.brochure ? "Completed" : "Not Uploaded" },
+        { name: "Profile Update", status: "Pending" },
+        { name: "GST Certificate", status: "Completed" },
+        { name: "Aadhar Card", status: "Completed" },
+        { name: "PAN Card", status: "Completed" },
+        { name: "MSME Document", status: "Pending" },
+        { name: "Product Brochure / Catalog", status: "Pending" },
       ] as { name: string; status: DocStatus }[];
   }, [data]);
 
@@ -231,7 +243,12 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
           style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
+              <button onClick={onViewDocuments} className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-2 py-0.5 rounded text-[9px] font-bold transition-colors">
+                <Plus size={10} strokeWidth={3} /> ADD
+              </button>
+            </div>
             <button onClick={onViewDocuments} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
           </div>
 
@@ -258,45 +275,78 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
 
       {/* ── Upcoming Events ── */}
       <div
-        className="w-full lg:w-[35%] shrink-0 bg-white rounded-lg p-3"
-        style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+        className="w-full lg:w-[35%] shrink-0 bg-white rounded-lg p-3 flex flex-col justify-between"
+        style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", minHeight: "220px" }}
       >
-        <div className="flex items-center justify-between mb-2 px-2">
-          <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Upcoming Events</span>
-          <button onClick={onViewEvents} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
-        </div>
-
-        <div className="space-y-2">
-          {EVENTS.map((ev, i) => {
-            const clr = EVENT_COLORS[ev.color];
-            return (
-              <div key={i} className="flex items-stretch gap-0 border border-gray-100 rounded-lg overflow-hidden">
-                {/* Date box */}
-                <div className={`${clr.bg} shrink-0 w-12 flex flex-col items-center justify-center py-1.5`}>
-                  <p className={`text-[15px] font-bold leading-none ${clr.day}`}>{ev.day}</p>
-                  <p className={`text-[11px] font-bold uppercase tracking-widest mt-1 ${clr.month}`}>{ev.month}</p>
+        <div>
+          <div className="flex items-center justify-between mb-2 px-2">
+            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Upcoming Events</span>
+            {/* Pagination Controls in Header */}
+            {!isLoadingEvents && totalEventPages > 1 && (
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => setEventPage(p => Math.max(1, p - 1))}
+                        disabled={eventPage === 1}
+                        className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
+                    >
+                        <ChevronLeft size={14} />
+                    </button>
+                    <span className="text-[9px] font-medium text-gray-500 whitespace-nowrap">
+                        {eventPage} / {totalEventPages}
+                    </span>
+                    <button 
+                        onClick={() => setEventPage(p => Math.min(totalEventPages, p + 1))}
+                        disabled={eventPage === totalEventPages}
+                        className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
+                    >
+                        <ChevronRight size={14} />
+                    </button>
                 </div>
-                {/* Info */}
-                <div className="flex-1 min-w-0 py-1 pl-4 pr-2 flex flex-col justify-center">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-bold text-[#1a3a7c] leading-tight truncate mb-1">{ev.title}</p>
-                      <div className="flex items-center gap-1">
-                        <MapPin size={11} className="text-[#1a3a7c] shrink-0" />
-                        <span className="text-[10px] text-[#1a3a7c] truncate">{ev.venue}</span>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            {isLoadingEvents ? (
+              <div className="flex justify-center py-4">
+                  <div className="w-5 h-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+              </div>
+            ) : paginatedEvents.length > 0 ? (
+              paginatedEvents.map((ev, i) => {
+                const parts = ev.dateString.split(' ');
+                const day = parts[0] || '';
+                const month = parts[1] || '';
+                return (
+                  <div key={i} className="flex items-stretch gap-0 border border-gray-100 rounded-lg overflow-hidden">
+                    {/* Date box */}
+                    <div className={`${ev.colorClass} shrink-0 w-10 flex flex-col items-center justify-center py-1`}>
+                      <p className={`text-[13px] font-black leading-none`}>{day}</p>
+                      <p className={`text-[9px] font-bold uppercase tracking-widest mt-0.5`}>{month}</p>
+                    </div>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0 py-1 pl-4 pr-2 flex flex-col justify-center">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-[#1a3a7c] leading-tight truncate mb-1">{ev.title}</p>
+                          <div className="flex items-center gap-1">
+                            <MapPin size={11} className="text-[#1a3a7c] shrink-0" />
+                            <span className="text-[10px] text-[#1a3a7c] truncate">{ev.location}</span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end shrink-0 pt-0.5">
+                          <p className="text-[8px] text-black whitespace-nowrap font-medium">{ev.fullDate}</p>
+                          {ev.time && (
+                            <p className="text-[8px] text-black whitespace-nowrap mt-0.5">{ev.time}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end shrink-0 pt-0.5">
-                      <p className="text-[8px] text-black whitespace-nowrap font-medium">{ev.date}</p>
-                      {ev.time && (
-                        <p className="text-[8px] text-black whitespace-nowrap mt-0.5">{ev.time}</p>
-                      )}
-                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })
+            ) : (
+              <div className="text-center text-xs text-gray-500 py-4">No upcoming events right now.</div>
+            )}
+          </div>
         </div>
       </div>
 
