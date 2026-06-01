@@ -12,6 +12,7 @@ import WelcomeHeader from '@/components/dashboard/exhibitor/home/WelcomeHeader';
 import StatCards from '@/components/dashboard/exhibitor/home/StatCards';
 import DashboardWidgets from '@/components/dashboard/exhibitor/home/DashboardWidgets';
 import DashboardBottom from '@/components/dashboard/exhibitor/home/DashboardBottom';
+import ReferralPopup from '@/components/dashboard/exhibitor/home/ReferralPopup';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();
@@ -27,11 +28,13 @@ export default function ExhibitorDashboardHome() {
 
     const isPostExpo = new Date() > new Date('2026-04-20'); // Post-expo phase
     const [showFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
+    const [isReferralPopupOpen, setIsReferralPopupOpen] = useState(true);
 
     return (
         <>
+            <ReferralPopup isOpen={isReferralPopupOpen} onClose={() => setIsReferralPopupOpen(false)} />
             {/* <ExhibotorTopbar /> */}
-            <div className="space-y-2 px-8 py-4">
+            <div className="space-y-2 px-8 pt-1 pb-4">
                 <WelcomeHeader />
                 <StatCards />
                 <AnimatePresence>
@@ -48,7 +51,9 @@ export default function ExhibitorDashboardHome() {
                     )}
                 </AnimatePresence>
 
-                <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
+                <div style={{ marginTop: '-10px' }} className="relative z-10">
+                    <HeroSection onRegisterVisit={() => { }} forceNewTab={true} hideStats={true} />
+                </div>
                 <DashboardWidgets />
                 <DashboardBottom />
                 <div className="bg-white shadow-sm">

@@ -179,11 +179,11 @@ const SocialSidebar = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           @media (min-width: 1024px) {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
           }
           background: white;
           border-radius: 9999px;
@@ -296,7 +296,7 @@ const SocialSidebar = () => {
         }
       `}</style>
 
-      <div className="flex flex-col gap-2 lg:gap-3 fixed right-1 lg:right-1.5 top-[45%] lg:top-1/2 -translate-y-1/2 z-50">
+      <div className="flex flex-col gap-2 fixed right-2 top-[45%] lg:top-1/2 -translate-y-1/2 z-50">
         {socialData.map((social, index) => {
           const Icon = social.icon;
 
@@ -328,7 +328,7 @@ const SocialSidebar = () => {
                 onClick={() => analyticsApi.logClick(`Social: ${social.label}`)}
               >
                 <div className="icon-wrapper">
-                  <Icon className="w-3.5 h-3.5 lg:w-[18px] lg:h-[18px]" style={{ color: social.color }} />
+                  <Icon size={16} style={{ color: social.color }} />
                 </div>
 
                 <div className="shine-effect" />

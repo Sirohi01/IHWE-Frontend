@@ -11,7 +11,7 @@ import rightimage from '@/assets/stallRightImagefinal.png';
 
 export default function StallInformation() {
     return (
-        <div className="w-full bg-[#f8f9fa] min-h-screen font-sans p-3 lg:p-4 pb-16">
+        <div className="w-full bg-[#f8f9fa] min-h-screen p-3 lg:p-4 pb-16" style={{ fontFamily: '"Inter", sans-serif' }}>
             <div className="max-w-[1600px] mx-auto space-y-1.5 md:space-y-2.5">
 
                 {/* Header Section */}

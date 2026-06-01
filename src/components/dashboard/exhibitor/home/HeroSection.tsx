@@ -267,7 +267,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-4xl mt-0 translate-y-0 md:translate-y-4"
+              className="max-w-4xl mt-0 translate-y-0 md:-translate-y-8"
             >
               <motion.div
                 initial={{ opacity: 0, x: -30 }}

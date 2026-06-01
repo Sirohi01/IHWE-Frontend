@@ -8,13 +8,11 @@ const WelcomeHeader = () => {
 
     return (
 
-        <div
-            className=" flex justify-between items-stretch gap-5 "
-        >
+        <div className="flex flex-col lg:flex-row justify-between lg:items-stretch gap-3 lg:gap-5">
             {/* ── Left ── */}
-            <div className="flex flex-col justify-center ">
-                <p className="text-xs text-gray-500 mb-1.5 tracking-wide">Welcome back,</p>
-                <div className="flex items-center gap-2 mb-2.5">
+            <div className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
+                <p className="text-xs text-black mb-1.5 tracking-wide">Welcome back,</p>
+                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-0.5">
                     <h2
                         className="text-[20px] font-semibold text-gray-900 leading-tight"
                         style={{
@@ -36,29 +34,41 @@ const WelcomeHeader = () => {
                     </div>
 
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">
+                {data?.contact1 && (data?.contact1?.firstName || data?.contact1?.lastName) && (
+                    <div className="flex items-center gap-1 mt-1 mb-1">
+                        <span className="text-[10px] text-gray-500 font-medium flex items-center gap-1">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            {data.contact1.title ? `${data.contact1.title} ` : ''}{data.contact1.firstName} {data.contact1.lastName}
+                        </span>
+                        {data?.contact1?.designation && (
+                            <span className="text-[10px] text-gray-400 font-medium ml-1">
+                                ({data.contact1.designation})
+                            </span>
+                        )}
+                    </div>
+                )}
+                <p className="text-xs text-gray-500 leading-relaxed mt-1">
                     Here's what's happening with your participation in IHWE 2026.
                 </p>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-2 lg:gap-4 w-full lg:w-auto mt-2 lg:mt-0">
                 {/* ── Center Card ── */}
                 <div
-                    className="flex-none w-[220px] bg-white border border-gray-200 rounded-md px-4 py-0.5 flex flex-col justify-center"
+                    className="flex-1 lg:flex-none w-full lg:w-auto lg:min-w-[160px] bg-white border border-gray-200 rounded-md px-3 py-1 flex flex-col justify-center self-center z-10"
                     style={{
-                        boxShadow: '0 1px 0 rgba(255,255,255,0.7) inset, 0 2px 8px rgba(0,0,0,0.06), 0 8px 20px rgba(0,0,0,0.05)',
-                        transform: 'perspective(800px) rotateY(-1deg) rotateX(1deg)',
+                        boxShadow: 'rgba(0, 0, 0, 0.18) 0px 2px 4px',
                     }}
                 >
                     {/* Date Row */}
                     <div className="flex items-center gap-2.5">
-                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
-                            <CalendarDays size={17} className="text-[#1a3a7c]" />
+                        <div className="w-[24px] h-[24px] flex items-center justify-center flex-shrink-0">
+                            <CalendarDays size={14} className="text-[#313677]" />
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
-                                style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
+                                className="text-[10px] font-medium text-[#313677] leading-snug"
+                                style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
                             >
                                 21 – 23 AUGUST 2026
                             </p>
@@ -66,14 +76,14 @@ const WelcomeHeader = () => {
                     </div>
 
                     {/* Location Row */}
-                    <div className="flex items-center gap-2.5 pt-0.5">
-                        <div className="w-[32px] h-[32px] flex items-center justify-center flex-shrink-0">
-                            <MapPin size={17} className="text-[#1a3a7c]" />
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-[24px] h-[24px] flex items-center justify-center flex-shrink-0">
+                            <MapPin size={14} className="text-[#313677]" />
                         </div>
                         <div>
                             <p
-                                className="text-[13px] font-medium text-[#1a3a7c] leading-snug"
-                                style={{ textShadow: '0 1px 2px rgba(26,58,124,0.15)' }}
+                                className="text-[10px] font-medium text-[#313677] leading-snug"
+                                style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
                             >
                                 PRAGATI MAIDAN,<br />NEW DELHI, INDIA
                             </p>
@@ -83,7 +93,7 @@ const WelcomeHeader = () => {
 
                 {/* ── Right Banner ── */}
                 <div
-                    className="flex-none w-[420px] rounded-md overflow-hidden relative flex items-center px-5 py-1"
+                    className="flex-none w-full lg:w-[420px] min-h-[60px] rounded-md overflow-hidden relative flex flex-col sm:flex-row justify-center sm:justify-start items-center px-5 py-2 lg:py-1 text-center sm:text-left"
                     style={{
                         backgroundImage: "url('/exhibition/topright.png')",
                         backgroundSize: "cover",
@@ -98,7 +108,7 @@ const WelcomeHeader = () => {
                     </div>
 
                     {/* Text */}
-                    <div className="relative z-[2] max-w-[150px]">
+                    <div className="relative z-[2] max-w-full sm:max-w-[150px]">
                         <p className="text-[11px] text-white/75 mb-0.5 leading-relaxed">
                             Be a part of the world's leading platform for
                         </p>

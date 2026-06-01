@@ -244,7 +244,7 @@ const BuyerLogin = () => {
                                         {/* Heading */}
                                         <div className="mb-4">
                                             <h2 className="text-[20px] font-black text-slate-800 uppercase tracking-tight leading-none mb-1">
-                                                IHWE BUYER
+                                                BUYER DASHBOARD
                                             </h2>
 
                                             <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-600 mt-2">

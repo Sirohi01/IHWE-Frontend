@@ -21,9 +21,9 @@ export default function ExTab({ activeTab, setActiveTab, onPreview }: ExTabProps
       {/* Header row */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h1 className="text-lg font-semibold text-[#1a3a7c] leading-tight">Company Profile</h1>
+          <h1 className="text-lg font-semibold text-[#1a3a7c] leading-tight">My Profile</h1>
           <p className="text-[12px] text-gray-400 mt-0.5">
-            Home &nbsp;<span className="text-gray-300">›</span>&nbsp; Company Profile
+            Home &nbsp;<span className="text-gray-300">›</span>&nbsp; Overview
           </p>
         </div>
         <button

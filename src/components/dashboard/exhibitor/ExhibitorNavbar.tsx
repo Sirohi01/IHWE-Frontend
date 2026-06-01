@@ -76,11 +76,17 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     };
 
     return (
-        <div className={`fixed top-0 right-0 z-[100] h-[64px] bg-gradient-to-r from-[#051c47] via-[#082b6b] to-[#051c47] border-b border-blue-900/50 shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-between px-6 print:hidden transition-all duration-300 ${sidebarOpen ? 'left-56' : 'left-[72px]'}`}>
+        <div className={`fixed top-0 right-0 z-[100] h-[56px] bg-gradient-to-r from-[#051c47] via-[#082b6b] to-[#051c47] border-b border-blue-900/50 shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex items-center justify-between px-3 lg:px-6 print:hidden transition-all duration-300 left-0 ${sidebarOpen ? 'lg:left-56' : 'lg:left-[72px]'}`}>
             {/* Left */}
-            <div className="flex items-center gap-3">
-                <h2 className="text-white text-lg uppercase font-semibold tracking-tight">Exhibitor Interface</h2>
-
+            <div className="flex items-center gap-2 lg:gap-3">
+                <button
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                    className="p-1.5 text-white hover:bg-white/10 rounded-md transition-colors lg:hidden"
+                >
+                    {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+                <h2 className="text-white text-sm lg:text-lg uppercase font-semibold tracking-tight hidden sm:block">Exhibitor Interface</h2>
+                <h2 className="text-white text-[11px] uppercase font-bold tracking-tight sm:hidden">IHWE 2026</h2>
             </div>
 
             {/* Right */}

@@ -70,28 +70,31 @@ const AnnouncementCard = () => {
   const ann = announcements[active];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
+    <div 
+      className="bg-white border border-gray-200 rounded-lg px-4 py-2"
+      style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-          <span className="w-8 h-8 rounded-full font-medium bg-emerald-50 text-emerald-700 flex items-center justify-center">
+          <span className="w-6 h-6 rounded-full font-medium bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <MegaphoneIcon />
           </span>
-          Important Announcements
+          <span className="text-xs">Important Announcements</span>
         </div>
-        <button className="flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-900 transition-colors">
-          View All <ArrowRightIcon size={13} />
+        <button className="flex items-center gap-1 text-[10px] font-medium text-emerald-700 hover:text-emerald-900 transition-colors">
+          View All <ArrowRightIcon size={10} />
         </button>
       </div>
 
       {/* Banner */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 flex items-start gap-3">
+      <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-2 py-1.5 flex items-start gap-2">
         <div className="flex-1">
-          <p className="text-xs font-semibold text-emerald-900 mb-1">{ann.title}</p>
-          <p className="text-xs text-emerald-700 leading-relaxed">{ann.desc}</p>
+          <p className="text-[11px] font-semibold text-emerald-900 mb-0.5">{ann.title}</p>
+          <p className="text-[10px] text-emerald-700 leading-tight">{ann.desc}</p>
         </div>
         <div className="flex-shrink-0">
-          <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <svg width="40" height="40" viewBox="0 0 52 52" fill="none">
             <circle cx="26" cy="26" r="26" fill="#c6ecd8" />
             <path d="M14 26 Q20 13 26 23 Q30 31 38 21" stroke="#1a7d4a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
             <circle cx="14" cy="26" r="3.5" fill="#1a7d4a" />
@@ -103,12 +106,12 @@ const AnnouncementCard = () => {
       </div>
 
       {/* Dots */}
-      <div className="flex justify-center gap-2 mt-3">
+      <div className="flex justify-center gap-1.5 mt-2">
         {announcements.map((_, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`w-2 h-2 rounded-full transition-colors ${i === active ? "bg-emerald-600" : "bg-gray-300"
+            className={`w-1.5 h-1.5 rounded-full transition-colors ${i === active ? "bg-emerald-600" : "bg-gray-300"
               }`}
             aria-label={`Announcement ${i + 1}`}
           />
@@ -120,30 +123,33 @@ const AnnouncementCard = () => {
 
 // --- Documents Card ---
 const DocumentsCard = () => (
-  <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
+  <div 
+    className="bg-white border border-gray-200 rounded-lg px-4 py-2"
+    style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+  >
     {/* Header */}
-    <div className="flex items-center justify-between mb-2">
+    <div className="flex items-center justify-between mb-1">
       <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
-        <span className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
+        <span className="w-6 h-6 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center">
           <FolderIcon />
         </span>
-        Event Documents
+        <span className="text-xs">Event Documents</span>
       </div>
-      <button className="flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-900 transition-colors">
-        View All <ArrowRightIcon size={13} />
+      <button className="flex items-center gap-1 text-[10px] font-medium text-emerald-700 hover:text-emerald-900 transition-colors">
+        View All <ArrowRightIcon size={10} />
       </button>
     </div>
 
     {/* Doc Rows */}
     <div className="divide-y divide-gray-100">
       {documents.map((doc, i) => (
-        <div key={i} className="flex items-center justify-between py-1.5">
+        <div key={i} className="flex items-center justify-between py-1">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">
               <FileIcon />
             </span>
-            <span className="text-xs font-medium text-gray-800">{doc.name}</span>
-            <span className="text-xs text-gray-400">{doc.size}</span>
+            <span className="text-[11px] font-medium text-gray-800">{doc.name}</span>
+            <span className="text-[10px] text-gray-400">{doc.size}</span>
           </div>
           <button
             className="text-emerald-600 hover:text-emerald-800 transition-colors p-1"
@@ -159,24 +165,27 @@ const DocumentsCard = () => (
 
 // --- Help Card ---
 const HelpCard = () => (
-  <div className="bg-white border border-gray-200 rounded-xl p-5">
+  <div 
+    className="bg-white border border-gray-200 rounded-xl p-3"
+    style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+  >
     {/* Header */}
-    <div className="flex items-center gap-2 text-sm font-medium text-gray-800 mb-2">
+    <div className="flex items-center gap-2 text-xs font-medium text-gray-800 mb-1">
       <HeadsetIcon />
       Need Help?
     </div>
 
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-2">
       <div className="flex-1">
-        <p className="text-xs text-gray-500 leading-relaxed mb-4">
+        <p className="text-[11px] text-gray-500 leading-snug mb-2">
           Our support team is here to help you through your event journey.
         </p>
-        <button className="inline-flex items-center gap-2 mt-2 bg-emerald-950 hover:bg-emerald-900 text-white text-xs font-medium rounded-md px-4 py-2.5 transition-colors">
-          Contact Support <ArrowRightIcon size={13} />
+        <button className="inline-flex items-center gap-1 mt-1 bg-emerald-950 hover:bg-emerald-900 text-white text-[10px] font-medium rounded-md px-3 py-1.5 transition-colors">
+          Contact Support <ArrowRightIcon size={10} />
         </button>
       </div>
       <div className="flex-shrink-0">
-        <svg width="100" height="100" viewBox="0 0 80 80" fill="none">
+        <svg width="60" height="60" viewBox="0 0 80 80" fill="none">
           <circle cx="40" cy="34" r="20" fill="#e6f1fb" />
           <path d="M24 34 Q24 16 40 16 Q56 16 56 34" stroke="#185fa5" strokeWidth="3" strokeLinecap="round" fill="none" />
           <rect x="19" y="31" width="9" height="14" rx="4.5" fill="#0f3d2e" />
@@ -194,7 +203,7 @@ const HelpCard = () => (
 // --- Main Component ---
 export default function EventDashboard1() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4  py-2 font-sans">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 py-1 font-sans pb-4">
       <AnnouncementCard />
       <DocumentsCard />
       <HelpCard />

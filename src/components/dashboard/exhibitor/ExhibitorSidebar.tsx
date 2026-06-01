@@ -37,18 +37,18 @@ interface SidebarProps {
 
 const NAV_ITEMS: NavItem[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "exhibitions", label: "My Event", icon: CalendarCheck },
     { id: "stall-management", label: "Stall Information", icon: Building2 },
-    { id: "accessories", label: "Add On Services", icon: ShoppingBag },
-    { id: "exhibitor-pass", label: "Exhibitor Pass", icon: Package },
     { id: "invoices", label: "Invoice & Receipts", icon: FileText },
+    { id: "accessories", label: "Add On Services", icon: ShoppingBag },
+    { id: "exhibitor-pass", label: "Passes & Hospitality", icon: Package },
+    { id: "product", label: "My Product/Services", icon: Package },
+    { id: "documentation", label: "MSME Documentation", icon: FolderOpen },
+    { id: "bsm", label: "Buyers Management", icon: UsersRound },
     { id: "payments", label: "Make Payment", icon: CreditCard },
-    { id: "documentation", label: "Documentation", icon: FolderOpen },
-    { id: "epromotion", label: "E-Promotion", icon: Star },
-    { id: "exhibitions", label: "My Events", icon: Star },
-    { id: "bsm", label: "Buyer Connect", icon: UsersRound, isNew: true },
+    { id: "epromotion", label: "E-Promotion", icon: Megaphone },
     { id: "feedback", label: "Feedback", icon: MessageSquare },
     { id: "chat", label: "Chat Support", icon: MessageSquare },
-    { id: "product", label: "Product and Services", icon: MessageSquare },
 ];
 
 const PSM_REPORT_IDS = [
@@ -297,24 +297,33 @@ export default function ExhibitorSidebar({
     ];
 
     return (
-        <aside className={cx("fixed top-0 left-0 bottom-0 z-50 flex flex-col transition-all duration-300 overflow-hidden print:hidden", sidebarOpen ? "w-56" : "w-[72px]")}>
+        <aside className={cx(
+            "fixed top-0 left-0 bottom-0 z-[110] lg:z-50 flex flex-col transition-all duration-300 overflow-hidden print:hidden",
+            sidebarOpen ? "translate-x-0 w-56" : "-translate-x-full lg:translate-x-0 lg:w-[72px]"
+        )} style={{ fontFamily: '"Inter", sans-serif' }}>
             {/* Backgrounds */}
             <div className="absolute inset-0 bg-[#061d49]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_88%,rgba(21,220,173,0.36),transparent_26%),radial-gradient(circle_at_78%_8%,rgba(37,112,255,0.22),transparent_24%),linear-gradient(180deg,#08204d_0%,#031b47_58%,#06306b_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,112,255,0.15),transparent_50%),linear-gradient(180deg,#08204d_0%,#031b47_58%,#06306b_100%)]" />
             {/* <div className="absolute inset-x-0 bottom-0 h-44 opacity-55 bg-[linear-gradient(180deg,transparent,#06d6a0_180%),repeating-linear-gradient(90deg,transparent_0_18px,rgba(41,208,255,.28)_19px_20px)]" /> */}
-            <div className="absolute inset-x-0 bottom-8 h-52 opacity-55">
-                <img src="/exhibition/1.png" alt="" />
+            <div className="absolute inset-x-0 bottom-0 h-52 opacity-55 pointer-events-none">
+                <img src="/exhibition/1.png" alt="" className="w-full h-full object-cover object-bottom" />
             </div>
             {/* Logo */}
-            <div className="relative z-10 flex py-2 items-center justify-center px-4">
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-16 bg-white/90 rounded-full blur-md" />
+            <div className="relative z-10 flex pt-2 pb-2 items-center justify-center px-4 mb-2 border-b border-white/10">
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    {/* Soft white glowing aura behind the logo for readability */}
+                    <div className="w-[120px] h-[40px] bg-white/60 rounded-full blur-2xl" />
                 </div>
-                <img src="/logo.png" alt="IHWE 2026" className="relative h-[70px] w-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,1)]" />
+                <img 
+                    src="/logo.png" 
+                    alt="IHWE 2026" 
+                    className="relative h-[60px] w-full object-contain" 
+                    style={{ filter: "drop-shadow(0px 0px 15px rgba(255,255,255,0.8)) drop-shadow(0px 0px 4px rgba(255,255,255,1))" }}
+                />
             </div>
 
 
-            <nav className="relative z-10 flex-1 space-y-1 px-3 pt-1 mt-1 overflow-y-auto">
+            <nav className="relative z-10 flex-1 space-y-1 px-3 pt-1 mt-1 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/30">
                 {/* Main nav */}
                 {NAV_ITEMS.map(item => {
                     const Icon = item.icon;
@@ -322,7 +331,7 @@ export default function ExhibitorSidebar({
                     const isChat = item.id === "chat";
                     return (
                         <button key={item.id} onClick={() => setActiveTab(item.id)}
-                            className={cx("w-full flex items-center gap-4 px-3 py-1.5    rounded-lg text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white shadow-[0_0_0_1px_rgba(90,255,203,0.45),0_12px_28px_rgba(0,0,0,0.28)]" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                            className={cx("w-full flex items-center gap-4 px-3 py-1 text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
                         >
                             <div className="relative shrink-0">
                                 <Icon size={sidebarOpen ? 16 : 15} strokeWidth={2.1} className="text-white" />
@@ -347,7 +356,7 @@ export default function ExhibitorSidebar({
                 {/* MSME dropdown */}
                 <div>
                     <button onClick={handleMsmeToggle}
-                        className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white shadow-[0_0_0_1px_rgba(90,255,203,0.45),0_12px_28px_rgba(0,0,0,0.28)]" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                        className={cx("w-full flex items-center gap-4 px-3 py-1 text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
                     >
                         <Award size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
                         {sidebarOpen && <span className="text-sm font-medium text-white flex-1 whitespace-nowrap">MSME</span>}
@@ -372,76 +381,6 @@ export default function ExhibitorSidebar({
                 </div>
             </nav>
 
-            {/* Social Icons Section */}
-            <div className={cx("relative z-10 px-4 py-2 border-t border-white/10 mt-auto transition-all duration-300", sidebarOpen ? "block" : "hidden")}>
-                {/* <div className="text-[9px] font-bold text-white/50 uppercase tracking-widest text-center mb-3">
-                    Follow Us
-                </div> */}
-                {/* Max-w forces exactly 3 items per row naturally */}
-                <div className="flex flex-wrap justify-center gap-3 w-full max-w-[140px] mx-auto">
-                    {socialData.map((social, index) => {
-                        const Icon = social.icon;
-                        return (
-                            <div key={index} className={`ex-social-item relative ${socialVisible ? "visible" : ""}`} style={{ "--index": index } as React.CSSProperties}>
-                                <div className="ex-glow-effect" style={{ backgroundColor: social.color }} />
-                                <div className="ex-ripple-effect" style={{ borderColor: social.color }} />
-
-                                <a href={social.url} target="_blank" rel="noopener noreferrer" className="ex-social-button" style={{ borderColor: social.color }} onClick={() => analyticsApi.logClick(`Social: ${social.label}`)}>
-                                    <div className="ex-icon-wrapper">
-                                        <Icon className="w-[14px] h-[14px]" style={{ color: social.color }} />
-                                    </div>
-                                    <div className="ex-shine-effect" />
-                                </a>
-
-                                <div className="ex-tooltip">
-                                    <div className="ex-tooltip-content" style={{ backgroundColor: social.color }}>
-                                        {social.label}
-                                        <div className="ex-tooltip-arrow" style={{ borderTopColor: social.color }}></div>
-                                    </div>
-                                </div>
-
-                                <div className="ex-particle" style={{ backgroundColor: social.color, "--x": "20px", "--y": "0px" } as React.CSSProperties} />
-                                <div className="ex-particle" style={{ backgroundColor: social.color, "--x": "-10px", "--y": "18px" } as React.CSSProperties} />
-                                <div className="ex-particle" style={{ backgroundColor: social.color, "--x": "-10px", "--y": "-18px" } as React.CSSProperties} />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-
-            <style>{`
-                @keyframes exFallIn { from { transform: translateY(30px) rotate(-180deg) scale(0.3); opacity: 0; } to { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } }
-                @keyframes exPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-                @keyframes exRipple { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
-                @keyframes exIconSpin { from { transform: rotate(0deg) scale(1); } to { transform: rotate(360deg) scale(1.1); } }
-                @keyframes exButtonShake { 0%, 100% { transform: rotate(0deg) scale(1.1); } 25% { transform: rotate(-10deg) scale(1.1); } 50% { transform: rotate(10deg) scale(1.1); } 75% { transform: rotate(-10deg) scale(1.1); } }
-                @keyframes exShine { 0% { left: -100%; } 100% { left: 200%; } }
-                @keyframes exTooltipBounce { 0%, 100% { transform: translateX(-50%) translateY(0) scale(1); } 50% { transform: translateX(-50%) translateY(-3px) scale(1.05); } }
-                @keyframes exParticle { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.5); opacity: 0; } }
-
-                .ex-social-item { animation: exFallIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: calc(var(--index) * 0.12s + 0.2s); opacity: 0; }
-                .ex-social-item.visible { opacity: 1; }
-                .ex-glow-effect { position: absolute; inset: 0; border-radius: 9999px; filter: blur(8px); opacity: 0; transition: opacity 0.3s; }
-                .ex-social-item:hover .ex-glow-effect { opacity: 0.6; animation: exPulse 2s ease-in-out infinite; }
-                .ex-ripple-effect { position: absolute; inset: 0; border-radius: 9999px; border: 2px solid; opacity: 0; }
-                .ex-social-item:hover .ex-ripple-effect { animation: exRipple 1.5s ease-out infinite; }
-                .ex-social-button { position: relative; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: white; border-radius: 9999px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 2px solid; transition: all 0.3s; overflow: hidden; }
-                .ex-social-button:hover { animation: exButtonShake 0.5s ease-in-out; transform: scale(1.1); }
-                .ex-social-button:active { transform: scale(0.9); }
-                .ex-icon-wrapper { transition: all 0.2s; }
-                .ex-social-item:hover .ex-icon-wrapper { animation: exIconSpin 0.6s ease-in-out; }
-                .ex-shine-effect { position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: rotate(45deg); opacity: 0; }
-                .ex-social-item:hover .ex-shine-effect { opacity: 1; animation: exShine 0.6s ease-in-out infinite; animation-delay: 0.5s; }
-                .ex-tooltip { position: absolute; bottom: 100%; left: 50%; margin-bottom: 8px; transform: translateX(-50%) translateY(10px) scale(0.8); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; z-index: 60; }
-                .ex-social-item:hover .ex-tooltip { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); animation: exTooltipBounce 0.8s ease-in-out infinite; }
-                .ex-tooltip-content { padding: 5px 10px; border-radius: 6px; color: white; font-size: 10px; font-weight: bold; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); position: relative; }
-                .ex-tooltip-arrow { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid; }
-                .ex-particle { position: absolute; width: 4px; height: 4px; border-radius: 9999px; pointer-events: none; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0; }
-                .ex-social-item:hover .ex-particle { animation: exParticle 1s ease-out infinite; }
-                .ex-particle:nth-child(1) { animation-delay: 0s; }
-                .ex-particle:nth-child(2) { animation-delay: 0.1s; }
-                .ex-particle:nth-child(3) { animation-delay: 0.2s; }
-            `}</style>
         </aside>
     );
 }

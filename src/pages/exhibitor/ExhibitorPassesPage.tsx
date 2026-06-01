@@ -112,6 +112,7 @@ export default function ExhibitorPassesPage() {
         <motion.div
             key="exhibitor-passes-v1"
             className="px-4 md:px-8 pt-5 pb-8 bg-[#f8fafc]/50 min-h-screen"
+            style={{ fontFamily: '"Inter", sans-serif' }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -120,7 +121,7 @@ export default function ExhibitorPassesPage() {
             <div className="flex flex-col xl:flex-row items-stretch justify-between gap-3.5 mb-1">
                 {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
                 <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
-                    <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-cover" />
+                    <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
                 </div>
 
                 {/* Right: Complimentary Quota Summary */}
@@ -134,7 +135,7 @@ export default function ExhibitorPassesPage() {
                     </div>
 
                     {/* Inner White Card Grid with Dividers */}
-                    <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-4 divide-x divide-slate-300 shadow-sm mb-1.5">
+                    <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-2 gap-y-4 sm:gap-y-0 sm:grid-cols-4 sm:divide-x sm:divide-slate-300 shadow-sm mb-1.5">
                         {/* Col 1 */}
                         <div className="flex flex-col items-center justify-center text-center px-1">
                             <Users size={28} className="text-[#1a3a7c] shrink-0" />

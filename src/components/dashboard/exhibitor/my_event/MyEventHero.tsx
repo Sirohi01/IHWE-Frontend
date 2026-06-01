@@ -37,7 +37,10 @@ function InfoCard({ icon: Icon, iconBg, label, value, sub }: {
     icon: any; iconBg: string; label: string; value: string; sub: string;
 }) {
     return (
-        <div className="flex items-center gap-4 rounded-lg border border-gray-100 shadow-sm px-4 py-1 flex-1 min-w-0 transition-all duration-200 hover:shadow-md hover:border-blue-200 bg-white hover:bg-blue-50/40 hover:-translate-y-0.5 cursor-pointer group">
+        <div 
+            className="flex items-center gap-4 rounded-lg bg-white px-4 py-1 flex-1 min-w-0 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer group"
+            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+        >
             <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110`}>
                 <Icon size={22} strokeWidth={1.4} className="text-current" />
             </div>
@@ -64,23 +67,23 @@ export default function MyEventHero() {
     const { days, hrs, mins, secs } = useCountdown(EVENT_DATE);
 
     return (
-        <div className="flex flex-col gap-3 w-full ">
+        <div className="flex flex-col gap-2 w-full ">
 
             {/* ── Top Banner: 3 columns ── */}
-            <div className="flex overflow-hidden gap-6">
+            <div className="flex overflow-hidden gap-4">
 
                 {/* COL 1 — White title */}
-                <div className="flex flex-col justify-center  py-8  w-[230px]">
-                    <h2 className="text-[28px] font-semibold text-[#0f1f45] leading-tight mb-2">My Event</h2>
-                    <div className="w-10 h-[3px] bg-emerald-500 rounded-full mb-3" />
-                    <p className="text-[13px] text-[#1a3a7c] leading-relaxed">
+                <div className="flex flex-col justify-center py-2 w-[230px]">
+                    <h2 className="text-[24px] font-semibold text-[#0f1f45] leading-tight mb-1">My Event</h2>
+                    <div className="w-10 h-[3px] bg-emerald-500 rounded-full mb-2" />
+                    <p className="text-[12px] text-[#1a3a7c] leading-relaxed">
                         Manage, track and organize everything about your participation in IHWE 2026 – all in one place.
                     </p>
                 </div>
 
                 {/* COL 2 — Hero image */}
                 <div
-                    className="flex-1 relative min-h-[170px] flex items-end justify-end p-2"
+                    className="flex-1 relative min-h-[130px] flex items-end justify-end p-2"
                     style={{
                         backgroundImage: `url(${Hero})`,
                         backgroundSize: "cover",
@@ -92,29 +95,29 @@ export default function MyEventHero() {
 
                     {/* COL 3 — Dark navy: tagline top, countdown bottom */}
                     <div
-                        className="w-fit  flex flex-row items-center gap-8 justify-between px-6 py-5 "
+                        className="w-fit flex flex-row items-center gap-6 justify-between px-4 py-3"
                     >
                         {/* Tagline */}
                         <div className="w-[180px]">
-                            <p className="text-white/80 text-lg italic font-medium leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-white/80 text-[15px] italic font-medium leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
                                 Let's make your
                             </p>
-                            <p className="text-white text-xl font-semibold leading-tight tracking-wide">
+                            <p className="text-white text-[17px] font-semibold leading-tight tracking-wide">
                                 IHWE 2026
                             </p>
-                            <p className="text-[#47B338] text-[22px] font-black italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-[#47B338] text-[19px] font-black italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
                                 experience
                             </p>
-                            <p className="text-white/90 text-lg font-medium italic leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-white/90 text-[15px] font-medium italic leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
                                 extraordinary!
                             </p>
                         </div>
 
                         {/* Countdown + button */}
-                        <div className="flex flex-col relative  gap-3">
-                            <div className="px-3 py-2 bg-[#021825] rounded-lg shrink-0 border border-white/10 ">
-                                <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-2.5">Event Starts In</p>
-                                <div className="flex items-center gap-2 ">
+                        <div className="flex flex-col relative gap-2">
+                            <div className="px-3 py-1.5 bg-[#021825] rounded-lg shrink-0 border border-white/10 ">
+                                <p className="text-white text-[9px] font-bold uppercase tracking-widest mb-1.5">Event Starts In</p>
+                                <div className="flex items-center gap-2">
                                     <CountBox value={days} label="DAYS" />
                                     <CountBox value={hrs} label="HRS" />
                                     <CountBox value={mins} label="MINS" />
@@ -122,8 +125,8 @@ export default function MyEventHero() {
                                 </div>
 
                             </div>
-                            <button className="w-full flex items-center justify-center gap-2 py-1.5 rounded-md bg-[#339D3F] hover:bg-emerald-600 text-white font-bold text-[13px] transition-colors">
-                                View Event Details <ArrowRight size={14} />
+                            <button className="w-full flex items-center justify-center gap-2 py-1 rounded-md bg-[#339D3F] hover:bg-emerald-600 text-white font-bold text-[12px] transition-colors">
+                                View Event Details <ArrowRight size={12} />
                             </button>
                         </div>
                     </div>
@@ -132,7 +135,7 @@ export default function MyEventHero() {
             </div>
 
             {/* ── Bottom Info Cards ── */}
-            <div className="flex gap-3">
+            <div className="flex gap-2">
                 {INFO_CARDS.map((card, i) => (
                     <InfoCard key={i} {...card} />
                 ))}

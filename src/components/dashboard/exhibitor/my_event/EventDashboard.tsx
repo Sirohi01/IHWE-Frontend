@@ -33,20 +33,23 @@ const bookings = [
 
 export default function EventDashboard() {
     return (
-        <div className="grid grid-cols-2 gap-4 pt-4">
+        <div className="grid grid-cols-2 gap-3 pt-2">
             {/* Checklist */}
-            <div className="bg-white rounded-lg px-4 py-2">
-                <div className="flex justify-between items-center ">
-                    <h2 className="text-sm font-medium text-[#19174D] mb-1">My Event Checklist</h2>
-                    <span className="text-xs text-emerald-500 font-medium  cursor-pointer">View All Tasks →</span>
+            <div 
+                className="bg-white rounded-lg px-4 py-2"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+            >
+                <div className="flex justify-between items-center mb-1">
+                    <h2 className="text-sm font-medium text-[#19174D]">My Event Checklist</h2>
+                    <span className="text-xs text-emerald-500 font-medium cursor-pointer">View All Tasks →</span>
                 </div>
-                <div className="border border-gray-100 rounded-lg px-2 py-1">
+                <div className="border border-gray-100 rounded-lg px-2 py-0.5">
                     {tasks.map((t, i) => (
                         <div key={i} className="flex items-center gap-3 py-0.5 border-b border-gray-100 last:border-none hover:bg-gray-50 rounded-lg px-1 cursor-pointer transition-all">
-                            <div className={`w-9 h-9 rounded-lg ${t.bg} flex items-center justify-center text-[17px] shrink-0`}>{t.icon}</div>
+                            <div className={`w-8 h-8 rounded-lg ${t.bg} flex items-center justify-center text-[15px] shrink-0`}>{t.icon}</div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-[12px] font-medium text-[#0f1f45]">{t.name}</p>
-                                <p className="text-[11px] text-gray-500">{t.sub}</p>
+                                <p className="text-[11px] font-medium text-[#0f1f45] leading-snug">{t.name}</p>
+                                <p className="text-[10px] text-gray-500 leading-none mt-0.5">{t.sub}</p>
                             </div>
                             <ChecklistBadge status={t.status} />
                             <span className="text-gray-300 text-lg">›</span>
@@ -56,16 +59,19 @@ export default function EventDashboard() {
             </div>
 
             {/* Bookings */}
-            <div className="bg-white rounded-lg  px-4 py-2">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-sm font-medium text-[#19174D] mb-1">My Bookings & Services</h2>
-                    <span className="text-xs text-emerald-500 font-medium  cursor-pointer">View All →</span>
+            <div 
+                className="bg-white rounded-lg px-4 py-2"
+                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+            >
+                <div className="flex justify-between items-center mb-1">
+                    <h2 className="text-sm font-medium text-[#19174D]">My Bookings & Services</h2>
+                    <span className="text-xs text-emerald-500 font-medium cursor-pointer">View All →</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-3 gap-2">
                     {bookings.map((b, i) => (
-                        <div key={i} className="bg-[#f4f7ff] rounded-xl px-3 py-1 flex flex-col items-center gap-2 cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition-all">
-                            <span className="text-2xl">{b.icon}</span>
-                            <p className="text-[13px] font-semibold text-[#0f1f45] text-center">{b.name}</p>
+                        <div key={i} className="bg-[#f4f7ff] rounded-xl px-2 py-1 flex flex-col items-center gap-1 cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition-all">
+                            <span className="text-xl">{b.icon}</span>
+                            <p className="text-[12px] font-semibold text-[#0f1f45] text-center leading-tight">{b.name}</p>
                             <BookingStatus status={b.status} />
                         </div>
                     ))}
