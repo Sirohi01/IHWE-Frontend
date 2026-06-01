@@ -1,6 +1,6 @@
 import { X, Gift, Building2, User, Phone, Mail, Tag, PenLine, ShieldCheck, CheckCircle2, ArrowRight, Clock } from 'lucide-react';
-import exbanImg from '@/assets/exban.png';
-import extopImg from '@/assets/extop.png';
+import exbanImg from '@/assets/exban.webp';
+import extopImg from '@/assets/extop.webp';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {

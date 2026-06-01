@@ -36,6 +36,7 @@ const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon:
 import { useState, useMemo, useEffect } from 'react';
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
+import { Link } from 'react-router-dom';
 
 function DonutChart({ segments }: { segments: { percent: number; color: string; label: string; amount: string }[] }) {
   const r = 36, cx = 44, cy = 44;
@@ -245,9 +246,9 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
-              <button onClick={onViewDocuments} className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-2 py-0.5 rounded text-[9px] font-bold transition-colors">
+              <Link to="/exhibitor-dashboard/document-center" className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-2 py-0.5 rounded text-[9px] font-bold transition-colors">
                 <Plus size={10} strokeWidth={3} /> ADD
-              </button>
+              </Link>
             </div>
             <button onClick={onViewDocuments} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
           </div>
@@ -262,9 +263,16 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
                     <FileText size={14} className="text-[#8fa3c8] shrink-0" strokeWidth={1.5} />
                     <span className="text-[10px] font-medium text-[#1a3a7c]">{doc.name}</span>
                   </div>
-                  <div className={`flex items-center gap-2 ${cfg.color}`}>
-                    <span className="text-[10px] font-medium">{cfg.label}</span>
-                    <Icon size={14} strokeWidth={1.8} />
+                  <div className="flex items-center gap-3">
+                    <div className={`flex items-center gap-1.5 ${cfg.color}`}>
+                      <span className="text-[10px] font-medium">{cfg.label}</span>
+                      <Icon size={14} strokeWidth={1.8} />
+                    </div>
+                    {(doc.status === "Pending" || doc.status === "Not Uploaded") && (
+                      <Link to="/exhibitor-dashboard/document-center" className="text-[9px] bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold px-2 py-0.5 rounded transition-colors border border-blue-200">
+                        Add
+                      </Link>
+                    )}
                   </div>
                 </div>
               );

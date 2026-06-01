@@ -6,7 +6,7 @@ import {
   Phone, Mail, PhoneCall, Filter, MessageCircle,
   Paperclip, Smile, MoreVertical, ArrowRight,
   PhoneIncoming, PhoneOutgoing, Calendar, BadgeCheck,
-  Clock,
+  Clock, X,
 } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import { API_URL, SERVER_URL } from "@/lib/api";
@@ -109,6 +109,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
   const [connected, setConnected] = useState(false);
   const [historyFilter, setHistoryFilter] = useState<HistoryFilter>("All");
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [isHistoryPopupOpen, setIsHistoryPopupOpen] = useState(false);
 
   const [rmDetails, setRmDetails] = useState<any>(null);
   const [rmLoading, setRmLoading] = useState(true);
@@ -293,10 +294,18 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
     : combinedHistory.filter((h) => h.type === historyFilter);
 
   type HistGroup = { date: string; items: HistItem[] };
+  
   const historyGroups: HistGroup[] = [];
-  filteredHistory.forEach((item) => {
+  filteredHistory.slice(0, 10).forEach((item) => {
     const last = historyGroups[historyGroups.length - 1];
     if (!last || last.date !== item.date) historyGroups.push({ date: item.date, items: [item] });
+    else last.items.push(item);
+  });
+
+  const fullHistoryGroups: HistGroup[] = [];
+  filteredHistory.forEach((item) => {
+    const last = fullHistoryGroups[fullHistoryGroups.length - 1];
+    if (!last || last.date !== item.date) fullHistoryGroups.push({ date: item.date, items: [item] });
     else last.items.push(item);
   });
 
@@ -834,11 +843,119 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
 
         {/* Footer */}
         <div className="px-4 py-3 bg-white flex-shrink-0 border-t border-slate-100">
-          <button className="w-full h-10 border border-slate-200 bg-white hover:bg-slate-50 transition-all rounded-2xl flex items-center justify-center gap-1.5 text-[#108c2d] text-[12px] font-black shadow-sm">
+          <button onClick={() => setIsHistoryPopupOpen(true)} className="w-full h-10 border border-slate-200 bg-white hover:bg-slate-50 transition-all rounded-2xl flex items-center justify-center gap-1.5 text-[#108c2d] text-[12px] font-black shadow-sm">
             View All Conversations <ArrowRight size={13} className="text-[#108c2d]" />
           </button>
         </div>
       </div>
+
+      {/* Pop-up for All Conversations */}
+      <AnimatePresence>
+        {isHistoryPopupOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-[450px] h-[85vh] bg-[#f8fafc] rounded-2xl shadow-2xl flex flex-col overflow-hidden font-inter border border-slate-200"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setIsHistoryPopupOpen(false)}
+                className="absolute top-3.5 right-3.5 z-10 w-7 h-7 flex items-center justify-center bg-black/10 text-slate-800 rounded-full hover:bg-red-500 hover:text-white shadow-sm transition-colors"
+              >
+                <X size={14} strokeWidth={3} />
+              </button>
+
+              {/* Header */}
+              <div className="px-5 py-4 bg-white border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                <p className="text-[16px] font-black text-slate-800 tracking-tight">All Conversations</p>
+              </div>
+
+              {/* History list inside Popup */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar px-2 py-4">
+                {fullHistoryGroups.map((group, gi) => (
+                  <div key={gi} className="mb-3 bg-white border border-slate-200/60 rounded-xl overflow-hidden shadow-sm mx-2">
+                    {/* Date Divider Badge */}
+                    <div className="px-4 py-2 border-b border-slate-100 bg-slate-50">
+                      <span className="text-[11px] text-slate-700 font-bold uppercase tracking-wide">
+                        {group.date}
+                      </span>
+                    </div>
+
+                    {/* Items List */}
+                    <div className="flex flex-col">
+                      {group.items.map((item, ii) => {
+                        const isCall = item.type === "Call";
+                        const isEmail = item.type === "Email";
+                        const isChat = item.type === "Chat";
+                        const isLast = ii === group.items.length - 1;
+
+                        return (
+                          <div
+                            key={item.id}
+                            className={`px-4 py-3 hover:bg-slate-50/50 transition-all cursor-pointer flex items-start gap-3 ${!isLast ? "border-b border-slate-100" : ""}`}
+                          >
+                            {/* Left Circle Icon */}
+                            <div className="flex-shrink-0 mt-0.5">
+                              {isChat && (
+                                <div className="w-9 h-9 rounded-full bg-[#e6f7ec] flex items-center justify-center flex-shrink-0 shadow-sm">
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    width="16"
+                                    height="16"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-[#108c2d]"
+                                  >
+                                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                                    <path d="M8 12h.01" strokeWidth="3.2" />
+                                    <path d="M12 12h.01" strokeWidth="3.2" />
+                                    <path d="M16 12h.01" strokeWidth="3.2" />
+                                  </svg>
+                                </div>
+                              )}
+                              {isEmail && (
+                                <div className="w-9 h-9 rounded-full bg-[#e8f0fe] flex items-center justify-center flex-shrink-0 shadow-sm">
+                                  <Mail size={15} className="text-[#1a73e8]" />
+                                </div>
+                              )}
+                              {isCall && (
+                                <div className="w-9 h-9 rounded-full bg-[#fff8f0] flex items-center justify-center flex-shrink-0 shadow-sm">
+                                  <PhoneCall size={15} className="text-[#f97316]" />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Details: Title + Description */}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                              <div className="flex items-center justify-between mb-1">
+                                <p className="text-[13px] font-black text-slate-800 leading-tight">
+                                  {item.title}
+                                </p>
+                                <span className="text-[11px] text-slate-400 font-semibold whitespace-nowrap ml-2">
+                                  {item.time}
+                                </span>
+                              </div>
+                              <p className="text-[11.5px] text-slate-600 leading-snug">
+                                {item.desc}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </motion.div>
   );

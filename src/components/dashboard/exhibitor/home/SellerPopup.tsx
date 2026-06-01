@@ -1,6 +1,6 @@
 import { X, Building2, User, Phone, Mail, Tag, ShoppingBag, FileText, MapPin, ShieldCheck, CheckCircle2, ArrowRight, Clock } from 'lucide-react';
-import exsellImg from '@/assets/exsell2.png';
-import exselltopImg from '@/assets/exselltop.png';
+import exsellImg from '@/assets/exsell2.webp';
+import exselltopImg from '@/assets/exselltop.webp';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SellerPopup({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
@@ -160,7 +160,7 @@ export default function SellerPopup({ isOpen, onClose }: { isOpen: boolean, onCl
                                                 <div className="text-[7px] text-gray-600 mt-[1px]">I'll do it later</div>
                                             </div>
                                         </button>
-                                        <button className="flex-1 bg-gradient-to-r from-[#011e08] to-[#327808] hover:from-[#2a6807] hover:to-[#013e09] text-white py-1.5 px-3 rounded-lg flex items-center justify-between shadow-lg shadow-green-900/20 transition-all group">
+                                        <button className="flex-1 bg-gradient-to-r from-[#011e08] to-[#327808] hover:from-[#2a6807] hover:to-[#013e09] text-white py-1.5 pl-3 pr-6 rounded-lg flex items-center justify-between shadow-lg shadow-green-900/20 transition-all group">
                                             <div className="flex items-center gap-2">
                                                 <div className="bg-white/20 p-1 rounded shrink-0">
                                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>

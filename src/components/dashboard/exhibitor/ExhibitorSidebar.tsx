@@ -331,7 +331,7 @@ export default function ExhibitorSidebar({
                     const isChat = item.id === "chat";
                     return (
                         <button key={item.id} onClick={() => setActiveTab(item.id)}
-                            className={cx("w-full flex items-center gap-4 px-3 py-1 text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                            className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
                         >
                             <div className="relative shrink-0">
                                 <Icon size={sidebarOpen ? 16 : 15} strokeWidth={2.1} className="text-white" />
@@ -356,7 +356,7 @@ export default function ExhibitorSidebar({
                 {/* MSME dropdown */}
                 <div>
                     <button onClick={handleMsmeToggle}
-                        className={cx("w-full flex items-center gap-4 px-3 py-1 text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                        className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
                     >
                         <Award size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
                         {sidebarOpen && <span className="text-sm font-medium text-white flex-1 whitespace-nowrap">MSME</span>}
