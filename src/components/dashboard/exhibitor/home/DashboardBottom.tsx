@@ -33,25 +33,74 @@ const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon:
   "Not Uploaded": { label: "Not Uploaded", color: "text-gray-400", icon: MinusCircle },
 };
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
 import { Link } from 'react-router-dom';
+
+function useCountUp(end: number, duration: number = 2500, active: boolean = true) {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        if (!active) return;
+        let startTime: number | null = null;
+        let animationFrame: number;
+
+        const animate = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const percentage = Math.min(progress / duration, 1);
+            
+            // easeOutQuart
+            const easeProgress = 1 - Math.pow(1 - percentage, 4);
+            
+            setCount(end * easeProgress);
+
+            if (progress < duration) {
+                animationFrame = requestAnimationFrame(animate);
+            } else {
+                setCount(end);
+            }
+        };
+
+        animationFrame = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrame);
+    }, [end, duration, active]);
+
+    return count;
+}
 
 function DonutChart({ segments }: { segments: { percent: number; color: string; label: string; amount: string }[] }) {
   const r = 36, cx = 44, cy = 44;
   const circ = 2 * Math.PI * r;
 
-  let currentOffset = 0;
   const [tooltip, setTooltip] = useState<{ x: number, y: number, label: string, amount: string, color: string } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.1 }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const progress = useCountUp(1, 2500, isVisible);
+
+  let currentOffset = 0;
 
   return (
-    <div className="relative inline-flex items-center justify-center">
+    <div className="relative inline-flex items-center justify-center" ref={containerRef}>
       <svg width="88" height="88" viewBox="0 0 88 88" onMouseLeave={() => setTooltip(null)}>
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="#e5e7eb" strokeWidth="10" />
         {segments.map((seg, i) => {
           if (seg.percent <= 0) return null;
-          const dash = (seg.percent / 100) * circ;
+          const animatedPercent = seg.percent * progress;
+          const dash = (animatedPercent / 100) * circ;
           const gap = circ - dash;
           const offset = -currentOffset;
           currentOffset += dash;

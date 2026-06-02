@@ -4,9 +4,11 @@ import React from "react";
 
 const DocumentCenter = () => {
     return (
-        <div className="pt-4 px-6 bg-[#f4f6fb]">
+        <div className="bg-white min-h-screen">
             <DocumentCenterHero />
-            <DocumentsCenter1 />
+            <div className="px-6 pb-6 mt-1">
+                <DocumentsCenter1 />
+            </div>
         </div>
     );
 }

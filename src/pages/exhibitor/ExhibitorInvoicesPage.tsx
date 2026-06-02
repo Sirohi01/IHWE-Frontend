@@ -1,5 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
+
+function useCountUp(end: number, duration: number, started: boolean) {
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+        if (!started) return;
+        let startTime: number | null = null;
+        const step = (ts: number) => {
+            if (!startTime) startTime = ts;
+            const progress = Math.min((ts - startTime) / duration, 1);
+            setCount(progress * end);
+            if (progress < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    }, [started, end, duration]);
+    return count;
+}
+
+const CounterNumber = ({ end, started, delay, decimals = 0 }: { end: number, started: boolean, delay: number, decimals?: number }) => {
+    const [active, setActive] = useState(false);
+    useEffect(() => {
+        if (started) {
+            const t = setTimeout(() => setActive(true), delay);
+            return () => clearTimeout(t);
+        }
+    }, [started, delay]);
+    const count = useCountUp(end, 2500, active);
+    return <>{count.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</>;
+};
 import ExhibitorInvoices from '../../components/dashboard/exhibitor/ExhibitorInvoices';
 import { settingsApi } from '@/lib/api';
 
@@ -26,6 +54,25 @@ export default function ExhibitorInvoicesPage() {
     const [selectedReg, setSelectedReg] = useState<any>(null);
 
     const [activeTab, setActiveTab] = useState('Invoices');
+
+    const statsRef = useRef<HTMLDivElement>(null);
+    const [statsVisible, setStatsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setStatsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+        if (statsRef.current) {
+            observer.observe(statsRef.current);
+        }
+        return () => observer.disconnect();
+    }, []);
 
     useEffect(() => {
         settingsApi.get().then((s: any) => {
@@ -58,6 +105,8 @@ export default function ExhibitorInvoicesPage() {
         totalPayable > 0
             ? ((totalPaid / totalPayable) * 100).toFixed(2)
             : 0;
+
+    const animatedPercentage = useCountUp(Number(paymentPercentage), 2500, statsVisible);
 
     const tabs = [
         'Invoices',
@@ -202,125 +251,57 @@ export default function ExhibitorInvoicesPage() {
                 <div className="xl:col-span-9 space-y-3">
 
                     {/* SUMMARY CARDS */}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                    <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
 
                         {/* CARD 1 */}
-
-                        <div className="bg-white rounded-[8px] border border-[#edf0f7] p-4 shadow-sm">
-
-                            <div className="flex items-center gap-4">
-
-                                <div className="w-12 h-12 rounded-2xl bg-[#eefbf3] flex items-center justify-center">
-                                    <Wallet
-                                        size={24}
-                                        className="text-[#00a651]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <p className="text-[12px] text-[#7c86a2] font-medium">
-                                        Total Amount
-                                    </p>
-
-                                    <h3 className="text-[15px] font-bold text-[#0f172a] mt-1">
-                                        ₹ {totalPayable.toLocaleString()}
-                                    </h3>
-
-                                    <p className="text-[10px] text-[#94a3b8]">
-                                        Incl. Taxes
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <div className="bg-emerald-50 p-2 rounded-full shrink-0">
+                                <Wallet size={16} className="text-emerald-500" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Total Amount</p>
+                                <p className="text-[15px] font-extrabold text-emerald-600 leading-tight">₹ <CounterNumber end={totalPayable} started={statsVisible} delay={0} /></p>
+                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Incl. Taxes</p>
                             </div>
                         </div>
 
                         {/* CARD 2 */}
-
-                        <div className="bg-white rounded-[8px] border border-[#edf0f7] p-4 shadow-sm">
-
-                            <div className="flex items-center gap-4">
-
-                                <div className="w-12 h-12 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
-                                    <CheckCircle2
-                                        size={24}
-                                        className="text-[#2563eb]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <p className="text-[12px] text-[#7c86a2] font-medium">
-                                        Amount Paid
-                                    </p>
-
-                                    <h3 className="text-[15px] font-bold text-[#0f172a] mt-1">
-                                        ₹ {totalPaid.toLocaleString()}
-                                    </h3>
-
-                                    <p className="text-[10px] text-[#94a3b8]">
-                                        Paid till date
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <div className="bg-blue-50 p-2 rounded-full shrink-0">
+                                <CheckCircle2 size={16} className="text-blue-500" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Amount Paid</p>
+                                <p className="text-[15px] font-extrabold text-blue-600 leading-tight">₹ <CounterNumber end={totalPaid} started={statsVisible} delay={100} /></p>
+                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Paid till date</p>
                             </div>
                         </div>
 
                         {/* CARD 3 */}
-
-                        <div className="bg-white rounded-[8px] border border-[#edf0f7] p-4 shadow-sm">
-
-                            <div className="flex items-center gap-4">
-
-                                <div className="w-12 h-12 rounded-2xl bg-[#fff7ed] flex items-center justify-center">
-                                    <Clock3
-                                        size={24}
-                                        className="text-[#f97316]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <p className="text-[12px] text-[#7c86a2] font-medium">
-                                        Pending Amount
-                                    </p>
-
-                                    <h3 className="text-[15px] font-bold text-[#0f172a] mt-1">
-                                        ₹ {totalBalance.toLocaleString()}
-                                    </h3>
-
-                                    <p className="text-[10px] text-[#94a3b8]">
-                                        Due amount
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <div className="bg-amber-50 p-2 rounded-full shrink-0">
+                                <Clock3 size={16} className="text-amber-500" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Pending Amount</p>
+                                <p className="text-[15px] font-extrabold text-amber-500 leading-tight">₹ <CounterNumber end={totalBalance} started={statsVisible} delay={200} /></p>
+                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Due amount</p>
                             </div>
                         </div>
 
                         {/* CARD 4 */}
-
-                        <div className="bg-white rounded-[8px] border border-[#edf0f7] p-4 shadow-sm">
-
-                            <div className="flex items-center gap-4">
-
-                                <div className="w-12 h-12 rounded-2xl bg-[#f5f3ff] flex items-center justify-center">
-                                    <AlertCircle
-                                        size={24}
-                                        className="text-[#7c3aed]"
-                                    />
-                                </div>
-
-                                <div>
-                                    <p className="text-[12px] text-[#7c86a2] font-medium">
-                                        Overdue Amount
-                                    </p>
-
-                                    <h3 className="text-[15px] font-bold text-[#0f172a] mt-1">
-                                        ₹ 0
-                                    </h3>
-
-                                    <p className="text-[10px] text-[#94a3b8]">
-                                        No overdue
-                                    </p>
-                                </div>
+                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <div className="bg-red-50 p-2 rounded-full shrink-0">
+                                <AlertCircle size={16} className="text-red-500" />
+                            </div>
+                            <div>
+                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Overdue Amount</p>
+                                <p className="text-[15px] font-extrabold text-red-500 leading-tight">₹ <CounterNumber end={0} started={statsVisible} delay={300} /></p>
+                                <p className="text-[9px] text-black font-medium whitespace-nowrap">No overdue</p>
                             </div>
                         </div>
                     </div>
+
 
                     {/* MAIN CARD */}
 
@@ -1082,10 +1063,7 @@ export default function ExhibitorInvoicesPage() {
                                         fill="none"
                                         strokeLinecap="round"
                                         strokeDasharray="301"
-                                        strokeDashoffset={`${301 -
-                                            (301 * Number(paymentPercentage)) /
-                                            100
-                                            }`}
+                                        strokeDashoffset={`${301 - (301 * animatedPercentage) / 100}`}
                                     />
 
                                     {/* BLUE */}
@@ -1108,7 +1086,7 @@ export default function ExhibitorInvoicesPage() {
                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
 
                                     <h2 className="text-[11px] leading-none font-bold text-[#0f172a]">
-                                        {paymentPercentage}%
+                                        {animatedPercentage.toFixed(2)}%
                                     </h2>
 
                                     <p className="text-[10px] text-[#64748b] mt-1">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ePromotionPackagesApi } from "@/lib/api";
+import bg222 from "@/assets/222.webp";
 
 const testimonials = [
   {
@@ -48,99 +49,15 @@ export default function EPromotion({ data }: any) {
       {/* ... rest of the component remains similar but cards will be dynamic ... */}
 
       {/* INTRO */}
-      <section
-        className="relative w-full min-h-[450px] md:min-h-[500px] flex items-center text-white overflow-hidden"
-        style={{
-          backgroundImage: "url('/images/epromotion.jpeg')",
-          backgroundSize: "cover",
-          backgroundPosition: "right center",
-        }}
-      >
-        {/* Dark Overlay */}
-        <div className="absolute"></div>
-
-        {/* Content */}
-        <div className="relative w-full px-6 md:px-12">
-
-          {/* GRID */}
-          <div className="grid md:grid-cols-[65%_35%] items-center gap-10">
-
-            {/* LEFT CONTENT */}
-            <div className="space-y-5">
-
-              {/* HEADING */}
-              <h2 className="text-3xl md:text-6xl font-bold text-green-900 leading-tight">
-                E-Promotion <br /> Opportunities
-              </h2>
-
-              {/* SUBTITLE */}
-              <h4 className="text-xl md:text-2xl text-green-800 font-semibold">
-                Promote | Connect | Convert
-              </h4>
-
-              {/* DESCRIPTION */}
-              <p className="text-black text-sm md:text-base leading-relaxed max-w-2xl">
-                Maximize your brand visibility before, during and after IHWE 2026.
-                Reach thousands of targeted buyers and generate quality leads with our
-                digital promotion solutions.
-              </p>
-
-              {/* FEATURES */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-4">
-
-                {/* ITEM 1 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
-                  <img src="/images/1.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
-                    Increased <br /> Brand Visibility
-                  </p>
-                </div>
-
-                {/* ITEM 2 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
-                  <img src="/images/2.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
-                    Generate <br /> Quality Leads
-                  </p>
-                </div>
-
-                {/* ITEM 3 */}
-                <div className="flex items-center gap-2 border-r pr-3 border-gray-300">
-                  <img src="/images/3.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
-                    Reach Targeted <br /> Audience
-                  </p>
-                </div>
-
-                {/* ITEM 4 (NO BORDER) */}
-                <div className="flex items-center gap-2">
-                  <img src="/images/4.png" className="w-8 h-8" />
-                  <p className="text-green-800 text-sm leading-tight">
-                    Boost ROI from <br /> Participation
-                  </p>
-                </div>
-
-              </div>
-
-              {/* BUTTONS */}
-              <div className="flex flex-wrap gap-4 pt-4">
-                <button className="bg-green-800 hover:bg-green-700 transition text-white px-6 py-2 rounded-md font-semibold shadow-lg">
-                  Explore Packages
-                </button>
-
-                <button className="border border-green-800 text-green-700 hover:bg-green-600 hover:text-white transition px-6 py-2 rounded-md font-semibold">
-                  Book Your Promotion Slot
-                </button>
-              </div>
-
-            </div>
-
-            {/* RIGHT SIDE (EMPTY / for future image or spacing) */}
-            <div></div>
-
+      <div className="w-full -mt-1.5">
+          <div className="w-full relative flex flex-col justify-center rounded-none">
+              <img 
+                  src={bg222} 
+                  alt="E-Promotion Banner" 
+                  className="w-full h-[100px] md:h-[120px] lg:h-[140px] object-cover object-center rounded-none"
+              />
           </div>
-        </div>
-      </section>
+      </div>
 
       {/* WHY */}
       {/* WHY E-PROMOTION */}

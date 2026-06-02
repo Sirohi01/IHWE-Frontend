@@ -6,7 +6,7 @@ import ExhibitorHeroSlider from '@/components/dashboard/exhibitor/home/Exhibitor
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquareText } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ExhibotorTopbar from "@/components/dashboard/exhibitor/ExhibotorTopbar";
 import WelcomeHeader from '@/components/dashboard/exhibitor/home/WelcomeHeader';
 import StatCards from '@/components/dashboard/exhibitor/home/StatCards';
@@ -29,16 +29,37 @@ export default function ExhibitorDashboardHome() {
 
     const isPostExpo = new Date() > new Date('2026-04-20'); // Post-expo phase
     const [showFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
-    const [isReferralPopupOpen, setIsReferralPopupOpen] = useState(true);
+    const [isReferralPopupOpen, setIsReferralPopupOpen] = useState(false);
     const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
+
+    // Initial load: 15 seconds delay for Referral Popup
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsReferralPopupOpen(true);
+        }, 15000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleReferralClose = () => {
+        setIsReferralPopupOpen(false);
+        // After closing Referral, wait 20 seconds for Seller Popup
+        setTimeout(() => {
+            setIsSellerPopupOpen(true);
+        }, 20000);
+    };
+
+    const handleSellerClose = () => {
+        setIsSellerPopupOpen(false);
+        // After closing Seller, wait 2 minutes (120000ms) to show Referral again
+        setTimeout(() => {
+            setIsReferralPopupOpen(true);
+        }, 120000);
+    };
 
     return (
         <>
-            <ReferralPopup isOpen={isReferralPopupOpen} onClose={() => {
-                setIsReferralPopupOpen(false);
-                setIsSellerPopupOpen(true);
-            }} />
-            <SellerPopup isOpen={isSellerPopupOpen} onClose={() => setIsSellerPopupOpen(false)} />
+            <ReferralPopup isOpen={isReferralPopupOpen} onClose={handleReferralClose} />
+            <SellerPopup isOpen={isSellerPopupOpen} onClose={handleSellerClose} />
             {/* <ExhibotorTopbar /> */}
             <div className="space-y-2 px-8 pt-1 pb-4">
                 <WelcomeHeader />
