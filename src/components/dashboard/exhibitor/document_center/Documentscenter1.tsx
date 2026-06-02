@@ -213,7 +213,7 @@ const DocumentsCenter1: React.FC = () => {
             {(activeTab === "All Documents" || activeTab === "MSME Related") && msmeDocs.length > 0 && (
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
-                  <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                     <FileText size={16} className="text-gray-500" /> MSME Related Documents
                   </h3>
                   <a href="#" className="text-xs font-bold text-blue-600 hover:underline">View All</a>

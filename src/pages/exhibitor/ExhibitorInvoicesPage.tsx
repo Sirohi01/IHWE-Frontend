@@ -160,71 +160,60 @@ export default function ExhibitorInvoicesPage() {
         }
     };
 
-    if (selectedReg) {
-        const isUSD =
-            selectedReg.participation?.currency === 'USD';
+    const handleDownload = () => {
+        const pdfContent = `%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 4 0 R >> >> /MediaBox [0 0 612 792] /Contents 5 0 R >>\nendobj\n4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n5 0 obj\n<< /Length 44 >>\nstream\nBT\n/F1 24 Tf\n100 700 Td\n(Dummy Invoice) Tj\nET\nendstream\nendobj\nxref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000222 00000 n \n0000000290 00000 n \ntrailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n385\n%%EOF`;
+        const element = document.createElement("a");
+        const file = new Blob([pdfContent], {type: 'application/pdf'});
+        element.href = URL.createObjectURL(file);
+        element.download = "Invoice.pdf";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    };
 
+    const renderModal = () => {
+        if (!selectedReg) return null;
+        const isUSD = selectedReg.participation?.currency === 'USD';
         const cur = isUSD ? 'USD ' : 'INR ';
-
         const paid = selectedReg.amountPaid || 0;
-
-        const total =
-            selectedReg.financeBreakdown?.netPayable ||
-            selectedReg.participation?.total ||
-            0;
-
+        const total = selectedReg.financeBreakdown?.netPayable || selectedReg.participation?.total || 0;
         const balance = selectedReg.balanceAmount || 0;
-
-        const paidPct =
-            total > 0
-                ? Math.min(
-                    100,
-                    Math.round((paid / total) * 100)
-                )
-                : 0;
-
-        const regDate = selectedReg.createdAt
-            ? new Date(
-                selectedReg.createdAt
-            ).toLocaleDateString('en-IN', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
-            })
-            : '';
+        const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
+        const regDate = selectedReg.createdAt ? new Date(selectedReg.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : '';
 
         return (
-            <div className="min-h-screen bg-[#f5f7fb] p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <button
-                        onClick={() => setSelectedReg(null)}
-                        className="h-11 px-5 rounded-xl bg-white border border-[#e6ebf2] text-[#0f172a] font-semibold flex items-center gap-2"
-                    >
-                        <ArrowLeft size={16} />
-                        Back
-                    </button>
-
-                    <div className="text-[14px] text-[#64748b] font-medium">
-                        Invoice :
-                        <span className="text-[#0f172a] font-bold ml-2">
-                            {getInvoiceNo(selectedReg)}
-                        </span>
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+                <div className="bg-[#f5f7fb] rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative flex flex-col">
+                    <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-white border-b border-gray-200">
+                        <div className="text-[14px] text-[#64748b] font-medium">
+                            Invoice :
+                            <span className="text-[#0f172a] font-bold ml-2">
+                                {getInvoiceNo(selectedReg)}
+                            </span>
+                        </div>
+                        <button
+                            onClick={() => setSelectedReg(null)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <div className="p-6">
+                        <ExhibitorInvoices
+                            data={selectedReg}
+                            settings={settings}
+                            cur={cur}
+                            total={total}
+                            paid={paid}
+                            balance={balance}
+                            paidPct={paidPct}
+                            regDate={regDate}
+                        />
                     </div>
                 </div>
-
-                <ExhibitorInvoices
-                    data={selectedReg}
-                    settings={settings}
-                    cur={cur}
-                    total={total}
-                    paid={paid}
-                    balance={balance}
-                    paidPct={paidPct}
-                    regDate={regDate}
-                />
             </div>
         );
-    }
+    };
 
     return (
         <div className="min-h-screen bg-[#f5f7fb] p-4">
@@ -457,7 +446,7 @@ export default function ExhibitorInvoicesPage() {
 
                                                         <div className="flex items-center justify-center gap-2">
 
-                                                            <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                            <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                                 <Download
                                                                     size={
                                                                         14
@@ -519,7 +508,7 @@ export default function ExhibitorInvoicesPage() {
 
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Download
                                                         size={
                                                             14
@@ -527,8 +516,7 @@ export default function ExhibitorInvoicesPage() {
                                                     />
                                                 </button>
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                >
+                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Eye
                                                         size={
                                                             14
@@ -572,7 +560,7 @@ export default function ExhibitorInvoicesPage() {
 
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Download
                                                         size={
                                                             14
@@ -580,8 +568,7 @@ export default function ExhibitorInvoicesPage() {
                                                     />
                                                 </button>
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                >
+                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Eye
                                                         size={
                                                             14
@@ -625,7 +612,7 @@ export default function ExhibitorInvoicesPage() {
 
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Download
                                                         size={
                                                             14
@@ -633,8 +620,7 @@ export default function ExhibitorInvoicesPage() {
                                                     />
                                                 </button>
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                >
+                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Eye
                                                         size={
                                                             14
@@ -678,7 +664,7 @@ export default function ExhibitorInvoicesPage() {
 
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Download
                                                         size={
                                                             14
@@ -686,8 +672,7 @@ export default function ExhibitorInvoicesPage() {
                                                     />
                                                 </button>
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                >
+                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Eye
                                                         size={
                                                             14
@@ -862,7 +847,7 @@ export default function ExhibitorInvoicesPage() {
 
                                                         <div className="flex items-center justify-center gap-2">
 
-                                                            <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                            <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                                 <Download
                                                                     size={
                                                                         14
@@ -906,7 +891,7 @@ export default function ExhibitorInvoicesPage() {
 
                                             <div className="flex items-center justify-center gap-2">
 
-                                                <button className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
+                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
                                                     <Download
                                                         size={
                                                             14
@@ -1386,6 +1371,7 @@ export default function ExhibitorInvoicesPage() {
                     </div>
                 </div>
             </div>
+            {renderModal()}
         </div>
     );
 }
