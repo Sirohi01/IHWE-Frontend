@@ -1,5 +1,7 @@
 import React from 'react';
 import { ExternalLink, Download, Settings, ShieldCheck, BadgeCheck, FileText, UserPlus, ArrowRight, CheckCircle } from 'lucide-react';
+import msmeApprovalLetter from '../../assets/MSME Approval Letter.pdf';
+import userManualDomestic from '../../assets/User_Manual_Domestic.pdf';
 
 const VerifyCheck = () => {
     const accessCards = [
@@ -9,7 +11,7 @@ const VerifyCheck = () => {
             btn: "VIEW PROCESS",
             icon: Settings,
             color: "green",
-            link: "#how-works",
+            link: userManualDomestic,
             img: "/mpscheme/qa1.png"
         },
         {
@@ -36,7 +38,7 @@ const VerifyCheck = () => {
             btn: "VIEW LETTER",
             icon: FileText,
             color: "orange",
-            link: "#",
+            link: msmeApprovalLetter,
             img: "/mpscheme/qa4.png"
         },
         {
@@ -86,6 +88,7 @@ const VerifyCheck = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5">
                     {accessCards.map((card, i) => {
                         const clr = colorMap[card.color];
+                        const opensInNewTab = card.link.startsWith('http') || card.link.endsWith('.pdf');
                         return (
                             <div key={i} className={`bg-white rounded-2xl border ${clr.border} shadow-sm overflow-hidden flex flex-col transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1`}>
 
@@ -118,8 +121,8 @@ const VerifyCheck = () => {
 
                                     <a
                                         href={card.link}
-                                        target={card.link.startsWith('http') ? "_blank" : undefined}
-                                        rel="noreferrer"
+                                        target={opensInNewTab ? "_blank" : undefined}
+                                        rel={opensInNewTab ? "noreferrer" : undefined}
                                         className={`w-full py-2 border border-current rounded-lg text-[11px] font-bold tracking-widest uppercase flex items-center justify-center gap-2 transition-colors duration-200 ${clr.text} ${clr.btnHover} bg-white`}
                                     >
                                         {card.btn} <ArrowRight size={14} strokeWidth={2} />
