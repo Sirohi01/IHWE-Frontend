@@ -16,14 +16,8 @@ const PAYMENT = {
   total: "₹ 1,00,000",
 };
 
-const DOCUMENTS: { name: string; status: DocStatus }[] = [
-  { name: "Agreement Letter", status: "Completed" },
-  { name: "Company Profile", status: "Completed" },
-  { name: "GST Certificate", status: "Completed" },
-  { name: "Product Brochure", status: "Pending" },
-  { name: "Manufacturing License", status: "Pending" },
-  { name: "Other Documents", status: "Not Uploaded" },
-];
+// Documents will be fetched dynamically
+// const DOCUMENTS: { name: string; status: DocStatus }[] = [];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -147,27 +141,58 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
   const { data } = useExhibitorCtx();
 
   const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
+  const [docsList, setDocsList] = useState<{ name: string; status: DocStatus }[]>([]);
   const [eventPage, setEventPage] = useState(1);
   const eventsPerPage = 5;
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchDocsAndEvents = async () => {
       setIsLoadingEvents(true);
       try {
-        const res = await fetch(`${API_URL}/upcoming-events`);
-        const result = await res.json();
+        const eventsRes = await fetch(`${API_URL}/upcoming-events`);
+        const result = await eventsRes.json();
         if (result.success) {
           setUpcomingEvents(result.data);
         }
+
+        const clientId = data?._id;
+        if (clientId) {
+          const [reqRes, docsRes] = await Promise.all([
+            fetch(`${API_URL}/document-requirements`),
+            fetch(`${API_URL}/client-documents/${clientId}`)
+          ]);
+          const reqData = await reqRes.json();
+          const docsData = await docsRes.json();
+
+          if (Array.isArray(reqData)) {
+            const uploadedMap = new Map();
+            if (Array.isArray(docsData)) {
+              docsData.forEach((d: any) => uploadedMap.set(d.document_name, d));
+            }
+
+            const formatted = reqData.map((d: any) => {
+              const uploaded = uploadedMap.get(d.document_name);
+              let status: DocStatus = "Not Uploaded";
+              if (uploaded?.status === "Approved") status = "Completed";
+              else if (uploaded?.status === "Pending" || uploaded?.status === "Rejected") status = "Pending";
+              
+              return {
+                name: d.document_name,
+                status
+              };
+            });
+            setDocsList(formatted);
+          }
+        }
       } catch (err) {
-        console.error("Failed to fetch upcoming events:", err);
+        console.error("Failed to fetch dashboard data:", err);
       } finally {
         setIsLoadingEvents(false);
       }
     };
-    fetchEvents();
-  }, []);
+    fetchDocsAndEvents();
+  }, [data?._id]);
 
   const totalEventPages = Math.ceil(upcomingEvents.length / eventsPerPage);
   const paginatedEvents = upcomingEvents.slice((eventPage - 1) * eventsPerPage, eventPage * eventsPerPage);
@@ -201,18 +226,6 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
   const lastPaymentDate = lastPayment?.paidAt ? new Date(lastPayment.paidAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'No payments yet';
   const lastPaymentTxn = lastPayment?.transactionId || 'N/A';
   const invoiceCount = data?.paymentHistory?.length || 0;
-
-  // Dynamic Documents Setup
-  const dDocs = useMemo(() => {
-      return [
-        { name: "Profile Update", status: "Pending" },
-        { name: "GST Certificate", status: "Completed" },
-        { name: "Aadhar Card", status: "Completed" },
-        { name: "PAN Card", status: "Completed" },
-        { name: "MSME Document", status: "Pending" },
-        { name: "Product Brochure / Catalog", status: "Pending" },
-      ] as { name: string; status: DocStatus }[];
-  }, [data]);
 
   return (
     <div className="flex flex-col lg:flex-row gap-2 w-full">
@@ -303,11 +316,11 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
           </div>
 
           <div className="border border-gray-200 rounded-lg overflow-hidden">
-            {dDocs.map((doc, i) => {
+            {docsList.slice(0, 7).map((doc, i) => {
               const cfg = DOC_STATUS_CONFIG[doc.status];
               const Icon = cfg.icon;
               return (
-                <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== dDocs.length - 1 ? "border-b border-gray-200" : ""}`}>
+                <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== Math.min(docsList.length, 7) - 1 ? "border-b border-gray-200" : ""}`}>
                   <div className="flex items-center gap-3">
                     <FileText size={14} className="text-[#8fa3c8] shrink-0" strokeWidth={1.5} />
                     <span className="text-[10px] font-medium text-[#1a3a7c]">{doc.name}</span>

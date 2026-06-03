@@ -8,7 +8,7 @@ const DocumentCenterHero: React.FC = () => {
                 <img 
                     src={exbanImg} 
                     alt="Exhibitor Banner" 
-                    className="w-full h-auto object-cover rounded-none"
+                    className="w-full h-[90px] md:h-[110px] lg:h-[130px] object-cover object-center rounded-none"
                 />
             </div>
         </div>
