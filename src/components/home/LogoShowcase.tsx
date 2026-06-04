@@ -43,18 +43,26 @@ const LogoShowcase = () => {
             <h3 className="font-bold text-[11px] lg:text-[13px] tracking-[0.15em] lg:tracking-[0.2em] uppercase text-[#012112] text-center mb-6">
               Healthcare Partner
             </h3>
-            <div className="flex items-center justify-center">
-              <div className="transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                <img 
-                  src="/health1.png" 
-                  alt="Healthcare Partner" 
-                  className="h-16 md:h-20 lg:h-24 w-auto max-w-[120px] md:max-w-[150px] lg:max-w-[200px] object-contain transition-all duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      `https://placehold.co/100x100/ffffff/888?text=Healthcare+Partner`;
-                  }}
-                />
-              </div>
+            <div className="w-full overflow-hidden">
+              <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
+                {[
+                  { src: "/health1.png", alt: "Healthcare Partner 1" },
+                  { src: "/applog.jpeg", alt: "Healthcare Partner 2" },
+                  { src: "/forlog.png", alt: "Healthcare Partner 3" }
+                ].map((logo, idx) => (
+                  <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
+                    <img 
+                      src={logo.src} 
+                      alt={logo.alt} 
+                      className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(logo.alt)}`;
+                      }}
+                    />
+                  </div>
+                ))}
+              </Marquee>
             </div>
           </div>
 

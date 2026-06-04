@@ -381,18 +381,18 @@ const DocumentsCenter1: React.FC = () => {
                         <MoreVertical size={12} className="cursor-pointer hover:text-white" />
                     </div>
                 </div>
-                <div className="bg-white flex-1 overflow-hidden shadow-inner p-2 relative">
+                <div className="bg-white flex-1 overflow-hidden shadow-inner p-2 relative flex items-center justify-center min-h-0">
                     {pendingUploads[selectedDoc.id] ? (
                          pendingUploads[selectedDoc.id].ext === 'PDF' ? (
                              <iframe src={pendingUploads[selectedDoc.id].url} className="w-full h-full border-0" title="PDF Preview" />
                          ) : (
-                             <img src={pendingUploads[selectedDoc.id].url} alt="Preview" className="w-full h-full object-contain" />
+                             <img src={pendingUploads[selectedDoc.id].url} alt="Preview" className="max-w-full max-h-full object-contain" />
                          )
                     ) : selectedDoc.previewUrl ? (
                          selectedDoc.type === 'PDF' ? (
                              <iframe src={selectedDoc.previewUrl} className="w-full h-full border-0" title="PDF Preview" />
                          ) : (
-                             <img src={selectedDoc.previewUrl} alt="Preview" className="w-full h-full object-contain" />
+                             <img src={selectedDoc.previewUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
                          )
                     ) : selectedDoc.status === "Pending Upload" ? (
                         <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">

@@ -77,7 +77,7 @@ const ExhibitorHeroSlider = () => {
     if (slides.length === 0) return null;
 
     return (
-        <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[16/5.62] rounded-xl">
+        <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[16/5.69] rounded-xl">
             <AnimatePresence initial={false} custom={direction} mode="popLayout">
                 <motion.div
                     key={current}
@@ -99,11 +99,21 @@ const ExhibitorHeroSlider = () => {
                         animate={{ scale: 1 }}
                         transition={{ duration: 7, ease: "easeOut" }}
                     >
-                        <img
-                            src={getImageUrl(slides[current].image)}
-                            alt={slides[current].imageAlt || "Exhibitor Hero Slide"}
-                            className="w-full h-full object-cover"
-                        />
+                        {slides[current].path ? (
+                            <a href={slides[current].path} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+                                <img
+                                    src={getImageUrl(slides[current].image)}
+                                    alt={slides[current].imageAlt || "Exhibitor Hero Slide"}
+                                    className="w-full h-full object-cover"
+                                />
+                            </a>
+                        ) : (
+                            <img
+                                src={getImageUrl(slides[current].image)}
+                                alt={slides[current].imageAlt || "Exhibitor Hero Slide"}
+                                className="w-full h-full object-cover"
+                            />
+                        )}
                     </motion.div>
                 </motion.div>
             </AnimatePresence>

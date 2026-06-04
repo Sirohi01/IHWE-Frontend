@@ -402,9 +402,12 @@ export default function ExhibitorInvoicesPage() {
                                                 >
 
                                                     <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                                        {getInvoiceNo(
-                                                            reg
-                                                        )}
+                                                        <button 
+                                                            onClick={() => setSelectedReg(reg)} 
+                                                            className="hover:underline text-left"
+                                                        >
+                                                            {getInvoiceNo(reg)}
+                                                        </button>
                                                     </td>
 
                                                     <td className="px-3 text-[12px] text-[#0f172a]">
@@ -479,7 +482,12 @@ export default function ExhibitorInvoicesPage() {
                                     >
 
                                         <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            IHWE2026/INV/002
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left"
+                                            >
+                                                IHWE2026/INV/002
+                                            </button>
                                         </td>
 
                                         <td className="px-3 text-[12px] text-[#0f172a]">
@@ -531,7 +539,12 @@ export default function ExhibitorInvoicesPage() {
                                     >
 
                                         <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            IHWE2026/INV/002
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left"
+                                            >
+                                                IHWE2026/INV/002
+                                            </button>
                                         </td>
 
                                         <td className="px-3 text-[12px] text-[#0f172a]">
@@ -583,7 +596,12 @@ export default function ExhibitorInvoicesPage() {
                                     >
 
                                         <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            IHWE2026/INV/002
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left"
+                                            >
+                                                IHWE2026/INV/002
+                                            </button>
                                         </td>
 
                                         <td className="px-3 text-[12px] text-[#0f172a]">
@@ -635,7 +653,12 @@ export default function ExhibitorInvoicesPage() {
                                     >
 
                                         <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            IHWE2026/INV/002
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left"
+                                            >
+                                                IHWE2026/INV/002
+                                            </button>
                                         </td>
 
                                         <td className="px-3 text-[12px] text-[#0f172a]">
@@ -819,7 +842,12 @@ export default function ExhibitorInvoicesPage() {
                                                 >
 
                                                     <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                                        IHWE2026/REC/001
+                                                        <button 
+                                                            onClick={() => setSelectedReg(reg)} 
+                                                            className="hover:underline text-left"
+                                                        >
+                                                            IHWE2026/REC/001
+                                                        </button>
                                                     </td>
 
                                                     <td className="px-3 text-[12px] text-[#0f172a]">
@@ -827,9 +855,12 @@ export default function ExhibitorInvoicesPage() {
                                                     </td>
 
                                                     <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        {getInvoiceNo(
-                                                            reg
-                                                        )}
+                                                        <button 
+                                                            onClick={() => setSelectedReg(reg)} 
+                                                            className="hover:underline text-left font-semibold text-[#2563eb]"
+                                                        >
+                                                            {getInvoiceNo(reg)}
+                                                        </button>
                                                     </td>
 
 
@@ -854,6 +885,13 @@ export default function ExhibitorInvoicesPage() {
                                                                     }
                                                                 />
                                                             </button>
+                                                            
+                                                            <button
+                                                                onClick={() => setSelectedReg(reg)}
+                                                                className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
+                                                            >
+                                                                <Eye size={14} />
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -865,7 +903,12 @@ export default function ExhibitorInvoicesPage() {
                                     >
 
                                         <td className="px-3 py-1 text-[12px] font-semibold text-[#2563eb]">
-                                            IHWE2026/REC/001
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left"
+                                            >
+                                                IHWE2026/REC/001
+                                            </button>
                                         </td>
 
                                         <td className="px-3 py-1 text-[12px] text-[#0f172a]">
@@ -873,7 +916,12 @@ export default function ExhibitorInvoicesPage() {
                                         </td>
 
                                         <td className="px-3 py-1 text-[12px] text-[#0f172a]">
-                                            IHWE2026/INV/001
+                                            <button 
+                                                onClick={() => setSelectedReg(data || {})} 
+                                                className="hover:underline text-left font-semibold text-[#2563eb]"
+                                            >
+                                                IHWE2026/INV/001
+                                            </button>
                                         </td>
 
 
@@ -897,6 +945,13 @@ export default function ExhibitorInvoicesPage() {
                                                             14
                                                         }
                                                     />
+                                                </button>
+                                                
+                                                <button
+                                                    onClick={() => setSelectedReg(data || {})}
+                                                    className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
+                                                >
+                                                    <Eye size={14} />
                                                 </button>
                                             </div>
                                         </td>

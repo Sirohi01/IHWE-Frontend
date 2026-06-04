@@ -43,6 +43,7 @@ function DownloadBtn({ url, label, icon: Icon }: any) {
 export default function ExhibitorInvoices({ data, settings, cur, total, paid, balance, paidPct, regDate }: InvoicesProps) {
     const printRef = useRef<HTMLDivElement>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
+    const [bankDetails, setBankDetails] = useState<any>(null);
     const history = data.paymentHistory || [];
 
     useEffect(() => {
@@ -57,6 +58,16 @@ export default function ExhibitorInvoices({ data, settings, cur, total, paid, ba
                 if (img) setHeaderImageUrl(img.startsWith('http') ? img : `${SERVER_URL}/${img.replace(/^\//, '')}`);
             })
             .catch(() => { });
+
+        fetch(`${SERVER_URL}/api/banks`)
+            .then(r => r.json())
+            .then(res => {
+                if (res && res.length > 0) {
+                    const activeBank = res.find((b: any) => b.status === 'active') || res[0];
+                    setBankDetails(activeBank);
+                }
+            })
+            .catch(() => {});
     }, []);
 
     const fb = data.financeBreakdown || {};
@@ -523,27 +534,27 @@ ${content.innerHTML}
                                         <tr>
                                             <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Bank Name</td>
                                             <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Kotak Mahindra Bank</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.bankname || 'Kotak Mahindra Bank'}</td>
                                         </tr>
                                         <tr>
                                             <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account Name</td>
                                             <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Namo Gange Wellness Pvt. Ltd.</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.accountname || 'Namo Gange Wellness Pvt. Ltd.'}</td>
                                         </tr>
                                         <tr>
                                             <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account No.</td>
                                             <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>6812013962</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.accountno || '6812013962'}</td>
                                         </tr>
                                         <tr>
                                             <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>IFSC Code</td>
                                             <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>KKBK0004584</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.ifsccode || 'KKBK0004584'}</td>
                                         </tr>
                                         <tr>
                                             <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Branch Name</td>
                                             <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>Jagriti Enclave, Anand Vihar, Delhi</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.bankbranch || 'Jagriti Enclave, Anand Vihar, Delhi'}</td>
                                         </tr>
                                     </tbody>
                                 </table>

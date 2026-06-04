@@ -312,15 +312,15 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
                 <Plus size={10} strokeWidth={3} /> ADD
               </Link>
             </div>
-            <button onClick={onViewDocuments} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</button>
+            <Link to="/exhibitor-dashboard/document-center" className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</Link>
           </div>
 
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
-            {docsList.slice(0, 7).map((doc, i) => {
+          <div className="border border-gray-200 rounded-lg overflow-y-auto max-h-[220px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
+            {docsList.map((doc, i) => {
               const cfg = DOC_STATUS_CONFIG[doc.status];
               const Icon = cfg.icon;
               return (
-                <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== Math.min(docsList.length, 7) - 1 ? "border-b border-gray-200" : ""}`}>
+                <div key={i} className={`flex items-center justify-between px-4 py-2 ${i !== docsList.length - 1 ? "border-b border-gray-200" : ""}`}>
                   <div className="flex items-center gap-3">
                     <FileText size={14} className="text-[#8fa3c8] shrink-0" strokeWidth={1.5} />
                     <span className="text-[10px] font-medium text-[#1a3a7c]">{doc.name}</span>

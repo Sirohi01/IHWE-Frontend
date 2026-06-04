@@ -123,7 +123,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                 </div>
 
                                 {/* How it works */}
-                                <div className="border border-gray-100 rounded-lg px-2 py-0.5 bg-gray-50/50 relative mt-0.5">
+                                <div className="border border-gray-100 rounded-lg px-2 py-0.5 bg-gray-50/50 relative mt-2">
                                     <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 bg-white px-1.5 border border-gray-100 rounded-full text-[7px] font-extrabold text-green-800 tracking-wider whitespace-nowrap">
                                         HOW IT WORKS
                                     </div>
@@ -134,8 +134,8 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                                 <div className="absolute -top-0.5 -left-0.5 w-2.5 h-2.5 bg-white rounded-full border border-green-700 flex items-center justify-center text-[5px] font-black text-green-700">1</div>
                                             </div>
                                             <div className="whitespace-nowrap">
-                                                <p className="text-[9px] font-bold text-[#00530a] leading-none">Share</p>
-                                                <p className="text-[8px]  font-semibold text-black leading-tight mt-[1px]">company /<br />contact details</p>
+                                                <p className="text-[10px] font-bold text-[#00530a] leading-none">Share</p>
+                                                <p className="text-[9px] font-semibold text-black leading-tight mt-[1px]">company /<br />contact details</p>
                                             </div>
                                         </div>
                                         <div className="flex-1 h-px border-t border-dashed border-green-300 relative">
@@ -147,8 +147,8 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                                 <div className="absolute -top-0.5 -left-0.5 w-2.5 h-2.5 bg-green-700 rounded-full flex items-center justify-center text-[5px] font-black text-white">2</div>
                                             </div>
                                             <div className="whitespace-nowrap">
-                                                <p className="text-[9px] font-bold text-[#00530a] leading-none">Our team</p>
-                                                <p className="text-[8px] font-semibold text-black leading-tight mt-[1px]">will connect<br />with them</p>
+                                                <p className="text-[10px] font-bold text-[#00530a] leading-none">Our team</p>
+                                                <p className="text-[9px] font-semibold text-black leading-tight mt-[1px]">will connect<br />with them</p>
                                             </div>
                                         </div>
                                         <div className="flex-1 h-px border-t border-dashed border-green-300 relative">
@@ -160,8 +160,8 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                                                 <div className="absolute -top-0.5 -left-0.5 w-2.5 h-2.5 bg-green-700 rounded-full flex items-center justify-center text-[5px] font-black text-white">3</div>
                                             </div>
                                             <div className="whitespace-nowrap">
-                                                <p className="text-[9px] font-bold text-[#00530a] leading-none">After successful</p>
-                                                <p className="text-[8px] font-semibold text-black leading-tight mt-[1px]">booking, earn bonus</p>
+                                                <p className="text-[10px] font-bold text-[#00530a] leading-none">After successful</p>
+                                                <p className="text-[9px] font-semibold text-black leading-tight mt-[1px]">booking, earn bonus</p>
                                             </div>
                                         </div>
                                     </div>
