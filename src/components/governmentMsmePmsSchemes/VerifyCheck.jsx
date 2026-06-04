@@ -1,7 +1,5 @@
 import React from 'react';
 import { ExternalLink, Download, Settings, ShieldCheck, BadgeCheck, FileText, UserPlus, ArrowRight, CheckCircle } from 'lucide-react';
-import msmeApprovalLetter from '../../assets/MSME Approval Letter.pdf';
-import userManualDomestic from '../../assets/User_Manual_Domestic.pdf';
 
 const VerifyCheck = () => {
     const accessCards = [
@@ -11,7 +9,7 @@ const VerifyCheck = () => {
             btn: "VIEW PROCESS",
             icon: Settings,
             color: "green",
-            link: userManualDomestic,
+            link: "/User_Manual_Domestic.pdf",
             img: "/mpscheme/qa1.png"
         },
         {
@@ -38,7 +36,7 @@ const VerifyCheck = () => {
             btn: "VIEW LETTER",
             icon: FileText,
             color: "orange",
-            link: msmeApprovalLetter,
+            link: "/MSME_Approval_Letter.pdf",
             img: "/mpscheme/qa4.png"
         },
         {
