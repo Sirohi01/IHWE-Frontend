@@ -969,7 +969,7 @@ const BookAStand = () => {
             >
                 <SectionContainer>
                     <div className="w-full">
-                            <div className="relative z-10 py-6 md:py-12 flex flex-col gap-2 w-full md:w-[60%] lg:w-[55%] bg-black/40 md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none backdrop-blur-sm md:backdrop-blur-none">
+                        <div className="relative z-10 py-6 md:py-12 flex flex-col gap-2 w-full md:w-[60%] lg:w-[55%] bg-black/40 md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none backdrop-blur-sm md:backdrop-blur-none">
 
                             {/* Register as a Buyer */}
                             <div className="inline-block mt-4 px-4 py-1 bg-[#a8d060]/15 border border-[#a8d060]/40 rounded-lg text-[#a8d060] text-xs font-bold uppercase tracking-[0.2em] w-fit backdrop-blur-sm shadow-[0_0_20px_rgba(168,208,96,0.2)]">
@@ -1911,13 +1911,13 @@ const BookAStand = () => {
                                                                                 className={`px-3.5 py-1.5 text-[11px] text-gray-600 font-medium rounded-md transition-all ${isFullSelected ? 'bg-[#23471d] text-white' : 'text-gray-600 hover:text-gray-700'}`}>
                                                                                 Full {settings?.fullPaymentDiscount > 0 ? `(−${settings.fullPaymentDiscount}%)` : ''}
                                                                             </button>
-                                                                            {firstInstallPlan && (
+                                                                            {/* {firstInstallPlan && (
                                                                                 <button type="button"
                                                                                     onClick={() => setFormData(prev => ({ ...prev, paymentPlanType: firstInstallPlan.id, paymentPlanLabel: firstInstallPlan.label }))}
                                                                                     className={`px-3.5 py-1.5 text-[11px] text-gray-600 font-medium rounded-md transition-all ${!isFullSelected ? 'bg-[#185FA5] text-white' : 'text-gray-500 hover:text-gray-700'}`}>
                                                                                     Advance ({firstInstallPlan.percentage}%)
                                                                                 </button>
-                                                                            )}
+                                                                            )} */}
                                                                         </div>
                                                                     );
                                                                 })()}
