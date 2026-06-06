@@ -31,7 +31,7 @@ const ExhibitorHeroSlider = () => {
         const timer = setInterval(() => {
             setDirection(1);
             setCurrent((prev) => (prev + 1) % slides.length);
-        }, 5000);
+        }, 9000);
         return () => clearInterval(timer);
     }, [slides.length, isPlaying]);
 
@@ -148,7 +148,7 @@ const ExhibitorHeroSlider = () => {
                     </button>
                 ))}
             </div>
-            
+
             <motion.div
                 className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent z-30"
                 initial={{ scaleX: 0 }}
