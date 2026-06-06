@@ -1292,14 +1292,19 @@ const VisitorRegistration = () => {
                                                     {/* —— SUBMIT BAR —— */}
                                                     <div className="pt-6 flex flex-col items-center">
                                                         {(!emailVerified || !phoneVerified) ? (
-                                                            <Button
-                                                                type="button"
-                                                                disabled
-                                                                className="w-full max-w-56 h-12 rounded-sm bg-slate-300 text-slate-500 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 cursor-not-allowed"
-                                                            >
-                                                                NEXT STEP
-                                                                <ArrowRight size={16} />
-                                                            </Button>
+                                                            <>
+                                                                <Button
+                                                                    type="button"
+                                                                    disabled
+                                                                    className="w-full max-w-56 h-12 rounded-sm bg-slate-300 text-slate-500 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 cursor-not-allowed"
+                                                                >
+                                                                    NEXT STEP
+                                                                    <ArrowRight size={16} />
+                                                                </Button>
+                                                                <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider text-center">
+                                                                    Please verify both Email and Mobile Number to proceed
+                                                                </p>
+                                                            </>
                                                         ) : (
                                                             <Button
                                                                 type="submit"

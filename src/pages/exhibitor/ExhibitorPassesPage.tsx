@@ -1,8 +1,10 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
     Users, UserCheck, Car, Wrench, ShieldCheck,
-    ArrowRight, Check, Sparkles, FileText, Phone, Gift
+    ArrowRight, Check, Sparkles, FileText, Phone, Gift,
+    X, Building2, User, Briefcase, Mail, Phone as PhoneIcon, UserCircle
 } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import passesImg from "@/assets/passes1.png";
@@ -15,29 +17,16 @@ import shoppingImg from "@/assets/shopping.png";
 export default function ExhibitorPassesPage() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPass, setSelectedPass] = useState<any>(null);
+
+    const handleOpenModal = (pass: any) => {
+        setSelectedPass(pass);
+        setIsModalOpen(true);
+    };
 
     // Rates and allocations matching the specifications
     const passes = [
-        {
-            id: "visitor",
-            title: "Visitor Pass",
-            subtitle: "For Invited Visitors",
-            icon: Users,
-            complimentary: 10,
-            used: 2,
-            remaining: 8,
-            price: 200,
-            color: "blue",
-            themeClasses: {
-                bg: "bg-[#f0f7ff]",
-                border: "border-blue-100 hover:border-blue-300",
-                text: "text-[#1a3a7c]",
-                iconBg: "bg-gradient-to-tr from-[#1e40af] to-[#3b82f6]",
-                badgeBg: "bg-blue-50 text-blue-700 border-blue-100",
-                btnBg: "bg-[#1a3a7c] hover:bg-[#112754] text-white shadow-blue-900/10",
-                statsBorder: "border-blue-100/60"
-            }
-        },
         {
             id: "exhibitor",
             title: "Exhibitor Pass",
@@ -96,6 +85,26 @@ export default function ExhibitorPassesPage() {
                 badgeBg: "bg-purple-50 text-purple-700 border-purple-100",
                 btnBg: "bg-[#6b21a8] hover:bg-[#581c87] text-white shadow-purple-900/10",
                 statsBorder: "border-purple-100/60"
+            }
+        },
+        {
+            id: "visitor",
+            title: "Visitor Pass",
+            subtitle: "For Invited Visitors",
+            icon: Users,
+            complimentary: 10,
+            used: 2,
+            remaining: 8,
+            price: 200,
+            color: "blue",
+            themeClasses: {
+                bg: "bg-[#f0f7ff]",
+                border: "border-blue-100 hover:border-blue-300",
+                text: "text-[#1a3a7c]",
+                iconBg: "bg-gradient-to-tr from-[#1e40af] to-[#3b82f6]",
+                badgeBg: "bg-blue-50 text-blue-700 border-blue-100",
+                btnBg: "bg-[#1a3a7c] hover:bg-[#112754] text-white shadow-blue-900/10",
+                statsBorder: "border-blue-100/60"
             }
         }
     ];
@@ -218,7 +227,7 @@ export default function ExhibitorPassesPage() {
 
                             {/* Button */}
                             <button
-                                onClick={() => navigate("/exhibitor-dashboard/accessories")}
+                                onClick={() => handleOpenModal(pass)}
                                 className={`w-full h-7 px-2.5 rounded-md text-[10px] font-extrabold transition-all duration-200 flex items-center justify-between shadow-sm hover:shadow-md ${pass.themeClasses.btnBg}`}
                             >
                                 <span className="flex-1 text-center">Request / Purchase Extra</span>
@@ -442,6 +451,196 @@ export default function ExhibitorPassesPage() {
                     View Terms & Conditions <ArrowRight size={11} className="shrink-0" />
                 </a>
             </div>
+
+            {/* Modal for Requesting/Purchasing Extra Passes */}
+            <AnimatePresence>
+                {isModalOpen && selectedPass && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsModalOpen(false)}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+                            className="relative w-full max-w-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]"
+                        >
+                            {/* Modal Header */}
+                            <div className={`px-5 py-3.5 flex items-center justify-between ${selectedPass.themeClasses.bg} border-b ${selectedPass.themeClasses.border}`}>
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-9 h-9 rounded-full ${selectedPass.themeClasses.iconBg} flex items-center justify-center text-white shadow-sm`}>
+                                        <selectedPass.icon size={18} />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-[14px] font-black text-slate-800 tracking-tight leading-tight">
+                                            Request {selectedPass.title}
+                                        </h2>
+                                        <p className="text-[10px] text-slate-500 font-bold mt-0.5">
+                                            ₹{selectedPass.price} / Pass • {selectedPass.subtitle}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button 
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+                                >
+                                    <X size={14} strokeWidth={2.5} />
+                                </button>
+                            </div>
+
+                            {/* Modal Body / Form */}
+                            <div className="p-5 overflow-y-auto custom-scrollbar">
+                                <form className="grid grid-cols-2 gap-x-4 gap-y-3.5" onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+                                    
+                                    {/* Company Name */}
+                                    <div className="col-span-2">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Company Name
+                                        </label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                                <Building2 size={14} />
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                disabled
+                                                defaultValue={data?.companyName || "Your Company Ltd."}
+                                                className="w-full bg-slate-50 border border-slate-200 text-slate-600 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none cursor-not-allowed"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Client Name */}
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Client Name
+                                        </label>
+                                        <div className="relative group">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                                <User size={14} />
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Enter full name"
+                                                required
+                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Designation */}
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Designation
+                                        </label>
+                                        <div className="relative group">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                                <Briefcase size={14} />
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Job Title / Role"
+                                                required
+                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Email */}
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Email Address
+                                        </label>
+                                        <div className="relative group flex items-center">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                                <Mail size={14} />
+                                            </div>
+                                            <input 
+                                                type="email" 
+                                                placeholder="name@company.com"
+                                                required
+                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-20 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                                            />
+                                            <button
+                                                type="button"
+                                                className={`absolute right-1.5 px-2 py-1 text-[9px] font-extrabold rounded-lg transition-all ${selectedPass.themeClasses.badgeBg}`}
+                                            >
+                                                Send OTP
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Phone Number */}
+                                    <div className="col-span-2 sm:col-span-1">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Phone Number
+                                        </label>
+                                        <div className="relative group flex items-center">
+                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                                                <PhoneIcon size={14} />
+                                            </div>
+                                            <input 
+                                                type="tel" 
+                                                placeholder="+91 00000 00000"
+                                                required
+                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-20 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
+                                            />
+                                            <button
+                                                type="button"
+                                                className={`absolute right-1.5 px-2 py-1 text-[9px] font-extrabold rounded-lg transition-all ${selectedPass.themeClasses.badgeBg}`}
+                                            >
+                                                Send OTP
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Gender */}
+                                    <div className="col-span-2">
+                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
+                                            Gender
+                                        </label>
+                                        <div className="flex gap-2">
+                                            <label className="flex-1 relative cursor-pointer group">
+                                                <input type="radio" name="gender" value="male" className="peer sr-only" required />
+                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-blue-50 peer-checked:border-blue-500 peer-checked:text-blue-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-blue-500">
+                                                    Male
+                                                </div>
+                                            </label>
+                                            <label className="flex-1 relative cursor-pointer group">
+                                                <input type="radio" name="gender" value="female" className="peer sr-only" required />
+                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-pink-50 peer-checked:border-pink-500 peer-checked:text-pink-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-pink-500">
+                                                    Female
+                                                </div>
+                                            </label>
+                                            <label className="flex-1 relative cursor-pointer group">
+                                                <input type="radio" name="gender" value="other" className="peer sr-only" required />
+                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-purple-50 peer-checked:border-purple-500 peer-checked:text-purple-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-purple-500">
+                                                    Other
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <div className="col-span-2 pt-1">
+                                        <button 
+                                            type="submit"
+                                            className={`w-full py-2.5 rounded-xl text-[11px] font-black text-white shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 ${selectedPass.themeClasses.btnBg}`}
+                                        >
+                                            Submit Request
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }

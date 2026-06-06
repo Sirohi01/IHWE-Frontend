@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, Send, ShieldCheck, Loader2, Upload, Star } from "lucide-react";
+import { CheckCircle, Send, ShieldCheck, Loader2, Upload, Star, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -60,6 +60,7 @@ function YesNoRadio({ label, name, value, onChange }: any) {
 
 const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) => {
     const [isSuccess, setIsSuccess] = useState(false);
+    const [step, setStep] = useState(1);
     const [heroData, setHeroData] = useState<any>(null);
     const [events, setEvents] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -476,153 +477,184 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                             </div>
                         </div>
 
-                        {/* ── SECTION 3 & 4: Purpose & Interest ── */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                            <div>
-                                <SectionHeader number="3" title="Purpose of Visit" />
-                                <div className="border border-slate-100 rounded-sm p-4 bg-slate-50/40">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                        {PURPOSE_OPTIONS.map((opt) => (
-                                            <label key={opt} className="flex items-center gap-2.5 cursor-pointer group">
-                                                <Checkbox checked={formData.purposeOfVisit.includes(opt)} onCheckedChange={(c: boolean) => handleCheckboxList('purposeOfVisit', opt, c)}
-                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <SectionHeader number="4" title="Interested Sectors" />
-                                <div className="border border-slate-100 rounded-sm p-4 bg-slate-50/40">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                        {INTEREST_OPTIONS.map((opt) => (
-                                            <label key={opt} className="flex items-center gap-2.5 cursor-pointer group">
-                                                <Checkbox checked={formData.areaOfInterest.includes(opt)} onCheckedChange={(c: boolean) => handleCheckboxList('areaOfInterest', opt, c)}
-                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── SECTION 5: Visit Planning ── */}
-                        <div>
-                            <SectionHeader number="5" title="Visit Planning" />
-                            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                                <div>
-                                    <Label className={labelClasses}>Preferred Visit Days</Label>
-                                    <Select onValueChange={(v) => handleSelectChange('preferredDate', v)} value={formData.preferredDate}>
-                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Days" /></SelectTrigger>
-                                        <SelectContent className="bg-white">
-                                            <SelectItem value="1 Day">1 Day</SelectItem>
-                                            <SelectItem value="2 Days">2 Days</SelectItem>
-                                            <SelectItem value="3 Days">3 Days</SelectItem>
-                                            <SelectItem value="All Days">All Days</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <YesNoRadio label="Need Invitation Letter for Visa?" name="invitationLetter" value={formData.invitationLetter} onChange={handleRadioChange} />
-                                <YesNoRadio label="Need Hotel Booking Assistance?" name="hotelAssistance" value={formData.hotelAssistance} onChange={handleRadioChange} />
-                                <YesNoRadio label="Need Airport Pickup?" name="airportPickup" value={formData.airportPickup} onChange={handleRadioChange} />
-                                <YesNoRadio label="Need Translator Support?" name="translatorSupport" value={formData.translatorSupport} onChange={handleRadioChange} />
-                            </div>
-                        </div>
-
-                        {/* ── SECTION 6: Conference ── */}
-                        <div>
-                            <SectionHeader number="6" title="Conference Participation" />
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                <div className="space-y-4 text-left">
-                                    <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? <span className=" text-red-500">*</span></Label>
-                                    <RadioGroup
-                                        value={formData.schedulingB2B}
-                                        onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
-                                        className="flex gap-6"
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                            <Label htmlFor="b2b-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                            <Label htmlFor="b2b-no" className="text-sm font-medium text-slate-600 cursor-pointer">No</Label>
-                                        </div>
-                                    </RadioGroup>
-                                </div>
-                                <YesNoRadio label="Interested in Medical Conference / Knowledge Sessions?" name="conferenceInterest" value={formData.conferenceInterest} onChange={handleRadioChange} />
-                                {formData.conferenceInterest === 'yes' && (
-                                    <div>
-                                        <Label className={labelClasses}>Interested As</Label>
-                                        <Select onValueChange={(v) => handleSelectChange('conferenceRole', v)} value={formData.conferenceRole}>
-                                            <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Role" /></SelectTrigger>
-                                            <SelectContent className="bg-white">
-                                                {["Delegate", "Attendee", "Speaker", "Panel Participant", "Industry Expert"].map(r => (
-                                                    <SelectItem key={r} value={r.toLowerCase().replace(' ', '-')}>{r}</SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                        {/* ── NEXT STEP BUTTON (STEP 1) ── */}
+                        {step === 1 && (
+                            <div className="pt-4 flex flex-col items-center border-t border-slate-100 mt-4">
+                                <Button 
+                                    type="button" 
+                                    onClick={() => setStep(2)} 
+                                    disabled={!emailVerified || !phoneVerified}
+                                    className="w-full max-w-xs h-10 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                                >
+                                    Next Step <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                </Button>
+                                {(!emailVerified || !phoneVerified) && (
+                                    <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider">
+                                        Please verify both Email and Mobile Number to proceed
+                                    </p>
                                 )}
-
                             </div>
-                        </div>
+                        )}
 
-                        {/* ── SECTION 7: Document Upload ── */}
-                        <div>
-                            <SectionHeader number="7" title="Document Upload" />
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
-                                {[
-                                    { key: 'passport', label: 'Passport Copy' },
-                                    { key: 'visitingCard', label: 'Visiting Card' },
-                                    { key: 'companyProfile', label: 'Company Profile' },
-                                    { key: 'visaDocs', label: 'Visa Documents' },
-                                    { key: 'photoId', label: 'Photo ID' },
-                                ].map(({ key, label }) => (
-                                    <label key={key} className="flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-sm cursor-pointer hover:border-[#23471d]/40 hover:bg-green-50/30 transition-all group">
-                                        <Upload size={16} className="text-slate-300 group-hover:text-[#23471d] transition-colors" />
-                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider text-center group-hover:text-[#23471d]">{label}</span>
-                                        {files[key] && <span className="text-[8px] text-green-600 font-bold truncate w-full text-center">{files[key]?.name}</span>}
-                                        <input type="file" className="hidden" onChange={(e) => setFiles(prev => ({ ...prev, [key]: e.target.files?.[0] || null }))} />
+                        {/* ── STEP 2 CONTENT ── */}
+                        <AnimatePresence>
+                            {step === 2 && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="space-y-2 overflow-hidden"
+                                >
+                                    {/* ── SECTION 3 & 4: Purpose & Interest ── */}
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-4">
+                                        <div>
+                                            <SectionHeader number="3" title="Purpose of Visit" />
+                                            <div className="border border-slate-100 rounded-sm p-4 bg-slate-50/40">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                                    {PURPOSE_OPTIONS.map((opt) => (
+                                                        <label key={opt} className="flex items-center gap-2.5 cursor-pointer group">
+                                                            <Checkbox checked={formData.purposeOfVisit.includes(opt)} onCheckedChange={(c: boolean) => handleCheckboxList('purposeOfVisit', opt, c)}
+                                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                            <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <SectionHeader number="4" title="Interested Sectors" />
+                                            <div className="border border-slate-100 rounded-sm p-4 bg-slate-50/40">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                                    {INTEREST_OPTIONS.map((opt) => (
+                                                        <label key={opt} className="flex items-center gap-2.5 cursor-pointer group">
+                                                            <Checkbox checked={formData.areaOfInterest.includes(opt)} onCheckedChange={(c: boolean) => handleCheckboxList('areaOfInterest', opt, c)}
+                                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                            <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
+                                                        </label>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* ── SECTION 5: Visit Planning ── */}
+                                    <div>
+                                        <SectionHeader number="5" title="Visit Planning" />
+                                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                                            <div>
+                                                <Label className={labelClasses}>Preferred Visit Days</Label>
+                                                <Select onValueChange={(v) => handleSelectChange('preferredDate', v)} value={formData.preferredDate}>
+                                                    <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Days" /></SelectTrigger>
+                                                    <SelectContent className="bg-white">
+                                                        <SelectItem value="1 Day">1 Day</SelectItem>
+                                                        <SelectItem value="2 Days">2 Days</SelectItem>
+                                                        <SelectItem value="3 Days">3 Days</SelectItem>
+                                                        <SelectItem value="All Days">All Days</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+
+                                            <YesNoRadio label="Need Invitation Letter for Visa?" name="invitationLetter" value={formData.invitationLetter} onChange={handleRadioChange} />
+                                            <YesNoRadio label="Need Hotel Booking Assistance?" name="hotelAssistance" value={formData.hotelAssistance} onChange={handleRadioChange} />
+                                            <YesNoRadio label="Need Airport Pickup?" name="airportPickup" value={formData.airportPickup} onChange={handleRadioChange} />
+                                            <YesNoRadio label="Need Translator Support?" name="translatorSupport" value={formData.translatorSupport} onChange={handleRadioChange} />
+                                        </div>
+                                    </div>
+
+                                    {/* ── SECTION 6: Conference ── */}
+                                    <div>
+                                        <SectionHeader number="6" title="Conference Participation" />
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                            <div className="space-y-4 text-left">
+                                                <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? <span className=" text-red-500">*</span></Label>
+                                                <RadioGroup
+                                                    value={formData.schedulingB2B}
+                                                    onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
+                                                    className="flex gap-6"
+                                                >
+                                                    <div className="flex items-center space-x-2">
+                                                        <RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                        <Label htmlFor="b2b-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                        <Label htmlFor="b2b-no" className="text-sm font-medium text-slate-600 cursor-pointer">No</Label>
+                                                    </div>
+                                                </RadioGroup>
+                                            </div>
+                                            <YesNoRadio label="Interested in Medical Conference / Knowledge Sessions?" name="conferenceInterest" value={formData.conferenceInterest} onChange={handleRadioChange} />
+                                            {formData.conferenceInterest === 'yes' && (
+                                                <div>
+                                                    <Label className={labelClasses}>Interested As</Label>
+                                                    <Select onValueChange={(v) => handleSelectChange('conferenceRole', v)} value={formData.conferenceRole}>
+                                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Role" /></SelectTrigger>
+                                                        <SelectContent className="bg-white">
+                                                            {["Delegate", "Attendee", "Speaker", "Panel Participant", "Industry Expert"].map(r => (
+                                                                <SelectItem key={r} value={r.toLowerCase().replace(' ', '-')}>{r}</SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                            )}
+
+                                        </div>
+                                    </div>
+
+                                    {/* ── SECTION 7: Document Upload ── */}
+                                    <div>
+                                        <SectionHeader number="7" title="Document Upload" />
+                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+                                            {[
+                                                { key: 'passport', label: 'Passport Copy' },
+                                                { key: 'visitingCard', label: 'Visiting Card' },
+                                                { key: 'companyProfile', label: 'Company Profile' },
+                                                { key: 'visaDocs', label: 'Visa Documents' },
+                                                { key: 'photoId', label: 'Photo ID' },
+                                            ].map(({ key, label }) => (
+                                                <label key={key} className="flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-slate-200 rounded-sm cursor-pointer hover:border-[#23471d]/40 hover:bg-green-50/30 transition-all group">
+                                                    <Upload size={16} className="text-slate-300 group-hover:text-[#23471d] transition-colors" />
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider text-center group-hover:text-[#23471d]">{label}</span>
+                                                    {files[key] && <span className="text-[8px] text-green-600 font-bold truncate w-full text-center">{files[key]?.name}</span>}
+                                                    <input type="file" className="hidden" onChange={(e) => setFiles(prev => ({ ...prev, [key]: e.target.files?.[0] || null }))} />
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 mt-1">
+                                        <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Any Specific requirement</Label>
+                                        <Input
+                                            name="anyRequirement"
+                                            value={formData.anyRequirement}
+                                            onChange={handleInputChange}
+                                            placeholder="Write Here .." className={inputClasses}
+                                        />
+                                    </div>
+
+
+                                    {/* ── SUBSCRIBE ── */}
+                                    <label className="flex items-center gap-3 cursor-pointer group pt-4">
+                                        <Checkbox checked={formData.subscribeNewsletter} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: !!c }))}
+                                            className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                        <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide">Subscribe to IHWE Global Updates & Newsletters</span>
                                     </label>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="space-y-2 mt-1">
-                            <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Any Specific requirement</Label>
-                            <Input
-                                name="anyRequirement"
-                                value={formData.anyRequirement}
-                                onChange={handleInputChange}
-                                placeholder="Write Here .." className={inputClasses}
-                            />
-                        </div>
 
-
-                        {/* ── SUBSCRIBE ── */}
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                            <Checkbox checked={formData.subscribeNewsletter} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: !!c }))}
-                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide">Subscribe to IHWE Global Updates & Newsletters</span>
-                        </label>
-
-                        {/* ── SUBMIT ── */}
-                        <div className="pt-4 flex flex-col items-center border-t border-slate-100">
-                            <Button type="submit" disabled={loading || !emailVerified || !phoneVerified}
-                                className="w-full max-w-xs h-10 rounded-sm bg-[#d26019] hover:bg-[#a84c14] text-white font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all">
-                                {loading
-                                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
-                                    : <>Submit Registration <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
-                                }
-                            </Button>
-                            <p className="mt-3 text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                                <ShieldCheck size={11} className="text-[#d26019]" />
-                                International Visitor · Secure Portal · IHWE 2026
-                            </p>
-                        </div>
+                                    {/* ── SUBMIT ── */}
+                                    <div className="pt-4 flex flex-col items-center border-t border-slate-100">
+                                        <Button type="submit" disabled={loading}
+                                            className="w-full max-w-xs h-10 rounded-sm bg-[#d26019] hover:bg-[#a84c14] text-white font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all">
+                                            {loading
+                                                ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</>
+                                                : <>Submit Registration <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                            }
+                                        </Button>
+                                        <p className="mt-3 text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                                            <ShieldCheck size={11} className="text-[#d26019]" />
+                                            International Visitor · Secure Portal · IHWE 2026
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                     </form>
                 </motion.div>

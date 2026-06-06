@@ -1,7 +1,7 @@
 import { Store, CheckCircle, FileText, Megaphone, CalendarDays } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
-
+import { API_URL } from "@/lib/api";
 
 export default function StatCards() {
     const { data } = useExhibitorCtx();
@@ -11,6 +11,59 @@ export default function StatCards() {
         minutes: 0,
         seconds: 0
     });
+
+    const [docStats, setDocStats] = useState({ completed: 0, total: 6, status: 'Pending' });
+
+    useEffect(() => {
+        const fetchDocs = async () => {
+            const clientId = data?._id;
+            if (!clientId) return;
+            try {
+                const [reqRes, docsRes] = await Promise.all([
+                    fetch(`${API_URL}/document-requirements`),
+                    fetch(`${API_URL}/client-documents/${clientId}`)
+                ]);
+                const reqData = await reqRes.json();
+                const docsData = await docsRes.json();
+
+                if (Array.isArray(reqData)) {
+                    const uploadedMap = new Map();
+                    if (Array.isArray(docsData)) {
+                        docsData.forEach((d: any) => uploadedMap.set(d.document_name, d));
+                    }
+                    let completedCount = 0;
+                    reqData.forEach((d: any) => {
+                        const uploaded = uploadedMap.get(d.document_name);
+                        // Depending on business logic, "Pending" might also mean they uploaded it, but user wants it to say "Completed" tab when all filled.
+                        // Based on DashboardBottom, it only counts as Completed if Approved. Let's stick to that, or count if uploaded. 
+                        // Wait, user says "utne hi number yr DOCUMENTS [0 / 6] Completed iss card me show krenge or pending or completed tab aaega yr jab sare documents fill ho jaenge"
+                        if (uploaded?.status === "Approved") completedCount++;
+                        else if (uploaded?.status === "Pending") completedCount++; // Let's count them if they are uploaded, even if pending approval?
+                    });
+                    
+                    // Actually, let's just match the exact counting logic. DashboardBottom says status="Completed" if Approved, "Pending" if Pending/Rejected, "Not Uploaded" otherwise.
+                    // The user said "jab sare documents fill ho jaenge", so counting uploaded documents might be better. Let's count both Approved and Pending as filled for the numbers, or maybe just Approved? 
+                    // Let's count uploaded and submitted ones.
+                    let filledCount = 0;
+                    reqData.forEach((d: any) => {
+                        const uploaded = uploadedMap.get(d.document_name);
+                        if (uploaded && uploaded.status !== "Not Uploaded") {
+                             filledCount++;
+                        }
+                    });
+
+                    setDocStats({
+                        completed: filledCount,
+                        total: reqData.length,
+                        status: filledCount === reqData.length ? 'Completed' : 'Pending'
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to fetch documents", e);
+            }
+        };
+        fetchDocs();
+    }, [data?._id]);
 
     useEffect(() => {
         const targetDate = new Date("2026-08-21T00:00:00");
@@ -39,6 +92,8 @@ export default function StatCards() {
             id: "stall",
             icon: Store,
             iconBg: "bg-gradient-to-br from-[#7c6ef5] to-[#5b4fcf]",
+            cardBg: "bg-indigo-50/70",
+            hoverBg: "hover:bg-indigo-100/80",
             label: "STALL NUMBER",
             value: data?.participation?.stallFor || "TBA",
             sub: `${data?.participation?.stallType || "Space"} – ${data?.participation?.stallSize || 0} SQM`,
@@ -48,6 +103,8 @@ export default function StatCards() {
             id: "payment",
             icon: CheckCircle,
             iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]",
+            cardBg: "bg-green-50/70",
+            hoverBg: "hover:bg-green-100/80",
             label: "PAYMENT STATUS",
             value: data?.status || "Pending",
             sub: `Total Paid: ${data?.participation?.currency || 'INR'} ${data?.amountPaid?.toLocaleString() || '0'}`,
@@ -57,22 +114,19 @@ export default function StatCards() {
             id: "documents",
             icon: FileText,
             iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]",
+            cardBg: "bg-orange-50/70",
+            hoverBg: "hover:bg-orange-100/80",
             label: "DOCUMENTS",
-            value: `${[
-                data?.companyLogoUrl,
-                data?.gstCertificateUrl || data?.kycDocuments?.gstCertificate,
-                data?.panCardFrontUrl || data?.kycDocuments?.panCard,
-                data?.representativePhotoUrl,
-                data?.cancelledChequeUrl,
-                data?.brochure
-            ].filter(Boolean).length} / 6`,
-            sub: "Completed",
+            value: `${docStats.completed} / ${docStats.total}`,
+            sub: docStats.status,
             valueColor: "text-gray-800",
         },
         {
             id: "epromotion",
             icon: Megaphone,
             iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]",
+            cardBg: "bg-blue-50/70",
+            hoverBg: "hover:bg-blue-100/80",
             label: "E-PROMOTION",
             value: "Active",
             sub: "Your profile is live",
@@ -82,6 +136,8 @@ export default function StatCards() {
             id: "countdown",
             icon: CalendarDays,
             iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]",
+            cardBg: "bg-teal-50/70",
+            hoverBg: "hover:bg-teal-100/80",
             label: "EVENT COUNTDOWN",
             value: "",
             sub: "Remaining Time",
@@ -97,7 +153,7 @@ export default function StatCards() {
                     <div
                         key={stat.id}
                         style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
-                        className={`flex items-center gap-2 bg-white rounded-md px-3 py-1 flex-1 transform translate-y-0 transition-all duration-300 ease-out hover:translate-y-[2.5px] hover:bg-slate-50/90 ${stat.id === "countdown" ? "min-w-[240px]" : "min-w-[170px]"
+                        className={`flex items-center gap-2 ${stat.cardBg} rounded-md px-3 py-1 flex-1 transform translate-y-0 transition-all duration-300 ease-out hover:translate-y-[2.5px] ${stat.hoverBg} ${stat.id === "countdown" ? "min-w-[240px]" : "min-w-[170px]"
                             }`}
                     >
                         <div className={`${stat.iconBg} rounded-xl p-2 shrink-0`}>

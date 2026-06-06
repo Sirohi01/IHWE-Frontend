@@ -241,6 +241,7 @@ const PersonCard = ({
 // ── Main Component ──────────────────────────────────────────────────────────
 const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
     const [isSuccess, setIsSuccess] = useState(false);
+    const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -608,76 +609,108 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                     )}
                 </div>
 
-                {/* ── SECTION 3: Purpose & Interest ── */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                        <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit <span className="text-red-500">*</span></Label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                            {PURPOSE_OPTIONS.map(opt => (
-                                <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                    <Checkbox checked={company.purposeOfVisit.includes(opt)} onCheckedChange={(c: boolean) => handlePurposeChange(opt, c)}
-                                        className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                    <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium">{opt}</span>
-                                </label>
-                            ))}
-                        </div>
+                {/* ── NEXT STEP BUTTON (STEP 1) ── */}
+                {step === 1 && (
+                    <div className="pt-4 flex flex-col items-center border-t border-slate-100 mt-6">
+                        <Button 
+                            type="button" 
+                            onClick={() => setStep(2)} 
+                            disabled={!emailVerified || !phoneVerified}
+                            className="w-full md:w-[380px] h-10 rounded-sm bg-[#0e4293] hover:bg-[#092f6d] text-white font-black text-[12px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                        >
+                            Next Step <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                        {(!emailVerified || !phoneVerified) && (
+                            <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider text-center">
+                                Please verify both Email and Mobile Number to proceed
+                            </p>
+                        )}
                     </div>
-                    <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                        <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest <span className="text-red-500">*</span></Label>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                            {INTEREST_OPTIONS.map(opt => (
-                                <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                    <Checkbox checked={company.areaOfInterest.includes(opt)} onCheckedChange={(c: boolean) => handleInterestChange(opt, c)}
-                                        className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
-                                    <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium">{opt}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                )}
 
-                {/* ── SECTION 4: Additional Preferences ── */}
-                <div className="space-y-3">
-                    <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-400 pb-1.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                        Additional Preferences
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4">
-                        <div>
-                            <Label className={labelClasses}>SCHEDULING B2B MEETINGS?</Label>
-                            <RadioGroup value={company.schedulingB2B} onValueChange={v => setCompany(prev => ({ ...prev, schedulingB2B: v }))} className="flex gap-6 mt-1">
-                                <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="b2b-yes" className="text-[12px] font-bold text-slate-700 cursor-pointer">Yes</Label></div>
-                                <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="b2b-no" className="text-[12px] font-bold text-slate-700 cursor-pointer">No</Label></div>
-                            </RadioGroup>
-                        </div>
-                        <div>
-                            <Label className={labelClasses}>WHATSAPP UPDATES?</Label>
-                            <RadioGroup value={company.whatsappUpdates} onValueChange={v => setCompany(prev => ({ ...prev, whatsappUpdates: v }))} className="flex gap-6 mt-1">
-                                <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="wa-yes" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="wa-yes" className="text-[12px] font-bold text-slate-700 cursor-pointer">Yes</Label></div>
-                                <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="wa-no" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="wa-no" className="text-[12px] font-bold text-slate-700 cursor-pointer">No</Label></div>
-                            </RadioGroup>
-                        </div>
-                        <div>
-                            <Label className={labelClasses}>ANY SPECIFIC REQUIREMENT</Label>
-                            <Input name="anyRequirement" value={company.anyRequirement} onChange={handleCompanyChange} placeholder="Enter any specific requirement" className={inputClasses} />
-                        </div>
-                    </div>
-                </div>
+                <AnimatePresence>
+                    {step === 2 && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="space-y-6 overflow-hidden mt-6"
+                        >
+                            {/* ── SECTION 3: Purpose & Interest ── */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
+                                    <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit <span className="text-red-500">*</span></Label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                        {PURPOSE_OPTIONS.map(opt => (
+                                            <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                                                <Checkbox checked={company.purposeOfVisit.includes(opt)} onCheckedChange={(c: boolean) => handlePurposeChange(opt, c)}
+                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium">{opt}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
+                                    <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest <span className="text-red-500">*</span></Label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                        {INTEREST_OPTIONS.map(opt => (
+                                            <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                                                <Checkbox checked={company.areaOfInterest.includes(opt)} onCheckedChange={(c: boolean) => handleInterestChange(opt, c)}
+                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
+                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium">{opt}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
 
-                {/* ── Submit ── */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                        <Checkbox checked={company.subscribeNewsletter} onCheckedChange={(c: boolean) => setCompany(prev => ({ ...prev, subscribeNewsletter: c }))}
-                            className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#0e4293] data-[state=checked]:border-[#0e4293]" />
-                        <span className="text-[10px] font-bold text-slate-500">
-                            I agree to the <Link to="/terms-of-service" className="text-[#0e4293] underline">Terms &amp; Conditions</Link> and <Link to="/privacy-policy" className="text-[#0e4293] underline">Privacy Policy</Link>
-                        </span>
-                    </label>
-                </div>
-                {errorMessage && <p className="text-red-500 text-[12px] font-bold">{errorMessage}</p>}
-                <Button type="submit" disabled={loading}
-                    className="w-full md:w-[380px] h-10 bg-[#0e4293] hover:bg-[#092f6d] text-white font-black text-[12px] uppercase tracking-[0.2em] rounded-md shadow-lg transition-all flex items-center justify-center gap-3">
-                    {loading ? <><Loader2 size={14} className="animate-spin" /> SUBMITTING...</> : <>SUBMIT GROUP REGISTRATION <ArrowRight size={14} /></>}
-                </Button>
+                            {/* ── SECTION 4: Additional Preferences ── */}
+                            <div className="space-y-3">
+                                <h3 className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em] border-b border-slate-400 pb-1.5" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                                    Additional Preferences
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-4">
+                                    <div>
+                                        <Label className={labelClasses}>SCHEDULING B2B MEETINGS?</Label>
+                                        <RadioGroup value={company.schedulingB2B} onValueChange={v => setCompany(prev => ({ ...prev, schedulingB2B: v }))} className="flex gap-6 mt-1">
+                                            <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="b2b-yes" className="text-[12px] font-bold text-slate-700 cursor-pointer">Yes</Label></div>
+                                            <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="b2b-no" className="text-[12px] font-bold text-slate-700 cursor-pointer">No</Label></div>
+                                        </RadioGroup>
+                                    </div>
+                                    <div>
+                                        <Label className={labelClasses}>WHATSAPP UPDATES?</Label>
+                                        <RadioGroup value={company.whatsappUpdates} onValueChange={v => setCompany(prev => ({ ...prev, whatsappUpdates: v }))} className="flex gap-6 mt-1">
+                                            <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="wa-yes" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="wa-yes" className="text-[12px] font-bold text-slate-700 cursor-pointer">Yes</Label></div>
+                                            <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="wa-no" className="w-4 h-4 border-slate-400 text-[#0e4293]" /><Label htmlFor="wa-no" className="text-[12px] font-bold text-slate-700 cursor-pointer">No</Label></div>
+                                        </RadioGroup>
+                                    </div>
+                                    <div>
+                                        <Label className={labelClasses}>ANY SPECIFIC REQUIREMENT</Label>
+                                        <Input name="anyRequirement" value={company.anyRequirement} onChange={handleCompanyChange} placeholder="Enter any specific requirement" className={inputClasses} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* ── Submit ── */}
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2">
+                                <label className="flex items-center gap-3 cursor-pointer">
+                                    <Checkbox checked={company.subscribeNewsletter} onCheckedChange={(c: boolean) => setCompany(prev => ({ ...prev, subscribeNewsletter: c }))}
+                                        className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#0e4293] data-[state=checked]:border-[#0e4293]" />
+                                    <span className="text-[10px] font-bold text-slate-500">
+                                        I agree to the <Link to="/terms-of-service" className="text-[#0e4293] underline">Terms &amp; Conditions</Link> and <Link to="/privacy-policy" className="text-[#0e4293] underline">Privacy Policy</Link>
+                                    </span>
+                                </label>
+                            </div>
+                            {errorMessage && <p className="text-red-500 text-[12px] font-bold">{errorMessage}</p>}
+                            <div className="flex justify-center w-full">
+                                <Button type="submit" disabled={loading}
+                                    className="w-full md:w-[380px] h-10 bg-[#0e4293] hover:bg-[#092f6d] text-white font-black text-[12px] uppercase tracking-[0.2em] rounded-md shadow-lg transition-all flex items-center justify-center gap-3">
+                                    {loading ? <><Loader2 size={14} className="animate-spin" /> SUBMITTING...</> : <>SUBMIT GROUP REGISTRATION <ArrowRight size={14} /></>}
+                                </Button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </form>
         </div>
     );
