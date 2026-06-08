@@ -283,7 +283,7 @@ const App = () => {
                       <Route path="reports/:type/:id" element={<PsmReports />} />
                       <Route path="reports-table" element={<PsmReportsTable />} />
                       <Route path="reports-table/:type" element={<PsmReportsTable />} />
-                    </Route>
+                    </Route>  
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                     <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                     <Route path="participants-feedback" element={<ParticipantsFeedback />} />
