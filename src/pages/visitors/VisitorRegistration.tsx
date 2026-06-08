@@ -24,7 +24,10 @@ import {
     Check,
     Package,
     BadgePercent,
-    BadgeCheck
+    BadgeCheck,
+    Heart,
+    Activity,
+    Calendar
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -92,6 +95,61 @@ const INTEREST_CORPORATE = [
     "Knowledge Sessions", "Startup Collaboration", "Government Delegation", "General Visit",
 ];
 
+const HEALTH_SERVICES = [
+    { key: "generalHealth", label: "General Check-up" },
+    { key: "bloodSugar", label: "Blood Sugar Test" },
+    { key: "bloodPressure", label: "Blood Pressure" },
+    { key: "eyeCheckup", label: "Eye Check-up" },
+    { key: "dentalCheckup", label: "Dental Check-up" },
+    { key: "ayurvedaConsultation", label: "Ayurveda Consultation" },
+    { key: "nutritionConsultation", label: "Nutrition Consultation" },
+    { key: "other", label: "Other" },
+];
+
+const TIME_SLOTS = [
+    "09:00 AM - 12:00 PM",
+    "12:00 PM - 03:00 PM",
+    "03:00 PM - 06:00 PM",
+];
+
+const getInitialHealthCampData = () => ({
+    registrationFor: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    alternateNo: "",
+    dateOfBirth: "",
+    gender: "",
+    residenceAddress: "",
+    country: "India",
+    state: "",
+    city: "",
+    existingMedicalConditions: "",
+    isTakingMedications: "",
+    medicationNames: "",
+    hasAllergies: "",
+    allergyDetails: "",
+    isExperiencingSymptoms: "",
+    symptomDetails: "",
+    healthCheckupServices: {
+        generalHealth: false,
+        bloodSugar: false,
+        bloodPressure: false,
+        eyeCheckup: false,
+        dentalCheckup: false,
+        ayurvedaConsultation: false,
+        nutritionConsultation: false,
+        other: false,
+    } as Record<string, boolean>,
+    preferredDate: "",
+    preferredTimeSlot: "09:00 AM - 12:00 PM",
+    consentMedicalData: "",
+    agreeToUpdates: "",
+    specificHealthConcerns: "",
+    subscribe: true,
+});
+
 const BenefitsBar = ({ items }: { items: any[] }) => (
     <div className="bg-white border border-slate-100 rounded-[20px] px-6 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.04)] max-w-[1400px] mx-auto relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
@@ -133,6 +191,8 @@ const unescapeHtml = (str: string) => {
     return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 };
 
+const getEventName = (event: any) => event?.name || event?.event_fullName || event?.event_name || "";
+
 const VisitorRegistration = () => {
     const [visitorType, setVisitorType] = useState("corporate");
     const [selected, setSelected] = useState<string | null>(null);
@@ -148,6 +208,10 @@ const VisitorRegistration = () => {
     const [cities, setCities] = useState<any[]>([]);
     const [loadingStates, setLoadingStates] = useState(false);
     const [loadingCities, setLoadingCities] = useState(false);
+    const [healthCampStates, setHealthCampStates] = useState<any[]>([]);
+    const [healthCampCities, setHealthCampCities] = useState<any[]>([]);
+    const [loadingHealthCampStates, setLoadingHealthCampStates] = useState(false);
+    const [loadingHealthCampCities, setLoadingHealthCampCities] = useState(false);
 
     // OTP States
     const [formData, setFormData] = useState({
@@ -175,6 +239,7 @@ const VisitorRegistration = () => {
         purposeOfVisit: [] as string[],
         areaOfInterest: [] as string[]
     });
+    const [healthCampData, setHealthCampData] = useState(getInitialHealthCampData());
 
     const defaultEventName = "9th Edition of International Health & Wellness Expo 2026";
 
@@ -272,6 +337,50 @@ const VisitorRegistration = () => {
         fetchCities();
     }, [formData.state, states]);
 
+    useEffect(() => {
+        const fetchHealthCampStates = async () => {
+            if (!healthCampData.country) {
+                setHealthCampStates([]);
+                return;
+            }
+            const selectedCountry = countries.find(c => c.name === healthCampData.country);
+            if (selectedCountry) {
+                setLoadingHealthCampStates(true);
+                try {
+                    const data = await crmApi.getStates(selectedCountry.countryCode);
+                    setHealthCampStates(data);
+                } catch (err) {
+                    console.error("Error fetching health camp states:", err);
+                } finally {
+                    setLoadingHealthCampStates(false);
+                }
+            }
+        };
+        fetchHealthCampStates();
+    }, [healthCampData.country, countries]);
+
+    useEffect(() => {
+        const fetchHealthCampCities = async () => {
+            if (!healthCampData.state) {
+                setHealthCampCities([]);
+                return;
+            }
+            const selectedState = healthCampStates.find(s => s.name === healthCampData.state);
+            if (selectedState) {
+                setLoadingHealthCampCities(true);
+                try {
+                    const data = await crmApi.getCities(selectedState.stateCode);
+                    setHealthCampCities(data);
+                } catch (err) {
+                    console.error("Error fetching health camp cities:", err);
+                } finally {
+                    setLoadingHealthCampCities(false);
+                }
+            }
+        };
+        fetchHealthCampCities();
+    }, [healthCampData.state, healthCampStates]);
+
     // Smooth Scroll to Form on Activation
     useEffect(() => {
         if (selected) {
@@ -325,6 +434,97 @@ const VisitorRegistration = () => {
                 ? [...prev.areaOfInterest, opt]
                 : prev.areaOfInterest.filter(i => i !== opt)
         }));
+    };
+
+    const handleHealthCampInputChange = (e: any) => {
+        const { name, value, type, checked } = e.target;
+        setHealthCampData(prev => {
+            const next = {
+                ...prev,
+                [name]: type === "checkbox" ? checked : value,
+            };
+            if (name === "country") {
+                next.state = "";
+                next.city = "";
+                setHealthCampStates([]);
+                setHealthCampCities([]);
+            }
+            if (name === "state") {
+                next.city = "";
+                setHealthCampCities([]);
+            }
+            return next;
+        });
+    };
+
+    const handleHealthServiceChange = (key: string, checked: boolean) => {
+        setHealthCampData(prev => ({
+            ...prev,
+            healthCheckupServices: {
+                ...prev.healthCheckupServices,
+                [key]: checked,
+            },
+        }));
+    };
+
+    const resetHealthCampForm = () => {
+        setHealthCampData({
+            ...getInitialHealthCampData(),
+            registrationFor: events.length > 0 ? getEventName(events[0]) : defaultEventName,
+        });
+    };
+
+    const validateHealthCampForm = () => {
+        if (!healthCampData.registrationFor) return "Please select Event";
+        if (!healthCampData.firstName.trim()) return "First Name is required";
+        if (!healthCampData.lastName.trim()) return "Last Name is required";
+        if (!healthCampData.email.trim()) return "Email is required";
+        if (!healthCampData.mobile.trim()) return "Mobile Number is required";
+        if (!healthCampData.dateOfBirth) return "Date of Birth is required";
+        if (!healthCampData.gender) return "Gender is required";
+        if (!healthCampData.preferredDate) return "Preferred Date is required";
+        if (!healthCampData.preferredTimeSlot) return "Preferred Time Slot is required";
+        if (!healthCampData.consentMedicalData) return "Please answer the consent question";
+        if (!healthCampData.agreeToUpdates) return "Please answer the agreement question";
+        return "";
+    };
+
+    const handleHealthCampSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrorMessage("");
+
+        const validationMessage = validateHealthCampForm();
+        if (validationMessage) {
+            alert(validationMessage);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const payload = {
+                ...healthCampData,
+                registrationFor: healthCampData.registrationFor || (events.length > 0 ? getEventName(events[0]) : defaultEventName),
+            };
+
+            const res = await visitorApi.submitHealthCamp(payload);
+            if (res.success || res.data) {
+                setIsSuccess(true);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setTimeout(() => {
+                    resetHealthCampForm();
+                    setSelected(null);
+                    setVisitorType("corporate");
+                    setIsSuccess(false);
+                }, 5000);
+            } else {
+                throw new Error(res.message || "Registration failed");
+            }
+        } catch (error: any) {
+            setErrorMessage(error.message || "Something went wrong. Please try again.");
+            alert("Error: " + (error.message || "Submission failed. Please check your data."));
+        } finally {
+            setLoading(false);
+        }
     };
 
     const sendEmailOtp = async () => {
@@ -420,7 +620,7 @@ const VisitorRegistration = () => {
         setLoading(true);
         try {
             let payload: any = {};
-            const eventName = formData.registrationFor || (events.length > 0 ? events[0].name : defaultEventName);
+            const eventName = formData.registrationFor || (events.length > 0 ? getEventName(events[0]) : defaultEventName);
 
             if (visitorType === 'general') {
                 payload = {
@@ -517,9 +717,17 @@ const VisitorRegistration = () => {
 
     useEffect(() => {
         if (events.length > 0 && !formData.registrationFor) {
-            setFormData(prev => ({ ...prev, registrationFor: events[0].name }));
+            setFormData(prev => ({ ...prev, registrationFor: getEventName(events[0]) }));
+            setHealthCampData(prev => ({
+                ...prev,
+                registrationFor: prev.registrationFor || getEventName(events[0]),
+            }));
         } else if (events.length === 0 && !formData.registrationFor) {
             setFormData(prev => ({ ...prev, registrationFor: defaultEventName }));
+            setHealthCampData(prev => ({
+                ...prev,
+                registrationFor: prev.registrationFor || defaultEventName,
+            }));
         }
     }, [events]);
 
@@ -836,7 +1044,7 @@ const VisitorRegistration = () => {
 
                                                 </div>
 
-                                                <form onSubmit={handleSubmit} className="p-8 space-y-4 font-inter">
+                                                <form onSubmit={visitorType === "freeHealth" ? handleHealthCampSubmit : handleSubmit} className="p-8 space-y-4 font-inter">
                                                     {/* —— VISITOR TYPE —— */}
 
                                                     <div className="flex flex-wrap items-center gap-12">
@@ -858,6 +1066,12 @@ const VisitorRegistration = () => {
                                                                     General Visitor
                                                                 </Label>
                                                             </div>
+                                                            <div className="flex items-center space-x-3">
+                                                                <RadioGroupItem value="freeHealth" id="freeHealth" className="w-5 h-5 border-slate-400 text-[#23471d]" />
+                                                                <Label htmlFor="freeHealth" className="text-sm font-bold text-slate-700 cursor-pointer flex items-center gap-2">
+                                                                    Free Health Camp
+                                                                </Label>
+                                                            </div>
                                                         </RadioGroup>
 
                                                         <div className="hidden flex flex-col gap-1 min-w-[220px]">
@@ -868,13 +1082,260 @@ const VisitorRegistration = () => {
                                                                 </SelectTrigger>
                                                                 <SelectContent>
                                                                     {events.map((ev: any) => (
-                                                                        <SelectItem key={ev._id} value={ev.name} className="text-xs">{ev.name}</SelectItem>
+                                                                        <SelectItem key={ev._id || getEventName(ev)} value={getEventName(ev)} className="text-xs">{getEventName(ev)}</SelectItem>
                                                                     ))}
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
                                                     </div>
 
+                                                    {visitorType === "freeHealth" && (
+                                                        <div className="space-y-4 animate-fadeIn">
+                                                            <section>
+                                                                <h3 className="text-[13px] font-semibold text-[#23471d] pb-1 border-b border-slate-200 mb-2 flex items-center gap-2">
+                                                                    <User className="w-5 h-5 text-[#d26019]" /> Patient Information
+                                                                </h3>
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
+                                                                    <div>
+                                                                        <Label className={labelClasses}>EVENT NAME <span className="text-red-500">*</span></Label>
+                                                                        <Select value={healthCampData.registrationFor} onValueChange={(v) => setHealthCampData(prev => ({ ...prev, registrationFor: v }))}>
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder="Select Here" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="bg-white">
+                                                                                {(events.length > 0 ? events : [{ _id: "default", name: defaultEventName }]).map((ev: any) => (
+                                                                                    <SelectItem key={ev._id || getEventName(ev)} value={getEventName(ev)}>{getEventName(ev)}</SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>FIRST NAME <span className="text-red-500">*</span></Label>
+                                                                        <Input name="firstName" value={healthCampData.firstName} onChange={handleHealthCampInputChange} required placeholder="First Name" className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>LAST NAME <span className="text-red-500">*</span></Label>
+                                                                        <Input name="lastName" value={healthCampData.lastName} onChange={handleHealthCampInputChange} required placeholder="Last Name" className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>EMAIL ADDRESS <span className="text-red-500">*</span></Label>
+                                                                        <Input name="email" type="email" value={healthCampData.email} onChange={handleHealthCampInputChange} required placeholder="Email" className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>MOBILE NUMBER <span className="text-red-500">*</span></Label>
+                                                                        <Input name="mobile" value={healthCampData.mobile} onChange={handleHealthCampInputChange} required placeholder="Mobile No." className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>ALTERNATE NO.</Label>
+                                                                        <Input name="alternateNo" value={healthCampData.alternateNo} onChange={handleHealthCampInputChange} placeholder="Optional" className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>DATE OF BIRTH <span className="text-red-500">*</span></Label>
+                                                                        <Input name="dateOfBirth" type="date" value={healthCampData.dateOfBirth} onChange={handleHealthCampInputChange} required className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>GENDER <span className="text-red-500">*</span></Label>
+                                                                        <Select value={healthCampData.gender} onValueChange={(v) => setHealthCampData(prev => ({ ...prev, gender: v }))}>
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder="Select Here" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="bg-white">
+                                                                                <SelectItem value="Male">Male</SelectItem>
+                                                                                <SelectItem value="Female">Female</SelectItem>
+                                                                                <SelectItem value="Other">Other</SelectItem>
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div className="lg:col-span-2">
+                                                                        <Label className={labelClasses}>RESIDENCE ADDRESS</Label>
+                                                                        <Input name="residenceAddress" value={healthCampData.residenceAddress} onChange={handleHealthCampInputChange} placeholder="Full Address" className={inputClasses} />
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>COUNTRY</Label>
+                                                                        <Select value={healthCampData.country} onValueChange={(v) => handleHealthCampInputChange({ target: { name: "country", value: v } })}>
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder="Select Country" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                                {countries.map(c => (
+                                                                                    <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>STATE</Label>
+                                                                        <Select disabled={!healthCampData.country || loadingHealthCampStates} value={healthCampData.state} onValueChange={(v) => handleHealthCampInputChange({ target: { name: "state", value: v } })}>
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder={loadingHealthCampStates ? "Loading..." : "Select State"} />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                                {healthCampStates.map(s => (
+                                                                                    <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>CITY</Label>
+                                                                        <Select disabled={!healthCampData.state || loadingHealthCampCities} value={healthCampData.city} onValueChange={(v) => handleHealthCampInputChange({ target: { name: "city", value: v } })}>
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder={loadingHealthCampCities ? "Loading..." : "Select City"} />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                                {healthCampCities.map(ct => (
+                                                                                    <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>
+                                                                                ))}
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+
+                                                            <section>
+                                                                <h3 className="text-[13px] font-semibold text-[#23471d] pb-1 border-b border-slate-200 mb-2 flex items-center gap-2">
+                                                                    <Heart className="w-5 h-5 text-[#d26019]" /> Medical Background
+                                                                </h3>
+                                                                <div className="space-y-3 bg-slate-50 px-6 py-3 border border-slate-200">
+                                                                    {[
+                                                                        { label: "Existing Medical Conditions?", key: "existingMedicalConditions", area: "existingMedicalConditions" },
+                                                                        { label: "Currently taking medications?", key: "isTakingMedications", area: "medicationNames" },
+                                                                        { label: "Do you have any allergies?", key: "hasAllergies", area: "allergyDetails" },
+                                                                        { label: "Experiencing any symptoms currently?", key: "isExperiencingSymptoms", area: "symptomDetails" },
+                                                                    ].map(({ label, key, area }) => (
+                                                                        <div key={key} className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
+                                                                            <div>
+                                                                                <Label className="text-[12px] font-semibold text-gray-700 uppercase">{label}</Label>
+                                                                                <RadioGroup value={(healthCampData as any)[key]} onValueChange={(v) => setHealthCampData(prev => ({ ...prev, [key]: v }))} className="flex gap-4 mt-1">
+                                                                                    {["yes", "no"].map(val => (
+                                                                                        <div key={val} className="flex items-center space-x-2">
+                                                                                            <RadioGroupItem value={val} id={`${key}-${val}`} className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                                                            <Label htmlFor={`${key}-${val}`} className="text-[11px] font-semibold text-gray-600 uppercase cursor-pointer">{val}</Label>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </RadioGroup>
+                                                                            </div>
+                                                                            <div className="md:col-span-2">
+                                                                                {(healthCampData as any)[key] === "yes" && (
+                                                                                    <textarea
+                                                                                        className="w-full h-10 p-2 border border-slate-400 focus:border-[#23471d] outline-none text-[12.5px] rounded-[2px] bg-white resize-none shadow-inner"
+                                                                                        placeholder="Provide details here..."
+                                                                                        value={(healthCampData as any)[area]}
+                                                                                        onChange={(e) => setHealthCampData(prev => ({ ...prev, [area]: e.target.value }))}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </section>
+
+                                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                                                <section>
+                                                                    <h3 className="text-[13px] font-semibold text-[#23471d] pb-1 border-b border-slate-200 mb-2 flex items-center gap-2">
+                                                                        <Activity className="w-5 h-5 text-[#d26019]" /> Health Check-Up Services
+                                                                    </h3>
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 bg-[#f0f4f0] p-4 border border-[#23471d]/20 rounded-sm">
+                                                                        {HEALTH_SERVICES.map(({ key, label }) => (
+                                                                            <label key={key} className="flex items-center gap-3 cursor-pointer group">
+                                                                                <Checkbox
+                                                                                    checked={healthCampData.healthCheckupServices[key]}
+                                                                                    onCheckedChange={(checked: boolean) => handleHealthServiceChange(key, checked)}
+                                                                                    className="w-4 h-4 rounded border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
+                                                                                />
+                                                                                <span className="text-[13px] font-medium text-gray-600 group-hover:text-[#23471d] transition-colors">{label}</span>
+                                                                            </label>
+                                                                        ))}
+                                                                    </div>
+                                                                </section>
+
+                                                                <section>
+                                                                    <h3 className="text-[13px] font-semibold text-[#23471d] pb-1 border-b border-slate-200 mb-2 flex items-center gap-2">
+                                                                        <Calendar className="w-5 h-5 text-[#d26019]" /> Appointment Schedule
+                                                                    </h3>
+                                                                    <div className="space-y-5 bg-slate-50 px-6 py-4 rounded border border-slate-200">
+                                                                        <div>
+                                                                            <Label className={labelClasses}>PREFERRED DATE <span className="text-red-500">*</span></Label>
+                                                                            <Input name="preferredDate" type="date" value={healthCampData.preferredDate} onChange={handleHealthCampInputChange} required className={inputClasses} />
+                                                                        </div>
+                                                                        <div>
+                                                                            <Label className={labelClasses}>PREFERRED TIME SLOT <span className="text-red-500">*</span></Label>
+                                                                            <Select value={healthCampData.preferredTimeSlot} onValueChange={(v) => setHealthCampData(prev => ({ ...prev, preferredTimeSlot: v }))}>
+                                                                                <SelectTrigger className={inputClasses}>
+                                                                                    <SelectValue placeholder="Select Time Slot" />
+                                                                                </SelectTrigger>
+                                                                                <SelectContent className="bg-white">
+                                                                                    {TIME_SLOTS.map(slot => (
+                                                                                        <SelectItem key={slot} value={slot}>{slot}</SelectItem>
+                                                                                    ))}
+                                                                                </SelectContent>
+                                                                            </Select>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+                                                            </div>
+
+                                                            <section className="bg-orange-50 p-6 border-l-4 border-[#d26019] space-y-3">
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                                                    <div className="space-y-3">
+                                                                        {[
+                                                                            { label: "Consent to share medical data for analysis?", key: "consentMedicalData", name: "consent" },
+                                                                            { label: "Agree to health updates & reminders?", key: "agreeToUpdates", name: "updates" },
+                                                                        ].map(({ label, key, name }) => (
+                                                                            <div key={key}>
+                                                                                <Label className="text-[12px] font-semibold text-gray-700 uppercase block mb-1 leading-tight">{label} <span className="text-red-500">*</span></Label>
+                                                                                <RadioGroup value={(healthCampData as any)[key]} onValueChange={(v) => setHealthCampData(prev => ({ ...prev, [key]: v }))} className="flex gap-6">
+                                                                                    {["yes", "no"].map(val => (
+                                                                                        <div key={val} className="flex items-center space-x-2">
+                                                                                            <RadioGroupItem value={val} id={`${name}-${val}`} className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                                                            <Label htmlFor={`${name}-${val}`} className="text-[11px] font-medium text-gray-700 uppercase cursor-pointer">{val}</Label>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </RadioGroup>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>SPECIFIC HEALTH CONCERNS OR QUESTIONS?</Label>
+                                                                        <textarea
+                                                                            className="w-full h-20 p-2 border border-slate-400 focus:border-[#23471d] outline-none text-[12.5px] rounded-[2px] bg-white resize-none"
+                                                                            placeholder="Mention any specific concerns for the doctors..."
+                                                                            value={healthCampData.specificHealthConcerns}
+                                                                            onChange={(e) => setHealthCampData(prev => ({ ...prev, specificHealthConcerns: e.target.value }))}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                                <div className="pt-4 border-t border-orange-100">
+                                                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                                                        <Checkbox
+                                                                            checked={healthCampData.subscribe}
+                                                                            onCheckedChange={(checked: boolean) => setHealthCampData(prev => ({ ...prev, subscribe: checked }))}
+                                                                            className="w-5 h-5 rounded border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
+                                                                        />
+                                                                        <span className="text-sm font-bold text-gray-700 uppercase tracking-tight">Subscribe to Event Updates & Wellness Newsletters</span>
+                                                                    </label>
+                                                                </div>
+                                                            </section>
+
+                                                            <div className="py-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center bg-white">
+                                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2 mb-4 sm:mb-0">
+                                                                    <ShieldCheck size={14} className="text-[#23471d]" />
+                                                                    Secure Visitor Portal
+                                                                </p>
+                                                                <div className="flex gap-4">
+                                                                    <Button type="button" onClick={resetHealthCampForm} variant="outline" className="px-10 h-9 bg-red-50 border-red-200 text-red-600 text-[11px] font-bold uppercase tracking-widest hover:bg-red-100">
+                                                                        Reset Form
+                                                                    </Button>
+                                                                    <Button type="submit" disabled={loading} className="px-12 h-9 bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-bold uppercase tracking-widest rounded-[2px] shadow-lg flex items-center gap-3">
+                                                                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Submit Registration <Send size={15} /></>}
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {visitorType !== "freeHealth" && (
+                                                        <>
                                                     {/* —— PERSONAL DETAILS —— */}
                                                     <div className="">
                                                         <h3
@@ -1303,6 +1764,8 @@ const VisitorRegistration = () => {
                                                             Secure Registration Portal
                                                         </p>
                                                     </div>
+                                                        </>
+                                                    )}
                                                 </form>
                                             </motion.div>
                                         )}
