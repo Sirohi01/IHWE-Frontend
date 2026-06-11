@@ -7,8 +7,8 @@ import HeroBg from "@/assets/buyer.jpg";
 import { heroBackgroundApi, SERVER_URL } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import BuyerRegistration from "./buyer/BuyerRegistration";
-import InternationalBuyerRegistration from "./buyer/InternationalBuyerRegistration";
+import BuyerRegistration from "@/pages/registration/BuyerRegistration";
+import InternationalBuyerRegistration from "@/pages/buyer/InternationalBuyerRegistration";
 import SectionContainer from "@/components/layout/SectionContainer";
 
 const BuyerLanding = () => {

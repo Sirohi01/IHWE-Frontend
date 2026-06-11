@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ConferenceStats from "../components/conference/ConferenceStats";
-import Day3Hero from "../components/conference/Day3/Day3Hero";
-import Day3About from "../components/conference/Day3/Day3About";
-import Day3Details from "../components/conference/Day3/Day3Details";
-import Day3Agenda from "../components/conference/Day3/Day3Agenda";
-import Day3FeaturedSpeakers from "../components/conference/Day3/Day3FeaturedSpeakers";
-import Day3Sponsors from "../components/conference/Day3/Day3Sponsors";
-import Day3CTA from "../components/conference/Day3/Day3CTA";
-import Day3BottomCTA from "../components/conference/Day3/Day3BottomCTA";
-import Day3Footer from "../components/conference/Day3/Day3Footer";
+import ConferenceStats from "../../components/conference/ConferenceStats";
+import Day3Hero from "../../components/conference/Day3/Day3Hero";
+import Day3About from "../../components/conference/Day3/Day3About";
+import Day3Details from "../../components/conference/Day3/Day3Details";
+import Day3Agenda from "../../components/conference/Day3/Day3Agenda";
+import Day3FeaturedSpeakers from "../../components/conference/Day3/Day3FeaturedSpeakers";
+import Day3Sponsors from "../../components/conference/Day3/Day3Sponsors";
+import Day3CTA from "../../components/conference/Day3/Day3CTA";
+import Day3BottomCTA from "../../components/conference/Day3/Day3BottomCTA";
+import Day3Footer from "../../components/conference/Day3/Day3Footer";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import day1HeroImg from "../assets/dayimagesarogyasangosti/design1.png";
-import day2HeroImg from "../assets/dayimagesarogyasangosti/nista1.png";
-import day3HeroImg from "../assets/dayimagesarogyasangosti/sagar.png";
+import day1HeroImg from "../../assets/dayimagesarogyasangosti/design1.png";
+import day2HeroImg from "../../assets/dayimagesarogyasangosti/nista1.png";
+import day3HeroImg from "../../assets/dayimagesarogyasangosti/sagar.png";
 
 const ConferenceDayUnified: React.FC = () => {
   const { dayNumber } = useParams<{ dayNumber: string }>();

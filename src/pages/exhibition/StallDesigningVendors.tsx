@@ -4,7 +4,7 @@ import * as LucideIcons from "lucide-react";
 import { Mail, Phone, MapPin, User, Building2, Loader2 } from "lucide-react";
 import { stallVendorApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
-import heroImg from "../assets/stall.jpg";
+import heroImg from "../../assets/stall.jpg";
 
 const DynamicIcon = ({ name, className }: { name: string; className?: string }) => {
   const Icon = (LucideIcons as any)[name] || Building2;

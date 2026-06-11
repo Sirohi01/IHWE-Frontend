@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/pagination";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import gallHero from "../assets/gall.jpg";
+import gallHero from "../../assets/gall.jpg";
 
 import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 

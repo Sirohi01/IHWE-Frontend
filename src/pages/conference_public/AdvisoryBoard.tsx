@@ -18,7 +18,7 @@ import {
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import heroImgFallback from "../assets/members.jpg";
+import heroImgFallback from "../../assets/members.jpg";
 import SectionContainer from "@/components/layout/SectionContainer";
 
 const AdvisoryBoard = () => {

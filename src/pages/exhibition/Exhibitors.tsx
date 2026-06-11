@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import ExhibitorHero from "../components/exhibitors/ExhibitorHero";
-import ExhibitorFilters from "../components/exhibitors/ExhibitorFilters";
-import ExhibitorGrid from "../components/exhibitors/ExhibitorGrid";
-import ExhibitorCTA from "../components/exhibitors/ExhibitorCTA";
+import ExhibitorHero from "../../components/exhibitors/ExhibitorHero";
+import ExhibitorFilters from "../../components/exhibitors/ExhibitorFilters";
+import ExhibitorGrid from "../../components/exhibitors/ExhibitorGrid";
+import ExhibitorCTA from "../../components/exhibitors/ExhibitorCTA";
 import { Leaf } from "lucide-react";
 import { exhibitorApi } from "@/lib/api";
 

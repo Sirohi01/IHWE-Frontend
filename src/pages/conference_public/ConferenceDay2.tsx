@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import ConferenceStats from "../components/conference/ConferenceStats";
-import DistinguishedSpeakers from "../components/conference/DistinguishedSpeakers";
-import Day2Hero from "../components/conference/Day2/Day2Hero";
-import Day2About from "../components/conference/Day2/Day2About";
-import Day2Agenda from "../components/conference/Day2/Day2Agenda";
-import Day2CTA from "../components/conference/Day2/Day2CTA";
+import ConferenceStats from "../../components/conference/ConferenceStats";
+import DistinguishedSpeakers from "../../components/conference/DistinguishedSpeakers";
+import Day2Hero from "../../components/conference/Day2/Day2Hero";
+import Day2About from "../../components/conference/Day2/Day2About";
+import Day2Agenda from "../../components/conference/Day2/Day2Agenda";
+import Day2CTA from "../../components/conference/Day2/Day2CTA";
 
 const ConferenceDay2: React.FC = () => {
   useEffect(() => {

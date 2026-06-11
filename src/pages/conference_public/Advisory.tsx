@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import advisoryHeroImage from "../assets/advisory/advisoryimagelogo.webp";
-import { otpApi, advisoryNominationApi } from "../lib/api";
+import advisoryHeroImage from "../../assets/advisory/advisoryimagelogo.webp";
+import { otpApi, advisoryNominationApi } from "../../lib/api";
 import { toast } from "sonner";
 
 const AdvisoryForm = () => {

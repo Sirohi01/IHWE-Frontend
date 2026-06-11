@@ -8,7 +8,7 @@ import {
 } from "@/lib/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import partnersHeroFallback from "../assets/cara14.jpg";
+import partnersHeroFallback from "../../assets/cara14.jpg";
 
 const fallbackCards = [
   {

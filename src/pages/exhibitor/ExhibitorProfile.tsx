@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { heroBackgroundApi, SERVER_URL, exhibitorProfileApi } from "@/lib/api";
 
-import heroImgFallback from "../assets/profile.jpg";
+import heroImgFallback from "../../assets/profile.jpg";
 
 const ExhibitorProfile = () => {
     const [heroData, setHeroData] = useState<any>(null);

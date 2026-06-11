@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { heroBackgroundApi, travelAccommodationApi, SERVER_URL } from "@/lib/api";
 
-import heroImgFallback from "../assets/travel.jpg";
+import heroImgFallback from "../../assets/travel.jpg";
 
 const ICONS_MAP: Record<string, any> = {
     Car, Train, Plane, MapPin, MapPinned, Info, Bus: Car, Metro: Train
