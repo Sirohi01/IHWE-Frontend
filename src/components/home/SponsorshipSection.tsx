@@ -933,6 +933,10 @@ const SponsorshipSection = () => {
           0% { transform: translateX(-50%); }
           100% { transform: translateX(0); }
         }
+        @keyframes marqueeScrollReverse {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
         .marquee-wrapper {
           display: flex;
           width: max-content;
@@ -940,6 +944,15 @@ const SponsorshipSection = () => {
           padding-left: 2rem;
         }
         .marquee-wrapper:hover {
+          animation-play-state: paused;
+        }
+        .marquee-wrapper-reverse {
+          display: flex;
+          width: max-content;
+          animation: marqueeScrollReverse 40s linear infinite;
+          padding-left: 2rem;
+        }
+        .marquee-wrapper-reverse:hover {
           animation-play-state: paused;
         }
       `}</style>
@@ -996,6 +1009,72 @@ const SponsorshipSection = () => {
 
         </SectionContainer>
       </div>
+    </section>
+  );
+};
+
+export const UpcomingBrands = () => {
+  const [data, setData] = useState<{title: string, items: any[]}>({ title: "UPCOMING LEADING BRANDS", items: [] });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch(`${API_URL}/upcoming-brands`);
+        const result = await response.json();
+        if (result.success && result.data) {
+          setData(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching upcoming brands:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  if (loading) return null;
+
+  return (
+    <section className="bg-white pt-4 pb-12 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <SectionContainer>
+        <div className="flex items-center gap-4 mb-10 lg:mb-8 mt-2">
+          <div className="flex-1 h-[1.5px] bg-slate-300" />
+          <span className="font-bold text-[12px] lg:text-[14px] tracking-[0.15em] lg:tracking-[0.25em] uppercase text-[#012112] text-center">
+            {data.title}
+          </span>
+          <div className="flex-1 h-[1.5px] bg-slate-300" />
+        </div>
+
+        {data.items && data.items.length > 0 && (
+          <div className="overflow-hidden relative w-full mt-4">
+            <div 
+              className="marquee-wrapper"
+              style={{ animationDuration: `${Math.max(data.items.length * 4, 20)}s` }}
+            >
+              {/* Double the brands for seamless loop */}
+              {[...data.items, ...data.items].map((brand: any, idx: number) => (
+                <div key={`${brand._id}-${idx}`} className="flex items-center">
+                  <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
+                    <img 
+                      src={`${SERVER_URL}${brand.logo}`} 
+                      alt={brand.altText || 'Brand Logo'} 
+                      className="h-10 md:h-16 w-auto object-contain transition-all duration-300" 
+                    />
+                    {brand.altText && (
+                      <span className="text-[9px] md:text-[11px] text-slate-500 font-semibold tracking-wide text-center leading-tight mt-1 max-w-[100px]">
+                        {brand.altText}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-[1.5px] h-6 bg-slate-300" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </SectionContainer>
     </section>
   );
 };

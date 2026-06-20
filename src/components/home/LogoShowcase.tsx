@@ -4,7 +4,7 @@ import Marquee from 'react-fast-marquee';
 
 const LogoShowcase = () => {
   return (
-    <section className="bg-white pt-4 pb-12 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <section className="bg-white pt-4 pb-6 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
       <SectionContainer>
         
         {/* ===== 3-COLUMN GRID LAYOUT WITH DESKTOP VERTICAL / MOBILE HORIZONTAL DIVIDERS ===== */}
