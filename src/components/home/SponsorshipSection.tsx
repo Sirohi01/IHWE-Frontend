@@ -119,25 +119,25 @@ const SPONSORSHIP_OPPORTUNITIES: Opportunity[] = [
 ];
 
 const WHY_SPONSOR: WhySponsor[] = [
-  { icon: Users2,    title: "Showcase your brand to\n10,000+ targeted visitors",   bold: "10,000+" },
-  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)",        bold: "Multi-channel" },
-  { icon: Handshake, title: "Build authority in the health & wellness ecosystem",   bold: "health & wellness" },
-  { icon: Star,      title: "Premium branding across expo touchpoints",             bold: "Premium branding" },
-  { icon: TrendingUp,title: "Direct access to decision-makers & buyers",            bold: "decision-makers" },
-  { icon: Globe,     title: "Global exposure & networking opportunities",            bold: "Global exposure &" },
+  { icon: Users2, title: "Showcase your brand to\n10,000+ targeted visitors", bold: "10,000+" },
+  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)", bold: "Multi-channel" },
+  { icon: Handshake, title: "Build authority in the health & wellness ecosystem", bold: "health & wellness" },
+  { icon: Star, title: "Premium branding across expo touchpoints", bold: "Premium branding" },
+  { icon: TrendingUp, title: "Direct access to decision-makers & buyers", bold: "decision-makers" },
+  { icon: Globe, title: "Global exposure & networking opportunities", bold: "Global exposure &" },
 ];
 
 const BRANDS: Brand[] = [
   { name: "PATANJALI", sub: "", color: "#e65c00", logo: logo1 },
-  { name: "Dabur",     sub: "", color: "#2d7a2d", logo: logo2 },
-  { name: "Himalaya",  sub: "", color: "#1a5fa8", logo: logo3 },
-  { name: "Apollo",    sub: "", color: "#003087", logo: logo4 },
-  { name: "ZANDU",     sub: "", color: "#c8a000", logo: logo5 },
-  { name: "BAIDYANATH",sub: "", color: "#8b1a1a", logo: logo6 },
-  { name: "HEALTHKART",sub: "", color: "#1a1a1a", logo: logo7 },
+  { name: "Dabur", sub: "", color: "#2d7a2d", logo: logo2 },
+  { name: "Himalaya", sub: "", color: "#1a5fa8", logo: logo3 },
+  { name: "Apollo", sub: "", color: "#003087", logo: logo4 },
+  { name: "ZANDU", sub: "", color: "#c8a000", logo: logo5 },
+  { name: "BAIDYANATH", sub: "", color: "#8b1a1a", logo: logo6 },
+  { name: "HEALTHKART", sub: "", color: "#1a1a1a", logo: logo7 },
   { name: "Herbalife", sub: "", color: "#e8000d", logo: logo8 },
-  { name: "nveda",     sub: "", color: "#2d7a2d", logo: logo9 },
-  { name: "MORE",      sub: "", color: "#555",    logo: logo10 },
+  { name: "nveda", sub: "", color: "#2d7a2d", logo: logo9 },
+  { name: "MORE", sub: "", color: "#555", logo: logo10 },
 ];
 
 // Animated counter — counts up when section scrolls into view
@@ -309,7 +309,7 @@ const SponsorshipSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Basic Validation
     if (!formData.fullName || !formData.companyName || !formData.email || !formData.phone) {
       toast.warning("Please fill all required fields marked with *");
@@ -514,9 +514,9 @@ const SponsorshipSection = () => {
                   {opp.image ? (
                     <img src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
                   ) : opp.icon ? (
-                    <opp.icon 
-                      className="w-9 h-9" 
-                      style={{ color: "#1a3a00" }} 
+                    <opp.icon
+                      className="w-9 h-9"
+                      style={{ color: "#1a3a00" }}
                     />
                   ) : null}
                 </div>
@@ -567,18 +567,18 @@ const SponsorshipSection = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 items-start mt-0 lg:-mt-6 relative z-10">
-            
+
             {/* 2. Dark Green CTA Card */}
             <div className="bg-[#012011] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
               {/* Decorative Leaf Image */}
-              <img 
-                src={leafImg} 
-                alt="decorative" 
+              <img
+                src={leafImg}
+                alt="decorative"
                 className="absolute -bottom-6 -left-10 w-48 h-48 opacity-40 pointer-events-none object-contain"
               />
               {/* Decorative Glow */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
-              
+
               <div className="relative z-10">
                 {/* Top Row: Title + Buttons */}
                 <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 lg:gap-6 pb-6 lg:pb-5 mb-6 lg:mb-5 relative">
@@ -595,9 +595,9 @@ const SponsorshipSection = () => {
 
                   {/* Horizontal Buttons Row */}
                   <div className="flex flex-wrap lg:flex-nowrap gap-3 lg:gap-2 items-center justify-center lg:justify-start lg:pt-0.5">
-                    <a 
-                      href={brochureUrl} 
-                      target="_blank" 
+                    <a
+                      href={brochureUrl}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
@@ -608,7 +608,7 @@ const SponsorshipSection = () => {
                       </div>
                     </a>
 
-                    <a 
+                    <a
                       href={whatsappUrl}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -622,7 +622,7 @@ const SponsorshipSection = () => {
                       </div>
                     </a>
 
-                    <a 
+                    <a
                       href={`tel:${contactPhone.replace(/\s+/g, '')}`}
                       className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
                     >
@@ -653,7 +653,7 @@ const SponsorshipSection = () => {
                         <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
                       </div>
                     </div>
-                    
+
                     <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
 
                     <div className="flex items-center gap-3 lg:gap-2">
@@ -689,7 +689,7 @@ const SponsorshipSection = () => {
             </div>
 
             {/* 3. Interest Form */}
-            <div 
+            <div
               className="bg-white rounded-2xl p-5 lg:p-4 border border-slate-100 shadow-sm h-fit mt-4 lg:-mt-16"
               style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
             >
@@ -714,8 +714,8 @@ const SponsorshipSection = () => {
                     >
                       <CheckCircle className="w-10 h-10 text-green-600" />
                     </motion.div>
-                    
-                    <motion.h4 
+
+                    <motion.h4
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
@@ -723,8 +723,8 @@ const SponsorshipSection = () => {
                     >
                       Inquiry Received!
                     </motion.h4>
-                    
-                    <motion.p 
+
+                    <motion.p
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
@@ -744,44 +744,44 @@ const SponsorshipSection = () => {
                     </motion.div>
                   </motion.div>
                 ) : (
-                  <motion.form 
+                  <motion.form
                     key="sponsorship-form"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onSubmit={handleSubmit} 
+                    onSubmit={handleSubmit}
                     className="space-y-2"
                   >
                     <div className="grid grid-cols-2 gap-2.5">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleChange}
-                        placeholder="Full Name*" 
-                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        placeholder="Full Name*"
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
                         required
                       />
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         name="companyName"
                         value={formData.companyName}
                         onChange={handleChange}
-                        placeholder="Company Name*" 
-                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                        placeholder="Company Name*"
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
                         required
                       />
                     </div>
                     <div className="grid grid-cols-1 gap-2.5">
                       <div className="flex flex-col gap-1.5">
                         <div className="relative">
-                          <input 
-                            type="email" 
+                          <input
+                            type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="Email Address*" 
-                            className={`w-full bg-[#f8f9fa] border ${isEmailVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`} 
+                            placeholder="Email Address*"
+                            className={`w-full bg-[#f8f9fa] border ${isEmailVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`}
                             required
                             disabled={isEmailVerified}
                           />
@@ -824,13 +824,13 @@ const SponsorshipSection = () => {
 
                       <div className="flex flex-col gap-1.5">
                         <div className="relative">
-                          <input 
-                            type="tel" 
+                          <input
+                            type="tel"
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            placeholder="WhatsApp Number*" 
-                            className={`w-full bg-[#f8f9fa] border ${isPhoneVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`} 
+                            placeholder="WhatsApp Number*"
+                            className={`w-full bg-[#f8f9fa] border ${isPhoneVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`}
                             required
                             disabled={isPhoneVerified}
                           />
@@ -871,9 +871,9 @@ const SponsorshipSection = () => {
                         )}
                       </div>
                     </div>
-                    
+
                     <div className="relative">
-                      <select 
+                      <select
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
@@ -894,16 +894,16 @@ const SponsorshipSection = () => {
                         <div className="border-l-2 border-b-2 border-slate-400 w-1.5 h-1.5 -rotate-45" />
                       </div>
                     </div>
-                    <textarea 
+                    <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Message (Optional)" 
-                      rows={1} 
-                      className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all" 
+                      placeholder="Message (Optional)"
+                      rows={1}
+                      className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
                     />
-                    
-                    <button 
+
+                    <button
                       type="submit"
                       disabled={isSubmitting || !isEmailVerified || !isPhoneVerified}
                       className={`w-full ${(!isEmailVerified || !isPhoneVerified) ? 'bg-slate-400' : 'bg-[#153421] hover:bg-[#022f15]'} text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center`}
@@ -973,7 +973,7 @@ const SponsorshipSection = () => {
           </div>
 
           <div className="overflow-hidden relative w-full mt-4">
-            <div 
+            <div
               className="marquee-wrapper"
               style={{ animationDuration: `${Math.max(BRANDS.length * 4, 20)}s` }}
             >
@@ -982,10 +982,10 @@ const SponsorshipSection = () => {
                 <div key={idx} className="flex items-center">
                   <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
                     {brand.logo ? (
-                      <img 
-                        src={brand.logo} 
-                        alt={brand.name} 
-                        className={`${brand.name === "Dabur" ? "h-12 md:h-20 lg:h-16" : brand.name === "HEALTHKART" ? "h-10 md:h-16 lg:h-14" : "h-9 md:h-14 lg:h-12"} w-auto object-contain transition-all duration-300`} 
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className={`${brand.name === "Dabur" ? "h-12 md:h-20 lg:h-16" : brand.name === "HEALTHKART" ? "h-10 md:h-16 lg:h-14" : "h-9 md:h-14 lg:h-12"} w-auto object-contain transition-all duration-300`}
                       />
                     ) : (
                       <span
@@ -1014,7 +1014,7 @@ const SponsorshipSection = () => {
 };
 
 export const UpcomingBrands = () => {
-  const [data, setData] = useState<{title: string, items: any[]}>({ title: "UPCOMING LEADING BRANDS", items: [] });
+  const [data, setData] = useState<{ title: string, items: any[] }>({ title: "UPCOMING LEADING BRANDS", items: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -1049,7 +1049,7 @@ export const UpcomingBrands = () => {
 
         {data.items && data.items.length > 0 && (
           <div className="overflow-hidden relative w-full mt-4">
-            <div 
+            <div
               className="marquee-wrapper"
               style={{ animationDuration: `${Math.max(data.items.length * 4, 20)}s` }}
             >
@@ -1057,16 +1057,11 @@ export const UpcomingBrands = () => {
               {[...data.items, ...data.items].map((brand: any, idx: number) => (
                 <div key={`${brand._id}-${idx}`} className="flex items-center">
                   <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
-                    <img 
-                      src={`${SERVER_URL}${brand.logo}`} 
-                      alt={brand.altText || 'Brand Logo'} 
-                      className="h-10 md:h-16 w-auto object-contain transition-all duration-300" 
+                    <img
+                      src={`${SERVER_URL}${brand.logo}`}
+                      alt={brand.altText || 'Brand Logo'}
+                      className="h-10 md:h-16 w-auto object-contain transition-all duration-300"
                     />
-                    {brand.altText && (
-                      <span className="text-[9px] md:text-[11px] text-slate-500 font-semibold tracking-wide text-center leading-tight mt-1 max-w-[100px]">
-                        {brand.altText}
-                      </span>
-                    )}
                   </div>
                   <div className="w-[1.5px] h-6 bg-slate-300" />
                 </div>
