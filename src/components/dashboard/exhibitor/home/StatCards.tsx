@@ -40,7 +40,7 @@ export default function StatCards() {
                         if (uploaded?.status === "Approved") completedCount++;
                         else if (uploaded?.status === "Pending") completedCount++; // Let's count them if they are uploaded, even if pending approval?
                     });
-                    
+
                     // Actually, let's just match the exact counting logic. DashboardBottom says status="Completed" if Approved, "Pending" if Pending/Rejected, "Not Uploaded" otherwise.
                     // The user said "jab sare documents fill ho jaenge", so counting uploaded documents might be better. Let's count both Approved and Pending as filled for the numbers, or maybe just Approved? 
                     // Let's count uploaded and submitted ones.
@@ -48,7 +48,7 @@ export default function StatCards() {
                     reqData.forEach((d: any) => {
                         const uploaded = uploadedMap.get(d.document_name);
                         if (uploaded && uploaded.status !== "Not Uploaded") {
-                             filledCount++;
+                            filledCount++;
                         }
                     });
 
@@ -201,11 +201,11 @@ export default function StatCards() {
                                 </>
                             ) : (
                                 <>
-                                    <div className="flex items-baseline gap-1.5 mb-0.5">
+                                    <div className="flex items-baseline gap-1 mb-0.5">
                                         <p className="text-[10px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none whitespace-nowrap">
                                             {stat.label}
                                         </p>
-                                        <span className={`text-[12px] font-bold leading-tight capitalize whitespace-nowrap ${stat.valueColor}`}>
+                                        <span className={`text-[9px] font-medium leading-tight capitalize whitespace-nowrap ${stat.valueColor}`}>
                                             {stat.value}
                                         </span>
                                     </div>
