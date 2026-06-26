@@ -8,8 +8,79 @@ import { Button } from '@/components/ui/button';
 import QRCode from 'react-qr-code';
 import stallImage from '@/assets/stallImage.png';
 import rightimage from '@/assets/stallRightImagefinal.png';
+import { useContext } from "react";
+import { ExhibitorCtx } from "@/context/ExhibitorContext";
+import { useState } from "react";
+import { X } from "lucide-react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ROUTE_TABS, TAB_ROUTES } from '@/components/dashboard/exhibitor/routes';
+import { API_URL } from '@/lib/api';
+import { toast } from 'react-toastify';
 
 export default function StallInformation() {
+    const [showQrModal, setShowQrModal] = useState(false);
+    const ctx = useContext(ExhibitorCtx);
+    const data = ctx?.data;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [dashboardData, setDashboardData] = useState<any>(null);
+    const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [unreadChat, setUnreadChat] = useState(0);
+    const [showChangePwd, setShowChangePwd] = useState(false);
+    const [pwdForm, setPwdForm] = useState({ current: '', newPwd: '', confirm: '' });
+    const [pwdLoading, setPwdLoading] = useState(false);
+    const [showPwd, setShowPwd] = useState({ current: false, newPwd: false });
+    const [logo, setLogo] = useState<string | null>(null);
+
+    const activeTab = ROUTE_TABS[location.pathname] || 'dashboard';
+
+    const setActiveTab = (tab: string) => {
+        const path = TAB_ROUTES[tab] || '/exhibitor-dashboard';
+        if (tab === 'chat') setUnreadChat(0);
+        navigate(path);
+    };
+
+    const fetchDashboard = async (regId?: string) => {
+        const token = localStorage.getItem('exhibitorToken');
+        if (!token) { navigate('/exhibitor-login'); return; }
+
+        // Persist selected regId — if not provided, use last selected one
+        if (regId) {
+            localStorage.setItem('selectedRegId', regId);
+        }
+        const effectiveRegId = regId || localStorage.getItem('selectedRegId');
+
+        let url = `${API_URL}/exhibitor-auth/dashboard`;
+        if (effectiveRegId) url += `?id=${effectiveRegId}`;
+        try {
+            const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+            const res = await r.json();
+            if (res.success) {
+                setDashboardData(res.data);
+                localStorage.setItem('selectedRegId', res.data._id);
+                if (res.allRegistrations) setAllRegistrations(res.allRegistrations);
+                if (res.data?._id) {
+                    fetch(`${API_URL}/chat/unread/${res.data._id}`, { headers: { Authorization: `Bearer ${token}` } })
+                        .then(r => r.json()).then(r => { if (r.success) setUnreadChat(r.count); }).catch(() => { });
+                }
+            } else {
+                toast.error(res.message);
+                if (res.message === 'Token expired or invalid') {
+                    localStorage.removeItem('exhibitorToken');
+                    localStorage.removeItem('selectedRegId');
+                    navigate('/exhibitor-login');
+                }
+            }
+        } catch { toast.error('Failed to load dashboard.'); }
+        finally { setLoading(false); }
+    };
+
+    const p = data?.participation ?? {};
+    const f = data?.financeBreakdown ?? {};
+    const event = data?.eventId ?? {};
+    const isConfirmed =
+        data?.status?.toLowerCase() === "confirmed";
     return (
         <div className="w-full bg-[#f8f9fa] min-h-screen p-3 lg:p-4 pb-16" style={{ fontFamily: '"Inter", sans-serif' }}>
             <div className="max-w-[1600px] mx-auto space-y-1.5 md:space-y-2.5">
@@ -25,11 +96,21 @@ export default function StallInformation() {
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
-                        <Button variant="outline" className="w-full sm:w-auto bg-white border-slate-200 text-blue-600 hover:bg-blue-50 hover:text-blue-600 font-semibold h-7 px-3 py-1 gap-1.5 shadow-sm text-[11px]">
+                        <Button
+                            onClick={() =>
+                                data?.stallAllotmentLetterUrl &&
+                                window.open(data.stallAllotmentLetterUrl, "_blank")
+                            }
+                        >
                             <Download size={12} />
                             Download Stall Allotment Letter
                         </Button>
-                        <Button className="w-full sm:w-auto bg-[#0052cc] hover:bg-[#0047b3] text-white font-semibold h-7 px-3 gap-1.5 py-1 shadow-sm text-[11px]">
+                        <Button
+                            onClick={() =>
+                                event?.floorPlanPdf &&
+                                window.open(event.floorPlanPdf, "_blank")
+                            }
+                        >
                             <FileText size={12} />
                             View Floor Plan (PDF)
                         </Button>
@@ -49,7 +130,7 @@ export default function StallInformation() {
                             />
                             <div className="absolute top-2 left-2 bg-[#10b981] text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
                                 <CheckCircle2 size={11} />
-                                Stall Confirmed
+                                Stall {isConfirmed || `Confirmed`}
                             </div>
                         </div>
                         {/* Right Details Section */}
@@ -57,12 +138,19 @@ export default function StallInformation() {
                             <div className="flex justify-between items-start mb-3">
                                 <div className='pt-4'>
                                     <p className="text-[12px] font-bold text-[#002855] mb-0.5">Stall No.</p>
-                                    <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">HALL 3 – B12</h2>
+                                    <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">{p?.stallFor || "HALL 3 – B12"}</h2>
                                 </div>
                                 <div className="text-center flex flex-col items-center ml-3 border border-slate-200 rounded-lg px-2.5 py-1 bg-slate-100">
                                     <p className="text-[10px] font-bold text-black mb-0.5   ">Stall QR Code</p>
-                                    <div className="w-16 h-16 bg-white  rounded-lg p-1 flex items-center justify-center">
-                                        <QRCode value="HALL 3 - B12" size={32} fgColor="#1a5c2e" style={{ height: "auto", maxWidth: "100%", width: "100%" }} />
+                                    <div
+                                        className="w-16 h-16 bg-white rounded-lg p-1 flex items-center justify-center cursor-pointer"
+                                        onClick={() => setShowQrModal(true)}
+                                    >
+                                        <QRCode
+                                            value={`${data?.registrationId || "REG"}-${p?.stallFor || "STALL"}`}
+                                            size={32}
+                                            fgColor="#1a5c2e"
+                                        />
                                     </div>
                                 </div>
 
@@ -75,7 +163,9 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Stall Type</p>
-                                        <p className="text-[11px] font-bold text-slate-800">Premium Corner</p>
+                                        <p className="text-[11px] font-bold text-slate-800">
+                                            {p?.stallType || "Premium Corner"}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -83,8 +173,11 @@ export default function StallInformation() {
                                         <Maximize size={12} strokeWidth={2} />
                                     </div>
                                     <div>
-                                        <p className="text-[9px] text-slate-400 font-medium">Stall Size</p>
-                                        <p className="text-[11px] font-bold text-slate-800">6m X 6m (36 sqm)</p>
+                                        <p className="text-[11px] font-bold text-slate-800">
+                                            {p?.dimension
+                                                ? `${p.dimension} (${p?.stallSize || 0} sqm)`
+                                                : "6m X 6m (36 sqm)"}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -93,7 +186,9 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Open Side</p>
-                                        <p className="text-[11px] font-bold text-slate-800">2 Sides</p>
+                                        <p className="text-[11px] font-bold text-slate-800">
+                                            {p?.stallScheme || "2 Sides"}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -102,7 +197,7 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Floor</p>
-                                        <p className="text-[11px] font-bold text-slate-800">Ground Floor</p>
+                                        <p className="text-[11px] font-bold text-slate-800">{f?.address?.split(',')?.[0] || f?.floor || "Ground Floor"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -111,7 +206,11 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Allotted On</p>
-                                        <p className="text-[11px] font-bold text-slate-800">15 May 2026</p>
+                                        <p className="text-[11px] font-bold text-slate-800">
+                                            {data?.createdAt
+                                                ? new Date(data.createdAt).toLocaleDateString("en-IN")
+                                                : "15 May 2026"}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -120,8 +219,16 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Status</p>
-                                        <div className="inline-flex items-center gap-1 text-[#10b981] text-[11px] font-bold bg-green-100 rounded-full px-2 py-1">
-                                            Confirmed <span className='bg-green-500 rounded-full w-3 h-3 flex items-center justify-center p-0.5 font-bold'> <Check size={12} strokeWidth={2.5} className="text-white" /></span>
+                                        <div
+                                            className={`inline-flex items-center gap-1 text-[11px] font-bold rounded-full px-2 py-1 ${isConfirmed
+                                                ? "text-[#10b981] bg-green-100"
+                                                : "text-amber-600 bg-amber-100"
+                                                }`}
+                                        >
+                                            {isConfirmed || "Confirmed"}
+                                            <span className="bg-green-500 rounded-full w-3 h-3 flex items-center justify-center p-0.5">
+                                                <Check size={12} className="text-white" />
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -158,7 +265,11 @@ export default function StallInformation() {
                         </div>
                         <div className="flex flex-col justify-center">
                             <h4 className="text-slate-800 font-extrabold text-[12px] md:text-[13px] mb-0.5 leading-tight">Great! Your stall is confirmed.</h4>
-                            <p className="text-slate-600 text-[10px] font-medium leading-tight whitespace-nowrap">Start preparing your stall for a successful exhibition. 🎉</p>
+                            <p className="text-slate-600 text-[10px] font-medium leading-tight">
+                                {data?.exhibitorName ||
+                                    data?.fasciaName ||
+                                    "Start preparing your stall for a successful exhibition. 🎉"}
+                            </p>
                         </div>
                     </div>
 
@@ -169,8 +280,17 @@ export default function StallInformation() {
                         </div>
                         <div className="flex flex-col justify-center">
                             <h4 className="text-slate-800 font-bold text-[10px] mb-0.5 leading-tight">Setup Deadline</h4>
-                            <p className="text-slate-900 text-[13px] md:text-[14px] font-semibold tracking-tight mb-0.5 leading-tight">18 Aug 2026</p>
-                            <p className="text-slate-500 text-[8px] md:text-[9px] font-semibold leading-tight whitespace-nowrap">Time: 08:00 AM - 06:00 PM</p>
+                            <p className="text-slate-900 text-[13px] md:text-[14px] font-semibold tracking-tight mb-0.5 leading-tight">
+                                {event?.setupDate
+                                    ? new Date(event.setupDate).toLocaleDateString("en-IN")
+                                    : "18 Aug 2026"}
+                            </p>
+
+                            <p className="text-slate-500 text-[8px] md:text-[9px] font-semibold leading-tight whitespace-nowrap">
+                                {event?.setupStartTime && event?.setupEndTime
+                                    ? `${event.setupStartTime} - ${event.setupEndTime}`
+                                    : "08:00 AM - 06:00 PM"}
+                            </p>
                         </div>
                     </div>
 
@@ -181,8 +301,18 @@ export default function StallInformation() {
                         </div>
                         <div className="flex flex-col justify-center">
                             <h4 className="text-slate-800 font-bold text-[10px] mb-0.5 leading-tight">Exhibition Days</h4>
-                            <p className="text-slate-900 text-[13px] md:text-[14px] font-semibold tracking-tight mb-0.5 leading-tight whitespace-nowrap">21 - 23 Aug 2026</p>
-                            <p className="text-slate-500 text-[8px] md:text-[9px] font-semibold leading-tight">10:00 AM - 06:00 PM</p>
+                            <p className="text-slate-900 text-[13px] md:text-[14px] font-semibold tracking-tight mb-0.5 leading-tight whitespace-nowrap">
+                                {event?.startDate && event?.endDate
+                                    ? `${new Date(event.startDate).toLocaleDateString(
+                                        "en-IN"
+                                    )} - ${new Date(event.endDate).toLocaleDateString("en-IN")}`
+                                    : "21 - 23 Aug 2026"}
+                            </p>
+                            <p className="text-slate-500 text-[8px] md:text-[9px] font-semibold leading-tight">
+                                {event?.startTime && event?.endTime
+                                    ? `${event.startTime} - ${event.endTime}`
+                                    : "10:00 AM - 06:00 PM"}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -199,21 +329,57 @@ export default function StallInformation() {
                             <h3 className="text-sm font-bold text-slate-800 mb-1.5">Included Services</h3>
                             <div className="flex flex-wrap gap-1">
                                 {[
-                                    { name: 'Carpet', sub: '(Provided)', icon: Map },
-                                    { name: 'Fascia Name', sub: '(Provided)', icon: Type },
-                                    { name: 'Electricity', sub: '(5 KW)', icon: ZapIcon },
-                                    { name: 'Basic Furniture', sub: '(1 Table + 3 Chair)', icon: Box },
-                                    { name: 'Internet', sub: '(2 Mbps)', icon: WifiIcon },
-                                    { name: 'Spot Lights', sub: '(4 Nos.)', icon: LightbulbIcon },
-                                    { name: 'Dustbin', sub: '(1 No.)', icon: Trash2 },
+                                    {
+                                        label: "Registration ID",
+                                        value: data?.registrationId || "—",
+                                        icon: FileText,
+                                    },
+                                    {
+                                        label: "Fascia Name",
+                                        value: data?.fasciaName || data?.exhibitorName || "—",
+                                        icon: Type,
+                                    },
+                                    {
+                                        label: "Stall Number",
+                                        value: p?.stallFor || "B12",
+                                        icon: MapPin,
+                                    },
+                                    {
+                                        label: "Stall Size",
+                                        value:
+                                            p?.dimension
+                                                ? `${p.dimension} (${p?.stallSize || 0} sqm)`
+                                                : "6m X 6m (36 sqm)",
+                                        icon: Maximize,
+                                    },
+                                    {
+                                        label: "Stall Type",
+                                        value: p?.stallType || "Premium Corner",
+                                        icon: Grid,
+                                    },
+                                    {
+                                        label: "Open Side",
+                                        value: p?.stallScheme || "2 Sides",
+                                        icon: Layers,
+                                    },
+                                    {
+                                        label: "Payment Mode",
+                                        value: data?.paymentMode || "—",
+                                        icon: Zap,
+                                    },
+                                    {
+                                        label: "KYC Status",
+                                        value: data?.kycStatus || "—",
+                                        icon: ShieldCheck,
+                                    },
                                 ].map((service, i) => (
                                     <div key={i} className="flex flex-col items-center justify-center border border-slate-100 rounded-xl p-1.5 min-w-[70px] flex-1 relative bg-white transition-colors shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
                                         <div className="absolute -top-1 -right-1 bg-[#10b981] text-white rounded-full p-0.5 shadow-sm border-2 border-white">
                                             <Check size={8} strokeWidth={3} />
                                         </div>
                                         <span className='border border-slate-100 p-3'><service.icon size={20} className="text-[#0052cc] mb-0.5 opacity-90" strokeWidth={1.5} /></span>
-                                        <p className="text-[9px] font-bold text-slate-700 text-center leading-tight whitespace-nowrap">{service.name}</p>
-                                        <p className="text-[8px] font-semibold text-slate-400 text-center mt-0 whitespace-nowrap">{service.sub}</p>
+                                        <p className="text-[9px] font-bold text-slate-700 text-center leading-tight whitespace-nowrap">{service.label}</p>
+                                        <p className="text-[8px] font-semibold text-slate-400 text-center mt-0 whitespace-nowrap">{service.value}</p>
                                     </div>
                                 ))}
                             </div>
@@ -256,10 +422,36 @@ export default function StallInformation() {
                             <h3 className="text-sm font-bold text-slate-800 mb-3">Important Deadlines</h3>
                             <div className="space-y-3">
                                 {[
-                                    { name: 'Last Date for Extra Services', date: '15 Aug 2026', time: '', icon: Calendar },
-                                    { name: 'Stall Setup Date', date: '19 Aug 2026', time: '', icon: Calendar },
-                                    { name: 'Decoration Completion', date: '20 Aug 2026', time: 'By 06:00 PM', icon: Calendar },
-                                    { name: 'Stall Dismantling', date: '23 Aug 2026', time: 'After 06:00 PM', icon: Calendar },
+                                    {
+                                        name: 'Last Date for Extra Services',
+                                        date: event?.extraServiceLastDate
+                                            ? new Date(event.extraServiceLastDate).toLocaleDateString("en-IN")
+                                            : '—',
+                                        icon: Calendar,
+                                    },
+                                    {
+                                        name: 'Stall Setup Date',
+                                        date: event?.setupDate
+                                            ? new Date(event.setupDate).toLocaleDateString("en-IN")
+                                            : '—',
+                                        icon: Calendar,
+                                    },
+                                    {
+                                        name: 'Decoration Completion',
+                                        date: event?.decorationCompletionDate
+                                            ? new Date(event.decorationCompletionDate).toLocaleDateString("en-IN")
+                                            : '—',
+                                        time: event?.decorationCompletionTime,
+                                        icon: Calendar,
+                                    },
+                                    {
+                                        name: 'Stall Dismantling',
+                                        date: event?.dismantlingDate
+                                            ? new Date(event.dismantlingDate).toLocaleDateString("en-IN")
+                                            : '—',
+                                        time: event?.dismantlingTime,
+                                        icon: Calendar,
+                                    },
                                 ].map((dl, i) => (
                                     <div key={i} className="flex items-center gap-2 pb-2.5 border-b border-slate-100 last:border-0 last:pb-0">
                                         <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0052cc] flex items-center justify-center shrink-0 border border-blue-100">
@@ -283,13 +475,43 @@ export default function StallInformation() {
                             <h3 className="text-sm font-bold text-slate-800 mb-2">Stall Overview</h3>
                             <div className="space-y-0.5">
                                 {[
-                                    { label: 'Hall Number', value: 'Hall 3', icon: Map },
-                                    { label: 'Stall Number', value: 'B12', icon: MapPin },
-                                    { label: 'Stall Size', value: '6m X 6m (36 sqm)', icon: Maximize },
-                                    { label: 'Stall Type', value: 'Premium Corner', icon: Grid },
-                                    { label: 'Open Side', value: '2 Sides', icon: Layers },
-                                    { label: 'Power Allocation', value: '5 KW', icon: Zap },
-                                    { label: 'Floor', value: 'Ground Floor', icon: Layers },
+                                    {
+                                        label: 'Hall Number',
+                                        value: p?.hallNumber || data?.hallNumber || '—',
+                                        icon: Map,
+                                    },
+                                    {
+                                        label: 'Stall Number',
+                                        value: p?.stallFor || 'B12',
+                                        icon: MapPin,
+                                    },
+                                    {
+                                        label: 'Stall Size',
+                                        value: p?.dimension
+                                            ? `${p.dimension} (${p?.stallSize || 0} sqm)`
+                                            : '6m X 6m (36 sqm)',
+                                        icon: Maximize,
+                                    },
+                                    {
+                                        label: 'Stall Type',
+                                        value: p?.stallType || 'Premium Corner',
+                                        icon: Grid,
+                                    },
+                                    {
+                                        label: 'Open Side',
+                                        value: p?.stallScheme || '2 Sides',
+                                        icon: Layers,
+                                    },
+                                    {
+                                        label: 'Power Allocation',
+                                        value: p?.powerAllocation || data?.powerAllocation || '—',
+                                        icon: Zap,
+                                    },
+                                    {
+                                        label: 'Floor',
+                                        value: p?.floor || data?.address?.split(',')?.[0] || '—',
+                                        icon: Layers,
+                                    },
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center justify-between py-0.5 border-b border-slate-50 last:border-0">
                                         <div className="flex items-center gap-2 text-slate-600">
@@ -314,20 +536,45 @@ export default function StallInformation() {
                             <h3 className="text-sm font-bold text-slate-800 mb-2">Useful Documents</h3>
                             <div className="space-y-0.5">
                                 {[
-                                    { name: 'Booth Guidelines' },
-                                    { name: 'Technical Manual' },
-                                    { name: 'Electrical Guidelines' },
-                                    { name: 'Exhibitor Manual' },
+                                    {
+                                        name: "Registration PDF",
+                                        url: data?.registrationPdfUrl,
+                                    },
+                                    {
+                                        name: "Payment Receipt",
+                                        url: data?.receiptPdfUrl,
+                                    },
+                                    {
+                                        name: "Booth Guidelines",
+                                        url: null,
+                                    },
+                                    {
+                                        name: "Technical Manual",
+                                        url: null,
+                                    },
+                                    {
+                                        name: "Exhibitor Manual",
+                                        url: null,
+                                    },
                                 ].map((doc, i) => (
                                     <div key={i} className="flex items-center justify-between py-0.5 border-b border-slate-50 last:border-0">
                                         <div className="flex items-center gap-2 text-slate-700">
                                             <FileText size={11} className="text-[#0052cc]" strokeWidth={1.5} />
                                             <span className="text-[10px] font-bold">{doc.name}</span>
                                         </div>
-                                        <button className="flex items-center gap-1 text-[8px] font-extrabold text-[#0052cc] bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded-md transition-colors border border-blue-100 tracking-wide uppercase">
-                                            <Download size={10} strokeWidth={2.5} />
-                                            View
-                                        </button>
+                                        {doc.url ? (
+                                            <a
+                                                href={doc.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="flex items-center gap-1 text-[8px] font-extrabold text-[#0052cc] bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded-md"
+                                            >
+                                                <Download size={10} />
+                                                View
+                                            </a>
+                                        ) : (
+                                            <span className="text-[8px] text-slate-300">Soon</span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -335,6 +582,51 @@ export default function StallInformation() {
                     </div>
                 </div>
             </div>
+            {showQrModal && (
+                <div
+                    className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
+                    onClick={() => setShowQrModal(false)}
+                >
+                    <div
+                        className="bg-white rounded-2xl p-6 relative"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            onClick={() => setShowQrModal(false)}
+                            className="absolute right-3 top-3"
+                        >
+                            <X size={22} />
+                        </button>
+
+                        <h3 className="text-lg font-bold text-center mb-5">
+                            Stall QR Code
+                        </h3>
+
+                        <div className="bg-white p-4 rounded-xl border">
+                            <QRCode
+                                value={`${data?.registrationId || "REG"}-${p?.stallFor || "STALL"}`}
+                                size={250}
+                                fgColor="#1a5c2e"
+                                style={{
+                                    height: "auto",
+                                    maxWidth: "100%",
+                                    width: "100%",
+                                }}
+                            />
+                            <Button
+                                className="mt-4 w-full"
+                                onClick={() => window.print()}
+                            >
+                                Download QR
+                            </Button>
+                        </div>
+
+                        <p className="text-center mt-4 text-sm text-slate-600">
+                            {p?.stallFor || "HALL 3 – B12"}
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
