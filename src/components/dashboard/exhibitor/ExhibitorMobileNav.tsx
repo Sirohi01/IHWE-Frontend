@@ -14,7 +14,7 @@ export default function ExhibitorMobileNav({ activeTab, setActiveTab }: MobileNa
                     { id: 'dashboard', label: 'Overview', icon: TrendingUp },
                     { id: 'profile',   label: 'Profile',  icon: User },
                     { id: 'invoices',  label: 'Invoices', icon: FileText },
-                    { id: 'exhibitions', label: 'Events', icon: Building2 },
+                    { id: 'my-event', label: 'Event', icon: Building2 },
                 ].map(tab => (
                     <button
                         key={tab.id}

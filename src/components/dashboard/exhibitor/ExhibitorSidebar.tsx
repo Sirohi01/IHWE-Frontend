@@ -37,7 +37,7 @@ interface SidebarProps {
 
 const NAV_ITEMS: NavItem[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "exhibitions", label: "My Event", icon: CalendarCheck },
+    { id: "my-event", label: "My Event", icon: CalendarCheck },
     { id: "stall-management", label: "Stall Information", icon: Building2 },
     { id: "invoices", label: "Invoice & Receipts", icon: FileText },
     { id: "accessories", label: "Add On Services", icon: ShoppingBag },
