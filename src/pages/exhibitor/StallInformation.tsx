@@ -197,7 +197,7 @@ export default function StallInformation() {
                                     </div>
                                     <div>
                                         <p className="text-[9px] text-slate-400 font-medium">Floor</p>
-                                        <p className="text-[11px] font-bold text-slate-800">{f?.address?.split(',')?.[0] || f?.floor || "Ground Floor"}</p>
+                                        <p className="text-[11px] font-bold text-slate-800">{p?.floor || f?.floor || f?.address?.split(',')?.[0] || "Ground Floor"}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -364,7 +364,7 @@ export default function StallInformation() {
                                     },
                                     {
                                         label: "Payment Mode",
-                                        value: data?.paymentMode || "—",
+                                        value: f?.paymentMode || data?.paymentMode || "—",
                                         icon: Zap,
                                     },
                                     {
@@ -509,7 +509,7 @@ export default function StallInformation() {
                                     },
                                     {
                                         label: 'Floor',
-                                        value: p?.floor || data?.address?.split(',')?.[0] || '—',
+                                        value: p?.floor || f?.floor || f?.address?.split(',')?.[0] || "Ground Floor",
                                         icon: Layers,
                                     },
                                 ].map((item, i) => (
