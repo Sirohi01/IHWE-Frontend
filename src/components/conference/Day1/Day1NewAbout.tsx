@@ -41,7 +41,7 @@ const focusAreas = [
   },
 ];
 
-const AboutDayOne = () => {
+const AboutDayOne: React.FC<{ data?: any }> = ({ data }) => {
   return (
     <div className="mx-auto max-w-[1320px] py-4">
       <div>
