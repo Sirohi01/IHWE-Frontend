@@ -55,7 +55,7 @@ const MainConferences: React.FC = () => {
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
-      link: "/conference/day-1"
+      link: "/conference.-1"
     },
     {
       day: "DAY 2",

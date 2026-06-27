@@ -124,7 +124,7 @@ const DelegateDetailsHero = () => {
                 <section className="grid grid-cols-1 md:flex md:items-center md:justify-between my-3 p-4 md:py-3 md:px-2 gap-4 md:gap-0 bg-white border border-gray-100 rounded-xl shadow-sm">
                     {[
                         {
-                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/c1.png') center/contain no-repeat", mask: "url('/icons/c1.png') center/contain no-repeat" }} />,
                             title: 'Global Platform',
                             desc: 'Uniting healthcare, wellness, and sustainable industries',
                         },

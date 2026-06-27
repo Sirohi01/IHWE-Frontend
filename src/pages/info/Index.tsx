@@ -34,7 +34,7 @@ import LogoShowcase from "@/components/home/LogoShowcase";
 import ExhibitionCategories from "@/components/home/ExhibitionCategories";
 import BeyondExhibition from "@/components/home/BeyondExhibition";
 import FloatingVideo from "@/components/home/FloatingVideo";
-import SponsorshipSection from "@/components/home/SponsorshipSection";
+import SponsorshipSection, { UpcomingBrands } from "@/components/home/SponsorshipSection";
 import BuyerSellerMeet from "@/components/home/BuyerSellerMeet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
 
@@ -64,6 +64,7 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
 
       <SponsorshipSection />
       <LogoShowcase />
+      <UpcomingBrands />
       <HealthcareSectors />
       <MarqueeStrip />
       <BuyerSellerMeet />

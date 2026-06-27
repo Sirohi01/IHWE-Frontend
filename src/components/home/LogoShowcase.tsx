@@ -4,7 +4,7 @@ import Marquee from 'react-fast-marquee';
 
 const LogoShowcase = () => {
   return (
-    <section className="bg-white pt-4 pb-12 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <section className="bg-white pt-4 pb-6 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
       <SectionContainer>
         
         {/* ===== 3-COLUMN GRID LAYOUT WITH DESKTOP VERTICAL / MOBILE HORIZONTAL DIVIDERS ===== */}
@@ -18,7 +18,7 @@ const LogoShowcase = () => {
             <div className="w-full overflow-hidden">
               <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
                 {[
-                  { src: "/knowledge1.png", alt: "Knowledge Partner 1" },
+                  { src: "/aa3.png", alt: "Knowledge Partner 1" },
                   { src: "/knowledge2.png", alt: "Knowledge Partner 2" },
                   { src: "/knowledge3.png", alt: "Knowledge Partner 3" }
                 ].map((logo, idx) => (
@@ -74,6 +74,7 @@ const LogoShowcase = () => {
             <div className="w-full overflow-hidden">
               <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
                 {[
+                  { src: "/aa2.png", alt: "Supporting Association 3" },
                   { src: "/health.png", alt: "Healthcare Partner" },
                   { src: "/Supporting.png", alt: "Supporting Association 1" },
                   { src: "/Supporting%20Association%20(2).webp", alt: "Supporting Association 2" }

@@ -1,32 +1,177 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
     Users, UserCheck, Car, Wrench, ShieldCheck,
     ArrowRight, Check, Sparkles, FileText, Phone, Gift,
-    X, Building2, User, Briefcase, Mail, Phone as PhoneIcon, UserCircle
+    X, Building2, User, Briefcase, Mail, Phone as PhoneIcon, UserCircle,
+    CheckCircle2, ChevronRight, Hash
 } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { API_URL } from "@/lib/api";
 import passesImg from "@/assets/passes1.png";
 import thaliImg from "@/assets/thali.png";
 import bottleImg from "@/assets/bottle.png";
 import howitworksImg from "@/assets/howitworks.png";
 import notepadImg from "@/assets/notepad.png";
 import shoppingImg from "@/assets/shopping.png";
+import Swal from "sweetalert2";
 
 export default function ExhibitorPassesPage() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPass, setSelectedPass] = useState<any>(null);
+    const [passConfigs, setPassConfigs] = useState<any[]>([]);
+    const [passRequests, setPassRequests] = useState<any[]>([]);
+
+    const [quantity, setQuantity] = useState(1);
+    const [personnel, setPersonnel] = useState([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
+    const [vehicles, setVehicles] = useState([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleOpenModal = (pass: any) => {
         setSelectedPass(pass);
+        setQuantity(1);
+        setPersonnel([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
+        setVehicles([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
         setIsModalOpen(true);
     };
 
-    // Rates and allocations matching the specifications
-    const passes = [
+    const handleQuantityChange = (newQty: number) => {
+        const maxAllowed = selectedPass?.maxPerRequest || 10;
+        if (newQty < 1 || newQty > maxAllowed) return;
+        setQuantity(newQty);
+        
+        if (selectedPass?.id === 'vehicle') {
+            const newVehicles = [...vehicles];
+            if (newQty > newVehicles.length) {
+                for (let i = newVehicles.length; i < newQty; i++) {
+                    newVehicles.push({ vehicleType: '4-wheeler', vehicleNumber: '' });
+                }
+            } else {
+                newVehicles.splice(newQty);
+            }
+            setVehicles(newVehicles);
+        } else {
+            const newPersonnel = [...personnel];
+            if (newQty > newPersonnel.length) {
+                for (let i = newPersonnel.length; i < newQty; i++) {
+                    newPersonnel.push({ name: '', designation: '', email: '', phone: '', gender: 'male' });
+                }
+            } else {
+                newPersonnel.splice(newQty);
+            }
+            setPersonnel(newPersonnel);
+        }
+    };
+
+    const updatePersonnel = (index: number, field: string, value: string) => {
+        const updated = [...personnel];
+        updated[index] = { ...updated[index], [field]: value };
+        setPersonnel(updated);
+    };
+
+    const updateVehicle = (index: number, field: string, value: string) => {
+        const updated = [...vehicles];
+        updated[index] = { ...updated[index], [field]: value };
+        setVehicles(updated);
+    };
+
+    const fetchPassData = async () => {
+        try {
+            const token = localStorage.getItem("exhibitorToken");
+            const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+            const [configRes, requestRes] = await Promise.all([
+                fetch(`${API_URL}/exhibitor-pass-config/active`),
+                data?._id
+                    ? fetch(`${API_URL}/exhibitor-pass-requests/exhibitor/${data._id}`, { headers })
+                    : Promise.resolve(null),
+            ]);
+
+            const configResult = await configRes.json();
+            if (configResult.success && Array.isArray(configResult.data)) {
+                setPassConfigs(configResult.data);
+            }
+
+            if (requestRes) {
+                const requestResult = await requestRes.json();
+                if (requestResult.success && Array.isArray(requestResult.data)) {
+                    setPassRequests(requestResult.data);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to load pass configuration", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPassData();
+    }, [data?._id]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const token = localStorage.getItem("exhibitorToken");
+            const payload = {
+                passType: selectedPass.id,
+                quantity,
+                vehicles: selectedPass.id === 'vehicle' ? vehicles : undefined,
+                personnel: selectedPass.id !== 'vehicle' ? personnel : undefined
+            };
+
+            const res = await fetch(`${API_URL}/exhibitor-auth/pass-request`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+            if (result.success || res.ok) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: result.message || "Pass request submitted successfully.",
+                    icon: 'success',
+                    confirmButtonColor: '#15803d',
+                    customClass: {
+                        popup: 'rounded-2xl',
+                        confirmButton: 'rounded-xl font-bold py-2 px-6'
+                    }
+                });
+                setIsModalOpen(false);
+                fetchPassData();
+            } else {
+                Swal.fire({
+                    title: 'Oops...',
+                    text: result.message || "Failed to submit pass request.",
+                    icon: 'error',
+                    confirmButtonColor: '#ef4444',
+                    customClass: {
+                        popup: 'rounded-2xl',
+                        confirmButton: 'rounded-xl font-bold py-2 px-6'
+                    }
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: 'Error!',
+                text: "Failed to submit pass request.",
+                icon: 'error',
+                confirmButtonColor: '#ef4444',
+                customClass: {
+                    popup: 'rounded-2xl',
+                    confirmButton: 'rounded-xl font-bold py-2 px-6'
+                }
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const defaultPasses = [
         {
             id: "exhibitor",
             title: "Exhibitor Pass",
@@ -109,6 +254,37 @@ export default function ExhibitorPassesPage() {
         }
     ];
 
+    const countsByType = passRequests.reduce<Record<string, { pending: number, approved: number, rejected: number, total: number }>>((acc, request) => {
+        const key = request.passType;
+        acc[key] = acc[key] || { pending: 0, approved: 0, rejected: 0, total: 0 };
+        acc[key][request.status as keyof typeof acc[string]] = (acc[key][request.status as keyof typeof acc[string]] || 0) + Number(request.quantity || 0);
+        acc[key].total += Number(request.quantity || 0);
+        return acc;
+    }, {});
+
+    const passes = defaultPasses
+        .filter((pass) => {
+            const config = passConfigs.find((item) => item.passType === pass.id);
+            return config?.isActive !== false;
+        })
+        .map((pass) => {
+        const config = passConfigs.find((item) => item.passType === pass.id);
+        const complimentary = Number(config?.complimentaryQuota ?? pass.complimentary);
+        const totalQuota = Number(config?.totalQuota ?? 10);
+        const used = countsByType[pass.id]?.approved ?? 0;
+        const totalRequested = countsByType[pass.id]?.total ?? 0;
+        return {
+            ...pass,
+            title: config?.title || pass.title,
+            subtitle: config?.subtitle || pass.subtitle,
+            complimentary,
+            used,
+            remaining: Math.max(totalQuota - totalRequested, 0),
+            price: Number(config?.price ?? pass.price),
+            maxPerRequest: Number(config?.maxPerRequest ?? 10)
+        };
+    });
+
     const notes = [
         "Use complimentary quota first.",
         "Extra passes, lunch and water bottles can be purchased online.",
@@ -145,30 +321,16 @@ export default function ExhibitorPassesPage() {
 
                     {/* Inner White Card Grid with Dividers */}
                     <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-2 gap-y-4 sm:gap-y-0 sm:grid-cols-4 sm:divide-x sm:divide-slate-300 shadow-sm mb-1.5">
-                        {/* Col 1 */}
-                        <div className="flex flex-col items-center justify-center text-center px-1">
-                            <Users size={28} className="text-[#1a3a7c] shrink-0" />
-                            <span className="text-[22px] font-black text-[#1a3a7c] tracking-tight mt-1.5 leading-none">10</span>
-                            <span className="text-[9.5px] font-extrabold text-[#1a3a7c] mt-1.5 uppercase tracking-wide">Visitor Pass</span>
-                        </div>
-                        {/* Col 2 */}
-                        <div className="flex flex-col items-center justify-center text-center px-1">
-                            <UserCheck size={28} className="text-[#ea580c] shrink-0" />
-                            <span className="text-[22px] font-black text-[#ea580c] tracking-tight mt-1.5 leading-none">2</span>
-                            <span className="text-[9.5px] font-extrabold text-[#ea580c] mt-1.5 uppercase tracking-wide">Exhibitor Pass</span>
-                        </div>
-                        {/* Col 3 */}
-                        <div className="flex flex-col items-center justify-center text-center px-1">
-                            <Car size={28} className="text-[#15803d] shrink-0" />
-                            <span className="text-[22px] font-black text-[#15803d] tracking-tight mt-1.5 leading-none">2</span>
-                            <span className="text-[9.5px] font-extrabold text-[#15803d] mt-1.5 uppercase tracking-wide">Vehicle Pass</span>
-                        </div>
-                        {/* Col 4 */}
-                        <div className="flex flex-col items-center justify-center text-center px-1">
-                            <Wrench size={28} className="text-[#6b21a8] shrink-0" />
-                            <span className="text-[22px] font-black text-[#6b21a8] tracking-tight mt-1.5 leading-none">4</span>
-                            <span className="text-[9.5px] font-extrabold text-[#6b21a8] mt-1.5 uppercase tracking-wide">Service Pass</span>
-                        </div>
+                        {passes.map((pass) => {
+                            const Icon = pass.icon;
+                            return (
+                                <div key={pass.id} className="flex flex-col items-center justify-center text-center px-1">
+                                    <Icon size={28} className={`${pass.themeClasses.text} shrink-0`} />
+                                    <span className={`text-[22px] font-black ${pass.themeClasses.text} tracking-tight mt-1.5 leading-none`}>{pass.complimentary}</span>
+                                    <span className={`text-[9.5px] font-extrabold ${pass.themeClasses.text} mt-1.5 uppercase tracking-wide`}>{pass.title}</span>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     {/* Bottom Info text */}
@@ -230,7 +392,9 @@ export default function ExhibitorPassesPage() {
                                 onClick={() => handleOpenModal(pass)}
                                 className={`w-full h-7 px-2.5 rounded-md text-[10px] font-extrabold transition-all duration-200 flex items-center justify-between shadow-sm hover:shadow-md ${pass.themeClasses.btnBg}`}
                             >
-                                <span className="flex-1 text-center">Request / Purchase Extra</span>
+                                <span className="flex-1 text-center">
+                                    {(countsByType[pass.id]?.pending || 0) > 0 ? `${countsByType[pass.id].pending} Pending` : 'Request / Purchase Extra'}
+                                </span>
                                 <ArrowRight size={11} className="shrink-0" />
                             </button>
                         </div>
@@ -455,7 +619,7 @@ export default function ExhibitorPassesPage() {
             {/* Modal for Requesting/Purchasing Extra Passes */}
             <AnimatePresence>
                 {isModalOpen && selectedPass && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
                         <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -468,171 +632,221 @@ export default function ExhibitorPassesPage() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-                            className="relative w-full max-w-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]"
+                            className="relative w-full max-w-[600px] bg-[#f8fafc] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ring-1 ring-slate-900/5"
                         >
                             {/* Modal Header */}
-                            <div className={`px-5 py-3.5 flex items-center justify-between ${selectedPass.themeClasses.bg} border-b ${selectedPass.themeClasses.border}`}>
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-9 h-9 rounded-full ${selectedPass.themeClasses.iconBg} flex items-center justify-center text-white shadow-sm`}>
-                                        <selectedPass.icon size={18} />
+                            <div className="px-6 py-5 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
+                                <div className="flex items-center gap-3.5">
+                                    <div className={`w-11 h-11 rounded-2xl ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
+                                        <selectedPass.icon size={22} className={selectedPass.themeClasses.text} />
                                     </div>
                                     <div>
-                                        <h2 className="text-[14px] font-black text-slate-800 tracking-tight leading-tight">
+                                        <h2 className="text-[18px] font-black text-slate-800 tracking-tight leading-tight">
                                             Request {selectedPass.title}
                                         </h2>
-                                        <p className="text-[10px] text-slate-500 font-bold mt-0.5">
+                                        <p className="text-[12px] text-slate-500 font-bold mt-0.5">
                                             ₹{selectedPass.price} / Pass • {selectedPass.subtitle}
                                         </p>
                                     </div>
                                 </div>
                                 <button 
                                     onClick={() => setIsModalOpen(false)}
-                                    className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+                                    className="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 hover:border-slate-300 transition-all"
                                 >
-                                    <X size={14} strokeWidth={2.5} />
+                                    <X size={16} strokeWidth={2.5} />
                                 </button>
                             </div>
 
                             {/* Modal Body / Form */}
-                            <div className="p-5 overflow-y-auto custom-scrollbar">
-                                <form className="grid grid-cols-2 gap-x-4 gap-y-3.5" onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); }}>
+                            <div className="p-5 overflow-y-auto custom-scrollbar flex-1 relative">
+                                <form className="space-y-3" onSubmit={handleSubmit}>
                                     
-                                    {/* Company Name */}
-                                    <div className="col-span-2">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Company Name
+                                    {/* Quantity Selector */}
+                                    <div className="bg-white p-4 rounded-2xl mb-3 border border-slate-200 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)]">
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
+                                            Select Quantity
                                         </label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                                <Building2 size={14} />
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[12px] font-bold text-slate-700">How many do you need?</span>
+                                            <div className="flex items-center gap-3 bg-slate-50 px-2 py-1 rounded-xl border border-slate-200">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleQuantityChange(quantity - 1)}
+                                                    className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
+                                                >
+                                                    <span className="text-lg font-black text-slate-400">-</span>
+                                                </button>
+                                                <span className="text-sm font-black text-slate-800 w-5 text-center">{quantity}</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleQuantityChange(quantity + 1)}
+                                                    className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
+                                                >
+                                                    <span className="text-lg font-black text-emerald-600">+</span>
+                                                </button>
                                             </div>
-                                            <input 
-                                                type="text" 
-                                                disabled
-                                                defaultValue={data?.companyName || "Your Company Ltd."}
-                                                className="w-full bg-slate-50 border border-slate-200 text-slate-600 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none cursor-not-allowed"
-                                            />
                                         </div>
+                                        <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center">
+                                            <span className="text-[11px] font-bold text-slate-500">Estimated Total</span>
+                                            <span className="text-[14px] font-black text-slate-800">₹{selectedPass?.price * quantity}</span>
+                                        </div>
+                                        <p className="text-[9px] text-slate-400 font-bold mt-1">
+                                            Max {selectedPass?.maxPerRequest || 10} passes per request
+                                        </p>
                                     </div>
 
-                                    {/* Client Name */}
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Client Name
-                                        </label>
-                                        <div className="relative group">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                                <User size={14} />
-                                            </div>
-                                            <input 
-                                                type="text" 
-                                                placeholder="Enter full name"
-                                                required
-                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Designation */}
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Designation
-                                        </label>
-                                        <div className="relative group">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                                <Briefcase size={14} />
-                                            </div>
-                                            <input 
-                                                type="text" 
-                                                placeholder="Job Title / Role"
-                                                required
-                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-3 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Email */}
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Email Address
-                                        </label>
-                                        <div className="relative group flex items-center">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                                <Mail size={14} />
-                                            </div>
-                                            <input 
-                                                type="email" 
-                                                placeholder="name@company.com"
-                                                required
-                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-20 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
-                                            />
-                                            <button
-                                                type="button"
-                                                className={`absolute right-1.5 px-2 py-1 text-[9px] font-extrabold rounded-lg transition-all ${selectedPass.themeClasses.badgeBg}`}
-                                            >
-                                                Send OTP
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Phone Number */}
-                                    <div className="col-span-2 sm:col-span-1">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Phone Number
-                                        </label>
-                                        <div className="relative group flex items-center">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                                                <PhoneIcon size={14} />
-                                            </div>
-                                            <input 
-                                                type="tel" 
-                                                placeholder="+91 00000 00000"
-                                                required
-                                                className="w-full bg-white border border-slate-200 text-slate-800 text-xs rounded-xl pl-8 pr-20 py-2 font-bold focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
-                                            />
-                                            <button
-                                                type="button"
-                                                className={`absolute right-1.5 px-2 py-1 text-[9px] font-extrabold rounded-lg transition-all ${selectedPass.themeClasses.badgeBg}`}
-                                            >
-                                                Send OTP
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Gender */}
-                                    <div className="col-span-2">
-                                        <label className="block text-[10px] font-extrabold text-slate-700 mb-1 uppercase tracking-wide">
-                                            Gender
-                                        </label>
-                                        <div className="flex gap-2">
-                                            <label className="flex-1 relative cursor-pointer group">
-                                                <input type="radio" name="gender" value="male" className="peer sr-only" required />
-                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-blue-50 peer-checked:border-blue-500 peer-checked:text-blue-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-blue-500">
-                                                    Male
+                                    {/* Dynamic Fields */}
+                                    {selectedPass?.id === 'vehicle' ? (
+                                        vehicles.map((veh, index) => (
+                                            <div key={index} className="bg-white border border-slate-200 rounded-2xl p-4 mb-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden">
+                                                <div className="absolute right-0 top-0 bg-slate-50 px-3 py-1.5 rounded-bl-xl border-b border-l border-slate-100">
+                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">#{index + 1}</span>
                                                 </div>
-                                            </label>
-                                            <label className="flex-1 relative cursor-pointer group">
-                                                <input type="radio" name="gender" value="female" className="peer sr-only" required />
-                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-pink-50 peer-checked:border-pink-500 peer-checked:text-pink-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-pink-500">
-                                                    Female
+                                                
+                                                <h3 className="text-[12px] font-black text-slate-800 mb-3">Vehicle Details</h3>
+                                                
+                                                <div className="mb-3">
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Vehicle Type</label>
+                                                    <div className="flex gap-2">
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => updateVehicle(index, 'vehicleType', '2-wheeler')}
+                                                            className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${veh.vehicleType === '2-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                        >
+                                                            {veh.vehicleType === '2-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
+                                                            <span className="font-black text-[11px]">2-Wheeler</span>
+                                                        </button>
+                                                        <button 
+                                                            type="button"
+                                                            onClick={() => updateVehicle(index, 'vehicleType', '4-wheeler')}
+                                                            className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${veh.vehicleType === '4-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                        >
+                                                            {veh.vehicleType === '4-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
+                                                            <span className="font-black text-[11px]">4-Wheeler</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </label>
-                                            <label className="flex-1 relative cursor-pointer group">
-                                                <input type="radio" name="gender" value="other" className="peer sr-only" required />
-                                                <div className="w-full text-center py-2 border border-slate-200 rounded-xl text-xs font-bold text-slate-500 peer-checked:bg-purple-50 peer-checked:border-purple-500 peer-checked:text-purple-700 hover:bg-slate-50 transition-all group-hover:border-slate-300 peer-checked:group-hover:border-purple-500">
-                                                    Other
+
+                                                <div>
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Registration Number</label>
+                                                    <div className="relative flex items-center">
+                                                        <div className="absolute left-3 z-10 text-slate-400">
+                                                            <Hash size={14} />
+                                                        </div>
+                                                        <input 
+                                                            type="text"
+                                                            required
+                                                            value={veh.vehicleNumber}
+                                                            onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value)}
+                                                            placeholder="e.g. MH 01 AB 1234"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </label>
-                                        </div>
-                                    </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        personnel.map((person, index) => (
+                                            <div key={index} className="bg-white border border-slate-200 rounded-2xl p-4 mb-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden">
+                                                <div className={`absolute right-0 top-0 px-3 py-1.5 rounded-bl-xl border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
+                                                    <span className={`text-[9px] font-black uppercase tracking-widest`}>Person #{index + 1}</span>
+                                                </div>
+                                                
+                                                <h3 className="text-[12px] font-black text-slate-800 mb-4">Attendee Details</h3>
+
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Full Name</label>
+                                                        <input 
+                                                            type="text"
+                                                            required
+                                                            value={person.name}
+                                                            onChange={(e) => updatePersonnel(index, 'name', e.target.value)}
+                                                            placeholder="Enter full name"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Designation</label>
+                                                        <input 
+                                                            type="text"
+                                                            required
+                                                            value={person.designation}
+                                                            onChange={(e) => updatePersonnel(index, 'designation', e.target.value)}
+                                                            placeholder="e.g. Manager"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                        />
+                                                    </div>
+
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <div>
+                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Email ID</label>
+                                                            <input 
+                                                                type="email"
+                                                                required
+                                                                value={person.email}
+                                                                onChange={(e) => updatePersonnel(index, 'email', e.target.value)}
+                                                                placeholder="Email address"
+                                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Phone</label>
+                                                            <input 
+                                                                type="tel"
+                                                                required
+                                                                value={person.phone}
+                                                                onChange={(e) => updatePersonnel(index, 'phone', e.target.value)}
+                                                                placeholder="Mobile No"
+                                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="pt-1">
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Gender Selection</label>
+                                                        <div className="flex gap-2">
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => updatePersonnel(index, 'gender', 'male')}
+                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'male' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                            >
+                                                                {person.gender === 'male' && <CheckCircle2 size={12} className="mr-1.5" />}
+                                                                <span className="font-black text-[11px]">Male</span>
+                                                            </button>
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => updatePersonnel(index, 'gender', 'female')}
+                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                            >
+                                                                {person.gender === 'female' && <CheckCircle2 size={12} className="mr-1.5" />}
+                                                                <span className="font-black text-[11px]">Female</span>
+                                                            </button>
+                                                            <button 
+                                                                type="button"
+                                                                onClick={() => updatePersonnel(index, 'gender', 'other')}
+                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'other' ? 'bg-purple-50 border-purple-400 text-purple-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                            >
+                                                                {person.gender === 'other' && <CheckCircle2 size={12} className="mr-1.5" />}
+                                                                <span className="font-black text-[11px]">Other</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
 
                                     {/* Submit Button */}
-                                    <div className="col-span-2 pt-1">
+                                    <div className="pt-1 pb-1">
                                         <button 
                                             type="submit"
-                                            className={`w-full py-2.5 rounded-xl text-[11px] font-black text-white shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 ${selectedPass.themeClasses.btnBg}`}
+                                            disabled={isSubmitting}
+                                            className={`w-full py-3.5 rounded-2xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg} ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                                         >
-                                            Submit Request
+                                            {isSubmitting ? 'Submitting...' : `Submit ${quantity} Request${quantity > 1 ? 's' : ''}`}
+                                            {!isSubmitting && <ChevronRight size={16} />}
                                         </button>
                                     </div>
                                 </form>
