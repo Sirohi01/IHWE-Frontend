@@ -1,25 +1,24 @@
 import { useState } from "react";
+import { SERVER_URL } from "@/lib/api";
 
-const documents = [
-  { name: "Exhibitor Manual", size: "PDF (2.4 MB)" },
-  { name: "Venue Map", size: "PDF (1.8 MB)" },
-  { name: "Move-in / Move-out Guidelines", size: "PDF (1.2 MB)" },
-];
+type Announcement = {
+  title: string;
+  desc: string;
+  badge?: string;
+};
 
-const announcements = [
-  {
-    title: "Venue Entry Pass Mandatory",
-    desc: "All exhibitors & team members must carry the venue entry pass during move-in, event days & move-out.",
-  },
-  {
-    title: "Booth Setup Deadline",
-    desc: "All booth setups must be completed by 8:00 PM on the day before the event opens.",
-  },
-  {
-    title: "Parking Notice",
-    desc: "Dedicated parking for exhibitors is available at Gate 3. Please display your parking pass visibly.",
-  },
-];
+type EventDocument = {
+  name: string;
+  size: string;
+  url: string;
+};
+
+const fixUrl = (url: string) => {
+  if (!url) return "";
+  if (url.startsWith("http") || url.startsWith("blob:")) return url;
+  const cleanPath = url.startsWith("/") ? url : `/${url}`;
+  return `${SERVER_URL}${cleanPath}`;
+};
 
 // --- Icons ---
 const MegaphoneIcon = () => (
@@ -65,9 +64,12 @@ const ArrowRightIcon = ({ size = 16 }: { size?: number }) => (
 );
 
 // --- Announcement Card ---
-const AnnouncementCard = () => {
+const AnnouncementCard = ({ announcements }: { announcements: Announcement[] }) => {
   const [active, setActive] = useState(0);
-  const ann = announcements[active];
+  const safeAnnouncements = announcements.length
+    ? announcements
+    : [{ title: "No pending event updates", desc: "Your event dashboard is up to date." }];
+  const ann = safeAnnouncements[Math.min(active, safeAnnouncements.length - 1)];
 
   return (
     <div 
@@ -107,7 +109,7 @@ const AnnouncementCard = () => {
 
       {/* Dots */}
       <div className="flex justify-center gap-1.5 mt-2">
-        {announcements.map((_, i) => (
+        {safeAnnouncements.map((_, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
@@ -122,7 +124,7 @@ const AnnouncementCard = () => {
 };
 
 // --- Documents Card ---
-const DocumentsCard = () => (
+const DocumentsCard = ({ documents }: { documents: EventDocument[] }) => (
   <div 
     className="bg-white border border-gray-200 rounded-lg px-4 py-2"
     style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
@@ -142,7 +144,7 @@ const DocumentsCard = () => (
 
     {/* Doc Rows */}
     <div className="divide-y divide-gray-100">
-      {documents.map((doc, i) => (
+      {documents.length > 0 ? documents.map((doc, i) => (
         <div key={i} className="flex items-center justify-between py-1">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">
@@ -152,13 +154,18 @@ const DocumentsCard = () => (
             <span className="text-[10px] text-gray-400">{doc.size}</span>
           </div>
           <button
+            onClick={() => window.open(fixUrl(doc.url), "_blank", "noopener,noreferrer")}
             className="text-emerald-600 hover:text-emerald-800 transition-colors p-1"
             aria-label={`Download ${doc.name}`}
           >
             <DownloadIcon />
           </button>
         </div>
-      ))}
+      )) : (
+        <div className="py-3 text-[10px] text-gray-400 font-medium">
+          No downloadable event documents are attached yet.
+        </div>
+      )}
     </div>
   </div>
 );
@@ -201,11 +208,14 @@ const HelpCard = () => (
 );
 
 // --- Main Component ---
-export default function EventDashboard1() {
+export default function EventDashboard1({ announcements = [], documents = [] }: {
+  announcements?: Announcement[];
+  documents?: EventDocument[];
+}) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 py-1 font-sans pb-4">
-      <AnnouncementCard />
-      <DocumentsCard />
+      <AnnouncementCard announcements={announcements} />
+      <DocumentsCard documents={documents} />
       <HelpCard />
     </div>
   );
