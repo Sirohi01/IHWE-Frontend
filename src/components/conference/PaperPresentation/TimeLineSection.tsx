@@ -50,7 +50,7 @@ const timeline = [
 
 export default function TimelineSection() {
   return (
-    <section className="w-full">
+    <section className="w-full mt-4">
       <div className="mx-auto max-w-[1320px] rounded-2xl border border-gray-200 bg-white p-6 md:p-8">
         <h2 className="mb-10 text-sm font-semibold uppercase tracking-wide text-gray-900">
           Timeline

@@ -39,7 +39,7 @@ const features = [
 
 export default function HealthcareHighlights() {
   return (
-    <div className="container mx-auto px-6 max-w-[1320px] py-4">
+    <div className="container mx-auto px-0 max-w-[1320px] py-4">
       <div
         className="
           relative overflow-hidden rounded-2xl py-4

@@ -1,20 +1,21 @@
 // ImportantNotes.tsx
 
 import React from "react";
+import bg from "../../../assets/day/important-notes.jpg"
 
 const ImportantNotes: React.FC = () => {
   return (
-    <section className="w-full py-6">
+    <section className="w-full py-4">
       <div className="mx-auto w-full max-w-[1320px] px-4 lg:px-0">
         <div
           className="relative min-h-[120px] w-full overflow-hidden rounded-2xl bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/important-notes-bg.png')",
+            backgroundImage: `url('${bg}')`,
           }}
         >
           {/* Content */}
-          <div className="relative z-10 flex min-h-[120px] items-center px-6 py-5 md:px-12">
-            <div className="max-w-[650px]">
+          <div className="relative z-10 flex min-h-[120px] items-center">
+            <div className="max-w-[650px] p-5">
 
               <h3 className="mb-3 text-[18px] font-semibold tracking-wide text-[#111827]">
                 IMPORTANT NOTES

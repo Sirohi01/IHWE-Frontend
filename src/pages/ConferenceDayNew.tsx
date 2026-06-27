@@ -156,13 +156,10 @@ const ConferenceDayUnified: React.FC = () => {
         {/* <ConferenceStats /> */}
 
         {/* 3. About Section */}
-        <div className="relative left-[20px]">
           <AboutDayOne data={data.about} />
-        </div>
 
         {/* 4. Agenda & Featured Speakers */}
-        <section className="bg-white py-4 relative left-[20px]">
-          <div className="container mx-auto px-6 max-w-[1380px]">
+     
             
                 <DayAgendaSection
                   data={data} 
@@ -175,8 +172,7 @@ const ConferenceDayUnified: React.FC = () => {
                   dayNumber={currentDay}
                 />
               </div> */}
-          </div>
-        </section>
+       
 <OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers} />
 <PartnersAndActionsSection />
 <HealthcareHighlights />

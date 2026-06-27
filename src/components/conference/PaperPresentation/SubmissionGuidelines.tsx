@@ -81,7 +81,7 @@ const topics = [
 
 export default function SubmissionGuidelinesSection() {
   return (
-    <section className="bg-white py-14 lg:py-20">
+    <section className="bg-white py-4">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-6 lg:px-0">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Submission Guidelines */}

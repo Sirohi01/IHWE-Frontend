@@ -46,7 +46,7 @@ const associates = [
 
 export default function PartnersAndActionsSection() {
   return (
-       <div className="container mx-auto px-6 max-w-[1320px] py-4">
+       <div className="container mx-auto max-w-[1320px] py-4 px-0">
    <section className="grid gap-5 lg:grid-cols-2 items-stretch">
       {/* Left */}
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3">

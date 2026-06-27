@@ -9,7 +9,7 @@ import {
   TrendingUp,
   Trophy,
 } from "lucide-react";
-
+import bg from "../../../assets/day/paper-presentation.webp"
 const benefits = [
   {
     icon: Globe,
@@ -50,13 +50,12 @@ export default function PaperPresentationHero() {
       <div className="relative h-[420px] md:h-[500px] lg:h-[580px]">
         {/* Full Width Background Image */}
         <img
-          src="/images/paper-presentation-banner.webp"
+          src={bg}
           alt="Paper Presentation"
           className="absolute inset-0 h-full w-full object-cover"
         />
 
         {/* Left Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-35% to-transparent" />
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex h-full max-w-[1320px] items-center px-5 sm:px-6 lg:px-0">
@@ -127,7 +126,6 @@ export default function PaperPresentationHero() {
       </div>
 
       {/* Bottom spacing */}
-      <div className="h-14" />
     </section>
   );
 }

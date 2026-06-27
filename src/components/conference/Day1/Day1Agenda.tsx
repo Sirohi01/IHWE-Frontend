@@ -91,7 +91,7 @@ const agendaData = [
 const Day1Agenda: React.FC = () => {
   return (
     <section className="py-0 bg-[#F0FDF4]/50">
-      <div className="container mx-auto px-6 max-w-[1320px]">
+      <div className="container mx-auto px-0 max-w-[1320px]">
 
         {/* Header */}
         <div className="text-center mb-8">

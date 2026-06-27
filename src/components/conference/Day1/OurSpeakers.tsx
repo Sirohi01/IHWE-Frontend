@@ -30,7 +30,7 @@ export default function OurSpeakersCarousel({
   speakers,
 }: OurSpeakersCarouselProps) {
   return (
-         <div className="container mx-auto px-6 max-w-[1320px] py-4" >
+         <div className="container mx-auto px-0 max-w-[1320px] py-4" >
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">

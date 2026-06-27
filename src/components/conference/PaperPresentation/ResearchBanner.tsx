@@ -1,12 +1,13 @@
 import React from "react";
+import bg from "../../../assets/day/ready-to-share.jpg"
 
 const ResearchBanner: React.FC = () => {
   return (
-    <section className="w-full px-4 sm:px-6 lg:px-8">
+    <section className="w-full">
       <div
-        className="mx-auto max-w-[1320px] rounded-lg overflow-hidden"
+        className="mx-auto max-w-[1320px] rounded-xl overflow-hidden"
         style={{
-          backgroundImage: `url("/images/banner-bg.png")`,
+          backgroundImage: `url('${bg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
