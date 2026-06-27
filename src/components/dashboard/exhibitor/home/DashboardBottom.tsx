@@ -226,7 +226,8 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
   const currencySymbol = data?.participation?.currency === 'USD' ? '$' : '₹';
   const formatAmt = (num: number) => `${currencySymbol} ${num?.toLocaleString('en-IN') || '0'}`;
 
-  const totalAmount = data?.participation?.total || 0;
+  const billedAmount = data?.participation?.total || 0;
+  const totalAmount = data?.financeBreakdown?.netPayable || billedAmount;
   const paidAmount = data?.amountPaid || 0;
   const balanceAmount = data?.balanceAmount || 0;
   
@@ -235,7 +236,8 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
   const pendingAmount = balanceAmount > 0 && overdueAmount === 0 ? balanceAmount : 0;
   
   const totalPaidLabel = formatAmt(paidAmount);
-  const totalBilledLabel = formatAmt(totalAmount);
+  const totalBilledLabel = formatAmt(billedAmount);
+  const totalAmountLabel = formatAmt(totalAmount);
 
   const calcPercent = (val: number) => totalAmount > 0 ? (val / totalAmount) * 100 : 0;
 
@@ -318,8 +320,8 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
                 <span className="text-[10px] font-semibold text-[#1a3a7c]">{paymentBreakdown.overdue.amount}</span>
               </div>
               <div className="border-t border-gray-100 pt-2 flex items-center justify-between">
-                <span className="text-[10px] font-semibold text-[#1a3a7c]">Total Amount</span>
-                <span className="text-[12px] font-bold text-[#1a3a7c]">{totalBilledLabel}</span>
+                <span className="text-[10px] font-semibold text-[#1a3a7c]">Net Payable Amount</span>
+                <span className="text-[12px] font-bold text-[#1a3a7c]">{totalAmountLabel}</span>
               </div>
             </div>
           </div>
