@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import ConferenceStats from "../components/conference/ConferenceStats";
 import Day3Hero from "../components/conference/Day3/Day3Hero";
 import Day3About from "../components/conference/Day3/Day3About";
@@ -22,12 +22,16 @@ const ConferenceDayUnified: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const currentDay = isNaN(parseInt(dayNumber || "")) ? 1 : parseInt(dayNumber || "1");
+  const dayMatch = (dayNumber || "1").match(/^(?:day-)?([1-3])$/);
+  const currentDay = dayMatch ? Number(dayMatch[1]) : 1;
+  const canonicalPath = `/conference/day-${currentDay}`;
+  const shouldNormalizeUrl = !dayMatch || dayNumber !== `day-${currentDay}`;
 
   useEffect(() => {
+    if (shouldNormalizeUrl) return;
     window.scrollTo(0, 0);
     fetchDayData();
-  }, [dayNumber]);
+  }, [dayNumber, shouldNormalizeUrl]);
 
   const fetchDayData = async () => {
     setLoading(true);
@@ -46,6 +50,10 @@ const ConferenceDayUnified: React.FC = () => {
       setLoading(false);
     }
   };
+
+  if (shouldNormalizeUrl) {
+    return <Navigate to={canonicalPath} replace />;
+  }
 
   if (loading) {
     return (

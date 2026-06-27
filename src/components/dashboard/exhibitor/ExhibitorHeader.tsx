@@ -34,7 +34,7 @@ export default function ExhibitorHeader({ logo, data, activeTab, setActiveTab, h
                         { id: 'dashboard', label: 'Overview', icon: TrendingUp },
                         { id: 'profile',   label: 'Profile',  icon: User },
                         { id: 'invoices',  label: 'Invoices', icon: FileText },
-                        { id: 'exhibitions', label: 'My Events', icon: Building2 },
+                        { id: 'my-event', label: 'My Event', icon: Building2 },
                     ].map(tab => (
                         <button
                             key={tab.id}

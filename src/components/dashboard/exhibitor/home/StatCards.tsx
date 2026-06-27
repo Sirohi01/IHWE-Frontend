@@ -3,6 +3,25 @@ import { useState, useEffect } from "react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
 
+const hasFile = (value: any) => value !== undefined && value !== null && String(value).trim() !== "";
+
+const fallbackDocumentStats = (data: any) => {
+    const docs = [
+        data?.companyLogoUrl,
+        data?.panCardFrontUrl,
+        data?.gstCertificateUrl,
+        data?.cancelledChequeUrl,
+        data?.representativePhotoUrl,
+        data?.registrationPdfUrl,
+    ];
+    const completed = docs.filter(hasFile).length;
+    return {
+        completed,
+        total: docs.length,
+        status: completed === docs.length ? "Completed" : "Pending",
+    };
+};
+
 export default function StatCards() {
     const { data } = useExhibitorCtx();
     const [timeLeft, setTimeLeft] = useState({
@@ -13,6 +32,7 @@ export default function StatCards() {
     });
 
     const [docStats, setDocStats] = useState({ completed: 0, total: 6, status: 'Pending' });
+    const [marketingStats, setMarketingStats] = useState({ count: 0, status: 'Not Available' });
 
     useEffect(() => {
         const fetchDocs = async () => {
@@ -57,18 +77,44 @@ export default function StatCards() {
                         total: reqData.length,
                         status: filledCount === reqData.length ? 'Completed' : 'Pending'
                     });
+                } else {
+                    setDocStats(fallbackDocumentStats(data));
                 }
             } catch (e) {
                 console.error("Failed to fetch documents", e);
+                setDocStats(fallbackDocumentStats(data));
             }
         };
         fetchDocs();
+    }, [data]);
+
+    useEffect(() => {
+        const fetchMarketingTemplates = async () => {
+            if (!data?._id) return;
+            try {
+                const res = await fetch(`${API_URL}/marketing-toolkit/templates?exhibitorId=${data._id}`);
+                const result = await res.json();
+                const count = result.success && Array.isArray(result.data) ? result.data.length : 0;
+                setMarketingStats({
+                    count,
+                    status: count > 0 ? "Available" : "Not Available",
+                });
+            } catch (e) {
+                console.error("Failed to fetch marketing templates", e);
+                setMarketingStats({ count: 0, status: "Not Available" });
+            }
+        };
+        fetchMarketingTemplates();
     }, [data?._id]);
 
     useEffect(() => {
-        const targetDate = new Date("2026-08-21T00:00:00");
+        const targetDate = data?.eventId?.startDate ? new Date(data.eventId.startDate) : null;
 
         const updateTimer = () => {
+            if (!targetDate || Number.isNaN(targetDate.getTime())) {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
+            }
             const difference = targetDate.getTime() - new Date().getTime();
             if (difference > 0) {
                 setTimeLeft({
@@ -85,7 +131,11 @@ export default function StatCards() {
         updateTimer();
         const timer = setInterval(updateTimer, 1000);
         return () => clearInterval(timer);
-    }, []);
+    }, [data?.eventId?.startDate]);
+
+    const balance = Number(data?.balanceAmount || 0);
+    const paid = Number(data?.amountPaid || 0);
+    const paymentValue = balance <= 0 && paid > 0 ? "Paid" : paid > 0 ? "Partial" : data?.status || "Pending";
 
     const stats = [
         {
@@ -106,8 +156,10 @@ export default function StatCards() {
             cardBg: "bg-green-50/70",
             hoverBg: "hover:bg-green-100/80",
             label: "PAYMENT STATUS",
-            value: data?.status || "Pending",
-            sub: `Total Paid: ${data?.participation?.currency || 'INR'} ${data?.amountPaid?.toLocaleString() || '0'}`,
+            value: paymentValue,
+            sub: balance > 0
+                ? `Balance Due: ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}`
+                : `Total Paid: ${data?.participation?.currency || 'INR'} ${paid.toLocaleString('en-IN')}`,
             valueColor: "text-[#22a96a]",
         },
         {
@@ -128,8 +180,8 @@ export default function StatCards() {
             cardBg: "bg-blue-50/70",
             hoverBg: "hover:bg-blue-100/80",
             label: "E-PROMOTION",
-            value: "Active",
-            sub: "Your profile is live",
+            value: marketingStats.status,
+            sub: `${marketingStats.count} template${marketingStats.count === 1 ? '' : 's'} available`,
             valueColor: "text-[#3b82f6]",
         },
         {
@@ -146,78 +198,81 @@ export default function StatCards() {
     ];
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-nowrap gap-3 w-full pb-2">
-            {stats.map((stat, i) => {
-                const Icon = stat.icon;
-                return (
-                    <div
-                        key={stat.id}
-                        style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
-                        className={`flex items-center gap-2 ${stat.cardBg} rounded-md px-3 py-1 flex-1 transform translate-y-0 transition-all duration-300 ease-out hover:translate-y-[2.5px] ${stat.hoverBg} ${stat.id === "countdown" ? "min-w-[240px]" : "min-w-[170px]"
-                            }`}
-                    >
-                        <div className={`${stat.iconBg} rounded-xl p-2 shrink-0`}>
-                            <Icon size={15} className="text-white" strokeWidth={1.8} />
-                        </div>
-                        <div className="min-w-0 flex-1 flex flex-col justify-center">
-                            {stat.id === "countdown" ? (
-                                <>
-                                    <p className="text-[10px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none mb-1 whitespace-nowrap">
-                                        {stat.label}
-                                    </p>
-                                    <div className="flex items-center gap-1 mt-1">
-                                        {/* Days */}
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
-                                                {timeLeft.days}
-                                            </span>
-                                            <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Days</span>
-                                        </div>
-                                        <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
-                                        {/* Hours */}
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
-                                                {String(timeLeft.hours).padStart(2, '0')}
-                                            </span>
-                                            <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Hours</span>
-                                        </div>
-                                        <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
-                                        {/* Minutes */}
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
-                                                {String(timeLeft.minutes).padStart(2, '0')}
-                                            </span>
-                                            <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Mins</span>
-                                        </div>
-                                        <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
-                                        {/* Seconds */}
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
-                                                {String(timeLeft.seconds).padStart(2, '0')}
-                                            </span>
-                                            <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Secs</span>
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="flex items-baseline gap-1.5 mb-0.5">
-                                        <p className="text-[10px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none whitespace-nowrap">
+        <div className="w-full pb-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex xl:flex-nowrap gap-3 w-full">
+                {stats.map((stat, i) => {
+                    const Icon = stat.icon;
+                    return (
+                        <div
+                            key={stat.id}
+                            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+                            className={`flex items-center gap-2 ${stat.cardBg} rounded-md px-3 py-1 flex-1 transform translate-y-0 transition-all duration-300 ease-out hover:translate-y-[2.5px] ${stat.hoverBg} ${stat.id === "countdown" ? "min-w-[240px]" : "min-w-[170px]"
+                                }`}
+                        >
+                            <div className={`${stat.iconBg} rounded-xl p-2 shrink-0`}>
+                                <Icon size={15} className="text-white" strokeWidth={1.8} />
+                            </div>
+                            <div className="min-w-0 flex-1 flex flex-col justify-center">
+                                {stat.id === "countdown" ? (
+                                    <>
+                                        <p className="text-[10px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none mb-1 whitespace-nowrap">
                                             {stat.label}
                                         </p>
-                                        <span className={`text-[12px] font-bold leading-tight capitalize whitespace-nowrap ${stat.valueColor}`}>
-                                            {stat.value}
+                                        <div className="flex items-center gap-1 mt-1">
+                                            {/* Days */}
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                                    {timeLeft.days}
+                                                </span>
+                                                <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Days</span>
+                                            </div>
+                                            <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                            {/* Hours */}
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                                    {String(timeLeft.hours).padStart(2, '0')}
+                                                </span>
+                                                <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Hours</span>
+                                            </div>
+                                            <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                            {/* Minutes */}
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                                    {String(timeLeft.minutes).padStart(2, '0')}
+                                                </span>
+                                                <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Mins</span>
+                                            </div>
+                                            <span className="text-teal-400/80 font-bold text-[10px] -mt-2 animate-pulse">:</span>
+                                            {/* Seconds */}
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[13px] font-bold text-teal-600 bg-teal-50/80 border border-teal-100 rounded px-1.5 py-0.5 min-w-[22px] text-center tabular-nums leading-none">
+                                                    {String(timeLeft.seconds).padStart(2, '0')}
+                                                </span>
+                                                <span className="text-[7px] font-extrabold text-teal-800/60 uppercase tracking-wider mt-0.5">Secs</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="flex items-baseline gap-1.5 mb-0.5">
+                                            <p className="text-[10px] font-semibold text-[#1a3a7c] uppercase tracking-wider leading-none whitespace-nowrap">
+                                                {stat.label}
+                                            </p>
+                                            <span className={`text-[12px] font-bold leading-tight capitalize whitespace-nowrap ${stat.valueColor}`}>
+                                                {stat.value}
+                                            </span>
+                                        </div>
+                                        <span className="text-[9px] font-medium text-[#1a3a7c] leading-tight whitespace-nowrap">
+                                            {stat.sub}
                                         </span>
-                                    </div>
-                                    <span className="text-[9px] font-medium text-[#1a3a7c] leading-tight whitespace-nowrap">
-                                        {stat.sub}
-                                    </span>
-                                </>
-                            )}
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
+            <div className="mt-1 h-4 w-full bg-[#1a3a7c]" />
         </div>
     );
 }
