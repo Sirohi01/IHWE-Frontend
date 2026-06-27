@@ -42,7 +42,7 @@ const StallDesign = lazy(() => import("./pages/support/StallDesign"));
 const LogisticsSupport = lazy(() => import("./pages/support/LogisticsSupport"));
 const PrintingBranding = lazy(() => import("./pages/support/PrintingBranding"));
 const HospitalityDesk = lazy(() => import("./pages/support/HospitalityDesk"));
-const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
+const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayNew"));
 const TravelPartner = lazy(() => import("./pages/TravelPartner"));
 const HotelStayPartner = lazy(() => import("./pages/HotelStayPartner"));
 const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
@@ -149,6 +149,7 @@ const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation")
 import MyEvent from "./pages/exhibitor/MyEvent";
 import DocumentCenter from "./pages/exhibitor/DocumentCenter";
 import BuyerContacts from "./pages/exhibitor/BuyerContacts";
+import PaperPresentation from "./pages/PaperPresentation";
 
 
 const SitemapRedirect = () => {
@@ -217,6 +218,7 @@ const App = () => {
                     <Route path="/support/hospitality-desk" element={<HospitalityDesk />} />
                     <Route path="/conference" element={<Conference />} />
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
+                    <Route path="/conference/paper-presentation" element={<PaperPresentation/>}/>
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
                     <Route path="/delegate-registration-details" element={<DelegateRegistrationDetails />} />
                     <Route path="/group-registration" element={<GroupRegistration />} />
