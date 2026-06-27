@@ -217,9 +217,6 @@ const App = () => {
                     <Route path="/support/printing-branding" element={<PrintingBranding />} />
                     <Route path="/support/hospitality-desk" element={<HospitalityDesk />} />
                     <Route path="/conference" element={<Conference />} />
-                    <Route path="/conference/day-1" element={<Navigate to="/conference/1" replace />} />
-                    <Route path="/conference/day-2" element={<Navigate to="/conference/2" replace />} />
-                    <Route path="/conference/day-3" element={<Navigate to="/conference/3" replace />} />
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
                     <Route path="/conference/paper-presentation" element={<PaperPresentation/>}/>
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
@@ -285,7 +282,7 @@ const App = () => {
                       <Route path="reports/:type/:id" element={<PsmReports />} />
                       <Route path="reports-table" element={<PsmReportsTable />} />
                       <Route path="reports-table/:type" element={<PsmReportsTable />} />
-                    </Route>  
+                    </Route>
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                     <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                     <Route path="participants-feedback" element={<ParticipantsFeedback />} />

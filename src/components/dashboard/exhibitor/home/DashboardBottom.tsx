@@ -4,21 +4,6 @@ import { CheckCircle, Clock, MinusCircle, FileText, MapPin, ChevronLeft, Chevron
 
 type DocStatus = "Completed" | "Pending" | "Not Uploaded";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const PAYMENT = {
-  totalPaid: "₹ 60,000",
-  lastPaymentDate: "24 May 2026",
-  txn: "TXN4678981236",
-  paid: { label: "Amount Paid", amount: "₹ 60,000", percent: 60, color: "#127445" },
-  pending: { label: "Balance Due", amount: "₹ 25,000", percent: 25, color: "#fbbf24" },
-  overdue: { label: "Overdue", amount: "₹ 15,000", percent: 15, color: "#ef4444" },
-  total: "₹ 1,00,000",
-};
-
-// Documents will be fetched dynamically
-// const DOCUMENTS: { name: string; status: DocStatus }[] = [];
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon: any }> = {
@@ -27,10 +12,41 @@ const DOC_STATUS_CONFIG: Record<DocStatus, { label: string; color: string; icon:
   "Not Uploaded": { label: "Not Uploaded", color: "text-gray-400", icon: MinusCircle },
 };
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+const hasFile = (value: any) => value !== undefined && value !== null && String(value).trim() !== "";
+
+const registrationDocs = (data: any): { name: string; status: DocStatus }[] => [
+  { name: "Company Logo", status: hasFile(data?.companyLogoUrl) ? "Completed" : "Not Uploaded" },
+  { name: "PAN Card", status: hasFile(data?.panCardFrontUrl) ? "Completed" : "Not Uploaded" },
+  { name: "GST Certificate", status: hasFile(data?.gstCertificateUrl) ? "Completed" : "Not Uploaded" },
+  { name: "Cancelled Cheque", status: hasFile(data?.cancelledChequeUrl) ? "Completed" : "Not Uploaded" },
+  { name: "Representative Photo", status: hasFile(data?.representativePhotoUrl) ? "Completed" : "Not Uploaded" },
+  { name: "Registration PDF", status: hasFile(data?.registrationPdfUrl) ? "Completed" : "Not Uploaded" },
+];
+
+const normalizeEvent = (event: any, index = 0) => {
+  const rawDate = event?.startDate || event?.date || event?.eventDate;
+  const date = rawDate ? new Date(rawDate) : null;
+  const isValidDate = date && !Number.isNaN(date.getTime());
+  const colors = [
+    "bg-blue-50 text-blue-700",
+    "bg-emerald-50 text-emerald-700",
+    "bg-orange-50 text-orange-700",
+    "bg-purple-50 text-purple-700",
+  ];
+  return {
+    title: event?.title || event?.name || "Upcoming Event",
+    location: event?.location || "Location TBA",
+    dateString: isValidDate ? date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" }) : "TBA",
+    fullDate: isValidDate ? date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "Date TBA",
+    time: event?.time || "",
+    colorClass: event?.colorClass || colors[index % colors.length],
+  };
+};
 
 function useCountUp(end: number, duration: number = 2500, active: boolean = true) {
     const [count, setCount] = useState(0);
@@ -139,6 +155,7 @@ interface DashboardBottomProps {
 
 export default function DashboardBottom({ onViewPayment, onViewDocuments, onViewEvents }: DashboardBottomProps) {
   const { data } = useExhibitorCtx();
+  const navigate = useNavigate();
 
   const [upcomingEvents, setUpcomingEvents] = useState<any[]>([]);
   const [docsList, setDocsList] = useState<{ name: string; status: DocStatus }[]>([]);
@@ -152,8 +169,10 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
       try {
         const eventsRes = await fetch(`${API_URL}/upcoming-events`);
         const result = await eventsRes.json();
-        if (result.success) {
-          setUpcomingEvents(result.data);
+        if (result.success && Array.isArray(result.data)) {
+          setUpcomingEvents(result.data.map(normalizeEvent));
+        } else if (data?.eventId) {
+          setUpcomingEvents([normalizeEvent(data.eventId)]);
         }
 
         const clientId = data?._id;
@@ -183,10 +202,16 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
               };
             });
             setDocsList(formatted);
+          } else {
+            setDocsList(registrationDocs(data));
           }
+        } else {
+          setDocsList(registrationDocs(data));
         }
       } catch (err) {
         console.error("Failed to fetch dashboard data:", err);
+        setUpcomingEvents(data?.eventId ? [normalizeEvent(data.eventId)] : []);
+        setDocsList(registrationDocs(data));
       } finally {
         setIsLoadingEvents(false);
       }
@@ -238,7 +263,7 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
         >
           <div className="flex items-center justify-between mb-4">
             <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Payment Overview</span>
-            <button onClick={onViewPayment} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View Details</button>
+            <button onClick={onViewPayment || (() => navigate('/exhibitor-dashboard/payments'))} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View Details</button>
           </div>
 
           {/* Top card - single unified */}
@@ -339,6 +364,11 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
                 </div>
               );
             })}
+            {!docsList.length && (
+              <div className="px-4 py-4 text-[10px] text-slate-400 font-semibold text-center">
+                No document requirements found.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -382,7 +412,7 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
               </div>
             ) : paginatedEvents.length > 0 ? (
               paginatedEvents.map((ev, i) => {
-                const parts = ev.dateString.split(' ');
+                const parts = String(ev.dateString || '').split(' ');
                 const day = parts[0] || '';
                 const month = parts[1] || '';
                 return (

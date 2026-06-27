@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,6 +7,7 @@ import {
     X, Building2, User, Briefcase, Mail, Phone as PhoneIcon, UserCircle
 } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { API_URL } from "@/lib/api";
 import passesImg from "@/assets/passes1.png";
 import thaliImg from "@/assets/thali.png";
 import bottleImg from "@/assets/bottle.png";
@@ -19,14 +20,46 @@ export default function ExhibitorPassesPage() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPass, setSelectedPass] = useState<any>(null);
+    const [passConfigs, setPassConfigs] = useState<any[]>([]);
+    const [passRequests, setPassRequests] = useState<any[]>([]);
 
     const handleOpenModal = (pass: any) => {
         setSelectedPass(pass);
         setIsModalOpen(true);
     };
 
-    // Rates and allocations matching the specifications
-    const passes = [
+    useEffect(() => {
+        const fetchPassData = async () => {
+            try {
+                const token = localStorage.getItem("exhibitorToken");
+                const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+                const [configRes, requestRes] = await Promise.all([
+                    fetch(`${API_URL}/exhibitor-pass-config/active`),
+                    data?._id
+                        ? fetch(`${API_URL}/exhibitor-pass-requests/exhibitor/${data._id}`, { headers })
+                        : Promise.resolve(null),
+                ]);
+
+                const configResult = await configRes.json();
+                if (configResult.success && Array.isArray(configResult.data)) {
+                    setPassConfigs(configResult.data);
+                }
+
+                if (requestRes) {
+                    const requestResult = await requestRes.json();
+                    if (requestResult.success && Array.isArray(requestResult.data)) {
+                        setPassRequests(requestResult.data);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load pass configuration", error);
+            }
+        };
+
+        fetchPassData();
+    }, [data?._id]);
+
+    const defaultPasses = [
         {
             id: "exhibitor",
             title: "Exhibitor Pass",
@@ -108,6 +141,27 @@ export default function ExhibitorPassesPage() {
             }
         }
     ];
+
+    const approvedQtyByType = passRequests.reduce<Record<string, number>>((acc, request) => {
+        if (request.status !== "approved") return acc;
+        acc[request.passType] = (acc[request.passType] || 0) + Number(request.quantity || 0);
+        return acc;
+    }, {});
+
+    const passes = defaultPasses.map((pass) => {
+        const config = passConfigs.find((item) => item.passType === pass.id);
+        const complimentary = Number(config?.complimentaryQuota ?? pass.complimentary);
+        const used = approvedQtyByType[pass.id] || 0;
+        return {
+            ...pass,
+            title: config?.title || pass.title,
+            subtitle: config?.subtitle || pass.subtitle,
+            complimentary,
+            used,
+            remaining: Math.max(complimentary - used, 0),
+            price: Number(config?.price ?? pass.price),
+        };
+    });
 
     const notes = [
         "Use complimentary quota first.",
