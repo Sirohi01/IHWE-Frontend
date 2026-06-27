@@ -33,7 +33,7 @@ const ResearchBanner: React.FC = () => {
               flex shrink-0 items-center gap-3
               rounded-full
               bg-[#39a936]
-              px-7 py-3.5
+              px-7 py-2
               text-xs font-semibold text-white
               transition-all
               hover:bg-[#2f912e]

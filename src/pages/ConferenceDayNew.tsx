@@ -151,12 +151,12 @@ const ConferenceDayUnified: React.FC = () => {
       <div className="relative">
         {/* 1. Hero Section */}
         {/* <Day3Hero data={data.hero} defaultImage={getDefaultHeroImage()} /> */}
-        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()}/>
+        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()} daynumber={dayNumber}/>
         {/* 2. Stats Section */}
         {/* <ConferenceStats /> */}
 
         {/* 3. About Section */}
-          <AboutDayOne data={data.about} />
+          <AboutDayOne data={data.about}  daynumber={dayNumber}/>
 
         {/* 4. Agenda & Featured Speakers */}
      
@@ -173,9 +173,9 @@ const ConferenceDayUnified: React.FC = () => {
                 />
               </div> */}
        
-<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers} />
-<PartnersAndActionsSection />
-<HealthcareHighlights />
+<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers}  daynumber={dayNumber}/>
+<PartnersAndActionsSection daynumber={dayNumber} />
+<HealthcareHighlights daynumber={dayNumber} />
         {/* 5. Details Section (Fixed content for now as per design) */}
      {/* Bottom Cards */}
        {/* Bottom Cards */}

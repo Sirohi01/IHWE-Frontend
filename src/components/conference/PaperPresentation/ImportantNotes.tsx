@@ -2,10 +2,10 @@
 
 import React from "react";
 import bg from "../../../assets/day/important-notes.jpg"
-
+import mike from "../../../assets/day/mik.webp"
 const ImportantNotes: React.FC = () => {
   return (
-    <section className="w-full py-4">
+    <section className="w-full py-2">
       <div className="mx-auto w-full max-w-[1320px] px-4 lg:px-0">
         <div
           className="relative min-h-[120px] w-full overflow-hidden rounded-2xl bg-cover bg-center bg-no-repeat"
@@ -15,6 +15,7 @@ const ImportantNotes: React.FC = () => {
         >
           {/* Content */}
           <div className="relative z-10 flex min-h-[120px] items-center">
+            <img src={mike} width={100} height={100} />
             <div className="max-w-[650px] p-5">
 
               <h3 className="mb-3 text-[18px] font-semibold tracking-wide text-[#111827]">

@@ -81,7 +81,7 @@ const topics = [
 
 export default function SubmissionGuidelinesSection() {
   return (
-    <section className="bg-white py-4">
+    <section className="bg-white py-2">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-6 lg:px-0">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Submission Guidelines */}
@@ -94,7 +94,7 @@ export default function SubmissionGuidelinesSection() {
               <div className="mt-3 h-1 w-12 rounded-full bg-[#2F8B2E]" />
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-2">
               {guidelines.map((item, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <CheckCircle2
@@ -109,7 +109,7 @@ export default function SubmissionGuidelinesSection() {
               ))}
             </div>
 
-            <button className="mt-10 flex h-12 items-center gap-2 rounded-full border border-[#2F8B2E] px-7 text-sm font-semibold uppercase text-[#2F8B2E] transition hover:bg-[#2F8B2E] hover:text-white">
+            <button className="mt-4 flex h-10 items-center gap-2 rounded-full border border-[#2F8B2E] px-7 text-sm font-semibold uppercase text-[#2F8B2E] transition hover:bg-[#2F8B2E] hover:text-white">
               Download Detailed Guidelines
               <Download size={16} />
             </button>
@@ -125,7 +125,7 @@ export default function SubmissionGuidelinesSection() {
               <div className="mt-3 h-1 w-12 rounded-full bg-[#2F8B2E]" />
             </div>
 
-            <div className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            <div className="grid gap-x-10 gap-y-2 sm:grid-cols-2">
               {topics.map((topic, index) => {
                 const Icon = topic.icon;
 
@@ -135,7 +135,7 @@ export default function SubmissionGuidelinesSection() {
                       <Icon size={18} className="text-[#2F8B2E]" />
                     </div>
 
-                    <p className="text-[14px] font-medium leading-6 text-gray-700">
+                    <p className="text-xs font-medium leading-6">
                       {topic.title}
                     </p>
                   </div>

@@ -61,7 +61,7 @@ export default function PaperPresentationHero() {
         <div className="relative z-10 mx-auto flex h-full max-w-[1320px] items-center px-5 sm:px-6 lg:px-0">
           <div className="max-w-[540px]">
             {/* Breadcrumb */}
-            <div className="mb-5 flex items-center gap-2 text-sm text-gray-500">
+            <div className="mb-5 flex items-center gap-2 text-sm">
               <span>Home</span>
               <span>›</span>
               <span>Paper Presentation</span>
@@ -81,12 +81,12 @@ export default function PaperPresentationHero() {
 
             {/* Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
-              <button className="flex h-14 items-center gap-2 rounded-full bg-[#2F8B2E] px-8 text-sm font-semibold text-white transition-all hover:bg-[#267225]">
+              <button className="flex h-10 items-center gap-2 rounded-full bg-[#2F8B2E] px-8 text-sm font-semibold text-white transition-all hover:bg-[#267225]">
                 SUBMIT YOUR PAPER
                 <ChevronRight size={18} />
               </button>
 
-              <button className="flex h-14 items-center gap-2 rounded-full border border-[#2F8B2E] bg-white px-8 text-sm font-semibold text-[#111827] transition-all hover:bg-gray-50">
+              <button className="flex h-10 items-center gap-2 rounded-full border border-[#2F8B2E] bg-white px-8 text-sm font-semibold text-[#111827] transition-all hover:bg-gray-50">
                 DOWNLOAD GUIDELINES
                 <Download size={18} className="text-[#2F8B2E]" />
               </button>
@@ -96,26 +96,26 @@ export default function PaperPresentationHero() {
       </div>
 
       {/* Cards */}
-      <div className="relative z-20 mx-auto -mt-14 max-w-[1320px] px-5 sm:px-6 lg:px-0">
-        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
-          <div className="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x lg:grid-cols-5 lg:divide-y-0">
+      <div className="relative z-20 mx-auto -mt-24 max-w-[1320px] px-5 sm:px-6 lg:px-0">
+        <div className="overflow-hidden rounded-[28px] border border-gray-200 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.06)] py-4">
+          <div className="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x lg:grid-cols-5 lg:divide-y-0 py-2">
             {benefits.map((item, index) => {
               const Icon = item.icon;
 
               return (
                 <div
                   key={index}
-                  className="flex flex-col items-center px-7 py-10 text-center"
+                  className="flex flex-col items-center px-7 py-2 text-center"
                 >
-                  <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#EDF8EE]">
+                  <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-[#EDF8EE]">
                     <Icon className="text-[#2F8B2E]" size={28} />
                   </div>
 
-                  <h3 className="text-[18px] font-semibold text-[#0A1C63]">
+                  <h3 className="text-sm font-semibold text-[#0A1C63]">
                     {item.title}
                   </h3>
 
-                  <p className="mt-4 text-sm leading-7 text-gray-500">
+                  <p className="mt-2 text-xs leading-5 ">
                     {item.description}
                   </p>
                 </div>
