@@ -26,13 +26,13 @@ export default function ExTab({ activeTab, setActiveTab, onPreview }: ExTabProps
             Home &nbsp;<span className="text-gray-300">›</span>&nbsp; Overview
           </p>
         </div>
-        <button
+        {/* <button
           onClick={onPreview}
           className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#1a3a7c]/30 text-[#1a3a7c] hover:bg-blue-50 transition-colors"
         >
           <Eye size={16} strokeWidth={2} />
           <span className="text-[13px] font-bold">Preview Public Profile</span>
-        </button>
+        </button> */}
       </div>
 
       {/* Tabs */}

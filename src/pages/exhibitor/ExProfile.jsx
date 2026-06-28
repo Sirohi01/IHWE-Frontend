@@ -45,7 +45,6 @@ import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 const DEFAULT_PLACEHOLDER = "https://placehold.co/400x400?text=No+Logo";
-const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80";
 
 const fixUrl = (url) => {
     if (!url || url === 'undefined' || url === 'null' || url === '') return DEFAULT_PLACEHOLDER;
@@ -54,8 +53,18 @@ const fixUrl = (url) => {
     return url.includes('res.cloudinary.com') ? url : `${SERVER_URL}${cleanPath}`;
 };
 
-// Fallback dynamic lists matching the mockup screenshot
-const MOCK_CATEGORIES = [
+const Avatar = ({ url, alt, className }) => (
+    url ? (
+        <img src={fixUrl(url)} alt={alt} className={`${className} object-cover`} />
+    ) : (
+        <div className={`${className} bg-slate-100 flex items-center justify-center text-slate-300`}>
+            <User className="w-1/2 h-1/2" />
+        </div>
+    )
+);
+
+// Fixed selectable taxonomy for an exhibitor's product categories (not exhibitor-specific data).
+const PRODUCT_CATEGORIES = [
     { id: 'Medical Devices', name: 'Medical Devices', color: 'text-blue-600 bg-blue-50 border-blue-100', icon: Activity },
     { id: 'Diagnostic Equipment', name: 'Diagnostic Equipment', color: 'text-green-600 bg-green-50 border-green-100', icon: Stethoscope },
     { id: 'Hospital Furniture', name: 'Hospital Furniture', color: 'text-teal-600 bg-teal-50 border-teal-100', icon: Bed },
@@ -63,19 +72,20 @@ const MOCK_CATEGORIES = [
     { id: 'Health & Wellness Products', name: 'Health & Wellness Products', color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: Heart }
 ];
 
-const MOCK_CERTIFICATES = [
-    { name: 'ISO 13485:2016 Certified', code: 'ISO' },
-    { name: 'CE Certified', code: 'CE' },
-    { name: 'ISO 9001:2015 Certified', code: 'ISO' },
-    { name: 'GMP Certified', code: 'GMP' }
-];
+// Backend only stores {name, fileUrl, issuedDate, expiryDate} for certificates - derive the
+// display badge code from the name instead of relying on a "code" field that isn't persisted.
+const certBadgeCode = (name = '') => {
+    const upper = name.toUpperCase();
+    if (upper.includes('CE')) return 'CE';
+    if (upper.includes('GMP')) return 'GMP';
+    return 'ISO';
+};
 
-const MOCK_TEAM = [
-    { name: 'Neha Patel', designation: 'Marketing Head', email: 'neha.patel@abchealthcare.com', mobile: '+91 91234 56789', isPrimary: true, photoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80' },
-    { name: 'Vikram Mehta', designation: 'Sales Manager', email: 'vikram.mehta@abchealthcare.com', mobile: '+91 99876 54321', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80' },
-    { name: 'Pooja Nair', designation: 'Product Specialist', email: 'pooja.nair@abchealthcare.com', mobile: '+91 88776 65544', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80' },
-    { name: 'Arjun Verma', designation: 'Technical Support', email: 'arjun.verma@abchealthcare.com', mobile: '+91 77665 44332', isPrimary: false, photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80' }
-];
+const VERIFICATION_BADGES = {
+    verified: { label: 'Verified Exhibitor', icon: ShieldCheck, classes: 'bg-emerald-50 text-emerald-700 border-emerald-100', dotClasses: 'text-emerald-500' },
+    pending: { label: 'Verification Pending', icon: AlertCircle, classes: 'bg-amber-50 text-amber-700 border-amber-100', dotClasses: 'text-amber-500' },
+    rejected: { label: 'Verification Rejected', icon: AlertCircle, classes: 'bg-rose-50 text-rose-700 border-rose-100', dotClasses: 'text-rose-500' },
+};
 
 export default function ExProfile() {
     const { data, setData, fetchDashboard } = useExhibitorCtx();
@@ -133,22 +143,21 @@ export default function ExProfile() {
                 state: data.state || '',
                 country: data.country || 'India',
                 pincode: data.pincode || '',
-                companyDescription: data.companyDescription || 'ABC Healthcare Pvt. Ltd. is a leading manufacturer and supplier of advanced medical equipment and healthcare solutions. With over 15 years of excellence, we serve hospitals, clinics and healthcare professionals across India and abroad.',
+                companyDescription: data.companyDescription || '',
             });
 
             setContactForm({
                 title: data.contact1?.title || 'Mr.',
-                firstName: data.contact1?.firstName || 'Rahul',
-                lastName: data.contact1?.lastName || 'Sharma',
-                email: data.contact1?.email || 'rahul.sharma@abchealthcare.com',
-                designation: data.contact1?.designation || 'Manager - Business Development',
-                mobile: data.contact1?.mobile || '+91 98765 43210',
+                firstName: data.contact1?.firstName || '',
+                lastName: data.contact1?.lastName || '',
+                email: data.contact1?.email || '',
+                designation: data.contact1?.designation || '',
+                mobile: data.contact1?.mobile || '',
             });
 
-            // Set categories, certificates, and team members dynamically (with mock fallbacks)
-            setCategorySelection(data.productCategories?.length > 0 ? data.productCategories : MOCK_CATEGORIES.map(c => c.id));
-            setCertificateList(data.certificates?.length > 0 ? data.certificates : MOCK_CERTIFICATES);
-            setTeamList(data.teamMembers?.length > 0 ? data.teamMembers : MOCK_TEAM);
+            setCategorySelection(data.productCategories || []);
+            setCertificateList(data.certificates || []);
+            setTeamList(data.teamMembers || []);
         }
     }, [data]);
 
@@ -230,6 +239,8 @@ export default function ExProfile() {
         }
     };
 
+    const verificationBadge = VERIFICATION_BADGES[data?.verificationStatus] || null;
+
     // Calculate completeness metric dynamically
     const calculateCompleteness = () => {
         let completed = 0;
@@ -265,10 +276,7 @@ export default function ExProfile() {
     // Add key certificates
     const addCertificate = () => {
         if (!newCertName.trim()) return;
-        const newCert = {
-            name: newCertName.trim(),
-            code: newCertName.toUpperCase().includes('ISO') ? 'ISO' : newCertName.toUpperCase().includes('CE') ? 'CE' : 'GMP'
-        };
+        const newCert = { name: newCertName.trim() };
         const updatedList = [...certificateList, newCert];
         setCertificateList(updatedList);
         setNewCertName('');
@@ -290,7 +298,7 @@ export default function ExProfile() {
             email: '',
             mobile: '',
             isPrimary: false,
-            photoUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+            photoUrl: '',
         });
         setActiveModal('team');
     };
@@ -365,10 +373,12 @@ export default function ExProfile() {
                             <Plus size={34} strokeWidth={4} />
                             <ShieldCheck size={46} strokeWidth={1.4} />
                         </div>
-                        <span className="absolute left-[260px] top-[58px] hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold bg-white/95 text-blue-700 shadow-sm">
-                            <ShieldCheck size={15} className="text-emerald-500" />
-                            Verified Exhibitor
-                        </span>
+                        {verificationBadge && (
+                            <span className="absolute left-[260px] top-[58px] hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold bg-white/95 text-blue-700 shadow-sm">
+                                <verificationBadge.icon size={15} className={verificationBadge.dotClasses} />
+                                {verificationBadge.label}
+                            </span>
+                        )}
                     </div>
 
                     {/* Logo & Core Info Area */}
@@ -403,10 +413,12 @@ export default function ExProfile() {
                                 <h1 className="text-[26px] md:text-[30px] leading-tight font-extrabold text-[#12245a]">
                                     {profileForm.brandName}
                                 </h1>
-                                <span className="md:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                    <ShieldCheck size={14} className="text-emerald-600" />
-                                    Verified Exhibitor
-                                </span>
+                                {verificationBadge && (
+                                    <span className={`md:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold border ${verificationBadge.classes}`}>
+                                        <verificationBadge.icon size={14} className={verificationBadge.dotClasses} />
+                                        {verificationBadge.label}
+                                    </span>
+                                )}
 
                                 <button
                                     onClick={() => {
@@ -428,25 +440,31 @@ export default function ExProfile() {
                                 </button>
                             </div>
 
-                            <p className="text-[#2a3658] font-semibold text-[15px]">
-                                Healthcare Equipment & Medical Devices
-                            </p>
+                            {data?.natureOfBusiness && (
+                                <p className="text-[#2a3658] font-semibold text-[15px]">
+                                    {data.natureOfBusiness}
+                                </p>
+                            )}
 
                             <div className="flex flex-wrap gap-x-7 gap-y-2 text-[#27365f] text-sm font-semibold">
                                 <span className="flex items-center gap-2">
                                     <MapPin size={17} className="text-[#24345f]" />
-                                    {profileForm.city ? `${profileForm.city}, ${profileForm.state}, ${profileForm.country}` : 'Mumbai, Maharashtra, India'}
+                                    {profileForm.city ? `${profileForm.city}, ${profileForm.state}, ${profileForm.country}` : 'Address not added'}
                                 </span>
                                 <span className="flex items-center gap-2">
                                     <ExternalLink size={17} className="text-[#24345f]" />
-                                    <a
-                                        href={profileForm.website ? (profileForm.website.startsWith('http') ? profileForm.website : `https://${profileForm.website}`) : '#'}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-[#236ee8] hover:underline"
-                                    >
-                                        {profileForm.website || 'www.abchealthcare.com'}
-                                    </a>
+                                    {profileForm.website ? (
+                                        <a
+                                            href={profileForm.website.startsWith('http') ? profileForm.website : `https://${profileForm.website}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[#236ee8] hover:underline"
+                                        >
+                                            {profileForm.website}
+                                        </a>
+                                    ) : (
+                                        <span className="text-slate-400">Website not added</span>
+                                    )}
                                 </span>
                                 <span className="flex items-center gap-2">
                                     <Globe size={17} className="text-[#24345f]" />
@@ -454,8 +472,8 @@ export default function ExProfile() {
                                 </span>
                             </div>
 
-                            <p className="text-[#1f2d52] text-[15px] leading-7 max-w-[720px] pt-1 font-medium">
-                                {profileForm.companyDescription}
+                            <p className={`text-[15px] leading-7 max-w-[720px] pt-1 font-medium ${profileForm.companyDescription ? 'text-[#1f2d52]' : 'text-slate-400 italic'}`}>
+                                {profileForm.companyDescription || "No company description added yet. Click 'Edit Profile' to add one."}
                             </p>
 
                             <div className="flex flex-wrap items-center gap-3 pt-3 print:hidden">
@@ -499,7 +517,7 @@ export default function ExProfile() {
                             </div>
 
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
-                                {MOCK_CATEGORIES.map((cat) => {
+                                {PRODUCT_CATEGORIES.map((cat) => {
                                     const isSelected = categorySelection.includes(cat.id);
                                     if (!isSelected) return null;
                                     const Icon = cat.icon;
@@ -540,21 +558,24 @@ export default function ExProfile() {
                             </div>
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-                                {certificateList.map((cert, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex flex-col items-center text-center justify-start gap-3"
-                                    >
-                                        <div className="w-[82px] h-[76px] bg-white border border-[#e5eaf2] rounded-lg flex items-center justify-center shadow-sm">
-                                            <span className={`${cert.code === 'CE' ? 'text-4xl font-normal text-black' : cert.code === 'GMP' ? 'text-sm font-black text-white bg-[#22ad7a] rounded-full w-11 h-11 flex items-center justify-center' : 'text-lg font-black text-blue-800'} leading-none`}>
-                                                {cert.code || 'ISO'}
-                                            </span>
+                                {certificateList.map((cert, index) => {
+                                    const code = certBadgeCode(cert.name);
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="flex flex-col items-center text-center justify-start gap-3"
+                                        >
+                                            <div className="w-[82px] h-[76px] bg-white border border-[#e5eaf2] rounded-lg flex items-center justify-center shadow-sm">
+                                                <span className={`${code === 'CE' ? 'text-4xl font-normal text-black' : code === 'GMP' ? 'text-sm font-black text-white bg-[#22ad7a] rounded-full w-11 h-11 flex items-center justify-center' : 'text-lg font-black text-blue-800'} leading-none`}>
+                                                    {code}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs font-extrabold text-[#1d2a4c] leading-[1.35]">
+                                                {cert.name}
+                                            </p>
                                         </div>
-                                        <p className="text-xs font-extrabold text-[#1d2a4c] leading-[1.35]">
-                                            {cert.name}
-                                        </p>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                                 {certificateList.length === 0 && (
                                     <div className="col-span-full py-6 text-center text-slate-400 text-xs font-medium">
                                         No certificates added yet. Click 'Manage' to upload.
@@ -713,11 +734,11 @@ export default function ExProfile() {
                             </div>
 
                             <div className="flex items-center gap-5">
-                                <div className="w-[72px] h-[72px] rounded-full bg-slate-100 overflow-hidden shrink-0 border border-slate-100">
-                                    <img
-                                        src={data?.representativePhotoUrl ? fixUrl(data.representativePhotoUrl) : DEFAULT_AVATAR}
+                                <div className="w-[72px] h-[72px] rounded-full overflow-hidden shrink-0 border border-slate-100">
+                                    <Avatar
+                                        url={data?.representativePhotoUrl}
                                         alt="Contact"
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full"
                                     />
                                 </div>
                                 <div className="space-y-2 text-[#26365f] text-sm font-semibold min-w-0">
@@ -787,11 +808,7 @@ export default function ExProfile() {
                                 </div>
 
                                 <div className="w-[60px] h-[60px] rounded-full overflow-hidden shrink-0 border border-slate-100">
-                                    <img
-                                        src={member.photoUrl || DEFAULT_AVATAR}
-                                        alt={member.name}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <Avatar url={member.photoUrl} alt={member.name} className="w-full h-full" />
                                 </div>
 
                                 <div className="space-y-2 min-w-0 text-sm text-[#26365f] font-semibold">
@@ -818,6 +835,11 @@ export default function ExProfile() {
                                 </div>
                             </div>
                         ))}
+                        {teamList.length === 0 && (
+                            <div className="col-span-full py-6 text-center text-slate-400 text-xs font-medium">
+                                No team members added yet. Click 'Add Team Member' to invite one.
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex justify-center pt-3 print:hidden">
@@ -832,7 +854,7 @@ export default function ExProfile() {
 
                 {/* Footer Section */}
                 <div className="hidden text-center text-[10px] font-bold uppercase text-slate-300 tracking-widest pt-4 border-t border-slate-100 xl:col-span-3">
-                    9th India Handicrafts & Gifts Fair (IHWE) • Exhibitor Admin Portal
+                    9th India Health & Wellness Expo (IHWE) • Exhibitor Admin Portal
                 </div>
             </div>
 
@@ -927,7 +949,7 @@ export default function ExProfile() {
                                             Select product categories to show on your public profile:
                                         </p>
                                         <div className="space-y-2">
-                                            {MOCK_CATEGORIES.map(cat => {
+                                            {PRODUCT_CATEGORIES.map(cat => {
                                                 const isSelected = categorySelection.includes(cat.id);
                                                 return (
                                                     <label
@@ -981,7 +1003,7 @@ export default function ExProfile() {
                                                     <div key={index} className="flex items-center justify-between p-3 bg-white">
                                                         <div className="flex items-center gap-3">
                                                             <div className="w-8 h-8 rounded-full bg-slate-50 border flex items-center justify-center text-[10px] font-bold text-indigo-700">
-                                                                {cert.code || 'ISO'}
+                                                                {certBadgeCode(cert.name)}
                                                             </div>
                                                             <span className="text-xs font-bold text-slate-700">{cert.name}</span>
                                                         </div>
