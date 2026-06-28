@@ -63,6 +63,7 @@ const CancellationPolicy = lazy(() => import("./pages/CancellationPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
+const AddTeamMembers = lazy(() => import("./pages/exhibitor/AddTeamMembers"));
 const ExhibitorProfilePage = lazy(() => import("./pages/exhibitor/ExhibitorProfilePage"));
 const ExhibitorInvoicesPage = lazy(() => import("./pages/exhibitor/ExhibitorInvoicesPage"));
 const ExhibitorBSMPage = lazy(() => import("./pages/exhibitor/ExhibitorBSMPage"));
@@ -262,6 +263,7 @@ const App = () => {
                   <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />}>
                     <Route index element={<ExhibitorDashboardHome />} />
                     <Route path="profile" element={<ExhibitorProfilePage />} />
+                    <Route path="add-team-members" element={<AddTeamMembers />} />
                     <Route path="invoices" element={<ExhibitorInvoicesPage />} />
                     <Route path="payments" element={<ExhibitorPaymentPage />} />
                     <Route path="exhibitor-pass" element={<ExhibitorPassesPage />} />

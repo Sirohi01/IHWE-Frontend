@@ -40,7 +40,7 @@ import {
     Eye
 
 } from 'lucide-react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
@@ -88,6 +88,7 @@ const VERIFICATION_BADGES = {
 };
 
 export default function ExProfile() {
+    const navigate = useNavigate();
     const { data, setData, fetchDashboard } = useExhibitorCtx();
 
     // Modals Control State
@@ -326,16 +327,7 @@ export default function ExProfile() {
 
     // Team Member actions
     const openAddTeamMember = () => {
-        setSelectedTeamMember(null);
-        setTeamMemberForm({
-            name: '',
-            designation: '',
-            email: '',
-            mobile: '',
-            isPrimary: false,
-            photoUrl: '',
-        });
-        setActiveModal('team');
+        navigate('/exhibitor-dashboard/add-team-members');
     };
 
     const openEditTeamMember = (index, member) => {

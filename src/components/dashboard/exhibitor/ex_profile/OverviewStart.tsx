@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Pencil, Edit2, Trash2, MapPin, Link2, Globe, Eye, Upload, Package, UserPlus, Shield,
-    FileText, Phone, Mail, Monitor, FlaskConical, BedDouble, Syringe, Heart, Camera, X, Check,
-    AlertCircle, ShieldCheck, User,
+    FileText, Phone, Users, Mail, Monitor, FlaskConical, BedDouble, Syringe, Heart, Camera, X, Check,
+    AlertCircle, ShieldCheck, User, IdCard, Badge, Utensils, Car
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { API_URL, SERVER_URL } from "@/lib/api";
 import { toast } from "sonner";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
@@ -84,6 +85,7 @@ const QUICK_ACTIONS = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function OverviewStart() {
+    const navigate = useNavigate();
     const { data, setData, fetchDashboard } = useExhibitorCtx();
 
     const [activeModal, setActiveModal] = useState<string | null>(null);
@@ -97,7 +99,7 @@ export default function OverviewStart() {
         title: "Mr.", firstName: "", lastName: "", email: "", designation: "", mobile: "", photoUrl: "",
     });
     const [teamMemberForm, setTeamMemberForm] = useState({
-        name: "", designation: "", email: "", mobile: "", isPrimary: false, photoUrl: "",
+        name: "", designation: "", department: "", roleAtExhibition: "", email: "", mobile: "", isPrimary: false, photoUrl: "", passes: { exhibitor: false, vehicle: false, service: false, visitor: false },
     });
 
     const [categorySelection, setCategorySelection] = useState<string[]>([]);
@@ -257,9 +259,7 @@ export default function OverviewStart() {
     };
 
     const openAddTeamMember = () => {
-        setSelectedTeamMember(null);
-        setTeamMemberForm({ name: "", designation: "", email: "", mobile: "", isPrimary: false, photoUrl: "" });
-        setActiveModal("team");
+        navigate('/exhibitor-dashboard/add-team-members');
     };
     const openEditTeamMember = (index: number, member: any) => {
         setSelectedTeamMember(index);
@@ -811,6 +811,16 @@ export default function OverviewStart() {
                                                 value={teamMemberForm.designation} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, designation: e.target.value })} />
                                         </div>
                                         <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Department</label>
+                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.department} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, department: e.target.value })} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Role at Exhibition</label>
+                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={teamMemberForm.roleAtExhibition} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, roleAtExhibition: e.target.value })} />
+                                        </div>
+                                        <div className="space-y-1">
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Email</label>
                                             <input type="email" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
                                                 value={teamMemberForm.email} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, email: e.target.value })} />
@@ -819,6 +829,27 @@ export default function OverviewStart() {
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Number</label>
                                             <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
                                                 value={teamMemberForm.mobile} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, mobile: e.target.value })} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Passes Required</label>
+                                            <div className="flex gap-4 p-3 border border-slate-200 rounded-xl flex-wrap">
+                                                <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                                    <input type="checkbox" checked={teamMemberForm.passes?.exhibitor} onChange={() => setTeamMemberForm({ ...teamMemberForm, passes: { ...teamMemberForm.passes, exhibitor: !teamMemberForm.passes?.exhibitor } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                                    <IdCard size={16} /> Exhibitor
+                                                </label>
+                                                <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                                    <input type="checkbox" checked={teamMemberForm.passes?.vehicle} onChange={() => setTeamMemberForm({ ...teamMemberForm, passes: { ...teamMemberForm.passes, vehicle: !teamMemberForm.passes?.vehicle } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                                    <Car size={16} /> Vehicle
+                                                </label>
+                                                <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                                    <input type="checkbox" checked={teamMemberForm.passes?.service} onChange={() => setTeamMemberForm({ ...teamMemberForm, passes: { ...teamMemberForm.passes, service: !teamMemberForm.passes?.service } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                                    <Badge size={16} /> Service
+                                                </label>
+                                                <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                                    <input type="checkbox" checked={teamMemberForm.passes?.visitor} onChange={() => setTeamMemberForm({ ...teamMemberForm, passes: { ...teamMemberForm.passes, visitor: !teamMemberForm.passes?.visitor } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                                    <Users size={16} /> Visitor
+                                                </label>
+                                            </div>
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo (Optional)</label>

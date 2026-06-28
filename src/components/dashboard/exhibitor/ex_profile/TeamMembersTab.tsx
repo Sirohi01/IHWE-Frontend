@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { UserPlus, Edit2, Trash2, Phone, X, Check, User } from "lucide-react";
+import { Users, UserPlus, Edit2, Trash2, Phone, X, Check, User, IdCard, Badge, Utensils, Car, FileText } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL, SERVER_URL } from "@/lib/api";
 import { toast } from "sonner";
@@ -22,9 +23,14 @@ const Avatar = ({ url, alt, className }: { url?: string; alt: string; className:
     );
 };
 
-const EMPTY_FORM = { name: "", designation: "", email: "", mobile: "", isPrimary: false, photoUrl: "" };
+const EMPTY_FORM = {
+    name: "", designation: "", department: "", roleAtExhibition: "",
+    email: "", mobile: "", isPrimary: false, photoUrl: "",
+    passes: { exhibitor: false, vehicle: false, service: false, visitor: false }
+};
 
-export default function TeamMembersTab() {
+export default function TeamMembersTab({ onSuccess }: { onSuccess?: () => void }) {
+    const navigate = useNavigate();
     const { data, setData, fetchDashboard } = useExhibitorCtx();
     const [teamList, setTeamList] = useState<any[]>([]);
     const [showModal, setShowModal] = useState(false);
@@ -32,6 +38,8 @@ export default function TeamMembersTab() {
     const [form, setForm] = useState(EMPTY_FORM);
     const [saving, setSaving] = useState(false);
     const photoInputRef = useRef<HTMLInputElement>(null);
+
+    const openAdd = () => navigate('/exhibitor-dashboard/add-team-members');
 
     // Uploads to Cloudinary and runs the same AI moderation check as other document uploads
     // before accepting the URL.
@@ -97,7 +105,6 @@ export default function TeamMembersTab() {
         }
     };
 
-    const openAdd = () => { setSelectedIndex(null); setForm(EMPTY_FORM); setShowModal(true); };
     const openEdit = (index: number, member: any) => { setSelectedIndex(index); setForm({ ...member }); setShowModal(true); };
 
     const handleSaveMember = () => {
@@ -153,12 +160,25 @@ export default function TeamMembersTab() {
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-medium bg-[#d9f4e9] text-[#158568]">Primary</span>
                                         )}
                                     </div>
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                        {member.passes?.exhibitor && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-700"><IdCard size={12} /> Exhibitor</span>}
+                                        {member.passes?.vehicle && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-green-100 text-green-700"><Car size={12} /> Vehicle</span>}
+                                        {member.passes?.service && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-purple-100 text-purple-700"><Badge size={12} /> Service</span>}
+                                        {member.passes?.visitor && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700"><Users size={12} /> Visitor</span>}
+                                    </div>
                                     <p className="text-[13px] font-medium text-gray-600 truncate">{member.designation}</p>
                                     <div className="truncate text-gray-600 text-xs">{member.email}</div>
                                     <div className="flex items-center gap-2 text-gray-600 text-xs">
                                         <Phone size={14} className="text-gray-600 shrink-0" />
                                         <span>{member.mobile}</span>
                                     </div>
+                                    {member.idProofUrl && (
+                                        <div className="mt-2 pt-2 border-t border-slate-100">
+                                            <a href={member.idProofUrl} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 font-medium">
+                                                <FileText size={12} /> View ID Proof
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -183,25 +203,60 @@ export default function TeamMembersTab() {
                             </button>
                         </div>
                         <div className="p-6 overflow-y-auto space-y-4 flex-1 text-sm font-medium">
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Full Name</label>
-                                <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                    value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Full Name</label>
+                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Company Role / Designation</label>
+                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Department</label>
+                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Role at Exhibition</label>
+                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.roleAtExhibition} onChange={(e) => setForm({ ...form, roleAtExhibition: e.target.value })} />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Email</label>
+                                    <input type="email" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Number</label>
+                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                        value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
+                                </div>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Company Role / Designation</label>
-                                <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                    value={form.designation} onChange={(e) => setForm({ ...form, designation: e.target.value })} />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Email</label>
-                                <input type="email" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                    value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Mobile Number</label>
-                                <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                    value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Passes Required</label>
+                                <div className="flex gap-4 p-3 border border-slate-200 rounded-xl flex-wrap">
+                                    <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                        <input type="checkbox" checked={form.passes?.exhibitor} onChange={() => setForm({ ...form, passes: { ...form.passes, exhibitor: !form.passes?.exhibitor } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                        <IdCard size={16} /> Exhibitor
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                        <input type="checkbox" checked={form.passes?.vehicle} onChange={() => setForm({ ...form, passes: { ...form.passes, vehicle: !form.passes?.vehicle } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                        <Car size={16} /> Vehicle
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                        <input type="checkbox" checked={form.passes?.service} onChange={() => setForm({ ...form, passes: { ...form.passes, service: !form.passes?.service } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                        <Badge size={16} /> Service
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+                                        <input type="checkbox" checked={form.passes?.visitor} onChange={() => setForm({ ...form, passes: { ...form.passes, visitor: !form.passes?.visitor } })} className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-gray-300" />
+                                        <Users size={16} /> Visitor
+                                    </label>
+                                </div>
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo (Optional)</label>
