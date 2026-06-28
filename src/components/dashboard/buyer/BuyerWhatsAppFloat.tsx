@@ -18,7 +18,7 @@ const BuyerWhatsAppFloat: React.FC<{ data: any }> = ({ data }) => {
             .catch(() => { });
     }, [data]);
 
-    const rawPhone = rmPhone || data?.admin?.phone || "9876543210";
+    const rawPhone = rmPhone || data?.admin?.phone || "";
     const cleanPhone = rawPhone.replace(/\D/g, '');
 
     const personName = data?.fullName || data?.nameOfRepresentative || 'Buyer';
@@ -27,6 +27,7 @@ const BuyerWhatsAppFloat: React.FC<{ data: any }> = ({ data }) => {
 
     const msg = `Hi, I am ${personName} from ${companyName}. My Buyer ID is ${regId}. I have a query regarding IHWE 2026: `;
     const whatsappUrl = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(msg)}`;
+    const hasWhatsappNumber = cleanPhone.length >= 10;
 
     return (
         <div className="fixed left-6 bottom-8 z-[60] flex flex-col items-center gap-4 print:hidden">
@@ -34,14 +35,15 @@ const BuyerWhatsAppFloat: React.FC<{ data: any }> = ({ data }) => {
             <BuyerCallFloat data={data} />
 
             {/* WhatsApp Button */}
-            <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Chat on WhatsApp"
-                className="relative block"
-                onClick={() => analyticsApi.logClick("Buyer WhatsApp Icon")}
-            >
+            {hasWhatsappNumber && (
+                <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Chat on WhatsApp"
+                    className="relative block"
+                    onClick={() => analyticsApi.logClick("Buyer WhatsApp Icon")}
+                >
                 {/* Main Button */}
                 <div className="relative w-12 h-12 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110">
                     <svg className="w-[28px] h-[28px] relative z-10" fill="white" viewBox="0 0 24 24">
@@ -50,7 +52,8 @@ const BuyerWhatsAppFloat: React.FC<{ data: any }> = ({ data }) => {
                     <div className="absolute inset-0 rounded-full bg-[#25D366] opacity-75 animate-ping" />
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent animate-pulse" />
                 </div>
-            </a>
+                </a>
+            )}
         </div>
     );
 };

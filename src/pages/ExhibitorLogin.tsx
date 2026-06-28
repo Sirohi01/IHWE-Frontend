@@ -69,9 +69,9 @@ const ExhibitorLogin = () => {
                 setExhibitorId(data.exhibitorId);
                 setStep(2);
                 toast.success('Wait! One more step.', {
-                    description: loginMode === 'email'
+                    description: data.message || (loginMode === 'email'
                         ? 'We sent a code to your registered email.'
-                        : 'We sent an OTP to your mobile.'
+                        : 'We sent an OTP to your mobile.')
                 });
             } else {
                 showAlert('error', 'Login Failed', data.message || 'Check your details and try again.');

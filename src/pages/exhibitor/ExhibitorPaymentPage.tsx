@@ -24,6 +24,24 @@ const loadRazorpay = (): Promise<boolean> => {
 };
 
 const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || '';
+const DUMMY_MOBILE_NUMBERS = new Set([
+    '98765432' + '11',
+    '98765432' + '10',
+    '99999' + '99999'
+]);
+
+const isDummyMobile = (value: string) => {
+    const digits = String(value || '').replace(/\D/g, '');
+    if (DUMMY_MOBILE_NUMBERS.has(digits)) return true;
+    if (digits.length > 10 && DUMMY_MOBILE_NUMBERS.has(digits.slice(-10))) return true;
+    return false;
+};
+
+interface ReceiptContact {
+    name: string;
+    email: string;
+    mobile: string;
+}
 
 interface PaymentSummary {
     exhibitorName: string;
@@ -56,6 +74,7 @@ interface PaymentSummary {
     paymentPlanType: string;
     paymentPlanLabel: string;
     chosenTdsPercent: number;
+    contact1?: any;
 }
 
 export default function ExhibitorPaymentPage() {
@@ -67,6 +86,12 @@ export default function ExhibitorPaymentPage() {
     const [paying, setPaying] = useState(false);
     const [payingInstallment, setPayingInstallment] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'pay' | 'history'>('pay');
+    const [receiptContact, setReceiptContact] = useState<ReceiptContact>({
+        name: '',
+        email: '',
+        mobile: ''
+    });
+    const [receiptErrors, setReceiptErrors] = useState<Partial<ReceiptContact>>({});
     const [paymentSuccess, setPaymentSuccess] = useState<{
         show: boolean; amount: number; gatewayFee: number; transactionId: string; balanceAmount: number; status: string;
     } | null>(null);
@@ -77,6 +102,36 @@ export default function ExhibitorPaymentPage() {
 
     const fmt = (n: number) =>
         `${cur}${Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+
+    const normalizeIndianMobile = (value: string) => {
+        if (isDummyMobile(value)) return '';
+        const digits = String(value || '').replace(/\D/g, '');
+        if (/^[6-9]\d{9}$/.test(digits)) return digits;
+        if (/^91[6-9]\d{9}$/.test(digits)) return digits.slice(-10);
+        return '';
+    };
+
+    const validateReceiptContact = () => {
+        const nextErrors: Partial<ReceiptContact> = {};
+        const email = receiptContact.email.trim();
+        const mobile = normalizeIndianMobile(receiptContact.mobile);
+
+        if (!receiptContact.name.trim()) nextErrors.name = 'Name is required';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Valid email is required';
+        if (!mobile) nextErrors.mobile = 'Valid 10-digit Indian mobile number is required';
+
+        setReceiptErrors(nextErrors);
+        if (Object.keys(nextErrors).length > 0) {
+            toast.error('Please enter valid receipt details before payment.');
+            return null;
+        }
+
+        return {
+            name: receiptContact.name.trim(),
+            email: email.toLowerCase(),
+            mobile
+        };
+    };
 
     const fetchSummary = useCallback(async () => {
         if (!data?._id) return;
@@ -114,8 +169,23 @@ export default function ExhibitorPaymentPage() {
     useEffect(() => {
         fetchSummary();
     }, [fetchSummary]);
+
+    useEffect(() => {
+        const contact = summary?.contact1 || data?.contact1 || {};
+        const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
+        const savedMobile = normalizeIndianMobile(contact.whatsapp) || normalizeIndianMobile(contact.mobile);
+        setReceiptContact(prev => ({
+            name: prev.name || name || data?.exhibitorName || summary?.exhibitorName || '',
+            email: prev.email || contact.email || '',
+            mobile: prev.mobile || savedMobile || ''
+        }));
+    }, [data?.contact1, data?.exhibitorName, summary?.contact1, summary?.exhibitorName]);
+
     const initiatePayment = async (amountOverride?: number, installmentNumber?: number) => {
         if (!data?._id) return;
+
+        const validReceiptContact = validateReceiptContact();
+        if (!validReceiptContact) return;
 
         const isLoaded = await loadRazorpay();
         if (!isLoaded) {
@@ -143,7 +213,8 @@ export default function ExhibitorPaymentPage() {
                 },
                 body: JSON.stringify({
                     amount: amountWithFee,
-                    installmentNumber
+                    installmentNumber,
+                    receiptContact: validReceiptContact
                 })
             });
             const orderData = await orderRes.json();
@@ -166,9 +237,9 @@ export default function ExhibitorPaymentPage() {
                     : `Payment - ${registration?.registrationId}`,
                 order_id: order.id,
                 prefill: {
-                    name: `${data.contact1?.firstName || ''} ${data.contact1?.lastName || ''}`.trim(),
-                    email: data.contact1?.email || '',
-                    contact: data.contact1?.mobile || ''
+                    name: registration?.receiptContact?.name || validReceiptContact.name,
+                    email: registration?.receiptContact?.email || validReceiptContact.email,
+                    contact: registration?.receiptContact?.mobile || validReceiptContact.mobile
                 },
                 theme: { color: '#23471d' },
                 modal: {
@@ -194,7 +265,8 @@ export default function ExhibitorPaymentPage() {
                                 registrationId: data._id,
                                 amountPaid: baseAmount,
                                 paymentType: installmentNumber ? `installment_${installmentNumber}` : 'online',
-                                installmentNumber
+                                installmentNumber,
+                                receiptContact: validReceiptContact
                             })
                         });
                         const verifyData = await verifyRes.json();
@@ -536,6 +608,70 @@ export default function ExhibitorPaymentPage() {
                             </div>
                         </div>
 
+                        {!isFullyPaid && (
+                            <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
+                                <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                                    <Receipt className="w-3.5 h-3.5 text-[#23471d]" />
+                                    <p className="text-[12px] font-bold text-gray-700">Receipt Details</p>
+                                </div>
+                                <div className="p-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div>
+                                            <label className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">
+                                                Name <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                value={receiptContact.name}
+                                                onChange={e => {
+                                                    setReceiptContact(prev => ({ ...prev, name: e.target.value }));
+                                                    setReceiptErrors(prev => ({ ...prev, name: undefined }));
+                                                }}
+                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                placeholder="Receipt name"
+                                            />
+                                            {receiptErrors.name && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.name}</p>}
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">
+                                                Email <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="email"
+                                                value={receiptContact.email}
+                                                onChange={e => {
+                                                    setReceiptContact(prev => ({ ...prev, email: e.target.value }));
+                                                    setReceiptErrors(prev => ({ ...prev, email: undefined }));
+                                                }}
+                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                placeholder="name@example.com"
+                                            />
+                                            {receiptErrors.email && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.email}</p>}
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">
+                                                Mobile / WhatsApp <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="tel"
+                                                value={receiptContact.mobile}
+                                                onChange={e => {
+                                                    setReceiptContact(prev => ({ ...prev, mobile: e.target.value }));
+                                                    setReceiptErrors(prev => ({ ...prev, mobile: undefined }));
+                                                }}
+                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.mobile ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                placeholder="10-digit mobile"
+                                                maxLength={14}
+                                            />
+                                            {receiptErrors.mobile && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.mobile}</p>}
+                                        </div>
+                                    </div>
+                                    <p className="text-[10px] text-gray-400 font-semibold mt-3">
+                                        Payment receipt will be sent to both email and WhatsApp/mobile after successful payment.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Installments — Sequential: next phase unlocks only after previous is paid */}
                         {summary.installments && summary.installments.length > 0 && (
                             <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
@@ -725,7 +861,7 @@ export default function ExhibitorPaymentPage() {
                         <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
                             <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                             <p className="text-[10px] text-blue-700 leading-relaxed">
-                                Payment receipts will be sent to your registered email address after successful payment.
+                                Payment receipts will be sent to the email and WhatsApp/mobile number entered above after successful payment.
                                 A {RAZORPAY_CHARGE_PCT}% gateway convenience fee is charged by Razorpay for online payments.
                                 For any payment issues, please contact our support team.
                             </p>

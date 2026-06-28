@@ -971,12 +971,12 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
                         key={i}
                         className="flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40 transition"
                     >
-                        {/* Label */}
+
                         <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r border-slate-200 bg-slate-50 flex items-center">
                             {label}
                         </div>
 
-                        {/* Value */}
+
                         <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all">
                             {value ?? '—'}
                         </div>
@@ -1030,13 +1030,13 @@ export default function StallExtras({ data }: StallExtrasProps) {
     const [paying, setPaying] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'razorpay' | 'neft'>('razorpay');
     const [neftForm, setNeftForm] = useState({
-        beneficiaryName: '',
-        beneficiaryAccountNumber: '',
-        confirmAccountNumber: '',
-        ifscCode: '',
-        bankName: '',
-        amount: '',
-        accountType: 'Current',
+        transactionReferenceNumber: '',
+        transactionDate: '',
+        transactionTime: '',
+        transferredAmount: '',
+        senderBankName: '',
+        senderAccountHolderName: '',
+        paymentScreenshot: null as File | null,
     });
 
 
@@ -1129,7 +1129,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
         setSelectedPaymentMethod('razorpay');
         setNeftForm(prev => ({
             ...prev,
-            amount: cartTotal.toFixed(2),
+            transferredAmount: cartTotal.toFixed(2),
         }));
         setShowCheckout(true);
     };
@@ -1219,64 +1219,57 @@ export default function StallExtras({ data }: StallExtrasProps) {
         }
     };
 
-    // ✅ FIXED: NEFT Submit handler - Cart ko clear nahi karenge, sirf checkout close karenge
     const handleNeftSubmit = async () => {
         if (cart.length === 0) return;
         if (cartTotal <= 0) return toast.error('Cart total must be greater than 0');
-        if (!neftForm.beneficiaryName.trim()) return toast.error('Beneficiary name is required');
-        if (!neftForm.beneficiaryAccountNumber.trim()) return toast.error('Account number is required');
-        if (neftForm.beneficiaryAccountNumber !== neftForm.confirmAccountNumber) {
-            return toast.error('Account number and confirm account number must match');
-        }
-        if (!neftForm.ifscCode.trim()) return toast.error('IFSC code is required');
-        if (!neftForm.bankName.trim()) return toast.error('Bank name is required');
-        if (!neftForm.accountType) return toast.error('Account type is required');
+        if (!neftForm.transactionReferenceNumber.trim()) return toast.error('Transaction Reference Number / UTR No. is required');
+        if (!neftForm.transactionDate) return toast.error('Transaction date is required');
+        if (!neftForm.transferredAmount || Number(neftForm.transferredAmount) <= 0) return toast.error('Transferred amount is required');
+        if (Math.abs(Number(neftForm.transferredAmount) - cartTotal) > 1) return toast.error('Transferred amount must match cart total');
+        if (!neftForm.senderBankName.trim()) return toast.error('Sender bank name is required');
+        if (!neftForm.senderAccountHolderName.trim()) return toast.error('Sender account holder name is required');
 
         setPaying(true);
         try {
+            const formData = new FormData();
+            formData.append('exhibitorRegistrationId', data._id);
+            formData.append('items', JSON.stringify(cart));
+            formData.append('bankTransferDetails', JSON.stringify({
+                transactionReferenceNumber: neftForm.transactionReferenceNumber,
+                transactionDate: neftForm.transactionDate,
+                transactionTime: neftForm.transactionTime,
+                transferredAmount: Number(neftForm.transferredAmount || cartTotal),
+                senderBankName: neftForm.senderBankName,
+                senderAccountHolderName: neftForm.senderAccountHolderName,
+            }));
+            if (neftForm.paymentScreenshot) {
+                formData.append('paymentScreenshot', neftForm.paymentScreenshot);
+            }
+
             const res = await fetch(`${API_URL}/stall-accessories/neft-order`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                body: JSON.stringify({
-                    exhibitorRegistrationId: data._id,
-                    items: cart,
-                    bankTransferDetails: {
-                        beneficiaryName: neftForm.beneficiaryName,
-                        beneficiaryAccountNumber: neftForm.beneficiaryAccountNumber,
-                        ifscCode: neftForm.ifscCode,
-                        bankName: neftForm.bankName,
-                        amount: Number(neftForm.amount || cartTotal),
-                        accountType: neftForm.accountType,
-                    },
-                }),
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
             }).then(r => r.json());
 
             if (!res.success) throw new Error(res.message || 'Failed to submit NEFT payment');
 
             toast.success('NEFT details submitted. Payment will be confirmed after admin approval.');
 
-            // ✅ FIX: Cart ko clear nahi karte, sirf checkout close karte hain
-            // setCart([]); // ❌ REMOVED - Cart ko clear mat karo
-            // setShowCartMobile(false); // ❌ REMOVED - Mobile cart ko close mat karo
-            setShowCheckout(false); // ✅ Sirf checkout close karo
+            setShowCheckout(false);
 
-            // ✅ Form ko reset karo for next use
             setNeftForm({
-                beneficiaryName: '',
-                beneficiaryAccountNumber: '',
-                confirmAccountNumber: '',
-                ifscCode: '',
-                bankName: '',
-                amount: cartTotal.toFixed(2),
-                accountType: 'Current',
+                transactionReferenceNumber: '',
+                transactionDate: '',
+                transactionTime: '',
+                transferredAmount: cartTotal.toFixed(2),
+                senderBankName: '',
+                senderAccountHolderName: '',
+                paymentScreenshot: null,
             });
 
-            // ✅ Orders reload karo
             loadOrders();
             loadCatalog();
-
-            // ✅ User ko pending orders dikhane ke liye cart mein pending flag add karo
-            // Ya fir cart items ko ek pending section mein show karo
 
         } catch (err: any) {
             toast.error(err.message || 'Failed to submit NEFT payment');
@@ -1686,7 +1679,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                     type="button"
                                     onClick={() => {
                                         setSelectedPaymentMethod('neft');
-                                        setNeftForm(prev => ({ ...prev, amount: cartTotal.toFixed(2) }));
+                                        setNeftForm(prev => ({ ...prev, transferredAmount: cartTotal.toFixed(2) }));
                                     }}
                                     className={`text-left border rounded-lg p-3 transition-all ${selectedPaymentMethod === 'neft'
                                         ? 'border-[#16a34a] bg-green-50 ring-1 ring-[#16a34a]'
@@ -1726,45 +1719,49 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             </div>
 
                             {selectedPaymentMethod === 'neft' && (
-                                <div className="border border-slate-200 rounded-lg p-3">
-                                    <div className="mb-3">
+                                <div className="border border-slate-200 rounded-lg p-2.5">
+                                    <div className="mb-2">
                                         <h4 className="text-[12px] font-black text-slate-800">NEFT Required Fields</h4>
                                         <p className="text-[10px] text-slate-500">Payment pending rahega jab tak admin approve nahi karta.</p>
                                     </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                                         {[
-                                            ['Beneficiary Name', 'beneficiaryName', 'Jisko payment bhejni hai uska naam'],
-                                            ['Beneficiary Account Number', 'beneficiaryAccountNumber', 'Receiver ka bank account number'],
-                                            ['Confirm Account Number', 'confirmAccountNumber', 'Same account number dobara'],
-                                            ['IFSC Code', 'ifscCode', 'Receiver bank branch ka IFSC'],
-                                            ['Bank Name', 'bankName', 'Receiver ka bank name'],
-                                            ['Amount', 'amount', 'Kitna paisa transfer karna hai'],
-                                        ].map(([label, name, hint]) => (
-                                            <label key={name} className="block">
-                                                <span className="text-[10px] font-bold text-slate-700">{label}</span>
+                                            ['Transaction Reference Number (UTR No.)', 'transactionReferenceNumber', 'Sabse important', 'text', true],
+                                            ['Transaction Date', 'transactionDate', 'Bank transfer date', 'date', true],
+                                            ['Transaction Time', 'transactionTime', 'Agar available ho', 'time', false],
+                                            ['Transferred Amount', 'transferredAmount', 'Kitna paisa transfer kiya hai', 'number', true],
+                                            ['Sender Bank Name', 'senderBankName', 'Jis bank se payment bheja hai', 'text', true],
+                                            ['Sender Account Holder Name', 'senderAccountHolderName', 'Jis account se payment bheja hai', 'text', true],
+                                        ].map(([label, name, hint, type, required]) => (
+                                            <label key={name as keyof typeof neftForm} className="block">
+                                                <span className="text-[9px] font-bold text-slate-700 leading-tight">
+                                                    {label} {required && <span className="text-red-500">*</span>}
+                                                </span>
                                                 <input
-                                                    value={(neftForm as any)[name]}
-                                                    readOnly={name === 'amount'}
+                                                    value={(neftForm as any)[name as keyof typeof neftForm]}
+                                                    type={type as string}
+                                                    readOnly={name === 'transferredAmount'}
                                                     onChange={(e) => setNeftForm(prev => ({
                                                         ...prev,
-                                                        [name]: name === 'ifscCode' ? e.target.value.toUpperCase() : e.target.value,
+                                                        [name as keyof typeof neftForm]: e.target.value,
                                                     }))}
-                                                    className="mt-1 w-full h-8 border border-slate-200 rounded-md px-2 text-[12px] outline-none focus:border-[#16a34a] read-only:bg-slate-100 read-only:text-slate-500"
+                                                    className="mt-0.5 w-full h-7 border border-slate-200 rounded-md px-2 text-[11px] outline-none focus:border-[#16a34a] read-only:bg-slate-100 read-only:text-slate-500"
                                                 />
                                                 <span className="mt-0.5 block text-[9px] text-slate-400">{hint}</span>
                                             </label>
                                         ))}
-                                        <label className="block">
-                                            <span className="text-[10px] font-bold text-slate-700">Account Type</span>
-                                            <select
-                                                value={neftForm.accountType}
-                                                onChange={(e) => setNeftForm(prev => ({ ...prev, accountType: e.target.value }))}
-                                                className="mt-1 w-full h-8 border border-slate-200 rounded-md px-2 text-[12px] outline-none focus:border-[#16a34a] bg-white"
-                                            >
-                                                <option value="Savings">Savings</option>
-                                                <option value="Current">Current</option>
-                                            </select>
-                                            <span className="mt-0.5 block text-[9px] text-slate-400">Savings / Current</span>
+                                        <label className="block sm:col-span-2 lg:col-span-3">
+                                            <span className="text-[9px] font-bold text-slate-700 leading-tight">Payment Screenshot / Bank Receipt</span>
+                                            <input
+                                                type="file"
+                                                accept="image/*,.pdf"
+                                                onChange={(e) => setNeftForm(prev => ({
+                                                    ...prev,
+                                                    paymentScreenshot: e.target.files?.[0] || null,
+                                                }))}
+                                                className="mt-0.5 w-full border border-slate-200 rounded-md px-2 py-1 text-[11px] outline-none focus:border-[#16a34a] bg-white"
+                                            />
+                                            <span className="mt-0.5 block text-[9px] text-slate-400">Optional but recommended</span>
                                         </label>
                                     </div>
                                 </div>
