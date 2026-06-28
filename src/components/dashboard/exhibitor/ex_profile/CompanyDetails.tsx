@@ -12,7 +12,6 @@ const COMPANY_FIELDS = [
     { key: "gstNo", label: "GST No." },
     { key: "panNo", label: "PAN No." },
     { key: "landlineNo", label: "Landline" },
-    { key: "natureOfBusiness", label: "Nature of Business" },
 ];
 
 const ADDRESS_FIELDS = [

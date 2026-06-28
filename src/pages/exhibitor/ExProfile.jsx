@@ -114,6 +114,7 @@ export default function ExProfile() {
         email: '',
         designation: '',
         mobile: '',
+        photoUrl: '',
     });
 
     const [teamMemberForm, setTeamMemberForm] = useState({
@@ -153,6 +154,7 @@ export default function ExProfile() {
                 email: data.contact1?.email || '',
                 designation: data.contact1?.designation || '',
                 mobile: data.contact1?.mobile || '',
+                photoUrl: data.contact1?.photoUrl || '',
             });
 
             setCategorySelection(data.productCategories || []);
@@ -440,9 +442,9 @@ export default function ExProfile() {
                                 </button>
                             </div>
 
-                            {data?.natureOfBusiness && (
+                            {data?.industrySector && (
                                 <p className="text-[#2a3658] font-semibold text-[15px]">
-                                    {data.natureOfBusiness}
+                                    {data.industrySector}
                                 </p>
                             )}
 
@@ -736,7 +738,7 @@ export default function ExProfile() {
                             <div className="flex items-center gap-5">
                                 <div className="w-[72px] h-[72px] rounded-full overflow-hidden shrink-0 border border-slate-100">
                                     <Avatar
-                                        url={data?.representativePhotoUrl}
+                                        url={contactForm.photoUrl}
                                         alt="Contact"
                                         className="w-full h-full"
                                     />
@@ -876,7 +878,7 @@ export default function ExProfile() {
                                     {activeModal === 'categories' && 'Manage Product Sectors'}
                                     {activeModal === 'certificates' && 'Key Exhibitor Certificates'}
                                     {activeModal === 'contact' && 'Primary Contact Details'}
-                                    {activeModal === 'team' && (selectedTeamMember !== null ? 'Modify Team Member' : 'Enlist New Team Member')}
+                                    {activeModal === 'team' && (selectedTeamMember !== null ? 'Modify Team Member' : 'New Team Member')}
                                 </h3>
                                 <button
                                     onClick={() => setActiveModal(null)}
@@ -1086,6 +1088,15 @@ export default function ExProfile() {
                                                 className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
                                                 value={contactForm.email}
                                                 onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.photoUrl}
+                                                onChange={(e) => setContactForm({ ...contactForm, photoUrl: e.target.value })}
                                             />
                                         </div>
                                     </div>

@@ -94,7 +94,7 @@ export default function OverviewStart() {
         brandName: "", website: "", address: "", city: "", state: "", country: "", pincode: "", companyDescription: "",
     });
     const [contactForm, setContactForm] = useState({
-        title: "Mr.", firstName: "", lastName: "", email: "", designation: "", mobile: "",
+        title: "Mr.", firstName: "", lastName: "", email: "", designation: "", mobile: "", photoUrl: "",
     });
     const [teamMemberForm, setTeamMemberForm] = useState({
         name: "", designation: "", email: "", mobile: "", isPrimary: false, photoUrl: "",
@@ -126,6 +126,7 @@ export default function OverviewStart() {
                 email: data.contact1?.email || "",
                 designation: data.contact1?.designation || "",
                 mobile: data.contact1?.mobile || "",
+                photoUrl: data.contact1?.photoUrl || "",
             });
             setCategorySelection(data.productCategories || []);
             setCertificateList(data.certificates || []);
@@ -334,8 +335,8 @@ export default function OverviewStart() {
                                     </button>
                                 </div>
 
-                                {data?.natureOfBusiness && (
-                                    <p className="text-[13px] text-gray-600 mb-2.5">{data.natureOfBusiness}</p>
+                                {data?.industrySector && (
+                                    <p className="text-[13px] text-gray-600 mb-2.5">{data.industrySector}</p>
                                 )}
 
                                 <div className="flex items-center gap-5 mb-3 flex-wrap">
@@ -505,7 +506,7 @@ export default function OverviewStart() {
                         </div>
                         <div className="flex items-start gap-3">
                             <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 border border-gray-100">
-                                <Avatar url={data?.representativePhotoUrl} alt="Contact" className="w-full h-full" />
+                                <Avatar url={contactForm.photoUrl} alt="Contact" className="w-full h-full" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="text-[14px] font-medium text-[#0A143D] mb-0.5">
@@ -602,7 +603,7 @@ export default function OverviewStart() {
                                     {activeModal === "categories" && "Manage Product Sectors"}
                                     {activeModal === "certificates" && "Key Exhibitor Certificates"}
                                     {activeModal === "contact" && "Primary Contact Details"}
-                                    {activeModal === "team" && (selectedTeamMember !== null ? "Modify Team Member" : "Enlist New Team Member")}
+                                    {activeModal === "team" && (selectedTeamMember !== null ? "Modify Team Member" : "New Team Member")}
                                 </h3>
                                 <button onClick={() => setActiveModal(null)} className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
                                     <X size={18} />
@@ -740,6 +741,11 @@ export default function OverviewStart() {
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Registered Email Address</label>
                                             <input type="email" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
                                                 value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
+                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                value={contactForm.photoUrl} onChange={(e) => setContactForm({ ...contactForm, photoUrl: e.target.value })} />
                                         </div>
                                     </div>
                                 )}

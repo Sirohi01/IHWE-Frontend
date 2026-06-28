@@ -144,7 +144,7 @@ export default function TeamMembersTab() {
                     <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col">
                         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                             <h3 className="font-extrabold text-slate-900 text-lg uppercase tracking-tight">
-                                {selectedIndex !== null ? "Modify Team Member" : "Enlist New Team Member"}
+                                {selectedIndex !== null ? "Modify Team Member" : "New Team Member"}
                             </h3>
                             <button onClick={() => setShowModal(false)} className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600">
                                 <X size={18} />
