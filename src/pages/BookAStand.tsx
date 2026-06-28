@@ -167,6 +167,9 @@ const initialFormData = {
     subCategory: '',
     otherSector: '',
     referredBy: '',
+    socialMediaType: '',
+    referralName: '',
+    referralMobile: '',
     spokenWith: '',
     filledBy: 'User',
     paymentMode: 'online' as 'manual' | 'online',
@@ -1443,7 +1446,7 @@ const BookAStand = () => {
                                                         Exhibitor Category
                                                     </h3>
 
-                                                    <div className="grid grid-cols-4 gap-4">
+                                                    <div className={`grid gap-4 ${formData.referredBy === 'Social Media' ? 'grid-cols-5' : formData.referredBy === 'Referral' ? 'grid-cols-6' : 'grid-cols-4'}`}>
                                                         <div>
                                                             <label className={labelClasses}>PRIMARY CATEGORY <span className="text-red-500">*</span></label>
                                                             <Select
@@ -1490,10 +1493,42 @@ const BookAStand = () => {
                                                                     <SelectItem value="Email Marketing" className="text-xs">Email Marketing</SelectItem>
                                                                     <SelectItem value="Social Media" className="text-xs">Social Media</SelectItem>
                                                                     <SelectItem value="Search Engine" className="text-xs">Search Engine</SelectItem>
+                                                                    <SelectItem value="Telecalling" className="text-xs">Telecalling</SelectItem>
+                                                                    <SelectItem value="Referral" className="text-xs">Referral</SelectItem>
                                                                     <SelectItem value="Others" className="text-xs">Others</SelectItem>
                                                                 </SelectContent>
                                                             </Select>
                                                         </div>
+
+                                                        {formData.referredBy === 'Social Media' && (
+                                                            <div>
+                                                                <label className={labelClasses}>SOCIAL MEDIA <span className="text-red-500">*</span></label>
+                                                                <Select onValueChange={(v) => handleSelectChange('socialMediaType', v)} value={formData.socialMediaType}>
+                                                                    <SelectTrigger className={inputClasses}>
+                                                                        <SelectValue placeholder="Select Platform" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="Instagram" className="text-xs">Instagram</SelectItem>
+                                                                        <SelectItem value="Facebook" className="text-xs">Facebook</SelectItem>
+                                                                        <SelectItem value="X" className="text-xs">X (Twitter)</SelectItem>
+                                                                        <SelectItem value="LinkedIn" className="text-xs">LinkedIn</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                            </div>
+                                                        )}
+
+                                                        {formData.referredBy === 'Referral' && (
+                                                            <>
+                                                                <div>
+                                                                    <label className={labelClasses}>REFERRAL NAME <span className="text-red-500">*</span></label>
+                                                                    <input required name="referralName" value={formData.referralName} onChange={handleInputChange} placeholder="Name" className={inputClasses} />
+                                                                </div>
+                                                                <div>
+                                                                    <label className={labelClasses}>REFERRAL MOBILE <span className="text-red-500">*</span></label>
+                                                                    <input required name="referralMobile" value={formData.referralMobile} onChange={handleInputChange} placeholder="Mobile" className={inputClasses} inputMode="numeric" maxLength={10} />
+                                                                </div>
+                                                            </>
+                                                        )}
 
                                                         <div>
                                                             <label className={labelClasses}>SPOKEN WITH <span className="text-red-500">*</span></label>
