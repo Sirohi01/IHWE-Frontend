@@ -42,7 +42,7 @@ const StallDesign = lazy(() => import("./pages/support/StallDesign"));
 const LogisticsSupport = lazy(() => import("./pages/support/LogisticsSupport"));
 const PrintingBranding = lazy(() => import("./pages/support/PrintingBranding"));
 const HospitalityDesk = lazy(() => import("./pages/support/HospitalityDesk"));
-const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayUnified"));
+const ConferenceDayUnified = lazy(() => import("./pages/ConferenceDayNew"));
 const TravelPartner = lazy(() => import("./pages/TravelPartner"));
 const HotelStayPartner = lazy(() => import("./pages/HotelStayPartner"));
 const MsmePmsScheme = lazy(() => import("./pages/governmentMsmePmsSchemes/MsmePmsScheme"));
@@ -149,6 +149,7 @@ const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation")
 import MyEvent from "./pages/exhibitor/MyEvent";
 import DocumentCenter from "./pages/exhibitor/DocumentCenter";
 import BuyerContacts from "./pages/exhibitor/BuyerContacts";
+import PaperPresentation from "./pages/PaperPresentation";
 
 
 const SitemapRedirect = () => {
@@ -216,10 +217,8 @@ const App = () => {
                     <Route path="/support/printing-branding" element={<PrintingBranding />} />
                     <Route path="/support/hospitality-desk" element={<HospitalityDesk />} />
                     <Route path="/conference" element={<Conference />} />
-                    <Route path="/conference/day-1" element={<Navigate to="/conference/1" replace />} />
-                    <Route path="/conference/day-2" element={<Navigate to="/conference/2" replace />} />
-                    <Route path="/conference/day-3" element={<Navigate to="/conference/3" replace />} />
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
+                    <Route path="/conference/paper-presentation" element={<PaperPresentation/>}/>
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
                     <Route path="/delegate-registration-details" element={<DelegateRegistrationDetails />} />
                     <Route path="/group-registration" element={<GroupRegistration />} />
@@ -283,7 +282,7 @@ const App = () => {
                       <Route path="reports/:type/:id" element={<PsmReports />} />
                       <Route path="reports-table" element={<PsmReportsTable />} />
                       <Route path="reports-table/:type" element={<PsmReportsTable />} />
-                    </Route>  
+                    </Route>
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
                     <Route path="documentation" element={<ExhibitorDocumentsPage />} />
                     <Route path="participants-feedback" element={<ParticipantsFeedback />} />

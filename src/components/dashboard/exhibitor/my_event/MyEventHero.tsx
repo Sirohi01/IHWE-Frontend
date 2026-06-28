@@ -1,10 +1,49 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Store, Calendar, Wrench, AlertTriangle, Users } from "lucide-react";
 import Hero from "@/assets/exhibitor/myeventhero2.png";
+import { useNavigate } from "react-router-dom";
+
+const formatDateRange = (start?: string, end?: string) => {
+    if (!start) return { value: "TBD", sub: "Dates pending" };
+    const startDate = new Date(start);
+    const endDate = end ? new Date(end) : startDate;
+    if (Number.isNaN(startDate.getTime())) return { value: "TBD", sub: "Dates pending" };
+
+    const sameMonth = startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear();
+    const value = sameMonth
+        ? `${startDate.getDate()} - ${endDate.getDate()}`
+        : `${startDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} - ${endDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}`;
+    const sub = sameMonth
+        ? startDate.toLocaleDateString("en-GB", { month: "long", year: "numeric" })
+        : endDate.getFullYear().toString();
+    return { value, sub };
+};
+
+const shiftDateRange = (start?: string, daysBefore = 2) => {
+    if (!start) return { value: "TBD", sub: "Setup pending" };
+    const startDate = new Date(start);
+    if (Number.isNaN(startDate.getTime())) return { value: "TBD", sub: "Setup pending" };
+    const setupStart = new Date(startDate);
+    setupStart.setDate(startDate.getDate() - daysBefore);
+    const setupEnd = new Date(startDate);
+    setupEnd.setDate(startDate.getDate() - 1);
+    return formatDateRange(setupStart.toISOString(), setupEnd.toISOString());
+};
+
+const singleDate = (date?: string) => {
+    if (!date) return { value: "TBD", sub: "Date pending" };
+    const d = new Date(date);
+    if (Number.isNaN(d.getTime())) return { value: "TBD", sub: "Date pending" };
+    return {
+        value: String(d.getDate()).padStart(2, "0"),
+        sub: d.toLocaleDateString("en-GB", { month: "long", year: "numeric" }),
+    };
+};
 
 function useCountdown(targetDate: Date) {
+    const targetTime = targetDate.getTime();
     const calc = () => {
-        const diff = Math.max(0, targetDate.getTime() - Date.now());
+        const diff = Math.max(0, targetTime - Date.now());
         return {
             days: Math.floor(diff / 86400000),
             hrs: Math.floor((diff % 86400000) / 3600000),
@@ -14,9 +53,10 @@ function useCountdown(targetDate: Date) {
     };
     const [time, setTime] = useState(calc);
     useEffect(() => {
+        setTime(calc());
         const t = setInterval(() => setTime(calc()), 1000);
         return () => clearInterval(t);
-    }, []);
+    }, [targetTime]);
     return time;
 }
 
@@ -53,18 +93,25 @@ function InfoCard({ icon: Icon, iconBg, label, value, sub }: {
     );
 }
 
-const EVENT_DATE = new Date("2026-08-21T10:00:00");
+export default function MyEventHero({ data }: { data: any }) {
+    const navigate = useNavigate();
+    const eventStart = data?.eventId?.startDate ? new Date(data.eventId.startDate) : new Date();
+    const { days, hrs, mins, secs } = useCountdown(eventStart);
+    const eventDates = formatDateRange(data?.eventId?.startDate, data?.eventId?.endDate);
+    const setupDates = shiftDateRange(data?.eventId?.startDate);
+    const dismantlingDate = singleDate(data?.eventId?.endDate);
+    const teamCount = Array.isArray(data?.teamMembers) ? data.teamMembers.length : 0;
+    const stallValue = data?.participation?.stallFor || data?.participation?.stallNo || "TBD";
+    const stallSub = data?.participation?.stallScheme || data?.participation?.stallType || "Stall pending";
+    const eventName = data?.eventId?.name || "IHWE 2026";
 
-const INFO_CARDS = [
-    { icon: Store, iconBg: "bg-emerald-50 text-emerald-600", label: "Stall Number", value: "H4-23", sub: "Hall 04" },
-    { icon: Calendar, iconBg: "bg-violet-50 text-violet-500", label: "Event Dates", value: "21 – 23", sub: "August 2026" },
-    { icon: Wrench, iconBg: "bg-blue-50 text-blue-400", label: "Setup Dates", value: "19 – 20", sub: "August 2026" },
-    { icon: AlertTriangle, iconBg: "bg-orange-50 text-orange-400", label: "Dismantling Date", value: "23", sub: "August 2026" },
-    { icon: Users, iconBg: "bg-sky-50 text-sky-500", label: "Team Members", value: "05", sub: "Registered" },
-];
-
-export default function MyEventHero() {
-    const { days, hrs, mins, secs } = useCountdown(EVENT_DATE);
+    const infoCards = [
+        { icon: Store, iconBg: "bg-emerald-50 text-emerald-600", label: "Stall Number", value: stallValue, sub: stallSub },
+        { icon: Calendar, iconBg: "bg-violet-50 text-violet-500", label: "Event Dates", value: eventDates.value, sub: eventDates.sub },
+        { icon: Wrench, iconBg: "bg-blue-50 text-blue-400", label: "Setup Dates", value: setupDates.value, sub: setupDates.sub },
+        { icon: AlertTriangle, iconBg: "bg-orange-50 text-orange-400", label: "Dismantling Date", value: dismantlingDate.value, sub: dismantlingDate.sub },
+        { icon: Users, iconBg: "bg-sky-50 text-sky-500", label: "Team Members", value: String(teamCount).padStart(2, "0"), sub: "Registered" },
+    ];
 
     return (
         <div className="flex flex-col gap-2 w-full ">
@@ -77,7 +124,7 @@ export default function MyEventHero() {
                     <h2 className="text-[24px] font-semibold text-[#0f1f45] leading-tight mb-1">My Event</h2>
                     <div className="w-10 h-[3px] bg-emerald-500 rounded-full mb-2" />
                     <p className="text-[12px] text-[#1a3a7c] leading-relaxed">
-                        Manage, track and organize everything about your participation in IHWE 2026 – all in one place.
+                        Manage, track and organize everything about your participation in {eventName} - all in one place.
                     </p>
                 </div>
 
@@ -103,7 +150,7 @@ export default function MyEventHero() {
                                 Let's make your
                             </p>
                             <p className="text-white text-[17px] font-semibold leading-tight tracking-wide">
-                                IHWE 2026
+                                {eventName}
                             </p>
                             <p className="text-[#47B338] text-[19px] font-black italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
                                 experience
@@ -125,7 +172,10 @@ export default function MyEventHero() {
                                 </div>
 
                             </div>
-                            <button className="w-full flex items-center justify-center gap-2 py-1 rounded-md bg-[#339D3F] hover:bg-emerald-600 text-white font-bold text-[12px] transition-colors">
+                            <button
+                                onClick={() => navigate("/exhibitor-dashboard/exhibitions")}
+                                className="w-full flex items-center justify-center gap-2 py-1 rounded-md bg-[#339D3F] hover:bg-emerald-600 text-white font-bold text-[12px] transition-colors"
+                            >
                                 View Event Details <ArrowRight size={12} />
                             </button>
                         </div>
@@ -136,7 +186,7 @@ export default function MyEventHero() {
 
             {/* ── Bottom Info Cards ── */}
             <div className="flex gap-2">
-                {INFO_CARDS.map((card, i) => (
+                {infoCards.map((card, i) => (
                     <InfoCard key={i} {...card} />
                 ))}
             </div>

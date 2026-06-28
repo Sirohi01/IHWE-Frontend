@@ -1,10 +1,25 @@
-import { CalendarDays, MapPin, CheckCircle2 } from "lucide-react";
-import ExEventCountdown from "../ExEventCountdown";
+import { CalendarDays, MapPin } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+
+const formatEventDates = (start?: string, end?: string) => {
+    if (!start) return "DATES TBA";
+    const startDate = new Date(start);
+    const endDate = end ? new Date(end) : startDate;
+    if (Number.isNaN(startDate.getTime())) return "DATES TBA";
+
+    const sameMonth = startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear();
+    if (sameMonth) {
+        return `${startDate.getDate()} - ${endDate.getDate()} ${startDate.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}`.toUpperCase();
+    }
+    return `${startDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short" })} - ${endDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`.toUpperCase();
+};
 
 const WelcomeHeader = () => {
     const { data } = useExhibitorCtx();
     const companyName = data?.companyName || data?.exhibitorName || data?.fullName || "Exhibitor";
+    const eventName = data?.eventId?.name || "IHWE";
+    const eventDates = formatEventDates(data?.eventId?.startDate, data?.eventId?.endDate);
+    const eventLocation = data?.eventId?.location || "Location TBA";
 
     return (
 
@@ -36,8 +51,8 @@ const WelcomeHeader = () => {
                 </div>
                 {data?.contact1 && (data?.contact1?.firstName || data?.contact1?.lastName) && (
                     <div className="flex items-center gap-1 mt-1 mb-1">
-                        <span className="text-[10px] text-gray-500 font-medium flex items-center gap-1">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span className="text-[15px] text-gray-500 font-medium flex items-center gap-1">
+
                             {data.contact1.title ? `${data.contact1.title} ` : ''}{data.contact1.firstName} {data.contact1.lastName}
                         </span>
                         {data?.contact1?.designation && (
@@ -48,7 +63,7 @@ const WelcomeHeader = () => {
                     </div>
                 )}
                 <p className="text-xs text-gray-500 leading-relaxed mt-1">
-                    Here's what's happening with your participation in IHWE 2026.
+                    Here's what's happening with your participation in {eventName}.
                 </p>
             </div>
 
@@ -70,7 +85,7 @@ const WelcomeHeader = () => {
                                 className="text-[10px] font-medium text-[#313677] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
                             >
-                                21 – 23 AUGUST 2026
+                                {eventDates}
                             </p>
                         </div>
                     </div>
@@ -85,7 +100,7 @@ const WelcomeHeader = () => {
                                 className="text-[10px] font-medium text-[#313677] leading-snug"
                                 style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
                             >
-                                PRAGATI MAIDAN,<br />NEW DELHI, INDIA
+                                {eventLocation}
                             </p>
                         </div>
                     </div>

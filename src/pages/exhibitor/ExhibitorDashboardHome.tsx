@@ -80,6 +80,7 @@ export default function ExhibitorDashboardHome() {
 
                 <div style={{ marginTop: '-10px' }} className="relative z-10">
                     <ExhibitorHeroSlider />
+                    <div className="mt-1 h-4 w-full bg-[#1a3a7c]" />
                 </div>
                 <DashboardWidgets />
                 <DashboardBottom />

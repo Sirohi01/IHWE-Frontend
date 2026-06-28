@@ -24,25 +24,6 @@ const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, co
 
 // ─── Quick Access Data ────────────────────────────────────────────────────────
 
-const QUICK_ACCESS = [
-    { id: "my-event", label: "My Event", sub: "View event details", icon: Calendar, link: "/exhibitor-dashboard/my-event", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
-    { id: "stall-management", label: "Stall Information", sub: "View stall details", icon: Building2, link: "/exhibitor-dashboard/ex-profile", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
-    { id: "invoices", label: "Invoice & Receipts", sub: "View & download", icon: FileText, link: "/exhibitor-dashboard/invoices", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
-    { id: "add-on-services", label: "Add On Services", sub: "View & purchase", icon: ShoppingBag, link: "/exhibitor-dashboard/accessories", iconBg: "bg-gradient-to-br from-[#f43f5e] to-[#e11d48]" },
-    { id: "exhibitor-pass", label: "Passes & Hospitality", sub: "View & download pass", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },
-
-    { id: "add-product", label: "My Product/Services", sub: "Add your products", icon: Package, link: "/exhibitor-dashboard/product", iconBg: "bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]" },
-
-    { id: "document-center", label: "MSME Documentation", sub: "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/document-center", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
-    { id: "buyer-contacts", label: "Buyers Management", sub: "View buyer contacts", icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
-
-
-    { id: "payments", label: "Make Payment", sub: "Secure payments", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
-    { id: "epromotion", label: "E-Promotion", sub: "Promote your brand", icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
-    { id: "chat", label: "Customer Care", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
-    { id: "relationship-manager", label: "Relationship Manager", sub: "Your dedicated contact", icon: Headset, link: "/exhibitor-dashboard/relationship-manager", iconBg: "bg-gradient-to-br from-[#059669] to-[#047857]" },
-];
-
 // ─── Important Updates Data ───────────────────────────────────────────────────
 
 type BadgeType = "New" | "Info" | "Alert";
@@ -67,6 +48,15 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loadingUpdates, setLoadingUpdates] = useState(true);
+    const [moduleStats, setModuleStats] = useState({
+        products: 0,
+        accessoryOrders: 0,
+        passRequests: 0,
+        approvedPassRequests: 0,
+        meetings: 0,
+        marketingTemplates: 0,
+        leads: 0,
+    });
 
     useEffect(() => {
         const fetchUpdates = async () => {
@@ -90,6 +80,63 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
         };
         fetchUpdates();
     }, [data?._id, page]);
+
+    useEffect(() => {
+        const fetchModuleStats = async () => {
+            if (!data?._id) return;
+            const token = localStorage.getItem('exhibitorToken');
+            const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+            const selectedRegId = localStorage.getItem('selectedRegId') || data._id;
+
+            const readArray = async (url: string, options?: RequestInit) => {
+                try {
+                    const res = await fetch(url, options);
+                    const result = await res.json();
+                    return result.success && Array.isArray(result.data) ? result.data : [];
+                } catch {
+                    return [];
+                }
+            };
+
+            const [products, accessoryOrders, passRequests, meetings, templates, leads] = await Promise.all([
+                readArray(`${API_URL}/stall-products/my?regId=${selectedRegId}`, { headers }),
+                readArray(`${API_URL}/stall-accessories/orders?exhibitorId=${data._id}`, { headers }),
+                readArray(`${API_URL}/exhibitor-pass-requests/exhibitor/${data._id}`, { headers }),
+                readArray(`${API_URL}/bsm/exhibitor/${data._id}`, { headers }),
+                readArray(`${API_URL}/marketing-toolkit/templates?exhibitorId=${data._id}`),
+                readArray(`${API_URL}/exhibitor-leads/my`, { headers }),
+            ]);
+
+            setModuleStats({
+                products: products.length,
+                accessoryOrders: accessoryOrders.length,
+                passRequests: passRequests.length,
+                approvedPassRequests: passRequests.filter((item: any) => item.status === 'approved').length,
+                meetings: meetings.length,
+                marketingTemplates: templates.length,
+                leads: leads.length,
+            });
+        };
+
+        fetchModuleStats();
+    }, [data?._id]);
+
+    const balance = Number(data?.balanceAmount || 0);
+    const quickAccess = [
+        { id: "my-event", label: "My Event", sub: data?.eventId?.name || "View event details", icon: Calendar, link: "/exhibitor-dashboard/my-event", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
+        { id: "stall-management", label: "Stall Information", sub: data?.participation?.stallFor ? `${data.participation.stallFor} - ${data?.participation?.stallSize || 0} SQM` : "Stall pending", icon: Building2, link: "/exhibitor-dashboard/stall-information", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
+        { id: "invoices", label: "Invoice & Receipts", sub: data?.invoice?.invoiceNo || data?.estimate?.estimateNo || `${data?.paymentHistory?.length || 0} payment records`, icon: FileText, link: "/exhibitor-dashboard/invoices", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
+        { id: "add-on-services", label: "Add On Services", sub: `${moduleStats.accessoryOrders} order${moduleStats.accessoryOrders === 1 ? '' : 's'} placed`, icon: ShoppingBag, link: "/exhibitor-dashboard/accessories", iconBg: "bg-gradient-to-br from-[#f43f5e] to-[#e11d48]" },
+        { id: "exhibitor-pass", label: "Passes & Hospitality", sub: moduleStats.passRequests ? `${moduleStats.approvedPassRequests}/${moduleStats.passRequests} approved` : "No requests yet", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },
+        { id: "add-product", label: "My Product/Services", sub: `${moduleStats.products} product${moduleStats.products === 1 ? '' : 's'} listed`, icon: Package, link: "/exhibitor-dashboard/product", iconBg: "bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]" },
+        { id: "document-center", label: "MSME Documentation", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/document-center", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
+        { id: "buyer-contacts", label: "Buyers Management", sub: `${moduleStats.leads} captured lead${moduleStats.leads === 1 ? '' : 's'}`, icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" },
+        { id: "payments", label: "Make Payment", sub: balance > 0 ? `Balance ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}` : "No balance due", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
+        { id: "epromotion", label: "E-Promotion", sub: `${moduleStats.marketingTemplates} template${moduleStats.marketingTemplates === 1 ? '' : 's'} available`, icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" },
+        { id: "chat", label: "Customer Care", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
+        { id: "relationship-manager", label: "Relationship Manager", sub: data?.filledByFullName || data?.filledBy || "Your dedicated contact", icon: Headset, link: "/exhibitor-dashboard/relationship-manager", iconBg: "bg-gradient-to-br from-[#059669] to-[#047857]" },
+    ];
+
     return (
         <div className="flex flex-col lg:flex-row items-start gap-2 w-full">
             <style>{`
@@ -160,7 +207,7 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                             <Sparkle color="#3b82f6" style={{ top: '-10px', left: '20%', animationDelay: '0.2s' }} />
                             <Sparkle color="#3b82f6" style={{ bottom: '-10px', right: '15%', animationDelay: '0.6s' }} />
                             <Link
-                                to="/delegates-registration"
+                                to="/delegate-registration"
                                 className="group relative overflow-hidden rounded-md px-2 py-1.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-all duration-500 uppercase tracking-wider text-[8px] font-bold shadow-[0_4px_10px_rgba(59,130,246,0.3)] hover:shadow-[0_6px_15px_rgba(59,130,246,0.4)] flex items-center justify-center shrink-0 border border-blue-400/30"
                             >
                                 <span className="relative z-10 flex items-center gap-1">
@@ -174,21 +221,21 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 -mt-1.5">
-                    {QUICK_ACCESS.map(item => {
+                    {quickAccess.map(item => {
                         const Icon = item.icon;
                         return (
                             <Link
                                 key={item.id}
                                 to={item.link}
                                 style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
-                                className="flex items-center gap-1.5 py-1.5 pl-1.5 pr-2 rounded-xl hover:bg-gray-50 transition-all group text-left"
+                                className="flex items-center gap-1.5 py-1.5 pl-1.5 pr-2 rounded-xl hover:bg-gray-50 transition-all group text-left min-w-0 overflow-hidden"
                             >
                                 <div className={`${item.iconBg} rounded-xl p-2 shrink-0 shadow-sm group-hover:scale-105 transition-transform`}>
                                     <Icon size={14} className="text-white" strokeWidth={1.8} />
                                 </div>
-                                <div className="min-w-0">
-                                    <p className="text-[10px] font-bold text-[#403c9e] leading-tight whitespace-nowrap tracking-tight">{item.label}</p>
-                                    <p className="text-[8px] text-[#1a3a7c] mt-0.5 whitespace-nowrap tracking-tight">{item.sub}</p>
+                                <div className="min-w-0 flex-1 overflow-hidden">
+                                    <p className="text-[10px] font-bold text-[#403c9e] leading-tight whitespace-nowrap tracking-tight truncate">{item.label}</p>
+                                    <p className="text-[8px] text-[#1a3a7c] mt-0.5 whitespace-nowrap tracking-tight truncate">{item.sub}</p>
                                 </div>
                             </Link>
                         );

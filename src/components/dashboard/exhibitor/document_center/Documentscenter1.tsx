@@ -22,22 +22,6 @@ interface Doc {
   originalPdfUrl?: string;
 }
 
-const mockDocs: Doc[] = [
-  { id: "1", title: "MSME Registration Cert.", type: "PDF", size: "1.2 MB", date: "02 Jun 2026", category: "MSME Related", status: "Approved", uploadedBy: "Exhibitor Admin", uploadDate: "31 May 2026, 11:20 AM" },
-  { id: "2", title: "Udyam Certificate", type: "PDF", size: "1.1 MB", date: "31 May 2026", category: "MSME Related", status: "Under Review", uploadedBy: "Exhibitor Admin", uploadDate: "31 May 2026, 11:20 AM" },
-  { id: "3", title: "GST Certificate", type: "PDF", size: "1.3 MB", date: "30 May 2026", category: "MSME Related", status: "Approved", uploadedBy: "Exhibitor Admin", uploadDate: "30 May 2026, 10:15 AM" },
-  { id: "4", title: "Bank Details Proof", type: "PDF", size: "1.0 MB", date: "29 May 2026", category: "MSME Related", status: "Under Review", uploadedBy: "Exhibitor Admin", uploadDate: "29 May 2026, 09:00 AM" },
-  { id: "5", title: "Subsidy Eligibility", type: "PDF", size: "1.4 MB", date: "28 May 2026", category: "MSME Related", status: "Approved", uploadedBy: "Exhibitor Admin", uploadDate: "28 May 2026, 02:30 PM" },
-  { id: "6", title: "Company Profile", type: "PDF", size: "2.4 MB", date: "02 Jun 2026", category: "General Documents", status: "Approved", uploadedBy: "Exhibitor Admin", uploadDate: "02 Jun 2026, 11:20 AM" },
-  { id: "7", title: "Product Catalogue", type: "PDF", size: "3.1 MB", date: "31 May 2026", category: "General Documents", status: "Under Review", uploadedBy: "Exhibitor Admin", uploadDate: "31 May 2026, 11:20 AM" },
-  { id: "8", title: "Participation Form", type: "DOCX", size: "1.1 MB", date: "30 May 2026", category: "General Documents", status: "Approved", uploadedBy: "Exhibitor Admin", uploadDate: "30 May 2026, 11:20 AM" },
-  { id: "9", title: "Price List", type: "PDF", size: "1.2 MB", date: "29 May 2026", category: "General Documents", status: "Pending Upload", uploadedBy: "-", uploadDate: "-" },
-  { id: "10", title: "Other Document", type: "PDF", size: "1.5 MB", date: "28 May 2026", category: "General Documents", status: "Rejected", uploadedBy: "Exhibitor Admin", uploadDate: "28 May 2026, 11:20 AM", feedback: "Please upload a clearer copy. The current one is unreadable." },
-  { id: "11", title: "MSME Annexure A", type: "PDF", size: "-", date: "-", category: "MSME Related", status: "Pending Upload", uploadedBy: "-", uploadDate: "-" },
-  { id: "12", title: "Authorized Signatory", type: "PDF", size: "-", date: "-", category: "General Documents", status: "Pending Upload", uploadedBy: "-", uploadDate: "-" },
-  { id: "13", title: "Brand Logo (High Res)", type: "JPG", size: "-", date: "-", category: "General Documents", status: "Pending Upload", uploadedBy: "-", uploadDate: "-" }
-];
-
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
 

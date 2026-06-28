@@ -3,6 +3,25 @@ import { useState, useEffect } from "react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
 
+const hasFile = (value: any) => value !== undefined && value !== null && String(value).trim() !== "";
+
+const fallbackDocumentStats = (data: any) => {
+    const docs = [
+        data?.companyLogoUrl,
+        data?.panCardFrontUrl,
+        data?.gstCertificateUrl,
+        data?.cancelledChequeUrl,
+        data?.representativePhotoUrl,
+        data?.registrationPdfUrl,
+    ];
+    const completed = docs.filter(hasFile).length;
+    return {
+        completed,
+        total: docs.length,
+        status: completed === docs.length ? "Completed" : "Pending",
+    };
+};
+
 export default function StatCards() {
     const { data } = useExhibitorCtx();
     const [timeLeft, setTimeLeft] = useState({
@@ -13,6 +32,7 @@ export default function StatCards() {
     });
 
     const [docStats, setDocStats] = useState({ completed: 0, total: 6, status: 'Pending' });
+    const [marketingStats, setMarketingStats] = useState({ count: 0, status: 'Not Available' });
 
     useEffect(() => {
         const fetchDocs = async () => {
@@ -40,7 +60,7 @@ export default function StatCards() {
                         if (uploaded?.status === "Approved") completedCount++;
                         else if (uploaded?.status === "Pending") completedCount++; // Let's count them if they are uploaded, even if pending approval?
                     });
-                    
+
                     // Actually, let's just match the exact counting logic. DashboardBottom says status="Completed" if Approved, "Pending" if Pending/Rejected, "Not Uploaded" otherwise.
                     // The user said "jab sare documents fill ho jaenge", so counting uploaded documents might be better. Let's count both Approved and Pending as filled for the numbers, or maybe just Approved? 
                     // Let's count uploaded and submitted ones.
@@ -48,7 +68,7 @@ export default function StatCards() {
                     reqData.forEach((d: any) => {
                         const uploaded = uploadedMap.get(d.document_name);
                         if (uploaded && uploaded.status !== "Not Uploaded") {
-                             filledCount++;
+                            filledCount++;
                         }
                     });
 
@@ -57,18 +77,44 @@ export default function StatCards() {
                         total: reqData.length,
                         status: filledCount === reqData.length ? 'Completed' : 'Pending'
                     });
+                } else {
+                    setDocStats(fallbackDocumentStats(data));
                 }
             } catch (e) {
                 console.error("Failed to fetch documents", e);
+                setDocStats(fallbackDocumentStats(data));
             }
         };
         fetchDocs();
+    }, [data]);
+
+    useEffect(() => {
+        const fetchMarketingTemplates = async () => {
+            if (!data?._id) return;
+            try {
+                const res = await fetch(`${API_URL}/marketing-toolkit/templates?exhibitorId=${data._id}`);
+                const result = await res.json();
+                const count = result.success && Array.isArray(result.data) ? result.data.length : 0;
+                setMarketingStats({
+                    count,
+                    status: count > 0 ? "Available" : "Not Available",
+                });
+            } catch (e) {
+                console.error("Failed to fetch marketing templates", e);
+                setMarketingStats({ count: 0, status: "Not Available" });
+            }
+        };
+        fetchMarketingTemplates();
     }, [data?._id]);
 
     useEffect(() => {
-        const targetDate = new Date("2026-08-21T00:00:00");
+        const targetDate = data?.eventId?.startDate ? new Date(data.eventId.startDate) : null;
 
         const updateTimer = () => {
+            if (!targetDate || Number.isNaN(targetDate.getTime())) {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
+            }
             const difference = targetDate.getTime() - new Date().getTime();
             if (difference > 0) {
                 setTimeLeft({
@@ -85,7 +131,11 @@ export default function StatCards() {
         updateTimer();
         const timer = setInterval(updateTimer, 1000);
         return () => clearInterval(timer);
-    }, []);
+    }, [data?.eventId?.startDate]);
+
+    const balance = Number(data?.balanceAmount || 0);
+    const paid = Number(data?.amountPaid || 0);
+    const paymentValue = balance <= 0 && paid > 0 ? "Paid" : paid > 0 ? "Partial" : data?.status || "Pending";
 
     const stats = [
         {
@@ -106,8 +156,10 @@ export default function StatCards() {
             cardBg: "bg-green-50/70",
             hoverBg: "hover:bg-green-100/80",
             label: "PAYMENT STATUS",
-            value: data?.status || "Pending",
-            sub: `Total Paid: ${data?.participation?.currency || 'INR'} ${data?.amountPaid?.toLocaleString() || '0'}`,
+            value: paymentValue,
+            sub: balance > 0
+                ? `Balance Due: ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}`
+                : `Total Paid: ${data?.participation?.currency || 'INR'} ${paid.toLocaleString('en-IN')}`,
             valueColor: "text-[#22a96a]",
         },
         {
@@ -128,8 +180,8 @@ export default function StatCards() {
             cardBg: "bg-blue-50/70",
             hoverBg: "hover:bg-blue-100/80",
             label: "E-PROMOTION",
-            value: "Active",
-            sub: "Your profile is live",
+            value: marketingStats.status,
+            sub: `${marketingStats.count} template${marketingStats.count === 1 ? '' : 's'} available`,
             valueColor: "text-[#3b82f6]",
         },
         {

@@ -50,6 +50,7 @@ export const TAB_ROUTES: Record<string, string> = {
     'seller-helpdesk': '/exhibitor-dashboard/seller-dashboard/helpdesk',
     'seller-reports': '/exhibitor-dashboard/seller-dashboard/reports',
     documentation: '/exhibitor-dashboard/documentation',
+    'my-event': '/exhibitor-dashboard/my-event',
     exhibitions: '/exhibitor-dashboard/exhibitions',
     epromotion: '/exhibitor-dashboard/epromotion',
     product: '/exhibitor-dashboard/product'

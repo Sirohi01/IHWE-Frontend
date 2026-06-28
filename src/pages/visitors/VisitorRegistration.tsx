@@ -227,6 +227,7 @@ const VisitorRegistration = () => {
         companyName: "",
         companyWebsite: "",
         industry: "",
+        otherIndustry: "",
         companySize: "",
         country: "India",
         state: "",
@@ -380,6 +381,36 @@ const VisitorRegistration = () => {
         };
         fetchHealthCampCities();
     }, [healthCampData.state, healthCampStates]);
+
+    // Fetch State and City based on Pincode
+    useEffect(() => {
+        const fetchPincodeDetails = async () => {
+            if (formData.companyPincode && formData.companyPincode.length === 6) {
+                try {
+                    const res = await fetch(`https://api.postalpincode.in/pincode/${formData.companyPincode}`);
+                    const data = await res.json();
+                    if (data && data[0] && data[0].Status === "Success") {
+                        const postOffice = data[0].PostOffice[0];
+                        if (postOffice) {
+                            const stateName = postOffice.State;
+                            const cityName = postOffice.District;
+                            
+                            setFormData(prev => ({
+                                ...prev,
+                                state: stateName,
+                                city: cityName
+                            }));
+                        }
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch pincode data:", error);
+                }
+            }
+        };
+
+        const timeoutId = setTimeout(fetchPincodeDetails, 500);
+        return () => clearTimeout(timeoutId);
+    }, [formData.companyPincode]);
 
     // Smooth Scroll to Form on Activation
     useEffect(() => {
@@ -634,7 +665,7 @@ const VisitorRegistration = () => {
                     gender: formData.gender,
                     companyName: formData.companyName,
                     designation: formData.designation,
-                    industrySector: formData.industry,
+                    industrySector: formData.industry === 'others' ? formData.otherIndustry : formData.industry,
                     country: formData.country,
                     state: formData.state,
                     city: formData.city,
@@ -652,7 +683,7 @@ const VisitorRegistration = () => {
                     designation: formData.designation,
                     companyName: formData.companyName,
                     companyWebsite: formData.companyWebsite,
-                    industrySector: formData.industry,
+                    industrySector: formData.industry === 'others' ? formData.otherIndustry : formData.industry,
                     companySize: formData.companySize,
                     country: formData.country,
                     state: formData.state,
@@ -687,6 +718,7 @@ const VisitorRegistration = () => {
                         companyName: "",
                         companyWebsite: "",
                         industry: "",
+                        otherIndustry: "",
                         companySize: "",
                         country: "India",
                         state: "",
@@ -1336,460 +1368,472 @@ const VisitorRegistration = () => {
 
                                                     {visitorType !== "freeHealth" && (
                                                         <>
-                                                    {/* —— PERSONAL DETAILS —— */}
-                                                    <div className="">
-                                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-1.5 mb-4 gap-2">
-                                                            <h3
-                                                                className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]"
-                                                                style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                            >
-                                                                Personal Information
-                                                            </h3>
-                                                            <span className="text-[10px] font-bold bg-[#d26019]/10 text-[#d26019] px-2 py-1 rounded tracking-widest uppercase w-fit">Step 1 of 2</span>
-                                                        </div>
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
-
-                                                            <div>
-                                                                <Label className={labelClasses}>FIRST NAME <span className=" text-red-500">*</span></Label>
-                                                                <Input
-                                                                    name="firstName"
-                                                                    value={formData.firstName}
-                                                                    onChange={handleInputChange}
-                                                                    required placeholder="Enter First Name" className={inputClasses}
-                                                                />
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>LAST NAME <span className=" text-red-500">*</span></Label>
-                                                                <Input
-                                                                    name="lastName"
-                                                                    value={formData.lastName}
-                                                                    onChange={handleInputChange}
-                                                                    required placeholder="Enter Last Name" className={inputClasses}
-                                                                />
-                                                            </div>
-                                                            {visitorType === "corporate" && (
-                                                                <div>
-                                                                    <Label className={labelClasses}>DESIGNATION <span className=" text-red-500">*</span></Label>
-                                                                    <Input
-                                                                        name="designation"
-                                                                        value={formData.designation}
-                                                                        onChange={handleInputChange}
-                                                                        required placeholder="Enter Designation.." className={inputClasses}
-                                                                    />
+                                                            {/* —— PERSONAL DETAILS —— */}
+                                                            <div className="">
+                                                                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-1.5 mb-4 gap-2">
+                                                                    <h3
+                                                                        className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]"
+                                                                        style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                                                                    >
+                                                                        Personal Information
+                                                                    </h3>
+                                                                    <span className="text-[10px] font-bold bg-[#d26019]/10 text-[#d26019] px-2 py-1 rounded tracking-widest uppercase w-fit">Step 1 of 2</span>
                                                                 </div>
-                                                            )}
-                                                            <div>
-                                                                <Label className={labelClasses}>GENDER <span className=" text-red-500">*</span></Label>
-                                                                <Select
-                                                                    onValueChange={(v) => setFormData(prev => ({ ...prev, gender: v }))}
-                                                                    value={formData.gender}
-                                                                >
-                                                                    <SelectTrigger className={inputClasses}>
-                                                                        <SelectValue placeholder="Select Here" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="male">Male</SelectItem>
-                                                                        <SelectItem value="female">Female</SelectItem>
-                                                                        <SelectItem value="others">Others</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>DATE OF BIRTH (OPTIONAL)</Label>
-                                                                <Input
-                                                                    name="dob"
-                                                                    value={formData.dob}
-                                                                    onChange={handleInputChange}
-                                                                    type="date" className={inputClasses}
-                                                                />
-                                                            </div>
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
 
-                                                            {/* Phone & OTP Row */}
-                                                            <div className="relative flex flex-col group">
-                                                                <Label className={labelClasses}>MOBILE NO. (WHATSAPP) <span className=" text-red-500">*</span></Label>
-                                                                <div className="relative flex items-center">
-                                                                    <Input
-                                                                        name="mobileNo"
-                                                                        value={formData.mobileNo}
-                                                                        onChange={handleInputChange}
-                                                                        disabled={phoneVerified || phoneOtpSent}
-                                                                        required placeholder="Enter WhatsApp Number"
-                                                                        className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
-                                                                    />
-                                                                    {!phoneVerified && (
-                                                                        <button
-                                                                            type="button"
-                                                                            onClick={sendPhoneOtp}
-                                                                            disabled={isSendingPhoneOtp || !formData.mobileNo || phoneTimer > 0}
-                                                                            className="absolute right-1 px-3 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all"
-                                                                        >
-                                                                            {isSendingPhoneOtp ? "..." : phoneTimer > 0 ? `${phoneTimer}s` : phoneOtpSent ? "RE-SEND" : "SEND OTP"}
-                                                                        </button>
-                                                                    )}
-                                                                    {phoneVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                <Label className={labelClasses}>ALTERNATE NO. (OPTIONAL)</Label>
-                                                                <Input
-                                                                    name="alternateNo"
-                                                                    value={formData.alternateNo}
-                                                                    onChange={handleInputChange}
-                                                                    placeholder="Enter Alternate No." className={inputClasses}
-                                                                />
-                                                            </div>
-                                                            {/* Email & OTP Row */}
-                                                            <div className="relative flex flex-col group lg:col-span-2">
-                                                                <Label className={labelClasses}>EMAIL ADDRESS <span className=" text-red-500">*</span></Label>
-                                                                <div className="relative flex items-center">
-                                                                    <Input
-                                                                        name="email"
-                                                                        value={formData.email}
-                                                                        onChange={handleInputChange}
-                                                                        disabled={emailVerified || emailOtpSent}
-                                                                        type="email" required placeholder="Enter Email Address"
-                                                                        className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
-                                                                    />
-                                                                    {!emailVerified && (
-                                                                        <button
-                                                                            type="button"
-                                                                            onClick={sendEmailOtp}
-                                                                            disabled={isSendingEmailOtp || !formData.email || emailTimer > 0}
-                                                                            className="absolute right-1 px-3 py-1 bg-[#d26019] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all"
-                                                                        >
-                                                                            {isSendingEmailOtp ? "..." : emailTimer > 0 ? `${emailTimer}s` : emailOtpSent ? "RE-SEND" : "SEND OTP"}
-                                                                        </button>
-                                                                    )}
-                                                                    {emailVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-                                                        {/* —— DUAL OTP INPUT GRID —— */}
-                                                        <AnimatePresence>
-                                                            {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
-                                                                <motion.div
-                                                                    initial={{ opacity: 0, height: 0 }}
-                                                                    animate={{ opacity: 1, height: "auto" }}
-                                                                    exit={{ opacity: 0, height: 0 }}
-                                                                    className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 overflow-hidden"
-                                                                >
-                                                                    {/* WhatsApp OTP Column */}
                                                                     <div>
-                                                                        {phoneOtpSent && !phoneVerified && (
-                                                                            <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
-                                                                                <Input
-                                                                                    value={phoneOtp}
-                                                                                    onChange={(e) => setPhoneOtp(e.target.value)}
-                                                                                    placeholder="WhatsApp OTP"
-                                                                                    className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
-                                                                                    maxLength={6}
-                                                                                    autoComplete="off"
-                                                                                    name="visitor-phone-otp-field"
-                                                                                    inputMode="numeric"
-                                                                                />
-                                                                                <Button
-                                                                                    type="button"
-                                                                                    onClick={confirmPhoneOtp}
-                                                                                    disabled={isVerifyingPhone || phoneOtp.length < 4}
-                                                                                    className="h-9 bg-[#23471d] hover:bg-[#1a3516] text-[10px] font-bold px-4"
-                                                                                >
-                                                                                    {isVerifyingPhone ? "..." : "VERIFY"}
-                                                                                </Button>
-                                                                            </div>
-                                                                        )}
+                                                                        <Label className={labelClasses}>FIRST NAME <span className=" text-red-500">*</span></Label>
+                                                                        <Input
+                                                                            name="firstName"
+                                                                            value={formData.firstName}
+                                                                            onChange={handleInputChange}
+                                                                            required placeholder="Enter First Name" className={inputClasses}
+                                                                        />
                                                                     </div>
-
-                                                                    {/* Email OTP Column */}
                                                                     <div>
-                                                                        {emailOtpSent && !emailVerified && (
-                                                                            <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 grid-col-3 rounded-sm">
-                                                                                <Input
-                                                                                    value={emailOtp}
-                                                                                    onChange={(e) => setEmailOtp(e.target.value)}
-                                                                                    placeholder="Email OTP"
-                                                                                    className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
-                                                                                    maxLength={6}
-                                                                                    autoComplete="off"
-                                                                                    name="visitor-email-otp-field"
-                                                                                    inputMode="numeric"
-                                                                                />
-                                                                                <Button
-                                                                                    type="button"
-                                                                                    onClick={confirmEmailOtp}
-                                                                                    disabled={isVerifyingEmail || emailOtp.length < 4}
-                                                                                    className="h-9 bg-[#d26019] hover:bg-[#a84c14] text-[10px] font-bold px-4"
-                                                                                >
-                                                                                    {isVerifyingEmail ? "..." : "VERIFY"}
-                                                                                </Button>
-                                                                            </div>
-                                                                        )}
+                                                                        <Label className={labelClasses}>LAST NAME <span className=" text-red-500">*</span></Label>
+                                                                        <Input
+                                                                            name="lastName"
+                                                                            value={formData.lastName}
+                                                                            onChange={handleInputChange}
+                                                                            required placeholder="Enter Last Name" className={inputClasses}
+                                                                        />
                                                                     </div>
-                                                                </motion.div>
-                                                            )}
-                                                        </AnimatePresence>
-                                                    </div>
-
-                                                    {phoneVerified && emailVerified && (
-                                                        <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-6 border-t-2 border-dashed border-slate-200">
-                                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-400 pb-1.5 mb-6 gap-2">
-                                                                <h3
-                                                                    className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]"
-                                                                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-                                                                >
-                                                                    {visitorType === "corporate" ? "Company & Industry Information" : "Additional Details"}
-                                                                </h3>
-                                                                <span className="text-[10px] font-bold bg-[#d26019] text-white px-2 py-1 rounded tracking-widest uppercase w-fit shadow-sm shadow-[#d26019]/20">Step 2 of 2</span>
-                                                            </div>
-                                                            {/* —— PROFESSIONAL DETAILS —— */}
-                                                            {visitorType === "corporate" && (
-                                                                <div className="space-y-2 mb-8">
-                                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
-                                                                        <div className="lg:col-span-2">
-                                                                            <Label className={labelClasses}>COMPANY NAME <span className=" text-red-500">*</span></Label>
+                                                                    {visitorType === "corporate" && (
+                                                                        <div>
+                                                                            <Label className={labelClasses}>DESIGNATION <span className=" text-red-500">*</span></Label>
                                                                             <Input
-                                                                                name="companyName"
-                                                                                value={formData.companyName}
+                                                                                name="designation"
+                                                                                value={formData.designation}
                                                                                 onChange={handleInputChange}
-                                                                                required placeholder="Enter Company Name.." className={inputClasses}
+                                                                                required placeholder="Enter Designation.." className={inputClasses}
                                                                             />
                                                                         </div>
-                                                                        <div>
-                                                                            <Label className={labelClasses}>COMPANY WEBSITE <span className=" text-red-500">*</span></Label>
+                                                                    )}
+                                                                    <div>
+                                                                        <Label className={labelClasses}>GENDER <span className=" text-red-500">*</span></Label>
+                                                                        <Select
+                                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, gender: v }))}
+                                                                            value={formData.gender}
+                                                                        >
+                                                                            <SelectTrigger className={inputClasses}>
+                                                                                <SelectValue placeholder="Select Here" />
+                                                                            </SelectTrigger>
+                                                                            <SelectContent>
+                                                                                <SelectItem value="male">Male</SelectItem>
+                                                                                <SelectItem value="female">Female</SelectItem>
+                                                                                <SelectItem value="others">Others</SelectItem>
+                                                                            </SelectContent>
+                                                                        </Select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>DATE OF BIRTH (OPTIONAL)</Label>
+                                                                        <Input
+                                                                            name="dob"
+                                                                            value={formData.dob}
+                                                                            onChange={handleInputChange}
+                                                                            type="date" className={inputClasses}
+                                                                        />
+                                                                    </div>
+
+                                                                    {/* Phone & OTP Row */}
+                                                                    <div className="relative flex flex-col group">
+                                                                        <Label className={labelClasses}>MOBILE NO. (WHATSAPP) <span className=" text-red-500">*</span></Label>
+                                                                        <div className="relative flex items-center">
                                                                             <Input
-                                                                                name="companyWebsite"
-                                                                                value={formData.companyWebsite}
+                                                                                name="mobileNo"
+                                                                                value={formData.mobileNo}
                                                                                 onChange={handleInputChange}
-                                                                                required placeholder="Enter Company Website.." className={inputClasses}
+                                                                                disabled={phoneVerified || phoneOtpSent}
+                                                                                required placeholder="Enter WhatsApp Number"
+                                                                                className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
                                                                             />
+                                                                            {!phoneVerified && (
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={sendPhoneOtp}
+                                                                                    disabled={isSendingPhoneOtp || !formData.mobileNo || phoneTimer > 0}
+                                                                                    className="absolute right-1 px-3 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all"
+                                                                                >
+                                                                                    {isSendingPhoneOtp ? "..." : phoneTimer > 0 ? `${phoneTimer}s` : phoneOtpSent ? "RE-SEND" : "SEND OTP"}
+                                                                                </button>
+                                                                            )}
+                                                                            {phoneVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
                                                                         </div>
-                                                                        <div>
-                                                                            <Label className={labelClasses}>INDUSTRY/SECTOR <span className=" text-red-500">*</span></Label>
-                                                                            <Select
-                                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, industry: v }))}
-                                                                                value={formData.industry}
-                                                                            >
-                                                                                <SelectTrigger className={inputClasses}>
-                                                                                    <SelectValue placeholder="Select Here" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent className="bg-white">
-                                                                                    <SelectItem value="ayush">AYUSH</SelectItem>
-                                                                                    <SelectItem value="agriculture">Agriculture & Organic</SelectItem>
-                                                                                    <SelectItem value="fitness">Fitness & Wellness</SelectItem>
-                                                                                    <SelectItem value="healthcare">Healthcare Services</SelectItem>
-                                                                                    <SelectItem value="pharma">Pharmaceutical</SelectItem>
-                                                                                    <SelectItem value="others">Others</SelectItem>
-                                                                                </SelectContent>
-                                                                            </Select>
+                                                                    </div>
+                                                                    <div>
+                                                                        <Label className={labelClasses}>ALTERNATE NO. (OPTIONAL)</Label>
+                                                                        <Input
+                                                                            name="alternateNo"
+                                                                            value={formData.alternateNo}
+                                                                            onChange={handleInputChange}
+                                                                            placeholder="Enter Alternate No." className={inputClasses}
+                                                                        />
+                                                                    </div>
+                                                                    {/* Email & OTP Row */}
+                                                                    <div className="relative flex flex-col group lg:col-span-2">
+                                                                        <Label className={labelClasses}>EMAIL ADDRESS <span className=" text-red-500">*</span></Label>
+                                                                        <div className="relative flex items-center">
+                                                                            <Input
+                                                                                name="email"
+                                                                                value={formData.email}
+                                                                                onChange={handleInputChange}
+                                                                                disabled={emailVerified || emailOtpSent}
+                                                                                type="email" required placeholder="Enter Email Address"
+                                                                                className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
+                                                                            />
+                                                                            {!emailVerified && (
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={sendEmailOtp}
+                                                                                    disabled={isSendingEmailOtp || !formData.email || emailTimer > 0}
+                                                                                    className="absolute right-1 px-3 py-1 bg-[#d26019] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all"
+                                                                                >
+                                                                                    {isSendingEmailOtp ? "..." : emailTimer > 0 ? `${emailTimer}s` : emailOtpSent ? "RE-SEND" : "SEND OTP"}
+                                                                                </button>
+                                                                            )}
+                                                                            {emailVerified && <CheckCircle size={14} className="absolute right-3 text-green-500" />}
                                                                         </div>
-                                                                        <div>
-                                                                            <Label className={labelClasses}>COMPANY SIZE <span className=" text-red-500">*</span></Label>
-                                                                            <Select
-                                                                                onValueChange={(v) => setFormData(prev => ({ ...prev, companySize: v }))}
-                                                                                value={formData.companySize}
-                                                                            >
-                                                                                <SelectTrigger className={inputClasses}>
-                                                                                    <SelectValue placeholder="Select Here" />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent className="bg-white">
-                                                                                    <SelectItem value="1-10">1-10 Employees</SelectItem>
-                                                                                    <SelectItem value="11-50">11-50 Employees</SelectItem>
-                                                                                    <SelectItem value="51-200">51-200 Employees</SelectItem>
-                                                                                    <SelectItem value="200+">200+ Employees</SelectItem>
-                                                                                </SelectContent>
-                                                                            </Select>
-                                                                        </div>
-                                                                        {visitorType != "corporate" && (
+                                                                    </div>
+
+                                                                </div>
+
+                                                                {/* —— DUAL OTP INPUT GRID —— */}
+                                                                <AnimatePresence>
+                                                                    {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
+                                                                        <motion.div
+                                                                            initial={{ opacity: 0, height: 0 }}
+                                                                            animate={{ opacity: 1, height: "auto" }}
+                                                                            exit={{ opacity: 0, height: 0 }}
+                                                                            className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 overflow-hidden"
+                                                                        >
+                                                                            {/* WhatsApp OTP Column */}
                                                                             <div>
-                                                                                <Label className={labelClasses}>COUNTRY <span className=" text-red-500">*</span></Label>
-                                                                                <Select
-                                                                                    onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })}
-                                                                                    value={formData.country}
-                                                                                >
-                                                                                    <SelectTrigger className={inputClasses}>
-                                                                                        <SelectValue placeholder="Select Country" />
-                                                                                    </SelectTrigger>
-                                                                                    <SelectContent className="max-h-[300px] bg-white">
-                                                                                        {countries.map(c => (
-                                                                                            <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
-                                                                                        ))}
-                                                                                    </SelectContent>
-                                                                                </Select>
+                                                                                {phoneOtpSent && !phoneVerified && (
+                                                                                    <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 rounded-sm">
+                                                                                        <Input
+                                                                                            value={phoneOtp}
+                                                                                            onChange={(e) => setPhoneOtp(e.target.value)}
+                                                                                            placeholder="WhatsApp OTP"
+                                                                                            className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
+                                                                                            maxLength={6}
+                                                                                            autoComplete="off"
+                                                                                            name="visitor-phone-otp-field"
+                                                                                            inputMode="numeric"
+                                                                                        />
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            onClick={confirmPhoneOtp}
+                                                                                            disabled={isVerifyingPhone || phoneOtp.length < 4}
+                                                                                            className="h-9 bg-[#23471d] hover:bg-[#1a3516] text-[10px] font-bold px-4"
+                                                                                        >
+                                                                                            {isVerifyingPhone ? "..." : "VERIFY"}
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                )}
                                                                             </div>
-                                                                        )}
-                                                                        <div>
-                                                                            <Label className={labelClasses}>STATE <span className=" text-red-500">*</span></Label>
-                                                                            <Select
-                                                                                disabled={!formData.country || loadingStates}
-                                                                                onValueChange={(v) => handleInputChange({ target: { name: 'state', value: v } })}
-                                                                                value={formData.state}
-                                                                            >
-                                                                                <SelectTrigger className={inputClasses}>
-                                                                                    <SelectValue placeholder={loadingStates ? "Loading..." : "Select State"} />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent className="max-h-[300px] bg-white">
-                                                                                    {states.map(s => (
-                                                                                        <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>
-                                                                                    ))}
-                                                                                </SelectContent>
-                                                                            </Select>
+
+                                                                            {/* Email OTP Column */}
+                                                                            <div>
+                                                                                {emailOtpSent && !emailVerified && (
+                                                                                    <div className="flex gap-2 items-center bg-orange-50/50 p-2 border border-orange-100 grid-col-3 rounded-sm">
+                                                                                        <Input
+                                                                                            value={emailOtp}
+                                                                                            onChange={(e) => setEmailOtp(e.target.value)}
+                                                                                            placeholder="Email OTP"
+                                                                                            className="flex-1 h-9 rounded-sm border-orange-200 text-center tracking-[0.3em] font-bold text-xs"
+                                                                                            maxLength={6}
+                                                                                            autoComplete="off"
+                                                                                            name="visitor-email-otp-field"
+                                                                                            inputMode="numeric"
+                                                                                        />
+                                                                                        <Button
+                                                                                            type="button"
+                                                                                            onClick={confirmEmailOtp}
+                                                                                            disabled={isVerifyingEmail || emailOtp.length < 4}
+                                                                                            className="h-9 bg-[#d26019] hover:bg-[#a84c14] text-[10px] font-bold px-4"
+                                                                                        >
+                                                                                            {isVerifyingEmail ? "..." : "VERIFY"}
+                                                                                        </Button>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </motion.div>
+                                                                    )}
+                                                                </AnimatePresence>
+                                                            </div>
+
+                                                            {phoneVerified && emailVerified && (
+                                                                <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-6 border-t-2 border-dashed border-slate-200">
+                                                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-400 pb-1.5 mb-6 gap-2">
+                                                                        <h3
+                                                                            className="text-sm font-bold text-[#d26019] uppercase tracking-[0.05em]"
+                                                                            style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                                                                        >
+                                                                            {visitorType === "corporate" ? "Company & Industry Information" : "Additional Details"}
+                                                                        </h3>
+                                                                        <span className="text-[10px] font-bold bg-[#d26019] text-white px-2 py-1 rounded tracking-widest uppercase w-fit shadow-sm shadow-[#d26019]/20">Step 2 of 2</span>
+                                                                    </div>
+                                                                    {/* —— PROFESSIONAL DETAILS —— */}
+                                                                    {visitorType === "corporate" && (
+                                                                        <div className="space-y-2 mb-8">
+                                                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-4">
+                                                                                <div className="lg:col-span-2">
+                                                                                    <Label className={labelClasses}>COMPANY NAME <span className=" text-red-500">*</span></Label>
+                                                                                    <Input
+                                                                                        name="companyName"
+                                                                                        value={formData.companyName}
+                                                                                        onChange={handleInputChange}
+                                                                                        required placeholder="Enter Company Name.." className={inputClasses}
+                                                                                    />
+                                                                                </div>
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>COMPANY WEBSITE</Label>
+                                                                                    <Input
+                                                                                        name="companyWebsite"
+                                                                                        value={formData.companyWebsite}
+                                                                                        onChange={handleInputChange}
+                                                                                        placeholder="Enter Company Website.." className={inputClasses}
+                                                                                    />
+                                                                                </div>
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>INDUSTRY/SECTOR <span className=" text-red-500">*</span></Label>
+                                                                                    <Select
+                                                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, industry: v }))}
+                                                                                        value={formData.industry}
+                                                                                    >
+                                                                                        <SelectTrigger className={inputClasses}>
+                                                                                            <SelectValue placeholder="Select Here" />
+                                                                                        </SelectTrigger>
+                                                                                        <SelectContent className="bg-white">
+                                                                                            <SelectItem value="ayush">AYUSH</SelectItem>
+                                                                                            <SelectItem value="agriculture">Agriculture & Organic</SelectItem>
+                                                                                            <SelectItem value="fitness">Fitness & Wellness</SelectItem>
+                                                                                            <SelectItem value="healthcare">Healthcare Services</SelectItem>
+                                                                                    <SelectItem value="pharma">Pharmaceutical</SelectItem>
+                                                                                            <SelectItem value="others">Others</SelectItem>
+                                                                                        </SelectContent>
+                                                                                    </Select>
+                                                                                </div>
+                                                                                {formData.industry === 'others' && (
+                                                                                    <div>
+                                                                                        <Label className={labelClasses}>PLEASE SPECIFY INDUSTRY <span className=" text-red-500">*</span></Label>
+                                                                                        <Input
+                                                                                            name="otherIndustry"
+                                                                                            value={formData.otherIndustry}
+                                                                                            onChange={handleInputChange}
+                                                                                            required placeholder="Enter your industry" className={inputClasses}
+                                                                                        />
+                                                                                    </div>
+                                                                                )}
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>COMPANY SIZE <span className=" text-red-500">*</span></Label>
+                                                                                    <Select
+                                                                                        onValueChange={(v) => setFormData(prev => ({ ...prev, companySize: v }))}
+                                                                                        value={formData.companySize}
+                                                                                    >
+                                                                                        <SelectTrigger className={inputClasses}>
+                                                                                            <SelectValue placeholder="Select Here" />
+                                                                                        </SelectTrigger>
+                                                                                        <SelectContent className="bg-white">
+                                                                                            <SelectItem value="1-10">1-10 Employees</SelectItem>
+                                                                                            <SelectItem value="11-50">11-50 Employees</SelectItem>
+                                                                                            <SelectItem value="51-200">51-200 Employees</SelectItem>
+                                                                                            <SelectItem value="200+">200+ Employees</SelectItem>
+                                                                                        </SelectContent>
+                                                                                    </Select>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>Pincode <span className=" text-red-500">*</span></Label>
+                                                                                    <Input
+                                                                                        name="companyPincode"
+                                                                                        value={formData.companyPincode}
+                                                                                        onChange={handleInputChange}
+                                                                                        required placeholder="Enter Pincode" className={inputClasses}
+                                                                                    />
+                                                                                </div>
+                                                                                {visitorType != "corporate" && (
+                                                                                    <div>
+                                                                                        <Label className={labelClasses}>COUNTRY <span className=" text-red-500">*</span></Label>
+                                                                                        <Select
+                                                                                            onValueChange={(v) => handleInputChange({ target: { name: 'country', value: v } })}
+                                                                                            value={formData.country}
+                                                                                        >
+                                                                                            <SelectTrigger className={inputClasses}>
+                                                                                                <SelectValue placeholder="Select Country" />
+                                                                                            </SelectTrigger>
+                                                                                            <SelectContent className="max-h-[300px] bg-white">
+                                                                                                {countries.map(c => (
+                                                                                                    <SelectItem key={c._id || c.name} value={c.name}>{c.name}</SelectItem>
+                                                                                                ))}
+                                                                                            </SelectContent>
+                                                                                        </Select>
+                                                                                    </div>
+                                                                                )}
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>STATE <span className=" text-red-500">*</span></Label>
+                                                                                    <Select
+                                                                                        disabled={!formData.country || loadingStates}
+                                                                                        onValueChange={(v) => handleInputChange({ target: { name: 'state', value: v } })}
+                                                                                        value={formData.state}
+                                                                                    >
+                                                                                        <SelectTrigger className={inputClasses}>
+                                                                                            <SelectValue placeholder={loadingStates ? "Loading..." : "Select State"} />
+                                                                                        </SelectTrigger>
+                                                                                        <SelectContent className="max-h-[300px] bg-white">
+                                                                                            {states.map(s => (
+                                                                                                <SelectItem key={s._id || s.name} value={s.name}>{s.name}</SelectItem>
+                                                                                            ))}
+                                                                                        </SelectContent>
+                                                                                    </Select>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <Label className={labelClasses}>CITY <span className=" text-red-500">*</span></Label>
+                                                                                    <Select
+                                                                                        disabled={!formData.state || loadingCities}
+                                                                                        onValueChange={(v) => handleInputChange({ target: { name: 'city', value: v } })}
+                                                                                        value={formData.city}
+                                                                                    >
+                                                                                        <SelectTrigger className={inputClasses}>
+                                                                                            <SelectValue placeholder={loadingCities ? "Loading..." : "Select City"} />
+                                                                                        </SelectTrigger>
+                                                                                        <SelectContent className="max-h-[300px] bg-white">
+                                                                                            {cities.map(ct => (
+                                                                                                <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>
+                                                                                            ))}
+                                                                                        </SelectContent>
+                                                                                    </Select>
+                                                                                </div>
+
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <Label className={labelClasses}>CITY <span className=" text-red-500">*</span></Label>
-                                                                            <Select
-                                                                                disabled={!formData.state || loadingCities}
-                                                                                onValueChange={(v) => handleInputChange({ target: { name: 'city', value: v } })}
-                                                                                value={formData.city}
-                                                                            >
-                                                                                <SelectTrigger className={inputClasses}>
-                                                                                    <SelectValue placeholder={loadingCities ? "Loading..." : "Select City"} />
-                                                                                </SelectTrigger>
-                                                                                <SelectContent className="max-h-[300px] bg-white">
-                                                                                    {cities.map(ct => (
-                                                                                        <SelectItem key={ct._id || ct.name} value={ct.name}>{ct.name}</SelectItem>
-                                                                                    ))}
-                                                                                </SelectContent>
-                                                                            </Select>
+                                                                    )}
+
+                                                                    {/* —— PURPOSE & INTEREST —— */}
+                                                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                                                        {/* Purpose of Visit */}
+                                                                        <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
+                                                                            <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit <span className=" text-red-500">*</span></Label>
+                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                                                                {(visitorType === "corporate" ? PURPOSE_CORPORATE : PURPOSE_GENERAL).map((opt) => (
+                                                                                    <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                                                                                        <Checkbox
+                                                                                            checked={formData.purposeOfVisit.includes(opt)}
+                                                                                            onCheckedChange={(checked: boolean) => handlePurposeChange(opt, checked)}
+                                                                                            className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
+                                                                                        />
+                                                                                        <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
+                                                                                    </label>
+                                                                                ))}
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <Label className={labelClasses}>Pincode <span className=" text-red-500">*</span></Label>
+
+                                                                        {/* Area of Interest */}
+                                                                        <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
+                                                                            <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest <span className=" text-red-500">*</span></Label>
+                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                                                                {(visitorType === "corporate" ? INTEREST_CORPORATE : INTEREST_GENERAL).map((opt) => (
+                                                                                    <label key={opt} className="flex items-center gap-3 cursor-pointer group">
+                                                                                        <Checkbox
+                                                                                            checked={formData.areaOfInterest.includes(opt)}
+                                                                                            onCheckedChange={(checked: boolean) => handleInterestChange(opt, checked)}
+                                                                                            className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
+                                                                                        />
+                                                                                        <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
+                                                                                    </label>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {visitorType === "corporate" && (
+                                                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
+                                                                            <div className="space-y-4 text-left">
+                                                                                <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? <span className=" text-red-500">*</span></Label>
+                                                                                <RadioGroup
+                                                                                    value={formData.schedulingB2B}
+                                                                                    onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
+                                                                                    className="flex gap-6"
+                                                                                >
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                                                        <Label htmlFor="b2b-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
+                                                                                    </div>
+                                                                                    <div className="flex items-center space-x-2">
+                                                                                        <RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#23471d]" />
+                                                                                        <Label htmlFor="b2b-no" className="text-sm font-medium text-slate-600 cursor-pointer">No</Label>
+                                                                                    </div>
+                                                                                </RadioGroup>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {visitorType === "corporate" && (
+                                                                        <div className="space-y-2">
+                                                                            <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Any Specific requirement</Label>
                                                                             <Input
-                                                                                name="companyPincode"
-                                                                                value={formData.companyPincode}
+                                                                                name="anyRequirement"
+                                                                                value={formData.anyRequirement}
                                                                                 onChange={handleInputChange}
-                                                                                required placeholder="Enter Pincode" className={inputClasses}
+                                                                                placeholder="Write Here .." className={inputClasses}
                                                                             />
                                                                         </div>
+                                                                    )}
+
+                                                                    {/* —— NEWSLETTER —— */}
+                                                                    <div className="pt-4 border-t border-slate-100">
+                                                                        <label className="flex items-center gap-3 cursor-pointer group">
+                                                                            <Checkbox
+                                                                                checked={formData.subscribeNewsletter}
+                                                                                onCheckedChange={(checked: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: checked }))}
+                                                                                className="rounded-none w-4 h-4 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
+                                                                            />
+                                                                            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide">Subscribe to Event Updates & Newsletters</span>
+                                                                        </label>
                                                                     </div>
                                                                 </div>
                                                             )}
 
-                                                            {/* —— PURPOSE & INTEREST —— */}
-                                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                                                {/* Purpose of Visit */}
-                                                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                                    <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Purpose of Visit <span className=" text-red-500">*</span></Label>
-                                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                                                        {(visitorType === "corporate" ? PURPOSE_CORPORATE : PURPOSE_GENERAL).map((opt) => (
-                                                                            <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                                                <Checkbox
-                                                                                    checked={formData.purposeOfVisit.includes(opt)}
-                                                                                    onCheckedChange={(checked: boolean) => handlePurposeChange(opt, checked)}
-                                                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
-                                                                                />
-                                                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                                                            </label>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Area of Interest */}
-                                                                <div className="space-y-4 bg-slate-50/50 p-5 border border-slate-300 rounded-[2px] shadow-sm">
-                                                                    <Label className="text-[11px] font-bold text-[#23471d] uppercase tracking-wider block border-b border-slate-200 pb-2">Area of Interest <span className=" text-red-500">*</span></Label>
-                                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                                                                        {(visitorType === "corporate" ? INTEREST_CORPORATE : INTEREST_GENERAL).map((opt) => (
-                                                                            <label key={opt} className="flex items-center gap-3 cursor-pointer group">
-                                                                                <Checkbox
-                                                                                    checked={formData.areaOfInterest.includes(opt)}
-                                                                                    onCheckedChange={(checked: boolean) => handleInterestChange(opt, checked)}
-                                                                                    className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
-                                                                                />
-                                                                                <span className="text-[11px] text-slate-600 group-hover:text-slate-900 font-medium transition-colors">{opt}</span>
-                                                                            </label>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            {visitorType === "corporate" && (
-                                                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
-                                                                    <div className="space-y-4 text-left">
-                                                                        <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Would you like to schedule B2B meetings? <span className=" text-red-500">*</span></Label>
-                                                                        <RadioGroup
-                                                                            value={formData.schedulingB2B}
-                                                                            onValueChange={(v) => setFormData(prev => ({ ...prev, schedulingB2B: v }))}
-                                                                            className="flex gap-6"
-                                                                        >
-                                                                            <div className="flex items-center space-x-2">
-                                                                                <RadioGroupItem value="yes" id="b2b-yes" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                                                                <Label htmlFor="b2b-yes" className="text-sm font-medium text-slate-600 cursor-pointer">Yes</Label>
-                                                                            </div>
-                                                                            <div className="flex items-center space-x-2">
-                                                                                <RadioGroupItem value="no" id="b2b-no" className="w-4 h-4 border-slate-400 text-[#23471d]" />
-                                                                                <Label htmlFor="b2b-no" className="text-sm font-medium text-slate-600 cursor-pointer">No</Label>
-                                                                            </div>
-                                                                        </RadioGroup>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-
-                                                            {visitorType === "corporate" && (
-                                                                <div className="space-y-2">
-                                                                    <Label className="text-[11px] font-bold text-slate-900 uppercase tracking-wider block">Any Specific requirement</Label>
-                                                                    <Input
-                                                                        name="anyRequirement"
-                                                                        value={formData.anyRequirement}
-                                                                        onChange={handleInputChange}
-                                                                        placeholder="Write Here .." className={inputClasses}
-                                                                    />
-                                                                </div>
-                                                            )}
-
-                                                            {/* —— NEWSLETTER —— */}
-                                                            <div className="pt-4 border-t border-slate-100">
-                                                                <label className="flex items-center gap-3 cursor-pointer group">
-                                                                    <Checkbox
-                                                                        checked={formData.subscribeNewsletter}
-                                                                        onCheckedChange={(checked: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: checked }))}
-                                                                        className="rounded-none w-4 h-4 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]"
-                                                                    />
-                                                                    <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide">Subscribe to Event Updates & Newsletters</span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    )}
-
-                                                    {/* —— SUBMIT BAR —— */}
-                                                    <div className="pt-6 flex flex-col items-center">
-                                                        {(!emailVerified || !phoneVerified) ? (
-                                                            <>
-                                                                <Button
-                                                                    type="button"
-                                                                    disabled
-                                                                    className="w-full max-w-56 h-12 rounded-sm bg-slate-300 text-slate-500 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 cursor-not-allowed"
-                                                                >
-                                                                    NEXT STEP
-                                                                    <ArrowRight size={16} />
-                                                                </Button>
-                                                                <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider text-center">
-                                                                    Please verify both Email and Mobile Number to proceed
-                                                                </p>
-                                                            </>
-                                                        ) : (
-                                                            <Button
-                                                                type="submit"
-                                                                disabled={loading}
-                                                                className="w-full max-w-56 h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
-                                                            >
-                                                                {loading ? (
+                                                            {/* —— SUBMIT BAR —— */}
+                                                            <div className="pt-6 flex flex-col items-center">
+                                                                {(!emailVerified || !phoneVerified) ? (
                                                                     <>
-                                                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                                                        <span>SUBMITTING...</span>
+                                                                        <Button
+                                                                            type="button"
+                                                                            disabled
+                                                                            className="w-full max-w-56 h-12 rounded-sm bg-slate-300 text-slate-500 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 cursor-not-allowed"
+                                                                        >
+                                                                            NEXT STEP
+                                                                            <ArrowRight size={16} />
+                                                                        </Button>
+                                                                        <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider text-center">
+                                                                            Please verify both Email and Mobile Number to proceed
+                                                                        </p>
                                                                     </>
                                                                 ) : (
-                                                                    <>
-                                                                        SUBMIT REGISTRATION
-                                                                        <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                                                    </>
+                                                                    <Button
+                                                                        type="submit"
+                                                                        disabled={loading}
+                                                                        className="w-full max-w-56 h-12 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-[#23471d]/10 flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                                                    >
+                                                                        {loading ? (
+                                                                            <>
+                                                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                                                <span>SUBMITTING...</span>
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                SUBMIT REGISTRATION
+                                                                                <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                                                            </>
+                                                                        )}
+                                                                    </Button>
                                                                 )}
-                                                            </Button>
-                                                        )}
-                                                        <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2">
-                                                            <ShieldCheck size={12} className="text-[#23471d]" />
-                                                            Secure Registration Portal
-                                                        </p>
-                                                    </div>
+                                                                <p className="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] flex items-center gap-2">
+                                                                    <ShieldCheck size={12} className="text-[#23471d]" />
+                                                                    Secure Registration Portal
+                                                                </p>
+                                                            </div>
                                                         </>
                                                     )}
                                                 </form>
