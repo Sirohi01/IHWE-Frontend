@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Download, Upload, Trash2, Plus, Save, Calendar, UserCheck, Utensils, Car, Info, AlertCircle, ShieldCheck, Loader2 } from 'lucide-react';
+import { Download, Upload, Trash2, Plus, Save, Calendar, UserCheck, Utensils, Car, Info, AlertCircle, ShieldCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { API_URL } from '@/lib/api';
 import { useAuthStore } from '@/stores/authStore';
@@ -8,8 +8,8 @@ import { useAuthStore } from '@/stores/authStore';
 const AddTeamMembers = () => {
     const navigate = useNavigate();
     const { token, user } = useAuthStore();
-    
-    const emptyRow = { photo: null, photoPreview: '', name: '', designation: '', mobile: '', email: '', roleAtExhibition: '', idProof: '', idProofDoc: null, idProofDocPreview: '', isUploadingPhoto: false, isUploadingId: false };
+
+    const emptyRow = { photo: null, photoPreview: '', name: '', designation: '', mobile: '', email: '', roleAtExhibition: '', idProof: '', idProofDoc: null, idProofDocPreview: '' };
     const [rows, setRows] = useState(Array(3).fill().map(() => ({ ...emptyRow })));
     const [isSaving, setIsSaving] = useState(false);
 
@@ -32,62 +32,50 @@ const AddTeamMembers = () => {
 
     const handlePhotoUpload = async (index, file) => {
         if (!file) return;
-        
-        let newRows = [...rows];
-        newRows[index].isUploadingPhoto = true;
-        setRows([...newRows]);
 
         const formData = new FormData();
         formData.append('photo', file);
         formData.append('documentType', 'personphoto');
 
-        const toastId = toast.loading('Verifying Photo...', { position: 'top-center' });
+        const toastId = toast.loading('Verifying photo...', { position: 'top-center' });
 
         try {
-            const response = await fetch(`${API_URL}/api/client-contacts/admin-upload-photo`, {
+            const uploadRes = await fetch(`${API_URL}/exhibitor-auth/team-member-photo`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                body: formData
+                body: formData,
+                headers: { Authorization: `Bearer ${token}` }
             });
-            const data = await response.json();
+            const data = await uploadRes.json();
 
-            if (data.success) {
-                newRows = [...rows];
-                newRows[index].photoPreview = URL.createObjectURL(file);
-                newRows[index].photoUrl = data.url || data.fileUrl;
-                newRows[index].photo = file;
-                newRows[index].isUploadingPhoto = false;
-                setRows([...newRows]);
+            if (uploadRes.ok) {
                 toast.success('Photo verified successfully!', { id: toastId });
+                const newRows = [...rows];
+                newRows[index].photoPreview = URL.createObjectURL(file);
+                newRows[index].photoUrl = data.photoUrl || data.url || data.fileUrl;
+                newRows[index].photo = file;
+                setRows([...newRows]);
             } else {
-                toast.error(`AI Verification Error: ${data.message || 'Verification failed'}`, { id: toastId });
-                newRows = [...rows];
+                toast.error(`Photo Error: ${data.message || 'Verification failed'}`, { id: toastId });
+                // Reset photo
+                const newRows = [...rows];
                 newRows[index].photoPreview = '';
                 newRows[index].photo = null;
                 newRows[index].photoUrl = '';
-                newRows[index].isUploadingPhoto = false;
                 setRows([...newRows]);
+
+                // Show SweetAlert for detailed error
+                if (data.message) {
+                    Swal.fire('AI Verification Failed', data.message, 'error');
+                }
             }
         } catch (e) {
             console.error(e);
             toast.error('Failed to verify photo. Please try again.', { id: toastId });
-            newRows = [...rows];
-            newRows[index].photoPreview = '';
-            newRows[index].photo = null;
-            newRows[index].photoUrl = '';
-            newRows[index].isUploadingPhoto = false;
-            setRows([...newRows]);
         }
     };
 
     const handleIdProofUpload = async (index, file) => {
         if (!file) return;
-
-        let newRows = [...rows];
-        newRows[index].isUploadingId = true;
-        setRows([...newRows]);
 
         const formData = new FormData();
         formData.append('photo', file);
@@ -96,47 +84,43 @@ const AddTeamMembers = () => {
         const toastId = toast.loading('Verifying ID Proof...', { position: 'top-center' });
 
         try {
-            const response = await fetch(`${API_URL}/api/client-contacts/admin-upload-photo`, {
+            const uploadRes = await fetch(`${API_URL}/exhibitor-auth/team-member-photo`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                body: formData
+                body: formData,
+                headers: { Authorization: `Bearer ${token}` }
             });
-            const data = await response.json();
+            const data = await uploadRes.json();
 
-            if (data.success) {
-                newRows = [...rows];
-                newRows[index].idProofDocPreview = file.name;
-                newRows[index].idProofUrl = data.url || data.fileUrl;
-                newRows[index].idProofDoc = file;
-                newRows[index].isUploadingId = false;
-                setRows([...newRows]);
+            if (uploadRes.ok) {
                 toast.success('ID Proof verified successfully!', { id: toastId });
+                const newRows = [...rows];
+                newRows[index].idProofDocPreview = file.name;
+                newRows[index].idProofUrl = data.photoUrl || data.url || data.fileUrl;
+                newRows[index].idProofDoc = file;
+                setRows([...newRows]);
             } else {
                 toast.error(`ID Proof Error: ${data.message || 'Verification failed'}`, { id: toastId });
-                newRows = [...rows];
+                // Reset ID Proof
+                const newRows = [...rows];
                 newRows[index].idProofDocPreview = '';
                 newRows[index].idProofDoc = null;
                 newRows[index].idProofUrl = '';
-                newRows[index].isUploadingId = false;
                 setRows([...newRows]);
+
+                // Show SweetAlert for detailed error
+                if (data.message) {
+                    Swal.fire('AI Verification Failed', data.message, 'error');
+                }
             }
         } catch (e) {
             console.error(e);
             toast.error('Failed to verify ID Proof. Please try again.', { id: toastId });
-            newRows = [...rows];
-            newRows[index].idProofDocPreview = '';
-            newRows[index].idProofDoc = null;
-            newRows[index].idProofUrl = '';
-            newRows[index].isUploadingId = false;
-            setRows([...newRows]);
         }
     };
 
     const handleSaveAll = async () => {
         const validRows = rows.filter(r => r.name || r.email || r.mobile);
-        
+
         if (validRows.length === 0) {
             toast.warn('Please fill at least one row');
             return;
@@ -145,7 +129,7 @@ const AddTeamMembers = () => {
         for (let i = 0; i < validRows.length; i++) {
             const r = validRows[i];
             if (!r.name || !r.designation || !r.mobile || !r.email || !r.roleAtExhibition) {
-                toast.error(`Please fill all mandatory fields (*) for Row ${i+1}`);
+                toast.error(`Please fill all mandatory fields (*) for Row ${i + 1}`);
                 return;
             }
         }
@@ -176,7 +160,7 @@ const AddTeamMembers = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const exData = await exRes.json();
-            
+
             if (exData && exData.data) {
                 const existingTeam = exData.data.teamMembers || [];
                 const updatedTeam = [...existingTeam, ...uploadedMembers];
@@ -211,7 +195,7 @@ const AddTeamMembers = () => {
     return (
         <div className="min-h-screen bg-[#f8fafc] p-6 font-sans">
             <div className="max-w-[1400px] mx-auto space-y-6">
-                
+
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
@@ -222,7 +206,7 @@ const AddTeamMembers = () => {
                             <p className="text-sm text-slate-500 mt-1">Add multiple team members who will be involved in the exhibition.</p>
                         </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                         <button className="h-10 px-4 rounded-lg border border-slate-300 bg-white text-slate-700 font-semibold text-sm flex items-center gap-2 hover:bg-slate-50 transition-colors">
                             <Upload size={16} />
@@ -272,18 +256,13 @@ const AddTeamMembers = () => {
                                         </td>
                                         <td className="p-4">
                                             <label className="w-14 h-14 rounded-lg border-2 border-dashed border-blue-200 bg-blue-50 hover:bg-blue-100 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden group mx-auto">
-                                                <input type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handlePhotoUpload(index, e.target.files[0])} disabled={row.isUploadingPhoto} />
-                                                {row.isUploadingPhoto ? (
-                                                    <div className="flex flex-col items-center justify-center">
-                                                        <Loader2 size={16} className="text-blue-500 animate-spin mb-1" />
-                                                        <span className="text-[9px] font-semibold text-blue-600 uppercase text-center leading-none mt-1">Uploading...</span>
-                                                    </div>
-                                                ) : row.photoPreview ? (
+                                                <input type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handlePhotoUpload(index, e.target.files[0])} />
+                                                {row.photoPreview ? (
                                                     <img src={row.photoPreview} alt="" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <>
                                                         <Upload size={14} className="text-blue-500 mb-1 group-hover:scale-110 transition-transform" />
-                                                        <span className="text-[9px] font-semibold text-blue-600 uppercase text-center leading-none mt-1">Upload<br/><span className="text-[7px] text-blue-400 font-normal">JPG, PNG</span></span>
+                                                        <span className="text-[9px] font-semibold text-blue-600 uppercase text-center leading-none mt-1">Upload<br /><span className="text-[7px] text-blue-400 font-normal">JPG, PNG</span></span>
                                                     </>
                                                 )}
                                             </label>
@@ -336,15 +315,9 @@ const AddTeamMembers = () => {
                                                 </select>
                                                 {row.idProof && (
                                                     <label className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-lg p-2 text-xs text-slate-600 transition-colors w-full justify-between">
-                                                        <span className="truncate max-w-[80px]">
-                                                            {row.isUploadingId ? 'Uploading...' : row.idProofDoc ? 'Uploaded' : 'Upload Doc'}
-                                                        </span>
-                                                        {row.isUploadingId ? (
-                                                            <Loader2 size={14} className="text-blue-500 animate-spin" />
-                                                        ) : (
-                                                            <Upload size={14} className={row.idProofDoc ? 'text-green-500' : 'text-blue-500'} />
-                                                        )}
-                                                        <input type="file" accept="image/jpeg, image/png, application/pdf" className="hidden" onChange={(e) => handleIdProofUpload(index, e.target.files[0])} disabled={row.isUploadingId} />
+                                                        <span className="truncate max-w-[80px]">{row.idProofDoc ? 'Uploaded' : 'Upload Doc'}</span>
+                                                        <Upload size={14} className={row.idProofDoc ? 'text-green-500' : 'text-blue-500'} />
+                                                        <input type="file" accept="image/jpeg, image/png, application/pdf" className="hidden" onChange={(e) => handleIdProofUpload(index, e.target.files[0])} />
                                                     </label>
                                                 )}
                                             </div>
@@ -359,7 +332,7 @@ const AddTeamMembers = () => {
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
                         <div className="flex gap-3">
                             <button onClick={handleAddRow} className="h-9 px-4 rounded-lg border border-blue-200 text-blue-600 font-semibold text-sm flex items-center gap-2 hover:bg-blue-50 transition-colors">
@@ -371,7 +344,7 @@ const AddTeamMembers = () => {
                                 Delete Row
                             </button>
                         </div>
-                        
+
                         <div className="flex items-center gap-3">
                             <span className="text-sm font-bold text-slate-700">Total Members Added:</span>
                             <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm">
