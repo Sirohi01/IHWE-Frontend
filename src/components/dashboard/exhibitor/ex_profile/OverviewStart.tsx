@@ -106,6 +106,8 @@ export default function OverviewStart() {
     const [newCertName, setNewCertName] = useState("");
 
     const logoInputRef = useRef<HTMLInputElement>(null);
+    const contactPhotoInputRef = useRef<HTMLInputElement>(null);
+    const teamPhotoInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (data) {
@@ -205,6 +207,34 @@ export default function OverviewStart() {
         } catch {
             toast.dismiss(loadingToast);
             toast.error("Error uploading logo");
+        }
+    };
+    const uploadPersonPhoto = async (file: File | undefined, onUploaded: (url: string) => void) => {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) return toast.error("File size should be less than 5MB");
+        if (!file.type.startsWith("image/")) return toast.error("Only image files are allowed");
+
+        const loadingToast = toast.loading("Uploading photo...");
+        try {
+            const token = localStorage.getItem("exhibitorToken");
+            const formData = new FormData();
+            formData.append("photo", file);
+            const res = await fetch(`${API_URL}/exhibitor-auth/team-member-photo`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            const result = await res.json();
+            toast.dismiss(loadingToast);
+            if (result.success) {
+                toast.success("Photo uploaded successfully!");
+                onUploaded(result.photoUrl);
+            } else {
+                toast.error(result.message || "Photo upload failed");
+            }
+        } catch {
+            toast.dismiss(loadingToast);
+            toast.error("Error uploading photo");
         }
     };
 
@@ -743,9 +773,27 @@ export default function OverviewStart() {
                                                 value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
-                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                                value={contactForm.photoUrl} onChange={(e) => setContactForm({ ...contactForm, photoUrl: e.target.value })} />
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo (Optional)</label>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-slate-200">
+                                                    <Avatar url={contactForm.photoUrl} alt="Contact" className="w-full h-full" />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => contactPhotoInputRef.current?.click()}
+                                                    className="px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
+                                                >
+                                                    {contactForm.photoUrl ? "Replace Photo" : "Upload Photo"}
+                                                </button>
+                                                <input
+                                                    type="file"
+                                                    ref={contactPhotoInputRef}
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={(e) => uploadPersonPhoto(e.target.files?.[0], (url) => setContactForm((prev) => ({ ...prev, photoUrl: url })))}
+                                                />
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 font-medium">Photo is screened automatically before it's accepted.</p>
                                         </div>
                                     </div>
                                 )}
@@ -773,9 +821,27 @@ export default function OverviewStart() {
                                                 value={teamMemberForm.mobile} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, mobile: e.target.value })} />
                                         </div>
                                         <div className="space-y-1">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
-                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                                value={teamMemberForm.photoUrl} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, photoUrl: e.target.value })} />
+                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo (Optional)</label>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-slate-200">
+                                                    <Avatar url={teamMemberForm.photoUrl} alt="Team Member" className="w-full h-full" />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => teamPhotoInputRef.current?.click()}
+                                                    className="px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
+                                                >
+                                                    {teamMemberForm.photoUrl ? "Replace Photo" : "Upload Photo"}
+                                                </button>
+                                                <input
+                                                    type="file"
+                                                    ref={teamPhotoInputRef}
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={(e) => uploadPersonPhoto(e.target.files?.[0], (url) => setTeamMemberForm((prev) => ({ ...prev, photoUrl: url })))}
+                                                />
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 font-medium">Photo is screened automatically before it's accepted.</p>
                                         </div>
                                         <label className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer">
                                             <input type="checkbox" checked={teamMemberForm.isPrimary}

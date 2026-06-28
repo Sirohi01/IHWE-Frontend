@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UserPlus, Edit2, Trash2, Phone, X, Check, User } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL, SERVER_URL } from "@/lib/api";
@@ -31,6 +31,38 @@ export default function TeamMembersTab() {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [form, setForm] = useState(EMPTY_FORM);
     const [saving, setSaving] = useState(false);
+    const photoInputRef = useRef<HTMLInputElement>(null);
+
+    // Uploads to Cloudinary and runs the same AI moderation check as other document uploads
+    // before accepting the URL.
+    const uploadPersonPhoto = async (file: File | undefined) => {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) return toast.error("File size should be less than 5MB");
+        if (!file.type.startsWith("image/")) return toast.error("Only image files are allowed");
+
+        const loadingToast = toast.loading("Uploading photo...");
+        try {
+            const token = localStorage.getItem("exhibitorToken");
+            const formData = new FormData();
+            formData.append("photo", file);
+            const res = await fetch(`${API_URL}/exhibitor-auth/team-member-photo`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            const result = await res.json();
+            toast.dismiss(loadingToast);
+            if (result.success) {
+                toast.success("Photo uploaded successfully!");
+                setForm((prev) => ({ ...prev, photoUrl: result.photoUrl }));
+            } else {
+                toast.error(result.message || "Photo upload failed");
+            }
+        } catch {
+            toast.dismiss(loadingToast);
+            toast.error("Error uploading photo");
+        }
+    };
 
     useEffect(() => {
         if (data) setTeamList(data.teamMembers || []);
@@ -172,9 +204,27 @@ export default function TeamMembersTab() {
                                     value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo URL (Optional)</label>
-                                <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                    value={form.photoUrl} onChange={(e) => setForm({ ...form, photoUrl: e.target.value })} />
+                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Photo (Optional)</label>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-slate-200">
+                                        <Avatar url={form.photoUrl} alt="Team Member" className="w-full h-full" />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => photoInputRef.current?.click()}
+                                        className="px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
+                                    >
+                                        {form.photoUrl ? "Replace Photo" : "Upload Photo"}
+                                    </button>
+                                    <input
+                                        type="file"
+                                        ref={photoInputRef}
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={(e) => uploadPersonPhoto(e.target.files?.[0])}
+                                    />
+                                </div>
+                                <p className="text-[10px] text-slate-400 font-medium">Photo is screened automatically before it's accepted.</p>
                             </div>
                             <label className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer">
                                 <input type="checkbox" checked={form.isPrimary}
