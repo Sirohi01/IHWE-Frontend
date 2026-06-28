@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { socialMediaApi, analyticsApi } from "@/lib/api";
 
 const CallFloat = () => {
-  const [phoneNumber, setPhoneNumber] = useState("+919876543210");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
     const fetchPhoneNumber = async () => {
@@ -19,6 +19,8 @@ const CallFloat = () => {
     };
     fetchPhoneNumber();
   }, []);
+
+  if (!phoneNumber.trim()) return null;
 
   return (
     <>

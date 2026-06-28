@@ -646,7 +646,7 @@ const SellerRegistration = () => {
                                             <div className="lg:col-span-1">
                                                 <Label className={labelClasses}>MOBILE NO. (WHATSAPP) *</Label>
                                                 <div className="relative flex items-center">
-                                                    <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} maxLength={10} disabled={mobileOtpVerified || mobileOtpSent} placeholder="9876543210" className={`${inputClasses} pr-20 ${mobileOtpVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} />
+                                                    <Input name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} maxLength={10} disabled={mobileOtpVerified || mobileOtpSent} placeholder="10-digit mobile" className={`${inputClasses} pr-20 ${mobileOtpVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`} />
                                                     {!mobileOtpVerified && (
                                                         <button type="button" onClick={() => requestOtp('mobile')} disabled={isVerifying.mobile || formData.mobileNumber.length !== 10 || mobileResendTimer > 0} className="absolute right-1 px-3 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all">
                                                             {isVerifying.mobile ? "..." : mobileResendTimer > 0 ? `${mobileResendTimer}s` : mobileOtpSent ? "RE-SEND" : "SEND OTP"}

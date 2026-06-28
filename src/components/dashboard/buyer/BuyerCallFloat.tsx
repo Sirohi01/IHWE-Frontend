@@ -18,9 +18,11 @@ const BuyerCallFloat = ({ data }: { data: any }) => {
         .catch(() => { });
   }, [data]);
 
-  const rawPhone = rmPhone || data?.admin?.phone || "+919876543210";
+  const rawPhone = rmPhone || data?.admin?.phone || "";
   const cleanPhone = rawPhone.replace(/\D/g, '');
   const url = `tel:${cleanPhone.startsWith('91') ? cleanPhone : '+91' + cleanPhone}`;
+
+  if (cleanPhone.length < 10) return null;
 
   return (
     <>
