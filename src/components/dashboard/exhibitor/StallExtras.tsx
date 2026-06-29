@@ -1463,7 +1463,6 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         </div>
                     )}
 
-                    {/* Pagination */}
                     {totalPages > 0 && (
                         <div className="mt-1 flex justify-center gap-1">
                             <button
@@ -1496,11 +1495,9 @@ export default function StallExtras({ data }: StallExtrasProps) {
                     )}
                 </div>
 
-                {/* ── RIGHT COLUMN: CART SIDEBAR ── */}
                 <div className={`lg:col-span-4 xl:col-span-3 ${showCartMobile ? 'fixed inset-0 z-50 bg-black/50 flex justify-end' : 'hidden lg:block'} sticky top-3`}>
                     <div className={`bg-white shadow-xl lg:shadow-sm border border-slate-100 flex flex-col lg:rounded-xl overflow-hidden ${showCartMobile ? 'animate-in slide-in-from-right-full duration-200' : ''}`}>
 
-                        {/* Cart Header */}
                         <div className="px-4 py-5 border-b border-slate-100 flex items-center justify-between bg-white">
                             <div className="flex items-center gap-2">
                                 <ShoppingCart size={16} className="text-[#1e293b]" />
@@ -1513,7 +1510,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             )}
                         </div>
 
-                        {/* Cart Items List */}
+
                         <div className="overflow-y-auto px-2.5 py-1.5 bg-slate-50 max-h-[250px] min-h-[250px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-3">
