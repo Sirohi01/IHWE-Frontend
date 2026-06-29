@@ -270,7 +270,7 @@ const App = () => {
                     <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
                     <Route path="stall-management" element={<ExhibitorStallManagementPage />} />
                     <Route path="marketing" element={<ExhibitorMarketingPage />} />
-                    <Route path="bsm" element={<ExhibitorBSMPage />} />
+                    <Route path="bsm" element={<BuyerContacts />} />
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
@@ -286,7 +286,7 @@ const App = () => {
                       <Route path="reports-table/:type" element={<PsmReportsTable />} />
                     </Route>
                     <Route path="exhibitions" element={<ExhibitorEventsPage />} />
-                    <Route path="documentation" element={<ExhibitorDocumentsPage />} />
+                    <Route path="documentation" element={<DocumentCenter />} />
                     <Route path="participants-feedback" element={<ParticipantsFeedback />} />
                     <Route path="mandate-form" element={<MandateForm />} />
                     <Route path="reminders" element={<PaymentReminders />} />

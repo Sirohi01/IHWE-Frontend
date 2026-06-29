@@ -15,7 +15,7 @@ import {
 
 import amanImage from "../../../assets/day/day1-banner.webp";
 
-const Day1Hero: React.FC = () => {
+const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defaultImage }) => {
   return (
     <section className="relative min-h-[620px] lg:min-h-[600px] overflow-hidden font-sans">
       {/* Background */}
