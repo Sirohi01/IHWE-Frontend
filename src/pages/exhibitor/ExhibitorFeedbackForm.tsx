@@ -27,6 +27,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import Swal from 'sweetalert2';
 import { cn } from "@/lib/utils";
+import { API_URL } from "@/lib/api";
 
 // ── Components ──────────────────────────────────────────────────────────────────
 
@@ -275,6 +276,8 @@ const FileInputButton = ({ id, label, icon: Icon }: { id: string, label: string,
 export default function ExhibitorFeedbackForm() {
     const { data: ctxData } = useExhibitorCtx();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoadingFeedback, setIsLoadingFeedback] = useState(true);
+    const [submittedFeedback, setSubmittedFeedback] = useState<any>(null);
 
     const [form, setForm] = useState({
         exhibitorName: "",
@@ -332,21 +335,85 @@ export default function ExhibitorFeedbackForm() {
         }
     }, [ctxData]);
 
+    const getRegParam = () => {
+        const selectedRegId = localStorage.getItem('selectedRegId');
+        return selectedRegId ? `?regId=${selectedRegId}` : '';
+    };
+
+    const loadExistingFeedback = async () => {
+        setIsLoadingFeedback(true);
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const response = await fetch(`${API_URL}/exhibitor-feedback/my${getRegParam()}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const result = await response.json();
+            if (result.success && result.data) {
+                setSubmittedFeedback(result.data);
+                localStorage.setItem('feedback_submitted', 'true');
+            } else {
+                setSubmittedFeedback(null);
+            }
+        } catch (error) {
+            console.error('[Feedback] Failed to load feedback', error);
+        } finally {
+            setIsLoadingFeedback(false);
+        }
+    };
+
+    useEffect(() => {
+        loadExistingFeedback();
+    }, []);
+
     const handleRating = (key: string, val: number) => setForm(prev => ({ ...prev, [key]: val }));
     const handleValue = (key: string, val: string) => setForm(prev => ({ ...prev, [key]: val }));
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (submittedFeedback) {
+            Swal.fire({ icon: 'info', title: 'Already Submitted', text: 'Your feedback has already been recorded.', confirmButtonColor: '#23471d' });
+            return;
+        }
         if (!form.isDeclared) {
             Swal.fire({ icon: 'warning', title: 'Action Required', text: 'Please confirm the final declaration.', confirmButtonColor: '#23471d' });
             return;
         }
         setIsSubmitting(true);
-        setTimeout(() => {
-            setIsSubmitting(false);
-            Swal.fire({ icon: 'success', title: 'Feedback Recorded', text: 'Thank you for your valuable feedback!', confirmButtonColor: '#23471d' });
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            const response = await fetch(`${API_URL}/exhibitor-feedback/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ...form,
+                    ...(selectedRegId && { regId: selectedRegId })
+                })
+            });
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Feedback submission failed');
+            }
+            setSubmittedFeedback(result.data);
             localStorage.setItem('feedback_submitted', 'true');
-        }, 1500);
+            Swal.fire({ icon: 'success', title: 'Feedback Recorded', text: 'Thank you for your valuable feedback!', confirmButtonColor: '#23471d' });
+        } catch (error: any) {
+            const alreadySubmitted = error.message === 'Feedback already submitted';
+            if (alreadySubmitted) {
+                await loadExistingFeedback();
+            }
+            Swal.fire({
+                icon: alreadySubmitted ? 'info' : 'error',
+                title: alreadySubmitted ? 'Already Submitted' : 'Submission Failed',
+                text: alreadySubmitted ? 'Your feedback has already been recorded.' : error.message,
+                confirmButtonColor: '#23471d'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const progress = Math.round((Object.values(form).filter(v => v !== "" && v !== 0 && v !== false).length / Object.keys(form).length) * 100);
@@ -359,6 +426,14 @@ export default function ExhibitorFeedbackForm() {
                 <div className="print:w-full">
                     <h2 className="text-[22px] font-black text-slate-900 uppercase tracking-tight mb-1 print:text-[22pt] print:mb-1 print:font-bold">EXHIBITOR FEEDBACK REPORT</h2>
                     <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest print:text-[11pt] print:text-slate-700 print:tracking-normal print:font-semibold">International Health & Wellness Expo 2026</p>
+                    {isLoadingFeedback && (
+                        <p className="mt-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest print:hidden">Checking submission status...</p>
+                    )}
+                    {!isLoadingFeedback && submittedFeedback && (
+                        <p className="mt-2 text-[11px] font-black text-[#23471d] uppercase tracking-widest print:hidden">
+                            Feedback already submitted on {new Date(submittedFeedback.createdAt).toLocaleDateString()}
+                        </p>
+                    )}
                 </div>
                 <div className="flex flex-wrap items-center gap-3 print:hidden">
                     <button type="button" onClick={() => window.print()} className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md">
@@ -533,7 +608,7 @@ export default function ExhibitorFeedbackForm() {
                             </div>
                         </div>
                         <div className="flex flex-col gap-1 min-w-[120px] text-right print:text-left"><p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest print:text-[9.5pt] print:text-slate-600">Document Date</p><span className="text-[14px] font-bold text-slate-700 print:text-[12pt] print:text-black">{form.date}</span></div>
-                        <div className="print:hidden"><button type="submit" className="h-12 px-14 bg-[#23471d] hover:bg-[#1a3516] text-white text-[12px] font-black uppercase tracking-widest rounded shadow-xl flex items-center gap-2.5 transition-all active:scale-95">Submit Official Feedback <ArrowRight size={20} /></button></div>
+                        <div className="print:hidden"><button type="submit" disabled={isSubmitting || isLoadingFeedback || !!submittedFeedback} className="h-12 px-14 bg-[#23471d] hover:bg-[#1a3516] disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-[12px] font-black uppercase tracking-widest rounded shadow-xl flex items-center gap-2.5 transition-all active:scale-95">{isSubmitting ? 'Submitting...' : submittedFeedback ? 'Feedback Submitted' : 'Submit Official Feedback'} <ArrowRight size={20} /></button></div>
                     </div>
                 </div>
             </form>

@@ -79,13 +79,16 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
     const total = data?.participation?.total || 0;
     const paid = data?.amountPaid || 0;
     const balance = data?.balanceAmount || 0;
+    const getRegParam = () => {
+        const selectedRegId = localStorage.getItem('selectedRegId');
+        return selectedRegId ? `?regId=${selectedRegId}` : '';
+    };
 
     const fetchData = async () => {
         setIsRefreshing(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
-            const selectedRegId = localStorage.getItem('selectedRegId');
-            const regParam = selectedRegId ? `?regId=${selectedRegId}` : '';
+            const regParam = getRegParam();
 
             const [pRes, aRes, uRes] = await Promise.all([
                 fetch(`${API_URL}/stall-products/my${regParam}`, { headers: { Authorization: `Bearer ${token}` } }),
@@ -127,7 +130,28 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
         setImagePreviews(prev => prev.filter((_, i) => i !== index));
     };
 
-    const handleAddProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+    const openAddModal = () => {
+        setEditingProduct(null);
+        setSelectedImages([]);
+        setImagePreviews([]);
+        setShowAddModal(true);
+    };
+
+    const openEditModal = (product: Product) => {
+        setEditingProduct(product);
+        setSelectedImages([]);
+        setImagePreviews([]);
+        setShowAddModal(true);
+    };
+
+    const closeProductModal = () => {
+        setShowAddModal(false);
+        setEditingProduct(null);
+        setSelectedImages([]);
+        setImagePreviews([]);
+    };
+
+    const handleSaveProduct = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormLoading(true);
         try {
@@ -139,18 +163,17 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
             if (selectedRegId) formData.append('regId', selectedRegId);
 
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products`, {
-                method: 'POST',
+            const isEdit = !!editingProduct;
+            const res = await fetch(`${API_URL}/stall-products${isEdit ? `/${editingProduct._id}${getRegParam()}` : ''}`, {
+                method: isEdit ? 'PUT' : 'POST',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData
             });
 
             const result = await res.json();
             if (result.success) {
-                toast.success("Product added successfully");
-                setShowAddModal(false);
-                setSelectedImages([]);
-                setImagePreviews([]);
+                toast.success(isEdit ? "Product updated successfully" : "Product added successfully");
+                closeProductModal();
                 fetchData();
             } else {
                 toast.error(result.message);
@@ -166,7 +189,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
         if (!confirm("Are you sure you want to delete this product?")) return;
         try {
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products/${id}`, {
+            const res = await fetch(`${API_URL}/stall-products/${id}${getRegParam()}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -187,7 +210,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
         setEnquiryLoading(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products/${product._id}/enquiries`, {
+            const res = await fetch(`${API_URL}/stall-products/${product._id}/enquiries${getRegParam()}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const result = await res.json();
@@ -233,7 +256,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                         <button
                             onClick={() => {
                                 setActiveSection('products');
-                                setShowAddModal(true);
+                                openAddModal();
                             }}
                             className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
                         >
@@ -450,6 +473,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                             onDelete={handleDeleteProduct}
                             onEnquiries={fetchProductEnquiries}
                             onView={setSelectedProduct}
+                            onEdit={openEditModal}
                         />
                     )}
 
@@ -603,7 +627,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={() => setShowAddModal(false)}
+                            onClick={closeProductModal}
                             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
@@ -613,18 +637,21 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                             className="bg-white w-full max-w-2xl rounded-sm shadow-2xl overflow-hidden relative"
                         >
                             <div className="bg-[#23471d] p-4 flex items-center justify-between">
-                                <h3 className="text-white text-[12px] font-black uppercase tracking-widest">Register New Product</h3>
-                                <button onClick={() => setShowAddModal(false)} className="text-white/70 hover:text-white transition-colors">
+                                <h3 className="text-white text-[12px] font-black uppercase tracking-widest">
+                                    {editingProduct ? 'Update Product' : 'Register New Product'}
+                                </h3>
+                                <button onClick={closeProductModal} className="text-white/70 hover:text-white transition-colors">
                                     <X size={20} />
                                 </button>
                             </div>
 
-                            <form onSubmit={handleAddProduct} className="p-8">
+                            <form onSubmit={handleSaveProduct} className="p-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="col-span-1 md:col-span-2 space-y-2">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Product Name *</label>
                                         <input
                                             name="name" required placeholder="e.g. Handmade Terracotta Vase"
+                                            defaultValue={editingProduct?.name || ''}
                                             className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none transition-all"
                                         />
                                     </div>
@@ -634,10 +661,12 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         <div className="flex gap-2">
                                             <input
                                                 name="price" type="number" placeholder="500"
+                                                defaultValue={editingProduct?.price || ''}
                                                 className="flex-1 h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                             />
                                             <select
                                                 name="priceUnit"
+                                                defaultValue={editingProduct?.priceUnit || 'per piece'}
                                                 className="w-24 h-11 bg-slate-50 border border-slate-200 rounded-sm px-2 text-[10px] font-bold focus:bg-white outline-none"
                                             >
                                                 {units.length > 0 ? (
@@ -659,6 +688,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">MOQ (Min Order Qty)</label>
                                         <input
                                             name="moq" placeholder="e.g. 100 units"
+                                            defaultValue={editingProduct?.moq || ''}
                                             className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                         />
                                     </div>
@@ -669,6 +699,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                             <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
                                             <input
                                                 name="category" placeholder="handicraft, vase, home decor"
+                                                defaultValue={editingProduct?.category || ''}
                                                 className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm pl-10 pr-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                             />
                                         </div>
@@ -678,6 +709,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</label>
                                         <textarea
                                             name="description" rows={3} placeholder="Tell buyers about your product features, quality and material..."
+                                            defaultValue={editingProduct?.description || ''}
                                             className="w-full bg-slate-50 border border-slate-200 rounded-sm p-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none transition-all resize-none"
                                         />
                                     </div>
@@ -714,7 +746,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                 <div className="mt-8 flex gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => setShowAddModal(false)}
+                                        onClick={closeProductModal}
                                         className="h-12 px-6 border border-slate-200 hover:bg-slate-50 text-slate-600 text-[11px] font-black uppercase tracking-widest rounded-sm transition-all"
                                     >
                                         Cancel
@@ -725,7 +757,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         className="h-12 flex-1 bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-black uppercase tracking-widest rounded-sm transition-all flex items-center justify-center gap-2"
                                     >
                                         {formLoading ? <Loader2 size={16} className="animate-spin" /> : <Package size={16} />}
-                                        Save Product Details
+                                        {editingProduct ? 'Update Product Details' : 'Save Product Details'}
                                     </button>
                                 </div>
                             </form>
@@ -877,12 +909,13 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
     );
 }
 
-function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
+function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView, onEdit }: {
     products: Product[],
     baseUrl: string,
     onDelete: (id: string) => void,
     onEnquiries: (p: Product) => void,
-    onView: (p: Product) => void
+    onView: (p: Product) => void,
+    onEdit: (p: Product) => void
 }) {
     if (!products.length) return (
         <div className="bg-white border-2 border-dashed border-slate-200 rounded-sm p-40 text-center">
@@ -928,6 +961,13 @@ function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
                                 title="View Leads"
                             >
                                 <MessageCircle size={12} />
+                            </button>
+                            <button
+                                onClick={() => onEdit(p)}
+                                className="w-7 h-7 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-[#23471d] hover:text-white transition-all shadow-lg"
+                                title="Edit Product"
+                            >
+                                <Edit2 size={12} />
                             </button>
                             <button
                                 onClick={() => onDelete(p._id)}

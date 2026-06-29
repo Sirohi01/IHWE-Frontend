@@ -1,80 +1,103 @@
 
-import { useState, useMemo } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import {
     Plus, Layers, Users, TrendingUp,
     Search, Filter, ChevronDown, ChevronLeft, ChevronRight,
     Edit2, Settings, Briefcase, Pill, Monitor,
-    ExternalLink, CheckCircle2, PenTool, Microscope, Trash2, Eye, Package
+    ExternalLink, CheckCircle2, PenTool, Microscope, Trash2, Eye, Package,
+    X, Loader2, Image as ImageIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { API_URL } from '@/lib/api';
 import productImage from '../../assets/productImage7.png'
-import image1 from '../../assets/awards_hero_bg_new.png'
-import image2 from '../../assets/cara111.jpg'
-import image3 from '../../assets/cara12.png'
-import image4 from '../../assets/cara222.jpg'
-import image5 from '../../assets/cara14.jpg'
 
 
-const initialProducts = [
-    {
-        id: 1,
-        title: "Advanced ICU Bed",
-        category: "Medical Equipment",
-        type: "Product",
-        views: 356,
-        inquiries: 24,
-        image: image1
-    },
-    {
-        id: 2,
-        title: "Portable Ventilator",
-        category: "Medical Equipment", // simplified categories to match dropdown
-        type: "Product",
-        views: 289,
-        inquiries: 18,
-        image: image2
-    },
-    {
-        id: 3,
-        title: "Surgical Instruments Set",
-        category: "Surgical Instruments",
-        type: "Product",
-        views: 210,
-        inquiries: 12,
-        image: image3
-    },
-    {
-        id: 4,
-        title: "Laboratory Testing Services",
-        category: "Diagnostic",
-        type: "Service",
-        views: 165,
-        inquiries: 9,
-        image: image4
-    },
-    {
-        id: 5,
-        title: "Telemedicine Solutions",
-        category: "Health IT Solutions",
-        type: "Service",
-        views: 135,
-        inquiries: 8,
-        image: image5
-    }
-];
+type CatalogItem = {
+    _id: string;
+    title: string;
+    category: string;
+    type: 'Product' | 'Service';
+    views: number;
+    inquiries: number;
+    image: string;
+    images: string[];
+    description: string;
+    price: number;
+    priceUnit: string;
+    moq: string;
+    tags: string[];
+};
 
 const categoryOptions = [
     "Medical Equipment", "Diagnostic", "Surgical Instruments", "Pharmaceuticals", "Health IT Solutions", "Other Services"
 ];
 
 export default function ProductServices() {
-    const [items, setItems] = useState(initialProducts);
+    const [items, setItems] = useState<CatalogItem[]>([]);
     const [activeTab, setActiveTab] = useState('All Items');
     const [searchQuery, setSearchQuery] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [showProductModal, setShowProductModal] = useState(false);
+    const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
+    const [viewingItem, setViewingItem] = useState<CatalogItem | null>(null);
+    const [activeViewImage, setActiveViewImage] = useState(0);
+    const [saving, setSaving] = useState(false);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const itemsPerPage = 5;
+    const backendBaseUrl = API_URL.replace(/\/api$/, '');
+
+    const getRegParam = () => {
+        const selectedRegId = localStorage.getItem('selectedRegId');
+        return selectedRegId ? `?regId=${selectedRegId}` : '';
+    };
+
+    const mapProduct = (product: any): CatalogItem => {
+        const tags = Array.isArray(product.tags) ? product.tags : [];
+        const isService = tags.some((tag: string) => tag?.toLowerCase() === 'service');
+        const images = Array.isArray(product.images)
+            ? product.images.map((img: string) => img?.startsWith('http') ? img : `${backendBaseUrl}${img}`).filter(Boolean)
+            : [];
+        return {
+            _id: product._id,
+            title: product.name || 'Untitled',
+            category: product.category || 'Other Services',
+            type: isService ? 'Service' : 'Product',
+            views: Number(product.views) || 0,
+            inquiries: Number(product.enquiryCount) || 0,
+            image: images[0] || '',
+            images,
+            description: product.description || '',
+            price: Number(product.price) || 0,
+            priceUnit: product.priceUnit || 'per piece',
+            moq: product.moq || '',
+            tags,
+        };
+    };
+
+    const fetchProducts = async () => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const res = await fetch(`${API_URL}/stall-products/my${getRegParam()}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || 'Failed to load products');
+            setItems((data.data || []).map(mapProduct));
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to load products');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
 
 
@@ -108,14 +131,86 @@ export default function ProductServices() {
     ];
 
     // Actions
-    const handleEdit = (item: any) => {
-        // edit action placeholder
+    const openAddModal = () => {
+        setEditingItem(null);
+        setSelectedImages([]);
+        setShowProductModal(true);
     };
 
-    const handleDelete = (id: number) => {
-        if (window.confirm('Are you sure you want to delete this item?')) {
-            setItems(items.filter(i => i.id !== id));
+    const handleEdit = (item: CatalogItem) => {
+        setEditingItem(item);
+        setSelectedImages([]);
+        setShowProductModal(true);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this item?')) return;
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const res = await fetch(`${API_URL}/stall-products/${id}${getRegParam()}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || 'Failed to delete item');
+            setItems(items.filter(i => i._id !== id));
             if (paginatedItems.length === 1 && currentPage > 1) setCurrentPage(currentPage - 1);
+            toast.success('Item deleted successfully');
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to delete item');
+        }
+    };
+
+    const handleView = async (item: CatalogItem) => {
+        setViewingItem({ ...item, views: item.views + 1 });
+        setActiveViewImage(0);
+        try {
+            await fetch(`${API_URL}/stall-products/${item._id}/view`, { method: 'POST' });
+            setItems(prev => prev.map(current => (
+                current._id === item._id
+                    ? { ...current, views: current.views + 1 }
+                    : current
+            )));
+        } catch (error) {
+            console.warn('Product view tracking failed', error);
+        }
+    };
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setSaving(true);
+        try {
+            const formData = new FormData(event.currentTarget);
+            const itemType = String(formData.get('itemType') || 'Product');
+            const rawTags = String(formData.get('tags') || '');
+            const tags = rawTags.split(',').map(tag => tag.trim()).filter(Boolean);
+            tags.push(itemType);
+            formData.set('tags', Array.from(new Set(tags)).join(','));
+            formData.delete('itemType');
+
+            selectedImages.forEach(file => formData.append('images', file));
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            if (selectedRegId) formData.append('regId', selectedRegId);
+
+            const token = localStorage.getItem('exhibitorToken');
+            const isEdit = !!editingItem;
+            const res = await fetch(`${API_URL}/stall-products${isEdit ? `/${editingItem._id}${getRegParam()}` : ''}`, {
+                method: isEdit ? 'PUT' : 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) throw new Error(data.message || 'Failed to save item');
+
+            toast.success(isEdit ? 'Item updated successfully' : 'Item added successfully');
+            setShowProductModal(false);
+            setEditingItem(null);
+            setSelectedImages([]);
+            await fetchProducts();
+        } catch (error: any) {
+            toast.error(error.message || 'Failed to save item');
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -132,7 +227,7 @@ export default function ProductServices() {
                         <span className="text-slate-700">Products & Services</span>
                     </div>
                 </div>
-                <Button className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-3 py-0.5 h-8 text-sm">
+                <Button onClick={openAddModal} className="bg-[#10b981] hover:bg-[#059669] text-white flex items-center gap-1.5 px-3 py-0.5 h-8 text-sm">
                     <Plus size={14} />
                     Add New Product / Service
                 </Button>
@@ -268,13 +363,24 @@ export default function ProductServices() {
                         </div>
 
                         <div className="divide-y divide-slate-100">
-                            {paginatedItems.length === 0 ? (
+                            {loading ? (
+                                <div className="p-8 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
+                                    <Loader2 size={16} className="animate-spin" />
+                                    Loading products...
+                                </div>
+                            ) : paginatedItems.length === 0 ? (
                                 <div className="p-4 md:p-5 text-center text-slate-500 text-sm">No items found matching your criteria.</div>
                             ) : paginatedItems.map((item) => (
-                                <div key={item.id} className="p-2 md:p-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-slate-50 transition-colors gap-2 md:gap-3">
+                                <div key={item._id} className="p-2 md:p-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-slate-50 transition-colors gap-2 md:gap-3">
                                     <div className="flex items-center gap-2.5 flex-1 min-w-0">
                                         <div className="w-14 h-10 sm:w-16 sm:h-12 bg-slate-100 rounded-lg overflow-hidden shrink-0 border border-slate-200">
-                                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                            {item.image ? (
+                                                <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                                    <ImageIcon size={16} />
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-2 mb-0.5">
@@ -306,13 +412,13 @@ export default function ProductServices() {
                                         </div>
 
                                         <div className="flex items-center gap-1 ml-auto sm:ml-3">
-                                            <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
+                                            <Button onClick={() => handleView(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 bg-white">
                                                 <Eye size={12} />
                                             </Button>
                                             <Button onClick={() => handleEdit(item)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-[#10b981] hover:bg-[#10b981]/10 border border-slate-200 bg-white">
                                                 <Edit2 size={12} />
                                             </Button>
-                                            <Button onClick={() => handleDelete(item.id)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white">
+                                            <Button onClick={() => handleDelete(item._id)} variant="ghost" size="icon" className="h-7 w-7 text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 bg-white">
                                                 <Trash2 size={12} />
                                             </Button>
                                         </div>
@@ -423,10 +529,181 @@ export default function ProductServices() {
 
             </div>
 
+            {viewingItem && (
+                <div className="fixed inset-0 z-[110] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden relative grid grid-cols-1 md:grid-cols-5 max-h-[86vh]">
+                        <button
+                            type="button"
+                            onClick={() => setViewingItem(null)}
+                            className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-slate-600"
+                        >
+                            <X size={18} />
+                        </button>
 
+                        <div className="md:col-span-3 bg-slate-100 min-h-[280px] md:min-h-[520px] flex flex-col">
+                            <div className="flex-1 flex items-center justify-center p-6">
+                                {viewingItem.images?.[activeViewImage] ? (
+                                    <img
+                                        src={viewingItem.images[activeViewImage]}
+                                        alt={viewingItem.title}
+                                        className="max-w-full max-h-[420px] object-contain rounded-lg bg-white shadow-sm"
+                                    />
+                                ) : (
+                                    <div className="text-slate-300 flex flex-col items-center gap-2">
+                                        <Package size={56} />
+                                        <span className="text-[10px] font-bold uppercase">No Image</span>
+                                    </div>
+                                )}
+                            </div>
+                            {viewingItem.images.length > 1 && (
+                                <div className="p-3 bg-white/70 flex gap-2 overflow-x-auto">
+                                    {viewingItem.images.map((img, index) => (
+                                        <button
+                                            key={img}
+                                            type="button"
+                                            onClick={() => setActiveViewImage(index)}
+                                            className={`w-14 h-14 rounded-md border-2 overflow-hidden bg-white shrink-0 ${activeViewImage === index ? 'border-[#10b981]' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                        >
+                                            <img src={img} alt="" className="w-full h-full object-cover" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
+                        <div className="md:col-span-2 p-5 md:p-6 overflow-y-auto">
+                            <div className="mb-4">
+                                <div className="flex flex-wrap gap-1.5 mb-2">
+                                    <span className={`text-[9px] px-2 py-1 rounded-sm font-bold uppercase tracking-wider ${viewingItem.type === 'Product' ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-blue-100 text-blue-700'}`}>
+                                        {viewingItem.type}
+                                    </span>
+                                    <span className="text-[9px] px-2 py-1 rounded-sm font-bold uppercase bg-slate-100 text-slate-600">
+                                        {viewingItem.category}
+                                    </span>
+                                </div>
+                                <h3 className="text-xl font-bold text-blue-900 leading-tight">{viewingItem.title}</h3>
+                                <p className="text-lg font-bold text-[#10b981] mt-2">
+                                    {viewingItem.price ? `₹${viewingItem.price}` : 'Price on request'}
+                                    {viewingItem.priceUnit && <span className="text-xs text-slate-400 font-medium"> / {viewingItem.priceUnit}</span>}
+                                </p>
+                            </div>
 
+                            <div className="grid grid-cols-2 gap-2 mb-5">
+                                <div className="bg-slate-50 rounded-lg p-3 text-center">
+                                    <p className="text-[9px] uppercase font-semibold text-slate-400">Views</p>
+                                    <p className="text-base font-bold text-slate-800">{viewingItem.views}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg p-3 text-center">
+                                    <p className="text-[9px] uppercase font-semibold text-slate-400">Inquiries</p>
+                                    <p className="text-base font-bold text-[#10b981]">{viewingItem.inquiries}</p>
+                                </div>
+                            </div>
 
+                            <div className="space-y-4">
+                                <div>
+                                    <h4 className="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-1">Description</h4>
+                                    <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
+                                        {viewingItem.description || 'No description provided.'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <h4 className="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-1">Specifications</h4>
+                                    <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between gap-3 border-b border-slate-100 pb-2">
+                                            <span className="text-slate-400">MOQ</span>
+                                            <span className="font-semibold text-slate-700 text-right">{viewingItem.moq || 'N/A'}</span>
+                                        </div>
+                                        <div className="flex justify-between gap-3 border-b border-slate-100 pb-2">
+                                            <span className="text-slate-400">Images</span>
+                                            <span className="font-semibold text-slate-700">{viewingItem.images.length}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showProductModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden">
+                        <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                            <h3 className="text-base font-semibold text-blue-900">
+                                {editingItem ? 'Edit Product / Service' : 'Add New Product / Service'}
+                            </h3>
+                            <button
+                                type="button"
+                                onClick={() => setShowProductModal(false)}
+                                className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500"
+                            >
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="p-4 space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div className="md:col-span-2">
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Name *</label>
+                                    <Input name="name" required defaultValue={editingItem?.title || ''} className="h-9 mt-1" placeholder="Product or service name" />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Type *</label>
+                                    <select name="itemType" defaultValue={editingItem?.type || 'Product'} className="w-full h-9 mt-1 border border-slate-200 rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20">
+                                        <option>Product</option>
+                                        <option>Service</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Category *</label>
+                                    <select name="category" required defaultValue={editingItem?.category || 'Medical Equipment'} className="w-full h-9 mt-1 border border-slate-200 rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20">
+                                        {categoryOptions.map(category => (
+                                            <option key={category} value={category}>{category}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Price</label>
+                                    <Input name="price" type="number" min="0" step="0.01" defaultValue={editingItem?.price || ''} className="h-9 mt-1" placeholder="0" />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Price Unit</label>
+                                    <Input name="priceUnit" defaultValue={editingItem?.priceUnit || 'per piece'} className="h-9 mt-1" placeholder="per piece" />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">MOQ</label>
+                                    <Input name="moq" defaultValue={editingItem?.moq || ''} className="h-9 mt-1" placeholder="Minimum order qty" />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Tags</label>
+                                    <Input name="tags" defaultValue={(editingItem?.tags || []).filter(tag => tag !== 'Product' && tag !== 'Service').join(', ')} className="h-9 mt-1" placeholder="comma separated tags" />
+                                </div>
+                                <div className="md:col-span-3">
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Description</label>
+                                    <textarea name="description" defaultValue={editingItem?.description || ''} rows={3} className="w-full mt-1 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20" placeholder="Short product/service description" />
+                                </div>
+                                <div className="md:col-span-3">
+                                    <label className="text-[11px] font-semibold text-slate-600 uppercase">Images</label>
+                                    <Input type="file" accept="image/*" multiple onChange={(event) => setSelectedImages(Array.from(event.target.files || []))} className="h-9 mt-1" />
+                                    {editingItem?.image && (
+                                        <p className="text-[11px] text-slate-500 mt-1">Existing image will remain. Upload new image only if you want to add more.</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-2 pt-2">
+                                <Button type="button" variant="outline" onClick={() => setShowProductModal(false)} className="h-9">
+                                    Cancel
+                                </Button>
+                                <Button type="submit" disabled={saving} className="h-9 bg-[#10b981] hover:bg-[#059669] text-white">
+                                    {saving ? <Loader2 size={14} className="mr-2 animate-spin" /> : <Plus size={14} className="mr-2" />}
+                                    {editingItem ? 'Update' : 'Save'}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
