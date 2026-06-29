@@ -27,7 +27,7 @@ export default function ExhibitorPassesPage() {
 
     const [quantity, setQuantity] = useState(1);
     const [personnel, setPersonnel] = useState([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
-    const [vehicles, setVehicles] = useState([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
+    const [vehicles, setVehicles] = useState([{ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' }]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     // New states for payment review
@@ -48,7 +48,7 @@ export default function ExhibitorPassesPage() {
         setSelectedPass(pass);
         setQuantity(1);
         setPersonnel([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
-        setVehicles([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
+        setVehicles([{ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' }]);
         setIsReviewing(false);
         setReviewData(null);
         setIsModalOpen(true);
@@ -63,7 +63,7 @@ export default function ExhibitorPassesPage() {
             const newVehicles = [...vehicles];
             if (newQty > newVehicles.length) {
                 for (let i = newVehicles.length; i < newQty; i++) {
-                    newVehicles.push({ vehicleType: '4-wheeler', vehicleNumber: '' });
+                    newVehicles.push({ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' });
                 }
             } else {
                 newVehicles.splice(newQty);
@@ -817,11 +817,48 @@ export default function ExhibitorPassesPage() {
                                                             type="text"
                                                             required
                                                             value={veh.vehicleNumber}
-                                                            onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value)}
+                                                            onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value.toUpperCase())}
                                                             placeholder="e.g. MH 01 AB 1234"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
                                                         />
                                                     </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Driver/Contact Name</label>
+                                                        <input 
+                                                            type="text"
+                                                            required
+                                                            value={veh.name || ''}
+                                                            onChange={(e) => updateVehicle(index, 'name', e.target.value)}
+                                                            placeholder="e.g. Rahul Sharma"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Phone</label>
+                                                        <input 
+                                                            type="text"
+                                                            required
+                                                            value={veh.phone || ''}
+                                                            onChange={(e) => updateVehicle(index, 'phone', e.target.value)}
+                                                            placeholder="e.g. 9876543210"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="mt-4">
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Email (For QR)</label>
+                                                    <input 
+                                                        type="email"
+                                                        required
+                                                        value={veh.email || ''}
+                                                        onChange={(e) => updateVehicle(index, 'email', e.target.value)}
+                                                        placeholder="e.g. rahul@example.com"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                    />
                                                 </div>
                                             </div>
                                         ))
