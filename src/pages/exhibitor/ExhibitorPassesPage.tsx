@@ -29,12 +29,28 @@ export default function ExhibitorPassesPage() {
     const [personnel, setPersonnel] = useState([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
     const [vehicles, setVehicles] = useState([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // New states for payment review
+    const [isReviewing, setIsReviewing] = useState(false);
+    const [reviewData, setReviewData] = useState<any>(null);
+
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
 
     const handleOpenModal = (pass: any) => {
         setSelectedPass(pass);
         setQuantity(1);
         setPersonnel([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
         setVehicles([{ vehicleType: '4-wheeler', vehicleNumber: '' }]);
+        setIsReviewing(false);
+        setReviewData(null);
         setIsModalOpen(true);
     };
 
@@ -109,8 +125,7 @@ export default function ExhibitorPassesPage() {
         fetchPassData();
     }, [data?._id]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleRequestPassSubmit = async (paymentDetails: any = null) => {
         setIsSubmitting(true);
         try {
             const token = localStorage.getItem("exhibitorToken");
@@ -118,7 +133,8 @@ export default function ExhibitorPassesPage() {
                 passType: selectedPass.id,
                 quantity,
                 vehicles: selectedPass.id === 'vehicle' ? vehicles : undefined,
-                personnel: selectedPass.id !== 'vehicle' ? personnel : undefined
+                personnel: selectedPass.id !== 'vehicle' ? personnel : undefined,
+                paymentDetails
             };
 
             const res = await fetch(`${API_URL}/exhibitor-auth/pass-request`, {
@@ -136,10 +152,7 @@ export default function ExhibitorPassesPage() {
                     text: result.message || "Pass request submitted successfully.",
                     icon: 'success',
                     confirmButtonColor: '#15803d',
-                    customClass: {
-                        popup: 'rounded-2xl',
-                        confirmButton: 'rounded-xl font-bold py-2 px-6'
-                    }
+                    customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl font-bold py-2 px-6' }
                 });
                 setIsModalOpen(false);
                 fetchPassData();
@@ -149,10 +162,7 @@ export default function ExhibitorPassesPage() {
                     text: result.message || "Failed to submit pass request.",
                     icon: 'error',
                     confirmButtonColor: '#ef4444',
-                    customClass: {
-                        popup: 'rounded-2xl',
-                        confirmButton: 'rounded-xl font-bold py-2 px-6'
-                    }
+                    customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl font-bold py-2 px-6' }
                 });
             }
         } catch (error) {
@@ -161,14 +171,83 @@ export default function ExhibitorPassesPage() {
                 text: "Failed to submit pass request.",
                 icon: 'error',
                 confirmButtonColor: '#ef4444',
-                customClass: {
-                    popup: 'rounded-2xl',
-                    confirmButton: 'rounded-xl font-bold py-2 px-6'
-                }
+                customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl font-bold py-2 px-6' }
             });
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleProceedToReview = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const token = localStorage.getItem("exhibitorToken");
+            const payload = {
+                passType: selectedPass.id,
+                quantity
+            };
+
+            const res = await fetch(`${API_URL}/exhibitor-auth/pass-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+            if (result.success) {
+                if (result.isFree) {
+                    await handleRequestPassSubmit();
+                } else {
+                    setReviewData(result);
+                    setIsReviewing(true);
+                }
+            } else {
+                Swal.fire({ title: 'Error', text: result.message || "Failed to calculate pricing.", icon: 'error', confirmButtonColor: '#ef4444' });
+            }
+        } catch (error) {
+            Swal.fire({ title: 'Error', text: "Failed to communicate with server.", icon: 'error', confirmButtonColor: '#ef4444' });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleProceedToPay = async () => {
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) {
+            Swal.fire({ title: 'Error', text: 'Razorpay SDK failed to load. Are you online?', icon: 'error' });
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_rYjE4Lms78Wn0s',
+            amount: reviewData.order.amount,
+            currency: 'INR',
+            name: '9th IHWE 2026',
+            description: `Payment for ${reviewData.paidQuantity} Extra ${selectedPass.title}`,
+            order_id: reviewData.order.id,
+            handler: async function (response: any) {
+                await handleRequestPassSubmit({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
+                });
+            },
+            prefill: {
+                name: data?.companyName || 'Exhibitor',
+                email: data?.email || '',
+                contact: data?.mobile || ''
+            },
+            theme: { color: '#15803d' }
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.on('payment.failed', function (response: any) {
+            Swal.fire({ title: 'Payment Failed', text: response.error.description, icon: 'error', confirmButtonColor: '#ef4444' });
+        });
+        rzp.open();
     };
 
     const defaultPasses = [
@@ -659,7 +738,8 @@ export default function ExhibitorPassesPage() {
 
                             {/* Modal Body / Form */}
                             <div className="p-5 overflow-y-auto custom-scrollbar flex-1 relative">
-                                <form className="space-y-3" onSubmit={handleSubmit}>
+                                {!isReviewing ? (
+                                <form className="space-y-3" onSubmit={handleProceedToReview}>
                                     
                                     {/* Quantity Selector */}
                                     <div className="bg-white p-4 rounded-2xl mb-3 border border-slate-200 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)]">
@@ -845,11 +925,57 @@ export default function ExhibitorPassesPage() {
                                             disabled={isSubmitting}
                                             className={`w-full py-3.5 rounded-2xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg} ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                                         >
-                                            {isSubmitting ? 'Submitting...' : `Submit ${quantity} Request${quantity > 1 ? 's' : ''}`}
+                                            {isSubmitting ? 'Processing...' : 'Proceed to Review'}
                                             {!isSubmitting && <ChevronRight size={16} />}
                                         </button>
                                     </div>
                                 </form>
+                                ) : (
+                                    <div className="space-y-4">
+                                        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                                            <h3 className="text-sm font-black text-slate-800 mb-3 border-b pb-2">Payment Review</h3>
+                                            <div className="space-y-2 text-xs font-bold text-slate-600">
+                                                <div className="flex justify-between">
+                                                    <span>Total Passes Requested:</span>
+                                                    <span>{quantity}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span>Complimentary Applied:</span>
+                                                    <span className="text-emerald-600">-{quantity - reviewData.paidQuantity}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span>Paid Passes:</span>
+                                                    <span>{reviewData.paidQuantity}</span>
+                                                </div>
+                                                <div className="border-t pt-2 flex justify-between">
+                                                    <span>Base Amount:</span>
+                                                    <span>₹{reviewData.baseAmount}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span>GST ({selectedPass.gstPercentage}%):</span>
+                                                    <span>₹{reviewData.gstAmount}</span>
+                                                </div>
+                                                <div className="border-t pt-2 flex justify-between text-sm font-black text-slate-800">
+                                                    <span>Total Amount:</span>
+                                                    <span>₹{reviewData.totalAmount}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={handleProceedToPay}
+                                            className={`w-full py-3.5 rounded-2xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg}`}
+                                        >
+                                            Pay ₹{reviewData.totalAmount} & Submit
+                                            <ArrowRight size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setIsReviewing(false)}
+                                            className="w-full py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50"
+                                        >
+                                            Back to Edit
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </div>
