@@ -51,8 +51,8 @@ const WelcomeHeader = () => {
                 </div>
                 {data?.contact1 && (data?.contact1?.firstName || data?.contact1?.lastName) && (
                     <div className="flex items-center gap-1 mt-1 mb-1">
-                        <span className="text-[10px] text-gray-500 font-medium flex items-center gap-1">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span className="text-[15px] text-gray-500 font-medium flex items-center gap-1">
+
                             {data.contact1.title ? `${data.contact1.title} ` : ''}{data.contact1.firstName} {data.contact1.lastName}
                         </span>
                         {data?.contact1?.designation && (
