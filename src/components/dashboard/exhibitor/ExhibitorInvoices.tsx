@@ -319,14 +319,14 @@ ${content.innerHTML}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
 
             {/* Action Buttons */}
-            {/* <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
+            <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
                 <button onClick={handlePrint}
                     className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
-                    <Printer size={14} /> Print Tax Invoice
+                    <Printer size={14} /> Print Proforma Invoice
                 </button>
                 {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
                 {data.receiptPdfUrl && <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />}
-            </div> */}
+            </div>
 
             {/* Printable Invoice */}
             <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif' }}>
