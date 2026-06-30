@@ -48,7 +48,24 @@ export default function CompanyDetails() {
         try {
             const token = localStorage.getItem("exhibitorToken");
             const formData = new FormData();
-            Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+            
+            // Only send fields that actually changed
+            let hasChanges = false;
+            Object.entries(form).forEach(([key, value]) => {
+                const original = String(data[key] || "");
+                const current = String(value || "");
+                if (current !== original) {
+                    formData.append(key, value);
+                    hasChanges = true;
+                }
+            });
+
+            if (!hasChanges) {
+                toast.info("No changes detected.");
+                setSaving(false);
+                setEditing(false);
+                return;
+            }
 
             const res = await fetch(`${API_URL}/exhibitor-auth/update-profile?id=${data._id}`, {
                 method: "PUT",
