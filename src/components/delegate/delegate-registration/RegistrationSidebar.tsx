@@ -3,19 +3,26 @@ import { ShoppingCart, Package, ShieldCheck, Coffee, Users, Info, Lock, CheckCir
 import { Link } from "react-router-dom";
 
 interface SelectedItem {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   price: number;
+  time?: string;
+  date?: string;
+  day?: string;
 }
 
 interface RegistrationSidebarProps {
   selectedItems?: SelectedItem[];
-  totalAmount?: number;
+  subTotal?: number;
+  onNext?: () => void;
+  showNextButton?: boolean;
 }
 
 const RegistrationSidebar: React.FC<RegistrationSidebarProps> = ({
   selectedItems = [],
-  totalAmount = 0
+  subTotal = 0,
+  onNext,
+  showNextButton = true
 }) => {
   return (
     <div className="sticky top-4 space-y-4">
@@ -24,22 +31,57 @@ const RegistrationSidebar: React.FC<RegistrationSidebarProps> = ({
         <div className="bg-gray-50/50 p-6 flex flex-col items-center">
           <h4 className="text-[14px] font-black text-gray-400 uppercase tracking-[0.2em] mb-8">YOUR SELECTION</h4>
 
-          <div className="w-24 h-24 rounded-full border-2 border-dashed border-gray-200 flex items-center justify-center mb-6">
-            <ShoppingCart className="w-10 h-10 text-gray-200" />
+          {selectedItems.length === 0 ? (
+            <>
+              <div className="w-24 h-24 rounded-full border-2 border-dashed border-gray-200 flex items-center justify-center mb-6">
+                <ShoppingCart className="w-10 h-10 text-gray-200" />
+              </div>
+              <p className="text-[14px] font-bold text-gray-400 italic mb-8">No option selected yet</p>
+            </>
+          ) : (
+            <div className="w-full mb-6 space-y-3">
+              {selectedItems.map((item, idx) => (
+                <div key={idx} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm text-left">
+                  <h5 className="text-[13px] font-black text-[#143111] leading-tight mb-1">{item.title}</h5>
+                  {item.date && item.time && (
+                    <p className="text-[10px] font-bold text-gray-500">{item.date} | {item.time}</p>
+                  )}
+                  <div className="text-[14px] font-black text-gray-800 mt-1">₹{item.price}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="w-full pt-4 border-t border-gray-200 flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <span className="text-[12px] font-bold text-gray-500 uppercase">Subtotal</span>
+              <span className="text-[14px] font-black text-gray-700">₹{subTotal}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[12px] font-bold text-gray-500 uppercase">GST (18%)</span>
+              <span className="text-[14px] font-black text-gray-700">₹{Math.round(subTotal * 0.18)}</span>
+            </div>
+            <div className="flex justify-between items-center border-b border-gray-100 pb-3">
+              <span className="text-[12px] font-bold text-gray-500 uppercase">Gateway Charges (2.5%)</span>
+              <span className="text-[14px] font-black text-gray-700">₹{Math.round((subTotal + Math.round(subTotal * 0.18)) * 0.025)}</span>
+            </div>
+            <div className="flex justify-between items-center pt-2">
+              <span className="text-[14px] font-black text-[#143111] uppercase tracking-widest">Total Amount</span>
+              <span className="text-[24px] font-black text-[#143111] leading-none">
+                ₹{subTotal + Math.round(subTotal * 0.18) + Math.round((subTotal + Math.round(subTotal * 0.18)) * 0.025)}
+              </span>
+            </div>
           </div>
 
-          <p className="text-[14px] font-bold text-gray-400 italic mb-8">No option selected yet</p>
-
-          <div className="w-full pt-8 border-t border-gray-100 flex flex-col items-center">
-            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Amount</div>
-            <div className="text-[28px] font-black text-[#143111] leading-none">₹{totalAmount}</div>
-          </div>
-
-          <Link target="blank" to="/delegate-registration-details"
-            className="w-full mt-8 bg-[#143111] hover:bg-[#0d210b] text-white py-3 px-6 rounded-xl font-black text-[12px] uppercase tracking-[0.1em] flex items-center justify-between gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-green-900/20 group">
-            <span>CONTINUE TO DETAILS</span>
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          {showNextButton && (
+            <button
+              onClick={onNext}
+              className="w-full mt-8 bg-[#143111] hover:bg-[#0d210b] text-white py-3 px-6 rounded-xl font-black text-[12px] uppercase tracking-[0.1em] flex items-center justify-between gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-green-900/20 group"
+            >
+              <span>CONTINUE TO DETAILS</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          )}
         </div>
       </div>
 

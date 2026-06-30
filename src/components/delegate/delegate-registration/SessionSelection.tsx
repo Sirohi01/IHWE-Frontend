@@ -1,46 +1,81 @@
 import React, { useState } from "react";
 import { Check, Calendar, Users, Lightbulb, BookOpen } from "lucide-react";
 
-const SessionSelection: React.FC = () => {
-  const [activeDay, setActiveDay] = useState(1);
-  const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-  const dayData = [
-    { id: 1, date: "21 AUG 2026", day: "Fri", title: "HEALTHCARE INNOVATION SUMMIT" },
-    { id: 2, date: "22 AUG 2026", day: "Sat", title: "GLOBAL WELLNESS LEADERSHIP FORUM" },
-    { id: 3, date: "23 AUG 2026", day: "Sun", title: "WELLNESS & AYUSH LEADERSHIP FORUM" },
-  ];
+export interface SelectedSession {
+  _id: string;
+  number: string;
+  time: string;
+  title: string;
+  price: number;
+  date: string;
+  day: string;
+}
 
-  const sessionsData: Record<number, any[]> = {
-    1: [
-      { id: "d1s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Smart Hospitals & Digital Transformation", description: "Exploring the future of smart hospitals, digital health platforms.", price: 500 },
-      { id: "d1s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Medical Devices & Innovation", description: "Latest trends in medical devices and modern healthcare.", price: 500 },
-      { id: "d1s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Diagnostics & Precision Medicine", description: "Advances in diagnostics, precision medicine and treatment.", price: 500 },
+interface SessionSelectionProps {
+  activeDay: string | number;
+  setActiveDay: (day: string | number) => void;
+  selectedSessions: SelectedSession[];
+  setSelectedSessions: React.Dispatch<React.SetStateAction<SelectedSession[]>>;
+}
 
-    ],
-    2: [
-      { id: "d2s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Wellness Economy & Global Opportunities", description: "Market trends and global prospects in the wellness sector.", price: 500 },
-      { id: "d2s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Ayurveda, AYUSH & Holistic Healing", description: "Traditional wisdom meets modern evidence-based practices.", price: 500 },
-      { id: "d2s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Fitness, Preventive Health & Lifestyle", description: "The core pillars of modern wellness and preventive care.", price: 500 },
+const SessionSelection: React.FC<SessionSelectionProps> = ({
+  activeDay,
+  setActiveDay,
+  selectedSessions,
+  setSelectedSessions,
+}) => {
+  const [dayData, setDayData] = useState<any[]>([]);
+  const [sessionsData, setSessionsData] = useState<Record<string, any[]>>({});
+  const [passesData, setPassesData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    ],
-    3: [
-      { id: "d3s1", number: "1", time: "10:00 AM – 11:30 AM", title: "Ayurveda & Traditional Wisdom", description: "Deep dive into ancient healing systems and their relevance.", price: 500 },
-      { id: "d3s2", number: "2", time: "12:00 PM – 01:30 PM", title: "Nutrition, Diet & Lifestyle", description: "Personalized nutrition and dietary habits for longevity.", price: 500 },
-      { id: "d3s3", number: "3", time: "02:30 PM – 04:00 PM", title: "Yoga, Mental Health & Wellness", description: "Holistic approaches to mental well-being and yoga practices.", price: 500 },
+  React.useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const res = await fetch(`${API_URL}/delegate-config/public`);
+        const json = await res.json();
+        if (json.success) {
+          const fetchedDays = json.data.days || [];
+          const fetchedPasses = json.data.passes || [];
+          setDayData(fetchedDays);
+          setPassesData(fetchedPasses);
+          if (fetchedDays.length > 0 && !activeDay) {
+            setActiveDay(fetchedDays[0]._id);
+          }
+          
+          const sessionMap: Record<string, any[]> = {};
+          fetchedDays.forEach((d: any) => {
+            sessionMap[d._id] = d.sessions || [];
+          });
+          setSessionsData(sessionMap);
+        }
+      } catch (err) {
+        console.error("Error fetching delegate config:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchConfig();
+  }, []);
 
-    ],
+  if (loading) {
+    return <div className="p-8 text-center text-gray-500">Loading sessions...</div>;
+  }
+
+  const toggleSession = (session: any, day: any) => {
+    setSelectedSessions((prev) => {
+      const exists = prev.find((s) => s._id === session._id);
+      if (exists) {
+        return prev.filter((s) => s._id !== session._id);
+      } else {
+        return [...prev, { ...session, date: day.date, day: day.day }];
+      }
+    });
   };
 
-  const toggleSession = (sessionId: string) => {
-    setSelectedSessions((prev) =>
-      prev.includes(sessionId)
-        ? prev.filter((id) => id !== sessionId)
-        : [...prev, sessionId]
-    );
-  };
-
-  const currentDay = dayData.find((d) => d.id === activeDay)!;
+  const currentDay = dayData.find((d) => d._id === activeDay) || dayData[0];
 
   return (
     <div className="w-full">
@@ -50,18 +85,18 @@ const SessionSelection: React.FC = () => {
 
       {/* Day Cards - Compact */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-        {dayData.map((day) => (
+        {dayData.map((day, index) => (
           <button
-            key={day.id}
-            onClick={() => setActiveDay(day.id)}
-            className={`relative flex flex-col p-2 sm:p-3 rounded-xl border-2 transition-all text-left ${activeDay === day.id
+            key={day._id}
+            onClick={() => setActiveDay(day._id)}
+            className={`relative flex flex-col p-2 sm:p-3 rounded-xl border-2 transition-all text-left ${activeDay === day._id
               ? "bg-[#143111] border-[#143111] text-white shadow-md"
               : "bg-white border-gray-100 text-gray-400 hover:border-gray-200"
               }`}
           >
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
-              <Calendar className={`w-3 h-3 sm:w-4 sm:h-4 ${activeDay === day.id ? "text-white" : "text-gray-300"}`} />
-              <span className="text-[11px] sm:text-[14px] font-black uppercase">DAY {day.id}</span>
+              <Calendar className={`w-3 h-3 sm:w-4 sm:h-4 ${activeDay === day._id ? "text-white" : "text-gray-300"}`} />
+              <span className="text-[11px] sm:text-[14px] font-black uppercase">DAY {index + 1}</span>
             </div>
             <div className="text-[9px] sm:text-[11px] font-bold uppercase tracking-tight opacity-80 leading-none mb-0.5 sm:mb-0">{day.date}</div>
             <div className="text-[8px] sm:text-[10px] font-medium opacity-60 uppercase leading-none">{day.day}</div>
@@ -77,7 +112,7 @@ const SessionSelection: React.FC = () => {
         <div className="relative bg-[#F8FAFC]/30 px-3 sm:px-4 flex items-center gap-1.5 text-center">
           <div className="w-1.5 h-1.5 rounded-full bg-[#143111] shrink-0" />
           <span className="text-[9px] sm:text-[12px] font-black text-[#143111] uppercase tracking-[0.1em] leading-tight">
-            DAY {activeDay} – {currentDay.title}
+            DAY {dayData.findIndex(d => d._id === activeDay) + 1} – {currentDay?.title}
           </span>
           <div className="w-1.5 h-1.5 rounded-full bg-[#143111] shrink-0" />
         </div>
@@ -85,10 +120,12 @@ const SessionSelection: React.FC = () => {
 
       {/* Sessions List - Compact Cards */}
       <div className="space-y-3 mb-6">
-        {sessionsData[activeDay]?.map((session) => (
+        {sessionsData[activeDay]?.map((session) => {
+          const isSelected = selectedSessions.some((s) => s._id === session._id);
+          return (
           <div
-            key={session.id}
-            onClick={() => toggleSession(session.id)}
+            key={session._id}
+            onClick={() => toggleSession(session, currentDay)}
             className="flex flex-col sm:flex-row items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group"
           >
             <div className="w-full sm:w-[80px] bg-[#143111] p-3 flex flex-row sm:flex-col justify-between sm:justify-center items-center text-white shrink-0 gap-2 sm:gap-0">
@@ -110,18 +147,19 @@ const SessionSelection: React.FC = () => {
             </div>
             <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center bg-gray-50/20 gap-2 sm:gap-0">
               <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹500</div>
-              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes(session.id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
                 }`}>
-                {selectedSessions.includes(session.id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+                {isSelected && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
               </div>
             </div>
           </div>
-        ))}
+        )})}
+      </div>
 
-        {/* All Sessions Card - Compact */}
-        <div
-          onClick={() => toggleSession(`all_day_${activeDay}`)}
-          className={`flex flex-col sm:flex-row items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
+      {passesData.filter(p => p.passKey === "all_day").map((p) => (
+        <div key={p._id}
+          onClick={() => toggleSession({ _id: `all_day_${activeDay}`, title: `${p.title} - Day ${currentDay?.day || ''}`, price: p.price }, currentDay)}
+          className={`flex flex-col sm:flex-row items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedSessions.some(s => s._id === `all_day_${activeDay}`) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
             }`}
         >
           <div className="w-full sm:w-[80px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-center text-[#143111] shrink-0 bg-[#F1F8EE] sm:bg-transparent">
@@ -132,14 +170,14 @@ const SessionSelection: React.FC = () => {
           <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
             <div className="flex items-center gap-3 mb-1.5">
               <h3 className="text-[14px] sm:text-[15px] font-black text-[#143111] uppercase tracking-tight">
-                ALL 3 SESSIONS – DAY {activeDay}
+                {p.title} – DAY {currentDay?.day || ''}
               </h3>
               <span className="px-2 py-0.5 bg-[#143111] text-white text-[8px] font-black uppercase rounded">
                 POPULAR
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-              {["All Sessions Access", "Delegate Kit", "Certificate", "Lunch (Thali)"].map((item, idx) => (
+              {p.perks.map((item: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-1.5 text-[10px] font-bold text-gray-700">
                   <Check className="w-3 h-3 text-green-600" /> {item}
                 </div>
@@ -147,98 +185,65 @@ const SessionSelection: React.FC = () => {
             </div>
           </div>
           <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 gap-2 sm:gap-0">
-            <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹1200</div>
-            <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes(`all_day_${activeDay}`) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+            <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹{p.price}</div>
+            <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.some(s => s._id === `all_day_${activeDay}`) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
               }`}>
-              {selectedSessions.includes(`all_day_${activeDay}`) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+              {selectedSessions.some(s => s._id === `all_day_${activeDay}`) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
             </div>
           </div>
         </div>
-      </div>
+      ))}
 
       <div className="mt-8">
         <h2 className="text-[13px] font-black text-gray-900 uppercase tracking-[0.1em] mb-3">OTHER OPTIONS</h2>
         <div className="space-y-3">
+          {passesData.filter(p => p.passKey !== "all_day").map(p => {
+            const isFullPass = p.passKey === 'full_pass';
+            const Icon = isFullPass ? Calendar : BookOpen;
+            const bgClass = isFullPass ? "bg-[#0B2C66]" : "bg-[#6A3DF0]";
+            const borderClass = isFullPass ? "border-[#0B2C66]" : "border-[#6A3DF0]";
+            const textClass = isFullPass ? "text-[#0B2C66]" : "text-[#6A3DF0]";
+            const shadowClass = isFullPass ? "shadow-blue-900/5" : "shadow-purple-900/5";
+            const checkBorderClass = isFullPass ? "border-green-500" : "border-purple-400";
+            const checkColorClass = isFullPass ? "text-green-600" : "text-purple-600";
+            const fakeDayData = isFullPass ? { date: "All Days", day: "" } : { date: "Any 1 Day", day: "" };
 
-          {/* Full Access Pass - Compact */}
-          <div
-            onClick={() => toggleSession("full_pass")}
-            className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.includes("full_pass") ? "border-[#0B2C66] shadow-md shadow-blue-900/5" : ""
-              }`}
-          >
-            <div className="w-full sm:w-[80px] bg-[#0B2C66] p-3 flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]">
-              <Calendar className="w-6 h-6 sm:w-7 sm:h-7 opacity-40 animate-pulse" />
-            </div>
-            <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
-              <h3 className="text-[13px] sm:text-[14px] font-black text-[#0B2C66] uppercase tracking-tight">
-                ALL 3 DAYS – FULL ACCESS PASS
-              </h3>
-              <p className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">(DAY 1 + DAY 2 + DAY 3)</p>
+            return (
+              <div key={p._id}
+                onClick={() => toggleSession({ _id: p.passKey, title: p.title, price: p.price }, fakeDayData)}
+                className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.some(s => s._id === p.passKey) ? `${borderClass} shadow-md ${shadowClass}` : ""
+                  }`}
+              >
+                <div className={`w-full sm:w-[80px] ${bgClass} p-3 flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]`}>
+                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 opacity-40 animate-pulse" />
+                </div>
+                <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
+                  <h3 className={`text-[13px] sm:text-[14px] font-black ${textClass} uppercase tracking-tight`}>
+                    {p.title}
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">{p.subtitle}</p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
-                {[
-                  "All Sessions (3 Days)",
-                  "Delegate Kit",
-                  "Certificate",
-                  "Lunch (All Days)"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
-                    <div className="w-4 h-4 rounded-full border border-green-500 flex items-center justify-center shrink-0">
-                      <Check className="w-2.5 h-2.5 text-green-600 stroke-[4]" />
-                    </div>
-                    {item}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                    {p.perks.map((item: string, idx: number) => (
+                      <div key={idx} className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
+                        <div className={`w-4 h-4 rounded-full border ${checkBorderClass} flex items-center justify-center shrink-0`}>
+                          <Check className={`w-2.5 h-2.5 ${checkColorClass} stroke-[4]`} />
+                        </div>
+                        {item}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
-              <div className="text-[18px] sm:text-[20px] font-black text-[#0B2C66] leading-none">₹3000</div>
-              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("full_pass") ? "bg-[#0B2C66] border-[#0B2C66]" : "bg-white border-gray-200"
-                }`}>
-                {selectedSessions.includes("full_pass") && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
-              </div>
-            </div>
-          </div>
-
-          {/* Paper Presentation Pass - Compact */}
-          <div
-            onClick={() => toggleSession("paper_pass")}
-            className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.includes("paper_pass") ? "border-[#6A3DF0] shadow-md shadow-purple-900/5" : ""
-              }`}
-          >
-            <div className="w-full sm:w-[80px] bg-[#6A3DF0] p-3 flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]">
-              <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 opacity-40" />
-            </div>
-            <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
-              <h3 className="text-[13px] sm:text-[14px] font-black text-[#6A3DF0] uppercase tracking-tight">
-                PAPER PRESENTATION PASS
-              </h3>
-              <p className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">(ANY 1 DAY – 2 SESSIONS)</p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
-                {[
-                  "Access to 2 Sessions",
-                  "Presentation Opportunity",
-                  "Certificate (Paper)",
-                  "Lunch + Delegate Kit"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
-                    <div className="w-4 h-4 rounded-full border border-purple-400 flex items-center justify-center shrink-0">
-                      <Check className="w-2.5 h-2.5 text-purple-600 stroke-[4]" />
-                    </div>
-                    {item}
+                </div>
+                <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
+                  <div className={`text-[18px] sm:text-[20px] font-black ${textClass} leading-none`}>₹{p.price}</div>
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.some(s => s._id === p.passKey) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
+                    }`}>
+                    {selectedSessions.some(s => s._id === p.passKey) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
-            <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
-              <div className="text-[18px] sm:text-[20px] font-black text-[#6A3DF0] leading-none">₹3000</div>
-              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.includes("paper_pass") ? "bg-[#6A3DF0] border-[#6A3DF0]" : "bg-white border-gray-200"
-                }`}>
-                {selectedSessions.includes("paper_pass") && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
 
