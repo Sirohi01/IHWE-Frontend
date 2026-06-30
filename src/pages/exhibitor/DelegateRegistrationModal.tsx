@@ -129,7 +129,7 @@ const DelegateRegistrationModal: React.FC<DelegateRegistrationModalProps> = ({
                     </div>
 
                     {/* Modal Body */}
-                    <div className="overflow-y-auto custom-scrollbar flex-1 relative bg-slate-50">
+                    <div className={`flex-1 relative bg-slate-50 flex flex-col ${view === 'registration' ? 'overflow-hidden' : 'overflow-y-auto custom-scrollbar'}`}>
                         {view === 'choice' && (
                             <div className="p-8 flex flex-col items-center justify-center space-y-6">
                                 <div className="text-center mb-4">
@@ -170,8 +170,8 @@ const DelegateRegistrationModal: React.FC<DelegateRegistrationModalProps> = ({
                         )}
 
                         {view === 'registration' && (
-                            <div className="p-4 sm:p-6">
-                                <div className={`mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border px-4 py-3 ${
+                            <div className="flex-1 flex flex-col overflow-hidden p-4 sm:p-6 pb-0">
+                                <div className={`shrink-0 mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border px-4 py-3 ${
                                     isComplimentary
                                         ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                                         : 'border-amber-200 bg-amber-50 text-amber-900'
@@ -190,8 +190,8 @@ const DelegateRegistrationModal: React.FC<DelegateRegistrationModalProps> = ({
                                         {isComplimentary ? `${complimentaryRemaining} FREE LEFT` : 'PAYMENT REQUIRED'}
                                     </span>
                                 </div>
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                                    <div className="lg:col-span-8">
+                                <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-5">
+                                    <div className="lg:col-span-8 overflow-y-auto custom-scrollbar pb-6 pr-2">
                                         {registrationStep === 1 ? (
                                             <SessionSelection
                                                 activeDay={activeDay}
@@ -211,7 +211,7 @@ const DelegateRegistrationModal: React.FC<DelegateRegistrationModalProps> = ({
                                             />
                                         )}
                                     </div>
-                                    <div className="lg:col-span-4">
+                                    <div className="lg:col-span-4 overflow-y-auto custom-scrollbar pb-6">
                                         <RegistrationSidebar
                                             onNext={() => {
                                                 if (selectedItems.length === 0) {

@@ -108,17 +108,17 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
           <button
             key={day._id}
             onClick={() => setActiveDay(day._id)}
-            className={`relative flex flex-col p-2 sm:p-3 rounded-xl border-2 transition-all text-left ${activeDay === day._id
+            className={`relative flex flex-col ${compact ? "p-1.5 sm:p-2" : "p-2 sm:p-3"} rounded-xl border-2 transition-all text-left ${activeDay === day._id
               ? "bg-[#143111] border-[#143111] text-white shadow-md"
               : "bg-white border-gray-100 text-gray-400 hover:border-gray-200"
               }`}
           >
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
-              <Calendar className={`w-3 h-3 sm:w-4 sm:h-4 ${activeDay === day._id ? "text-white" : "text-gray-300"}`} />
-              <span className="text-[11px] sm:text-[14px] font-black uppercase">DAY {index + 1}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5">
+              <Calendar className={`w-3 h-3 ${compact ? "sm:w-3 sm:h-3" : "sm:w-4 sm:h-4"} ${activeDay === day._id ? "text-white" : "text-gray-300"}`} />
+              <span className={`text-[11px] ${compact ? "sm:text-[12px]" : "sm:text-[14px]"} font-black uppercase`}>DAY {index + 1}</span>
             </div>
-            <div className="text-[9px] sm:text-[11px] font-bold uppercase tracking-tight opacity-80 leading-none mb-0.5 sm:mb-0">{day.date}</div>
-            <div className="text-[8px] sm:text-[10px] font-medium opacity-60 uppercase leading-none">{day.day}</div>
+            <div className={`text-[9px] ${compact ? "sm:text-[10px]" : "sm:text-[11px]"} font-bold uppercase tracking-tight opacity-80 leading-none mb-0.5`}>{day.date}</div>
+            <div className={`text-[8px] ${compact ? "sm:text-[9px]" : "sm:text-[10px]"} font-medium opacity-60 uppercase leading-none`}>{day.day}</div>
           </button>
         ))}
       </div>
@@ -145,30 +145,30 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
           <div
             key={session._id}
             onClick={() => toggleSession(session, currentDay)}
-            className={`flex flex-col sm:flex-row items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group ${compact ? "min-h-[86px]" : ""}`}
+            className={`flex flex-col sm:flex-row items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group ${compact ? "min-h-[70px]" : ""}`}
           >
-            <div className="w-full sm:w-[80px] bg-[#143111] p-3 flex flex-row sm:flex-col justify-between sm:justify-center items-center text-white shrink-0 gap-2 sm:gap-0">
+            <div className={`w-full ${compact ? "sm:w-[65px] p-2" : "sm:w-[80px] p-3"} bg-[#143111] flex flex-row sm:flex-col justify-between sm:justify-center items-center text-white shrink-0 gap-2 sm:gap-0`}>
               <div className="flex sm:flex-col items-center sm:justify-center gap-1.5 sm:gap-0">
-                <span className="text-[8px] font-bold opacity-60 uppercase">SESSION</span>
-                <span className="text-[16px] sm:text-[24px] font-black leading-none">{session.number}</span>
+                <span className={`text-[8px] font-bold opacity-60 uppercase ${compact ? 'hidden sm:block' : ''}`}>SESSION</span>
+                <span className={`${compact ? "text-[16px] sm:text-[20px]" : "text-[16px] sm:text-[24px]"} font-black leading-none mt-0 sm:mt-1`}>{session.number}</span>
               </div>
-              <div className="text-[10px] sm:text-[9px] font-bold opacity-80 text-right sm:text-center leading-tight">
+              <div className={`${compact ? "text-[10px] sm:text-[8px] mt-1" : "text-[10px] sm:text-[9px] mt-1"} font-bold opacity-80 text-right sm:text-center leading-tight`}>
                 {session.time}
               </div>
             </div>
-            <div className={`${compact ? "p-3" : "p-4"} flex-1 flex flex-col justify-center border-b sm:border-b-0 sm:border-r border-gray-50`}>
-              <h3 className={`${compact ? "text-[13px]" : "text-[14px] sm:text-[15px]"} font-black text-[#143111] leading-tight mb-1 group-hover:text-green-800 transition-colors`}>
+            <div className={`${compact ? "p-2 sm:px-3 sm:py-2" : "p-3 sm:p-4"} flex-1 flex flex-col justify-center border-b sm:border-b-0 sm:border-r border-gray-50`}>
+              <h3 className={`${compact ? "text-[13px]" : "text-[14px] sm:text-[15px]"} font-black text-[#143111] leading-tight mb-0.5 group-hover:text-green-800 transition-colors`}>
                 {session.title}
               </h3>
-              <p className={`${compact ? "text-[11px]" : "text-[12px]"} text-gray-500 font-medium leading-tight max-w-[450px]`}>
+              <p className={`${compact ? "text-[10px] sm:text-[11px] line-clamp-1" : "text-[11px] sm:text-[12px]"} text-gray-500 font-medium leading-tight max-w-[450px]`}>
                 {session.description}
               </p>
             </div>
-            <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center bg-gray-50/20 gap-2 sm:gap-0">
-              <div className="text-[13px] sm:text-[14px] font-black text-[#143111]">
+            <div className={`w-full ${compact ? "sm:w-[90px] p-2" : "sm:w-[110px] p-3 sm:p-4"} flex flex-row sm:flex-col items-center justify-between sm:justify-center bg-gray-50/20 gap-2 sm:gap-0`}>
+              <div className={`${compact ? "text-[12px]" : "text-[13px] sm:text-[14px]"} font-black text-[#143111]`}>
                 {isComplimentary ? "Included" : `₹${session.price || 0}`}
               </div>
-              <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+              <div className={`w-5 h-5 ${compact ? "sm:w-5 sm:h-5" : "sm:w-7 sm:h-7"} rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
                 }`}>
                 {isSelected && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
               </div>
@@ -183,33 +183,33 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
           className={`flex flex-col sm:flex-row items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedPasses.some(s => s._id === p._id) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
             }`}
         >
-          <div className="w-full sm:w-[80px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-center text-[#143111] shrink-0 bg-[#F1F8EE] sm:bg-transparent">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#F1F8EE] flex items-center justify-center">
-              <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+          <div className={`w-full ${compact ? "sm:w-[65px] p-2" : "sm:w-[80px] p-3 sm:p-4"} flex flex-row sm:flex-col items-center justify-center text-[#143111] shrink-0 bg-[#F1F8EE] sm:bg-transparent`}>
+            <div className={`w-9 h-9 ${compact ? "sm:w-8 sm:h-8" : "sm:w-12 sm:h-12"} rounded-full bg-[#F1F8EE] flex items-center justify-center`}>
+              <Users className={`w-5 h-5 ${compact ? "sm:w-4 sm:h-4" : "sm:w-6 sm:h-6"}`} />
             </div>
           </div>
-          <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
-            <div className="flex items-center gap-3 mb-1.5">
-              <h3 className="text-[14px] sm:text-[15px] font-black text-[#143111] uppercase tracking-tight">
+          <div className={`flex-grow ${compact ? "p-3" : "p-4"} flex flex-col justify-center border-b sm:border-b-0`}>
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className={`${compact ? "text-[13px]" : "text-[14px] sm:text-[15px]"} font-black text-[#143111] uppercase tracking-tight`}>
                 {p.title} – DAY {currentDay?.day || ''}
               </h3>
-              <span className="px-2 py-0.5 bg-[#143111] text-white text-[8px] font-black uppercase rounded">
+              <span className={`px-2 ${compact ? "py-0" : "py-0.5"} bg-[#143111] text-white text-[8px] font-black uppercase rounded`}>
                 POPULAR
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {p.perks.map((item: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-1.5 text-[10px] font-bold text-gray-700">
+                <div key={idx} className={`flex items-center gap-1 ${compact ? "text-[9px]" : "text-[10px]"} font-bold text-gray-700`}>
                   <Check className="w-3 h-3 text-green-600" /> {item}
                 </div>
               ))}
             </div>
           </div>
-          <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 gap-2 sm:gap-0">
-            <div className="text-[13px] sm:text-[14px] font-black text-[#143111]">
+          <div className={`w-full ${compact ? "sm:w-[90px] p-2" : "sm:w-[110px] p-3 sm:p-4"} flex flex-row sm:flex-col items-center justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 gap-2 sm:gap-0`}>
+            <div className={`${compact ? "text-[12px]" : "text-[13px] sm:text-[14px]"} font-black text-[#143111]`}>
               {isComplimentary ? "Included" : `₹${p.price}`}
             </div>
-            <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+            <div className={`w-5 h-5 ${compact ? "sm:w-5 sm:h-5" : "sm:w-7 sm:h-7"} rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
               }`}>
               {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
             </div>
@@ -237,31 +237,32 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
                 className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedPasses.some(s => s._id === p._id) ? `${borderClass} shadow-md ${shadowClass}` : ""
                   }`}
               >
-                <div className={`w-full sm:w-[80px] ${bgClass} p-3 flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]`}>
-                  <Icon className="w-6 h-6 sm:w-7 sm:h-7 opacity-40 animate-pulse" />
+                <div className={`w-full ${compact ? "sm:w-[65px] p-2" : "sm:w-[80px] p-3"} ${bgClass} flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]`}>
+                  <Icon className={`w-5 h-5 ${compact ? "sm:w-5 sm:h-5" : "sm:w-7 sm:h-7"} opacity-40 animate-pulse`} />
                 </div>
-                <div className="flex-grow p-4 flex flex-col justify-center border-b sm:border-b-0">
+                <div className={`flex-grow ${compact ? "p-3" : "p-4"} flex flex-col justify-center border-b sm:border-b-0`}>
                   <h3 className={`text-[13px] sm:text-[14px] font-black ${textClass} uppercase tracking-tight`}>
                     {p.title}
                   </h3>
-                  <p className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">{p.subtitle}</p>
+                  {!compact && <p className="text-[10px] sm:text-[11px] font-bold text-gray-500 uppercase mt-0.5 mb-3">{p.subtitle}</p>}
+                  {compact && <div className="mt-1" />}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 ${compact ? "mt-1" : ""}`}>
                     {p.perks.map((item: string, idx: number) => (
-                      <div key={idx} className="flex items-center gap-2 text-[10px] font-bold text-gray-700">
-                        <div className={`w-4 h-4 rounded-full border ${checkBorderClass} flex items-center justify-center shrink-0`}>
-                          <Check className={`w-2.5 h-2.5 ${checkColorClass} stroke-[4]`} />
+                      <div key={idx} className={`flex items-center gap-1.5 ${compact ? "text-[9px]" : "text-[10px]"} font-bold text-gray-700`}>
+                        <div className={`w-3.5 h-3.5 rounded-full border ${checkBorderClass} flex items-center justify-center shrink-0`}>
+                          <Check className={`w-2 h-2 ${checkColorClass} stroke-[4]`} />
                         </div>
                         {item}
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
-                  <div className={`text-[13px] sm:text-[14px] font-black ${textClass} leading-none`}>
+                <div className={`w-full ${compact ? "sm:w-[100px] p-2" : "sm:w-[140px] p-3 sm:p-4"} flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0`}>
+                  <div className={`text-[12px] ${compact ? "sm:text-[13px]" : "sm:text-[14px]"} font-black ${textClass} leading-none`}>
                     {isComplimentary ? "Included" : `₹${p.price}`}
                   </div>
-                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
+                  <div className={`w-5 h-5 ${compact ? "sm:w-5 sm:h-5" : "sm:w-7 sm:h-7"} rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
                     }`}>
                     {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
                   </div>
