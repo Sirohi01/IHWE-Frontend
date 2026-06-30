@@ -380,6 +380,7 @@ export default function ExhibitorPassesPage() {
             const complimentary = Number(config?.complimentaryQuota ?? data?.entitlements?.delegatePassQuota ?? pass.complimentary);
             const totalQuota = Number(config?.totalQuota ?? complimentary);
             const used = Number(data?.entitlements?.delegatePassUsed || 0);
+            const complimentaryRemaining = Math.max(complimentary - used, 0);
             return {
                 ...pass,
                 title: config?.title || pass.title,
@@ -387,6 +388,7 @@ export default function ExhibitorPassesPage() {
                 complimentary,
                 used,
                 remaining: Math.max(totalQuota - used, 0),
+                complimentaryRemaining,
                 totalQuota,
                 price: null,
                 maxPerRequest: 1
@@ -1170,6 +1172,7 @@ export default function ExhibitorPassesPage() {
             <DelegateRegistrationModal 
                 isOpen={isDelegateModalOpen}
                 onClose={() => setIsDelegateModalOpen(false)}
+                complimentaryRemaining={Number(passes.find((pass) => pass.id === 'delegate')?.complimentaryRemaining || 0)}
                 onSubmitRegistration={async (formData) => {
                     try {
                         const token = localStorage.getItem('exhibitorToken');
@@ -1192,7 +1195,54 @@ export default function ExhibitorPassesPage() {
                         });
 
                         const resData = await response.json();
-                        if (response.ok) {
+                        if (response.ok && resData.requiresPayment) {
+                            const isLoaded = await loadRazorpay();
+                            if (!isLoaded) {
+                                Swal.fire("Error", "Razorpay SDK failed to load.", "error");
+                                return;
+                            }
+
+                            const options = {
+                                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_rYjE4Lms78Wn0s',
+                                amount: resData.amount,
+                                currency: 'INR',
+                                name: '9th IHWE 2026',
+                                description: 'Delegate Registration',
+                                order_id: resData.orderId,
+                                handler: async function (paymentResponse: any) {
+                                    const verifyRes = await fetch(`${API_URL}/delegate/verify`, {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            registrationId: resData.registrationId,
+                                            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                                            razorpay_order_id: paymentResponse.razorpay_order_id,
+                                            razorpay_signature: paymentResponse.razorpay_signature
+                                        })
+                                    });
+                                    const verifyData = await verifyRes.json();
+                                    if (verifyRes.ok && verifyData.success) {
+                                        Swal.fire("Success", "Paid delegate registered successfully!", "success");
+                                        setIsDelegateModalOpen(false);
+                                        window.location.reload();
+                                    } else {
+                                        Swal.fire("Error", verifyData.message || "Payment verification failed", "error");
+                                    }
+                                },
+                                prefill: {
+                                    name: data?.companyName || 'Exhibitor',
+                                    email: data?.email || '',
+                                    contact: data?.mobile || ''
+                                },
+                                theme: { color: '#be185d' }
+                            };
+
+                            const rzp = new (window as any).Razorpay(options);
+                            rzp.on('payment.failed', function (paymentResponse: any) {
+                                Swal.fire("Payment Failed", paymentResponse.error?.description || "Payment was not completed.", "error");
+                            });
+                            rzp.open();
+                        } else if (response.ok) {
                             Swal.fire("Success", "Delegate registered successfully!", "success");
                             setIsDelegateModalOpen(false);
                             // Optionally trigger a re-fetch of exhibitor data to update quota

@@ -16,7 +16,11 @@ const ICON_MAP: { [key: string]: React.ReactNode } = {
   ShieldPlus: <ShieldPlus className="w-10 h-10 text-white" />,
 };
 
-const MainConferences: React.FC = () => {
+interface MainConferencesProps {
+  isModal?: boolean;
+}
+
+const MainConferences: React.FC<MainConferencesProps> = ({ isModal = false }) => {
   const [tracks, setTracks] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -55,7 +59,7 @@ const MainConferences: React.FC = () => {
       icon: <Lightbulb className="w-10 h-10 text-white" />,
       accentColor: "#4E9F3D",
       badgeColor: "bg-[#1A4D2E]",
-      link: "/conference.-1"
+      link: "/conference/day-1"
     },
     {
       day: "DAY 2",
@@ -93,12 +97,12 @@ const MainConferences: React.FC = () => {
   ];
 
   return (
-    <section className="py-8 bg-white">
-      <div className="mx-auto max-w-[1340px] px-6 lg:px-0 lg:pl-2">
+    <section className={`${isModal ? "py-5" : "py-8"} bg-white`}>
+      <div className={`mx-auto ${isModal ? "max-w-[1180px] px-4" : "max-w-[1340px] px-6 lg:px-0 lg:pl-2"}`}>
 
 
-        <div className="text-center mb-6">
-          <h2 className="text-[20px] md:text-[24px] font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2 flex items-center justify-center flex-wrap">
+        <div className={`${isModal ? "mb-4" : "mb-6"} text-center`}>
+          <h2 className={`${isModal ? "text-[17px] md:text-[21px]" : "text-[20px] md:text-[24px]"} font-[900] text-[#4E9F3D] uppercase tracking-tight mb-2 flex items-center justify-center flex-wrap`}>
             3 DAYS <span className="mx-3 text-[#4E9F3D] text-[0.7em] opacity-80">|</span> 3 POWERFUL{" "}
             <span className="text-[#1E88E5] ml-1">CONFERENCES</span>{" "}
             <span className="mx-3 text-[#4E9F3D] text-[0.7em] opacity-80">|</span>{" "}
@@ -108,15 +112,21 @@ const MainConferences: React.FC = () => {
         </div>
 
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className={`grid lg:grid-cols-3 ${isModal ? "gap-4" : "gap-8"}`}>
           {mainConferences.map((conf, index) => (
-            <Link to={conf.link || "#"} key={index} className="block h-full cursor-pointer">
+            <Link
+              to={conf.link || "#"}
+              key={index}
+              target={isModal ? "_blank" : undefined}
+              rel={isModal ? "noopener noreferrer" : undefined}
+              className="block h-full cursor-pointer"
+            >
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.7 }}
-                className={`group relative rounded-[32px] overflow-hidden bg-white transition-all duration-500 ${conf.shadowColor} hover:-translate-y-3 min-h-[500px] flex flex-col h-full`}
+                className={`group relative ${isModal ? "rounded-[22px] min-h-[410px]" : "rounded-[32px] min-h-[500px]"} overflow-hidden bg-white transition-all duration-500 ${conf.shadowColor} hover:-translate-y-3 flex flex-col h-full`}
               >
 
                 <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -127,12 +137,12 @@ const MainConferences: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-white/90" />
                 </div>
-                <div className="relative z-10 p-7 flex flex-col h-full">
+                <div className={`relative z-10 ${isModal ? "p-5" : "p-7"} flex flex-col h-full`}>
 
 
                   <div className="flex justify-center items-start mb-4 w-full">
                     <div
-                      className={`absolute top-0 left-0 ${conf.badgeColor} text-white px-6 md:px-20 py-2.5 rounded-br-[28px] font-black text-[18px] md:text-[22px] tracking-wider w-full md:min-w-[420px] text-center border-2 border-yellow-300`}
+                      className={`absolute top-0 left-0 ${conf.badgeColor} text-white ${isModal ? "px-5 py-2 rounded-br-[22px] text-[16px] md:text-[20px] md:min-w-[320px]" : "px-6 md:px-20 py-2.5 rounded-br-[28px] text-[18px] md:text-[22px] md:min-w-[420px]"} font-black tracking-wider w-full text-center border-2 border-yellow-300`}
                       style={{
                         boxShadow:
                           "0 0 18px rgba(255, 215, 0, 0.55), 0 4px 12px rgba(255, 215, 0, 0.35)"
@@ -150,30 +160,30 @@ const MainConferences: React.FC = () => {
                   </div>
 
 
-                  <div className="absolute top-6 right-7">
+                  <div className={`${isModal ? "absolute top-6 right-5" : "absolute top-6 right-7"}`}>
                     <div
                       className="w-18 h-18 rounded-full flex items-center justify-center border-4 border-white backdrop-blur-md transition-transform duration-500 group-hover:rotate-12"
                       style={{
                         backgroundColor: `${conf.accentColor}dd`,
-                        width: "72px",
-                        height: "72px"
+                        width: isModal ? "58px" : "72px",
+                        height: isModal ? "58px" : "72px"
                       }}
                     >
                       {React.cloneElement(conf.icon as React.ReactElement, {
-                        className: "w-9 h-9 text-white"
+                        className: `${isModal ? "w-7 h-7" : "w-9 h-9"} text-white`
                       })}
                     </div>
                   </div>
 
                   <h3
-                    className="text-[22px] font-[900] leading-[1.15] mb-4 mt-10 uppercase max-w-[85%]"
+                    className={`${isModal ? "text-[18px] mt-9 mb-3 max-w-[82%]" : "text-[22px] mt-10 mb-4 max-w-[85%]"} font-[900] leading-[1.15] uppercase`}
                     style={{ color: "#0B2C66" }}
                   >
                     {conf.title}
                   </h3>
 
 
-                  <div className="space-y-2.5 mb-auto">
+                  <div className={`${isModal ? "space-y-2" : "space-y-2.5"} mb-auto`}>
                     {conf.sessions.map((session, idx) => (
                       <div key={idx} className="flex items-start gap-3">
                         <div
@@ -184,7 +194,7 @@ const MainConferences: React.FC = () => {
                             width: "9px"
                           }}
                         />
-                        <span className="text-[13px] font-bold text-gray-800 leading-snug">
+                        <span className={`${isModal ? "text-[11px]" : "text-[13px]"} font-bold text-gray-800 leading-snug`}>
                           {session}
                         </span>
                       </div>
@@ -194,7 +204,7 @@ const MainConferences: React.FC = () => {
 
                   <div className="flex justify-center items-end w-full mt-4">
                     <div
-                      className="absolute bottom-0 left-0 px-6 md:px-20 py-1.5 rounded-tr-[24px] font-black text-[16px] md:text-[20px] tracking-wider w-full md:min-w-[420px] text-center border-2 border-yellow-300"
+                      className={`absolute bottom-0 left-0 ${isModal ? "px-5 py-1.5 rounded-tr-[20px] text-[14px] md:text-[17px] md:min-w-[320px]" : "px-6 md:px-20 py-1.5 rounded-tr-[24px] text-[16px] md:text-[20px] md:min-w-[420px]"} font-black tracking-wider w-full text-center border-2 border-yellow-300`}
                       style={{
                         backgroundColor:
                           conf.accentColor === "#4E9F3D"

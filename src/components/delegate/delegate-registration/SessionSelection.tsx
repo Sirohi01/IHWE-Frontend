@@ -20,6 +20,8 @@ interface SessionSelectionProps {
   setSelectedSessions: React.Dispatch<React.SetStateAction<SelectedSession[]>>;
   selectedPasses: any[];
   setSelectedPasses: React.Dispatch<React.SetStateAction<any[]>>;
+  isComplimentary?: boolean;
+  compact?: boolean;
 }
 
 const SessionSelection: React.FC<SessionSelectionProps> = ({
@@ -29,6 +31,8 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
   setSelectedSessions,
   selectedPasses,
   setSelectedPasses,
+  isComplimentary = false,
+  compact = false,
 }) => {
   const [dayData, setDayData] = useState<any[]>([]);
   const [sessionsData, setSessionsData] = useState<Record<string, any[]>>({});
@@ -94,12 +98,12 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
 
   return (
     <div className="w-full">
-      <h2 className="text-[15px] font-black text-[#143111] uppercase tracking-tight mb-4">
+      <h2 className={`${compact ? "text-[13px] mb-3" : "text-[15px] mb-4"} font-black text-[#143111] uppercase tracking-tight`}>
         STEP 1: CHOOSE DAY & SESSION
       </h2>
 
       {/* Day Cards - Compact */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+      <div className={`grid grid-cols-3 gap-2 sm:gap-3 ${compact ? "mb-4" : "mb-6"}`}>
         {dayData.map((day, index) => (
           <button
             key={day._id}
@@ -120,7 +124,7 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
       </div>
 
       {/* Divider - Compact */}
-      <div className="relative flex items-center justify-center mb-5">
+      <div className={`relative flex items-center justify-center ${compact ? "mb-4" : "mb-5"}`}>
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-100" />
         </div>
@@ -134,14 +138,14 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
       </div>
 
       {/* Sessions List - Compact Cards */}
-      <div className="space-y-3 mb-6">
+      <div className={`${compact ? "space-y-2 mb-4" : "space-y-3 mb-6"}`}>
         {sessionsData[activeDay]?.map((session) => {
           const isSelected = selectedSessions.some((s) => s._id === session._id);
           return (
           <div
             key={session._id}
             onClick={() => toggleSession(session, currentDay)}
-            className="flex flex-col sm:flex-row items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group"
+            className={`flex flex-col sm:flex-row items-stretch bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-sm transition-all cursor-pointer group ${compact ? "min-h-[86px]" : ""}`}
           >
             <div className="w-full sm:w-[80px] bg-[#143111] p-3 flex flex-row sm:flex-col justify-between sm:justify-center items-center text-white shrink-0 gap-2 sm:gap-0">
               <div className="flex sm:flex-col items-center sm:justify-center gap-1.5 sm:gap-0">
@@ -152,16 +156,18 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
                 {session.time}
               </div>
             </div>
-            <div className="flex-1 p-4 flex flex-col justify-center border-b sm:border-b-0 sm:border-r border-gray-50">
-              <h3 className="text-[14px] sm:text-[15px] font-black text-[#143111] leading-tight mb-1 group-hover:text-green-800 transition-colors">
+            <div className={`${compact ? "p-3" : "p-4"} flex-1 flex flex-col justify-center border-b sm:border-b-0 sm:border-r border-gray-50`}>
+              <h3 className={`${compact ? "text-[13px]" : "text-[14px] sm:text-[15px]"} font-black text-[#143111] leading-tight mb-1 group-hover:text-green-800 transition-colors`}>
                 {session.title}
               </h3>
-              <p className="text-[12px] text-gray-500 font-medium leading-tight max-w-[450px]">
+              <p className={`${compact ? "text-[11px]" : "text-[12px]"} text-gray-500 font-medium leading-tight max-w-[450px]`}>
                 {session.description}
               </p>
             </div>
             <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center bg-gray-50/20 gap-2 sm:gap-0">
-              <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹500</div>
+              <div className="text-[13px] sm:text-[14px] font-black text-[#143111]">
+                {isComplimentary ? "Included" : `₹${session.price || 0}`}
+              </div>
               <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
                 }`}>
                 {isSelected && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
@@ -200,7 +206,9 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
             </div>
           </div>
           <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 gap-2 sm:gap-0">
-            <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹{p.price}</div>
+            <div className="text-[13px] sm:text-[14px] font-black text-[#143111]">
+              {isComplimentary ? "Included" : `₹${p.price}`}
+            </div>
             <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
               }`}>
               {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
@@ -209,7 +217,7 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
         </div>
       ))}
 
-      <div className="mt-8">
+      <div className={compact ? "mt-5" : "mt-8"}>
         <h2 className="text-[13px] font-black text-gray-900 uppercase tracking-[0.1em] mb-3">OTHER OPTIONS</h2>
         <div className="space-y-3">
           {passesData.filter(p => p.passKey !== "all_day").map(p => {
@@ -250,7 +258,9 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
                   </div>
                 </div>
                 <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
-                  <div className={`text-[18px] sm:text-[20px] font-black ${textClass} leading-none`}>₹{p.price}</div>
+                  <div className={`text-[13px] sm:text-[14px] font-black ${textClass} leading-none`}>
+                    {isComplimentary ? "Included" : `₹${p.price}`}
+                  </div>
                   <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
                     }`}>
                     {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}

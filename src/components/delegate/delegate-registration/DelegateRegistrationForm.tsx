@@ -6,9 +6,15 @@ import { RefreshCw } from "lucide-react";
 
 interface DelegateRegistrationFormProps {
     onSubmit: (e: React.FormEvent) => void;
+    compact?: boolean;
+    submitLabel?: string;
 }
 
-const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({ onSubmit }) => {
+const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({
+    onSubmit,
+    compact = false,
+    submitLabel = "Submit Registration"
+}) => {
     const [pincode, setPincode] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
@@ -45,8 +51,8 @@ const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({ onS
     };
 
     return (
-        <div className="w-full bg-white rounded-2xl p-6 lg:p-10 shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-medium text-[#1a5c1a] mb-2">Delegate Registration Details</h2>
+        <div className={`w-full bg-white rounded-2xl ${compact ? "p-5" : "p-6 lg:p-10"} shadow-sm border border-gray-100`}>
+            <h2 className={`${compact ? "text-xl" : "text-2xl"} font-medium text-[#1a5c1a] mb-2`}>Delegate Registration Details</h2>
             <div className="w-9 h-[2px] bg-[#1a5c1a] mb-3" />
             <p className="text-sm text-gray-500 mb-7">Please fill in the details below to complete your registration.</p>
 
@@ -216,7 +222,7 @@ const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({ onS
 
                 {/* Buttons */}
                 <button type="submit" disabled={!termsAccepted || !refundAccepted} className={`w-full mt-6 text-white font-medium py-3 rounded-lg text-sm transition-colors shadow-md hover:shadow-lg ${(!termsAccepted || !refundAccepted) ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#1a5c1a] hover:bg-[#145014]'}`}>
-                    Submit Registration
+                    {submitLabel}
                 </button>
             </form>
         </div>
