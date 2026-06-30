@@ -28,9 +28,11 @@ export default function ExhibitorPassesPage() {
     const [passRequests, setPassRequests] = useState<any[]>([]);
 
     const [quantity, setQuantity] = useState(1);
-    const [personnel, setPersonnel] = useState([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
-    const [vehicles, setVehicles] = useState([{ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' }]);
+    const [personnel, setPersonnel] = useState<any[]>([]);
+    const [vehicles, setVehicles] = useState<any[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [paymentWarningConfirmed, setPaymentWarningConfirmed] = useState(false);
+    const [manualAllocationConfirmed, setManualAllocationConfirmed] = useState(false);
     
     // New states for payment review
     const [isReviewing, setIsReviewing] = useState(false);
@@ -46,40 +48,182 @@ export default function ExhibitorPassesPage() {
         });
     };
 
-    const handleOpenModal = (pass: any) => {
+    const escapeHtml = (value: unknown) => String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    const getTeamAllocation = (pass: any) => {
+        const teamMembers = Array.isArray(data?.teamMembers) ? data.teamMembers : [];
+        const previousRequests = passRequests.filter(
+            request => request.passType === pass.id && request.status !== 'rejected'
+        );
+        const previousEntries = previousRequests.flatMap(request => [
+            ...(request.personnel || []),
+            ...(request.vehicles || [])
+        ]);
+        const allocatedIds = new Set(
+            previousEntries.map(entry => String(entry.teamMemberId || '')).filter(Boolean)
+        );
+        const allocatedContacts = new Set(
+            previousEntries
+                .flatMap(entry => [entry.email, entry.phone])
+                .filter(Boolean)
+                .map(value => String(value).toLowerCase())
+        );
+
+        const isAllocated = (member: any) =>
+            Boolean(member?.passes?.[pass.id])
+            || allocatedIds.has(String(member._id))
+            || allocatedContacts.has(String(member.email || '').toLowerCase())
+            || allocatedContacts.has(String(member.mobile || '').toLowerCase());
+
+        return {
+            available: teamMembers.filter((member: any) => !isAllocated(member)),
+            allocated: teamMembers.filter(isAllocated)
+        };
+    };
+
+    const createPersonnelEntry = (member?: any) => ({
+        teamMemberId: member?._id || undefined,
+        name: member?.name || '',
+        designation: member?.designation || member?.roleAtExhibition || '',
+        email: member?.email || '',
+        phone: member?.mobile || '',
+        gender: member?.gender || 'male',
+        isTeamMember: Boolean(member)
+    });
+
+    const createVehicleEntry = (member?: any) => ({
+        teamMemberId: member?._id || undefined,
+        vehicleType: '4-wheeler',
+        vehicleNumber: '',
+        name: member?.name || '',
+        email: member?.email || '',
+        phone: member?.mobile || '',
+        isTeamMember: Boolean(member)
+    });
+
+    const renderMemberList = (members: any[], emptyText: string, tone: 'green' | 'slate') => {
+        if (members.length === 0) {
+            return `<div style="padding:7px 9px;color:#94a3b8;font-size:11px">${emptyText}</div>`;
+        }
+        return members.map(member => `
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 9px;border-top:1px solid #f1f5f9">
+                <div style="min-width:0;text-align:left">
+                    <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(member.name || 'Unnamed member')}</div>
+                    <div style="font-size:10px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(member.designation || member.roleAtExhibition || member.email || '')}</div>
+                </div>
+                <span style="flex:none;border-radius:5px;padding:2px 6px;font-size:9px;font-weight:800;text-transform:uppercase;${tone === 'green' ? 'background:#ecfdf5;color:#047857' : 'background:#f1f5f9;color:#64748b'}">${tone === 'green' ? 'Available' : 'Allocated'}</span>
+            </div>
+        `).join('');
+    };
+
+    const showTeamStatus = async (pass: any, available: any[], allocated: any[]) => {
+        const result = await Swal.fire({
+            title: 'Team member allocation',
+            html: `
+                <div style="font-size:11px;color:#64748b;margin-bottom:8px">Passes are assigned to registered team members first.</div>
+                <div style="max-height:210px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
+                    <div style="padding:7px 9px;background:#f8fafc;text-align:left;font-size:10px;font-weight:800;color:#475569">AVAILABLE (${available.length})</div>
+                    ${renderMemberList(available, 'No available team member', 'green')}
+                    ${allocated.length > 0 ? `<div style="padding:7px 9px;background:#f8fafc;text-align:left;font-size:10px;font-weight:800;color:#475569">ALREADY ALLOCATED (${allocated.length})</div>${renderMemberList(allocated, '', 'slate')}` : ''}
+                </div>`,
+            width: 410,
+            padding: '16px',
+            showCancelButton: true,
+            confirmButtonText: 'Continue',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#15803d',
+            cancelButtonColor: '#64748b',
+            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
+        });
+        return result.isConfirmed;
+    };
+
+    const confirmPaymentStart = async (pass: any) => {
+        const result = await Swal.fire({
+            title: 'Payment starts from here',
+            text: `Complimentary ${pass.title} quota is finished. Additional passes will require online payment.`,
+            icon: 'info',
+            width: 390,
+            padding: '16px',
+            showCancelButton: true,
+            confirmButtonText: 'Continue paid',
+            cancelButtonText: 'Go back',
+            confirmButtonColor: '#15803d',
+            cancelButtonColor: '#64748b',
+            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
+        });
+        return result.isConfirmed;
+    };
+
+    const confirmManualDetails = async (pass: any, allocated: any[]) => {
+        const result = await Swal.fire({
+            title: 'Team members finished',
+            html: `
+                <div style="font-size:11px;color:#64748b;margin-bottom:8px">All registered team members already have this pass. Additional attendee/contact details must be entered manually.</div>
+                ${allocated.length > 0 ? `<div style="max-height:150px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">${renderMemberList(allocated, '', 'slate')}</div>` : ''}`,
+            icon: 'warning',
+            width: 410,
+            padding: '16px',
+            showCancelButton: true,
+            confirmButtonText: 'Fill manually',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#15803d',
+            cancelButtonColor: '#64748b',
+            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
+        });
+        return result.isConfirmed;
+    };
+
+    const handleOpenModal = async (pass: any) => {
+        const { available, allocated } = getTeamAllocation(pass);
+        if (!(await showTeamStatus(pass, available, allocated))) return;
+
+        const startsAsPaid = Number(pass.complimentaryRemaining || 0) <= 0;
+        if (startsAsPaid && !(await confirmPaymentStart(pass))) return;
+        if (available.length === 0 && !(await confirmManualDetails(pass, allocated))) return;
+
         setSelectedPass(pass);
         setQuantity(1);
-        setPersonnel([{ name: '', designation: '', email: '', phone: '', gender: 'male' }]);
-        setVehicles([{ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' }]);
+        setPersonnel([createPersonnelEntry(available[0])]);
+        setVehicles([createVehicleEntry(available[0])]);
+        setPaymentWarningConfirmed(startsAsPaid);
+        setManualAllocationConfirmed(available.length === 0);
         setIsReviewing(false);
         setReviewData(null);
         setIsModalOpen(true);
     };
 
-    const handleQuantityChange = (newQty: number) => {
+    const handleQuantityChange = async (newQty: number) => {
         const maxAllowed = selectedPass?.maxPerRequest || 10;
         if (newQty < 1 || newQty > maxAllowed) return;
+        const complimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
+        if (newQty > complimentaryRemaining && quantity <= complimentaryRemaining && !paymentWarningConfirmed) {
+            if (!(await confirmPaymentStart(selectedPass))) return;
+            setPaymentWarningConfirmed(true);
+        }
+
+        const { available, allocated } = getTeamAllocation(selectedPass);
+        if (newQty > available.length && quantity <= available.length && !manualAllocationConfirmed) {
+            if (!(await confirmManualDetails(selectedPass, allocated))) return;
+            setManualAllocationConfirmed(true);
+        }
+
         setQuantity(newQty);
         
         if (selectedPass?.id === 'vehicle') {
-            const newVehicles = [...vehicles];
-            if (newQty > newVehicles.length) {
-                for (let i = newVehicles.length; i < newQty; i++) {
-                    newVehicles.push({ vehicleType: '4-wheeler', vehicleNumber: '', name: '', email: '', phone: '' });
-                }
-            } else {
-                newVehicles.splice(newQty);
-            }
+            const newVehicles = Array.from({ length: newQty }, (_, index) =>
+                vehicles[index] || createVehicleEntry(available[index])
+            );
             setVehicles(newVehicles);
         } else {
-            const newPersonnel = [...personnel];
-            if (newQty > newPersonnel.length) {
-                for (let i = newPersonnel.length; i < newQty; i++) {
-                    newPersonnel.push({ name: '', designation: '', email: '', phone: '', gender: 'male' });
-                }
-            } else {
-                newPersonnel.splice(newQty);
-            }
+            const newPersonnel = Array.from({ length: newQty }, (_, index) =>
+                personnel[index] || createPersonnelEntry(available[index])
+            );
             setPersonnel(newPersonnel);
         }
     };
@@ -126,6 +270,17 @@ export default function ExhibitorPassesPage() {
     useEffect(() => {
         fetchPassData();
     }, [data?._id]);
+
+    useEffect(() => {
+        if (!isModalOpen && !isDelegateModalOpen) return;
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [isModalOpen, isDelegateModalOpen]);
 
     const handleRequestPassSubmit = async (paymentDetails: any = null) => {
         setIsSubmitting(true);
@@ -833,13 +988,13 @@ export default function ExhibitorPassesPage() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-                            className="relative w-full max-w-[720px] bg-[#f8fafc] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] ring-1 ring-slate-900/5"
+                            className="relative w-full max-w-[640px] bg-[#f8fafc] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ring-1 ring-slate-900/5"
                         >
                             {/* Modal Header */}
-                            <div className="px-5 py-4 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
-                                <div className="flex items-center gap-3.5">
-                                    <div className={`w-11 h-11 rounded-xl ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
-                                        <selectedPass.icon size={22} className={selectedPass.themeClasses.text} />
+                            <div className="px-4 py-3 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-9 h-9 rounded-lg ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
+                                        <selectedPass.icon size={19} className={selectedPass.themeClasses.text} />
                                     </div>
                                     <div>
                                         <div className="flex flex-wrap items-center gap-2">
@@ -866,13 +1021,13 @@ export default function ExhibitorPassesPage() {
                             </div>
 
                             {/* Modal Body / Form */}
-                            <div className="p-3 overflow-y-auto custom-scrollbar flex-1 relative">
+                            <div className="p-2.5 overflow-y-auto custom-scrollbar flex-1 relative">
                                 {!isReviewing ? (
                                 <form className="space-y-2.5" onSubmit={handleProceedToReview}>
                                     
                                     {/* Quantity Selector */}
-                                    <div className="bg-white p-3 rounded-xl mb-2.5 border border-slate-200 shadow-sm">
-                                        <div className="flex items-center justify-between gap-3 mb-2">
+                                    <div className="bg-white p-2.5 rounded-xl mb-2 border border-slate-200 shadow-sm">
+                                        <div className="flex items-center justify-between gap-3 mb-1.5">
                                             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                                 Select Quantity
                                             </label>
@@ -901,7 +1056,7 @@ export default function ExhibitorPassesPage() {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
+                                        <div className="mt-2 grid grid-cols-3 gap-1.5 text-center">
                                             <div className="rounded-lg bg-emerald-50/70 border border-emerald-100 px-2 py-1.5">
                                                 <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">Free Left</span>
                                                 <span className="block text-[12px] font-black text-emerald-700 mt-0.5">{selectedComplimentaryRemaining}</span>
@@ -925,14 +1080,19 @@ export default function ExhibitorPassesPage() {
                                     {/* Dynamic Fields */}
                                     {selectedPass?.id === 'vehicle' ? (
                                         vehicles.map((veh, index) => (
-                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-3 mb-2.5 shadow-sm relative overflow-hidden">
+                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-2.5 mb-2 shadow-sm relative overflow-hidden">
                                                 <div className="absolute right-0 top-0 bg-slate-50 px-2.5 py-1 rounded-bl-lg border-b border-l border-slate-100">
                                                     <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">#{index + 1}</span>
                                                 </div>
                                                 
-                                                <h3 className="text-[12px] font-black text-slate-800 mb-2.5">Vehicle Details</h3>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <h3 className="text-[12px] font-black text-slate-800">Vehicle Details</h3>
+                                                    <span className={`rounded px-1.5 py-0.5 text-[8px] font-black uppercase ${veh.isTeamMember ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                                                        {veh.isTeamMember ? 'Team member allocated' : 'Manual details'}
+                                                    </span>
+                                                </div>
                                                 
-                                                <div className="mb-2.5">
+                                                <div className="mb-2">
                                                     <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Vehicle Type</label>
                                                     <div className="flex gap-1.5">
                                                         <button 
@@ -966,12 +1126,12 @@ export default function ExhibitorPassesPage() {
                                                             value={veh.vehicleNumber}
                                                             onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value.toUpperCase())}
                                                             placeholder="e.g. MH 01 AB 1234"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
+                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
                                                         />
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2.5">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                                                     <div>
                                                         <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Driver/Contact Name</label>
                                                         <input 
@@ -980,7 +1140,7 @@ export default function ExhibitorPassesPage() {
                                                             value={veh.name || ''}
                                                             onChange={(e) => updateVehicle(index, 'name', e.target.value)}
                                                             placeholder="e.g. Rahul Sharma"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                     <div>
@@ -991,12 +1151,12 @@ export default function ExhibitorPassesPage() {
                                                             value={veh.phone || ''}
                                                             onChange={(e) => updateVehicle(index, 'phone', e.target.value)}
                                                             placeholder="e.g. 9876543210"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                 </div>
                                                 
-                                                <div className="mt-2.5">
+                                                <div className="mt-2">
                                                     <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Contact Email (For QR)</label>
                                                     <input 
                                                         type="email"
@@ -1004,21 +1164,26 @@ export default function ExhibitorPassesPage() {
                                                         value={veh.email || ''}
                                                         onChange={(e) => updateVehicle(index, 'email', e.target.value)}
                                                         placeholder="e.g. rahul@example.com"
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                        className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                     />
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
                                         personnel.map((person, index) => (
-                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-3 mb-2.5 shadow-sm relative overflow-hidden">
+                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-2.5 mb-2 shadow-sm relative overflow-hidden">
                                                 <div className={`absolute right-0 top-0 px-2.5 py-1 rounded-bl-lg border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
                                                     <span className={`text-[8.5px] font-black uppercase tracking-widest`}>Person #{index + 1}</span>
                                                 </div>
                                                 
-                                                <h3 className="text-[12px] font-black text-slate-800 mb-2.5">Attendee Details</h3>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <h3 className="text-[12px] font-black text-slate-800">Attendee Details</h3>
+                                                    <span className={`rounded px-1.5 py-0.5 text-[8px] font-black uppercase ${person.isTeamMember ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                                                        {person.isTeamMember ? 'Team member allocated' : 'Manual details'}
+                                                    </span>
+                                                </div>
 
-                                                <div className="space-y-2.5">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                     <div>
                                                         <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Full Name</label>
                                                         <input 
@@ -1027,7 +1192,7 @@ export default function ExhibitorPassesPage() {
                                                             value={person.name}
                                                             onChange={(e) => updatePersonnel(index, 'name', e.target.value)}
                                                             placeholder="Enter full name"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
@@ -1039,11 +1204,11 @@ export default function ExhibitorPassesPage() {
                                                             value={person.designation}
                                                             onChange={(e) => updatePersonnel(index, 'designation', e.target.value)}
                                                             placeholder="e.g. Manager"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 gap-2.5">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:col-span-2">
                                                         <div>
                                                             <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Email ID</label>
                                                             <input 
@@ -1052,7 +1217,7 @@ export default function ExhibitorPassesPage() {
                                                                 value={person.email}
                                                                 onChange={(e) => updatePersonnel(index, 'email', e.target.value)}
                                                                 placeholder="Email address"
-                                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                         <div>
@@ -1063,12 +1228,12 @@ export default function ExhibitorPassesPage() {
                                                                 value={person.phone}
                                                                 onChange={(e) => updatePersonnel(index, 'phone', e.target.value)}
                                                                 placeholder="Mobile No"
-                                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <div>
+                                                    <div className="sm:col-span-2">
                                                         <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Gender Selection</label>
                                                         <div className="flex gap-1.5">
                                                             <button 
