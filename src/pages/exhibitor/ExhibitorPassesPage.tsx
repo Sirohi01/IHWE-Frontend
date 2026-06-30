@@ -271,6 +271,17 @@ export default function ExhibitorPassesPage() {
         fetchPassData();
     }, [data?._id]);
 
+    useEffect(() => {
+        if (!isModalOpen && !isDelegateModalOpen) return;
+
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
+    }, [isModalOpen, isDelegateModalOpen]);
+
     const handleRequestPassSubmit = async (paymentDetails: any = null) => {
         setIsSubmitting(true);
         try {
