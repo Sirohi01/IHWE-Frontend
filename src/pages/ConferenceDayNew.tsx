@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ConferenceStats from "../components/conference/ConferenceStats";
-import Day3Hero from "../components/conference/Day3/Day3Hero";
-import Day3About from "../components/conference/Day3/Day3About";
-import Day3Details from "../components/conference/Day3/Day3Details";
-import Day3Agenda from "../components/conference/Day3/Day3Agenda";
-import Day3FeaturedSpeakers from "../components/conference/Day3/Day3FeaturedSpeakers";
-import Day3Sponsors from "../components/conference/Day3/Day3Sponsors";
-import Day3CTA from "../components/conference/Day3/Day3CTA";
-import Day3BottomCTA from "../components/conference/Day3/Day3BottomCTA";
-import Day3Footer from "../components/conference/Day3/Day3Footer";
 import user from "../assets/day/user.webp"
 
 import { api } from "@/lib/api";
@@ -149,11 +139,9 @@ const ConferenceDayUnified: React.FC = () => {
   return (
     <div className="bg-white min-h-screen font-inter overflow-x-hidden">
       <div className="relative">
-        {/* 1. Hero Section */}
-        {/* <Day3Hero data={data.hero} defaultImage={getDefaultHeroImage()} /> */}
+      
         <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()}/>
-        {/* 2. Stats Section */}
-        {/* <ConferenceStats /> */}
+       
 
         {/* 3. About Section */}
         <div className="relative left-[20px]">
@@ -169,20 +157,13 @@ const ConferenceDayUnified: React.FC = () => {
                   dayTitle={`${data.hero?.title} — ${data.hero?.date}`} 
                   dayNumber={currentDay}
                 />
-              {/* <div className="w-full xl:w-[38%]">
-                <Day3FeaturedSpeakers 
-                  data={data.featuredSpeakers} 
-                  dayNumber={currentDay}
-                />
-              </div> */}
+             
           </div>
         </section>
 <OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers} />
 <PartnersAndActionsSection />
 <HealthcareHighlights />
-        {/* 5. Details Section (Fixed content for now as per design) */}
-     {/* Bottom Cards */}
-       {/* Bottom Cards */}
+       
       </div>
     </div>
   );

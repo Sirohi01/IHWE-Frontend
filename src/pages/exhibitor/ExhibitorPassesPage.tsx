@@ -16,11 +16,13 @@ import howitworksImg from "@/assets/howitworks.png";
 import notepadImg from "@/assets/notepad.png";
 import shoppingImg from "@/assets/shopping.png";
 import Swal from "sweetalert2";
+import DelegateRegistrationModal from "./DelegateRegistrationModal";
 
 export default function ExhibitorPassesPage() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDelegateModalOpen, setIsDelegateModalOpen] = useState(false);
     const [selectedPass, setSelectedPass] = useState<any>(null);
     const [passConfigs, setPassConfigs] = useState<any[]>([]);
     const [passRequests, setPassRequests] = useState<any[]>([]);
@@ -180,6 +182,12 @@ export default function ExhibitorPassesPage() {
 
     const handleProceedToReview = async (e: React.FormEvent) => {
         e.preventDefault();
+        const complimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
+        if (quantity <= complimentaryRemaining) {
+            await handleRequestPassSubmit();
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const token = localStorage.getItem("exhibitorToken");
@@ -330,6 +338,26 @@ export default function ExhibitorPassesPage() {
                 btnBg: "bg-[#1a3a7c] hover:bg-[#112754] text-white shadow-blue-900/10",
                 statsBorder: "border-blue-100/60"
             }
+        },
+        {
+            id: "delegate",
+            title: "Delegate Pass",
+            subtitle: "For Conference Access",
+            icon: Sparkles,
+            complimentary: 0,
+            used: data?.entitlements?.delegatePassUsed || 0,
+            remaining: 0,
+            price: 5000,
+            color: "pink",
+            themeClasses: {
+                bg: "bg-[#fdf4ff]",
+                border: "border-pink-100 hover:border-pink-300",
+                text: "text-[#be185d]",
+                iconBg: "bg-gradient-to-tr from-[#be185d] to-[#f472b6]",
+                badgeBg: "bg-pink-50 text-pink-700 border-pink-100",
+                btnBg: "bg-[#be185d] hover:bg-[#9d174d] text-white shadow-pink-900/10",
+                statsBorder: "border-pink-100/60"
+            }
         }
     ];
 
@@ -347,11 +375,32 @@ export default function ExhibitorPassesPage() {
             return config?.isActive !== false;
         })
         .map((pass) => {
+        if (pass.id === 'delegate') {
+            const config = passConfigs.find((item) => item.passType === pass.id);
+            const complimentary = Number(config?.complimentaryQuota ?? data?.entitlements?.delegatePassQuota ?? pass.complimentary);
+            const totalQuota = Number(config?.totalQuota ?? complimentary);
+            const used = Number(data?.entitlements?.delegatePassUsed || 0);
+            const complimentaryRemaining = Math.max(complimentary - used, 0);
+            return {
+                ...pass,
+                title: config?.title || pass.title,
+                subtitle: config?.subtitle || pass.subtitle,
+                complimentary,
+                used,
+                remaining: Math.max(totalQuota - used, 0),
+                complimentaryRemaining,
+                totalQuota,
+                price: null,
+                maxPerRequest: 1
+            };
+        }
+
         const config = passConfigs.find((item) => item.passType === pass.id);
         const complimentary = Number(config?.complimentaryQuota ?? pass.complimentary);
         const totalQuota = Number(config?.totalQuota ?? 10);
         const used = countsByType[pass.id]?.approved ?? 0;
         const totalRequested = countsByType[pass.id]?.total ?? 0;
+        const complimentaryRemaining = Math.max(complimentary - totalRequested, 0);
         return {
             ...pass,
             title: config?.title || pass.title,
@@ -359,6 +408,8 @@ export default function ExhibitorPassesPage() {
             complimentary,
             used,
             remaining: Math.max(totalQuota - totalRequested, 0),
+            complimentaryRemaining,
+            totalQuota,
             price: Number(config?.price ?? pass.price),
             maxPerRequest: Number(config?.maxPerRequest ?? 10)
         };
@@ -372,6 +423,12 @@ export default function ExhibitorPassesPage() {
         "Lunch & Water Bottle entitlement for Exhibitor Team (2 persons per day)."
     ];
 
+    const selectedComplimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
+    const selectedFreeQuantity = Math.min(quantity, selectedComplimentaryRemaining);
+    const selectedPaidQuantity = Math.max(quantity - selectedComplimentaryRemaining, 0);
+    const selectedIsFullyComplimentary = selectedPaidQuantity === 0;
+    const selectedEstimatedPayable = selectedPaidQuantity * Number(selectedPass?.price || 0);
+
     return (
         <motion.div
             key="exhibitor-passes-v1"
@@ -382,7 +439,7 @@ export default function ExhibitorPassesPage() {
             exit={{ opacity: 0 }}
         >
             {/* ─── TOP HEADER SECTION ─── */}
-            <div className="flex flex-col xl:flex-row items-stretch justify-between gap-3.5 mb-1">
+            <div className="flex flex-col xl:flex-row items-stretch justify-between gap-1.5 mb-1">
                 {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
                 <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
                     <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
@@ -399,7 +456,7 @@ export default function ExhibitorPassesPage() {
                     </div>
 
                     {/* Inner White Card Grid with Dividers */}
-                    <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-2 gap-y-4 sm:gap-y-0 sm:grid-cols-4 sm:divide-x sm:divide-slate-300 shadow-sm mb-1.5">
+                    <div className="bg-white rounded-xl border border-[#e2edd9] py-4 grid grid-cols-2 gap-y-4 sm:gap-y-0 sm:grid-cols-5 sm:divide-x sm:divide-slate-300 shadow-sm mb-1.5">
                         {passes.map((pass) => {
                             const Icon = pass.icon;
                             return (
@@ -419,8 +476,8 @@ export default function ExhibitorPassesPage() {
                 </div>
             </div>
 
-            {/* ─── 4 MAIN PASS CARDS ─── */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 mb-1">
+            {/* ─── 5 MAIN PASS CARDS ─── */}
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-1">
                 {passes.map((pass) => {
                     const Icon = pass.icon;
                     return (
@@ -460,19 +517,27 @@ export default function ExhibitorPassesPage() {
                                         <span className="text-[13px] font-black text-slate-800 mt-1">{pass.remaining}</span>
                                     </div>
                                     <div className="flex flex-col items-center justify-center">
-                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Extra Price</span>
-                                        <span className="text-[9.5px] font-black text-slate-800 mt-1">₹{pass.price} / Pass</span>
+                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">{pass.id === 'delegate' ? 'Total Passes' : 'Extra Price'}</span>
+                                        <span className="text-[9.5px] font-black text-slate-800 mt-1">
+                                            {pass.id === 'delegate' ? pass.totalQuota : `₹${pass.price} / Pass`}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Button */}
                             <button
-                                onClick={() => handleOpenModal(pass)}
+                                onClick={() => {
+                                    if (pass.id === 'delegate') {
+                                        setIsDelegateModalOpen(true);
+                                    } else {
+                                        handleOpenModal(pass);
+                                    }
+                                }}
                                 className={`w-full h-7 px-2.5 rounded-md text-[10px] font-extrabold transition-all duration-200 flex items-center justify-between shadow-sm hover:shadow-md ${pass.themeClasses.btnBg}`}
                             >
                                 <span className="flex-1 text-center">
-                                    {(countsByType[pass.id]?.pending || 0) > 0 ? `${countsByType[pass.id].pending} Pending` : 'Request / Purchase Extra'}
+                                    {(countsByType[pass.id]?.pending || 0) > 0 ? `${countsByType[pass.id].pending} Pending` : (pass.id === 'delegate' ? 'Register Delegate' : 'Request / Purchase Extra')}
                                 </span>
                                 <ArrowRight size={11} className="shrink-0" />
                             </button>
@@ -496,24 +561,78 @@ export default function ExhibitorPassesPage() {
                         {/* Entitlement Items */}
                         <div className="grid grid-cols-2 gap-1 mb-2">
                             {/* Lunch */}
-                            <div className="bg-[#fbfcfa] border border-[#e2edd9] rounded-xl p-2 flex flex-col justify-between">
+                            <div className="bg-[#fbfcfa] border border-[#e2edd9] rounded-xl p-2 flex flex-col justify-between hover:shadow-md cursor-pointer transition-all" onClick={() => {
+                                const config = passConfigs.find(c => c.passType === 'lunch');
+                                const comp = Number(config?.complimentaryQuota ?? 2);
+                                const req = countsByType['lunch']?.total || 0;
+                                const complimentaryRemaining = Math.max(comp - req, 0);
+                                setSelectedPass({
+                                    id: 'lunch',
+                                    title: 'Packed Thali Lunch',
+                                    subtitle: 'Daily Entitlement',
+                                    icon: Gift,
+                                    price: Number(config?.price || 250),
+                                    complimentary: comp,
+                                    remaining: complimentaryRemaining,
+                                    complimentaryRemaining,
+                                    themeClasses: {
+                                        bg: "bg-[#f4fbf6]",
+                                        border: "border-[#d2edd9]",
+                                        text: "text-[#15803d]",
+                                        iconBg: "bg-gradient-to-tr from-[#166534] to-[#22c55e]",
+                                        badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-100",
+                                        btnBg: "bg-[#15803d] hover:bg-[#166534] text-white",
+                                        statsBorder: "border-emerald-100/60"
+                                    }
+                                });
+                                setIsModalOpen(true);
+                            }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Packed Thali Lunch</span>
                                 <div className="flex items-center justify-between gap-1">
-                                    <img src={thaliImg} alt="Packed Thali Lunch" className="w-[50px] h-[40px] object-contain shrink-0" />
+                                    <img src={thaliImg} alt="Packed Thali Lunch" className="w-[40px] h-[35px] object-contain shrink-0" />
                                     <div className="text-center flex-1">
-                                        <span className="text-[18px] font-black text-[#15803d] leading-none block">2</span>
+                                        <span className="text-[18px] font-black text-[#15803d] leading-none block">
+                                            {passConfigs.find(c => c.passType === 'lunch')?.complimentaryQuota ?? 2}
+                                        </span>
                                         <span className="text-[7.5px] font-bold text-slate-400 block leading-tight mt-0.5 uppercase tracking-wide">Persons<br />Per Day</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Water Bottle */}
-                            <div className="bg-[#f7fbff] border border-[#e3efff] rounded-xl p-2 flex flex-col justify-between">
+                            <div className="bg-[#f7fbff] border border-[#e3efff] rounded-xl p-2 flex flex-col justify-between hover:shadow-md cursor-pointer transition-all" onClick={() => {
+                                const config = passConfigs.find(c => c.passType === 'water');
+                                const comp = Number(config?.complimentaryQuota ?? 2);
+                                const req = countsByType['water']?.total || 0;
+                                const complimentaryRemaining = Math.max(comp - req, 0);
+                                setSelectedPass({
+                                    id: 'water',
+                                    title: 'Water Bottle',
+                                    subtitle: 'Daily Entitlement',
+                                    icon: Gift,
+                                    price: Number(config?.price || 20),
+                                    complimentary: comp,
+                                    remaining: complimentaryRemaining,
+                                    complimentaryRemaining,
+                                    themeClasses: {
+                                        bg: "bg-[#f0f7ff]",
+                                        border: "border-blue-100",
+                                        text: "text-[#1a3a7c]",
+                                        iconBg: "bg-gradient-to-tr from-[#1e40af] to-[#3b82f6]",
+                                        badgeBg: "bg-blue-50 text-blue-700 border-blue-100",
+                                        btnBg: "bg-blue-600 hover:bg-blue-700 text-white",
+                                        statsBorder: "border-blue-100/60"
+                                    }
+                                });
+                                setIsModalOpen(true);
+                            }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Water Bottle</span>
                                 <div className="flex items-center justify-between gap-1">
-                                    <img src={bottleImg} alt="Water Bottle" className="w-[50px] h-[40px] object-contain shrink-0" />
+                                    <img src={bottleImg} alt="Water Bottle" className="w-[40px] h-[35px] object-contain shrink-0" />
                                     <div className="text-center flex-1">
-                                        <span className="text-[18px] font-black text-blue-600 leading-none block">2</span>
+                                        <span className="text-[18px] font-black text-blue-600 leading-none block">
+                                            {passConfigs.find(c => c.passType === 'water')?.complimentaryQuota ?? 2}
+                                        </span>
                                         <span className="text-[7.5px] font-bold text-slate-400 block leading-tight mt-0.5 uppercase tracking-wide">Bottles<br />Per Day</span>
                                     </div>
                                 </div>
@@ -634,29 +753,32 @@ export default function ExhibitorPassesPage() {
                         </h4>
 
                         {/* Passes list row */}
-                        <div className="grid grid-cols-4 gap-1.5 mt-1.5 pb-1.5 border-b border-dashed border-[#d8e6da]">
+                        <div className="grid grid-cols-5 gap-1.5 mt-1.5 pb-1.5 border-b border-dashed border-[#d8e6da]">
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
-                                <Users size={11} className="text-[#1a3a7c] shrink-0" /> 10 Visitor Passes
+                                <Users size={11} className="text-[#1a3a7c] shrink-0" /> {passes.find(p => p.id === 'visitor')?.complimentary} Visitor
                             </span>
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
-                                <UserCheck size={11} className="text-[#ea580c] shrink-0" /> 2 Exhibitor Passes
+                                <UserCheck size={11} className="text-[#ea580c] shrink-0" /> {passes.find(p => p.id === 'exhibitor')?.complimentary} Exhibitor
                             </span>
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
-                                <Car size={11} className="text-[#15803d] shrink-0" /> 2 Vehicle Passes
+                                <Car size={11} className="text-[#15803d] shrink-0" /> {passes.find(p => p.id === 'vehicle')?.complimentary} Vehicle
                             </span>
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
-                                <Wrench size={11} className="text-[#6b21a8] shrink-0" /> 4 Service Passes
+                                <Wrench size={11} className="text-[#6b21a8] shrink-0" /> {passes.find(p => p.id === 'service')?.complimentary} Service
+                            </span>
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <Sparkles size={11} className="text-[#be185d] shrink-0" /> {passes.find(p => p.id === 'delegate')?.complimentary} Delegate
                             </span>
                         </div>
 
                         {/* Lunch and Water Bottles row */}
                         <div className="mt-1.5 flex items-center gap-4 text-[9px] font-black text-slate-700">
                             <span className="flex items-center gap-1">
-                                + <img src={thaliImg} alt="Lunch" className="w-[16px] h-[16px] object-contain shrink-0" /> 2 Packed Thali Lunch (2 Persons Per Day)
+                                + <img src={thaliImg} alt="Lunch" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.lunchCount || 2} Packed Thali Lunch ({data?.entitlements?.lunchCount || 2} Persons Per Day)
                             </span>
                             <span className="text-slate-300 font-normal">|</span>
                             <span className="flex items-center gap-1">
-                                + <img src={bottleImg} alt="Water" className="w-[16px] h-[16px] object-contain shrink-0" /> 2 Water Bottles (2 Per Day)
+                                + <img src={bottleImg} alt="Water" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.waterBottleCount || 2} Water Bottles ({data?.entitlements?.waterBottleCount || 2} Per Day)
                             </span>
                         </div>
                     </div>
@@ -711,20 +833,27 @@ export default function ExhibitorPassesPage() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-                            className="relative w-full max-w-[600px] bg-[#f8fafc] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ring-1 ring-slate-900/5"
+                            className="relative w-full max-w-[720px] bg-[#f8fafc] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] ring-1 ring-slate-900/5"
                         >
                             {/* Modal Header */}
-                            <div className="px-6 py-5 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
+                            <div className="px-5 py-4 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
                                 <div className="flex items-center gap-3.5">
-                                    <div className={`w-11 h-11 rounded-2xl ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
+                                    <div className={`w-11 h-11 rounded-xl ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
                                         <selectedPass.icon size={22} className={selectedPass.themeClasses.text} />
                                     </div>
                                     <div>
-                                        <h2 className="text-[18px] font-black text-slate-800 tracking-tight leading-tight">
-                                            Request {selectedPass.title}
-                                        </h2>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <h2 className="text-[17px] font-black text-slate-800 tracking-tight leading-tight">
+                                                Request {selectedPass.title}
+                                            </h2>
+                                            <span className={`px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wide ${selectedIsFullyComplimentary ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                                                {selectedIsFullyComplimentary ? 'Free quota' : 'Extra paid'}
+                                            </span>
+                                        </div>
                                         <p className="text-[12px] text-slate-500 font-bold mt-0.5">
-                                            ₹{selectedPass.price} / Pass • {selectedPass.subtitle}
+                                            {selectedIsFullyComplimentary
+                                                ? `${selectedComplimentaryRemaining} complimentary available • ${selectedPass.subtitle}`
+                                                : `₹${selectedPass.price} / extra pass • ${selectedPass.subtitle}`}
                                         </p>
                                     </div>
                                 </div>
@@ -737,40 +866,58 @@ export default function ExhibitorPassesPage() {
                             </div>
 
                             {/* Modal Body / Form */}
-                            <div className="p-5 overflow-y-auto custom-scrollbar flex-1 relative">
+                            <div className="p-3 overflow-y-auto custom-scrollbar flex-1 relative">
                                 {!isReviewing ? (
-                                <form className="space-y-3" onSubmit={handleProceedToReview}>
+                                <form className="space-y-2.5" onSubmit={handleProceedToReview}>
                                     
                                     {/* Quantity Selector */}
-                                    <div className="bg-white p-4 rounded-2xl mb-3 border border-slate-200 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)]">
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                            Select Quantity
-                                        </label>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-[12px] font-bold text-slate-700">How many do you need?</span>
-                                            <div className="flex items-center gap-3 bg-slate-50 px-2 py-1 rounded-xl border border-slate-200">
+                                    <div className="bg-white p-3 rounded-xl mb-2.5 border border-slate-200 shadow-sm">
+                                        <div className="flex items-center justify-between gap-3 mb-2">
+                                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                Select Quantity
+                                            </label>
+                                            <span className={`px-2 py-0.5 rounded-full border text-[8.5px] font-black uppercase tracking-wide ${selectedIsFullyComplimentary ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                                                {selectedIsFullyComplimentary ? 'Complimentary' : 'Extra Payment'}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                            <span className="text-[12px] font-extrabold text-slate-700">How many do you need?</span>
+                                            <div className="flex items-center justify-between sm:justify-center gap-2 bg-slate-50 px-1.5 py-1 rounded-xl border border-slate-200">
                                                 <button
                                                     type="button"
                                                     onClick={() => handleQuantityChange(quantity - 1)}
-                                                    className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
+                                                    disabled={quantity <= 1}
+                                                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50 disabled:opacity-40"
                                                 >
                                                     <span className="text-lg font-black text-slate-400">-</span>
                                                 </button>
-                                                <span className="text-sm font-black text-slate-800 w-5 text-center">{quantity}</span>
+                                                <span className="text-[15px] font-black text-slate-800 w-7 text-center">{quantity}</span>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleQuantityChange(quantity + 1)}
-                                                    className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
+                                                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
                                                 >
                                                     <span className="text-lg font-black text-emerald-600">+</span>
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="mt-3 pt-3 border-t border-slate-100 flex justify-between items-center">
-                                            <span className="text-[11px] font-bold text-slate-500">Estimated Total</span>
-                                            <span className="text-[14px] font-black text-slate-800">₹{selectedPass?.price * quantity}</span>
+                                        <div className="mt-2.5 grid grid-cols-3 gap-1.5 text-center">
+                                            <div className="rounded-lg bg-emerald-50/70 border border-emerald-100 px-2 py-1.5">
+                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">Free Left</span>
+                                                <span className="block text-[12px] font-black text-emerald-700 mt-0.5">{selectedComplimentaryRemaining}</span>
+                                            </div>
+                                            <div className="rounded-lg bg-slate-50 border border-slate-100 px-2 py-1.5">
+                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">Free Used</span>
+                                                <span className="block text-[12px] font-black text-slate-800 mt-0.5">{selectedFreeQuantity}</span>
+                                            </div>
+                                            <div className={`rounded-lg border px-2 py-1.5 ${selectedIsFullyComplimentary ? 'bg-emerald-50/70 border-emerald-100' : 'bg-amber-50 border-amber-100'}`}>
+                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">{selectedIsFullyComplimentary ? 'Payable' : 'To Pay'}</span>
+                                                <span className={`block text-[12px] font-black mt-0.5 ${selectedIsFullyComplimentary ? 'text-emerald-700' : 'text-slate-800'}`}>
+                                                    {selectedIsFullyComplimentary ? 'Free' : `₹${selectedEstimatedPayable}`}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <p className="text-[9px] text-slate-400 font-bold mt-1">
+                                        <p className="text-[8.5px] text-slate-400 font-bold mt-1.5">
                                             Max {selectedPass?.maxPerRequest || 10} passes per request
                                         </p>
                                     </div>
@@ -778,20 +925,20 @@ export default function ExhibitorPassesPage() {
                                     {/* Dynamic Fields */}
                                     {selectedPass?.id === 'vehicle' ? (
                                         vehicles.map((veh, index) => (
-                                            <div key={index} className="bg-white border border-slate-200 rounded-2xl p-4 mb-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden">
-                                                <div className="absolute right-0 top-0 bg-slate-50 px-3 py-1.5 rounded-bl-xl border-b border-l border-slate-100">
+                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-3 mb-2.5 shadow-sm relative overflow-hidden">
+                                                <div className="absolute right-0 top-0 bg-slate-50 px-2.5 py-1 rounded-bl-lg border-b border-l border-slate-100">
                                                     <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">#{index + 1}</span>
                                                 </div>
                                                 
-                                                <h3 className="text-[12px] font-black text-slate-800 mb-3">Vehicle Details</h3>
+                                                <h3 className="text-[12px] font-black text-slate-800 mb-2.5">Vehicle Details</h3>
                                                 
-                                                <div className="mb-3">
-                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Vehicle Type</label>
-                                                    <div className="flex gap-2">
+                                                <div className="mb-2.5">
+                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Vehicle Type</label>
+                                                    <div className="flex gap-1.5">
                                                         <button 
                                                             type="button"
                                                             onClick={() => updateVehicle(index, 'vehicleType', '2-wheeler')}
-                                                            className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${veh.vehicleType === '2-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                            className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${veh.vehicleType === '2-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                         >
                                                             {veh.vehicleType === '2-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
                                                             <span className="font-black text-[11px]">2-Wheeler</span>
@@ -799,7 +946,7 @@ export default function ExhibitorPassesPage() {
                                                         <button 
                                                             type="button"
                                                             onClick={() => updateVehicle(index, 'vehicleType', '4-wheeler')}
-                                                            className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${veh.vehicleType === '4-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                            className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${veh.vehicleType === '4-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                         >
                                                             {veh.vehicleType === '4-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
                                                             <span className="font-black text-[11px]">4-Wheeler</span>
@@ -808,7 +955,7 @@ export default function ExhibitorPassesPage() {
                                                 </div>
 
                                                 <div>
-                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Registration Number</label>
+                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Registration Number</label>
                                                     <div className="relative flex items-center">
                                                         <div className="absolute left-3 z-10 text-slate-400">
                                                             <Hash size={14} />
@@ -819,115 +966,115 @@ export default function ExhibitorPassesPage() {
                                                             value={veh.vehicleNumber}
                                                             onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value.toUpperCase())}
                                                             placeholder="e.g. MH 01 AB 1234"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
                                                         />
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2.5">
                                                     <div>
-                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Driver/Contact Name</label>
+                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Driver/Contact Name</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={veh.name || ''}
                                                             onChange={(e) => updateVehicle(index, 'name', e.target.value)}
                                                             placeholder="e.g. Rahul Sharma"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Phone</label>
+                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Contact Phone</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={veh.phone || ''}
                                                             onChange={(e) => updateVehicle(index, 'phone', e.target.value)}
                                                             placeholder="e.g. 9876543210"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                 </div>
                                                 
-                                                <div className="mt-4">
-                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Email (For QR)</label>
+                                                <div className="mt-2.5">
+                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Contact Email (For QR)</label>
                                                     <input 
                                                         type="email"
                                                         required
                                                         value={veh.email || ''}
                                                         onChange={(e) => updateVehicle(index, 'email', e.target.value)}
                                                         placeholder="e.g. rahul@example.com"
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-black text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                     />
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
                                         personnel.map((person, index) => (
-                                            <div key={index} className="bg-white border border-slate-200 rounded-2xl p-4 mb-3 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden">
-                                                <div className={`absolute right-0 top-0 px-3 py-1.5 rounded-bl-xl border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
-                                                    <span className={`text-[9px] font-black uppercase tracking-widest`}>Person #{index + 1}</span>
+                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-3 mb-2.5 shadow-sm relative overflow-hidden">
+                                                <div className={`absolute right-0 top-0 px-2.5 py-1 rounded-bl-lg border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
+                                                    <span className={`text-[8.5px] font-black uppercase tracking-widest`}>Person #{index + 1}</span>
                                                 </div>
                                                 
-                                                <h3 className="text-[12px] font-black text-slate-800 mb-4">Attendee Details</h3>
+                                                <h3 className="text-[12px] font-black text-slate-800 mb-2.5">Attendee Details</h3>
 
-                                                <div className="space-y-3">
+                                                <div className="space-y-2.5">
                                                     <div>
-                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Full Name</label>
+                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Full Name</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={person.name}
                                                             onChange={(e) => updatePersonnel(index, 'name', e.target.value)}
                                                             placeholder="Enter full name"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
                                                     <div>
-                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Designation</label>
+                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Designation</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={person.designation}
                                                             onChange={(e) => updatePersonnel(index, 'designation', e.target.value)}
                                                             placeholder="e.g. Manager"
-                                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
-                                                    <div className="grid grid-cols-2 gap-3">
+                                                    <div className="grid grid-cols-2 gap-2.5">
                                                         <div>
-                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Email ID</label>
+                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Email ID</label>
                                                             <input 
                                                                 type="email"
                                                                 required
                                                                 value={person.email}
                                                                 onChange={(e) => updatePersonnel(index, 'email', e.target.value)}
                                                                 placeholder="Email address"
-                                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                         <div>
-                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Phone</label>
+                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Phone</label>
                                                             <input 
                                                                 type="tel"
                                                                 required
                                                                 value={person.phone}
                                                                 onChange={(e) => updatePersonnel(index, 'phone', e.target.value)}
                                                                 placeholder="Mobile No"
-                                                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <div className="pt-1">
-                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Gender Selection</label>
-                                                        <div className="flex gap-2">
+                                                    <div>
+                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Gender Selection</label>
+                                                        <div className="flex gap-1.5">
                                                             <button 
                                                                 type="button"
                                                                 onClick={() => updatePersonnel(index, 'gender', 'male')}
-                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'male' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                                className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'male' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'male' && <CheckCircle2 size={12} className="mr-1.5" />}
                                                                 <span className="font-black text-[11px]">Male</span>
@@ -935,7 +1082,7 @@ export default function ExhibitorPassesPage() {
                                                             <button 
                                                                 type="button"
                                                                 onClick={() => updatePersonnel(index, 'gender', 'female')}
-                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                                className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'female' && <CheckCircle2 size={12} className="mr-1.5" />}
                                                                 <span className="font-black text-[11px]">Female</span>
@@ -943,7 +1090,7 @@ export default function ExhibitorPassesPage() {
                                                             <button 
                                                                 type="button"
                                                                 onClick={() => updatePersonnel(index, 'gender', 'other')}
-                                                                className={`flex-1 py-2 rounded-xl border-2 flex items-center justify-center transition-all ${person.gender === 'other' ? 'bg-purple-50 border-purple-400 text-purple-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
+                                                                className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'other' ? 'bg-purple-50 border-purple-400 text-purple-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'other' && <CheckCircle2 size={12} className="mr-1.5" />}
                                                                 <span className="font-black text-[11px]">Other</span>
@@ -956,21 +1103,24 @@ export default function ExhibitorPassesPage() {
                                     )}
 
                                     {/* Submit Button */}
-                                    <div className="pt-1 pb-1">
-                                        <button 
+                                    <div className="sticky bottom-0 -mx-3 px-3 pt-2 pb-1 bg-[#f8fafc]/95 backdrop-blur border-t border-slate-200">
+                                        <button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className={`w-full py-3.5 rounded-2xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg} ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                            className={`mx-auto w-full max-w-[420px] py-2 rounded-lg text-[11px] font-black text-white shadow-[0_3px_10px_0_rgba(0,0,0,0.1)] hover:shadow-[0_5px_16px_rgba(0,0,0,0.14)] transition-all flex items-center justify-center gap-1.5 ${selectedPass.themeClasses.btnBg} ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                                         >
-                                            {isSubmitting ? 'Processing...' : 'Proceed to Review'}
-                                            {!isSubmitting && <ChevronRight size={16} />}
+                                            {isSubmitting ? 'Processing...' : (selectedIsFullyComplimentary ? 'Submit Complimentary Request' : 'Proceed to Payment Review')}
+                                            {!isSubmitting && <ChevronRight size={14} />}
                                         </button>
                                     </div>
                                 </form>
                                 ) : (
                                     <div className="space-y-4">
                                         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                                            <h3 className="text-sm font-black text-slate-800 mb-3 border-b pb-2">Payment Review</h3>
+                                            <div className="flex items-center justify-between gap-3 mb-3 border-b border-slate-100 pb-3">
+                                                <h3 className="text-sm font-black text-slate-800">Payment Review</h3>
+                                                <span className="px-2 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-100 text-[9px] font-black uppercase tracking-wide">Extra Passes</span>
+                                            </div>
                                             <div className="space-y-2 text-xs font-bold text-slate-600">
                                                 <div className="flex justify-between">
                                                     <span>Total Passes Requested:</span>
@@ -1000,7 +1150,7 @@ export default function ExhibitorPassesPage() {
                                         </div>
                                         <button 
                                             onClick={handleProceedToPay}
-                                            className={`w-full py-3.5 rounded-2xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg}`}
+                                            className={`w-full py-3.5 rounded-xl text-[13px] font-black text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] transition-all flex items-center justify-center gap-2 ${selectedPass.themeClasses.btnBg}`}
                                         >
                                             Pay ₹{reviewData.totalAmount} & Submit
                                             <ArrowRight size={16} />
@@ -1018,6 +1168,94 @@ export default function ExhibitorPassesPage() {
                     </div>
                 )}
             </AnimatePresence>
+
+            <DelegateRegistrationModal 
+                isOpen={isDelegateModalOpen}
+                onClose={() => setIsDelegateModalOpen(false)}
+                complimentaryRemaining={Number(passes.find((pass) => pass.id === 'delegate')?.complimentaryRemaining || 0)}
+                onSubmitRegistration={async (formData) => {
+                    try {
+                        const token = localStorage.getItem('exhibitorToken');
+                        // Backend integration for exhibitor complimentary delegate registration
+                        const form = new FormData();
+                        Object.keys(formData).forEach(key => {
+                            if (key === 'sessions' || key === 'specialPasses') {
+                                form.append(key, JSON.stringify(formData[key]));
+                            } else {
+                                form.append(key, formData[key] as any);
+                            }
+                        });
+
+                        const response = await fetch(`${API_URL}/delegate/registration/exhibitor-complimentary`, {
+                            method: "POST",
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            },
+                            body: form
+                        });
+
+                        const resData = await response.json();
+                        if (response.ok && resData.requiresPayment) {
+                            const isLoaded = await loadRazorpay();
+                            if (!isLoaded) {
+                                Swal.fire("Error", "Razorpay SDK failed to load.", "error");
+                                return;
+                            }
+
+                            const options = {
+                                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_rYjE4Lms78Wn0s',
+                                amount: resData.amount,
+                                currency: 'INR',
+                                name: '9th IHWE 2026',
+                                description: 'Delegate Registration',
+                                order_id: resData.orderId,
+                                handler: async function (paymentResponse: any) {
+                                    const verifyRes = await fetch(`${API_URL}/delegate/verify`, {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            registrationId: resData.registrationId,
+                                            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                                            razorpay_order_id: paymentResponse.razorpay_order_id,
+                                            razorpay_signature: paymentResponse.razorpay_signature
+                                        })
+                                    });
+                                    const verifyData = await verifyRes.json();
+                                    if (verifyRes.ok && verifyData.success) {
+                                        Swal.fire("Success", "Paid delegate registered successfully!", "success");
+                                        setIsDelegateModalOpen(false);
+                                        window.location.reload();
+                                    } else {
+                                        Swal.fire("Error", verifyData.message || "Payment verification failed", "error");
+                                    }
+                                },
+                                prefill: {
+                                    name: data?.companyName || 'Exhibitor',
+                                    email: data?.email || '',
+                                    contact: data?.mobile || ''
+                                },
+                                theme: { color: '#be185d' }
+                            };
+
+                            const rzp = new (window as any).Razorpay(options);
+                            rzp.on('payment.failed', function (paymentResponse: any) {
+                                Swal.fire("Payment Failed", paymentResponse.error?.description || "Payment was not completed.", "error");
+                            });
+                            rzp.open();
+                        } else if (response.ok) {
+                            Swal.fire("Success", "Delegate registered successfully!", "success");
+                            setIsDelegateModalOpen(false);
+                            // Optionally trigger a re-fetch of exhibitor data to update quota
+                            window.location.reload();
+                        } else {
+                            Swal.fire("Error", resData.message || "Failed to register delegate", "error");
+                        }
+                    } catch (error) {
+                        console.error("Delegate registration error:", error);
+                        Swal.fire("Error", "An unexpected error occurred.", "error");
+                    }
+                }}
+            />
         </motion.div>
     );
 }
