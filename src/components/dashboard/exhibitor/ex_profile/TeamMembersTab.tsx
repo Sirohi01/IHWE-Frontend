@@ -36,6 +36,7 @@ export default function TeamMembersTab({ onSuccess }: { onSuccess?: () => void }
     const [showModal, setShowModal] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [form, setForm] = useState(EMPTY_FORM);
+    const [showOtherRoleInput, setShowOtherRoleInput] = useState(false);
     const [saving, setSaving] = useState(false);
     const photoInputRef = useRef<HTMLInputElement>(null);
 
@@ -105,7 +106,12 @@ export default function TeamMembersTab({ onSuccess }: { onSuccess?: () => void }
         }
     };
 
-    const openEdit = (index: number, member: any) => { setSelectedIndex(index); setForm({ ...member }); setShowModal(true); };
+    const openEdit = (index: number, member: any) => {
+        setSelectedIndex(index);
+        setForm({ ...member });
+        setShowOtherRoleInput(!!member.roleAtExhibition);
+        setShowModal(true);
+    };
 
     const handleSaveMember = () => {
         if (!form.name.trim() || !form.designation.trim()) {
@@ -221,8 +227,31 @@ export default function TeamMembersTab({ onSuccess }: { onSuccess?: () => void }
                                 </div>
                                 <div className="space-y-1">
                                     <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Role at Exhibition</label>
-                                    <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                        value={form.roleAtExhibition} onChange={(e) => setForm({ ...form, roleAtExhibition: e.target.value })} />
+                                    {showOtherRoleInput ? (
+                                        <input
+                                            type="text"
+                                            className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                            value={form.roleAtExhibition}
+                                            onChange={(e) => setForm({ ...form, roleAtExhibition: e.target.value })}
+                                            placeholder="Enter role"
+                                        />
+                                    ) : (
+                                        <select
+                                            className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 bg-white"
+                                            value={form.roleAtExhibition}
+                                            onChange={(e) => {
+                                                if (e.target.value === "Other") {
+                                                    setForm({ ...form, roleAtExhibition: "" });
+                                                    setShowOtherRoleInput(true);
+                                                } else {
+                                                    setForm({ ...form, roleAtExhibition: e.target.value });
+                                                }
+                                            }}
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    )}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

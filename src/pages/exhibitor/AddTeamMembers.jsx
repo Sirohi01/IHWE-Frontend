@@ -9,7 +9,7 @@ const AddTeamMembers = () => {
     const navigate = useNavigate();
     const { token, user } = useAuthStore();
 
-    const emptyRow = { photo: null, photoPreview: '', name: '', designation: '', mobile: '', email: '', roleAtExhibition: '', idProof: '', idProofDoc: null, idProofDocPreview: '' };
+    const emptyRow = { photo: null, photoPreview: '', name: '', designation: '', mobile: '', email: '', roleAtExhibition: '', isOtherRoleAtExhibition: false, idProof: '', idProofDoc: null, idProofDocPreview: '' };
     const [rows, setRows] = useState(Array(3).fill().map(() => ({ ...emptyRow })));
     const [isSaving, setIsSaving] = useState(false);
 
@@ -295,14 +295,33 @@ const AddTeamMembers = () => {
                                             <input type="email" value={row.email} onChange={(e) => handleFieldChange(index, 'email', e.target.value)} placeholder="Email ID" className="w-full h-10 px-3 rounded-lg border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700" />
                                         </td>
                                         <td className="p-4">
-                                            <select value={row.roleAtExhibition} onChange={(e) => handleFieldChange(index, 'roleAtExhibition', e.target.value)} className="w-full h-10 px-3 rounded-lg border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700 bg-white">
-                                                <option value="">Select</option>
-                                                <option value="Primary Contact">Primary Contact</option>
-                                                <option value="Marketing Team">Marketing Team</option>
-                                                <option value="Sales Team">Sales Team</option>
-                                                <option value="Stall Incharge">Stall Incharge</option>
-                                                <option value="Technical Team">Technical Team</option>
-                                            </select>
+                                            {row.isOtherRoleAtExhibition ? (
+                                                <input
+                                                    type="text"
+                                                    value={row.roleAtExhibition}
+                                                    onChange={(e) => handleFieldChange(index, 'roleAtExhibition', e.target.value)}
+                                                    placeholder="Enter role"
+                                                    className="w-full h-10 px-3 rounded-lg border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700"
+                                                />
+                                            ) : (
+                                                <select
+                                                    value={row.roleAtExhibition}
+                                                    onChange={(e) => {
+                                                        if (e.target.value === 'Other') {
+                                                            const newRows = [...rows];
+                                                            newRows[index].roleAtExhibition = '';
+                                                            newRows[index].isOtherRoleAtExhibition = true;
+                                                            setRows(newRows);
+                                                        } else {
+                                                            handleFieldChange(index, 'roleAtExhibition', e.target.value);
+                                                        }
+                                                    }}
+                                                    className="w-full h-10 px-3 rounded-lg border border-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm font-medium text-slate-700 bg-white"
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            )}
                                         </td>
                                         <td className="p-4">
                                             <div className="flex flex-col gap-2">

@@ -91,6 +91,7 @@ export default function OverviewStart() {
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
     const [selectedTeamMember, setSelectedTeamMember] = useState<number | null>(null);
+    const [showOtherRoleInput, setShowOtherRoleInput] = useState(false);
 
     const [profileForm, setProfileForm] = useState({
         brandName: "", website: "", address: "", city: "", state: "", country: "", pincode: "", companyDescription: "",
@@ -264,6 +265,7 @@ export default function OverviewStart() {
     const openEditTeamMember = (index: number, member: any) => {
         setSelectedTeamMember(index);
         setTeamMemberForm({ ...member });
+        setShowOtherRoleInput(!!member.roleAtExhibition);
         setActiveModal("team");
     };
     const saveTeamMember = () => {
@@ -817,8 +819,31 @@ export default function OverviewStart() {
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Role at Exhibition</label>
-                                            <input type="text" className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
-                                                value={teamMemberForm.roleAtExhibition} onChange={(e) => setTeamMemberForm({ ...teamMemberForm, roleAtExhibition: e.target.value })} />
+                                            {showOtherRoleInput ? (
+                                                <input
+                                                    type="text"
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500"
+                                                    value={teamMemberForm.roleAtExhibition}
+                                                    onChange={(e) => setTeamMemberForm({ ...teamMemberForm, roleAtExhibition: e.target.value })}
+                                                    placeholder="Enter role"
+                                                />
+                                            ) : (
+                                                <select
+                                                    className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 bg-white"
+                                                    value={teamMemberForm.roleAtExhibition}
+                                                    onChange={(e) => {
+                                                        if (e.target.value === "Other") {
+                                                            setTeamMemberForm({ ...teamMemberForm, roleAtExhibition: "" });
+                                                            setShowOtherRoleInput(true);
+                                                        } else {
+                                                            setTeamMemberForm({ ...teamMemberForm, roleAtExhibition: e.target.value });
+                                                        }
+                                                    }}
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            )}
                                         </div>
                                         <div className="space-y-1">
                                             <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Work Email</label>
