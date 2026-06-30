@@ -439,7 +439,7 @@ export default function ExhibitorPassesPage() {
             exit={{ opacity: 0 }}
         >
             {/* ─── TOP HEADER SECTION ─── */}
-            <div className="flex flex-col xl:flex-row items-stretch justify-between gap-3.5 mb-1">
+            <div className="flex flex-col xl:flex-row items-stretch justify-between gap-1.5 mb-1">
                 {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
                 <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
                     <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
