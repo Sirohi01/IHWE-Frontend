@@ -18,6 +18,8 @@ interface SessionSelectionProps {
   setActiveDay: (day: string | number) => void;
   selectedSessions: SelectedSession[];
   setSelectedSessions: React.Dispatch<React.SetStateAction<SelectedSession[]>>;
+  selectedPasses: any[];
+  setSelectedPasses: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const SessionSelection: React.FC<SessionSelectionProps> = ({
@@ -25,6 +27,8 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
   setActiveDay,
   selectedSessions,
   setSelectedSessions,
+  selectedPasses,
+  setSelectedPasses,
 }) => {
   const [dayData, setDayData] = useState<any[]>([]);
   const [sessionsData, setSessionsData] = useState<Record<string, any[]>>({});
@@ -71,6 +75,17 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
         return prev.filter((s) => s._id !== session._id);
       } else {
         return [...prev, { ...session, date: day.date, day: day.day }];
+      }
+    });
+  };
+
+  const togglePass = (pass: any, day: any) => {
+    setSelectedPasses((prev) => {
+      const exists = prev.find((p) => p._id === pass._id);
+      if (exists) {
+        return prev.filter((p) => p._id !== pass._id);
+      } else {
+        return [...prev, { ...pass, date: day.date, day: day.day }];
       }
     });
   };
@@ -158,8 +173,8 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
 
       {passesData.filter(p => p.passKey === "all_day").map((p) => (
         <div key={p._id}
-          onClick={() => toggleSession({ _id: `all_day_${activeDay}`, title: `${p.title} - Day ${currentDay?.day || ''}`, price: p.price }, currentDay)}
-          className={`flex flex-col sm:flex-row items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedSessions.some(s => s._id === `all_day_${activeDay}`) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
+          onClick={() => togglePass({ _id: p._id, title: `${p.title} - Day ${currentDay?.day || ''}`, price: p.price }, currentDay)}
+          className={`flex flex-col sm:flex-row items-stretch rounded-xl border-2 transition-all cursor-pointer group ${selectedPasses.some(s => s._id === p._id) ? "bg-[#F1F8EE] border-[#143111]" : "bg-white border-[#143111]/10"
             }`}
         >
           <div className="w-full sm:w-[80px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-center text-[#143111] shrink-0 bg-[#F1F8EE] sm:bg-transparent">
@@ -186,9 +201,9 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
           </div>
           <div className="w-full sm:w-[110px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 gap-2 sm:gap-0">
             <div className="text-[16px] sm:text-[18px] font-black text-[#143111]">₹{p.price}</div>
-            <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.some(s => s._id === `all_day_${activeDay}`) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
+            <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? "bg-[#143111] border-[#143111]" : "bg-white border-gray-200"
               }`}>
-              {selectedSessions.some(s => s._id === `all_day_${activeDay}`) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+              {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
             </div>
           </div>
         </div>
@@ -210,8 +225,8 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
 
             return (
               <div key={p._id}
-                onClick={() => toggleSession({ _id: p.passKey, title: p.title, price: p.price }, fakeDayData)}
-                className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedSessions.some(s => s._id === p.passKey) ? `${borderClass} shadow-md ${shadowClass}` : ""
+                onClick={() => togglePass({ _id: p._id, title: p.title, price: p.price }, fakeDayData)}
+                className={`flex flex-col sm:flex-row items-stretch rounded-xl border border-gray-200 transition-all cursor-pointer group bg-white ${selectedPasses.some(s => s._id === p._id) ? `${borderClass} shadow-md ${shadowClass}` : ""
                   }`}
               >
                 <div className={`w-full sm:w-[80px] ${bgClass} p-3 flex flex-row sm:flex-col items-center justify-center text-white shrink-0 rounded-t-[10px] sm:rounded-tr-none sm:rounded-l-[10px]`}>
@@ -236,9 +251,9 @@ const SessionSelection: React.FC<SessionSelectionProps> = ({
                 </div>
                 <div className="w-full sm:w-[140px] p-3 sm:p-4 flex flex-row sm:flex-col items-center justify-between sm:justify-center border-l border-gray-50 bg-gray-50/10 gap-2 sm:gap-0">
                   <div className={`text-[18px] sm:text-[20px] font-black ${textClass} leading-none`}>₹{p.price}</div>
-                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedSessions.some(s => s._id === p.passKey) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded border-2 flex items-center justify-center transition-all ${selectedPasses.some(s => s._id === p._id) ? `${bgClass} ${borderClass}` : "bg-white border-gray-200"
                     }`}>
-                    {selectedSessions.some(s => s._id === p.passKey) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+                    {selectedPasses.some(s => s._id === p._id) && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
                   </div>
                 </div>
               </div>

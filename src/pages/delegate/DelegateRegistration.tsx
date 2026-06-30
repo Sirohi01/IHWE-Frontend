@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import Swal from 'sweetalert2';
 import DelegateHero from "../../components/delegate/delegate-registration/DelegateHero";
 import RegistrationStepper from "../../components/delegate/delegate-registration/RegistrationStepper";
 import SessionSelection from "../../components/delegate/delegate-registration/SessionSelection";
@@ -18,33 +19,47 @@ const DelegateRegistration: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [activeDay, setActiveDay] = useState<string | number>("");
   const [selectedSessions, setSelectedSessions] = useState<SelectedSession[]>([]);
+  const [selectedPasses, setSelectedPasses] = useState<any[]>([]);
 
   const handleNextStep = () => {
-    if (selectedSessions.length === 0) {
-      alert("Please select at least one session to continue.");
+    if (selectedSessions.length === 0 && selectedPasses.length === 0) {
+      alert("Please select at least one session or pass to continue.");
       return;
     }
     setCurrentStep(2);
   };
 
+  const resetForm = () => {
+    setCurrentStep(1);
+    setSelectedSessions([]);
+    setSelectedPasses([]);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedSessions.length === 0) {
-      toast.error("Please select at least one session");
+    if (selectedSessions.length === 0 && selectedPasses.length === 0) {
+      toast.error("Please select at least one session or pass");
       return;
     }
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const personalDetails = Object.fromEntries(formData.entries());
-    
-    const subTotal = selectedSessions.reduce((acc, curr) => acc + curr.price, 0);
+    const subTotal = [...selectedSessions, ...selectedPasses].reduce((acc, curr) => acc + curr.price, 0);
+
+    formData.append('sessions', JSON.stringify(selectedSessions));
+    formData.append('specialPasses', JSON.stringify(selectedPasses));
+    formData.append('gatewayAmount', subTotal.toString());
+    const personalDetails = {
+      fullName: formData.get('fullName') as string,
+      email: formData.get('email') as string,
+      mobile: formData.get('mobile') as string,
+    };
 
     try {
       toast.loading("Creating order...", { id: "payment" });
-      const res = await axios.post(`${API_URL}/delegate/register`, {
-        ...personalDetails,
-        sessions: selectedSessions,
-        gatewayAmount: subTotal
+      const res = await axios.post(`${API_URL}/delegate/register`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
 
       if (!res.data.success) {
@@ -90,10 +105,14 @@ const DelegateRegistration: React.FC = () => {
             });
 
             if (verifyRes.data.success) {
-              toast.success("Registration Successful!", { id: "payment-verify" });
-              alert("Payment successful! Confirmation sent via WhatsApp & Email.");
-              setCurrentStep(1);
-              setSelectedSessions([]);
+              toast.dismiss("payment-verify");
+              Swal.fire({
+                title: 'Payment Successful!',
+                text: 'Confirmation sent via WhatsApp & Email.',
+                icon: 'success',
+                confirmButtonColor: '#143111'
+              });
+              resetForm();
             } else {
               toast.error("Payment verification failed", { id: "payment-verify" });
             }
@@ -142,11 +161,13 @@ const DelegateRegistration: React.FC = () => {
               transition={{ duration: 0.4 }}
             >
               {currentStep === 1 && (
-                <SessionSelection 
+                <SessionSelection
                   activeDay={activeDay}
                   setActiveDay={setActiveDay}
                   selectedSessions={selectedSessions}
                   setSelectedSessions={setSelectedSessions}
+                  selectedPasses={selectedPasses}
+                  setSelectedPasses={setSelectedPasses}
                 />
               )}
               {currentStep === 2 && (
@@ -158,11 +179,11 @@ const DelegateRegistration: React.FC = () => {
           {/* Right Sidebar */}
           <div className="lg:col-span-4">
             <div className="sticky top-4">
-              <RegistrationSidebar 
-                onNext={handleNextStep} 
+              <RegistrationSidebar
+                onNext={handleNextStep}
                 showNextButton={currentStep === 1}
-                selectedItems={selectedSessions}
-                subTotal={selectedSessions.reduce((acc, curr) => acc + curr.price, 0)}
+                selectedItems={[...selectedSessions, ...selectedPasses]}
+                subTotal={[...selectedSessions, ...selectedPasses].reduce((acc, curr) => acc + curr.price, 0)}
               />
             </div>
           </div>
