@@ -18,7 +18,11 @@ interface AgendaDay {
   sessions: Session[];
 }
 
-const ConferenceAgenda: React.FC = () => {
+interface ConferenceAgendaProps {
+  isModal?: boolean;
+}
+
+const ConferenceAgenda: React.FC<ConferenceAgendaProps> = ({ isModal = false }) => {
   const [activeDay, setActiveDay] = useState(0);
   const [agendaData, setAgendaData] = useState<AgendaDay[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,21 +138,25 @@ const ConferenceAgenda: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-6">
 
-          <div className="hidden lg:block w-[380px] flex-shrink-0">
-            <div className="w-full h-[520px] rounded-[24px] overflow-hidden shadow-lg border border-[#E2E8F0]">
-              <img
-                src={amconImage}
-                alt="Agenda visual"
-                className="w-full h-full object-cover"
-              />
+          {/* Left Image: hide completely if in modal to save space, otherwise show on larger screens */}
+          {!isModal && (
+            <div className="hidden lg:block w-[380px] flex-shrink-0">
+              <div className="w-full h-[520px] rounded-[24px] overflow-hidden shadow-lg border border-[#E2E8F0]">
+                <img
+                  src={amconImage}
+                  alt="Agenda visual"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex-1 flex flex-col h-[520px] ">
+          {/* Right Agenda List */}
+          <div className="flex-1 flex flex-col">
 
-            <div className="bg-[#F8FAFC] p-0 rounded-[20px] border border-[#E2E8F0] mb-4 flex overflow-x-auto lg:overflow-visible no-scrollbar pb-2 lg:pb-0 gap-3">
+            <div className={`bg-[#F8FAFC] p-0 rounded-[20px] border border-[#E2E8F0] mb-4 flex overflow-x-auto ${isModal ? '' : 'lg:overflow-visible'} no-scrollbar pb-2 lg:pb-0 gap-3`}>
               {displayData.map((item, index) => {
                 const isActive = activeDay === index;
                 const colors = getDayColors(index);
@@ -157,7 +165,7 @@ const ConferenceAgenda: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => setActiveDay(index)}
-                    className={`min-w-[180px] lg:flex-1 flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 rounded-[16px] transition-all duration-300 ${isActive ? colors.active : colors.inactive
+                    className={`min-w-[180px] ${isModal ? 'flex-1' : 'lg:flex-1'} flex items-center gap-3 px-4 lg:px-6 py-3 lg:py-4 rounded-[16px] transition-all duration-300 ${isActive ? colors.active : colors.inactive
                       }`}
                   >
                     <div className={`p-2 rounded-lg ${colors.iconBg}`}>
@@ -177,7 +185,7 @@ const ConferenceAgenda: React.FC = () => {
             </div>
 
 
-            <div className="rounded-[16px]  border border-[#E2E8F0] overflow-hidden" style={{ backgroundColor: '#F5F5F0' }}>
+            <div className="rounded-[16px] border border-[#E2E8F0] overflow-hidden flex-1 flex flex-col" style={{ backgroundColor: '#F5F5F0' }}>
               <style dangerouslySetInnerHTML={{
                 __html: `
                 .agenda-scroll::-webkit-scrollbar {
@@ -189,7 +197,7 @@ const ConferenceAgenda: React.FC = () => {
                 }
               `}} />
 
-              <div className="h-[380px] overflow-y-auto agenda-scroll py-6">
+              <div className={`${isModal ? 'h-[400px]' : 'h-[380px]'} overflow-y-auto agenda-scroll py-6`}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeDay}

@@ -121,13 +121,6 @@ const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({ onS
                     </div>
                 </div>
 
-                {/* Row 4: Address */}
-                <div className="flex flex-col gap-1.5 mb-5">
-                    <label className="text-sm font-medium text-gray-800">Address <span className="text-red-500">*</span></label>
-                    <textarea name="address" required rows={3} placeholder="Enter your complete address"
-                        className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#1a5c1a] resize-none"></textarea>
-                </div>
-
                 {/* Row 5: Pincode, Country, State, City */}
                 <div className="flex flex-col md:flex-row gap-5 mb-5">
                     <div className="flex flex-col gap-1.5 flex-1 relative">
@@ -196,6 +189,13 @@ const DelegateRegistrationForm: React.FC<DelegateRegistrationFormProps> = ({ onS
                             <option value="Others">Others</option>
                         </select>
                     </div>
+                </div>
+
+                {/* Address block moved here */}
+                <div className="flex flex-col gap-1.5 mb-5">
+                    <label className="text-sm font-medium text-gray-800">Address <span className="text-red-500">*</span></label>
+                    <textarea name="address" required rows={3} placeholder="Enter your complete address"
+                        className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-[#1a5c1a] resize-none"></textarea>
                 </div>
 
                 {/* Checkboxes */}
