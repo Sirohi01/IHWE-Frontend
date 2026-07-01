@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
-import { API_URL } from '@/lib/api';
+import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -9,6 +9,7 @@ import {
     IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar,
     Store, Ruler, Layers3, WalletCards
 } from 'lucide-react';
+import paymentCompleteImg from '@/assets/paymentComplete.png';
 
 const RAZORPAY_CHARGE_PCT = 2.5;
 const loadRazorpay = (): Promise<boolean> => {
@@ -76,6 +77,13 @@ interface PaymentSummary {
     contact1?: any;
 }
 
+const fixUrl = (url?: string) => {
+    if (!url || url === "undefined" || url === "null") return "";
+    if (url.startsWith("http") || url.startsWith("blob:")) return url;
+    const cleanPath = url.startsWith("/") ? url : `/${url}`;
+    return url.includes("res.cloudinary.com") ? url : `${SERVER_URL}${cleanPath}`;
+};
+
 export default function ExhibitorPaymentPage() {
     const { data, fetchDashboard } = useExhibitorCtx();
     const [summary, setSummary] = useState<PaymentSummary | null>(null);
@@ -140,18 +148,14 @@ export default function ExhibitorPaymentPage() {
             const json = await res.json();
             if (json.success) {
                 const d = json.data;
-                // Fallback: if financeBreakdown fields are 0 (old registrations),
-                // reconstruct from participation fields
                 const fb = d.finance;
                 if (fb.grossAmount === 0 && fb.netPayable > 0) {
-                    // participation.amount = taxable value (pre-GST)
-                    // participation.total  = taxable + GST (invoice total)
                     const taxable = d.stall?.amount || 0;
                     const invoiceTotal = d.stall?.total || 0;
                     const gst = invoiceTotal - taxable;
                     fb.subtotal = taxable;
                     fb.gstAmount = gst;
-                    fb.grossAmount = taxable; // best approximation
+                    fb.grossAmount = taxable;
                     fb.subtotal1 = taxable;
                 }
                 setSummary(d);
@@ -394,84 +398,149 @@ export default function ExhibitorPaymentPage() {
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full space-y-2"
+                className="w-full space-y-2 pr-9 lg:pr-9"
             >
+                {/* Page Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
+                    <h1 className="text-lg md:text-xl font-bold text-slate-800 pl-1">Payment Management</h1>
+
+                    {/* ── Tabs ── */}
+                    <div className="flex w-full sm:w-fit gap-2">
+                        {[
+                            { id: 'pay', label: 'Make Payment', icon: CreditCard },
+                            { id: 'history', label: 'Payment History', icon: Receipt }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 text-[12px] font-bold rounded-lg transition-colors border shadow-sm ${activeTab === tab.id
+                                    ? 'text-white bg-[#1a5c2e] border-[#1a5c2e]'
+                                    : 'text-slate-600 bg-white border-slate-200 hover:bg-slate-50'
+                                    }`}
+                            >
+                                <tab.icon className="w-4 h-4" />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* ── Header Card ── */}
-                <section className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-                    <div className="h-1.5 bg-gradient-to-r from-[#173a31] via-[#2f7d32] to-[#d5a72d]" />
-                    <div className="grid xl:grid-cols-[1.45fr_0.8fr]">
-                        <div className="p-3 sm:p-3.5 xl:border-r border-slate-200">
-                            <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                    <div className="flex items-center gap-2 text-[10px] font-semibold uppercase text-emerald-700">
-                                        <Store className="w-3.5 h-3.5" /> Confirmed exhibition space
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+                    {/* Left Card: Confirmed Exhibition Space */}
+                    <div className="lg:col-span-8 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-3 flex flex-col justify-start gap-4">
+                        <div className="flex flex-row items-start justify-between">
+                            <div className="flex items-start gap-3">
+                                {data?.companyLogoUrl ? (
+                                    <div className="w-12 h-12 bg-white rounded-full border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                                        <img src={fixUrl(data.companyLogoUrl)} alt="Company Logo" className="w-full h-full object-contain" />
                                     </div>
-                                    <h1 className="mt-1 text-lg sm:text-xl font-semibold text-slate-950 truncate">{summary.exhibitorName}</h1>
-                                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-slate-500">
-                                        <span className="inline-flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{summary.event?.name || 'IHWE 2026'}</span>
-                                        <span>Registration: {summary.registrationId}</span>
+                                ) : (
+                                    <div className="w-12 h-12 bg-[#ecfdf5] rounded-full border border-[#d1fae5] flex items-center justify-center shrink-0 shadow-sm">
+                                        <span className="text-[#10b981] font-black text-xl">
+                                            {summary.exhibitorName ? summary.exhibitorName.charAt(0).toUpperCase() : 'C'}
+                                        </span>
                                     </div>
-                                </div>
-                                <div className="flex items-center gap-2 shrink-0">
-                                    {getStatusBadge(summary.status)}
-                                    <button onClick={fetchSummary} title="Refresh payment details" className="w-8 h-8 border border-slate-200 hover:bg-slate-50 rounded-lg flex items-center justify-center transition-colors">
-                                        <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
-                                    </button>
+                                )}
+                                <div>
+                                    <h1 className="text-lg md:text-xl font-bold text-[#1a2b3c] leading-tight mb-1.5">{summary.exhibitorName}</h1>
+                                    <div className="flex flex-col gap-1 text-[11px] md:text-[12px] font-medium text-slate-500">
+                                        <div className="flex items-start gap-1.5">
+                                            <Calendar className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                                            <span className="leading-snug">{summary.event?.name || 'IHWE 2026'}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 mt-0.5">
+                                            <CheckCircle2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                            Registration: <span className="font-bold text-[#10b981]">{summary.registrationId}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="mt-3 grid grid-cols-2 lg:grid-cols-4 border border-slate-200 rounded-lg overflow-hidden">
-                                <div className="col-span-2 sm:col-span-1 p-2.5 bg-[#173a31] text-white">
-                                    <p className="text-[9px] font-semibold uppercase text-white/60">Stall Number</p>
-                                    <p className="mt-0.5 text-xl font-semibold">{summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA'}</p>
-                                </div>
-                                <div className="p-2.5 border-r border-b lg:border-b-0 border-slate-200">
-                                    <Layers3 className="w-4 h-4 text-amber-600" />
-                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Stall Type</p>
-                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallType || 'Standard'}</p>
-                                </div>
-                                <div className="p-2.5 border-b lg:border-b-0 lg:border-r border-slate-200">
-                                    <Ruler className="w-4 h-4 text-blue-600" />
-                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Booked Area</p>
-                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallSize || 0} SQM</p>
-                                </div>
-                                <div className="p-2.5">
-                                    <Building2 className="w-4 h-4 text-violet-600" />
-                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Scheme</p>
-                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallScheme || summary.stall?.scheme || 'Exhibition Stall'}</p>
-                                </div>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ecfdf5] text-[#10b981] text-[10px] font-bold rounded-md uppercase tracking-wide border border-[#d1fae5] shrink-0 mt-1">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Confirmed Exhibition Space</span>
+                                <span className="sm:hidden">Confirmed</span>
                             </div>
                         </div>
-                        <div className="p-3 sm:p-3.5 bg-slate-50/70 border-t xl:border-t-0 border-slate-200">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
-                                        <WalletCards className="w-4 h-4 text-[#23471d]" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-semibold text-slate-800">Payment Summary</p>
-                                        <p className="text-[10px] text-slate-500">{summary.paymentPlanLabel || 'Stall booking settlement'}</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold text-[#23471d]">{paidPercentage}% paid</span>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 border border-slate-100 rounded-lg overflow-hidden shadow-sm mt-auto">
+                            <div className="col-span-2 md:col-span-1 bg-[#1a5c2e] p-2 text-white flex flex-col justify-center rounded-t-lg md:rounded-t-none md:rounded-l-lg md:rounded-r-none">
+                                <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider mb-0.5">Stall Number</p>
+                                <p className="text-2xl md:text-3xl font-black leading-none">{summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA'}</p>
                             </div>
-                            <div className="mt-2.5">
-                                <p className="text-[10px] font-semibold uppercase text-slate-500">Balance payable</p>
-                                <p className={`mt-0.5 text-2xl font-semibold ${isFullyPaid ? 'text-emerald-700' : 'text-slate-950'}`}>{fmt(totalPayable)}</p>
+                            <div className="p-2.5 bg-white border-r border-slate-100 flex flex-col justify-center">
+                                <Layers3 className="w-4 h-4 text-amber-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Stall Type</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallType || 'Standard'}</p>
                             </div>
-                            <div className="mt-2.5 h-2 rounded-full bg-slate-200 overflow-hidden">
-                                <div className="h-full rounded-full bg-[#2f7d32] transition-all" style={{ width: `${paidPercentage}%` }} />
+                            <div className="p-2.5 bg-white border-r border-slate-100 flex flex-col justify-center">
+                                <Ruler className="w-4 h-4 text-blue-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Booked Area</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallSize || 0} SQM</p>
                             </div>
-                            <div className="mt-2 grid grid-cols-2 gap-2">
-                                <div><p className="text-[9px] uppercase text-slate-400">Contract value</p><p className="mt-0.5 text-xs font-semibold text-slate-800">{fmt(contractValue)}</p></div>
-                                <div><p className="text-[9px] uppercase text-slate-400">Amount received</p><p className="mt-0.5 text-xs font-semibold text-emerald-700">{fmt(amountPaid)}</p></div>
-                            </div>
-                            <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
-                                <span className="text-[10px] text-slate-500">{isFullyPaid ? 'Settlement completed' : effectiveDueDate ? `Due by ${new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}` : 'Due date not assigned'}</span>
-                                {!isFullyPaid && <span className="text-[10px] font-semibold text-amber-700">Action required</span>}
+                            <div className="p-2.5 bg-white flex flex-col justify-center">
+                                <Building2 className="w-4 h-4 text-purple-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Scheme</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallScheme || summary.stall?.scheme || 'Exhibition Stall'}</p>
                             </div>
                         </div>
                     </div>
-                </section>
+
+                    {/* Right Card: Payment Summary */}
+                    <div className="lg:col-span-4 bg-white border border-slate-200 rounded-xl shadow-sm p-3 flex flex-col justify-between">
+                        <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-[#ecfdf5] rounded-lg flex items-center justify-center border border-[#d1fae5]">
+                                    <Receipt className="w-4 h-4 text-[#10b981]" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-800 text-[13px]">Payment Summary</h3>
+                                    <p className="text-[10px] font-medium text-slate-500">{summary.paymentPlanLabel || 'Full Payment (100%)'}</p>
+                                </div>
+                            </div>
+                            <span className="px-2 py-0.5 bg-[#ecfdf5] text-[#10b981] text-[9px] font-bold rounded-md border border-[#d1fae5]">
+                                {paidPercentage}% paid
+                            </span>
+                        </div>
+
+                        <div className="flex items-end justify-between mb-3">
+                            <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Balance Payable</p>
+                                <p className={`text-xl font-black ${isFullyPaid ? 'text-[#10b981]' : 'text-slate-800'} leading-none`}>{fmt(totalPayable)}</p>
+                            </div>
+                            <div className="flex gap-3 text-right">
+                                <div>
+                                    <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Contract Value</p>
+                                    <p className="text-[11px] md:text-xs font-bold text-slate-800 leading-none">{fmt(contractValue)}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount Received</p>
+                                    <p className="text-[11px] md:text-xs font-bold text-[#10b981] leading-none">{fmt(amountPaid)}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="w-full h-1.5 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                            <div className="h-full bg-[#10b981] rounded-full transition-all duration-500" style={{ width: `${paidPercentage}%` }} />
+                        </div>
+
+                        <div className="mt-auto">
+                            {isFullyPaid ? (
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ecfdf5] border border-[#d1fae5] rounded-lg shadow-sm">
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
+                                    <span className="text-[10px] font-bold text-[#10b981]">Settlement completed</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg">
+                                    <span className="text-[11px] font-semibold text-slate-600">
+                                        {effectiveDueDate ? `Due by ${new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}` : 'Due date not assigned'}
+                                    </span>
+                                    <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded">Action Required</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
                 {/* ── Overdue Warning ── */}
                 <AnimatePresence>
@@ -498,26 +567,6 @@ export default function ExhibitorPaymentPage() {
                     )}
                 </AnimatePresence>
 
-                {/* ── Tabs ── */}
-                <div className="flex w-full sm:w-fit bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm">
-                    {[
-                        { id: 'pay', label: 'Make Payment', icon: CreditCard },
-                        { id: 'history', label: 'Payment History', icon: Receipt }
-                    ].map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-[11px] font-semibold rounded-md transition-colors ${activeTab === tab.id
-                                ? 'text-white bg-[#23471d]'
-                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-                                }`}
-                        >
-                            <tab.icon className="w-3.5 h-3.5" />
-                            {tab.label}
-                        </button>
-                    ))}
-                </div>
-
                 {/* ── PAY TAB ── */}
                 {activeTab === 'pay' && (
                     <motion.div
@@ -526,94 +575,91 @@ export default function ExhibitorPaymentPage() {
                         className="space-y-2"
                     >
                         {/* Financial Summary Card — Full Breakdown */}
-                        <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-                            <div className="px-3 py-2 border-b border-slate-100 flex items-center gap-2">
-                                <IndianRupee className="w-3.5 h-3.5 text-[#23471d]" />
-                                <p className="text-[13px] font-semibold text-slate-800">Financial Breakdown</p>
+                        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                            <div className="px-4 py-1.5 md:py-2 flex items-center gap-2 border-b border-slate-100 bg-slate-50/50">
+                                <div className="w-6 h-6 rounded-full bg-[#ecfdf5] flex items-center justify-center border border-[#d1fae5]">
+                                    <IndianRupee className="w-3.5 h-3.5 text-[#10b981]" />
+                                </div>
+                                <p className="text-[14px] font-bold text-slate-800">Financial Breakdown</p>
                             </div>
-                            <div className="p-2.5">
-                                {/* Cost Breakdown */}
-                                <div className="space-y-0 border border-gray-100 rounded-lg overflow-hidden mb-0">
-                                    {/* Gross Amount */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 bg-slate-50 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">Gross Booking Cost</span>
-                                        <span className="text-xs font-bold text-gray-800 shrink-0">{fmt(summary.finance.grossAmount)}</span>
+                            <div className="p-0">
+                                <div className="w-full text-[13px]">
+                                    {/* Gross Booking Cost */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Gross Booking Cost</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.grossAmount)}</span>
                                     </div>
 
                                     {/* Stall Discount */}
                                     {summary.finance.stallDiscountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
-                                            <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block shrink-0"></span>
-                                                <span className="truncate">Stall Discount</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Stall Discount
                                             </span>
-                                            <span className="text-xs font-bold text-orange-600 shrink-0">−{fmt(summary.finance.stallDiscountAmount)}</span>
+                                            <span className="font-bold text-orange-600">−{fmt(summary.finance.stallDiscountAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Full Payment Discount */}
                                     {summary.finance.discountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-emerald-50/40 gap-2">
-                                            <span className="text-xs text-emerald-700 font-bold flex items-center gap-1.5 min-w-0">
-                                                <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                                                <span className="truncate">Full Payment Discount</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Full Payment Discount
                                             </span>
-                                            <span className="text-xs font-black text-emerald-700 shrink-0">−{fmt(summary.finance.discountAmount)}</span>
+                                            <span className="font-bold text-emerald-600">−{fmt(summary.finance.discountAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Taxable Value */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-slate-50 gap-2">
-                                        <span className="text-xs text-gray-600 font-bold">Taxable Value (Pre-GST)</span>
-                                        <span className="text-xs font-black text-gray-800 shrink-0">{fmt(summary.finance.subtotal)}</span>
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Taxable Value (Pre-GST)</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.subtotal)}</span>
                                     </div>
 
                                     {/* GST */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">GST @ 18%</span>
-                                        <span className="text-xs font-bold text-gray-700 shrink-0">+{fmt(summary.finance.gstAmount)}</span>
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">GST @ 18%</span>
+                                        <span className="font-bold text-slate-600">+{fmt(summary.finance.gstAmount)}</span>
                                     </div>
 
                                     {/* TDS */}
                                     {summary.finance.tdsAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
-                                            <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block shrink-0"></span>
-                                                <span className="truncate">TDS</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span> TDS
                                             </span>
-                                            <span className="text-xs font-bold text-blue-600 shrink-0">−{fmt(summary.finance.tdsAmount)}</span>
+                                            <span className="font-bold text-[#0052cc]">−{fmt(summary.finance.tdsAmount)}</span>
                                         </div>
                                     )}
 
-                                    {/* Net Payable */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 bg-[#23471d]/5 border-b border-[#23471d]/10 gap-2">
-                                        <span className="text-[12px] font-black text-[#23471d] uppercase tracking-wide">Total Contract Value</span>
-                                        <span className="text-[15px] sm:text-[16px] font-black text-[#23471d] shrink-0">{fmt(summary.finance.netPayable)}</span>
+                                    {/* Net Payable / Contract Value */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="font-bold text-[#10b981] uppercase text-xs tracking-wider">Total Contract Value</span>
+                                        <span className="font-black text-[#10b981] text-[15px]">{fmt(summary.finance.netPayable)}</span>
                                     </div>
 
-                                    {/* Amount Paid */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">Amount Paid So Far</span>
-                                        <span className="text-xs font-black text-emerald-600 shrink-0">−{fmt(summary.finance.amountPaid)}</span>
+                                    {/* Amount Paid So Far */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="text-slate-600 font-medium text-xs">Amount Paid So Far</span>
+                                        <span className="font-black text-[#10b981]">−{fmt(summary.finance.amountPaid)}</span>
                                     </div>
 
                                     {/* Penalty */}
                                     {summary.finance.penaltyAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-red-50/50 gap-2">
-                                            <span className="text-xs text-red-600 font-bold flex items-center gap-1.5">
-                                                <AlertTriangle className="w-3 h-3 shrink-0" /> Late Payment Penalty
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-red-50/30">
+                                            <span className="text-red-500 font-medium flex items-center gap-2 text-xs">
+                                                <AlertTriangle className="w-3.5 h-3.5" /> Late Payment Penalty
                                             </span>
-                                            <span className="text-xs font-black text-red-700 shrink-0">+{fmt(summary.finance.penaltyAmount)}</span>
+                                            <span className="font-bold text-red-600">+{fmt(summary.finance.penaltyAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Balance Due */}
-                                    <div className="flex justify-between items-center px-3 py-1.5 bg-rose-50 border-t border-rose-100 gap-2">
-                                        <span className="text-[12px] font-black text-rose-700 uppercase tracking-wide">Balance Due</span>
-                                        <span className="text-[15px] sm:text-[16px] font-black text-rose-700 shrink-0">{fmt(summary.finance.totalPayable)}</span>
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 bg-[#fff1f2]">
+                                        <span className="font-black text-rose-600 uppercase text-xs tracking-wider">Balance Due</span>
+                                        <span className="font-black text-rose-600 text-[18px]">{fmt(summary.finance.totalPayable)}</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
@@ -756,7 +802,7 @@ export default function ExhibitorPaymentPage() {
                                                             <button
                                                                 onClick={() => initiatePayment(instBase, inst.installmentNumber)}
                                                                 disabled={paying || payingInstallment !== null}
-                                                            className="mt-1 flex items-center gap-1.5 px-2.5 py-1.5 bg-[#23471d] text-white text-[9px] font-semibold rounded-md hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
+                                                                className="mt-1 flex items-center gap-1.5 px-2.5 py-1.5 bg-[#23471d] text-white text-[9px] font-semibold rounded-md hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
                                                             >
                                                                 {payingInstallment === inst.installmentNumber
                                                                     ? <><Loader2 className="w-3 h-3 animate-spin" /> Processing...</>
@@ -856,25 +902,21 @@ export default function ExhibitorPaymentPage() {
                             <motion.div
                                 initial={{ scale: 0.95, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center"
+                                className="w-full rounded-xl overflow-hidden shadow-sm border border-slate-200"
                             >
-                                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                    <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-                                </div>
-                                <p className="text-[16px] font-black text-emerald-800">All Payments Complete!</p>
-                                <p className="text-[12px] text-emerald-600 mt-1">Your stall booking is fully paid. Thank you!</p>
+                                <img src={paymentCompleteImg} alt="Payment Complete" className="w-full h-auto object-cover" />
                             </motion.div>
                         )}
 
                         {/* Info Note */}
-                        <div className="flex items-start gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-lg">
+                        {/* <div className="flex items-start gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-lg">
                             <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                             <p className="text-[10px] text-blue-700 leading-relaxed">
                                 Payment receipts will be sent to the email and WhatsApp/mobile number entered above after successful payment.
                                 A {RAZORPAY_CHARGE_PCT}% gateway convenience fee is charged by Razorpay for online payments.
                                 For any payment issues, please contact our support team.
                             </p>
-                        </div>
+                        </div> */}
                     </motion.div>
                 )}
 
