@@ -721,7 +721,7 @@ export default function ExhibitorPassesPage() {
                                 const comp = Number(config?.complimentaryQuota ?? 2);
                                 const req = countsByType['lunch']?.total || 0;
                                 const complimentaryRemaining = Math.max(comp - req, 0);
-                                setSelectedPass({
+                                handleOpenModal({
                                     id: 'lunch',
                                     title: 'Packed Thali Lunch',
                                     subtitle: 'Daily Entitlement',
@@ -730,6 +730,8 @@ export default function ExhibitorPassesPage() {
                                     complimentary: comp,
                                     remaining: complimentaryRemaining,
                                     complimentaryRemaining,
+                                    maxPerRequest: Number(config?.maxPerRequest || 10),
+                                    gstPercentage: Number(config?.gstPercentage || 18),
                                     themeClasses: {
                                         bg: "bg-[#f4fbf6]",
                                         border: "border-[#d2edd9]",
@@ -740,7 +742,6 @@ export default function ExhibitorPassesPage() {
                                         statsBorder: "border-emerald-100/60"
                                     }
                                 });
-                                setIsModalOpen(true);
                             }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Packed Thali Lunch</span>
                                 <div className="flex items-center justify-between gap-1">
@@ -760,7 +761,7 @@ export default function ExhibitorPassesPage() {
                                 const comp = Number(config?.complimentaryQuota ?? 2);
                                 const req = countsByType['water']?.total || 0;
                                 const complimentaryRemaining = Math.max(comp - req, 0);
-                                setSelectedPass({
+                                handleOpenModal({
                                     id: 'water',
                                     title: 'Water Bottle',
                                     subtitle: 'Daily Entitlement',
@@ -769,6 +770,8 @@ export default function ExhibitorPassesPage() {
                                     complimentary: comp,
                                     remaining: complimentaryRemaining,
                                     complimentaryRemaining,
+                                    maxPerRequest: Number(config?.maxPerRequest || 10),
+                                    gstPercentage: Number(config?.gstPercentage || 18),
                                     themeClasses: {
                                         bg: "bg-[#f0f7ff]",
                                         border: "border-blue-100",
@@ -779,7 +782,6 @@ export default function ExhibitorPassesPage() {
                                         statsBorder: "border-blue-100/60"
                                     }
                                 });
-                                setIsModalOpen(true);
                             }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Water Bottle</span>
                                 <div className="flex items-center justify-between gap-1">
