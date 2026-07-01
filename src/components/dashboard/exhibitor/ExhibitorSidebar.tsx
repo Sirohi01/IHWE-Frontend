@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { socialMediaApi, analyticsApi } from "@/lib/api";
+import { logActivity } from "@/utils/activityLogger";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -132,7 +133,10 @@ function MsmeNode({
     if (!isGroup) {
         return (
             <button
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                    logActivity('Navigation', `Switched to ${item.label}`);
+                    setActiveTab(item.id);
+                }}
                 className={cx(
                     "w-full flex items-center gap-2 px-2 py-2 rounded-sm text-left transition-all relative group",
                     isActive ? "bg-emerald-500/20 text-emerald-400" : "text-white/60 hover:bg-white/8 hover:text-white"
@@ -330,7 +334,10 @@ export default function ExhibitorSidebar({
                     const active = activeTab === item.id;
                     const isChat = item.id === "chat";
                     return (
-                        <button key={item.id} onClick={() => setActiveTab(item.id)}
+                        <button key={item.id} onClick={() => {
+                            logActivity('Navigation', `Switched to ${item.label}`);
+                            setActiveTab(item.id);
+                        }}
                             className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
                         >
                             <div className="relative shrink-0">
