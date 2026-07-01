@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
+import { logActivity } from '@/utils/activityLogger';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     CreditCard, CheckCircle2, Clock, AlertTriangle,
@@ -281,6 +282,7 @@ export default function ExhibitorPaymentPage() {
                                 balanceAmount: verifyData.data?.balanceAmount || 0,
                                 status: verifyData.data?.status || 'paid'
                             });
+                            logActivity('Finance', 'Made Payment', `Transaction ID: ${response.razorpay_payment_id}`);
                             await fetchSummary();
                             await fetchDashboard();
                         } else {

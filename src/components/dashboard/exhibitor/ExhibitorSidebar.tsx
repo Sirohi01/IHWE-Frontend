@@ -9,7 +9,6 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { socialMediaApi, analyticsApi } from "@/lib/api";
-import { logActivity } from "@/utils/activityLogger";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -134,7 +133,6 @@ function MsmeNode({
         return (
             <button
                 onClick={() => {
-                    logActivity('Navigation', `Switched to ${item.label}`);
                     setActiveTab(item.id);
                 }}
                 className={cx(
@@ -335,7 +333,6 @@ export default function ExhibitorSidebar({
                     const isChat = item.id === "chat";
                     return (
                         <button key={item.id} onClick={() => {
-                            logActivity('Navigation', `Switched to ${item.label}`);
                             setActiveTab(item.id);
                         }}
                             className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", active ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}

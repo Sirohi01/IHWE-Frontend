@@ -17,6 +17,7 @@ import notepadImg from "@/assets/notepad.png";
 import shoppingImg from "@/assets/shopping.png";
 import Swal from "sweetalert2";
 import DelegateRegistrationModal from "./DelegateRegistrationModal";
+import { logActivity } from "@/utils/activityLogger";
 
 export default function ExhibitorPassesPage() {
     const { data } = useExhibitorCtx();
@@ -311,6 +312,7 @@ export default function ExhibitorPassesPage() {
                     confirmButtonColor: '#15803d',
                     customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl font-bold py-2 px-6' }
                 });
+                logActivity('Passes & Hospitality', `Requested ${quantity} ${selectedPass.title}`);
                 setIsModalOpen(false);
                 fetchPassData();
             } else {

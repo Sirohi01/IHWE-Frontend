@@ -30,6 +30,7 @@ const CounterNumber = ({ end, started, delay, decimals = 0 }: { end: number, sta
 };
 import ExhibitorInvoices from '../../components/dashboard/exhibitor/ExhibitorInvoices';
 import { settingsApi } from '@/lib/api';
+import { logActivity } from '@/utils/activityLogger';
 
 import {
     ArrowLeft,
@@ -169,6 +170,7 @@ export default function ExhibitorInvoicesPage() {
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
+        logActivity('Finance', 'Downloaded Invoice Document');
     };
 
     const renderModal = () => {
