@@ -1,14 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import DashboardHero from '@/components/dashboard/DashboardHero';
 import {
     CreditCard, CheckCircle2, Clock, AlertTriangle,
     Loader2, RefreshCw, Receipt,
-    IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar
+    IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar,
+    Store, Ruler, Layers3, WalletCards
 } from 'lucide-react';
 
 const RAZORPAY_CHARGE_PCT = 2.5;
@@ -79,8 +78,6 @@ interface PaymentSummary {
 
 export default function ExhibitorPaymentPage() {
     const { data, fetchDashboard } = useExhibitorCtx();
-    const location = useLocation();
-    const isSeller = location.pathname.includes('/seller-portal');
     const [summary, setSummary] = useState<PaymentSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [paying, setPaying] = useState(false);
@@ -343,6 +340,11 @@ export default function ExhibitorPaymentPage() {
     const daysOverdue = getDaysOverdue();
     const totalPayable = summary?.finance?.totalPayable || summary?.finance?.balanceAmount || 0;
     const isFullyPaid = summary?.status === 'paid' || totalPayable <= 0;
+    const contractValue = Number(summary?.finance?.netPayable || 0);
+    const amountPaid = Number(summary?.finance?.amountPaid || 0);
+    const paidPercentage = contractValue > 0
+        ? Math.min(100, Math.max(0, Math.round((amountPaid / contractValue) * 100)))
+        : 0;
 
     // ── Due date logic ─────────────────────────────────────────────────────────
     // Full payment: use paymentDueDate (set to last installment due date or 7 days from booking)
@@ -388,60 +390,88 @@ export default function ExhibitorPaymentPage() {
     );
 
     return (
-        <div className="min-h-screen bg-[#f5f7fb] p-4 space-y-2">
-            <DashboardHero
-                pageId={isSeller ? "sl-payments" : "ex-payments"}
-                defaultTitle="Secure Payment Portal"
-                defaultSubtitle="Manage your stall payments and transaction history"
-                type={isSeller ? "seller" : "exhibitor"}
-            />
-
+        <div className="min-h-screen bg-[#f5f7fb] p-2.5 sm:p-3">
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full space-y-2"
             >
                 {/* ── Header Card ── */}
-                <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                    <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a25] px-4 py-2.5 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
-                                <CreditCard className="w-4 h-4 text-white" />
+                <section className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                    <div className="h-1.5 bg-gradient-to-r from-[#173a31] via-[#2f7d32] to-[#d5a72d]" />
+                    <div className="grid xl:grid-cols-[1.45fr_0.8fr]">
+                        <div className="p-3 sm:p-3.5 xl:border-r border-slate-200">
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                    <div className="flex items-center gap-2 text-[10px] font-semibold uppercase text-emerald-700">
+                                        <Store className="w-3.5 h-3.5" /> Confirmed exhibition space
+                                    </div>
+                                    <h1 className="mt-1 text-lg sm:text-xl font-semibold text-slate-950 truncate">{summary.exhibitorName}</h1>
+                                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-slate-500">
+                                        <span className="inline-flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{summary.event?.name || 'IHWE 2026'}</span>
+                                        <span>Registration: {summary.registrationId}</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                    {getStatusBadge(summary.status)}
+                                    <button onClick={fetchSummary} title="Refresh payment details" className="w-8 h-8 border border-slate-200 hover:bg-slate-50 rounded-lg flex items-center justify-center transition-colors">
+                                        <RefreshCw className="w-3.5 h-3.5 text-slate-500" />
+                                    </button>
+                                </div>
                             </div>
-                            <div className="min-w-0">
-                                <h2 className="text-xs font-black text-white uppercase tracking-widest">Payment Portal</h2>
-                                <p className="text-[10px] text-white/60 font-medium mt-0.5 truncate">{summary.registrationId}</p>
+                            <div className="mt-3 grid grid-cols-2 lg:grid-cols-4 border border-slate-200 rounded-lg overflow-hidden">
+                                <div className="col-span-2 sm:col-span-1 p-2.5 bg-[#173a31] text-white">
+                                    <p className="text-[9px] font-semibold uppercase text-white/60">Stall Number</p>
+                                    <p className="mt-0.5 text-xl font-semibold">{summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA'}</p>
+                                </div>
+                                <div className="p-2.5 border-r border-b lg:border-b-0 border-slate-200">
+                                    <Layers3 className="w-4 h-4 text-amber-600" />
+                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Stall Type</p>
+                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallType || 'Standard'}</p>
+                                </div>
+                                <div className="p-2.5 border-b lg:border-b-0 lg:border-r border-slate-200">
+                                    <Ruler className="w-4 h-4 text-blue-600" />
+                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Booked Area</p>
+                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallSize || 0} SQM</p>
+                                </div>
+                                <div className="p-2.5">
+                                    <Building2 className="w-4 h-4 text-violet-600" />
+                                    <p className="mt-1 text-[9px] font-semibold uppercase text-slate-400">Scheme</p>
+                                    <p className="mt-0.5 text-xs font-semibold text-slate-800">{summary.stall?.stallScheme || summary.stall?.scheme || 'Exhibition Stall'}</p>
+                                </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                            {getStatusBadge(summary.status)}
-                            <button onClick={fetchSummary} className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                                <RefreshCw className="w-3.5 h-3.5 text-white" />
-                            </button>
+                        <div className="p-3 sm:p-3.5 bg-slate-50/70 border-t xl:border-t-0 border-slate-200">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
+                                        <WalletCards className="w-4 h-4 text-[#23471d]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-semibold text-slate-800">Payment Summary</p>
+                                        <p className="text-[10px] text-slate-500">{summary.paymentPlanLabel || 'Stall booking settlement'}</p>
+                                    </div>
+                                </div>
+                                <span className="text-xs font-semibold text-[#23471d]">{paidPercentage}% paid</span>
+                            </div>
+                            <div className="mt-2.5">
+                                <p className="text-[10px] font-semibold uppercase text-slate-500">Balance payable</p>
+                                <p className={`mt-0.5 text-2xl font-semibold ${isFullyPaid ? 'text-emerald-700' : 'text-slate-950'}`}>{fmt(totalPayable)}</p>
+                            </div>
+                            <div className="mt-2.5 h-2 rounded-full bg-slate-200 overflow-hidden">
+                                <div className="h-full rounded-full bg-[#2f7d32] transition-all" style={{ width: `${paidPercentage}%` }} />
+                            </div>
+                            <div className="mt-2 grid grid-cols-2 gap-2">
+                                <div><p className="text-[9px] uppercase text-slate-400">Contract value</p><p className="mt-0.5 text-xs font-semibold text-slate-800">{fmt(contractValue)}</p></div>
+                                <div><p className="text-[9px] uppercase text-slate-400">Amount received</p><p className="mt-0.5 text-xs font-semibold text-emerald-700">{fmt(amountPaid)}</p></div>
+                            </div>
+                            <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+                                <span className="text-[10px] text-slate-500">{isFullyPaid ? 'Settlement completed' : effectiveDueDate ? `Due by ${new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}` : 'Due date not assigned'}</span>
+                                {!isFullyPaid && <span className="text-[10px] font-semibold text-amber-700">Action required</span>}
+                            </div>
                         </div>
                     </div>
-                    {/* Exhibitor + Event info strip */}
-                    <div className="px-4 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                            <Building2 className="w-3 h-3 text-gray-400 shrink-0" />
-                            <span className="text-[11px] font-bold text-gray-700 truncate max-w-[140px] sm:max-w-none">{summary.exhibitorName}</span>
-                        </div>
-                        {summary.event?.name && (
-                            <div className="flex items-center gap-1.5 min-w-0">
-                                <Calendar className="w-3 h-3 text-gray-400 shrink-0" />
-                                <span className="text-[11px] font-bold text-gray-700 truncate max-w-[120px] sm:max-w-none">{summary.event.name}</span>
-                            </div>
-                        )}
-                        {(summary.stall?.stallFor || summary.stall?.stallNumber) && (
-                            <div className="flex items-center gap-1">
-                                <span className="text-[9px] font-black text-gray-400 uppercase">Stall:</span>
-                                <span className="text-[11px] font-black text-[#23471d]">
-                                    {summary.stall.stallFor || summary.stall.stallNumber}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                </section>
 
                 {/* ── Overdue Warning ── */}
                 <AnimatePresence>
@@ -450,7 +480,7 @@ export default function ExhibitorPaymentPage() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-3"
+                            className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-start gap-2.5"
                         >
                             <div className="w-7 h-7 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
                                 <AlertTriangle className="w-4 h-4 text-red-600" />
@@ -469,7 +499,7 @@ export default function ExhibitorPaymentPage() {
                 </AnimatePresence>
 
                 {/* ── Tabs ── */}
-                <div className="flex bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
+                <div className="flex w-full sm:w-fit bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm">
                     {[
                         { id: 'pay', label: 'Make Payment', icon: CreditCard },
                         { id: 'history', label: 'Payment History', icon: Receipt }
@@ -477,9 +507,9 @@ export default function ExhibitorPaymentPage() {
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[12px] font-semibold transition-all border-b-2 ${activeTab === tab.id
-                                ? 'border-[#23471d] text-[#23471d] bg-[#23471d]/5'
-                                : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-[11px] font-semibold rounded-md transition-colors ${activeTab === tab.id
+                                ? 'text-white bg-[#23471d]'
+                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                                 }`}
                         >
                             <tab.icon className="w-3.5 h-3.5" />
@@ -493,26 +523,26 @@ export default function ExhibitorPaymentPage() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="space-y-4"
+                        className="space-y-2"
                     >
                         {/* Financial Summary Card — Full Breakdown */}
-                        <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                            <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                        <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                            <div className="px-3 py-2 border-b border-slate-100 flex items-center gap-2">
                                 <IndianRupee className="w-3.5 h-3.5 text-[#23471d]" />
-                                <p className="text-[12px] font-bold text-gray-700">Financial Breakdown</p>
+                                <p className="text-[13px] font-semibold text-slate-800">Financial Breakdown</p>
                             </div>
-                            <div className="p-3 sm:p-4">
+                            <div className="p-2.5">
                                 {/* Cost Breakdown */}
-                                <div className="space-y-0 border border-gray-100 rounded-lg overflow-hidden mb-4">
+                                <div className="space-y-0 border border-gray-100 rounded-lg overflow-hidden mb-0">
                                     {/* Gross Amount */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-slate-50 border-b border-gray-100 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 bg-slate-50 border-b border-gray-100 gap-2">
                                         <span className="text-xs text-gray-500 font-medium">Gross Booking Cost</span>
                                         <span className="text-xs font-bold text-gray-800 shrink-0">{fmt(summary.finance.grossAmount)}</span>
                                     </div>
 
                                     {/* Stall Discount */}
                                     {summary.finance.stallDiscountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
+                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
                                             <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block shrink-0"></span>
                                                 <span className="truncate">Stall Discount</span>
@@ -523,7 +553,7 @@ export default function ExhibitorPaymentPage() {
 
                                     {/* Full Payment Discount */}
                                     {summary.finance.discountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-emerald-50/40 gap-2">
+                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-emerald-50/40 gap-2">
                                             <span className="text-xs text-emerald-700 font-bold flex items-center gap-1.5 min-w-0">
                                                 <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
                                                 <span className="truncate">Full Payment Discount</span>
@@ -533,20 +563,20 @@ export default function ExhibitorPaymentPage() {
                                     )}
 
                                     {/* Taxable Value */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-slate-50 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-slate-50 gap-2">
                                         <span className="text-xs text-gray-600 font-bold">Taxable Value (Pre-GST)</span>
                                         <span className="text-xs font-black text-gray-800 shrink-0">{fmt(summary.finance.subtotal)}</span>
                                     </div>
 
                                     {/* GST */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
                                         <span className="text-xs text-gray-500 font-medium">GST @ 18%</span>
                                         <span className="text-xs font-bold text-gray-700 shrink-0">+{fmt(summary.finance.gstAmount)}</span>
                                     </div>
 
                                     {/* TDS */}
                                     {summary.finance.tdsAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
+                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
                                             <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block shrink-0"></span>
                                                 <span className="truncate">TDS</span>
@@ -556,20 +586,20 @@ export default function ExhibitorPaymentPage() {
                                     )}
 
                                     {/* Net Payable */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-[#23471d]/5 border-b border-[#23471d]/10 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 bg-[#23471d]/5 border-b border-[#23471d]/10 gap-2">
                                         <span className="text-[12px] font-black text-[#23471d] uppercase tracking-wide">Total Contract Value</span>
                                         <span className="text-[15px] sm:text-[16px] font-black text-[#23471d] shrink-0">{fmt(summary.finance.netPayable)}</span>
                                     </div>
 
                                     {/* Amount Paid */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 gap-2">
                                         <span className="text-xs text-gray-500 font-medium">Amount Paid So Far</span>
                                         <span className="text-xs font-black text-emerald-600 shrink-0">−{fmt(summary.finance.amountPaid)}</span>
                                     </div>
 
                                     {/* Penalty */}
                                     {summary.finance.penaltyAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-red-50/50 gap-2">
+                                        <div className="flex justify-between items-center px-3 py-1.5 border-b border-gray-100 bg-red-50/50 gap-2">
                                             <span className="text-xs text-red-600 font-bold flex items-center gap-1.5">
                                                 <AlertTriangle className="w-3 h-3 shrink-0" /> Late Payment Penalty
                                             </span>
@@ -578,44 +608,23 @@ export default function ExhibitorPaymentPage() {
                                     )}
 
                                     {/* Balance Due */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-rose-50 border-t border-rose-100 gap-2">
+                                    <div className="flex justify-between items-center px-3 py-1.5 bg-rose-50 border-t border-rose-100 gap-2">
                                         <span className="text-[12px] font-black text-rose-700 uppercase tracking-wide">Balance Due</span>
                                         <span className="text-[15px] sm:text-[16px] font-black text-rose-700 shrink-0">{fmt(summary.finance.totalPayable)}</span>
                                     </div>
                                 </div>
 
-                                {/* Stall + Due Date info */}
-                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                    <div className="bg-slate-50 rounded-lg p-3">
-                                        <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Stall</p>
-                                        <p className="text-[13px] font-black text-gray-800">
-                                            {summary.stall?.stallFor || summary.stall?.stallNumber || '—'}
-                                        </p>
-                                        <p className="text-[10px] text-gray-500 truncate">{summary.stall?.stallType} • {summary.stall?.stallSize} sqm</p>
-                                    </div>
-                                    <div className={`rounded-lg p-3 ${daysOverdue > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                                        <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Payment Due</p>
-                                        {effectiveDueDate ? (
-                                            <>
-                                                <p className={`text-[13px] font-black ${daysOverdue > 0 ? 'text-red-700' : 'text-gray-800'}`}>
-                                                    {new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                                </p>
-                                                {daysOverdue > 0 && <p className="text-[10px] text-red-600 font-bold">{daysOverdue}d overdue</p>}
-                                            </>
-                                        ) : <p className="text-sm font-black text-gray-400">—</p>}
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         {!isFullyPaid && (
-                            <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                            <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
                                     <Receipt className="w-3.5 h-3.5 text-[#23471d]" />
-                                    <p className="text-[12px] font-bold text-gray-700">Receipt Details</p>
+                                    <p className="text-[13px] font-semibold text-slate-800">Receipt Details</p>
                                 </div>
-                                <div className="p-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div className="p-2.5">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                         <div>
                                             <label className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">
                                                 Name <span className="text-red-500">*</span>
@@ -626,7 +635,7 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, name: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, name: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.name ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="Receipt name"
                                             />
                                             {receiptErrors.name && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.name}</p>}
@@ -642,7 +651,7 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, email: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, email: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.email ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="name@example.com"
                                             />
                                             {receiptErrors.email && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.email}</p>}
@@ -658,14 +667,14 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, mobile: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, mobile: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.mobile ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.mobile ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="10-digit mobile"
                                                 maxLength={14}
                                             />
                                             {receiptErrors.mobile && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.mobile}</p>}
                                         </div>
                                     </div>
-                                    <p className="text-[10px] text-gray-400 font-semibold mt-3">
+                                    <p className="text-[9px] text-gray-400 font-medium mt-1.5">
                                         Payment receipt will be sent to both email and WhatsApp/mobile after successful payment.
                                     </p>
                                 </div>
@@ -674,11 +683,11 @@ export default function ExhibitorPaymentPage() {
 
                         {/* Installments — Sequential: next phase unlocks only after previous is paid */}
                         {summary.installments && summary.installments.length > 0 && (
-                            <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                <div className="px-4 py-2.5 border-b border-gray-100 flex items-center justify-between">
+                            <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <Percent className="w-3.5 h-3.5 text-[#23471d]" />
-                                        <p className="text-[12px] font-bold text-gray-700">Installment Schedule</p>
+                                        <p className="text-[13px] font-semibold text-slate-800">Installment Schedule</p>
                                     </div>
                                     <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">
                                         {summary.installments.filter((i: any) => i.status === 'paid').length}/{summary.installments.length} Paid
@@ -695,11 +704,11 @@ export default function ExhibitorPaymentPage() {
                                         const { fee: instFee, total: instTotal } = calcWithGatewayFee(instBase);
 
                                         return (
-                                            <div key={i} className={`p-3 flex items-start sm:items-center justify-between gap-3 transition-colors
+                                            <div key={i} className={`px-3 py-2 flex items-start sm:items-center justify-between gap-2 transition-colors
                                             ${isPaid ? 'bg-emerald-50/30' : isLocked ? 'bg-gray-50/80 opacity-60' : isOverdue ? 'bg-red-50/40' : ''}`}>
-                                                <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                                                <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
                                                     {/* Phase icon */}
-                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 sm:mt-0
+                                                    <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 mt-0.5 sm:mt-0
                                                     ${isPaid ? 'bg-emerald-100' : isLocked ? 'bg-gray-200' : isOverdue ? 'bg-red-100' : 'bg-amber-100'}`}>
                                                         {isPaid
                                                             ? <CheckCircle2 className="w-4 h-4 text-emerald-600" />
@@ -747,7 +756,7 @@ export default function ExhibitorPaymentPage() {
                                                             <button
                                                                 onClick={() => initiatePayment(instBase, inst.installmentNumber)}
                                                                 disabled={paying || payingInstallment !== null}
-                                                                className="mt-1.5 flex items-center gap-1 px-2.5 sm:px-3 py-1.5 bg-[#23471d] text-white text-[9px] font-black uppercase rounded-lg hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
+                                                            className="mt-1 flex items-center gap-1.5 px-2.5 py-1.5 bg-[#23471d] text-white text-[9px] font-semibold rounded-md hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
                                                             >
                                                                 {payingInstallment === inst.installmentNumber
                                                                     ? <><Loader2 className="w-3 h-3 animate-spin" /> Processing...</>
@@ -769,7 +778,7 @@ export default function ExhibitorPaymentPage() {
 
                         {/* ── Remaining Balance after all installments paid ── */}
                         {isInstallmentPlan && allInstallmentsPaid && remainingAfterInstallments > 0 && !isFullyPaid && (
-                            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
+                            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 flex items-start gap-2">
                                 <div className="w-7 h-7 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
                                     <Info className="w-4 h-4 text-amber-600" />
                                 </div>
@@ -790,18 +799,18 @@ export default function ExhibitorPaymentPage() {
                             !isInstallmentPlan ||
                             (isInstallmentPlan && allInstallmentsPaid && remainingAfterInstallments > 0)
                         ) && (
-                                <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                    <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                                <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                    <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
                                         <ShieldCheck className="w-3.5 h-3.5 text-[#23471d]" />
                                         <p className="text-[12px] font-bold text-gray-700">
                                             {summary.installments.length === 0 ? 'Secure Payment via Razorpay' : 'Pay Remaining Balance'}
                                         </p>
                                     </div>
-                                    <div className="p-4">
+                                    <div className="p-2.5">
                                         {(() => {
                                             const { fee, total } = calcWithGatewayFee(totalPayable);
                                             return (
-                                                <div className="bg-slate-50 rounded-lg border border-slate-200 p-3 mb-3 space-y-2">
+                                                <div className="bg-slate-50 rounded-lg border border-slate-200 p-2.5 mb-2 space-y-1.5">
                                                     <div className="flex justify-between text-xs">
                                                         <span className="text-gray-500 font-medium">Balance Due</span>
                                                         <span className="font-bold text-gray-800">{fmt(totalPayable)}</span>
@@ -824,7 +833,7 @@ export default function ExhibitorPaymentPage() {
                                         <button
                                             onClick={() => initiatePayment()}
                                             disabled={paying || payingInstallment !== null}
-                                            className="w-full h-10 flex items-center justify-center gap-2 bg-[#23471d] text-white font-bold text-[12px] rounded-lg hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-sm active:scale-[0.99]"
+                                            className="w-full sm:w-auto sm:min-w-56 h-9 mx-auto flex items-center justify-center gap-2 bg-[#23471d] text-white font-semibold text-[11px] rounded-lg hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-sm active:scale-[0.99]"
                                         >
                                             {paying
                                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing Payment...</>
@@ -832,7 +841,7 @@ export default function ExhibitorPaymentPage() {
                                             }
                                         </button>
 
-                                        <div className="mt-3 flex items-center justify-center gap-3 text-[9px] text-gray-400 font-bold uppercase tracking-wider">
+                                        <div className="mt-2 flex items-center justify-center gap-2 text-[8px] text-gray-400 font-bold uppercase">
                                             <span>UPI</span><span className="text-gray-200">|</span>
                                             <span>Cards</span><span className="text-gray-200">|</span>
                                             <span>Net Banking</span><span className="text-gray-200">|</span>
@@ -847,7 +856,7 @@ export default function ExhibitorPaymentPage() {
                             <motion.div
                                 initial={{ scale: 0.95, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-emerald-50 border border-emerald-200 rounded-lg p-6 text-center"
+                                className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-center"
                             >
                                 <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <CheckCircle2 className="w-6 h-6 text-emerald-600" />
@@ -858,7 +867,7 @@ export default function ExhibitorPaymentPage() {
                         )}
 
                         {/* Info Note */}
-                        <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                        <div className="flex items-start gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-lg">
                             <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                             <p className="text-[10px] text-blue-700 leading-relaxed">
                                 Payment receipts will be sent to the email and WhatsApp/mobile number entered above after successful payment.
@@ -874,7 +883,7 @@ export default function ExhibitorPaymentPage() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm"
+                        className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm"
                     >
                         {summary.paymentHistory && summary.paymentHistory.length > 0 ? (
                             <>
@@ -883,13 +892,13 @@ export default function ExhibitorPaymentPage() {
                                         <thead className="bg-slate-50 border-b border-gray-200">
                                             <tr>
                                                 {['#', 'Type', 'Amount', 'Method', 'Transaction ID', 'Date', 'Receipt'].map(h => (
-                                                    <th key={h} className="px-4 py-2 text-left text-[12px] font-semibold text-[#64748b]">{h}</th>
+                                                    <th key={h} className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase">{h}</th>
                                                 ))}
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
                                             {summary.paymentHistory.map((h: any, i: number) => (
-                                                <tr key={i} className="hover:bg-slate-50/50 transition-colors">
+                                                <tr key={i} className="hover:bg-slate-50 transition-colors">
                                                     <td className="px-4 py-2.5 text-[12px] text-gray-400 font-bold">#{i + 1}</td>
                                                     <td className="px-4 py-3">
                                                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">
