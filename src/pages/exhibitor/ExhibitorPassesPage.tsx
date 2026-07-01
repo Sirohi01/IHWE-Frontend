@@ -94,6 +94,7 @@ export default function ExhibitorPassesPage() {
         email: member?.email || '',
         phone: member?.mobile || '',
         gender: member?.gender || 'male',
+        aadhaarNumber: '',
         isTeamMember: Boolean(member)
     });
 
@@ -339,6 +340,20 @@ export default function ExhibitorPassesPage() {
 
     const handleProceedToReview = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (selectedPass?.id === 'service') {
+            const invalidPerson = personnel.find(person => String(person.aadhaarNumber || '').replace(/\D/g, '').length !== 12);
+            if (invalidPerson) {
+                Swal.fire({
+                    title: 'Valid Aadhaar required',
+                    text: 'Please enter a valid 12-digit Aadhaar number for every service pass holder.',
+                    icon: 'warning',
+                    width: 390,
+                    confirmButtonColor: '#6b21a8'
+                });
+                return;
+            }
+        }
+
         const complimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
         if (quantity <= complimentaryRemaining) {
             await handleRequestPassSubmit();
@@ -1236,6 +1251,24 @@ export default function ExhibitorPassesPage() {
                                                             />
                                                         </div>
                                                     </div>
+
+                                                    {selectedPass?.id === 'service' && (
+                                                        <div className="sm:col-span-2">
+                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Aadhaar Card Number</label>
+                                                            <input
+                                                                type="text"
+                                                                inputMode="numeric"
+                                                                required
+                                                                maxLength={12}
+                                                                pattern="[0-9]{12}"
+                                                                value={person.aadhaarNumber || ''}
+                                                                onChange={(e) => updatePersonnel(index, 'aadhaarNumber', e.target.value.replace(/\D/g, '').slice(0, 12))}
+                                                                placeholder="Enter 12-digit Aadhaar number"
+                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                                                            />
+                                                            <p className="mt-1 text-[9px] text-slate-400">Required for service personnel verification.</p>
+                                                        </div>
+                                                    )}
 
                                                     <div className="sm:col-span-2">
                                                         <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Gender Selection</label>
