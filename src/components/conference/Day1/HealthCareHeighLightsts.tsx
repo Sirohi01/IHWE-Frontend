@@ -37,9 +37,9 @@ const features = [
   },
 ];
 
-export default function HealthcareHighlights() {
+export default function HealthcareHighlights({currentDay}: {currentDay: number}) {
   return (
-    <div className="container mx-auto px-6 max-w-[1320px] py-4">
+    <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
       <div
         className="
           relative overflow-hidden rounded-2xl py-4

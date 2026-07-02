@@ -44,9 +44,9 @@ const associates = [
   partner,
 ];
 
-export default function PartnersAndActionsSection() {
+export default function PartnersAndActionsSection({currentDay}: {currentDay: number}) {
   return (
-       <div className="container mx-auto px-6 max-w-[1320px] py-4">
+       <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
    <section className="grid gap-5 lg:grid-cols-2 items-stretch">
       {/* Left */}
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3">

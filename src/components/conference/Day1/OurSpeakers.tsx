@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { SERVER_URL } from "@/lib/api";
 
 
 interface Speaker {
@@ -21,16 +22,19 @@ interface Speaker {
 interface OurSpeakersCarouselProps {
   title?: string;
   subtitle?: string;
-  speakers: Speaker[];
+  currentDay: number;
+  data:any
 }
 
 export default function OurSpeakersCarousel({
   title = "OUR SPEAKERS",
   subtitle = "Meet the visionaries shaping the future of healthcare.",
-  speakers,
+  data,
+  currentDay
 }: OurSpeakersCarouselProps) {
+  const speakers= data.ourSpeakers;
   return (
-         <div className="container mx-auto px-6 max-w-[1320px] py-4" >
+         <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4" >
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
@@ -85,7 +89,7 @@ export default function OurSpeakersCarousel({
       <div className="flex h-[210px] flex-col items-center rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
         {/* Avatar */}
         <img
-          src={speaker.image}
+          src={`${SERVER_URL}${speaker?.image}`}
           alt={speaker.name}
           className="mb-3 h-16 w-16 rounded-full object-cover"
         />

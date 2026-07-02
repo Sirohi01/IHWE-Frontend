@@ -82,11 +82,12 @@ const ourSpeakers = [
 
 const ConferenceDayUnified: React.FC = () => {
   const { dayNumber } = useParams<{ dayNumber: string }>();
+  console.log(dayNumber,"dayNumber")
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const currentDay = isNaN(parseInt(dayNumber || "")) ? 1 : parseInt(dayNumber || "1");
+  const currentDay = parseInt((dayNumber || "1").replace("day-", ""), 10) || 1;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -135,21 +136,20 @@ const ConferenceDayUnified: React.FC = () => {
     if (currentDay === 2) return day2HeroImg;
     return day3HeroImg;
   };
-
+console.log(data,"currentDay")
   return (
     <div className="bg-white min-h-screen font-inter overflow-x-hidden">
       <div className="relative">
-      
-        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()}/>
+        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()} currentDay={currentDay}/>
        
 
         {/* 3. About Section */}
-        <div className="relative left-[20px]">
-          <AboutDayOne data={data.about} />
+        <div className="relative">
+          <AboutDayOne data={data.about} currentDay={currentDay} />
         </div>
 
         {/* 4. Agenda & Featured Speakers */}
-        <section className="bg-white py-4 relative left-[20px]">
+        <section className="bg-white py-4 relative">
           <div className="container mx-auto px-6 max-w-[1380px]">
             
                 <DayAgendaSection
@@ -160,9 +160,9 @@ const ConferenceDayUnified: React.FC = () => {
              
           </div>
         </section>
-<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers} />
-<PartnersAndActionsSection />
-<HealthcareHighlights />
+<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" data={data} currentDay={currentDay} />
+<PartnersAndActionsSection currentDay={currentDay} />
+<HealthcareHighlights currentDay={currentDay} />
        
       </div>
     </div>

@@ -15,14 +15,16 @@ import {
 
 import amanImage from "../../../assets/day/day1-banner.webp";
 
-const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defaultImage }) => {
+const Day1Hero: React.FC<{ data?: any, defaultImage?: string, currentDay: number }> = ({ data, defaultImage, currentDay }) => {
+const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck className="h-5 w-5 text-[#2F8D3A]" />,<Zap className="h-5 w-5 text-[#2F8D3A]" />]
   return (
     <section className="relative min-h-[620px] lg:min-h-[600px] overflow-hidden font-sans">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${amanImage})`,
+          backgroundImage: `url(${data.
+backgroundImage || amanImage})`,
         }}
       />
 
@@ -35,40 +37,55 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defau
             <ChevronRight className="h-3 w-3" />
             <span>Conference</span>
             <ChevronRight className="h-3 w-3" />
-            <span className="font-semibold text-[#0B2C66]">Day 1</span>
+            <span className="font-semibold text-[#0B2C66]">Day {currentDay}</span>
           </div>
 
           {/* Tags */}
           <div className="mb-5 flex items-center gap-3">
             <span className="rounded-full bg-[#2F8D3A] px-4 py-2 text-[11px] font-bold text-white">
-              DAY 1
+              {data.category||`DAY {currentDay}`}
             </span>
 
             <span className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-[11px] font-semibold text-gray-700">
               <Calendar className="h-3.5 w-3.5 text-[#2F8D3A]" />
-              21 AUGUST 2026
+              {data.date||'21 AUGUST 2026'}
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="leading-none">
             <span className="block text-[40px] font-extrabold text-[#0B2C66] sm:text-[46px]">
-              HEALTHCARE
+              {data.title||`HEALTHCARE`}
             </span>
 
             <span className="block text-[40px] font-extrabold text-[#2F8D3A] sm:text-[46px]">
-              INNOVATION SUMMIT
+              {data.subtitle||'INNOVATION SUMMIT'}
             </span>
           </h1>
 
           {/* Description */}
           <p className="mt-4 max-w-[420px] text-sm leading-5 font-semibold">
-            Advancing technology, infrastructure & innovation for future-ready
-            healthcare systems.
+            {data.description || `Advancing technology, infrastructure & innovation for future-ready
+            healthcare systems.`}
           </p>
 
           {/* Features */}
           <div className="mt-8 flex flex-wrap gap-x-8 gap-y-5">
+            {data.stats?data.stats?.map((feature: any, index: number) => (
+                  <div className="flex items-start gap-2">
+             {icons[index]}
+              <div>
+                <p className="text-[12px] font-bold text-[#0B2C66]">
+                  {feature.value}
+                </p>
+                <p className="text-[10px] uppercase">
+                  {feature.label}
+                </p>
+              </div>
+            </div>))
+             :(
+              <>  
+            
             <div className="flex items-start gap-2">
               <ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />
               <div>
@@ -104,6 +121,8 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defau
                 </p>
               </div>
             </div>
+              </>
+             ) }
           </div>
 
           {/* Buttons */}
