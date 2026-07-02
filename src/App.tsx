@@ -151,6 +151,7 @@ import DocumentCenter from "./pages/exhibitor/DocumentCenter";
 import BuyerContacts from "./pages/exhibitor/BuyerContacts";
 import PaperPresentation from "./pages/presentation/PaperPresentation";
 import PosterPresentation from "./pages/presentation/PosterPresentation";
+import AbstractPresentation from "./pages/presentation/AbstractPresentation";
 
 const SitemapRedirect = () => {
   useEffect(() => {
@@ -220,6 +221,7 @@ const App = () => {
                     <Route path="/conference/:dayNumber" element={<ConferenceDayUnified />} />
                     <Route path="/conference/paper-presentation" element={<PaperPresentation/>}/>
                     <Route path="/conference/poster-presentation" element={<PosterPresentation/>}/>
+                    <Route path="/conference/abstract-submission" element={<AbstractPresentation/>}/>
                     <Route path="/delegate-registration" element={<DelegateRegistration />} />
                     <Route path="/delegate-registration-details" element={<DelegateRegistrationDetails />} />
                     <Route path="/group-registration" element={<GroupRegistration />} />
