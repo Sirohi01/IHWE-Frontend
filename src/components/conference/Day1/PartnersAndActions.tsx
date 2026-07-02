@@ -102,7 +102,7 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
           >
             {associates.map((logo, i) => (
               <SwiperSlide key={i}>
-                <div className="flex h-[130px] items-center justify-center rounded-lg border border-[#ececec] bg-white p-5">
+                <div className="flex h-[130px] items-center justify-center rounded-lg border border-[#ececec] bg-white ">
                   <img
                     src={`${SERVER_URL}${logo}`}
                     alt="partner"
