@@ -22,7 +22,7 @@ const timeline = [
     icon: ShieldCheck,
   },
   {
-    title: "Full Paper Submission",
+    title: "Poster Submission",
     date: "10 July - 31 July 2026",
     icon: Upload,
   },
@@ -42,7 +42,7 @@ const timeline = [
     icon: BadgeCheck,
   },
   {
-    title: "Presentation Date",
+    title: "Poster Display Date",
     date: "21 August 2026",
     icon: Users,
   },
@@ -53,8 +53,8 @@ export default function TimelineSection() {
     <section className="w-full mt-2">
       <div className="  sm:px-6 lg:px-12">
         <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
-          <h2 className="mb-2 text-[13px] font-samibold uppercase tracking-wide text-gray-900">
-            Timeline
+          <h2 className="mb-4 text-[13px] font-bold uppercase tracking-wide text-gray-900">
+            IMPORTANT DATES
             <span className="mt-1.5 block h-[3px] w-8 rounded-full bg-[#2F8B2E]" />
           </h2>
 
