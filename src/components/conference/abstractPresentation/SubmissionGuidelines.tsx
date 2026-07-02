@@ -16,16 +16,15 @@ import {
   Scale,
   Pill,
 } from "lucide-react";
-
 const guidelines = [
-  "Papers must be original and not published or presented elsewhere.",
-  "Abstract should be between 250–300 words.",
-  "Full paper should be between 2500–3500 words.",
-  "Submit your paper in MS Word format (.doc/.docx).",
-  "Use Times New Roman font, 12pt size, 1.5 line spacing.",
-  "Include a cover page with title, authors, affiliations, and contact details.",
-  "All submissions are subject to a double-blind peer review process.",
-  "Presenting author must register for the conference.",
+  "Abstract must be original and not published or presented elsewhere.",
+  "Word limit: 250 - 300 words.",
+  "Use structured format: Background, Objectives, Methods, Results, Conclusion.",
+  "Use Times New Roman font, 12pt size, single line spacing.",
+  "Do not include author names or affiliations in the abstract.",
+  "Use standard abbreviations and avoid uncommon abbreviations.",
+  "Submit your abstract in MS Word format (.doc/.docx).",
+  "All submissions are subject to a review process.",
 ];
 
 const topics = [
@@ -34,40 +33,40 @@ const topics = [
     title: "Healthcare Technology & Innovation",
   },
   {
-    icon: Hospital,
-    title: "Healthcare Management",
+    icon: Stethoscope,
+    title: "Nursing & Patient Care",
   },
   {
     icon: MonitorSmartphone,
     title: "AI & Digital Health",
   },
   {
-    icon: Stethoscope,
-    title: "Nursing & Patient Care",
+    icon: Apple,
+    title: "Nutrition & Dietetics",
   },
   {
     icon: HeartPulse,
     title: "Public Health & Epidemiology",
   },
   {
-    icon: Apple,
-    title: "Nutrition & Dietetics",
+    icon: Leaf,
+    title: "Environmental Health",
   },
   {
     icon: BriefcaseMedical,
     title: "Medical Devices & Diagnostics",
   },
   {
-    icon: Leaf,
-    title: "Environmental Health",
+    icon: Scale,
+    title: "Policy, Ethics & Education",
   },
   {
     icon: Pill,
     title: "Pharmaceutical Sciences",
   },
   {
-    icon: Scale,
-    title: "Policy, Ethics & Education",
+    icon: Hospital,
+    title: "Health Economics & Outcomes",
   },
   {
     icon: Brain,
@@ -77,9 +76,13 @@ const topics = [
     icon: FlaskConical,
     title: "Other Allied Health Sciences",
   },
+  {
+    icon: Hospital,
+    title: "Healthcare Management",
+  },
 ];
 
-export default function SubmissionGuidelinesSection() {
+export default function AbstractSubmissionGuidelinesSection() {
   return (
     <section className="bg-white py-2">
       <div className=" px-5 sm:px-6 lg:px-12">
@@ -88,7 +91,7 @@ export default function SubmissionGuidelinesSection() {
           <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
             <div className="mb-2">
               <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
-                Submission Guidelines
+                ABSTRACT GUIDELINES
               </h2>
 
               <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
@@ -119,7 +122,7 @@ export default function SubmissionGuidelinesSection() {
           <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
             <div className="mb-2">
               <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
-                Paper Presentation Topics
+                ABSTRACT TOPICS
               </h2>
 
               <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />

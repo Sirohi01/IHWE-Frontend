@@ -16,7 +16,7 @@ const ResearchBanner: React.FC = () => {
             </h2>
 
             <p className="mt-1 text-[11.5px] text-white/90 max-w-[500px]">
-              Submit your paper today and be a part of this global healthcare
+              Submit your poster today and be a part of this global healthcare
               innovation summit.
             </p>
           </div>
@@ -36,7 +36,7 @@ const ResearchBanner: React.FC = () => {
               hover:shadow-md
             "
           >
-            Submit Your Paper Now
+            Submit Your Poster Now
             <span className="text-[16px] leading-none mt-[-2px]">›</span>
           </button>
 

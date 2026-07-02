@@ -27,17 +27,17 @@ const ImportantNotes: React.FC = () => {
               <ul className="space-y-1.5 text-[12px] text-gray-700">
                 <li className="flex items-center gap-2 font-medium">
                   <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Only registered participants are eligible to present their papers.
+                  Only registered participants are eligible to submit an abstract.
                 </li>
 
                 <li className="flex items-center gap-2 font-medium">
                   <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Each presenter will get 10–12 minutes for presentation followed by Q&A.
+                  Each presenter will be notified of acceptance status via email.
                 </li>
 
                 <li className="flex items-center gap-2 font-medium">
                   <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Certificates will be provided to all presenting authors.
+                  E-certificate will be provided to all presenting authors.
                 </li>
               </ul>
             </div>

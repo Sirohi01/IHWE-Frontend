@@ -1,15 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
-import { API_URL } from '@/lib/api';
+import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
+import { logActivity } from '@/utils/activityLogger';
 import { motion, AnimatePresence } from 'framer-motion';
-import DashboardHero from '@/components/dashboard/DashboardHero';
 import {
     CreditCard, CheckCircle2, Clock, AlertTriangle,
     Loader2, RefreshCw, Receipt,
-    IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar
+    IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar,
+    Store, Ruler, Layers3, WalletCards
 } from 'lucide-react';
+import paymentCompleteImg from '@/assets/paymentComplete.png';
 
 const RAZORPAY_CHARGE_PCT = 2.5;
 const loadRazorpay = (): Promise<boolean> => {
@@ -77,10 +78,15 @@ interface PaymentSummary {
     contact1?: any;
 }
 
+const fixUrl = (url?: string) => {
+    if (!url || url === "undefined" || url === "null") return "";
+    if (url.startsWith("http") || url.startsWith("blob:")) return url;
+    const cleanPath = url.startsWith("/") ? url : `/${url}`;
+    return url.includes("res.cloudinary.com") ? url : `${SERVER_URL}${cleanPath}`;
+};
+
 export default function ExhibitorPaymentPage() {
     const { data, fetchDashboard } = useExhibitorCtx();
-    const location = useLocation();
-    const isSeller = location.pathname.includes('/seller-portal');
     const [summary, setSummary] = useState<PaymentSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [paying, setPaying] = useState(false);
@@ -143,18 +149,14 @@ export default function ExhibitorPaymentPage() {
             const json = await res.json();
             if (json.success) {
                 const d = json.data;
-                // Fallback: if financeBreakdown fields are 0 (old registrations),
-                // reconstruct from participation fields
                 const fb = d.finance;
                 if (fb.grossAmount === 0 && fb.netPayable > 0) {
-                    // participation.amount = taxable value (pre-GST)
-                    // participation.total  = taxable + GST (invoice total)
                     const taxable = d.stall?.amount || 0;
                     const invoiceTotal = d.stall?.total || 0;
                     const gst = invoiceTotal - taxable;
                     fb.subtotal = taxable;
                     fb.gstAmount = gst;
-                    fb.grossAmount = taxable; // best approximation
+                    fb.grossAmount = taxable;
                     fb.subtotal1 = taxable;
                 }
                 setSummary(d);
@@ -280,6 +282,7 @@ export default function ExhibitorPaymentPage() {
                                 balanceAmount: verifyData.data?.balanceAmount || 0,
                                 status: verifyData.data?.status || 'paid'
                             });
+                            logActivity('Finance', 'Made Payment', `Transaction ID: ${response.razorpay_payment_id}`);
                             await fetchSummary();
                             await fetchDashboard();
                         } else {
@@ -343,6 +346,11 @@ export default function ExhibitorPaymentPage() {
     const daysOverdue = getDaysOverdue();
     const totalPayable = summary?.finance?.totalPayable || summary?.finance?.balanceAmount || 0;
     const isFullyPaid = summary?.status === 'paid' || totalPayable <= 0;
+    const contractValue = Number(summary?.finance?.netPayable || 0);
+    const amountPaid = Number(summary?.finance?.amountPaid || 0);
+    const paidPercentage = contractValue > 0
+        ? Math.min(100, Math.max(0, Math.round((amountPaid / contractValue) * 100)))
+        : 0;
 
     // ── Due date logic ─────────────────────────────────────────────────────────
     // Full payment: use paymentDueDate (set to last installment due date or 7 days from booking)
@@ -388,58 +396,151 @@ export default function ExhibitorPaymentPage() {
     );
 
     return (
-        <div className="min-h-screen bg-[#f5f7fb] p-4 space-y-2">
-            <DashboardHero
-                pageId={isSeller ? "sl-payments" : "ex-payments"}
-                defaultTitle="Secure Payment Portal"
-                defaultSubtitle="Manage your stall payments and transaction history"
-                type={isSeller ? "seller" : "exhibitor"}
-            />
-
+        <div className="min-h-screen bg-[#f5f7fb] p-2.5 sm:p-3">
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full space-y-2"
+                className="w-full space-y-2 pr-9 lg:pr-9"
             >
+                {/* Page Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
+                    <h1 className="text-lg md:text-xl font-bold text-slate-800 pl-1">Payment Management</h1>
+
+                    {/* ── Tabs ── */}
+                    <div className="flex w-full sm:w-fit gap-2">
+                        {[
+                            { id: 'pay', label: 'Make Payment', icon: CreditCard },
+                            { id: 'history', label: 'Payment History', icon: Receipt }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 text-[12px] font-bold rounded-lg transition-colors border shadow-sm ${activeTab === tab.id
+                                    ? 'text-white bg-[#1a5c2e] border-[#1a5c2e]'
+                                    : 'text-slate-600 bg-white border-slate-200 hover:bg-slate-50'
+                                    }`}
+                            >
+                                <tab.icon className="w-4 h-4" />
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* ── Header Card ── */}
-                <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                    <div className="bg-gradient-to-r from-[#23471d] to-[#2d5a25] px-4 py-2.5 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
-                                <CreditCard className="w-4 h-4 text-white" />
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
+                    {/* Left Card: Confirmed Exhibition Space */}
+                    <div className="lg:col-span-8 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-3 flex flex-col justify-start gap-4">
+                        <div className="flex flex-row items-start justify-between">
+                            <div className="flex items-start gap-3">
+                                {data?.companyLogoUrl ? (
+                                    <div className="w-12 h-12 bg-white rounded-full border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                                        <img src={fixUrl(data.companyLogoUrl)} alt="Company Logo" className="w-full h-full object-contain" />
+                                    </div>
+                                ) : (
+                                    <div className="w-12 h-12 bg-[#ecfdf5] rounded-full border border-[#d1fae5] flex items-center justify-center shrink-0 shadow-sm">
+                                        <span className="text-[#10b981] font-black text-xl">
+                                            {summary.exhibitorName ? summary.exhibitorName.charAt(0).toUpperCase() : 'C'}
+                                        </span>
+                                    </div>
+                                )}
+                                <div>
+                                    <h1 className="text-lg md:text-xl font-bold text-[#1a2b3c] leading-tight mb-1.5">{summary.exhibitorName}</h1>
+                                    <div className="flex flex-col gap-1 text-[11px] md:text-[12px] font-medium text-slate-500">
+                                        <div className="flex items-start gap-1.5">
+                                            <Calendar className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                                            <span className="leading-snug">{summary.event?.name || 'IHWE 2026'}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 mt-0.5">
+                                            <CheckCircle2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                            Registration: <span className="font-bold text-[#10b981]">{summary.registrationId}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="min-w-0">
-                                <h2 className="text-xs font-black text-white uppercase tracking-widest">Payment Portal</h2>
-                                <p className="text-[10px] text-white/60 font-medium mt-0.5 truncate">{summary.registrationId}</p>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ecfdf5] text-[#10b981] text-[10px] font-bold rounded-md uppercase tracking-wide border border-[#d1fae5] shrink-0 mt-1">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Confirmed Exhibition Space</span>
+                                <span className="sm:hidden">Confirmed</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                            {getStatusBadge(summary.status)}
-                            <button onClick={fetchSummary} className="w-7 h-7 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                                <RefreshCw className="w-3.5 h-3.5 text-white" />
-                            </button>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 border border-slate-100 rounded-lg overflow-hidden shadow-sm mt-auto">
+                            <div className="col-span-2 md:col-span-1 bg-[#1a5c2e] p-2 text-white flex flex-col justify-center rounded-t-lg md:rounded-t-none md:rounded-l-lg md:rounded-r-none">
+                                <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider mb-0.5">Stall Number</p>
+                                <p className="text-2xl md:text-3xl font-black leading-none">{summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA'}</p>
+                            </div>
+                            <div className="p-2.5 bg-white border-r border-slate-100 flex flex-col justify-center">
+                                <Layers3 className="w-4 h-4 text-amber-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Stall Type</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallType || 'Standard'}</p>
+                            </div>
+                            <div className="p-2.5 bg-white border-r border-slate-100 flex flex-col justify-center">
+                                <Ruler className="w-4 h-4 text-blue-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Booked Area</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallSize || 0} SQM</p>
+                            </div>
+                            <div className="p-2.5 bg-white flex flex-col justify-center">
+                                <Building2 className="w-4 h-4 text-purple-500 mb-1" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none mb-1">Scheme</p>
+                                <p className="text-sm font-bold text-slate-800 leading-none">{summary.stall?.stallScheme || summary.stall?.scheme || 'Exhibition Stall'}</p>
+                            </div>
                         </div>
                     </div>
-                    {/* Exhibitor + Event info strip */}
-                    <div className="px-4 py-2 bg-slate-50 border-b border-gray-100 flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                            <Building2 className="w-3 h-3 text-gray-400 shrink-0" />
-                            <span className="text-[11px] font-bold text-gray-700 truncate max-w-[140px] sm:max-w-none">{summary.exhibitorName}</span>
+
+                    {/* Right Card: Payment Summary */}
+                    <div className="lg:col-span-4 bg-white border border-slate-200 rounded-xl shadow-sm p-3 flex flex-col justify-between">
+                        <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-[#ecfdf5] rounded-lg flex items-center justify-center border border-[#d1fae5]">
+                                    <Receipt className="w-4 h-4 text-[#10b981]" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-800 text-[13px]">Payment Summary</h3>
+                                    <p className="text-[10px] font-medium text-slate-500">{summary.paymentPlanLabel || 'Full Payment (100%)'}</p>
+                                </div>
+                            </div>
+                            <span className="px-2 py-0.5 bg-[#ecfdf5] text-[#10b981] text-[9px] font-bold rounded-md border border-[#d1fae5]">
+                                {paidPercentage}% paid
+                            </span>
                         </div>
-                        {summary.event?.name && (
-                            <div className="flex items-center gap-1.5 min-w-0">
-                                <Calendar className="w-3 h-3 text-gray-400 shrink-0" />
-                                <span className="text-[11px] font-bold text-gray-700 truncate max-w-[120px] sm:max-w-none">{summary.event.name}</span>
+
+                        <div className="flex items-end justify-between mb-3">
+                            <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Balance Payable</p>
+                                <p className={`text-xl font-black ${isFullyPaid ? 'text-[#10b981]' : 'text-slate-800'} leading-none`}>{fmt(totalPayable)}</p>
                             </div>
-                        )}
-                        {(summary.stall?.stallFor || summary.stall?.stallNumber) && (
-                            <div className="flex items-center gap-1">
-                                <span className="text-[9px] font-black text-gray-400 uppercase">Stall:</span>
-                                <span className="text-[11px] font-black text-[#23471d]">
-                                    {summary.stall.stallFor || summary.stall.stallNumber}
-                                </span>
+                            <div className="flex gap-3 text-right">
+                                <div>
+                                    <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Contract Value</p>
+                                    <p className="text-[11px] md:text-xs font-bold text-slate-800 leading-none">{fmt(contractValue)}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Amount Received</p>
+                                    <p className="text-[11px] md:text-xs font-bold text-[#10b981] leading-none">{fmt(amountPaid)}</p>
+                                </div>
                             </div>
-                        )}
+                        </div>
+
+                        <div className="w-full h-1.5 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                            <div className="h-full bg-[#10b981] rounded-full transition-all duration-500" style={{ width: `${paidPercentage}%` }} />
+                        </div>
+
+                        <div className="mt-auto">
+                            {isFullyPaid ? (
+                                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ecfdf5] border border-[#d1fae5] rounded-lg shadow-sm">
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981]" />
+                                    <span className="text-[10px] font-bold text-[#10b981]">Settlement completed</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-between px-3 py-2 bg-slate-50 border border-slate-100 rounded-lg">
+                                    <span className="text-[11px] font-semibold text-slate-600">
+                                        {effectiveDueDate ? `Due by ${new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}` : 'Due date not assigned'}
+                                    </span>
+                                    <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded">Action Required</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -450,7 +551,7 @@ export default function ExhibitorPaymentPage() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-3"
+                            className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-start gap-2.5"
                         >
                             <div className="w-7 h-7 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
                                 <AlertTriangle className="w-4 h-4 text-red-600" />
@@ -468,154 +569,110 @@ export default function ExhibitorPaymentPage() {
                     )}
                 </AnimatePresence>
 
-                {/* ── Tabs ── */}
-                <div className="flex bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                    {[
-                        { id: 'pay', label: 'Make Payment', icon: CreditCard },
-                        { id: 'history', label: 'Payment History', icon: Receipt }
-                    ].map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[12px] font-semibold transition-all border-b-2 ${activeTab === tab.id
-                                ? 'border-[#23471d] text-[#23471d] bg-[#23471d]/5'
-                                : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                                }`}
-                        >
-                            <tab.icon className="w-3.5 h-3.5" />
-                            {tab.label}
-                        </button>
-                    ))}
-                </div>
-
                 {/* ── PAY TAB ── */}
                 {activeTab === 'pay' && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="space-y-4"
+                        className="space-y-2"
                     >
                         {/* Financial Summary Card — Full Breakdown */}
-                        <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                            <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
-                                <IndianRupee className="w-3.5 h-3.5 text-[#23471d]" />
-                                <p className="text-[12px] font-bold text-gray-700">Financial Breakdown</p>
+                        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                            <div className="px-4 py-1.5 md:py-2 flex items-center gap-2 border-b border-slate-100 bg-slate-50/50">
+                                <div className="w-6 h-6 rounded-full bg-[#ecfdf5] flex items-center justify-center border border-[#d1fae5]">
+                                    <IndianRupee className="w-3.5 h-3.5 text-[#10b981]" />
+                                </div>
+                                <p className="text-[14px] font-bold text-slate-800">Financial Breakdown</p>
                             </div>
-                            <div className="p-3 sm:p-4">
-                                {/* Cost Breakdown */}
-                                <div className="space-y-0 border border-gray-100 rounded-lg overflow-hidden mb-4">
-                                    {/* Gross Amount */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-slate-50 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">Gross Booking Cost</span>
-                                        <span className="text-xs font-bold text-gray-800 shrink-0">{fmt(summary.finance.grossAmount)}</span>
+                            <div className="p-0">
+                                <div className="w-full text-[13px]">
+                                    {/* Gross Booking Cost */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Gross Booking Cost</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.grossAmount)}</span>
                                     </div>
 
                                     {/* Stall Discount */}
                                     {summary.finance.stallDiscountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
-                                            <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 inline-block shrink-0"></span>
-                                                <span className="truncate">Stall Discount</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Stall Discount
                                             </span>
-                                            <span className="text-xs font-bold text-orange-600 shrink-0">−{fmt(summary.finance.stallDiscountAmount)}</span>
+                                            <span className="font-bold text-orange-600">−{fmt(summary.finance.stallDiscountAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Full Payment Discount */}
                                     {summary.finance.discountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-emerald-50/40 gap-2">
-                                            <span className="text-xs text-emerald-700 font-bold flex items-center gap-1.5 min-w-0">
-                                                <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                                                <span className="truncate">Full Payment Discount</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Full Payment Discount
                                             </span>
-                                            <span className="text-xs font-black text-emerald-700 shrink-0">−{fmt(summary.finance.discountAmount)}</span>
+                                            <span className="font-bold text-emerald-600">−{fmt(summary.finance.discountAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Taxable Value */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-slate-50 gap-2">
-                                        <span className="text-xs text-gray-600 font-bold">Taxable Value (Pre-GST)</span>
-                                        <span className="text-xs font-black text-gray-800 shrink-0">{fmt(summary.finance.subtotal)}</span>
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Taxable Value (Pre-GST)</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.subtotal)}</span>
                                     </div>
 
                                     {/* GST */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">GST @ 18%</span>
-                                        <span className="text-xs font-bold text-gray-700 shrink-0">+{fmt(summary.finance.gstAmount)}</span>
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">GST @ 18%</span>
+                                        <span className="font-bold text-slate-600">+{fmt(summary.finance.gstAmount)}</span>
                                     </div>
 
                                     {/* TDS */}
                                     {summary.finance.tdsAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
-                                            <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5 min-w-0">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block shrink-0"></span>
-                                                <span className="truncate">TDS</span>
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span> TDS
                                             </span>
-                                            <span className="text-xs font-bold text-blue-600 shrink-0">−{fmt(summary.finance.tdsAmount)}</span>
+                                            <span className="font-bold text-[#0052cc]">−{fmt(summary.finance.tdsAmount)}</span>
                                         </div>
                                     )}
 
-                                    {/* Net Payable */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-[#23471d]/5 border-b border-[#23471d]/10 gap-2">
-                                        <span className="text-[12px] font-black text-[#23471d] uppercase tracking-wide">Total Contract Value</span>
-                                        <span className="text-[15px] sm:text-[16px] font-black text-[#23471d] shrink-0">{fmt(summary.finance.netPayable)}</span>
+                                    {/* Net Payable / Contract Value */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="font-bold text-[#10b981] uppercase text-xs tracking-wider">Total Contract Value</span>
+                                        <span className="font-black text-[#10b981] text-[15px]">{fmt(summary.finance.netPayable)}</span>
                                     </div>
 
-                                    {/* Amount Paid */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 gap-2">
-                                        <span className="text-xs text-gray-500 font-medium">Amount Paid So Far</span>
-                                        <span className="text-xs font-black text-emerald-600 shrink-0">−{fmt(summary.finance.amountPaid)}</span>
+                                    {/* Amount Paid So Far */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="text-slate-600 font-medium text-xs">Amount Paid So Far</span>
+                                        <span className="font-black text-[#10b981]">−{fmt(summary.finance.amountPaid)}</span>
                                     </div>
 
                                     {/* Penalty */}
                                     {summary.finance.penaltyAmount > 0 && (
-                                        <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 border-b border-gray-100 bg-red-50/50 gap-2">
-                                            <span className="text-xs text-red-600 font-bold flex items-center gap-1.5">
-                                                <AlertTriangle className="w-3 h-3 shrink-0" /> Late Payment Penalty
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-red-50/30">
+                                            <span className="text-red-500 font-medium flex items-center gap-2 text-xs">
+                                                <AlertTriangle className="w-3.5 h-3.5" /> Late Payment Penalty
                                             </span>
-                                            <span className="text-xs font-black text-red-700 shrink-0">+{fmt(summary.finance.penaltyAmount)}</span>
+                                            <span className="font-bold text-red-600">+{fmt(summary.finance.penaltyAmount)}</span>
                                         </div>
                                     )}
 
                                     {/* Balance Due */}
-                                    <div className="flex justify-between items-center px-3 sm:px-4 py-2.5 bg-rose-50 border-t border-rose-100 gap-2">
-                                        <span className="text-[12px] font-black text-rose-700 uppercase tracking-wide">Balance Due</span>
-                                        <span className="text-[15px] sm:text-[16px] font-black text-rose-700 shrink-0">{fmt(summary.finance.totalPayable)}</span>
-                                    </div>
-                                </div>
-
-                                {/* Stall + Due Date info */}
-                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                    <div className="bg-slate-50 rounded-lg p-3">
-                                        <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Stall</p>
-                                        <p className="text-[13px] font-black text-gray-800">
-                                            {summary.stall?.stallFor || summary.stall?.stallNumber || '—'}
-                                        </p>
-                                        <p className="text-[10px] text-gray-500 truncate">{summary.stall?.stallType} • {summary.stall?.stallSize} sqm</p>
-                                    </div>
-                                    <div className={`rounded-lg p-3 ${daysOverdue > 0 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                                        <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Payment Due</p>
-                                        {effectiveDueDate ? (
-                                            <>
-                                                <p className={`text-[13px] font-black ${daysOverdue > 0 ? 'text-red-700' : 'text-gray-800'}`}>
-                                                    {new Date(effectiveDueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                                </p>
-                                                {daysOverdue > 0 && <p className="text-[10px] text-red-600 font-bold">{daysOverdue}d overdue</p>}
-                                            </>
-                                        ) : <p className="text-sm font-black text-gray-400">—</p>}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 bg-[#fff1f2]">
+                                        <span className="font-black text-rose-600 uppercase text-xs tracking-wider">Balance Due</span>
+                                        <span className="font-black text-rose-600 text-[18px]">{fmt(summary.finance.totalPayable)}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {!isFullyPaid && (
-                            <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                            <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
                                     <Receipt className="w-3.5 h-3.5 text-[#23471d]" />
-                                    <p className="text-[12px] font-bold text-gray-700">Receipt Details</p>
+                                    <p className="text-[13px] font-semibold text-slate-800">Receipt Details</p>
                                 </div>
-                                <div className="p-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div className="p-2.5">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                         <div>
                                             <label className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-1">
                                                 Name <span className="text-red-500">*</span>
@@ -626,7 +683,7 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, name: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, name: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.name ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="Receipt name"
                                             />
                                             {receiptErrors.name && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.name}</p>}
@@ -642,7 +699,7 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, email: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, email: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.email ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="name@example.com"
                                             />
                                             {receiptErrors.email && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.email}</p>}
@@ -658,14 +715,14 @@ export default function ExhibitorPaymentPage() {
                                                     setReceiptContact(prev => ({ ...prev, mobile: e.target.value }));
                                                     setReceiptErrors(prev => ({ ...prev, mobile: undefined }));
                                                 }}
-                                                className={`w-full h-10 px-3 rounded-lg border text-xs font-semibold outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.mobile ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'}`}
+                                                className={`w-full h-8 px-2.5 rounded-md border text-xs font-medium outline-none focus:ring-2 focus:ring-[#23471d]/20 ${receiptErrors.mobile ? 'border-red-300 bg-red-50' : 'border-slate-200 bg-white'}`}
                                                 placeholder="10-digit mobile"
                                                 maxLength={14}
                                             />
                                             {receiptErrors.mobile && <p className="mt-1 text-[10px] font-semibold text-red-600">{receiptErrors.mobile}</p>}
                                         </div>
                                     </div>
-                                    <p className="text-[10px] text-gray-400 font-semibold mt-3">
+                                    <p className="text-[9px] text-gray-400 font-medium mt-1.5">
                                         Payment receipt will be sent to both email and WhatsApp/mobile after successful payment.
                                     </p>
                                 </div>
@@ -674,11 +731,11 @@ export default function ExhibitorPaymentPage() {
 
                         {/* Installments — Sequential: next phase unlocks only after previous is paid */}
                         {summary.installments && summary.installments.length > 0 && (
-                            <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                <div className="px-4 py-2.5 border-b border-gray-100 flex items-center justify-between">
+                            <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <Percent className="w-3.5 h-3.5 text-[#23471d]" />
-                                        <p className="text-[12px] font-bold text-gray-700">Installment Schedule</p>
+                                        <p className="text-[13px] font-semibold text-slate-800">Installment Schedule</p>
                                     </div>
                                     <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">
                                         {summary.installments.filter((i: any) => i.status === 'paid').length}/{summary.installments.length} Paid
@@ -695,11 +752,11 @@ export default function ExhibitorPaymentPage() {
                                         const { fee: instFee, total: instTotal } = calcWithGatewayFee(instBase);
 
                                         return (
-                                            <div key={i} className={`p-3 flex items-start sm:items-center justify-between gap-3 transition-colors
+                                            <div key={i} className={`px-3 py-2 flex items-start sm:items-center justify-between gap-2 transition-colors
                                             ${isPaid ? 'bg-emerald-50/30' : isLocked ? 'bg-gray-50/80 opacity-60' : isOverdue ? 'bg-red-50/40' : ''}`}>
-                                                <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                                                <div className="flex items-start sm:items-center gap-2 min-w-0 flex-1">
                                                     {/* Phase icon */}
-                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 sm:mt-0
+                                                    <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 mt-0.5 sm:mt-0
                                                     ${isPaid ? 'bg-emerald-100' : isLocked ? 'bg-gray-200' : isOverdue ? 'bg-red-100' : 'bg-amber-100'}`}>
                                                         {isPaid
                                                             ? <CheckCircle2 className="w-4 h-4 text-emerald-600" />
@@ -747,7 +804,7 @@ export default function ExhibitorPaymentPage() {
                                                             <button
                                                                 onClick={() => initiatePayment(instBase, inst.installmentNumber)}
                                                                 disabled={paying || payingInstallment !== null}
-                                                                className="mt-1.5 flex items-center gap-1 px-2.5 sm:px-3 py-1.5 bg-[#23471d] text-white text-[9px] font-black uppercase rounded-lg hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
+                                                                className="mt-1 flex items-center gap-1.5 px-2.5 py-1.5 bg-[#23471d] text-white text-[9px] font-semibold rounded-md hover:bg-[#1a3516] disabled:opacity-50 transition-colors whitespace-nowrap"
                                                             >
                                                                 {payingInstallment === inst.installmentNumber
                                                                     ? <><Loader2 className="w-3 h-3 animate-spin" /> Processing...</>
@@ -769,7 +826,7 @@ export default function ExhibitorPaymentPage() {
 
                         {/* ── Remaining Balance after all installments paid ── */}
                         {isInstallmentPlan && allInstallmentsPaid && remainingAfterInstallments > 0 && !isFullyPaid && (
-                            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start gap-3">
+                            <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 flex items-start gap-2">
                                 <div className="w-7 h-7 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
                                     <Info className="w-4 h-4 text-amber-600" />
                                 </div>
@@ -790,18 +847,18 @@ export default function ExhibitorPaymentPage() {
                             !isInstallmentPlan ||
                             (isInstallmentPlan && allInstallmentsPaid && remainingAfterInstallments > 0)
                         ) && (
-                                <div className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm">
-                                    <div className="px-4 py-2.5 border-b border-gray-100 flex items-center gap-2">
+                                <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                    <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
                                         <ShieldCheck className="w-3.5 h-3.5 text-[#23471d]" />
                                         <p className="text-[12px] font-bold text-gray-700">
                                             {summary.installments.length === 0 ? 'Secure Payment via Razorpay' : 'Pay Remaining Balance'}
                                         </p>
                                     </div>
-                                    <div className="p-4">
+                                    <div className="p-2.5">
                                         {(() => {
                                             const { fee, total } = calcWithGatewayFee(totalPayable);
                                             return (
-                                                <div className="bg-slate-50 rounded-lg border border-slate-200 p-3 mb-3 space-y-2">
+                                                <div className="bg-slate-50 rounded-lg border border-slate-200 p-2.5 mb-2 space-y-1.5">
                                                     <div className="flex justify-between text-xs">
                                                         <span className="text-gray-500 font-medium">Balance Due</span>
                                                         <span className="font-bold text-gray-800">{fmt(totalPayable)}</span>
@@ -824,7 +881,7 @@ export default function ExhibitorPaymentPage() {
                                         <button
                                             onClick={() => initiatePayment()}
                                             disabled={paying || payingInstallment !== null}
-                                            className="w-full h-10 flex items-center justify-center gap-2 bg-[#23471d] text-white font-bold text-[12px] rounded-lg hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-sm active:scale-[0.99]"
+                                            className="w-full sm:w-auto sm:min-w-56 h-9 mx-auto flex items-center justify-center gap-2 bg-[#23471d] text-white font-semibold text-[11px] rounded-lg hover:bg-[#1a3516] disabled:opacity-60 transition-all shadow-sm active:scale-[0.99]"
                                         >
                                             {paying
                                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Processing Payment...</>
@@ -832,7 +889,7 @@ export default function ExhibitorPaymentPage() {
                                             }
                                         </button>
 
-                                        <div className="mt-3 flex items-center justify-center gap-3 text-[9px] text-gray-400 font-bold uppercase tracking-wider">
+                                        <div className="mt-2 flex items-center justify-center gap-2 text-[8px] text-gray-400 font-bold uppercase">
                                             <span>UPI</span><span className="text-gray-200">|</span>
                                             <span>Cards</span><span className="text-gray-200">|</span>
                                             <span>Net Banking</span><span className="text-gray-200">|</span>
@@ -847,25 +904,21 @@ export default function ExhibitorPaymentPage() {
                             <motion.div
                                 initial={{ scale: 0.95, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-emerald-50 border border-emerald-200 rounded-lg p-6 text-center"
+                                className="w-full rounded-xl overflow-hidden shadow-sm border border-slate-200"
                             >
-                                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                    <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-                                </div>
-                                <p className="text-[16px] font-black text-emerald-800">All Payments Complete!</p>
-                                <p className="text-[12px] text-emerald-600 mt-1">Your stall booking is fully paid. Thank you!</p>
+                                <img src={paymentCompleteImg} alt="Payment Complete" className="w-full h-auto object-cover" />
                             </motion.div>
                         )}
 
                         {/* Info Note */}
-                        <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                        {/* <div className="flex items-start gap-2 px-3 py-2 bg-blue-50 border border-blue-100 rounded-lg">
                             <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                             <p className="text-[10px] text-blue-700 leading-relaxed">
                                 Payment receipts will be sent to the email and WhatsApp/mobile number entered above after successful payment.
                                 A {RAZORPAY_CHARGE_PCT}% gateway convenience fee is charged by Razorpay for online payments.
                                 For any payment issues, please contact our support team.
                             </p>
-                        </div>
+                        </div> */}
                     </motion.div>
                 )}
 
@@ -874,7 +927,7 @@ export default function ExhibitorPaymentPage() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-white border border-[#edf0f7] rounded-lg overflow-hidden shadow-sm"
+                        className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm"
                     >
                         {summary.paymentHistory && summary.paymentHistory.length > 0 ? (
                             <>
@@ -883,13 +936,13 @@ export default function ExhibitorPaymentPage() {
                                         <thead className="bg-slate-50 border-b border-gray-200">
                                             <tr>
                                                 {['#', 'Type', 'Amount', 'Method', 'Transaction ID', 'Date', 'Receipt'].map(h => (
-                                                    <th key={h} className="px-4 py-2 text-left text-[12px] font-semibold text-[#64748b]">{h}</th>
+                                                    <th key={h} className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase">{h}</th>
                                                 ))}
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
                                             {summary.paymentHistory.map((h: any, i: number) => (
-                                                <tr key={i} className="hover:bg-slate-50/50 transition-colors">
+                                                <tr key={i} className="hover:bg-slate-50 transition-colors">
                                                     <td className="px-4 py-2.5 text-[12px] text-gray-400 font-bold">#{i + 1}</td>
                                                     <td className="px-4 py-3">
                                                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">

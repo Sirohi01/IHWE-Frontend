@@ -1,49 +1,43 @@
-import paperHero from "../../../assets/day/paper_hero.png";
+import paperHero from "../../../assets/day/abstract_hero.png";
 
 import {
-  ChevronRight,
   Download,
-  Globe,
-  Lightbulb,
+  FileText,
+  Users,
+  UserCheck,
   BookOpen,
-  TrendingUp,
-  Trophy,
+  Globe,
 } from "lucide-react";
 
 const benefits = [
   {
-    icon: Globe,
-    title: "Global Exposure",
-    description:
-      "Present your research in front of international experts and thought leaders.",
+    icon: FileText,
+    title: "Share Your Research",
+    description: "Give a glimpse of your research and contribute to the global healthcare community.",
   },
   {
-    icon: Lightbulb,
-    title: "Knowledge Sharing",
-    description:
-      "Exchange ideas and innovative solutions with fellow researchers and professionals.",
+    icon: Users,
+    title: "Peer Review",
+    description: "All abstracts will be reviewed by our expert scientific committee.",
+  },
+  {
+    icon: UserCheck,
+    title: "Selected for Presentation",
+    description: "Selected abstracts will be invited for oral or poster presentation.",
   },
   {
     icon: BookOpen,
     title: "Publication Opportunity",
-    description:
-      "Selected papers will be considered for publication in reputed indexed journals.",
+    description: "Accepted abstracts will be published in the conference abstract book.",
   },
   {
-    icon: TrendingUp,
-    title: "Career Advancement",
-    description:
-      "Enhance your academic profile and expand your professional network.",
-  },
-  {
-    icon: Trophy,
-    title: "Awards & Recognition",
-    description:
-      "Best paper presentations will be awarded with certificates and prizes.",
+    icon: Globe,
+    title: "Global Recognition",
+    description: "Showcase your work to an international audience of experts and leaders.",
   },
 ];
 
-export default function PaperPresentationHero() {
+export default function AbstractPresentationHero() {
   return (
     <section className="relative overflow-hidden bg-white">
       {/* Hero Section */}
@@ -65,31 +59,33 @@ export default function PaperPresentationHero() {
             <div className="mb-5 flex items-center gap-2 text-sm text-gray-500">
               <span>Home</span>
               <span>›</span>
-              <span>Paper Presentation</span>
+              <span>Abstract Submission</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-[42px] font-bold uppercase leading-[0.95] md:text-[58px] lg:text-[68px]">
-              <span className="block text-[#0A1C63]">PAPER</span>
-              <span className="block text-[#2F8B2E]">PRESENTATION</span>
+            <h1 className="text-4xl font-bold leading-tight md:text-5xl lg:text-6xl uppercase">
+              <span className="text-[#0a1c63]">ABSTRACT</span>
+              <br />
+              <span className="text-[#2F8B2E]">SUBMISSION</span>
             </h1>
 
             {/* Description */}
-            <p className="mt-6 max-w-[480px] text-[15px] leading-7 text-gray-600 md:text-base">
-              Share your innovative research, ideas, and solutions with global
-              experts and contribute to the future of healthcare.
+            <p className="mt-4 max-w-xl text-[16px] text-gray-700 md:text-[17px]">
+              Submit your innovative ideas and research for consideration at the Healthcare Innovation Summit.
             </p>
 
             {/* Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
-              <button className="flex h-14 items-center gap-2 rounded-full bg-[#2F8B2E] px-8 text-sm font-semibold text-white transition-all hover:bg-[#267225]">
-                SUBMIT YOUR PAPER
-                <ChevronRight size={18} />
+              <button className="flex h-12 items-center justify-center rounded-full bg-[#2F8B2E] px-8 text-sm font-semibold uppercase text-white transition hover:bg-green-700 shadow-md">
+                SUBMIT ABSTRACT <span className="ml-2">›</span>
               </button>
 
-              <button className="flex h-14 items-center gap-2 rounded-full border border-[#2F8B2E] bg-white px-8 text-sm font-semibold text-[#111827] transition-all hover:bg-gray-50">
+              <button className="group flex h-12 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-8 text-sm font-semibold uppercase text-gray-700 transition hover:bg-gray-50 shadow-sm">
                 DOWNLOAD GUIDELINES
-                <Download size={18} className="text-[#2F8B2E]" />
+                <Download
+                  size={16}
+                  className="text-gray-500 transition group-hover:text-gray-700"
+                />
               </button>
             </div>
           </div>

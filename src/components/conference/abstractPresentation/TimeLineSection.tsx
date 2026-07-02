@@ -53,8 +53,8 @@ export default function TimelineSection() {
     <section className="w-full mt-2">
       <div className="  sm:px-6 lg:px-12">
         <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
-          <h2 className="mb-2 text-[13px] font-samibold uppercase tracking-wide text-gray-900">
-            Timeline
+          <h2 className="mb-4 text-[13px] font-bold uppercase tracking-wide text-gray-900">
+            SUBMISSION TIMELINE
             <span className="mt-1.5 block h-[3px] w-8 rounded-full bg-[#2F8B2E]" />
           </h2>
 

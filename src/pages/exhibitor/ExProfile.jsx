@@ -44,6 +44,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
+import { logActivity } from '@/utils/activityLogger';
 const DEFAULT_PLACEHOLDER = "https://placehold.co/400x400?text=No+Logo";
 
 const fixUrl = (url) => {
@@ -193,6 +194,7 @@ export default function ExProfile() {
                 toast.success('Profile Saved Successfully!');
                 if (result.data) setData(result.data);
                 setActiveModal(null);
+                logActivity('Profile', 'Updated profile details');
                 await fetchDashboard();
             } else {
                 toast.error(result.message || 'Saving failed');
@@ -234,6 +236,7 @@ export default function ExProfile() {
             if (result.success) {
                 toast.success('Logo Uploaded Successfully!');
                 if (result.data) setData(result.data);
+                logActivity('Profile', 'Updated company logo');
                 await fetchDashboard();
             } else {
                 toast.error(result.message || 'Logo upload failed');
@@ -316,12 +319,14 @@ export default function ExProfile() {
         const updatedList = [...certificateList, newCert];
         setCertificateList(updatedList);
         setNewCertName('');
+        logActivity('Profile', 'Added new certificate', newCert.name);
         saveProfileData({ certificates: updatedList });
     };
 
     const deleteCertificate = (index) => {
         const updatedList = certificateList.filter((_, i) => i !== index);
         setCertificateList(updatedList);
+        logActivity('Profile', 'Deleted certificate');
         saveProfileData({ certificates: updatedList });
     };
 
@@ -358,12 +363,14 @@ export default function ExProfile() {
         }
 
         setTeamList(updatedList);
+        logActivity('Profile', 'Updated team member details');
         saveProfileData({ teamMembers: updatedList });
     };
 
     const deleteTeamMember = (index) => {
         const updatedList = teamList.filter((_, i) => i !== index);
         setTeamList(updatedList);
+        logActivity('Profile', 'Deleted team member');
         saveProfileData({ teamMembers: updatedList });
     };
 

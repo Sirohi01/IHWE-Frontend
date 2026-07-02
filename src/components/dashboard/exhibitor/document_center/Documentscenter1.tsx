@@ -24,6 +24,7 @@ interface Doc {
 
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
+import { logActivity } from "@/utils/activityLogger";
 
 const StatusConfig = {
   "Approved": { color: "text-emerald-600", bg: "bg-emerald-50", icon: <CheckCircle2 size={12} className="text-emerald-600" /> },
@@ -155,6 +156,7 @@ const DocumentsCenter1: React.FC = () => {
           }
         });
 
+        logActivity('Documents', 'Uploaded Document', `Document: ${selectedDoc.title}`);
         setPendingUploads(prev => { const newUploads = { ...prev }; delete newUploads[selectedDoc.id]; return newUploads; });
         await fetchDocs();
       } catch (err) {
@@ -179,6 +181,7 @@ const DocumentsCenter1: React.FC = () => {
         if (result.isConfirmed) {
           try {
             await fetch(`${API_URL}/client-documents/${selectedDoc.id}`, { method: 'DELETE' });
+            logActivity('Documents', 'Deleted Document', `Document: ${selectedDoc.title}`);
             await fetchDocs();
             Swal.fire({ title: 'Deleted!', text: 'Your document has been removed.', icon: 'success', confirmButtonColor: '#2563eb' });
           } catch(err) {

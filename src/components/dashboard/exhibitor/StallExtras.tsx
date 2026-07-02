@@ -956,6 +956,7 @@ import {
 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
+import { logActivity } from '@/utils/activityLogger';
 
 declare global { interface Window { Razorpay: any; } }
 
@@ -1195,6 +1196,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
                         if (verifyRes.success) {
                             toast.success('Payment successful! Receipt sent to your email.');
+                            logActivity('Add On Services', `Paid ${fmt(cartTotalWithFee)} for ${cart.length} items`);
                             setCart([]);
                             setShowCartMobile(false);
                             loadOrders();
@@ -1255,6 +1257,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
             if (!res.success) throw new Error(res.message || 'Failed to submit NEFT payment');
 
             toast.success('NEFT details submitted. Payment will be confirmed after admin approval.');
+            logActivity('Add On Services', `Submitted NEFT details for ${cart.length} items (${fmt(cartTotal)})`);
 
             setShowCheckout(false);
 
