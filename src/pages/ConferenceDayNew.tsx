@@ -14,71 +14,7 @@ import OurSpeakersCarousel from "@/components/conference/Day1/OurSpeakers";
 import PartnersAndActionsSection from "@/components/conference/Day1/PartnersAndActions";
 import HealthcareHighlights from "@/components/conference/Day1/HealthCareHeighLightsts";
 
-const ourSpeakers = [
-  {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-    {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-    {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-];
+
 
 const ConferenceDayUnified: React.FC = () => {
   const { dayNumber } = useParams<{ dayNumber: string }>();
@@ -86,7 +22,7 @@ const ConferenceDayUnified: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const currentDay = isNaN(parseInt(dayNumber || "")) ? 1 : parseInt(dayNumber || "1");
+  const currentDay = parseInt((dayNumber || "1").replace("day-", ""), 10) || 1;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -135,21 +71,20 @@ const ConferenceDayUnified: React.FC = () => {
     if (currentDay === 2) return day2HeroImg;
     return day3HeroImg;
   };
-
+console.log(data,"currentDay")
   return (
     <div className="bg-white min-h-screen font-inter overflow-x-hidden">
       <div className="relative">
-      
-        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()}/>
+        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()} currentDay={currentDay}/>
        
 
         {/* 3. About Section */}
-        <div className="relative left-[20px]">
-          <AboutDayOne data={data.about} />
+        <div className="relative pt-10">
+          <AboutDayOne data={data.about} currentDay={currentDay} />
         </div>
 
         {/* 4. Agenda & Featured Speakers */}
-        <section className="bg-white py-4 relative left-[20px]">
+        <section className="bg-white relative">
           <div className="container mx-auto px-6 max-w-[1380px]">
             
                 <DayAgendaSection
@@ -160,9 +95,9 @@ const ConferenceDayUnified: React.FC = () => {
              
           </div>
         </section>
-<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" speakers={ourSpeakers} />
-<PartnersAndActionsSection />
-<HealthcareHighlights />
+<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" data={data} currentDay={currentDay} />
+<PartnersAndActionsSection currentDay={currentDay} data={data} />
+<HealthcareHighlights currentDay={currentDay} data={data} />
        
       </div>
     </div>

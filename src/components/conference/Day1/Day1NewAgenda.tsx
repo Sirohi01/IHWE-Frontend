@@ -1,5 +1,6 @@
 "use client";
 
+import { SERVER_URL } from "@/lib/api";
 import {
   Clock3,
   ChevronRight,
@@ -10,91 +11,31 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-const agenda = [
-  {
-    time: "11:00 AM - 11:45 AM",
-    session: "SESSION 1",
-    type: "PANEL",
-    topic: "Smart Hospitals & Digital Transformation",
-    desc: "Building intelligent, connected hospitals.",
-    speaker: "Dr. Maria Neira",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-  },
-  {
-    time: "12:00 PM - 12:45 PM",
-    session: "SESSION 2",
-    type: "EXPERT TALK",
-    topic: "Medical Devices & Innovation Showcase",
-    desc: "Next-gen medical devices improving outcomes.",
-    speaker: "Dr. Kevin Tan",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-  },
-  {
-    time: "02:00 PM - 02:45 PM",
-    session: "SESSION 3",
-    type: "PANEL",
-    topic: "AI, HealthTech & Digital Health Solutions",
-    desc: "AI and digital platforms redefining healthcare.",
-    speaker: "Dr. Devi Shetty",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-  },
-];
-
-const speakers = [
-  {
-    name: "Dr. Randal Pinkett",
-    role: "Former Chief Health Officer",
-    company: "Amazon",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-    badge: "KEYNOTE SPEAKER",
-  },
-  {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-    badge: "FEATURED SPEAKER",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-    badge: "FEATURED SPEAKER",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=100",
-    badge: "FEATURED SPEAKER",
-  },
-];
-
 export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?: any; dayTitle?: string; dayNumber?: number }) {
+  const agenda = data.agenda;
   return (
-    <div className="mx-auto max-w-[1320px] py-4">
+    <div className="mx-auto max-w-[1320px]">
       <section className="grid gap-5 lg:grid-cols-2">
         {/* Left */}
-        <div className="rounded-2xl border bg-white p-4 shadow-sm">
-          <div className="text-center mb-4">
+        <div className="rounded-2xl border bg-white p-4 shadow-sm max-h-[500px] flex flex-col">
+          <div className="text-center mb-4 shrink-0">
             <h2 className="text-lg font-bold text-green-700">
-              DAY 1 AGENDA — 21 AUGUST 2026
+              {agenda.title||`DAY ${dayNumber} AGENDA — 21 AUGUST 2026`}
             </h2>
             <p className="text-[11px]">
-              6 Insightful Sessions | 1 Powerful Day
+              {agenda.subtitle||`6 Insightful Sessions | 1 Powerful Day`}
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-xl border">
-            <div className="grid grid-cols-[1.4fr_1fr_2fr_1.5fr] bg-[#0B2A63] px-3 py-2 text-[10px] font-semibold text-white">
+          <div className="overflow-y-auto rounded-xl border flex-1">
+            <div className="grid grid-cols-[1.4fr_1fr_2fr_1.5fr] bg-[#0B2A63] px-3 py-2 text-[10px] font-semibold text-white sticky top-0 z-10">
               <div>TIME</div>
               <div>SESSION</div>
               <div>TOPIC</div>
               <div>SPEAKER</div>
             </div>
 
-            {agenda.map((item, i) => (
+            {agenda.sessions.map((item, i) => (
               <div
                 key={i}
                 className="grid grid-cols-[1.4fr_1fr_2fr_1.5fr] items-center border-t px-3 py-3 text-[11px]"
@@ -113,23 +54,29 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
 
                 <div>
                   <p className="font-semibold">{item.topic}</p>
-                  <p className="text-[10px] ">{item.desc}</p>
+                  <p className="text-[10px] ">{item.description}</p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <img
-                    src={item.image}
+                    src={`${SERVER_URL}${item.speaker.image}`}
                     className="h-8 w-8 rounded-full object-cover"
+                    alt={item.speaker.name}
                   />
-                  <span className="text-[11px] font-medium">
-                    {item.speaker}
-                  </span>
+                  <div>
+
+                  <p className="text-[11px] font-medium">
+                    {item.speaker.name}
+                  </p>
+<p className="text-[11px]">{item.speaker.role}</p>
+<p className="text-[11px]">{item.speaker.company}</p>
+</div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-5 flex justify-center">
+          <div className="mt-5 flex justify-center shrink-0">
             <button className="flex items-center gap-2 rounded-full border border-slate-300 px-6 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50">
               VIEW FULL AGENDA
               <ChevronRight size={14} />
@@ -143,7 +90,7 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold">
                 FEATURED SPEAKERS{" "}
-                <span className="text-green-700">— DAY 1</span>
+                <span className="text-green-700">— DAY {dayNumber}</span>
               </h2>
 
               <button className="rounded-full bg-green-700 px-4 py-1.5 text-[10px] font-semibold text-white">
@@ -161,13 +108,13 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
               </button>
 
               <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-                {speakers.map((speaker, i) => (
+                {data.featuredSpeakers.map((speaker, i) => (
                   <div
                     key={i}
                     className="rounded-2xl border p-4 text-center flex flex-col justify-between"
                   >
                     <img
-                      src={speaker.image}
+                    src={`${SERVER_URL}${speaker.image}`}
                       className="mx-auto h-16 w-16 rounded-full object-cover"
                     />
 
@@ -184,7 +131,7 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
                     </p>
 
                     <span className="mt-4 inline-block rounded-full border border-green-700 px-1 py-1 text-[8px] font-semibold text-green-700">
-                      {speaker.badge}
+                      {speaker.category}
                     </span>
                   </div>
                 ))}
@@ -203,22 +150,23 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {[
               {
-                title: "BE PART OF DAY 1",
-                text: "Start your journey towards a holistic future.",
+                title:  data.cta.bePartTitle||`BE PART OF DAY ${dayNumber}`,
+                text: data.cta.
+bePartDescription||"Start your journey towards a holistic future.",
                 btn: "REGISTER NOW",
                 icon: Users,
                 bg: "bg-green-700",
               },
               {
-                title: "DELEGATE PASS",
-                text: "Full access to all Day 1 sessions.",
+                title:  data.cta.delegatePass.title||`DELEGATE PASS - DAY ${dayNumber}`,
+                text: data.cta.delegatePass.descriptio||`Full access to all Day ${dayNumber} sessions.`,
                 btn: "BOOK NOW",
                 icon: Ticket,
                 bg: "bg-[#0B2A63]",
               },
               {
-                title: "SPONSOR DAY 1",
-                text: "Showcase your solutions globally.",
+                title: data.cta.sponsor.title||`SPONSOR DAY ${dayNumber}`,
+                text:data.cta.sponsor.description|| "Showcase your solutions globally.",
                 btn: "BECOME A SPONSOR",
                 icon: Handshake,
                 bg: "bg-green-800",

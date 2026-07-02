@@ -11,64 +11,80 @@ import {
   Zap,
   Sparkles,
   Users2,
+  Brain,
 } from "lucide-react";
-
+import { SERVER_URL } from "@/lib/api";
 import amanImage from "../../../assets/day/day1-banner.webp";
 
-const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defaultImage }) => {
+const Day1Hero: React.FC<{ data?: any, defaultImage?: string, currentDay: number }> = ({ data, defaultImage, currentDay }) => {
+const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck className="h-5 w-5 text-[#2F8D3A]" />,<Zap className="h-5 w-5 text-[#2F8D3A]" />,<Brain className="h-5 w-5 text-[#2F8D3A]" />]
   return (
-    <section className="relative min-h-[620px] lg:min-h-[600px] overflow-hidden font-sans">
+<section className="relative w-full overflow-visible font-sans aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[16/5.62]">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${amanImage})`,
+          backgroundImage: `url(${SERVER_URL}${data.backgroundImage || amanImage})`,
         }}
       />
 
       {/* Content */}
-      <div className="max-w-[1320px] relative z-10 mx-auto pt-16 pl-2">
-        <div className="max-w-[540px]">
+  <div className="absolute inset-0 z-10 flex items-center">
+  <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-2">
+    <div className="max-w-[540px]">
           {/* Breadcrumb */}
           <div className="mb-5 flex items-center gap-2 text-[11px] font-medium">
             <span>Home</span>
             <ChevronRight className="h-3 w-3" />
             <span>Conference</span>
             <ChevronRight className="h-3 w-3" />
-            <span className="font-semibold text-[#0B2C66]">Day 1</span>
+            <span className="font-semibold text-[#0B2C66]">Day {currentDay}</span>
           </div>
 
           {/* Tags */}
           <div className="mb-5 flex items-center gap-3">
             <span className="rounded-full bg-[#2F8D3A] px-4 py-2 text-[11px] font-bold text-white">
-              DAY 1
+              {data.category||`DAY {currentDay}`}
             </span>
 
             <span className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-[11px] font-semibold text-gray-700">
               <Calendar className="h-3.5 w-3.5 text-[#2F8D3A]" />
-              21 AUGUST 2026
+              {data.date||'21 AUGUST 2026'}
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="leading-none">
-            <span className="block text-[40px] font-extrabold text-[#0B2C66] sm:text-[46px]">
-              HEALTHCARE
-            </span>
+            <span className="block text-[40px] font-extrabold text-[#0B2C66] sm:text-[46px]" dangerouslySetInnerHTML={{ __html: data.title || `HEALTHCARE` }}></span>
 
             <span className="block text-[40px] font-extrabold text-[#2F8D3A] sm:text-[46px]">
-              INNOVATION SUMMIT
+              {data.subtitle||'INNOVATION SUMMIT'}
             </span>
           </h1>
 
           {/* Description */}
           <p className="mt-4 max-w-[420px] text-sm leading-5 font-semibold">
-            Advancing technology, infrastructure & innovation for future-ready
-            healthcare systems.
+            {data.description || `Advancing technology, infrastructure & innovation for future-ready
+            healthcare systems.`}
           </p>
 
           {/* Features */}
           <div className="mt-8 flex flex-wrap gap-x-8 gap-y-5">
+            {data.stats?data.stats?.map((feature: any, index: number) => (
+                  <div className="flex items-start gap-2">
+             {icons[index]}
+              <div>
+                <p className="text-[12px] font-bold text-[#0B2C66]">
+                  {feature.value}
+                </p>
+                <p className="text-[10px] uppercase">
+                  {feature.label}
+                </p>
+              </div>
+            </div>))
+             :(
+              <>  
+            
             <div className="flex items-start gap-2">
               <ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />
               <div>
@@ -104,6 +120,8 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defau
                 </p>
               </div>
             </div>
+              </>
+             ) }
           </div>
 
           {/* Buttons */}
@@ -120,12 +138,12 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defau
           </div> */}
         </div>
       </div>
-
+</div>
       {/* Bottom Stats */}
-      <div className="absolute bottom-6 left-0 right-0 z-10">
-       <div className="mx-auto max-w-[1320px] py-4">
-          <div className="overflow-hidden rounded-2xl bg-[#072B67] shadow-2xl">
-            <div className="grid grid-cols-2 md:grid-cols-6">
+<div className="absolute left-0 right-0 bottom-0 translate-y-1/2 z-20">
+   <div className="mx-auto max-w-[1320px]">
+  <div className="overflow-hidden rounded-2xl bg-[#072B67] shadow-2xl border border-white/10">
+    <div className="grid grid-cols-2 md:grid-cols-6">
               {[
                 {
                   icon: Users,
@@ -162,21 +180,21 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string }> = ({ data, defau
 
                 return (
                   <div
-                    key={i}
-                    className="flex items-center gap-3 border-white/10 px-5 py-4 md:border-r"
-                  >
-                    <Icon className="h-6 w-6 text-lime-400" />
+  key={i}
+  className="flex items-center gap-2 px-3 md:px-4 py-2.5 border-white/10 md:border-r"
+>
+  <Icon className="h-4 w-4 text-lime-400 flex-shrink-0" />
 
-                    <div>
-                      <p className="text-lg font-bold text-white">
-                        {item.value}
-                      </p>
+  <div>
+    <p className="text-[14px] font-bold text-white leading-none">
+      {item.value}
+    </p>
 
-                      <p className="text-[10px] uppercase font-semibold text-white">
-                        {item.label}
-                      </p>
-                    </div>
-                  </div>
+    <p className="text-[8px] uppercase tracking-[0.18em] font-semibold text-white/70 leading-tight">
+      {item.label}
+    </p>
+  </div>
+</div>
                 );
               })}
             </div>
