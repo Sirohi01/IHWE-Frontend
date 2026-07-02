@@ -14,75 +14,10 @@ import OurSpeakersCarousel from "@/components/conference/Day1/OurSpeakers";
 import PartnersAndActionsSection from "@/components/conference/Day1/PartnersAndActions";
 import HealthcareHighlights from "@/components/conference/Day1/HealthCareHeighLightsts";
 
-const ourSpeakers = [
-  {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-    {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-    {
-    name: "Dr. Maria Neira",
-    role: "Director",
-    company: "WHO",
-    image: user,
-    badge: "FEATURED",
-  },
-  {
-    name: "Dr. Kevin Tan",
-    role: "Founder & CEO",
-    company: "HealthTech Asia",
-    image: user,
-    badge: "KEYNOTE",
-  },
-  {
-    name: "Dr. Devi Shetty",
-    role: "Chairman & Founder",
-    company: "Narayana Health",
-    image: user,
-    badge: "SPEAKER",
-  },
-];
+
 
 const ConferenceDayUnified: React.FC = () => {
   const { dayNumber } = useParams<{ dayNumber: string }>();
-  console.log(dayNumber,"dayNumber")
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -144,12 +79,12 @@ console.log(data,"currentDay")
        
 
         {/* 3. About Section */}
-        <div className="relative">
+        <div className="relative pt-10">
           <AboutDayOne data={data.about} currentDay={currentDay} />
         </div>
 
         {/* 4. Agenda & Featured Speakers */}
-        <section className="bg-white py-4 relative">
+        <section className="bg-white relative">
           <div className="container mx-auto px-6 max-w-[1380px]">
             
                 <DayAgendaSection
@@ -161,8 +96,8 @@ console.log(data,"currentDay")
           </div>
         </section>
 <OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" data={data} currentDay={currentDay} />
-<PartnersAndActionsSection currentDay={currentDay} />
-<HealthcareHighlights currentDay={currentDay} />
+<PartnersAndActionsSection currentDay={currentDay} data={data} />
+<HealthcareHighlights currentDay={currentDay} data={data} />
        
       </div>
     </div>

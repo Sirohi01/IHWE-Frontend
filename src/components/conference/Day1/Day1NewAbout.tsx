@@ -19,7 +19,7 @@ const focusAreasIcons = [
 
 const AboutDayOne: React.FC<{ data?: any, currentDay: number }> = ({ data, currentDay }) => {
   return (
-    <div className="mx-auto max-w-[1320px] py-4">
+    <div className="mx-auto max-w-[1320px]">
       <div>
         <div className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6">
           <div className="grid gap-8 lg:grid-cols-2">

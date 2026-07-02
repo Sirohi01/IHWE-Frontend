@@ -8,36 +8,38 @@ import {
   Globe,
 } from "lucide-react";
 import heighlights from  "../../../assets/day/highlights.jpg"
-
-const features = [
+const icons  = [
+Users,
+Lightbulb,
+BarChart3,
+Handshake,
+Globe
+]
+const fallbackfeatures = [
   {
-    icon: Users,
     title: "Network",
     description: "with global experts & industry leaders",
   },
   {
-    icon: Lightbulb,
     title: "Discover",
     description: "the latest innovations in healthcare",
   },
   {
-    icon: BarChart3,
     title: "Gain Insights",
     description: "from world-class sessions",
   },
   {
-    icon: Handshake,
     title: "Explore",
     description: "business & collaboration opportunities",
   },
   {
-    icon: Globe,
     title: "Be a Part",
     description: "of the future of healthcare",
   },
 ];
 
-export default function HealthcareHighlights({currentDay}: {currentDay: number}) {
+export default function HealthcareHighlights({currentDay, data}: {currentDay: number; data:any}) {
+  const features = data.healthcareHighlights?.features || fallbackfeatures;
   return (
     <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
       <div
@@ -51,7 +53,7 @@ export default function HealthcareHighlights({currentDay}: {currentDay: number})
 
         <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-white/10">
           {features.map((item, index) => {
-            const Icon = item.icon;
+            const Icon = icons[index];
 
             return (
               <div

@@ -14,7 +14,7 @@ import {
 export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?: any; dayTitle?: string; dayNumber?: number }) {
   const agenda = data.agenda;
   return (
-    <div className="mx-auto max-w-[1320px] py-4">
+    <div className="mx-auto max-w-[1320px]">
       <section className="grid gap-5 lg:grid-cols-2">
         {/* Left */}
         <div className="rounded-2xl border bg-white p-4 shadow-sm max-h-[500px] flex flex-col">

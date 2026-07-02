@@ -34,7 +34,7 @@ export default function OurSpeakersCarousel({
 }: OurSpeakersCarouselProps) {
   const speakers= data.ourSpeakers;
   return (
-         <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4" >
+         <div className="mx-auto px-6 md:px-0 max-w-[1320px]" >
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
