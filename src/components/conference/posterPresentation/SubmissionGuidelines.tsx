@@ -18,14 +18,13 @@ import {
 } from "lucide-react";
 
 const guidelines = [
-  "Papers must be original and not published or presented elsewhere.",
-  "Abstract should be between 250–300 words.",
-  "Full paper should be between 2500–3500 words.",
-  "Submit your paper in MS Word format (.doc/.docx).",
-  "Use Times New Roman font, 12pt size, 1.5 line spacing.",
-  "Include a cover page with title, authors, affiliations, and contact details.",
-  "All submissions are subject to a double-blind peer review process.",
-  "Presenting author must register for the conference.",
+  "Poster size should be 90 cm (width) x 120 cm (height) in portrait orientation.",
+  "Poster should be clear, self-explanatory and visually attractive.",
+  "Use large fonts and high-resolution images for better visibility.",
+  "Include title, authors, affiliation, introduction, methods, results, conclusion and references.",
+  "All posters must be in English.",
+  "Presenting author must be present at the poster during the assigned time.",
+  "Posters should be mounted at the assigned board number.",
 ];
 
 const topics = [
@@ -79,7 +78,7 @@ const topics = [
   },
 ];
 
-export default function SubmissionGuidelinesSection() {
+export default function PosterSubmissionGuidelinesSection() {
   return (
     <section className="bg-white py-2">
       <div className=" px-5 sm:px-6 lg:px-12">
@@ -88,7 +87,7 @@ export default function SubmissionGuidelinesSection() {
           <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
             <div className="mb-2">
               <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
-                Submission Guidelines
+                POSTER GUIDELINES
               </h2>
 
               <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
@@ -119,7 +118,7 @@ export default function SubmissionGuidelinesSection() {
           <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
             <div className="mb-2">
               <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
-                Paper Presentation Topics
+                THEMES / TRACKS
               </h2>
 
               <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
