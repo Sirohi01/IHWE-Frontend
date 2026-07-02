@@ -1,43 +1,43 @@
-import paperHero from "../../../assets/day/poster_hero.png";
+import paperHero from "../../../assets/day/abstract_hero.png";
 
 import {
   Download,
+  FileText,
   Users,
-  Lightbulb,
-  BarChart,
-  Award,
-  Share2,
+  UserCheck,
+  BookOpen,
+  Globe,
 } from "lucide-react";
 
 const benefits = [
   {
+    icon: FileText,
+    title: "Share Your Research",
+    description: "Give a glimpse of your research and contribute to the global healthcare community.",
+  },
+  {
     icon: Users,
-    title: "Wide Visibility",
-    description: "Showcase your work to a diverse global audience.",
+    title: "Peer Review",
+    description: "All abstracts will be reviewed by our expert scientific committee.",
   },
   {
-    icon: Lightbulb,
-    title: "Interactive Discussions",
-    description: "Engage in one-on-one discussions and exchange innovative ideas.",
+    icon: UserCheck,
+    title: "Selected for Presentation",
+    description: "Selected abstracts will be invited for oral or poster presentation.",
   },
   {
-    icon: BarChart,
-    title: "Research Impact",
-    description: "Increase the reach and impact of your research.",
+    icon: BookOpen,
+    title: "Publication Opportunity",
+    description: "Accepted abstracts will be published in the conference abstract book.",
   },
   {
-    icon: Award,
-    title: "Recognition",
-    description: "Top posters will be recognized and awarded.",
-  },
-  {
-    icon: Share2,
-    title: "Networking Opportunities",
-    description: "Build connections with researchers and professionals in your field.",
+    icon: Globe,
+    title: "Global Recognition",
+    description: "Showcase your work to an international audience of experts and leaders.",
   },
 ];
 
-export default function PosterPresentationHero() {
+export default function AbstractPresentationHero() {
   return (
     <section className="relative overflow-hidden bg-white">
       {/* Hero Section */}
@@ -59,25 +59,25 @@ export default function PosterPresentationHero() {
             <div className="mb-5 flex items-center gap-2 text-sm text-gray-500">
               <span>Home</span>
               <span>›</span>
-              <span>Poster Presentation</span>
+              <span>Abstract Submission</span>
             </div>
 
             {/* Title */}
             <h1 className="text-4xl font-bold leading-tight md:text-5xl lg:text-6xl uppercase">
-              <span className="text-[#0a1c63]">POSTER</span>
+              <span className="text-[#0a1c63]">ABSTRACT</span>
               <br />
-              <span className="text-[#2F8B2E]">PRESENTATION</span>
+              <span className="text-[#2F8B2E]">SUBMISSION</span>
             </h1>
 
             {/* Description */}
             <p className="mt-4 max-w-xl text-[16px] text-gray-700 md:text-[17px]">
-              Present your research visually and engage with experts, peers and attendees from around the world.
+              Submit your innovative ideas and research for consideration at the Healthcare Innovation Summit.
             </p>
 
             {/* Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
               <button className="flex h-12 items-center justify-center rounded-full bg-[#2F8B2E] px-8 text-sm font-semibold uppercase text-white transition hover:bg-green-700 shadow-md">
-                SUBMIT YOUR POSTER <span className="ml-2">›</span>
+                SUBMIT ABSTRACT <span className="ml-2">›</span>
               </button>
 
               <button className="group flex h-12 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-8 text-sm font-semibold uppercase text-gray-700 transition hover:bg-gray-50 shadow-sm">
