@@ -38,8 +38,8 @@ const fallbackfeatures = [
   },
 ];
 
-export default function HealthcareHighlights({ currentDay, data }: { currentDay: number; data: any }) {
-  const features = data.healthcareHighlights?.features || fallbackfeatures;
+export default function HealthcareHighlights({ currentDay = 1, data = {} }: { currentDay?: number; data?: any }) {
+  const features = data?.healthcareHighlights?.features || fallbackfeatures;
   return (
     <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
       <div
