@@ -29,35 +29,34 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
 
   return (
     <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
-      <section className="grid gap-5 lg:grid-cols-2 items-stretch">
+      <section className="md:grid gap-4 lg:grid-cols-2 items-stretch">
         {/* Left */}
-        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3 items-stretch">
           {cards.map((card, i) => {
             const Icon = icons[i];
 
             return (
-              <Link to={card.link}>
+              <Link to={card.link} key={i} className="flex h-full">
                 <div
-                  key={i}
-                  className="rounded-xl border border-[#ececec] bg-white px-4 py-5 text-center"
+                  className="flex h-full w-full flex-col items-center rounded-xl border border-[#ececec] bg-white px-3 py-3 text-center"
                 >
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#eef7eb]">
+                  <div className="mx-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eef7eb]">
                     <Icon
-                      size={28}
+                      size={20}
                       className="text-[#4b8f46]"
                       strokeWidth={1.8}
                     />
                   </div>
 
-                  <h3 className="mt-4 text-[18px] font-semibold leading-5 text-[#16213e]">
+                  <h3 className="mt-2 text-sm font-semibold text-[#16213e]">
                     {card.title}
                   </h3>
 
-                  <p className="mt-4 text-[11px] leading-5 text-[#666666]">
+                  <p className="mt-1 line-clamp-2 min-h-[36px] text-[11px] leading-5 text-[#666666]">
                     {card.text}
                   </p>
 
-                  <button className="mt-6 inline-flex items-center gap-2 text-[11px] font-semibold uppercase text-[#3d8b37]">
+                  <button className="mt-auto inline-flex items-center gap-2 pt-1 text-[11px] font-semibold uppercase text-[#3d8b37]">
                     Learn More
                     <ArrowRight size={13} />
                   </button>
@@ -68,9 +67,9 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
         </div>
 
         {/* Right */}
-        <div className="rounded-xl border border-[#ececec] bg-white p-5">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-[20px] font-bold uppercase text-[#222]">
+        <div className="rounded-xl border border-[#ececec] bg-white p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-bold uppercase text-[#222]">
               Associations & Partners
             </h2>
           </div>
@@ -98,15 +97,15 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
                 slidesPerView: 6,
               },
             }}
-            className="partner-swiper pb-8"
+            className="partner-swiper"
           >
             {associates.map((logo, i) => (
               <SwiperSlide key={i}>
-                <div className="flex h-[130px] items-center justify-center rounded-lg border border-[#ececec] bg-white ">
+                <div className="flex h-[104px] items-center justify-center rounded-lg border border-[#ececec] bg-white ">
                   <img
                     src={`${SERVER_URL}${logo}`}
                     alt="partner"
-                    className="max-h-16 w-full object-contain"
+                    className="w-full object-contain"
                   />
                 </div>
               </SwiperSlide>
@@ -114,7 +113,7 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
           </Swiper>
         </div>
 
-        <style jsx global>{`
+        <style>{`
         .partner-swiper .swiper-button-next,
         .partner-swiper .swiper-button-prev {
           width: 26px;

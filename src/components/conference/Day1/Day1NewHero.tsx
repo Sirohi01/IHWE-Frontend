@@ -29,8 +29,8 @@ const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck cla
       />
 
       {/* Content */}
-  <div className="absolute inset-0 z-10 flex items-center">
-  <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-2">
+  <div className="relative md:absolute inset-0 z-10 flex items-center">
+  <div className="mx-auto w-full max-w-[1320px] px-6 lg:px-2">
     <div className="max-w-[540px]">
           {/* Breadcrumb */}
           <div className="mb-5 flex items-center gap-2 text-[11px] font-medium">
@@ -69,7 +69,7 @@ const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck cla
           </p>
 
           {/* Features */}
-          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-5">
+          <div className="mt-4 md:mt-8 flex flex-wrap gap-x-4 gap-y-4">
             {data.stats?data.stats?.map((feature: any, index: number) => (
                   <div className="flex items-start gap-2">
              {icons[index]}
@@ -140,10 +140,10 @@ const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck cla
       </div>
 </div>
       {/* Bottom Stats */}
-<div className="absolute left-0 right-0 bottom-0 translate-y-1/2 z-20">
+<div className="relative md:absolute left-0 right-0 bottom-0 translate-y-1/2 z-20 px-6 lg:px-2">
    <div className="mx-auto max-w-[1320px]">
   <div className="overflow-hidden rounded-2xl bg-[#072B67] shadow-2xl border border-white/10">
-    <div className="grid grid-cols-2 md:grid-cols-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
               {[
                 {
                   icon: Users,
@@ -181,16 +181,18 @@ const icons =[<ShieldCheck className="h-5 w-5 text-[#2F8D3A]" />,<BadgeCheck cla
                 return (
                   <div
   key={i}
-  className="flex items-center gap-2 px-3 md:px-4 py-2.5 border-white/10 md:border-r"
+  className="flex items-center gap-1.5 sm:gap-2 px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 border-white/10
+  [&:not(:nth-child(2n))]:border-r sm:[&:not(:nth-child(2n))]:border-r-0 sm:[&:not(:nth-child(3n))]:border-r
+  md:[&:not(:nth-child(3n))]:border-r-0 md:[&:not(:last-child)]:border-r"
 >
-  <Icon className="h-4 w-4 text-lime-400 flex-shrink-0" />
+  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-lime-400 flex-shrink-0" />
 
   <div>
-    <p className="text-[14px] font-bold text-white leading-none">
+    <p className="text-[11px] sm:text-[13px] md:text-[14px] font-bold text-white leading-none">
       {item.value}
     </p>
 
-    <p className="text-[8px] uppercase tracking-[0.18em] font-semibold text-white/70 leading-tight">
+    <p className="text-[7px] sm:text-[8px] mt-2 uppercase tracking-[0.14em] sm:tracking-[0.18em] font-semibold text-white/70 leading-tight">
       {item.label}
     </p>
   </div>
