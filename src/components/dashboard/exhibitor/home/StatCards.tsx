@@ -108,14 +108,18 @@ export default function StatCards() {
     }, [data?._id]);
 
     useEffect(() => {
-        const targetDate = data?.eventId?.startDate ? new Date(data.eventId.startDate) : null;
+        // Hardcoded to match IntroductionSection.tsx exactly as requested
+        const targetDate = new Date("2026-08-21T00:00:00");
 
         const updateTimer = () => {
-            if (!targetDate || Number.isNaN(targetDate.getTime())) {
+            if (!targetDate || isNaN(targetDate.getTime())) {
                 setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
                 return;
             }
-            const difference = targetDate.getTime() - new Date().getTime();
+            
+            const now = new Date().getTime();
+            const difference = targetDate.getTime() - now;
+            
             if (difference > 0) {
                 setTimeLeft({
                     days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -130,8 +134,11 @@ export default function StatCards() {
 
         updateTimer();
         const timer = setInterval(updateTimer, 1000);
-        return () => clearInterval(timer);
-    }, [data?.eventId?.startDate]);
+        
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
     const balance = Number(data?.balanceAmount || 0);
     const paid = Number(data?.amountPaid || 0);
