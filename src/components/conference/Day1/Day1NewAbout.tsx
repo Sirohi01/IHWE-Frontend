@@ -19,23 +19,23 @@ const focusAreasIcons = [
 
 const AboutDayOne: React.FC<{ data?: any, currentDay: number }> = ({ data, currentDay }) => {
   return (
-    <div className="mx-auto max-w-[1320px]">
+    <div className="mx-auto max-w-[1320px] px-6 md:px-0">
       <div>
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 md:p-6">
+        <div className="rounded-2xl border border-gray-200 bg-white p-4 md:p-4">
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Left */}
             <div>
-              <h3 className="mb-4 text-[20px] font-bold uppercase tracking-wide text-gray-900">
+              <h3 className="mb-2 text-[20px] font-bold uppercase tracking-wide text-gray-900">
                 {data.title || `About Day ${currentDay}`}
               </h3>
 
-              <p className="mb-4 text-[13px] leading-6">
+              <p className="mb-2 text-[13px]">
                 {data.description || `The Healthcare Innovation Summit brings together visionaries,
                 technologists, clinicians, and industry leaders to explore the
                 latest advancements shaping the future of healthcare.`}
               </p>
 
-              <p className="text-[13px] leading-6">
+              <p className="text-[13px]">
                 {data.descriptionSecondary || `From smart hospitals to AI-powered diagnostics, this summit
                 focuses on building resilient, efficient, and patient-centric
                 healthcare systems.`}
@@ -48,7 +48,7 @@ const AboutDayOne: React.FC<{ data?: any, currentDay: number }> = ({ data, curre
                 Key Focus Areas
               </h3>
 
-              <div className="grid grid-cols-2 gap-x-8 gap-y-5 md:grid-cols-3">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-3">
                 {data.focusAreas.map((item, index) => {
                   const Icon =focusAreasIcons[index];
 const splitedItem= item.split("&")

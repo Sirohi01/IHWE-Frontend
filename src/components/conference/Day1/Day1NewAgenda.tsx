@@ -10,14 +10,24 @@ import {
   ChevronLeft,
   ChevronRightIcon,
 } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import { useRef } from "react";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?: any; dayTitle?: string; dayNumber?: number }) {
   const agenda = data.agenda;
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+
   return (
-    <div className="mx-auto max-w-[1320px]">
+    <div className="mx-auto max-w-[1320px] py-4">
       <section className="grid gap-5 lg:grid-cols-2">
         {/* Left */}
-        <div className="rounded-2xl border bg-white p-4 shadow-sm max-h-[500px] flex flex-col">
+        <div className="rounded-2xl border bg-white p-4 shadow-sm max-h-[430px] flex flex-col">
           <div className="text-center mb-4 shrink-0">
             <h2 className="text-lg font-bold text-green-700">
               {agenda.title||`DAY ${dayNumber} AGENDA — 21 AUGUST 2026`}
@@ -76,8 +86,8 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
             ))}
           </div>
 
-          <div className="mt-5 flex justify-center shrink-0">
-            <button className="flex items-center gap-2 rounded-full border border-slate-300 px-6 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50">
+          <div className="mt-2 flex justify-center shrink-0">
+            <button className="flex items-center gap-2 rounded-full border border-slate-300 px-4 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-50">
               VIEW FULL AGENDA
               <ChevronRight size={14} />
             </button>
@@ -98,50 +108,82 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
               </button>
             </div>
 
-            <div className="relative">
-              <button className="absolute -left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1">
+            <div className="relative px-1">
+              <button
+                ref={prevRef}
+                className="absolute -left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1 disabled:opacity-30"
+              >
                 <ChevronLeft size={14} />
               </button>
 
-              <button className="absolute -right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1">
+              <button
+                ref={nextRef}
+                className="absolute -right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1 disabled:opacity-30"
+              >
                 <ChevronRightIcon size={14} />
               </button>
 
-              <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+              <Swiper
+                modules={[Navigation, Pagination]}
+                spaceBetween={12}
+                slidesPerView={2}
+                pagination={{ clickable: true, el: ".speakers-pagination" }}
+                onBeforeInit={(swiper) => {
+                  // @ts-ignore
+                  swiper.params.navigation.prevEl = prevRef.current;
+                  // @ts-ignore
+                  swiper.params.navigation.nextEl = nextRef.current;
+                }}
+                navigation={{
+                  prevEl: prevRef.current,
+                  nextEl: nextRef.current,
+                }}
+                breakpoints={{
+                  0: { slidesPerView: 1.3, spaceBetween: 10 },
+                  480: { slidesPerView: 2, spaceBetween: 10 },
+                  768: { slidesPerView: 2, spaceBetween: 12 },
+                  1024: { slidesPerView: 3, spaceBetween: 12 },
+                  1280: { slidesPerView: 4, spaceBetween: 12 },
+                }}
+                className="!pb-2"
+              >
                 {data.featuredSpeakers.map((speaker, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl border p-4 text-center flex flex-col justify-between"
-                  >
-                    <img
-                    src={`${SERVER_URL}${speaker.image}`}
-                      className="mx-auto h-16 w-16 rounded-full object-cover"
-                    />
+                  <SwiperSlide key={i} className="h-auto">
+                      <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
+                {/* Avatar */}
+                <img
+                  src={`${SERVER_URL}${speaker?.image}`}
+                  alt={speaker.name}
+                  className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
+                />
 
-                    <h3 className="mt-3 text-xs font-bold">
-                      {speaker.name}
-                    </h3>
+                {/* Name */}
+                <h3 className="line-clamp-2 text-[11px] font-semibold text-[#111111]">
+                  {speaker.name}
+                </h3>
 
-                    <p className="mt-1 text-[10px]">
-                      {speaker.role}
-                    </p>
+                {/* Role */}
+                <p className="mt-1 line-clamp-2 text-[8px] leading-[13px] font-medium">
+                  {speaker.role}
+                </p>
 
-                    <p className="text-[10px]">
-                      {speaker.company}
-                    </p>
+                {/* Company */}
+                <p className="mt-1 line-clamp-2 text-[9px] font-medium">
+                  {speaker.company}
+                </p>
 
-                    <span className="mt-4 inline-block rounded-full border border-green-700 px-1 py-1 text-[8px] font-semibold text-green-700">
-                      {speaker.category}
-                    </span>
-                  </div>
+                {/* Badge */}
+                <div className="mt-auto">
+                  <span className="rounded-full border border-[#2f7d32] px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-[#2f7d32]">
+                    {speaker.badge || "FEATURED SPEAKER"}
+                  </span>
+                </div>
+              </div>
+                  </SwiperSlide>
                 ))}
-              </div>
+              </Swiper>
 
-              <div className="mt-4 flex justify-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-green-700" />
-                <span className="h-2 w-2 rounded-full bg-gray-300" />
-                <span className="h-2 w-2 rounded-full bg-gray-300" />
-              </div>
+              <div className="speakers-pagination mt-4 flex justify-center gap-1 [&_.swiper-pagination-bullet]:h-2 [&_.swiper-pagination-bullet]:w-2 [&_.swiper-pagination-bullet]:rounded-full [&_.swiper-pagination-bullet]:bg-gray-300 [&_.swiper-pagination-bullet-active]:bg-green-700" />
             </div>
           </div>
 
@@ -191,7 +233,7 @@ bePartDescription||"Start your journey towards a holistic future.",
                         {card.title}
                       </h3>
 
-                      <p className="mt-0.5 text-[10px] leading-4 text-white/75">
+                      <p className="mt-0.5 text-[10px] leading-4 text-white/75 line-clamp-2">
                         {card.text}
                       </p>
 
