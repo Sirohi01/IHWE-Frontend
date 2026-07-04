@@ -65,6 +65,7 @@ const TAB_DOC_TYPES: Record<string, string[]> = {
     'All': ['Invoice', 'Proforma Invoice', 'Delivery Challan', 'Payment', 'Credit Note'],
     'Proforma Invoice': ['Proforma Invoice'],
     'Invoice': ['Invoice'],
+    'Delivery Challan': ['Delivery Challan'],
     'Payment': ['Payment'],
     'Credit Notes': ['Credit Note'],
 };
@@ -175,6 +176,7 @@ export default function ExhibitorInvoicesPage() {
         'All',
         'Proforma Invoice',
         'Invoice',
+        'Delivery Challan',
         'Payment',
         'Credit Notes',
     ];

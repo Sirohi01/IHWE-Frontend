@@ -115,6 +115,16 @@ export default function ExhibitorDocumentPrintPage() {
                     .print-root, .print-root * { visibility: visible; }
                     .print-root { position: absolute; left: 0; top: 0; width: 100%; }
                     .no-print { display: none !important; }
+
+                    /* Let long tables (item lists, GST breakdowns) flow across pages while
+                       repeating their header row and never splitting a single row in half.
+                       Self-contained blocks (details grid, terms, bank/signature, a single
+                       delivery challan) are marked .avoid-break so they jump to the next
+                       page whole instead of being cut across the boundary. */
+                    table { page-break-inside: auto; }
+                    thead { display: table-header-group; }
+                    tr { page-break-inside: avoid; page-break-after: auto; }
+                    .avoid-break { page-break-inside: avoid; }
                 }
             `}</style>
         </div>
