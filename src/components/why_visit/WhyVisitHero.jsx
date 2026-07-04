@@ -145,7 +145,7 @@ const WhyVisitHero = () => {
 
             {/* Hero Section */}
             <div
-                className="relative w-full bg-cover bg-center bg-no-repeat min-h-[400px] md:h-[460px] flex flex-col justify-center"
+                className="relative w-full bg-cover bg-center bg-no-repeat flex flex-col justify-center aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
                 style={{ backgroundImage: "url('/whyVisit/bg.webp')" }}
             >
                 {/* Overlay */}

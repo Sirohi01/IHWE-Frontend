@@ -534,7 +534,7 @@ const WhyExhibit = () => {
       `}</style>
       
       {/* ─── HERO SECTION ─── */}
-      <section className="relative min-h-[400px] md:h-[460px] flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden">
+      <section className="relative flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
         {/* BG Image */}
         <div className="absolute inset-0 z-0 w-full overflow-hidden pointer-events-none">
           <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-center md:object-[center_37%] max-w-full" />

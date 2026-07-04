@@ -17,7 +17,7 @@ const STATS = [
 const ExhibitorHero = () => {
     return (
         <section
-            className="relative w-full overflow-hidden bg-black font-inter text-white min-h-[400px] md:min-h-[520px] flex items-center"
+            className="relative w-full overflow-hidden bg-black font-inter text-white flex items-center aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
             style={{
                 backgroundImage: `url(${exhibitorBg})`,
                 backgroundSize: 'cover',

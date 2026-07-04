@@ -390,7 +390,7 @@ const About = () => {
       `}</style>
       {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
       {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
-      <section className="relative min-h-[400px] md:h-[460px] flex items-center pt-24 md:pt-12 pb-10 md:pb-6 overflow-hidden bg-white">
+      <section className="relative flex items-center pt-24 md:pt-12 pb-10 md:pb-6 overflow-hidden bg-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
         
         {/* Full Width Background Image */}
         <div className="absolute inset-0 z-0">

@@ -27,7 +27,7 @@ const BSMeetHero = () => {
 
     return (
         <div
-            className="w-full bg-cover relative bg-no-repeat bg-center font-['Barlow',sans-serif] overflow-visible z-10"
+            className="w-full flex flex-col justify-center bg-cover relative bg-no-repeat bg-center font-['Barlow',sans-serif] overflow-visible z-10 aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
             style={{
                 backgroundImage: "url('/bsmeet/bg4.webp')"
             }}

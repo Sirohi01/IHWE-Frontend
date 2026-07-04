@@ -233,7 +233,7 @@ const Partners = () => {
       `}</style>
 
 
-      <section className="relative min-h-[350px] md:h-[510px] flex items-center overflow-hidden bg-white pt-24 pb-10 lg:py-0">
+      <section className="relative flex items-center overflow-hidden bg-white pt-24 pb-10 lg:py-0 aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
         <div className="container mx-auto px-4 lg:pl-12 relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
 

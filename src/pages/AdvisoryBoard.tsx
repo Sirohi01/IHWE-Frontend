@@ -64,7 +64,7 @@ const AdvisoryBoard = () => {
 
         {/* HERO BG */}
         <div
-          className="relative min-h-[500px] bg-cover bg-center"
+          className="relative bg-cover bg-center aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
           style={{
             backgroundImage: heroData?.backgroundImage
               ? `url(${SERVER_URL}${heroData.backgroundImage})`

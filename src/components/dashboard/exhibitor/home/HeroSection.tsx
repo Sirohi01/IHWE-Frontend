@@ -217,7 +217,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
         }
       `}</style>
 
-      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[16/5.3]">
+      <section className="relative w-full overflow-hidden bg-black font-inter text-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/6.7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={current}

@@ -394,7 +394,7 @@ const MsmePmsScheme = () => {
       <section className="relative bg-white overflow-hidden border-b border-slate-100">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-20">
           {/* Main Banner Container */}
-          <div className="flex flex-col lg:flex-row min-h-[450px]">
+          <div className="flex flex-col lg:flex-row aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
             {/* Left Side: Content */}
             <div className="lg:w-[58%] xl:w-[50%] pt-28 sm:pt-4 pb-0 relative z-20 bg-white flex flex-col justify-end">
 

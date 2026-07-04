@@ -275,7 +275,7 @@ const Contact = () => {
     <div className="bg-[#f3f4f6] min-h-screen font-inter overflow-hidden">
       {/* ── HERO SECTION ── */}
       <section
-        className="relative min-h-[250px] md:min-h-[320px] flex items-center pt-14 md:pt-20 pb-10 md:pb-14"
+        className="relative flex items-center pt-14 md:pt-20 pb-10 md:pb-14 aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
         style={{ 
           backgroundImage: `url(${contactBg})`,
           backgroundSize: 'cover',

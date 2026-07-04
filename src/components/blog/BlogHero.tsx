@@ -12,7 +12,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
     <section className="relative overflow-hidden bg-white">
 
       {/* ── Main Hero Banner ── */}
-      <div className="relative min-h-[320px] md:min-h-[475px] flex items-center overflow-hidden">
+      <div className="relative flex items-center overflow-hidden aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
 
         {/* White to light-blue gradient bg */}
         <div className="absolute inset-0 bg-gradient-to-r from-white via-[#f0f8ff] to-[#e0f2fe]" />
