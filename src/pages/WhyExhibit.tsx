@@ -534,7 +534,7 @@ const WhyExhibit = () => {
       `}</style>
       
       {/* ─── HERO SECTION ─── */}
-      <section className="relative min-h-[360px] flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden">
+      <section className="relative min-h-[400px] md:h-[460px] flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden">
         {/* BG Image */}
         <div className="absolute inset-0 z-0 w-full overflow-hidden pointer-events-none">
           <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-center md:object-[center_37%] max-w-full" />
@@ -675,7 +675,7 @@ const WhyExhibit = () => {
       </section>
 
       {/* ─── STATS BAND ─── */}
-      <div className="relative z-20 -mt-6 md:-mt-7">
+      <div className="relative z-20 -mt-9 md:-mt-12">
         <SectionContainer>
           <div 
             className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"

@@ -275,7 +275,7 @@ const Contact = () => {
     <div className="bg-[#f3f4f6] min-h-screen font-inter overflow-hidden">
       {/* ── HERO SECTION ── */}
       <section
-        className="relative min-h-[140px] md:min-h-[200px] flex items-center pt-10 md:pt-14 pb-4 md:pb-6"
+        className="relative min-h-[250px] md:min-h-[320px] flex items-center pt-14 md:pt-20 pb-10 md:pb-14"
         style={{ 
           backgroundImage: `url(${contactBg})`,
           backgroundSize: 'cover',
@@ -289,16 +289,16 @@ const Contact = () => {
             <div className="text-white max-w-4xl" data-aos="fade-right">
               <div className="inline-flex items-center gap-2 mb-6">
                 <Mail className="w-4 h-4 text-[#72a01d]" />
-                <span className="text-xs font-bold uppercase tracking-widest text-[#72a01d]">CONTACT US</span>
+                <span className="text-sm font-bold uppercase tracking-widest text-[#72a01d]">CONTACT US</span>
                 <div className="w-8 h-[1px] bg-[#72a01d]" />
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight drop-shadow-lg">
+              <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight drop-shadow-lg">
                 WE'RE HERE <br />
                 <span className="text-[#73ad1d]">TO HELP YOU!</span>
               </h1>
               
-              <p className="text-white text-base mb-8 max-w-xl leading-relaxed drop-shadow-md">
+              <p className="text-white text-lg mb-8 max-w-xl leading-relaxed drop-shadow-md">
                 Have questions about the expo, exhibiting,<br />
                 partnerships or anything else?<br />
                 Our team is just a message away.
@@ -316,8 +316,8 @@ const Contact = () => {
                         <item.icon className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-white tracking-wider leading-none mb-1">{item.label}</p>
-                        <p className="text-[10px] text-white">{item.sub}</p>
+                        <p className="text-xs font-bold text-white tracking-wider leading-none mb-1">{item.label}</p>
+                        <p className="text-xs text-white">{item.sub}</p>
                       </div>
                     </div>
                     {i < arr.length - 1 && (
@@ -358,7 +358,7 @@ const Contact = () => {
       </section>
 
       {/* ── OVERLAPPING CARDS SECTION ── */}
-      <section className="relative z-20 pb-20">
+      <section className="relative z-20 pt-10 md:pt-12 pb-20">
         <SectionContainer>
           <div className="grid lg:grid-cols-12 gap-8 items-stretch">
             
