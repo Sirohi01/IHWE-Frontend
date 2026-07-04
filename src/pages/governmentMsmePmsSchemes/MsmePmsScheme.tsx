@@ -12,6 +12,12 @@ import {
   Youtube,
   ArrowRight,
 } from "lucide-react";
+import { motion, useInView, animate } from "framer-motion";
+import band1 from "@/assets/band1.png";
+import band2 from "@/assets/band2.png";
+import band3 from "@/assets/band3.png";
+import band4 from "@/assets/band4.png";
+import band5 from "@/assets/band5.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +31,36 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { msmePmsSchemeApi, verifyApi } from "@/lib/api";
+
+const LocalStatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = React.useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  if (!/^[\d,]+/.test(value)) return <span>{value}</span>;
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
 
 const DEFAULT_PAGE_DATA = {
   heroSubTitle: "GOVERNMENT SUPPORT TO GROW YOUR BUSINESS",
@@ -491,29 +527,41 @@ const MsmePmsScheme = () => {
         </div>
       </div>
 
-      {/* Stats Bar (Rounded Card Style) */}
-      < div className="relative z-40" >
+      {/* Stats Bar (Rounded Card Style) - Using WhyExhibit style */}
+      <div className="relative z-40 -mt-4 md:-mt-6 mb-8">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div className="bg-[#23471d] rounded-[12px] shadow-[0_12px_32px_rgba(11,43,15,0.25)] border border-white/10 py-4 px-3">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 items-center gap-y-4">
-              {(pageData.stats && pageData.stats.length > 0 ? pageData.stats : DEFAULT_PAGE_DATA.stats).map((stat: any, i: number) => (
-                <div key={i} className={`flex items-center justify-center gap-3 md:gap-4 px-2 sm:px-4 min-h-[64px] ${i !== (pageData.stats && pageData.stats.length > 0 ? pageData.stats : DEFAULT_PAGE_DATA.stats).length - 1 ? "lg:border-r border-white/10" : ""} group`}>
-                  <div className="flex items-center justify-center shrink-0 w-10 h-12 md:w-[60px] md:h-[60px] transition-transform group-hover:scale-105">
-                    <img
-                      src={stat.img}
-                      alt={stat.label}
-                      className={`object-contain w-[75%] h-[75%] ${stat.val == 'MULTIPLE' ? 'brightness-0 invert' : ''}`}
-                    />
+          <div 
+            className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"
+            style={{ 
+              backgroundColor: '#134E8E',
+              boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
+            }}
+          >
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-nowrap items-center justify-center md:justify-between gap-y-6 gap-x-2 md:gap-0">
+              {[
+                { img: band1, val: "8,000+", label: "VISITORS / DELEGATES" },
+                { img: band2, val: "150+", label: "EXHIBITORS" },
+                { img: band3, val: "1,000+", label: "GLOBAL BUYERS" },
+                { img: band4, val: "150+", label: "EXPERTS SPEAKERS" },
+                { img: band5, val: "B2B", label: "MEETINGS" },
+              ].map((stat: any, i: number, arr: any[]) => (
+                <React.Fragment key={i}>
+                  <div className="flex flex-col items-center text-center group flex-1">
+                    <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                    <h4 className="text-base md:text-lg font-bold text-white leading-none">
+                      <LocalStatCounter value={stat.val} />
+                    </h4>
+                    <p className="text-[7.5px] md:text-[9.5px] font-bold text-[#f5c842] uppercase tracking-widest leading-tight">{stat.label}</p>
                   </div>
-                  <div className="flex flex-col justify-center">
-                    <span className="text-[16px] md:text-[18px] font-black text-white leading-none mb-0.5">{stat.val}</span>
-                    <span className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase tracking-widest leading-tight">{stat.label}</span>
-                  </div>
-                </div>
+                  {i < arr.length - 1 && (
+                    <div className="hidden md:block w-px h-6 bg-white/20" />
+                  )}
+                </React.Fragment>
               ))}
             </div>
           </div>
-        </div >
+        </div>
+      </div>
 
         {/* Content Sections: About & Benefits Grid */}
         < section className="py-2 bg-white" >

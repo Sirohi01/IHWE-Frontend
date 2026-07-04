@@ -347,7 +347,7 @@ const Sponsership = () => {
         >
 
           {/* CONTENT */}
-          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 pt-12 lg:pt-20 pb-32">
+          <div className="relative z-20 max-w-[1450px] mx-auto px-4 md:px-10 lg:px-16 pt-6 lg:pt-12 pb-32">
 
             <div className="grid lg:grid-cols-[1fr_0.95fr] gap-10 items-center">
 

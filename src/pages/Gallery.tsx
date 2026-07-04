@@ -309,9 +309,9 @@ const Gallery = () => {
 
     return (
         <div className="bg-white min-h-screen">
-            {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
+            {/* ── HERO SECTION - Increased Height ── */}
             <section
-                className="hero-background-standard"
+                className="hero-background-standard !aspect-auto min-h-[320px] md:min-h-[480px]"
                 style={{ 
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`
                 }}

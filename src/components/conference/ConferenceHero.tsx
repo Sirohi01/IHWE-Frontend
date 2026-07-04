@@ -8,7 +8,7 @@ import arogyaLogo from "../../assets/arogyasangostilogo/compressed_arogyasangost
 const ConferenceHero: React.FC = () => {
   const darkYellow = "#C9A227";
   return (
-    <section className="relative min-h-[750px] lg:min-h-[600px] flex items-center overflow-hidden font-sans" style={{ backgroundColor: "#caf0f8" }}>
+    <section className="relative min-h-[560px] lg:min-h-[470px] flex items-center overflow-hidden font-sans" style={{ backgroundColor: "#caf0f8" }}>
 
 
       <div
@@ -28,7 +28,7 @@ const ConferenceHero: React.FC = () => {
         <div className="max-w-[600px]">
 
 
-          <div className="flex flex-col items-center lg:items-start gap-0 -mt-4">
+          <div className="flex flex-col items-center lg:items-start gap-0 -mt-8">
             <div className="flex items-center gap-0">
               <span
                 className="text-[12px] sm:text-[14px] uppercase tracking-[0.3em] sm:tracking-[0.4em] font-bold"
@@ -77,7 +77,7 @@ const ConferenceHero: React.FC = () => {
               <img
                 src={arogyaLogo}
                 alt="Arogyasangosti Logo"
-                className="h-32 sm:h-40 md:h-48 w-auto object-contain transition-all duration-300 hover:scale-105"
+                className="h-28 sm:h-36 md:h-40 w-auto object-contain transition-all duration-300 hover:scale-105"
                 style={{
                   filter: 'drop-shadow(0 0 15px rgba(255,215,0,0.4)) drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
                 }}
@@ -111,15 +111,15 @@ const ConferenceHero: React.FC = () => {
                 fontWeight: 400,
               }}
             >
-              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-semibold">
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-semibold">
                 Learn.
               </div>
 
-              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] text-[#4E9F3D] font-semibold">
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] text-[#4E9F3D] font-semibold">
                 Connect.
               </div>
 
-              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] text-[#1E88E5] font-semibold">
+              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] text-[#1E88E5] font-semibold">
                 Lead
               </div>
             </div>
@@ -130,7 +130,7 @@ const ConferenceHero: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[14px] sm:text-[15px] md:text-[16px] text-[#5F6B7A] leading-[1.5] max-w-[480px] mx-auto lg:mx-0"
+            className="text-[13px] sm:text-[14px] md:text-[15px] text-[#5F6B7A] leading-[1.5] max-w-[440px] mx-auto lg:mx-0"
             style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif", fontWeight: 400, marginTop: '12px', marginBottom: '16px' }}
           >
             3 Days of world-class conferences, expert panels, and thought

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 
 function useCountUp(end: number, duration: number, started: boolean) {
@@ -28,12 +28,11 @@ const CounterNumber = ({ end, started, delay, decimals = 0 }: { end: number, sta
     const count = useCountUp(end, 2500, active);
     return <>{count.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}</>;
 };
-import ExhibitorInvoices from '../../components/dashboard/exhibitor/ExhibitorInvoices';
-import { settingsApi } from '@/lib/api';
+import { API_URL } from '@/lib/api';
 import { logActivity } from '@/utils/activityLogger';
+import { toast } from 'sonner';
 
 import {
-    ArrowLeft,
     Calendar,
     CheckCircle2,
     Clock3,
@@ -43,18 +42,84 @@ import {
     Eye,
     Download,
     CreditCard,
-    FileText,
     ChevronRight,
     Edit2,
+    Loader2,
 } from 'lucide-react';
+
+const loadRazorpay = (): Promise<boolean> => {
+    return new Promise((resolve) => {
+        if ((window as any).Razorpay) { resolve(true); return; }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
+};
+
+const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || '';
+
+// Which recentDocuments.documentType values show up under each tab.
+const TAB_DOC_TYPES: Record<string, string[]> = {
+    'All': ['Invoice', 'Proforma Invoice', 'Delivery Challan', 'Payment', 'Credit Note'],
+    'Proforma Invoice': ['Proforma Invoice'],
+    'Invoice': ['Invoice'],
+    'Delivery Challan': ['Delivery Challan'],
+    'Payment': ['Payment'],
+    'Credit Notes': ['Credit Note'],
+};
+
+const STATUS_STYLES: Record<string, string> = {
+    Paid: 'bg-[#e8f8ee] text-[#16a34a]',
+    Received: 'bg-[#e8f8ee] text-[#16a34a]',
+    Delivered: 'bg-[#e8f8ee] text-[#16a34a]',
+    Acknowledged: 'bg-[#e8f8ee] text-[#16a34a]',
+    Partial: 'bg-[#eff6ff] text-[#2563eb]',
+    Issued: 'bg-[#eff6ff] text-[#2563eb]',
+    Generated: 'bg-[#eff6ff] text-[#2563eb]',
+    Sent: 'bg-[#eff6ff] text-[#2563eb]',
+    'E-Sent': 'bg-[#eff6ff] text-[#2563eb]',
+    'W-Sent': 'bg-[#eff6ff] text-[#2563eb]',
+    'E/W-Sent': 'bg-[#eff6ff] text-[#2563eb]',
+    Unpaid: 'bg-[#fff7ed] text-[#f59e0b]',
+    Draft: 'bg-[#fff7ed] text-[#f59e0b]',
+    Cancelled: 'bg-[#fef2f2] text-[#dc2626]',
+};
+
+const getStatusBadge = (status: string) => (
+    <span className={`px-3 py-1 rounded-lg text-[12px] font-semibold whitespace-nowrap ${STATUS_STYLES[status] || 'bg-gray-100 text-gray-600'}`}>
+        {status || 'N/A'}
+    </span>
+);
+
+const formatDocDate = (value: any) => {
+    if (!value) return 'N/A';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return 'N/A';
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const formatAmount = (value: any) => `₹ ${(Number(value) || 0).toLocaleString('en-IN')}`;
+
+const DOC_TYPE_SLUGS: Record<string, string> = {
+    'Invoice': 'invoice',
+    'Proforma Invoice': 'proforma',
+    'Delivery Challan': 'challan',
+};
+
+const ITEMS_PER_PAGE = 10;
 
 export default function ExhibitorInvoicesPage() {
     const { data } = useExhibitorCtx();
+    const token = localStorage.getItem('exhibitorToken');
 
-    const [settings, setSettings] = useState<any>(null);
-    const [selectedReg, setSelectedReg] = useState<any>(null);
+    const [activeTab, setActiveTab] = useState('All');
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const [activeTab, setActiveTab] = useState('Invoices');
+    const [overview, setOverview] = useState<any>(null);
+    const [loadingOverview, setLoadingOverview] = useState(true);
+    const [payingDocId, setPayingDocId] = useState<string | null>(null);
 
     const statsRef = useRef<HTMLDivElement>(null);
     const [statsVisible, setStatsVisible] = useState(false);
@@ -75,32 +140,30 @@ export default function ExhibitorInvoicesPage() {
         return () => observer.disconnect();
     }, []);
 
+    const fetchOverview = useCallback(async () => {
+        if (!data?._id) return;
+        try {
+            setLoadingOverview(true);
+            const res = await fetch(`${API_URL}/exhibitor-auth/account-overview?id=${data._id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const json = await res.json();
+            if (json.success) setOverview(json.data);
+        } catch (err) {
+            console.error('Failed to load account overview', err);
+        } finally {
+            setLoadingOverview(false);
+        }
+    }, [data?._id, token]);
+
     useEffect(() => {
-        settingsApi.get().then((s: any) => {
-            if (s) setSettings(s);
-        });
-    }, []);
+        fetchOverview();
+    }, [fetchOverview]);
 
-    const regs = data ? [data] : [];
-
-    const totalPayable = regs.reduce(
-        (sum: number, r: any) =>
-            sum +
-            (r.financeBreakdown?.netPayable ||
-                r.participation?.total ||
-                0),
-        0
-    );
-
-    const totalPaid = regs.reduce(
-        (sum: number, r: any) => sum + (r.amountPaid || 0),
-        0
-    );
-
-    const totalBalance = regs.reduce(
-        (sum: number, r: any) => sum + (r.balanceAmount || 0),
-        0
-    );
+    const financials = overview?.financials;
+    const totalPayable = financials?.totalDue ?? 0;
+    const totalPaid = financials?.paidAmount ?? 0;
+    const totalBalance = financials?.remainingBalance ?? 0;
 
     const paymentPercentage =
         totalPayable > 0
@@ -110,112 +173,138 @@ export default function ExhibitorInvoicesPage() {
     const animatedPercentage = useCountUp(Number(paymentPercentage), 2500, statsVisible);
 
     const tabs = [
-        'Invoices',
-        'Payments',
-        'Receipts',
+        'All',
+        'Proforma Invoice',
+        'Invoice',
+        'Delivery Challan',
+        'Payment',
         'Credit Notes',
-        'Agreements',
     ];
 
-    const getInvoiceNo = (reg: any) => {
-        const seqNum = reg.registrationId
-            ? reg.registrationId
-                .split('-')
-                .pop()
-                ?.padStart(3, '0')
-            : '001';
+    const documents: any[] = overview?.recentDocuments || [];
+    const filteredDocuments = documents
+        .filter((doc) => (TAB_DOC_TYPES[activeTab] || []).includes(doc.documentType))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-        const invoiceYear = new Date(
-            reg.createdAt || Date.now()
-        ).getFullYear();
+    const remainingById = new Map<string, number>(
+        (financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry.remainingAmount])
+    );
 
-        const nextYear = (invoiceYear + 1)
-            .toString()
-            .slice(-2);
+    const totalPages = Math.max(1, Math.ceil(filteredDocuments.length / ITEMS_PER_PAGE));
+    const safeCurrentPage = Math.min(currentPage, totalPages);
+    const paginatedDocuments = filteredDocuments.slice(
+        (safeCurrentPage - 1) * ITEMS_PER_PAGE,
+        safeCurrentPage * ITEMS_PER_PAGE
+    );
 
-        return `IHWE${invoiceYear}/INV/${seqNum}`;
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeTab]);
+
+    const viewDocument = (doc: any) => {
+        const slug = DOC_TYPE_SLUGS[doc.documentType];
+        if (!slug) return;
+        logActivity('Finance', 'Viewed Document', doc.documentNo);
+        window.open(`/exhibitor-print/${slug}/${doc.id}`, '_blank', 'noopener,noreferrer');
     };
 
-    const getStatusBadge = (status: string) => {
-        switch (status) {
-            case 'paid':
-                return (
-                    <span className="px-3 py-1 rounded-lg bg-[#e8f8ee] text-[#16a34a] text-[12px] font-semibold">
-                        Paid
-                    </span>
-                );
+    const payDocument = async (doc: any) => {
+        const docType = doc.documentType === 'Invoice' ? 'invoice' : 'proforma';
+        const outstanding = remainingById.get(String(doc.id));
+        if (!outstanding || outstanding <= 0) return;
 
-            case 'advance-paid':
-                return (
-                    <span className="px-3 py-1 rounded-lg bg-[#eff6ff] text-[#2563eb] text-[12px] font-semibold">
-                        Partially Paid
-                    </span>
-                );
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) {
+            toast.error('Payment gateway failed to load. Please refresh and try again.');
+            return;
+        }
 
-            default:
-                return (
-                    <span className="px-3 py-1 rounded-lg bg-[#fff7ed] text-[#f59e0b] text-[12px] font-semibold">
-                        Pending
-                    </span>
-                );
+        setPayingDocId(String(doc.id));
+        try {
+            const orderRes = await fetch(`${API_URL}/exhibitor-auth/documents/${docType}/${doc.id}/create-order`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const orderData = await orderRes.json();
+            if (!orderData.success) {
+                toast.error(orderData.message || 'Failed to create payment order');
+                setPayingDocId(null);
+                return;
+            }
+
+            const { order, key } = orderData;
+            const options = {
+                key: key || RAZORPAY_KEY,
+                amount: order.amount,
+                currency: order.currency || 'INR',
+                name: 'IHWE Exhibition',
+                description: `Payment - ${doc.documentNo}`,
+                order_id: order.id,
+                prefill: {
+                    name: overview?.companyInfo?.contactPerson,
+                    email: overview?.companyInfo?.email,
+                    contact: overview?.companyInfo?.mobile,
+                },
+                theme: { color: '#00a651' },
+                modal: {
+                    ondismiss: () => {
+                        setPayingDocId(null);
+                        toast.info('Payment cancelled');
+                    },
+                },
+                handler: async (response: any) => {
+                    try {
+                        const verifyRes = await fetch(`${API_URL}/exhibitor-auth/documents/verify-payment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                docType,
+                                docId: doc.id,
+                            }),
+                        });
+                        const verifyData = await verifyRes.json();
+                        if (verifyData.success) {
+                            toast.success('Payment successful!');
+                            logActivity('Finance', 'Made Payment', `Against ${doc.documentNo}`);
+                            await fetchOverview();
+                        } else {
+                            toast.error(verifyData.message || 'Payment verification failed');
+                        }
+                    } catch (err) {
+                        toast.error('Payment verification error. Please contact support.');
+                    } finally {
+                        setPayingDocId(null);
+                    }
+                },
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', (response: any) => {
+                toast.error(`Payment failed: ${response.error?.description || 'Unknown error'}`);
+                setPayingDocId(null);
+            });
+            rzp.open();
+        } catch (err: any) {
+            toast.error(err.message || 'Payment initiation failed');
+            setPayingDocId(null);
         }
     };
 
-    const handleDownload = () => {
-        const pdfContent = `%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 4 0 R >> >> /MediaBox [0 0 612 792] /Contents 5 0 R >>\nendobj\n4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n5 0 obj\n<< /Length 44 >>\nstream\nBT\n/F1 24 Tf\n100 700 Td\n(Dummy Invoice) Tj\nET\nendstream\nendobj\nxref\n0 6\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n0000000222 00000 n \n0000000290 00000 n \ntrailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n385\n%%EOF`;
-        const element = document.createElement("a");
-        const file = new Blob([pdfContent], {type: 'application/pdf'});
-        element.href = URL.createObjectURL(file);
-        element.download = "Invoice.pdf";
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-        logActivity('Finance', 'Downloaded Invoice Document');
-    };
-
-    const renderModal = () => {
-        if (!selectedReg) return null;
-        const isUSD = selectedReg.participation?.currency === 'USD';
-        const cur = isUSD ? 'USD ' : 'INR ';
-        const paid = selectedReg.amountPaid || 0;
-        const total = selectedReg.financeBreakdown?.netPayable || selectedReg.participation?.total || 0;
-        const balance = selectedReg.balanceAmount || 0;
-        const paidPct = total > 0 ? Math.min(100, Math.round((paid / total) * 100)) : 0;
-        const regDate = selectedReg.createdAt ? new Date(selectedReg.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : '';
-
-        return (
-            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-                <div className="bg-[#f5f7fb] rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto relative flex flex-col">
-                    <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-white border-b border-gray-200">
-                        <div className="text-[14px] text-[#64748b] font-medium">
-                            Invoice :
-                            <span className="text-[#0f172a] font-bold ml-2">
-                                {getInvoiceNo(selectedReg)}
-                            </span>
-                        </div>
-                        <button
-                            onClick={() => setSelectedReg(null)}
-                            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-                        >
-                            ✕
-                        </button>
-                    </div>
-                    <div className="p-6">
-                        <ExhibitorInvoices
-                            data={selectedReg}
-                            settings={settings}
-                            cur={cur}
-                            total={total}
-                            paid={paid}
-                            balance={balance}
-                            paidPct={paidPct}
-                            regDate={regDate}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    };
+    const mainTableTitle = activeTab === 'Payment'
+        ? 'Payment History'
+        : activeTab === 'Credit Notes'
+            ? 'Credit Notes'
+            : activeTab === 'Proforma Invoice'
+                ? 'Proforma Invoice List'
+                : activeTab === 'Invoice'
+                    ? 'Invoice List'
+                    : 'All Documents';
 
     return (
         <div className="min-h-screen bg-[#f5f7fb] p-4">
@@ -327,20 +416,8 @@ export default function ExhibitorInvoicesPage() {
 
                             <div>
                                 <h2 className="text-[16px] font-bold text-[#0f172a]">
-                                    Invoice List
+                                    {mainTableTitle}
                                 </h2>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-
-                                <select className="h-8 px-4 rounded-sm border border-[#e2e8f0] bg-white text-[13px] text-[#64748b] outline-none">
-                                    <option>All Status</option>
-                                </select>
-
-                                <button className="h-8 px-4 rounded-sm border border-[#e2e8f0] bg-white text-[13px] text-[#64748b] flex items-center gap-2">
-                                    <Calendar size={16} />
-                                    Select Date Range
-                                </button>
                             </div>
                         </div>
 
@@ -355,26 +432,22 @@ export default function ExhibitorInvoicesPage() {
                                     <tr>
 
                                         <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Invoice No.
+                                            Document No.
                                         </th>
 
                                         <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Invoice Date
+                                            Date
                                         </th>
 
                                         <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Due Date
+                                            Type
                                         </th>
 
                                         <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Description
-                                        </th>
-
-                                        <th className="px-4 py-1 text-right text-[13px] font-semibold text-[#64748b]">
                                             Amount
                                         </th>
 
-                                        <th className="px-4 py-2 text-center text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-4 py-2 text-left text-[13px] font-semibold text-[#64748b]">
                                             Status
                                         </th>
 
@@ -385,641 +458,130 @@ export default function ExhibitorInvoicesPage() {
                                 </thead>
 
                                 <tbody>
-
-                                    {regs.map(
-                                        (
-                                            reg: any,
-                                            idx: number
-                                        ) => {
-                                            const total =
-                                                reg
-                                                    .financeBreakdown
-                                                    ?.netPayable ||
-                                                0;
+                                    {loadingOverview ? (
+                                        <tr>
+                                            <td colSpan={6} className="py-8 text-center text-[13px] text-[#64748b]">
+                                                Loading documents...
+                                            </td>
+                                        </tr>
+                                    ) : filteredDocuments.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={6} className="py-8 text-center text-[13px] text-[#64748b]">
+                                                No documents found.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        paginatedDocuments.map((doc: any) => {
+                                            const isPayable = (doc.documentType === 'Invoice' || doc.documentType === 'Proforma Invoice')
+                                                && (remainingById.get(String(doc.id)) || 0) > 0;
+                                            const isPaying = payingDocId === String(doc.id);
+                                            const canView = Boolean(DOC_TYPE_SLUGS[doc.documentType]);
 
                                             return (
                                                 <tr
-                                                    key={idx}
+                                                    key={`${doc.documentType}-${doc.id}`}
                                                     className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
                                                 >
-
-                                                    <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                                        <button 
-                                                            onClick={() => setSelectedReg(reg)} 
-                                                            className="hover:underline text-left"
-                                                        >
-                                                            {getInvoiceNo(reg)}
-                                                        </button>
-                                                    </td>
-
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        15 Jan 2026
-                                                    </td>
-
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        31 Jan 2026
-                                                    </td>
-
-                                                    <td className="px-3  text-[12px] text-[#0f172a]">
-                                                        Stall Booking (
-                                                        {
-                                                            reg
-                                                                .participation
-                                                                ?.stallSize
-                                                        }
-                                                        m x
-                                                        {
-                                                            reg
-                                                                .participation
-                                                                ?.stallSize
-                                                        }
-                                                        m )
-                                                    </td>
-
-                                                    <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                                        ₹{' '}
-                                                        {total.toLocaleString()}
-                                                    </td>
-
-                                                    <td className="px-2 text-center">
-                                                        {getStatusBadge(
-                                                            reg.status
+                                                    <td className="px-3 py-1.5 text-[12px] font-semibold text-[#2563eb]">
+                                                        {canView ? (
+                                                            <button
+                                                                onClick={() => viewDocument(doc)}
+                                                                className="hover:underline text-left"
+                                                            >
+                                                                {doc.documentNo}
+                                                            </button>
+                                                        ) : doc.documentType === 'Payment' ? (
+                                                            <span className="text-[#0f172a] font-normal">
+                                                                Payment for <span className="font-semibold">{doc.documentNo}</span>
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[#0f172a]">{doc.documentNo}</span>
                                                         )}
                                                     </td>
 
+                                                    <td className="px-3 text-[12px] text-[#0f172a]">
+                                                        {formatDocDate(doc.date)}
+                                                    </td>
+
+                                                    <td className="px-3 text-[12px] text-[#0f172a]">
+                                                        {doc.documentType}
+                                                    </td>
+
+                                                    <td className="px-2 text-left text-[12px] font-semibold text-[#0f172a]">
+                                                        {formatAmount(doc.amount)}
+                                                    </td>
+
+                                                    <td className="px-2 text-left">
+                                                        {getStatusBadge(doc.status)}
+                                                    </td>
+
                                                     <td className="px-2">
-
                                                         <div className="flex items-center justify-center gap-2">
-
-                                                            <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                                <Download
-                                                                    size={
-                                                                        14
-                                                                    }
-                                                                />
-                                                            </button>
-
-                                                            <button
-                                                                onClick={() =>
-                                                                    setSelectedReg(
-                                                                        reg
-                                                                    )
-                                                                }
-                                                                className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                            >
-                                                                <Eye
-                                                                    size={
-                                                                        14
-                                                                    }
-                                                                />
-                                                            </button>
+                                                            {isPayable && (
+                                                                <button
+                                                                    onClick={() => payDocument(doc)}
+                                                                    disabled={isPaying}
+                                                                    className="h-6 px-2.5 rounded-xl bg-[#00a651] hover:bg-[#00914a] text-white text-[11px] font-semibold flex items-center justify-center gap-1 disabled:opacity-60"
+                                                                >
+                                                                    {isPaying ? <Loader2 size={12} className="animate-spin" /> : <CreditCard size={12} />}
+                                                                    Pay Now
+                                                                </button>
+                                                            )}
+                                                            {canView && (
+                                                                <button
+                                                                    onClick={() => viewDocument(doc)}
+                                                                    title="View / Print"
+                                                                    className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
+                                                                >
+                                                                    <Eye size={14} />
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
                                             );
-                                        }
+                                        })
                                     )}
-                                    <tr
-                                        className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                    >
-
-                                        <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left"
-                                            >
-                                                IHWE2026/INV/002
-                                            </button>
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            15 Jan 2026
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            31 Jan 2026
-                                        </td>
-
-                                        <td className="px-3  text-[12px] text-[#0f172a]">
-                                            Stall Booking (
-                                            3m x 3m )
-                                        </td>
-
-                                        <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                            ₹{' '}
-                                            2,36,000
-                                        </td>
-
-                                        <td className="px-2 text-[12px] text-center">
-                                            Paid
-                                        </td>
-
-                                        <td className="px-2">
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Download
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-
-                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Eye
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr
-                                        className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                    >
-
-                                        <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left"
-                                            >
-                                                IHWE2026/INV/002
-                                            </button>
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            15 Jan 2026
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            31 Jan 2026
-                                        </td>
-
-                                        <td className="px-3  text-[12px] text-[#0f172a]">
-                                            Stall Booking (
-                                            3m x 3m )
-                                        </td>
-
-                                        <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                            ₹{' '}
-                                            2,36,000
-                                        </td>
-
-                                        <td className="px-2 text-[12px] text-center">
-                                            Paid
-                                        </td>
-
-                                        <td className="px-2">
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Download
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-
-                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Eye
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr
-                                        className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                    >
-
-                                        <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left"
-                                            >
-                                                IHWE2026/INV/002
-                                            </button>
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            15 Jan 2026
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            31 Jan 2026
-                                        </td>
-
-                                        <td className="px-3  text-[12px] text-[#0f172a]">
-                                            Stall Booking (
-                                            3m x 3m )
-                                        </td>
-
-                                        <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                            ₹{' '}
-                                            2,36,000
-                                        </td>
-
-                                        <td className="px-2 text-[12px] text-center">
-                                            Paid
-                                        </td>
-
-                                        <td className="px-2">
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Download
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-
-                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Eye
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr
-                                        className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                    >
-
-                                        <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left"
-                                            >
-                                                IHWE2026/INV/002
-                                            </button>
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            15 Jan 2026
-                                        </td>
-
-                                        <td className="px-3 text-[12px] text-[#0f172a]">
-                                            31 Jan 2026
-                                        </td>
-
-                                        <td className="px-3  text-[12px] text-[#0f172a]">
-                                            Stall Booking (
-                                            3m x 3m )
-                                        </td>
-
-                                        <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                            ₹{' '}
-                                            2,36,000
-                                        </td>
-
-                                        <td className="px-2 text-[12px] text-center">
-                                            Paid
-                                        </td>
-
-                                        <td className="px-2">
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Download
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-
-                                                <button onClick={() => setSelectedReg(data || {})} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Eye
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-
                                 </tbody>
                             </table>
                             {/* TABLE FOOTER */}
 
                             <div className="flex items-center justify-between px-4 py-2 border-t border-[#eef2f7]">
 
-                                {/* LEFT */}
-
                                 <p className="text-[12px] text-[#64748b]">
-                                    Showing 1 to 5 of 5 entries
+                                    Showing {filteredDocuments.length === 0 ? 0 : (safeCurrentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDocuments.length)} of {filteredDocuments.length} entries
                                 </p>
 
-                                {/* RIGHT PAGINATION */}
-
-                                <div className="flex items-center gap-2">
-
-                                    {/* PREV */}
-
-                                    <button className="w-8 h-8 rounded-[10px] border border-[#dbe4ee] bg-white flex items-center justify-center text-[#64748b] hover:bg-[#f8fafc] transition-all">
-
-                                        <svg
-                                            width="14"
-                                            height="14"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
+                                {totalPages > 1 && (
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                            disabled={safeCurrentPage === 1}
+                                            className="px-2.5 py-1 rounded-md border border-[#e2e8f0] text-[12px] font-semibold text-[#64748b] disabled:opacity-40 hover:bg-[#f8fafc]"
                                         >
-                                            <path
-                                                d="M15 18L9 12L15 6"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                    </button>
-
-                                    {/* ACTIVE PAGE */}
-
-                                    <button className="w-8 h-8 rounded-[10px] bg-[#00a651] text-white font-semibold text-[12px] shadow-sm">
-                                        1
-                                    </button>
-
-                                    {/* NEXT */}
-
-                                    <button className="w-8 h-8 rounded-[10px] border border-[#dbe4ee] bg-white flex items-center justify-center text-[#64748b] hover:bg-[#f8fafc] transition-all">
-
-                                        <svg
-                                            width="14"
-                                            height="14"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                        >
-                                            <path
-                                                d="M9 18L15 12L9 6"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div className="bg-white rounded-[8px] border border-[#edf0f7] shadow-sm overflow-hidden">
-                        <div className="px-4 py-2 border-b border-[#edf0f7] flex items-center justify-between">
-
-                            <div>
-                                <h2 className="text-[16px] font-bold text-[#0f172a]">
-                                    Recent Receipts
-                                </h2>
-                            </div>
-
-                        </div>
-
-                        {/* TABLE */}
-
-                        <div className="overflow-x-auto">
-
-                            <table className="w-full">
-
-                                <thead className="bg-[#f8fafc]">
-
-                                    <tr>
-
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Receipt No.
-                                        </th>
-
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Receipt Date
-                                        </th>
-
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
-                                            Against Invoice
-                                        </th>
-
-
-
-                                        <th className="px-4 py-1 text-right text-[13px] font-semibold text-[#64748b]">
-                                            Amount
-                                        </th>
-
-                                        <th className="px-4 py-1 text-center text-[13px] font-semibold text-[#64748b]">
-                                            Payment Mode
-                                        </th>
-
-                                        <th className="px-4 py-1 text-center text-[13px] font-semibold text-[#64748b]">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                    {regs.map(
-                                        (
-                                            reg: any,
-                                            idx: number
-                                        ) => {
-                                            const total =
-                                                reg
-                                                    .financeBreakdown
-                                                    ?.netPayable ||
-                                                0;
-
+                                            Prev
+                                        </button>
+                                        {Array.from({ length: totalPages }).map((_, idx) => {
+                                            const pageNum = idx + 1;
                                             return (
-                                                <tr
-                                                    key={idx}
-                                                    className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                                >
-
-                                                    <td className="px-3 text-[12px] font-semibold text-[#2563eb]">
-                                                        <button 
-                                                            onClick={() => setSelectedReg(reg)} 
-                                                            className="hover:underline text-left"
-                                                        >
-                                                            IHWE2026/REC/001
-                                                        </button>
-                                                    </td>
-
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        15 Jan 2026
-                                                    </td>
-
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        <button 
-                                                            onClick={() => setSelectedReg(reg)} 
-                                                            className="hover:underline text-left font-semibold text-[#2563eb]"
-                                                        >
-                                                            {getInvoiceNo(reg)}
-                                                        </button>
-                                                    </td>
-
-
-
-                                                    <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
-                                                        ₹{' '}
-                                                        {total.toLocaleString()}
-                                                    </td>
-
-                                                    <td className="px-2 text-[12px] text-center">
-                                                        Online (Razorpay)
-                                                    </td>
-
-                                                    <td className="px-2">
-
-                                                        <div className="flex items-center justify-center gap-2">
-
-                                                            <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                                <Download
-                                                                    size={
-                                                                        14
-                                                                    }
-                                                                />
-                                                            </button>
-                                                            
-                                                            <button
-                                                                onClick={() => setSelectedReg(reg)}
-                                                                className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
-                                                            >
-                                                                <Eye size={14} />
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                            );
-                                        }
-                                    )}
-                                    <tr className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
-                                    >
-
-                                        <td className="px-3 py-1 text-[12px] font-semibold text-[#2563eb]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left"
-                                            >
-                                                IHWE2026/REC/001
-                                            </button>
-                                        </td>
-
-                                        <td className="px-3 py-1 text-[12px] text-[#0f172a]">
-                                            15 Jan 2026
-                                        </td>
-
-                                        <td className="px-3 py-1 text-[12px] text-[#0f172a]">
-                                            <button 
-                                                onClick={() => setSelectedReg(data || {})} 
-                                                className="hover:underline text-left font-semibold text-[#2563eb]"
-                                            >
-                                                IHWE2026/INV/001
-                                            </button>
-                                        </td>
-
-
-
-                                        <td className="px-2  text-right text-[12px] font-semibold text-[#0f172a]">
-                                            ₹{' '}
-                                            2,36,000
-                                        </td>
-
-                                        <td className="px-2 text-[12px] text-center">
-                                            Online (Razorpay)
-                                        </td>
-
-                                        <td className="px-2 py-1">
-
-                                            <div className="flex items-center justify-center gap-2">
-
-                                                <button onClick={handleDownload} className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center">
-                                                    <Download
-                                                        size={
-                                                            14
-                                                        }
-                                                    />
-                                                </button>
-                                                
                                                 <button
-                                                    onClick={() => setSelectedReg(data || {})}
-                                                    className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
+                                                    key={pageNum}
+                                                    onClick={() => setCurrentPage(pageNum)}
+                                                    className={`w-7 h-7 rounded-md text-[12px] font-semibold ${safeCurrentPage === pageNum ? 'bg-[#00a651] text-white' : 'text-[#64748b] hover:bg-[#f8fafc] border border-[#e2e8f0]'}`}
                                                 >
-                                                    <Eye size={14} />
+                                                    {pageNum}
                                                 </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            {/* TABLE FOOTER */}
-
-                            <div className="flex items-center justify-between px-4 py-2 border-t border-[#eef2f7]">
-
-                                {/* LEFT */}
-
-                                <p className="text-[12px] text-[#64748b]">
-                                    Showing 1 to 5 of 5 entries
-                                </p>
-
-                                {/* RIGHT PAGINATION */}
-
-                                <div className="flex items-center gap-2">
-
-                                    {/* PREV */}
-
-                                    <button className="w-9 h-9 rounded-[10px] border border-[#dbe4ee] bg-white flex items-center justify-center text-[#64748b] hover:bg-[#f8fafc] transition-all">
-
-                                        <svg
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
+                                            );
+                                        })}
+                                        <button
+                                            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                                            disabled={safeCurrentPage === totalPages}
+                                            className="px-2.5 py-1 rounded-md border border-[#e2e8f0] text-[12px] font-semibold text-[#64748b] disabled:opacity-40 hover:bg-[#f8fafc]"
                                         >
-                                            <path
-                                                d="M15 18L9 12L15 6"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                    </button>
-
-                                    {/* ACTIVE PAGE */}
-
-                                    <button className="w-8 h-8 rounded-[10px] bg-[#00a651] text-white font-semibold text-[12px] shadow-sm">
-                                        1
-                                    </button>
-
-                                    {/* NEXT */}
-
-                                    <button className="w-9 h-9 rounded-[10px] border border-[#dbe4ee] bg-white flex items-center justify-center text-[#64748b] hover:bg-[#f8fafc] transition-all">
-
-                                        <svg
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                        >
-                                            <path
-                                                d="M9 18L15 12L9 6"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                    </button>
-                                </div>
+                                            Next
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -1040,34 +602,6 @@ export default function ExhibitorInvoicesPage() {
                             <h3 className="text-[16px] font-bold text-[#0f172a]">
                                 Payment Summary
                             </h3>
-
-                            <button className="text-[#94a3b8] hover:text-[#0f172a]">
-                                <svg
-                                    width="18"
-                                    height="18"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <circle
-                                        cx="12"
-                                        cy="5"
-                                        r="1.5"
-                                        fill="currentColor"
-                                    />
-                                    <circle
-                                        cx="12"
-                                        cy="12"
-                                        r="1.5"
-                                        fill="currentColor"
-                                    />
-                                    <circle
-                                        cx="12"
-                                        cy="19"
-                                        r="1.5"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </button>
                         </div>
 
                         {/* CHART SECTION */}
@@ -1106,20 +640,6 @@ export default function ExhibitorInvoicesPage() {
                                         strokeLinecap="round"
                                         strokeDasharray="301"
                                         strokeDashoffset={`${301 - (301 * animatedPercentage) / 100}`}
-                                    />
-
-                                    {/* BLUE */}
-
-                                    <circle
-                                        cx="60"
-                                        cy="60"
-                                        r="48"
-                                        stroke="#2563eb"
-                                        strokeWidth="10"
-                                        fill="none"
-                                        strokeLinecap="round"
-                                        strokeDasharray="60 301"
-                                        strokeDashoffset="-170"
                                     />
                                 </svg>
 
@@ -1174,23 +694,6 @@ export default function ExhibitorInvoicesPage() {
                                         </h4>
                                     </div>
                                 </div>
-
-                                {/* OVERDUE */}
-
-                                <div className="flex items-start gap-2">
-
-                                    <div className="w-3 h-3 rounded-full bg-[#d1d5db] mt-1"></div>
-
-                                    <div>
-                                        <p className="text-[11px] font-medium text-[#64748b]">
-                                            Overdue Amount
-                                        </p>
-
-                                        <h4 className="text-[12px] font-bold text-[#0f172a] mt-0.5">
-                                            ₹ 0
-                                        </h4>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -1206,15 +709,6 @@ export default function ExhibitorInvoicesPage() {
                                 ₹ {totalPayable.toLocaleString()}
                             </span>
                         </div>
-
-                        {/* PAY BUTTON */}
-
-                        <button className="w-full h-[32px] rounded-[8px] bg-[#00a651] hover:bg-[#00914a] transition-all text-white text-[12px] font-semibold mt-2 flex items-center justify-center gap-2">
-
-                            <CreditCard size={14} />
-
-                            Pay Now
-                        </button>
 
                         {/* DOWNLOAD */}
 
@@ -1258,7 +752,7 @@ export default function ExhibitorInvoicesPage() {
                                 <ChevronRight size={14} />
                             </button>
 
-                            <button className="w-full flex items-center justify-between">
+                            <button onClick={() => setActiveTab('Payments')} className="w-full flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <CreditCard size={14} />
                                     <span className="font-medium text-[12px]">
@@ -1421,14 +915,13 @@ export default function ExhibitorInvoicesPage() {
                                     href="tel:+918178612345"
                                     className="text-[11px] font-medium text-[#2563eb]"
                                 >
-                                    +91 81786 12345
+                                    +91-9654900525
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {renderModal()}
         </div>
     );
 }
