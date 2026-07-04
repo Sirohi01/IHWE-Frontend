@@ -7,7 +7,7 @@ import amanImage from "../../../assets/dayimagesarogyasangosti/design1.png";
 const Day1Hero: React.FC = () => {
   const darkYellow = "#C9A227";
   return (
-    <section className="relative min-h-[750px] lg:min-h-[680px] flex items-center overflow-hidden font-sans">
+    <section className="relative h-[420px] md:h-[500px] lg:h-[580px] w-full flex items-center overflow-hidden font-sans">
 
       {/* Background Image */}
       <div

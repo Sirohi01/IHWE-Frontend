@@ -28,7 +28,7 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
   const associates = data.associates;
 
   return (
-    <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
+    <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-2">
       <section className="md:grid gap-4 lg:grid-cols-2 items-stretch">
         {/* Left */}
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3 items-stretch">
@@ -36,19 +36,19 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
             const Icon = icons[i];
 
             return (
-              <Link to={card.link} key={i} className="flex h-full">
+              <Link to={card.link || '#'} key={i} className="flex h-full group">
                 <div
-                  className="flex h-full w-full flex-col items-center rounded-xl border border-[#ececec] bg-white px-3 py-3 text-center"
+                  className="flex h-full w-full flex-col items-center rounded-xl border border-[#ececec] bg-white px-3 py-3 text-center transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:border-[#4b8f46]/30"
                 >
-                  <div className="mx-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eef7eb]">
+                  <div className="mx-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#eef7eb] transition-all duration-300 group-hover:bg-[#4b8f46] group-hover:scale-110 group-hover:shadow-md">
                     <Icon
                       size={20}
-                      className="text-[#4b8f46]"
+                      className="text-[#4b8f46] transition-colors duration-300 group-hover:text-white"
                       strokeWidth={1.8}
                     />
                   </div>
 
-                  <h3 className="mt-2 text-sm font-semibold text-[#16213e]">
+                  <h3 className="mt-2 text-sm font-semibold text-[#16213e] transition-colors duration-300 group-hover:text-[#4b8f46]">
                     {card.title}
                   </h3>
 
@@ -56,9 +56,9 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
                     {card.text}
                   </p>
 
-                  <button className="mt-auto inline-flex items-center gap-2 pt-1 text-[11px] font-semibold uppercase text-[#3d8b37]">
+                  <button className="mt-auto inline-flex items-center gap-2 pt-1 text-[11px] font-semibold uppercase text-[#3d8b37] transition-all duration-300">
                     Learn More
-                    <ArrowRight size={13} />
+                    <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
                 </div>
               </Link>
@@ -67,45 +67,37 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
         </div>
 
         {/* Right */}
-        <div className="rounded-xl border border-[#ececec] bg-white p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-base font-bold uppercase text-[#222]">
+        <div className="flex flex-col justify-center overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-white px-6 py-2 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.05)] border border-gray-100">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="text-[15px] font-semibold uppercase tracking-wide text-[#0B2A63] flex items-center gap-2">
               Associations & Partners
             </h2>
           </div>
 
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
-            navigation
+            // navigation
             pagination={{ clickable: true }}
             autoplay={{
               delay: 2500,
               disableOnInteraction: false,
             }}
-            spaceBetween={12}
+            spaceBetween={16}
             breakpoints={{
-              0: {
-                slidesPerView: 2,
-              },
-              640: {
-                slidesPerView: 3,
-              },
-              1024: {
-                slidesPerView: 5,
-              },
-              1280: {
-                slidesPerView: 6,
-              },
+              0: { slidesPerView: 2 },
+              640: { slidesPerView: 3 },
+              1024: { slidesPerView: 4 },
+              1280: { slidesPerView: 5 },
             }}
-            className="partner-swiper"
+            className="partner-swiper w-full !pb-8"
           >
             {associates.map((logo, i) => (
               <SwiperSlide key={i}>
-                <div className="flex h-[104px] items-center justify-center rounded-lg border border-[#ececec] bg-white ">
+                <div className="group flex h-[90px] items-center justify-center rounded-xl bg-white p-3 shadow-sm border border-gray-100 transition-all duration-300 hover:border-[#2F8B2E] hover:shadow-md cursor-pointer">
                   <img
                     src={`${SERVER_URL}${logo}`}
                     alt="partner"
-                    className="w-full object-contain"
+                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
               </SwiperSlide>

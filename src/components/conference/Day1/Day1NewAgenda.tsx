@@ -30,10 +30,10 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
         <div className="rounded-2xl border bg-white p-4 shadow-sm max-h-[430px] flex flex-col">
           <div className="text-center mb-4 shrink-0">
             <h2 className="text-lg font-bold text-green-700">
-              {agenda.title||`DAY ${dayNumber} AGENDA — 21 AUGUST 2026`}
+              {agenda.title || `DAY ${dayNumber} AGENDA — 21 AUGUST 2026`}
             </h2>
             <p className="text-[11px]">
-              {agenda.subtitle||`6 Insightful Sessions | 1 Powerful Day`}
+              {agenda.subtitle || `6 Insightful Sessions | 1 Powerful Day`}
             </p>
           </div>
 
@@ -75,12 +75,12 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
                   />
                   <div>
 
-                  <p className="text-[11px] font-medium">
-                    {item.speaker.name}
-                  </p>
-<p className="text-[11px]">{item.speaker.role}</p>
-<p className="text-[11px]">{item.speaker.company}</p>
-</div>
+                    <p className="text-[11px] font-medium">
+                      {item.speaker.name}
+                    </p>
+                    <p className="text-[11px]">{item.speaker.role}</p>
+                    <p className="text-[11px]">{item.speaker.company}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -95,9 +95,9 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
         </div>
 
         {/* Right */}
-        <div>
-          <div className="rounded-2xl border bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between">
+        <div className="flex flex-col gap-4 max-h-[430px]">
+          <div className="rounded-2xl border bg-white p-4 shadow-sm flex-1 flex flex-col justify-between min-h-0">
+            <div className="mb-4 flex items-center justify-between shrink-0">
               <h2 className="text-lg font-bold">
                 FEATURED SPEAKERS{" "}
                 <span className="text-green-700">— DAY {dayNumber}</span>
@@ -149,36 +149,36 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
               >
                 {data.featuredSpeakers.map((speaker, i) => (
                   <SwiperSlide key={i} className="h-auto">
-                      <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
-                {/* Avatar */}
-                <img
-                  src={`${SERVER_URL}${speaker?.image}`}
-                  alt={speaker.name}
-                  className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
-                />
+                    <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
+                      {/* Avatar */}
+                      <img
+                        src={`${SERVER_URL}${speaker?.image}`}
+                        alt={speaker.name}
+                        className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
+                      />
 
-                {/* Name */}
-                <h3 className="line-clamp-2 text-[11px] font-semibold text-[#111111]">
-                  {speaker.name}
-                </h3>
+                      {/* Name */}
+                      <h3 className="line-clamp-2 text-[11px] font-semibold text-[#111111]">
+                        {speaker.name}
+                      </h3>
 
-                {/* Role */}
-                <p className="mt-1 line-clamp-2 text-[8px] leading-[13px] font-medium">
-                  {speaker.role}
-                </p>
+                      {/* Role */}
+                      <p className="mt-1 line-clamp-2 text-[8px] leading-[13px] font-medium">
+                        {speaker.role}
+                      </p>
 
-                {/* Company */}
-                <p className="mt-1 line-clamp-2 text-[9px] font-medium">
-                  {speaker.company}
-                </p>
+                      {/* Company */}
+                      <p className="mt-1 line-clamp-2 text-[9px] font-medium">
+                        {speaker.company}
+                      </p>
 
-                {/* Badge */}
-                <div className="mt-auto">
-                  <span className="rounded-full border border-[#2f7d32] px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-[#2f7d32]">
-                    {speaker.badge || "FEATURED SPEAKER"}
-                  </span>
-                </div>
-              </div>
+                      {/* Badge */}
+                      <div className="mt-auto">
+                        <span className="rounded-full border border-[#2f7d32] px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-[#2f7d32]">
+                          {speaker.badge || "FEATURED SPEAKER"}
+                        </span>
+                      </div>
+                    </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -189,26 +189,26 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
 
 
           {/* Bottom Cards */}
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <div className="grid shrink-0 gap-3 md:grid-cols-3">
             {[
               {
-                title:  data.cta.bePartTitle||`BE PART OF DAY ${dayNumber}`,
+                title: data.cta.bePartTitle || `BE PART OF DAY ${dayNumber}`,
                 text: data.cta.
-bePartDescription||"Start your journey towards a holistic future.",
+                  bePartDescription || "Start your journey towards a holistic future.",
                 btn: "REGISTER NOW",
                 icon: Users,
                 bg: "bg-green-700",
               },
               {
-                title:  data.cta.delegatePass.title||`DELEGATE PASS - DAY ${dayNumber}`,
-                text: data.cta.delegatePass.descriptio||`Full access to all Day ${dayNumber} sessions.`,
+                title: data.cta.delegatePass.title || `DELEGATE PASS - DAY ${dayNumber}`,
+                text: data.cta.delegatePass.descriptio || `Full access to all Day ${dayNumber} sessions.`,
                 btn: "BOOK NOW",
                 icon: Ticket,
                 bg: "bg-[#0B2A63]",
               },
               {
-                title: data.cta.sponsor.title||`SPONSOR DAY ${dayNumber}`,
-                text:data.cta.sponsor.description|| "Showcase your solutions globally.",
+                title: data.cta.sponsor.title || `SPONSOR DAY ${dayNumber}`,
+                text: data.cta.sponsor.description || "Showcase your solutions globally.",
                 btn: "BECOME A SPONSOR",
                 icon: Handshake,
                 bg: "bg-green-800",

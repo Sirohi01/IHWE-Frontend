@@ -21,7 +21,7 @@ const AboutDayOne: React.FC<{ data?: any, currentDay: number }> = ({ data, curre
   return (
     <div className="mx-auto max-w-[1320px] px-6 md:px-0">
       <div>
-        <div className="rounded-2xl border border-gray-200 bg-white p-4 md:p-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4 md:p-4">
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Left */}
             <div>

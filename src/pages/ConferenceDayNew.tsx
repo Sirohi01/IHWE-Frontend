@@ -71,34 +71,34 @@ const ConferenceDayUnified: React.FC = () => {
     if (currentDay === 2) return day2HeroImg;
     return day3HeroImg;
   };
-console.log(data,"currentDay")
+  console.log(data, "currentDay")
   return (
     <div className="bg-white min-h-screen font-inter overflow-x-hidden">
       <div className="relative">
-        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()} currentDay={currentDay}/>
-       
+        <Day1Hero data={data.hero} defaultImage={getDefaultHeroImage()} currentDay={currentDay} />
+
 
         {/* 3. About Section */}
-        <div className="relative pt-20 md:pt-10">
+        <div className="relative pt-20 md:pt-2">
           <AboutDayOne data={data.about} currentDay={currentDay} />
         </div>
 
         {/* 4. Agenda & Featured Speakers */}
         <section className="bg-white relative">
           <div className="container mx-auto px-6 max-w-[1380px]">
-            
-                <DayAgendaSection
-                  data={data} 
-                  dayTitle={`${data.hero?.title} — ${data.hero?.date}`} 
-                  dayNumber={currentDay}
-                />
-             
+
+            <DayAgendaSection
+              data={data}
+              dayTitle={`${data.hero?.title} — ${data.hero?.date}`}
+              dayNumber={currentDay}
+            />
+
           </div>
         </section>
-<OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" data={data} currentDay={currentDay} />
-<PartnersAndActionsSection currentDay={currentDay} data={data} />
-<HealthcareHighlights currentDay={currentDay} data={data} />
-       
+        <OurSpeakersCarousel title="Our Speakers" subtitle="Check OUr Latest Speakers" data={data} currentDay={currentDay} />
+        <PartnersAndActionsSection currentDay={currentDay} data={data} />
+        <HealthcareHighlights currentDay={currentDay} data={data} />
+
       </div>
     </div>
   );
