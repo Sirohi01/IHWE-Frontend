@@ -233,11 +233,11 @@ const Partners = () => {
       `}</style>
 
 
-      <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden bg-white pt-20 pb-10 lg:py-0">
+      <section className="relative min-h-[350px] md:h-[510px] flex items-center overflow-hidden bg-white pt-24 pb-10 lg:py-0">
         <div className="container mx-auto px-4 lg:pl-12 relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12">
 
-            <div className="w-full lg:w-[45%] space-y-4 text-center lg:text-left pt-6 lg:pt-0 pb-2 lg:pb-8 lg:mt-14">
+            <div className="w-full lg:w-[45%] space-y-2 md:space-y-3 text-center lg:text-left pt-6 lg:pt-6 pb-2 lg:pb-4 lg:mt-6">
               <motion.p
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -288,7 +288,7 @@ const Partners = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="grid grid-cols-2 lg:flex items-center gap-y-8 gap-x-0 lg:gap-0 pt-8 lg:pt-10 max-w-[500px] mx-auto lg:mx-0"
+                className="grid grid-cols-2 lg:flex items-center gap-y-6 gap-x-0 lg:gap-0 pt-4 lg:pt-6 max-w-[500px] mx-auto lg:mx-0"
               >
                 {[
                   { label: <><span>Dedicated</span><br /><span>Support Team</span></>, img: part1, sub: "24x7 Assistance" },

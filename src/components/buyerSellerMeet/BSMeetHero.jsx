@@ -128,7 +128,7 @@ const BSMeetHero = () => {
                 }
             `}</style>
 
-            <SectionContainer className="relative z-10 py-10">
+            <SectionContainer className="relative z-10 py-6 md:py-8">
                 <div className="flex flex-col md:flex-row justify-between w-full gap-10 items-center">
 
                     {/* LEFT CONTENT */}
@@ -153,7 +153,7 @@ const BSMeetHero = () => {
                         </p>
 
                         {/* BUTTONS */}
-                        <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mt-10 w-full md:w-auto">
+                        <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mt-6 w-full md:w-auto">
                             {/* REGISTER AS BUYER */}
                             <div className="relative group/btn w-full sm:w-auto shrink-0 flex justify-center md:justify-start">
                                 {/* Maroon Sparkles */}
@@ -175,7 +175,7 @@ const BSMeetHero = () => {
                         </div>
 
                         {/* DATE & LOCATION BAR - RESPONSIVE */}
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden rounded-xl mt-8 md:mt-12 border-2 border-[#c8d8b0] bg-[#edf2e4] w-full sm:w-fit shadow-md">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center overflow-hidden rounded-xl mt-4 md:mt-5 border-2 border-[#c8d8b0] bg-[#edf2e4] w-full sm:w-fit shadow-md">
                             <div className="flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-2.5 text-xs sm:text-[14px] font-bold text-[#1a3d20] uppercase whitespace-nowrap justify-center sm:justify-start">
                                 <FaCalendarAlt size={16} className="text-green-700 shrink-0" />
                                 21 - 23 AUGUST 2026

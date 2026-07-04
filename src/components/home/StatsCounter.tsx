@@ -190,9 +190,9 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
                         {heroStats.map((s, index) => (
                             <div
                                 key={index}
-                                className="flex items-center gap-2 md:gap-3 px-3 md:px-5 py-3 group hover:bg-white/5 transition-colors duration-300"
+                                className="flex items-center gap-2 md:gap-3 px-2 md:px-4 py-2 group hover:bg-white/5 transition-colors duration-300"
                             >
-                                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#f5c842] transition-colors duration-300 text-white group-hover:text-[#134E8E] shadow-sm">
+                                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#f5c842] transition-colors duration-300 text-white group-hover:text-[#134E8E] shadow-sm">
                                     {s.icon}
                                 </div>
                                 <div className="flex flex-col justify-center">
@@ -202,18 +202,18 @@ const StatsCounter = ({ variant = "default" }: StatsCounterProps) => {
                                                 {s.prefix}
                                             </span>
                                         )}
-                                        <span className="text-white font-extrabold text-lg md:text-xl tabular-nums tracking-tight">
+                                        <span className="text-white font-extrabold text-base md:text-lg tabular-nums tracking-tight">
                                             <CounterNumber end={s.number} started={visible} delay={index * 100} />
                                         </span>
                                         <span className="text-white/80 font-bold text-[10px] md:text-xs">{s.sup}</span>
                                     </div>
                                     <p 
-                                        className="font-bold text-[7.5px] md:text-[8.5px] uppercase tracking-[0.1em] md:tracking-[0.15em] leading-tight"
+                                        className="font-bold text-[7px] md:text-[8px] uppercase tracking-[0.1em] md:tracking-[0.15em] leading-tight"
                                         style={{ color: '#f5c842' }}
                                     >
                                         {s.label}
                                     </p>
-                                    <p className="text-white/60 text-[7px] md:text-[8px] mt-0.5 leading-tight">{s.sub}</p>
+                                    <p className="text-white/60 text-[6.5px] md:text-[7.5px] mt-0.5 leading-tight">{s.sub}</p>
                                 </div>
                             </div>
                         ))}

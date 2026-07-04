@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useInView, animate } from "framer-motion";
-import { Users, Building2, Globe, Mic, Handshake } from 'lucide-react';
+import band1 from "@/assets/band1.png";
+import band2 from "@/assets/band2.png";
+import band3 from "@/assets/band3.png";
+import band4 from "@/assets/band4.png";
+import band5 from "@/assets/band5.png";
 
 // StatCounter component
 const StatCounter = ({ value }) => {
@@ -39,58 +43,38 @@ const StatCounter = ({ value }) => {
 
 const StatsBand = () => {
   const stats = [
-    { icon: Users, val: "8,000+", label: "VISITORS", desc: "Qualified trade visitors from India & across the globe", color: "#8cc63f" },
-    { icon: Building2, val: "150+", label: "EXHIBITORS", desc: "Leading brands & organizations", color: "#00aef0" },
-    { icon: Globe, val: "1,000+", label: "GLOBAL BUYERS", desc: "Global participation & representation", color: "#c8d400" },
-    { icon: Mic, val: "150+", label: "Expert Speakers", desc: "Industry experts & thought leaders", color: "#a13ccf" },
-    { icon: Handshake, val: "B2B", label: "MEETINGS", desc: "Pre-scheduled meetings that drive real business", color: "#f7931e" },
+    { img: band1, val: "8,000+", label: "VISITORS / DELEGATES" },
+    { img: band2, val: "150+", label: "EXHIBITORS" },
+    { img: band3, val: "1,000+", label: "GLOBAL BUYERS" },
+    { img: band4, val: "150+", label: "EXPERTS SPEAKERS" },
+    { img: band5, val: "B2B", label: "MEETINGS" },
   ];
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 -mt-4 relative z-20 font-['Barlow',sans-serif]">
-      <div
-        className="rounded-2xl shadow-2xl border border-white/10 grid grid-cols-2 md:flex items-stretch py-5 px-3 md:px-4 overflow-hidden relative gap-y-6 md:gap-y-0"
-        style={{
-          background: 'linear-gradient(160deg, #001635 0%, #01204e 50%, #001635 100%)',
-          boxShadow: 'rgba(0, 22, 53, 0.5) 0px 20px 40px -10px, inset 0 0 40px rgba(0, 102, 255, 0.1)'
+    <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 relative z-20 font-inter -mt-8 md:-mt-10">
+      <div 
+        className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"
+        style={{ 
+          backgroundColor: '#134E8E',
+          boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
         }}
       >
-        {/* Corner glow effect */}
-        <div className="absolute top-0 left-0 w-24 h-24 bg-blue-500/10 blur-3xl rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-24 h-24 bg-blue-500/10 blur-3xl rounded-full pointer-events-none"></div>
-
-        {stats.map((item, i) => (
-          <React.Fragment key={i}>
-            <div className={`flex-1 flex flex-col items-center text-center cursor-default px-2 ${i === 4 ? 'col-span-2 md:col-span-1' : ''}`}>
-
-              {/* TOP: Icon & Text Row */}
-              <div className="flex items-center justify-center gap-3 mb-3.5">
-                <div className="shrink-0 transition-transform duration-300 hover:scale-110" style={{ color: item.color }}>
-                  <item.icon strokeWidth={1.8} size={30} className="md:w-[34px] md:h-[34px]" />
-                </div>
-                <div className="flex flex-col items-start text-left min-w-0">
-                  <span className="text-[18px] md:text-[20px] font-bold text-white leading-none tracking-tight">
-                    <StatCounter value={item.val} />
-                  </span>
-                  <span className="text-[9px] md:text-[10px] font-black text-white tracking-widest uppercase mt-0.5 opacity-90">
-                    {item.label}
-                  </span>
-                </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-nowrap items-center justify-center md:justify-between gap-y-6 gap-x-2 md:gap-0">
+          {stats.map((stat, i) => (
+            <React.Fragment key={i}>
+              <div className="flex flex-col items-center text-center group flex-1">
+                <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                <h4 className="text-base md:text-lg font-bold text-white leading-none">
+                  <StatCounter value={stat.val} />
+                </h4>
+                <p className="text-[7.5px] md:text-[9.5px] font-bold text-[#f5c842] uppercase tracking-widest leading-tight">{stat.label}</p>
               </div>
-
-              {/* BOTTOM: Description centered */}
-              <p className="text-[11px] md:text-[12px] font-medium text-gray-300 leading-tight px-1 text-center max-w-[180px] opacity-90">
-                {item.desc}
-              </p>
-
-            </div>
-
-            {/* Separator line - HIDDEN ON MOBILE */}
-            {i < stats.length - 1 && (
-              <div className="hidden md:block w-[1px] bg-white/15 self-stretch mx-2" />
-            )}
-          </React.Fragment>
-        ))}
+              {i < stats.length - 1 && (
+                <div className="hidden md:block w-px h-6 bg-white/20" />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -145,7 +145,7 @@ const WhyVisitHero = () => {
 
             {/* Hero Section */}
             <div
-                className="relative w-full bg-cover bg-center bg-no-repeat"
+                className="relative w-full bg-cover bg-center bg-no-repeat min-h-[400px] md:h-[460px] flex flex-col justify-center"
                 style={{ backgroundImage: "url('/whyVisit/bg.webp')" }}
             >
                 {/* Overlay */}
@@ -198,7 +198,7 @@ const WhyVisitHero = () => {
                                 explore emerging wellness trends, and unlock new
                                 business opportunities — all under one roof.
                             </p>
-                            <div className="flex flex-col lg:flex-row justify-between w-full lg:items-center gap-6 mt-4">
+                            <div className="flex flex-col lg:flex-row w-full lg:items-center gap-6 mt-0">
                                 {/* Buttons */}
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <div className="relative group/btn w-full sm:w-auto">
@@ -242,28 +242,34 @@ const WhyVisitHero = () => {
                                     </div>
                                 </div>
 
-                                {/* Stats */}
-                                <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:items-center lg:justify-between gap-y-4 gap-x-3 lg:gap-2 px-4 py-4 lg:px-6 lg:py-4 rounded-[10px] bg-[#011630] w-full">
-                                    {stats.map((stat, i) => (
-                                        <div key={i} className="flex items-center">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-[#a8d060] shrink-0 text-[20px] lg:text-[25px]">{stat.icon}</span>
-                                                <div className="min-w-0">
-                                                    <p className="text-white font-bold text-xs lg:text-sm leading-none">
-                                                        <StatCounter value={stat.num} />
-                                                    </p>
-                                                    <p className="text-white text-[8.5px] lg:text-[9px] uppercase tracking-wide leading-tight mt-0.5 whitespace-nowrap">{stat.label}</p>
-                                                </div>
-                                            </div>
-                                            {i < stats.length - 1 && (
-                                                <div className="hidden lg:block w-px h-8 bg-gray-600 ml-4" />
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
+                                {/* Stats have been moved outside the hero banner */}
                             </div>
                         </div>
 
+                    </div>
+                </SectionContainer>
+            </div>
+
+            {/* OVERLAPPING STATS BAND */}
+            <div className="relative z-20 -mt-6 md:-mt-8 mb-8">
+                <SectionContainer>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:items-center lg:justify-between gap-y-4 gap-x-3 lg:gap-2 px-4 py-4 lg:px-6 lg:py-4 rounded-xl bg-[#011630] w-full" style={{boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)'}}>
+                        {stats.map((stat, i) => (
+                            <div key={i} className="flex items-center">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[#a8d060] shrink-0 text-[20px] lg:text-[25px]">{stat.icon}</span>
+                                    <div className="min-w-0">
+                                        <p className="text-white font-bold text-xs lg:text-sm leading-none">
+                                            <StatCounter value={stat.num} />
+                                        </p>
+                                        <p className="text-white text-[8.5px] lg:text-[9px] uppercase tracking-wide leading-tight mt-0.5 whitespace-nowrap">{stat.label}</p>
+                                    </div>
+                                </div>
+                                {i < stats.length - 1 && (
+                                    <div className="hidden lg:block w-px h-8 bg-gray-600 ml-4" />
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </SectionContainer>
             </div>
