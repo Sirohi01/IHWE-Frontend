@@ -62,6 +62,7 @@ const CancellationPolicy = lazy(() => import("./pages/CancellationPolicy"));
 const ExhibitorLogin = lazy(() => import("./pages/ExhibitorLogin"));
 const ExhibitorDashboard = lazy(() => import("./pages/ExhibitorDashboard"));
 const ExhibitorDashboardHome = lazy(() => import("./pages/exhibitor/ExhibitorDashboardHome"));
+const ExhibitorDocumentPrintPage = lazy(() => import("./pages/exhibitor/ExhibitorDocumentPrintPage"));
 const AddTeamMembers = lazy(() => import("./pages/exhibitor/AddTeamMembers"));
 const ExhibitorProfilePage = lazy(() => import("./pages/exhibitor/ExhibitorProfilePage"));
 const ExhibitorInvoicesPage = lazy(() => import("./pages/exhibitor/ExhibitorInvoicesPage"));
@@ -260,6 +261,7 @@ const App = () => {
                   </Route>
 
                   <Route path="/exhibitor-login" element={<ExhibitorLogin />} />
+                  <Route path="/exhibitor-print/:docType/:docId" element={<ExhibitorDocumentPrintPage />} />
                   <Route path="/buyer-login" element={<BuyerLogin />} />
                   <Route path="/delegates-login" element={<DelegatesLogin />} />
                   <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />}>
