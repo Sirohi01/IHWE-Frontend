@@ -40,20 +40,23 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
         const qty = Number(item.qty || 0);
         const sourceQty = Number(item.sourceQty || item.piQty || item.originalQty || 0);
         const ratio = sourceQty > 0 ? qty / sourceQty : 1;
-        const amount = Number(item.amount || 0);
+        
         const rateAmount = Number(item.rate || 0) * qty;
-        const discount = Number(item.discountAmount ?? item.discount ?? 0) * ratio;
-        const discountPercent = Number(item.disc ?? item.discountPct ?? 0);
-        const computedDiscount = discount || ((amount || rateAmount) * ratio * discountPercent) / 100;
-        const taxable = Number(item.taxable ?? item.tax ?? item.taxableValue ?? 0);
-        const gstAmount = Number(item.gstAmount ?? 0);
-        if (key === 'amount' && Number(item.amount)) return Number(item.amount) * ratio;
-        if (key === 'discount') return computedDiscount;
-        if (key === 'taxable' && taxable) return taxable * ratio;
-        if (key === 'gstAmount' && gstAmount) return gstAmount * ratio;
-        if (key === 'amount') return rateAmount;
-        if (key === 'taxable') return Math.max(0, rateAmount - computedDiscount);
-        if (key === 'gstAmount') return (lineValue(item, 'taxable') * getGstRate(item)) / 100;
+        const amount = Number(item.amount || rateAmount) * ratio;
+        
+        // item.disc is the discount amount in this system
+        const discountAmt = Number(item.disc ?? item.discountAmount ?? item.discount ?? 0) * ratio;
+        
+        // We ignore explicit 'taxable' fields because old records might have them corrupted with item.tax (GST Amount)
+        const computedTaxable = amount - discountAmt;
+        
+        const gstAmount = Number(item.gstAmount ?? item.tax ?? 0) * ratio;
+
+        if (key === 'amount') return amount;
+        if (key === 'discount') return discountAmt;
+        if (key === 'taxable') return computedTaxable;
+        if (key === 'gstAmount') return gstAmount;
+        
         return 0;
     };
     const totalTaxable = items.reduce((sum: number, it: any) => sum + lineValue(it, 'taxable'), 0);
@@ -233,6 +236,10 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
             <tbody>
                 {chunk.map((item: any, i: number) => {
                     const index = startIndex + i;
+                    const amt = lineValue(item, 'amount');
+                    const taxable = lineValue(item, 'taxable');
+                    const discAmt = amt - taxable;
+                    const discPct = amt > 0 ? (discAmt / amt) * 100 : 0;
                     return (
                         <tr key={`${item.sourceItemKey}-${index}`}>
                             <td style={{ ...td, textAlign: 'center' }}>{index + 1}</td>
@@ -247,8 +254,8 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                             <td style={{ ...td, textAlign: 'center' }}>{item.size || '-'}</td>
                             <td style={{ ...td, textAlign: 'center' }}>{item.unit || '-'}</td>
                             <td style={{ ...td, textAlign: 'right' }}>{fmtNum(item.rate || 0)}</td>
-                            <td style={{ ...td, textAlign: 'right' }}>{fmtNum(lineValue(item, 'discount'))}</td>
-                            <td style={{ ...td, textAlign: 'right', fontWeight: 700 }}>{fmtNum(lineValue(item, 'taxable'))}</td>
+                            <td style={{ ...td, textAlign: 'center' }}>{Math.round(discPct)}%</td>
+                            <td style={{ ...td, textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxable)}</td>
                         </tr>
                     );
                 })}

@@ -338,6 +338,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                     const index = startIndex + i;
                     const amt = parseFloat(item.amount) || 0;
                     const disc = parseFloat(item.taxableValue) ? amt - parseFloat(item.taxableValue) : 0;
+                    const discPct = item.discountPct != null ? parseFloat(item.discountPct) : (amt > 0 ? (disc / amt) * 100 : 0);
                     return (
                         <tr key={index}>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{index + 1}</td>
@@ -354,7 +355,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.size || '—'}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.unit}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{fmtNum(disc)}%</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{Math.round(discPct)}%</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(item.taxableValue)}</td>
                         </tr>
                     );

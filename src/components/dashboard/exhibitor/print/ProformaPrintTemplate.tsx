@@ -40,12 +40,11 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         ? new Date(document.added).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
         : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
-    const totalTaxable = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), 0);
-    const totalGstAmount = items.reduce((sum: number, item: any) => {
-        const taxable = parseFloat(item.tax) || 0;
-        const rate = parseFloat(item.gstRate) || 0;
-        return sum + (taxable * rate) / 100;
+    const totalTaxable = items.reduce((sum: number, item: any) => {
+        const amt = parseFloat(item.amount) || 0;
+        return sum + (amt - (parseFloat(item.disc) || 0));
     }, 0);
+    const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), 0);
     const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.finalAmount) || 0), 0);
 
     const c1 = company?.contacts?.[0] || company?.contact1 || {};
@@ -239,6 +238,9 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
             <tbody>
                 {chunk.map((item: any, i: number) => {
                     const index = startIndex + i;
+                    const amt = parseFloat(item.amount) || 0;
+                    const discAmt = parseFloat(item.disc) || 0;
+                    const taxable = amt - discAmt;
                     return (
                         <tr key={index}>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{index + 1}</td>
@@ -255,8 +257,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.size || '—'}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.unit}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.disc)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(item.tax)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{fmtNum(item?.disc)}%</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxable)}</td>
                         </tr>
                     );
                 })}
@@ -297,8 +299,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     {items.map((item: any, index: number) => {
                         const gstRate = parseFloat(item?.gstRate) || 0;
                         const halfGst = gstRate / 2;
-                        const itemTaxable = parseFloat(item?.tax) || 0;
-                        const gstAmt = (itemTaxable * gstRate) / 100;
+                        const itemTaxable = (parseFloat(item?.amount) || 0) - (parseFloat(item?.disc) || 0);
+                        const gstAmt = parseFloat(item?.tax) || 0;
                         const halfGstAmt = gstAmt / 2;
 
                         return (
