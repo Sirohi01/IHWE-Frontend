@@ -1,6 +1,22 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
 const MAX_PAGE_CONTENT_HEIGHT = 1300;
+function toWords(n: number): string {
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    if (n === 0) return 'Zero';
+    const convert = (num: number): string => {
+        if (num < 20) return ones[num];
+        if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
+        if (num < 1000) return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' ' + convert(num % 100) : '');
+        if (num < 100000) return convert(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + convert(num % 1000) : '');
+        if (num < 10000000) return convert(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + convert(num % 100000) : '');
+        return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
+    };
+    const intPart = Math.floor(n);
+    return 'RUPEES ' + convert(intPart) + ' Only.';
+}
 const FIRST_PAGE_ITEM_ROWS = 10;
 const OTHER_PAGE_ITEM_ROWS = 16;
 const MIN_PADDED_ROWS = 5;
@@ -44,18 +60,17 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
         const rateAmount = Number(item.rate || 0) * qty;
         const amount = Number(item.amount || rateAmount) * ratio;
         
-        // item.disc is the discount amount in this system
-        const discountAmt = Number(item.disc ?? item.discountAmount ?? item.discount ?? 0) * ratio;
-        
-        // We ignore explicit 'taxable' fields because old records might have them corrupted with item.tax (GST Amount)
+        // discount stored in DB is the absolute discount amount for the full sourceQty
+        const discountAmt = Number(item.discount ?? item.discountAmount ?? item.disc ?? 0) * ratio;
         const computedTaxable = amount - discountAmt;
         
-        const gstAmount = Number(item.gstAmount ?? item.tax ?? 0) * ratio;
+        const gstRate = parseFloat(item.gstRate) || parseFloat(item.gst_per) || 18;
+        const computedGstAmount = (computedTaxable * gstRate) / 100;
 
         if (key === 'amount') return amount;
         if (key === 'discount') return discountAmt;
         if (key === 'taxable') return computedTaxable;
-        if (key === 'gstAmount') return gstAmount;
+        if (key === 'gstAmount') return computedGstAmount;
         
         return 0;
     };
@@ -306,7 +321,7 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                     })}
                     <tr>
                         <td colSpan={3} style={mutedCell}>GST Amount in Words</td>
-                        <td colSpan={6} style={td}>-</td>
+                        <td colSpan={6} style={{ ...td, textTransform: 'capitalize' }}>{toWords(Math.round(totalGst)).toUpperCase()}</td>
                         <td style={mutedCell}>Total GST Amount</td>
                         <td style={{ ...td, textAlign: 'right', fontWeight: 800 }}>{fmtNum(totalGst)}</td>
                     </tr>
@@ -314,7 +329,9 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                         {Array(11).fill(0).map((_, cell) => <td key={cell} style={{ border: 'none', padding: 0 }}></td>)}
                     </tr>
                     <tr>
-                        <td colSpan={10} style={{ ...mutedCell, textAlign: 'right' }}>Total Value</td>
+                        <td colSpan={3} style={mutedCell}>Amount in Words (INR)</td>
+                        <td colSpan={6} style={{ ...td, textTransform: 'capitalize' }}>{toWords(Math.round(grandTotal)).toUpperCase()}</td>
+                        <td style={mutedCell}>Total Value</td>
                         <td style={{ ...td, textAlign: 'right', fontWeight: 800 }}>{fmtNum(grandTotal)}</td>
                     </tr>
                 </tbody>

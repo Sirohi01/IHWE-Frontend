@@ -42,7 +42,9 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
 
     const totalTaxable = items.reduce((sum: number, item: any) => {
         const amt = parseFloat(item.amount) || 0;
-        return sum + (amt - (parseFloat(item.disc) || 0));
+        const discPct = parseFloat(item.disc) || 0;
+        const discountAmt = (amt * discPct) / 100;
+        return sum + (amt - discountAmt);
     }, 0);
     const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), 0);
     const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.finalAmount) || 0), 0);
@@ -239,8 +241,9 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                 {chunk.map((item: any, i: number) => {
                     const index = startIndex + i;
                     const amt = parseFloat(item.amount) || 0;
-                    const discAmt = parseFloat(item.disc) || 0;
-                    const taxable = amt - discAmt;
+                    const discPct = parseFloat(item.disc) || 0; // In Proforma, item.disc stores the percentage (e.g. 9)
+                    const discountAmt = (amt * discPct) / 100;
+                    const taxable = amt - discountAmt;
                     return (
                         <tr key={index}>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{index + 1}</td>
@@ -299,7 +302,10 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     {items.map((item: any, index: number) => {
                         const gstRate = parseFloat(item?.gstRate) || 0;
                         const halfGst = gstRate / 2;
-                        const itemTaxable = (parseFloat(item?.amount) || 0) - (parseFloat(item?.disc) || 0);
+                        const amt = parseFloat(item?.amount) || 0;
+                        const discPct = parseFloat(item?.disc) || 0;
+                        const discountAmt = (amt * discPct) / 100;
+                        const itemTaxable = amt - discountAmt;
                         const gstAmt = parseFloat(item?.tax) || 0;
                         const halfGstAmt = gstAmt / 2;
 
