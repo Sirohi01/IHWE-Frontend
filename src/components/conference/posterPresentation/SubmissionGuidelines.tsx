@@ -25,7 +25,7 @@ export default function PosterSubmissionGuidelinesSection({ data = {} }: { data?
 
   return (
     <section className="bg-white py-2">
-      <div className=" px-5 sm:px-6 lg:px-12">
+      <div className=" px-5 sm:px-6 lg:px-14">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Submission Guidelines */}
           <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">

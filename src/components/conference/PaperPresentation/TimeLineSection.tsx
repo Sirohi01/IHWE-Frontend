@@ -36,7 +36,7 @@ export default function TimelineSection() {
 
   return (
     <section className="w-full mt-2">
-      <div className="  sm:px-6 lg:px-12">
+      <div className="  sm:px-6 lg:px-14">
         <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
           <h2 className="mb-2 text-[13px] font-samibold uppercase tracking-wide text-gray-900">
             Timeline

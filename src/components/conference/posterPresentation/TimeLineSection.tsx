@@ -17,7 +17,7 @@ export default function TimelineSection({ data = {} }: { data?: any }) {
 
   return (
     <section className="w-full mt-2">
-      <div className="  sm:px-6 lg:px-12">
+      <div className="  sm:px-6 lg:px-14">
         <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
           <h2 className="mb-4 text-[13px] font-bold uppercase tracking-wide text-gray-900">
             IMPORTANT DATES

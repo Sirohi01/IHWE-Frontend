@@ -8,7 +8,7 @@ const ImportantNotes: React.FC<{ data?: any }> = ({ data = {} }) => {
 
   return (
     <section className="w-full">
-      <div className="px-5 sm:px-6 lg:px-12">
+      <div className="px-5 sm:px-6 lg:px-14">
         <div className="relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#eefaf2] to-[#f4fdf6] border border-[#d1f0db]">
 
           <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden md:block opacity-60">

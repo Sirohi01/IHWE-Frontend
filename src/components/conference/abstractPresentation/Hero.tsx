@@ -94,28 +94,29 @@ export default function AbstractPresentationHero() {
 
       {/* Cards */}
 
-      <div className="relative z-20  -mt-14 mx-12 px-2 sm:px-6 lg:px-0">
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md">
-          <div className="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x lg:grid-cols-5 lg:divide-y-0">
+      <div className="relative z-20 mt-1 px-5 sm:px-6 lg:px-14">
+        <div className="overflow-hidden rounded-xl bg-[#0A1C63] shadow-lg shadow-[#0A1C63]/20">
+          <div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-white/10">
             {benefits.map((item, index) => {
               const Icon = item.icon;
 
               return (
                 <div
                   key={index}
-                  className="flex flex-col items-center px-2 py-2 text-center"
+                  className="flex flex-1 items-center gap-3 px-4 py-3.5 transition-colors hover:bg-white/5 group"
                 >
-                  <div className="mb-1.5 flex h-10 w-10 items-center justify-center rounded-full bg-[#EDF8EE]">
-                    <Icon className="text-[#2F8B2E]" size={18} />
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 shadow-sm transition-transform group-hover:scale-110">
+                    <Icon className="text-white" size={16} strokeWidth={2.5} />
                   </div>
 
-                  <h3 className="text-[13px] font-semibold text-[#0A1C63]">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-0.5 text-[12px] leading-[1.3] text-gray-500">
-                    {item.description}
-                  </p>
+                  <div className="flex-1">
+                    <h3 className="text-[12px] font-bold text-white leading-tight uppercase tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="mt-0.5 text-[11px] leading-[1.3] text-gray-300 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
               );
             })}
