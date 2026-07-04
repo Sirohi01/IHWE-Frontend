@@ -79,7 +79,7 @@ console.log(data,"currentDay")
        
 
         {/* 3. About Section */}
-        <div className="relative pt-10">
+        <div className="relative pt-20 md:pt-10">
           <AboutDayOne data={data.about} currentDay={currentDay} />
         </div>
 

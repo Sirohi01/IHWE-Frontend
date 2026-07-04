@@ -41,10 +41,10 @@ const fallbackfeatures = [
 export default function HealthcareHighlights({ currentDay, data }: { currentDay: number; data: any }) {
   const features = data.healthcareHighlights?.features || fallbackfeatures;
   return (
-    <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-4">
+    <div className="mx-auto px-6 md:px-0 max-w-[1320px] pb-4">
       <div
         className="
-          relative overflow-hidden rounded-2xl py-4
+          relative overflow-hidden rounded-2xl
         "
       >
         <img src={heighlights} alt="high lights bg" className="absolute inset-0 w-full h-full" />

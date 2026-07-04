@@ -28,13 +28,11 @@ export default function ExhibitorPassesPage() {
     const [passConfigs, setPassConfigs] = useState<any[]>([]);
     const [passRequests, setPassRequests] = useState<any[]>([]);
 
-    const [quantity, setQuantity] = useState(1);
     const [personnel, setPersonnel] = useState<any[]>([]);
     const [vehicles, setVehicles] = useState<any[]>([]);
+    const quantity = selectedPass?.id === 'vehicle' ? vehicles.length : personnel.length;
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [paymentWarningConfirmed, setPaymentWarningConfirmed] = useState(false);
-    const [manualAllocationConfirmed, setManualAllocationConfirmed] = useState(false);
-    
+
     // New states for payment review
     const [isReviewing, setIsReviewing] = useState(false);
     const [reviewData, setReviewData] = useState<any>(null);
@@ -48,13 +46,6 @@ export default function ExhibitorPassesPage() {
             document.body.appendChild(script);
         });
     };
-
-    const escapeHtml = (value: unknown) => String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
 
     const getTeamAllocation = (pass: any) => {
         const teamMembers = Array.isArray(data?.teamMembers) ? data.teamMembers : [];
@@ -108,126 +99,89 @@ export default function ExhibitorPassesPage() {
         isTeamMember: Boolean(member)
     });
 
-    const renderMemberList = (members: any[], emptyText: string, tone: 'green' | 'slate') => {
-        if (members.length === 0) {
-            return `<div style="padding:7px 9px;color:#94a3b8;font-size:11px">${emptyText}</div>`;
-        }
-        return members.map(member => `
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 9px;border-top:1px solid #f1f5f9">
-                <div style="min-width:0;text-align:left">
-                    <div style="font-size:12px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(member.name || 'Unnamed member')}</div>
-                    <div style="font-size:10px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(member.designation || member.roleAtExhibition || member.email || '')}</div>
-                </div>
-                <span style="flex:none;border-radius:5px;padding:2px 6px;font-size:9px;font-weight:800;text-transform:uppercase;${tone === 'green' ? 'background:#ecfdf5;color:#047857' : 'background:#f1f5f9;color:#64748b'}">${tone === 'green' ? 'Available' : 'Allocated'}</span>
-            </div>
-        `).join('');
+    // Lunch/Water are simple daily quantity items - always billed to the exhibitor's
+    // registered primary contact (contact1), no per-item attendee form needed.
+    const createSimpleEntry = () => {
+        const contact = data?.contact1 || {};
+        const name = [contact.firstName, contact.lastName].filter(Boolean).join(' ') || data?.companyName || '';
+        return {
+            teamMemberId: undefined,
+            name,
+            designation: contact.designation || '',
+            email: contact.email || '',
+            phone: contact.whatsapp || contact.mobile || '',
+            gender: 'male',
+            aadhaarNumber: '',
+            isTeamMember: false
+        };
     };
 
-    const showTeamStatus = async (pass: any, available: any[], allocated: any[]) => {
-        const result = await Swal.fire({
-            title: 'Team member allocation',
-            html: `
-                <div style="font-size:11px;color:#64748b;margin-bottom:8px">Passes are assigned to registered team members first.</div>
-                <div style="max-height:210px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">
-                    <div style="padding:7px 9px;background:#f8fafc;text-align:left;font-size:10px;font-weight:800;color:#475569">AVAILABLE (${available.length})</div>
-                    ${renderMemberList(available, 'No available team member', 'green')}
-                    ${allocated.length > 0 ? `<div style="padding:7px 9px;background:#f8fafc;text-align:left;font-size:10px;font-weight:800;color:#475569">ALREADY ALLOCATED (${allocated.length})</div>${renderMemberList(allocated, '', 'slate')}` : ''}
-                </div>`,
-            width: 410,
-            padding: '16px',
-            showCancelButton: true,
-            confirmButtonText: 'Continue',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#15803d',
-            cancelButtonColor: '#64748b',
-            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
-        });
-        return result.isConfirmed;
-    };
-
-    const confirmPaymentStart = async (pass: any) => {
-        const result = await Swal.fire({
-            title: 'Payment starts from here',
-            text: `Complimentary ${pass.title} quota is finished. Additional passes will require online payment.`,
-            icon: 'info',
-            width: 390,
-            padding: '16px',
-            showCancelButton: true,
-            confirmButtonText: 'Continue paid',
-            cancelButtonText: 'Go back',
-            confirmButtonColor: '#15803d',
-            cancelButtonColor: '#64748b',
-            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
-        });
-        return result.isConfirmed;
-    };
-
-    const confirmManualDetails = async (pass: any, allocated: any[]) => {
-        const result = await Swal.fire({
-            title: 'Team members finished',
-            html: `
-                <div style="font-size:11px;color:#64748b;margin-bottom:8px">All registered team members already have this pass. Additional attendee/contact details must be entered manually.</div>
-                ${allocated.length > 0 ? `<div style="max-height:150px;overflow:auto;border:1px solid #e2e8f0;border-radius:8px">${renderMemberList(allocated, '', 'slate')}</div>` : ''}`,
-            icon: 'warning',
-            width: 410,
-            padding: '16px',
-            showCancelButton: true,
-            confirmButtonText: 'Fill manually',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#15803d',
-            cancelButtonColor: '#64748b',
-            customClass: { popup: 'rounded-xl', title: 'text-lg', confirmButton: 'rounded-lg text-xs font-bold', cancelButton: 'rounded-lg text-xs font-bold' }
-        });
-        return result.isConfirmed;
-    };
-
-    const handleOpenModal = async (pass: any) => {
-        const { available, allocated } = getTeamAllocation(pass);
-        if (!(await showTeamStatus(pass, available, allocated))) return;
-
-        const startsAsPaid = Number(pass.complimentaryRemaining || 0) <= 0;
-        if (startsAsPaid && !(await confirmPaymentStart(pass))) return;
-        if (available.length === 0 && !(await confirmManualDetails(pass, allocated))) return;
-
+    const handleOpenModal = (pass: any) => {
+        const { available } = getTeamAllocation(pass);
         setSelectedPass(pass);
-        setQuantity(1);
-        setPersonnel([createPersonnelEntry(available[0])]);
-        setVehicles([createVehicleEntry(available[0])]);
-        setPaymentWarningConfirmed(startsAsPaid);
-        setManualAllocationConfirmed(available.length === 0);
+        if (pass.id === 'vehicle') {
+            setVehicles(available[0] ? [createVehicleEntry(available[0])] : []);
+            setPersonnel([]);
+        } else if (pass.simpleFlow) {
+            setPersonnel([createSimpleEntry()]);
+            setVehicles([]);
+        } else {
+            setPersonnel(available[0] ? [createPersonnelEntry(available[0])] : []);
+            setVehicles([]);
+        }
         setIsReviewing(false);
         setReviewData(null);
         setIsModalOpen(true);
     };
 
-    const handleQuantityChange = async (newQty: number) => {
+    const handleSimpleQuantityChange = (newQty: number) => {
         const maxAllowed = selectedPass?.maxPerRequest || 10;
         if (newQty < 1 || newQty > maxAllowed) return;
-        const complimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
-        if (newQty > complimentaryRemaining && quantity <= complimentaryRemaining && !paymentWarningConfirmed) {
-            if (!(await confirmPaymentStart(selectedPass))) return;
-            setPaymentWarningConfirmed(true);
+        const sharedContact = personnel[0];
+        setPersonnel(Array.from({ length: newQty }, () => (sharedContact ? { ...sharedContact } : createSimpleEntry())));
+    };
+
+    // Team members are added/removed via checkbox; manual entries only unlock once
+    // all currently available team members have been checked off.
+    const toggleTeamMember = (member: any) => {
+        const isVehiclePass = selectedPass?.id === 'vehicle';
+        const list = isVehiclePass ? vehicles : personnel;
+        const existingIndex = list.findIndex((entry: any) => entry.teamMemberId === member._id);
+
+        if (existingIndex >= 0) {
+            const updated = list.filter((_: any, i: number) => i !== existingIndex);
+            if (isVehiclePass) setVehicles(updated); else setPersonnel(updated);
+            return;
         }
 
-        const { available, allocated } = getTeamAllocation(selectedPass);
-        if (newQty > available.length && quantity <= available.length && !manualAllocationConfirmed) {
-            if (!(await confirmManualDetails(selectedPass, allocated))) return;
-            setManualAllocationConfirmed(true);
+        const maxAllowed = selectedPass?.maxPerRequest || 10;
+        if (list.length >= maxAllowed) {
+            Swal.fire({ title: 'Limit reached', text: `Max ${maxAllowed} passes allowed per request.`, icon: 'warning', confirmButtonColor: '#15803d' });
+            return;
         }
 
-        setQuantity(newQty);
-        
-        if (selectedPass?.id === 'vehicle') {
-            const newVehicles = Array.from({ length: newQty }, (_, index) =>
-                vehicles[index] || createVehicleEntry(available[index])
-            );
-            setVehicles(newVehicles);
-        } else {
-            const newPersonnel = Array.from({ length: newQty }, (_, index) =>
-                personnel[index] || createPersonnelEntry(available[index])
-            );
-            setPersonnel(newPersonnel);
+        const newEntry = isVehiclePass ? createVehicleEntry(member) : createPersonnelEntry(member);
+        const teamCount = list.filter((entry: any) => entry.isTeamMember).length;
+        const updated = [...list.slice(0, teamCount), newEntry, ...list.slice(teamCount)];
+        if (isVehiclePass) setVehicles(updated); else setPersonnel(updated);
+    };
+
+    const addManualEntry = () => {
+        const isVehiclePass = selectedPass?.id === 'vehicle';
+        const list = isVehiclePass ? vehicles : personnel;
+        const maxAllowed = selectedPass?.maxPerRequest || 10;
+        if (list.length >= maxAllowed) {
+            Swal.fire({ title: 'Limit reached', text: `Max ${maxAllowed} passes allowed per request.`, icon: 'warning', confirmButtonColor: '#15803d' });
+            return;
         }
+        const newEntry = isVehiclePass ? createVehicleEntry() : createPersonnelEntry();
+        if (isVehiclePass) setVehicles([...vehicles, newEntry]); else setPersonnel([...personnel, newEntry]);
+    };
+
+    const removeEntry = (index: number) => {
+        const isVehiclePass = selectedPass?.id === 'vehicle';
+        if (isVehiclePass) setVehicles(vehicles.filter((_: any, i: number) => i !== index));
+        else setPersonnel(personnel.filter((_: any, i: number) => i !== index));
     };
 
     const updatePersonnel = (index: number, field: string, value: string) => {
@@ -340,6 +294,10 @@ export default function ExhibitorPassesPage() {
 
     const handleProceedToReview = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (quantity < 1) {
+            Swal.fire({ title: 'Select at least one', text: 'Check a team member or add a manual entry to proceed.', icon: 'warning', confirmButtonColor: '#15803d' });
+            return;
+        }
         if (selectedPass?.id === 'service') {
             const invalidPerson = personnel.find(person => String(person.aadhaarNumber || '').replace(/\D/g, '').length !== 12);
             if (invalidPerson) {
@@ -598,7 +556,15 @@ export default function ExhibitorPassesPage() {
     const selectedComplimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
     const selectedFreeQuantity = Math.min(quantity, selectedComplimentaryRemaining);
     const selectedPaidQuantity = Math.max(quantity - selectedComplimentaryRemaining, 0);
-    const selectedIsFullyComplimentary = selectedPaidQuantity === 0;
+    const selectedHasSelection = quantity >= 1;
+    // Only "fully complimentary" once something is actually selected — 0 selected should
+    // never read as "Free", it should read as "nothing chosen yet".
+    const selectedIsFullyComplimentary = selectedHasSelection && selectedPaidQuantity === 0;
+    const selectedStatusBadge = !selectedHasSelection
+        ? { text: 'Nothing selected', cls: 'bg-slate-100 text-slate-500 border-slate-200' }
+        : selectedIsFullyComplimentary
+        ? { text: 'Complimentary', cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' }
+        : { text: 'Extra Payment', cls: 'bg-amber-50 text-amber-700 border-amber-100' };
     const selectedEstimatedPayable = selectedPaidQuantity * Number(selectedPass?.price || 0);
 
     return (
@@ -749,6 +715,7 @@ export default function ExhibitorPassesPage() {
                                     complimentaryRemaining,
                                     maxPerRequest: Number(config?.maxPerRequest || 10),
                                     gstPercentage: Number(config?.gstPercentage || 18),
+                                    simpleFlow: true,
                                     themeClasses: {
                                         bg: "bg-[#f4fbf6]",
                                         border: "border-[#d2edd9]",
@@ -789,6 +756,7 @@ export default function ExhibitorPassesPage() {
                                     complimentaryRemaining,
                                     maxPerRequest: Number(config?.maxPerRequest || 10),
                                     gstPercentage: Number(config?.gstPercentage || 18),
+                                    simpleFlow: true,
                                     themeClasses: {
                                         bg: "bg-[#f0f7ff]",
                                         border: "border-blue-100",
@@ -1010,251 +978,378 @@ export default function ExhibitorPassesPage() {
                             className="relative w-full max-w-[640px] bg-[#f8fafc] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ring-1 ring-slate-900/5"
                         >
                             {/* Modal Header */}
-                            <div className="px-4 py-3 flex items-center justify-between bg-white border-b border-slate-100 z-10 shadow-sm">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-9 h-9 rounded-lg ${selectedPass.themeClasses.bg} flex items-center justify-center border ${selectedPass.themeClasses.border}`}>
-                                        <selectedPass.icon size={19} className={selectedPass.themeClasses.text} />
+                            <div className={`px-4 py-3 flex items-center justify-between bg-gradient-to-r ${selectedPass.themeClasses.iconBg} z-10 shadow-sm`}>
+                                <div className="flex items-center gap-2.5">
+                                    <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                                        <selectedPass.icon size={18} className="text-white" />
                                     </div>
                                     <div>
                                         <div className="flex flex-wrap items-center gap-2">
-                                            <h2 className="text-[17px] font-black text-slate-800 tracking-tight leading-tight">
-                                                Request {selectedPass.title}
+                                            <h2 className="text-[15px] font-black text-white tracking-tight leading-tight">
+                                                {selectedPass.title}
                                             </h2>
-                                            <span className={`px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wide ${selectedIsFullyComplimentary ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
-                                                {selectedIsFullyComplimentary ? 'Free quota' : 'Extra paid'}
+                                            <span className="px-2 py-0.5 rounded-full bg-white/20 text-white text-[9px] font-black uppercase tracking-wide backdrop-blur-sm">
+                                                {selectedStatusBadge.text}
                                             </span>
                                         </div>
-                                        <p className="text-[12px] text-slate-500 font-bold mt-0.5">
+                                        <p className="text-[10.5px] text-white/80 font-bold mt-0.5">
                                             {selectedIsFullyComplimentary
-                                                ? `${selectedComplimentaryRemaining} complimentary available • ${selectedPass.subtitle}`
-                                                : `₹${selectedPass.price} / extra pass • ${selectedPass.subtitle}`}
+                                                ? `${selectedComplimentaryRemaining} complimentary available`
+                                                : `₹${selectedPass.price} / extra pass`} • {selectedPass.subtitle}
                                         </p>
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setIsModalOpen(false)}
-                                    className="w-9 h-9 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 hover:border-slate-300 transition-all"
+                                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-all shrink-0 backdrop-blur-sm"
                                 >
-                                    <X size={16} strokeWidth={2.5} />
+                                    <X size={15} strokeWidth={2.5} />
                                 </button>
                             </div>
 
                             {/* Modal Body / Form */}
-                            <div className="p-2.5 overflow-y-auto custom-scrollbar flex-1 relative">
+                            <div className="p-4 overflow-y-auto custom-scrollbar flex-1 relative">
                                 {!isReviewing ? (
-                                <form className="space-y-2.5" onSubmit={handleProceedToReview}>
-                                    
-                                    {/* Quantity Selector */}
-                                    <div className="bg-white p-2.5 rounded-xl mb-2 border border-slate-200 shadow-sm">
-                                        <div className="flex items-center justify-between gap-3 mb-1.5">
-                                            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                                Select Quantity
-                                            </label>
-                                            <span className={`px-2 py-0.5 rounded-full border text-[8.5px] font-black uppercase tracking-wide ${selectedIsFullyComplimentary ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
-                                                {selectedIsFullyComplimentary ? 'Complimentary' : 'Extra Payment'}
-                                            </span>
-                                        </div>
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                            <span className="text-[12px] font-extrabold text-slate-700">How many do you need?</span>
-                                            <div className="flex items-center justify-between sm:justify-center gap-2 bg-slate-50 px-1.5 py-1 rounded-xl border border-slate-200">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleQuantityChange(quantity - 1)}
-                                                    disabled={quantity <= 1}
-                                                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50 disabled:opacity-40"
-                                                >
-                                                    <span className="text-lg font-black text-slate-400">-</span>
-                                                </button>
-                                                <span className="text-[15px] font-black text-slate-800 w-7 text-center">{quantity}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleQuantityChange(quantity + 1)}
-                                                    className="w-7 h-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50"
-                                                >
-                                                    <span className="text-lg font-black text-emerald-600">+</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="mt-2 grid grid-cols-3 gap-1.5 text-center">
-                                            <div className="rounded-lg bg-emerald-50/70 border border-emerald-100 px-2 py-1.5">
-                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">Free Left</span>
-                                                <span className="block text-[12px] font-black text-emerald-700 mt-0.5">{selectedComplimentaryRemaining}</span>
-                                            </div>
-                                            <div className="rounded-lg bg-slate-50 border border-slate-100 px-2 py-1.5">
-                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">Free Used</span>
-                                                <span className="block text-[12px] font-black text-slate-800 mt-0.5">{selectedFreeQuantity}</span>
-                                            </div>
-                                            <div className={`rounded-lg border px-2 py-1.5 ${selectedIsFullyComplimentary ? 'bg-emerald-50/70 border-emerald-100' : 'bg-amber-50 border-amber-100'}`}>
-                                                <span className="block text-[8px] font-black text-slate-400 uppercase tracking-wide">{selectedIsFullyComplimentary ? 'Payable' : 'To Pay'}</span>
-                                                <span className={`block text-[12px] font-black mt-0.5 ${selectedIsFullyComplimentary ? 'text-emerald-700' : 'text-slate-800'}`}>
-                                                    {selectedIsFullyComplimentary ? 'Free' : `₹${selectedEstimatedPayable}`}
+                                <form className="space-y-3" onSubmit={handleProceedToReview}>
+
+                                    {/* Complimentary / Paid status - updates live as selection crosses the free quota, no blocking popups */}
+                                    {selectedHasSelection && !selectedIsFullyComplimentary && (
+                                        <p className="text-[11.5px] font-bold text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+                                            Free quota used up — {selectedPaidQuantity} of your {quantity} {selectedPass?.title} will be charged (₹{selectedEstimatedPayable}).
+                                        </p>
+                                    )}
+
+                                    {selectedPass?.simpleFlow ? (
+                                        <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                                            <div className="flex items-center justify-between gap-2 mb-2">
+                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                    Quantity
+                                                </label>
+                                                <span className={`px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wide ${selectedStatusBadge.cls}`}>
+                                                    {selectedStatusBadge.text}
                                                 </span>
                                             </div>
-                                        </div>
-                                        <p className="text-[8.5px] text-slate-400 font-bold mt-1.5">
-                                            Max {selectedPass?.maxPerRequest || 10} passes per request
-                                        </p>
-                                    </div>
-
-                                    {/* Dynamic Fields */}
-                                    {selectedPass?.id === 'vehicle' ? (
-                                        vehicles.map((veh, index) => (
-                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-2.5 mb-2 shadow-sm relative overflow-hidden">
-                                                <div className="absolute right-0 top-0 bg-slate-50 px-2.5 py-1 rounded-bl-lg border-b border-l border-slate-100">
-                                                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">#{index + 1}</span>
+                                            <div className="flex items-center justify-between gap-2">
+                                                <span className="text-[12px] font-extrabold text-slate-700">How many do you need?</span>
+                                                <div className={`flex items-center gap-2 px-1 py-1 rounded-full border ${selectedPass.themeClasses.border} ${selectedPass.themeClasses.bg}`}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleSimpleQuantityChange(quantity - 1)}
+                                                        disabled={quantity <= 1}
+                                                        className="w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-200 hover:bg-slate-50 disabled:opacity-40"
+                                                    >
+                                                        <span className="text-base font-black text-slate-400 leading-none">-</span>
+                                                    </button>
+                                                    <span className="text-[14px] font-black text-slate-800 w-5 text-center">{quantity}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleSimpleQuantityChange(quantity + 1)}
+                                                        className={`w-7 h-7 rounded-full flex items-center justify-center shadow-sm text-white ${selectedPass.themeClasses.btnBg}`}
+                                                    >
+                                                        <span className="text-base font-black leading-none">+</span>
+                                                    </button>
                                                 </div>
-                                                
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <h3 className="text-[12px] font-black text-slate-800">Vehicle Details</h3>
-                                                    <span className={`rounded px-1.5 py-0.5 text-[8px] font-black uppercase ${veh.isTeamMember ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                                                        {veh.isTeamMember ? 'Team member allocated' : 'Manual details'}
+                                            </div>
+                                            <div className="flex items-center justify-between gap-2 mt-2.5 pt-2 border-t border-slate-100 text-[10.5px] font-bold text-slate-500">
+                                                <span>Free <b className="text-emerald-700">{selectedComplimentaryRemaining}</b></span>
+                                                <span>Used <b className="text-slate-700">{selectedFreeQuantity}</b></span>
+                                                <span>{selectedIsFullyComplimentary ? 'Payable' : 'To Pay'} <b className={selectedIsFullyComplimentary ? 'text-emerald-700' : 'text-amber-700'}>{selectedIsFullyComplimentary ? 'Free' : `₹${selectedEstimatedPayable}`}</b></span>
+                                                <span className="text-slate-400">{quantity}/{selectedPass?.maxPerRequest || 10}</span>
+                                            </div>
+                                        </div>
+                                    ) : (() => {
+                                        const { available: modalAvailable, allocated: modalAllocated } = getTeamAllocation(selectedPass);
+                                        const list = selectedPass?.id === 'vehicle' ? vehicles : personnel;
+                                        const checkedIds = new Set(list.filter((e: any) => e.isTeamMember).map((e: any) => String(e.teamMemberId)));
+                                        const manualCount = list.filter((e: any) => !e.isTeamMember).length;
+                                        const teamMembersExhausted = modalAvailable.length === 0 || checkedIds.size >= modalAvailable.length;
+                                        return (
+                                            <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                                                <div className="flex items-center justify-between gap-2 mb-2">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <Users size={12.5} className={selectedPass.themeClasses.text} strokeWidth={2.5} />
+                                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                            Team Members
+                                                        </label>
+                                                    </div>
+                                                    <span className={`px-2 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wide ${selectedStatusBadge.cls}`}>
+                                                        {selectedStatusBadge.text}
                                                     </span>
                                                 </div>
-                                                
+
+                                                {modalAvailable.length > 0 ? (
+                                                    <div className="flex flex-wrap gap-1.5 mb-1.5">
+                                                        {modalAvailable.map((member: any) => {
+                                                            const checked = checkedIds.has(String(member._id));
+                                                            return (
+                                                                <button
+                                                                    key={member._id}
+                                                                    type="button"
+                                                                    onClick={() => toggleTeamMember(member)}
+                                                                    className={`relative flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full border transition-all ${checked ? `${selectedPass.themeClasses.iconBg} border-transparent text-white shadow-sm` : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300'}`}
+                                                                >
+                                                                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 ${checked ? 'bg-white/25 text-white' : 'bg-slate-200 text-slate-500'}`}>
+                                                                        {(member.name || '?').trim().charAt(0).toUpperCase()}
+                                                                    </span>
+                                                                    <span className="text-[11px] font-bold whitespace-nowrap">{member.name || 'Unnamed'}</span>
+                                                                    {checked && (
+                                                                        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-white flex items-center justify-center shadow">
+                                                                            <Check size={9} strokeWidth={4} className={selectedPass.themeClasses.text} />
+                                                                        </span>
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-[10.5px] font-bold text-slate-500 mb-1.5 bg-slate-50 border border-slate-100 rounded-lg px-2.5 py-1.5">No registered team members available.</p>
+                                                )}
+
+                                                {modalAllocated.length > 0 && (
+                                                    <p className="text-[9.5px] text-slate-400 font-semibold mb-1.5">{modalAllocated.length} already allocated this pass.</p>
+                                                )}
+
+                                                {teamMembersExhausted && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={addManualEntry}
+                                                        className="w-full h-7 rounded-full border border-dashed border-slate-300 text-[10.5px] font-black text-slate-500 hover:border-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 mb-2"
+                                                    >
+                                                        + Add Manual {selectedPass?.id === 'vehicle' ? 'Vehicle' : 'Person'}
+                                                        {manualCount > 0 && <span className="px-1.5 rounded-full bg-slate-100 text-slate-500 text-[9px]">{manualCount}</span>}
+                                                    </button>
+                                                )}
+
+                                                <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[10.5px] font-bold text-slate-500">
+                                                    <span>Free <b className="text-emerald-700">{selectedComplimentaryRemaining}</b></span>
+                                                    <span>Used <b className="text-slate-700">{selectedFreeQuantity}</b></span>
+                                                    <span>{selectedIsFullyComplimentary ? 'Payable' : 'To Pay'} <b className={selectedIsFullyComplimentary ? 'text-emerald-700' : 'text-amber-700'}>{selectedIsFullyComplimentary ? 'Free' : `₹${selectedEstimatedPayable}`}</b></span>
+                                                    <span className="text-slate-400">{quantity}/{selectedPass?.maxPerRequest || 10}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+
+                                    {/* Dynamic Fields — team members only fill in what's NOT already known (vehicle no. / Aadhaar); manual entries get the full form */}
+                                    {selectedPass?.id === 'vehicle' ? (
+                                        vehicles.map((veh, index) => (
+                                            veh.isTeamMember ? (
+                                                <div key={index} className="bg-white border border-slate-200 rounded-xl p-2 mb-2 shadow-sm flex items-center gap-2">
+                                                    <div className="flex-1 min-w-0">
+                                                        <span className="block text-[11px] font-black text-slate-800 truncate">{veh.name}</span>
+                                                        <span className="block text-[10px] font-bold text-emerald-700 uppercase tracking-wide">Team member</span>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => updateVehicle(index, 'vehicleType', veh.vehicleType === '2-wheeler' ? '4-wheeler' : '2-wheeler')}
+                                                        className="h-7 px-2 rounded-lg border border-slate-200 bg-slate-50 text-[10px] font-black text-slate-600 shrink-0"
+                                                    >
+                                                        {veh.vehicleType === '2-wheeler' ? '2-Wheeler' : '4-Wheeler'}
+                                                    </button>
+                                                    <input
+                                                        type="text"
+                                                        required
+                                                        value={veh.vehicleNumber}
+                                                        onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value.toUpperCase())}
+                                                        placeholder="Vehicle No."
+                                                        className="w-28 h-7 bg-slate-50 border border-slate-200 rounded-lg px-2 font-bold text-slate-800 text-[10px] uppercase focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all shrink-0"
+                                                    />
+                                                    <button type="button" onClick={() => removeEntry(index)} className="text-slate-400 hover:text-red-500 shrink-0" title="Remove">
+                                                        <X size={13} strokeWidth={3} />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                            <div key={index} className="bg-white border border-slate-200 rounded-xl p-2.5 mb-2 shadow-sm relative overflow-hidden">
+                                                <div className="absolute right-0 top-0 flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded-bl-lg border-b border-l border-slate-100">
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Manual #{index + 1}</span>
+                                                    <button type="button" onClick={() => removeEntry(index)} className="text-slate-400 hover:text-red-500" title="Remove">
+                                                        <X size={11} strokeWidth={3} />
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <h3 className="text-[13.5px] font-black text-slate-800">Vehicle Details</h3>
+                                                    <span className="rounded px-1.5 py-0.5 text-[9.5px] font-black uppercase bg-amber-50 text-amber-700">Manual details</span>
+                                                </div>
+
                                                 <div className="mb-2">
-                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Vehicle Type</label>
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Vehicle Type</label>
                                                     <div className="flex gap-1.5">
-                                                        <button 
+                                                        <button
                                                             type="button"
                                                             onClick={() => updateVehicle(index, 'vehicleType', '2-wheeler')}
                                                             className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${veh.vehicleType === '2-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                         >
                                                             {veh.vehicleType === '2-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
-                                                            <span className="font-black text-[11px]">2-Wheeler</span>
+                                                            <span className="font-black text-[12px]">2-Wheeler</span>
                                                         </button>
-                                                        <button 
+                                                        <button
                                                             type="button"
                                                             onClick={() => updateVehicle(index, 'vehicleType', '4-wheeler')}
                                                             className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${veh.vehicleType === '4-wheeler' ? 'bg-emerald-50 border-emerald-500 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                         >
                                                             {veh.vehicleType === '4-wheeler' && <CheckCircle2 size={12} className="mr-1.5" />}
-                                                            <span className="font-black text-[11px]">4-Wheeler</span>
+                                                            <span className="font-black text-[12px]">4-Wheeler</span>
                                                         </button>
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Registration Number</label>
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Registration Number</label>
                                                     <div className="relative flex items-center">
                                                         <div className="absolute left-3 z-10 text-slate-400">
                                                             <Hash size={14} />
                                                         </div>
-                                                        <input 
+                                                        <input
                                                             type="text"
                                                             required
                                                             value={veh.vehicleNumber}
                                                             onChange={(e) => updateVehicle(index, 'vehicleNumber', e.target.value.toUpperCase())}
                                                             placeholder="e.g. MH 01 AB 1234"
-                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
+                                                            className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all uppercase"
                                                         />
                                                     </div>
                                                 </div>
 
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                                                     <div>
-                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Driver/Contact Name</label>
-                                                        <input 
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Driver/Contact Name</label>
+                                                        <input
                                                             type="text"
                                                             required
                                                             value={veh.name || ''}
                                                             onChange={(e) => updateVehicle(index, 'name', e.target.value)}
                                                             placeholder="e.g. Rahul Sharma"
-                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Contact Phone</label>
-                                                        <input 
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Phone</label>
+                                                        <input
                                                             type="text"
                                                             required
                                                             value={veh.phone || ''}
                                                             onChange={(e) => updateVehicle(index, 'phone', e.target.value)}
                                                             placeholder="e.g. 9876543210"
-                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                            className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                         />
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="mt-2">
-                                                    <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Contact Email (For QR)</label>
-                                                    <input 
+                                                    <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Contact Email (For QR)</label>
+                                                    <input
                                                         type="email"
                                                         required
                                                         value={veh.email || ''}
                                                         onChange={(e) => updateVehicle(index, 'email', e.target.value)}
                                                         placeholder="e.g. rahul@example.com"
-                                                        className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                                                        className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
                                                     />
                                                 </div>
                                             </div>
+                                            )
                                         ))
+                                    ) : selectedPass?.simpleFlow ? (
+                                        <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl px-3 py-2 mb-2 flex items-center gap-2.5">
+                                            <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                                                <Check size={13} strokeWidth={3} />
+                                            </div>
+                                            <p className="text-[10px] font-bold text-emerald-800 leading-snug">
+                                                No form needed — email & WhatsApp will go to your registered contact,{' '}
+                                                <span className="font-black">{personnel[0]?.name || 'your registered contact'}</span>
+                                                {personnel[0]?.phone ? ` (${personnel[0].phone})` : ''}.
+                                            </p>
+                                        </div>
                                     ) : (
                                         personnel.map((person, index) => (
+                                            person.isTeamMember ? (
+                                                selectedPass?.id === 'service' ? (
+                                                    <div key={index} className="bg-white border border-slate-200 rounded-xl p-2 mb-2 shadow-sm flex items-center gap-2">
+                                                        <div className="flex-1 min-w-0">
+                                                            <span className="block text-[11px] font-black text-slate-800 truncate">{person.name}</span>
+                                                            <span className="block text-[10px] font-bold text-emerald-700 uppercase tracking-wide">Team member · Aadhaar needed</span>
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            required
+                                                            maxLength={12}
+                                                            pattern="[0-9]{12}"
+                                                            value={person.aadhaarNumber || ''}
+                                                            onChange={(e) => updatePersonnel(index, 'aadhaarNumber', e.target.value.replace(/\D/g, '').slice(0, 12))}
+                                                            placeholder="12-digit Aadhaar"
+                                                            className="w-36 h-7 bg-slate-50 border border-slate-200 rounded-lg px-2 font-bold text-slate-800 text-[10px] focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all shrink-0"
+                                                        />
+                                                    </div>
+                                                ) : null
+                                            ) : (
                                             <div key={index} className="bg-white border border-slate-200 rounded-xl p-2.5 mb-2 shadow-sm relative overflow-hidden">
-                                                <div className={`absolute right-0 top-0 px-2.5 py-1 rounded-bl-lg border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
-                                                    <span className={`text-[8.5px] font-black uppercase tracking-widest`}>Person #{index + 1}</span>
+                                                <div className={`absolute right-0 top-0 flex items-center gap-1 px-2.5 py-1 rounded-bl-lg border-b border-l border-white/50 ${selectedPass?.themeClasses?.badgeBg || 'bg-blue-50'}`}>
+                                                    <span className={`text-[10px] font-black uppercase tracking-widest`}>Manual #{index + 1}</span>
+                                                    <button type="button" onClick={() => removeEntry(index)} className="text-slate-500 hover:text-red-600" title="Remove">
+                                                        <X size={11} strokeWidth={3} />
+                                                    </button>
                                                 </div>
-                                                
+
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <h3 className="text-[12px] font-black text-slate-800">Attendee Details</h3>
-                                                    <span className={`rounded px-1.5 py-0.5 text-[8px] font-black uppercase ${person.isTeamMember ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                                                        {person.isTeamMember ? 'Team member allocated' : 'Manual details'}
-                                                    </span>
+                                                    <h3 className="text-[13.5px] font-black text-slate-800">Attendee Details</h3>
+                                                    <span className="rounded px-1.5 py-0.5 text-[9.5px] font-black uppercase bg-amber-50 text-amber-700">Manual details</span>
                                                 </div>
 
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                     <div>
-                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Full Name</label>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Full Name</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={person.name}
                                                             onChange={(e) => updatePersonnel(index, 'name', e.target.value)}
                                                             placeholder="Enter full name"
-                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
                                                     <div>
-                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Designation</label>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Designation</label>
                                                         <input 
                                                             type="text"
                                                             required
                                                             value={person.designation}
                                                             onChange={(e) => updatePersonnel(index, 'designation', e.target.value)}
                                                             placeholder="e.g. Manager"
-                                                            className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                            className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                         />
                                                     </div>
 
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:col-span-2">
                                                         <div>
-                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Email ID</label>
+                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Email ID</label>
                                                             <input 
                                                                 type="email"
                                                                 required
                                                                 value={person.email}
                                                                 onChange={(e) => updatePersonnel(index, 'email', e.target.value)}
                                                                 placeholder="Email address"
-                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                         <div>
-                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Phone</label>
+                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Phone</label>
                                                             <input 
                                                                 type="tel"
                                                                 required
                                                                 value={person.phone}
                                                                 onChange={(e) => updatePersonnel(index, 'phone', e.target.value)}
                                                                 placeholder="Mobile No"
-                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                                                className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                                                             />
                                                         </div>
                                                     </div>
 
                                                     {selectedPass?.id === 'service' && (
                                                         <div className="sm:col-span-2">
-                                                            <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Aadhaar Card Number</label>
+                                                            <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Aadhaar Card Number</label>
                                                             <input
                                                                 type="text"
                                                                 inputMode="numeric"
@@ -1264,14 +1359,14 @@ export default function ExhibitorPassesPage() {
                                                                 value={person.aadhaarNumber || ''}
                                                                 onChange={(e) => updatePersonnel(index, 'aadhaarNumber', e.target.value.replace(/\D/g, '').slice(0, 12))}
                                                                 placeholder="Enter 12-digit Aadhaar number"
-                                                                className="w-full h-8 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[11px] focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                                                                className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg px-2.5 font-bold text-slate-800 text-[12px] focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
                                                             />
                                                             <p className="mt-1 text-[9px] text-slate-400">Required for service personnel verification.</p>
                                                         </div>
                                                     )}
 
                                                     <div className="sm:col-span-2">
-                                                        <label className="block text-[9px] font-bold text-slate-500 mb-1 uppercase tracking-wider">Gender Selection</label>
+                                                        <label className="block text-[10px] font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Gender Selection</label>
                                                         <div className="flex gap-1.5">
                                                             <button 
                                                                 type="button"
@@ -1279,7 +1374,7 @@ export default function ExhibitorPassesPage() {
                                                                 className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'male' ? 'bg-blue-50 border-blue-400 text-blue-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'male' && <CheckCircle2 size={12} className="mr-1.5" />}
-                                                                <span className="font-black text-[11px]">Male</span>
+                                                                <span className="font-black text-[12px]">Male</span>
                                                             </button>
                                                             <button 
                                                                 type="button"
@@ -1287,7 +1382,7 @@ export default function ExhibitorPassesPage() {
                                                                 className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'female' ? 'bg-pink-50 border-pink-400 text-pink-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'female' && <CheckCircle2 size={12} className="mr-1.5" />}
-                                                                <span className="font-black text-[11px]">Female</span>
+                                                                <span className="font-black text-[12px]">Female</span>
                                                             </button>
                                                             <button 
                                                                 type="button"
@@ -1295,12 +1390,13 @@ export default function ExhibitorPassesPage() {
                                                                 className={`flex-1 py-1.5 rounded-lg border flex items-center justify-center transition-all ${person.gender === 'other' ? 'bg-purple-50 border-purple-400 text-purple-700' : 'bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-300'}`}
                                                             >
                                                                 {person.gender === 'other' && <CheckCircle2 size={12} className="mr-1.5" />}
-                                                                <span className="font-black text-[11px]">Other</span>
+                                                                <span className="font-black text-[12px]">Other</span>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            )
                                         ))
                                     )}
 
@@ -1308,11 +1404,11 @@ export default function ExhibitorPassesPage() {
                                     <div className="sticky bottom-0 -mx-3 px-3 pt-2 pb-1 bg-[#f8fafc]/95 backdrop-blur border-t border-slate-200">
                                         <button
                                             type="submit"
-                                            disabled={isSubmitting}
-                                            className={`mx-auto w-full max-w-[420px] py-2 rounded-lg text-[11px] font-black text-white shadow-[0_3px_10px_0_rgba(0,0,0,0.1)] hover:shadow-[0_5px_16px_rgba(0,0,0,0.14)] transition-all flex items-center justify-center gap-1.5 ${selectedPass.themeClasses.btnBg} ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                            disabled={isSubmitting || quantity < 1}
+                                            className={`mx-auto w-full max-w-[420px] py-2 rounded-lg text-[11px] font-black text-white shadow-[0_3px_10px_0_rgba(0,0,0,0.1)] hover:shadow-[0_5px_16px_rgba(0,0,0,0.14)] transition-all flex items-center justify-center gap-1.5 ${selectedPass.themeClasses.btnBg} ${(isSubmitting || quantity < 1) ? 'opacity-70 cursor-not-allowed' : ''}`}
                                         >
-                                            {isSubmitting ? 'Processing...' : (selectedIsFullyComplimentary ? 'Submit Complimentary Request' : 'Proceed to Payment Review')}
-                                            {!isSubmitting && <ChevronRight size={14} />}
+                                            {isSubmitting ? 'Processing...' : quantity < 1 ? 'Select at least one' : (selectedIsFullyComplimentary ? 'Submit Complimentary Request' : 'Proceed to Payment Review')}
+                                            {!isSubmitting && quantity >= 1 && <ChevronRight size={14} />}
                                         </button>
                                     </div>
                                 </form>

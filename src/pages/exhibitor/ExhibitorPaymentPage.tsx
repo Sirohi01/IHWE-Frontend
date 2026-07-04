@@ -172,6 +172,126 @@ export default function ExhibitorPaymentPage() {
         fetchSummary();
     }, [fetchSummary]);
 
+    // Documents (Invoices / Proforma Invoices) this exhibitor can pay against individually,
+    // in addition to paying the overall registration balance above.
+    const [docOverview, setDocOverview] = useState<any>(null);
+    const [payingDocId, setPayingDocId] = useState<string | null>(null);
+
+    const fetchDocOverview = useCallback(async () => {
+        if (!data?._id) return;
+        try {
+            const res = await fetch(`${API_URL}/exhibitor-auth/account-overview?id=${data._id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const json = await res.json();
+            if (json.success) setDocOverview(json.data);
+        } catch (err) {
+            console.error('Failed to load documents', err);
+        }
+    }, [data?._id, token]);
+
+    useEffect(() => {
+        fetchDocOverview();
+    }, [fetchDocOverview]);
+
+    const payableDocuments = (() => {
+        const documents: any[] = docOverview?.recentDocuments || [];
+        const remainingById = new Map<string, number>(
+            (docOverview?.financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry.remainingAmount])
+        );
+        return documents
+            .filter((doc) => doc.documentType === 'Invoice' || doc.documentType === 'Proforma Invoice')
+            .map((doc) => ({ ...doc, remaining: remainingById.get(String(doc.id)) || 0 }))
+            .filter((doc) => doc.remaining > 0);
+    })();
+
+    const payDocument = async (doc: any) => {
+        const docType = doc.documentType === 'Invoice' ? 'invoice' : 'proforma';
+        if (!doc.remaining || doc.remaining <= 0) return;
+
+        const isLoaded = await loadRazorpay();
+        if (!isLoaded) {
+            toast.error('Payment gateway failed to load. Please refresh and try again.');
+            return;
+        }
+
+        setPayingDocId(String(doc.id));
+        try {
+            const orderRes = await fetch(`${API_URL}/exhibitor-auth/documents/${docType}/${doc.id}/create-order`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const orderData = await orderRes.json();
+            if (!orderData.success) {
+                toast.error(orderData.message || 'Failed to create payment order');
+                setPayingDocId(null);
+                return;
+            }
+
+            const { order, key } = orderData;
+            const options = {
+                key: key || RAZORPAY_KEY,
+                amount: order.amount,
+                currency: order.currency || 'INR',
+                name: 'IHWE Exhibition',
+                description: `Payment - ${doc.documentNo}`,
+                order_id: order.id,
+                prefill: {
+                    name: receiptContact.name,
+                    email: receiptContact.email,
+                    contact: receiptContact.mobile,
+                },
+                theme: { color: '#23471d' },
+                modal: {
+                    ondismiss: () => {
+                        setPayingDocId(null);
+                        toast.info('Payment cancelled');
+                    },
+                },
+                handler: async (response: any) => {
+                    try {
+                        const verifyRes = await fetch(`${API_URL}/exhibitor-auth/documents/verify-payment`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                docType,
+                                docId: doc.id,
+                            }),
+                        });
+                        const verifyData = await verifyRes.json();
+                        if (verifyData.success) {
+                            toast.success('Payment successful!');
+                            logActivity('Finance', 'Made Payment', `Against ${doc.documentNo}`);
+                            await fetchDocOverview();
+                        } else {
+                            toast.error(verifyData.message || 'Payment verification failed');
+                        }
+                    } catch (err) {
+                        toast.error('Payment verification error. Please contact support.');
+                    } finally {
+                        setPayingDocId(null);
+                    }
+                },
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', (response: any) => {
+                toast.error(`Payment failed: ${response.error?.description || 'Unknown error'}`);
+                setPayingDocId(null);
+            });
+            rzp.open();
+        } catch (err: any) {
+            toast.error(err.message || 'Payment initiation failed');
+            setPayingDocId(null);
+        }
+    };
+
     useEffect(() => {
         const contact = summary?.contact1 || data?.contact1 || {};
         const name = `${contact.firstName || ''} ${contact.lastName || ''}`.trim();
@@ -908,6 +1028,37 @@ export default function ExhibitorPaymentPage() {
                             >
                                 <img src={paymentCompleteImg} alt="Payment Complete" className="w-full h-auto object-cover" />
                             </motion.div>
+                        )}
+
+                        {/* Pay against a specific Invoice / Proforma Invoice */}
+                        {payableDocuments.length > 0 && (
+                            <div className="w-full rounded-xl overflow-hidden shadow-sm border border-slate-200 bg-white">
+                                <div className="px-3 py-2 border-b border-slate-100 bg-slate-50">
+                                    <p className="text-[12px] font-black text-slate-700 uppercase tracking-wide">Pay Against Invoice / Proforma</p>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">Pay directly against a specific document instead of the overall balance above.</p>
+                                </div>
+                                <div className="divide-y divide-slate-100">
+                                    {payableDocuments.map((doc: any) => {
+                                        const isPaying = payingDocId === String(doc.id);
+                                        return (
+                                            <div key={`${doc.documentType}-${doc.id}`} className="flex items-center justify-between gap-2 px-3 py-2.5">
+                                                <div className="min-w-0">
+                                                    <p className="text-[12px] font-bold text-slate-800 truncate">{doc.documentNo}</p>
+                                                    <p className="text-[10px] text-slate-400">{doc.documentType} &middot; Due {fmt(doc.remaining)}</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => payDocument(doc)}
+                                                    disabled={isPaying}
+                                                    className="shrink-0 h-8 px-3 rounded-lg bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-semibold flex items-center gap-1.5 disabled:opacity-60"
+                                                >
+                                                    {isPaying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
+                                                    Pay {fmt(doc.remaining)}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         )}
 
                         {/* Info Note */}
