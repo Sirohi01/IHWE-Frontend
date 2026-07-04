@@ -1,85 +1,33 @@
 "use client";
 
-import {
-  CheckCircle2,
-  Download,
-  Lightbulb,
-  BriefcaseMedical,
-  HeartPulse,
-  FlaskConical,
-  Brain,
-  MonitorSmartphone,
-  Hospital,
-  Stethoscope,
-  Apple,
-  Leaf,
-  Scale,
-  Pill,
-} from "lucide-react";
-
-const guidelines = [
-  "Papers must be original and not published or presented elsewhere.",
-  "Abstract should be between 250–300 words.",
-  "Full paper should be between 2500–3500 words.",
-  "Submit your paper in MS Word format (.doc/.docx).",
-  "Use Times New Roman font, 12pt size, 1.5 line spacing.",
-  "Include a cover page with title, authors, affiliations, and contact details.",
-  "All submissions are subject to a double-blind peer review process.",
-  "Presenting author must register for the conference.",
-];
-
-const topics = [
-  {
-    icon: Lightbulb,
-    title: "Healthcare Technology & Innovation",
-  },
-  {
-    icon: Hospital,
-    title: "Healthcare Management",
-  },
-  {
-    icon: MonitorSmartphone,
-    title: "AI & Digital Health",
-  },
-  {
-    icon: Stethoscope,
-    title: "Nursing & Patient Care",
-  },
-  {
-    icon: HeartPulse,
-    title: "Public Health & Epidemiology",
-  },
-  {
-    icon: Apple,
-    title: "Nutrition & Dietetics",
-  },
-  {
-    icon: BriefcaseMedical,
-    title: "Medical Devices & Diagnostics",
-  },
-  {
-    icon: Leaf,
-    title: "Environmental Health",
-  },
-  {
-    icon: Pill,
-    title: "Pharmaceutical Sciences",
-  },
-  {
-    icon: Scale,
-    title: "Policy, Ethics & Education",
-  },
-  {
-    icon: Brain,
-    title: "Mental Health & Wellbeing",
-  },
-  {
-    icon: FlaskConical,
-    title: "Other Allied Health Sciences",
-  },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "@/lib/api";
+import * as Icons from "lucide-react";
+import { CheckCircle2, Download } from "lucide-react";
 
 export default function SubmissionGuidelinesSection() {
+  const [data, setData] = useState({ guidelines: [], topics: [] });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/paper-presentation`);
+        if (res.data.success && res.data.data) {
+          setData(res.data.data);
+          console.log("Paper presentation data fetched successfully:", res.data.data);
+        } else {
+          console.error("Failed to fetch paper presentation data:", res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching paper presentation data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const guidelines = data.guidelines || [];
+  const topics = data.topics || [];
   return (
     <section className="bg-white py-2">
       <div className=" px-5 sm:px-6 lg:px-12">
@@ -127,7 +75,10 @@ export default function SubmissionGuidelinesSection() {
 
             <div className="grid gap-x-6 gap-y-3 mt-3 sm:grid-cols-2">
               {topics.map((topic, index) => {
-                const Icon = topic.icon;
+                // Safely resolve the icon
+                const Icon = (topic?.icon && Icons[topic.icon as keyof typeof Icons] 
+                                ? Icons[topic.icon as keyof typeof Icons] 
+                                : Icons.Circle) as React.ElementType;
 
                 return (
                   <div key={index} className="flex items-start gap-3">

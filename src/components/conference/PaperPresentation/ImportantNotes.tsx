@@ -1,9 +1,27 @@
 // ImportantNotes.tsx
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "@/lib/api";
 import { Megaphone, ClipboardCheck, CheckCircle2 } from "lucide-react";
 
 const ImportantNotes: React.FC = () => {
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/paper-presentation`);
+        if (res.data.success && res.data.data && res.data.data.importantNotes) {
+          setNotes(res.data.data.importantNotes);
+        }
+      } catch (error) {
+        console.error("Error fetching paper presentation data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <section className="w-full">
       <div className="px-5 sm:px-6 lg:px-12">
@@ -25,20 +43,12 @@ const ImportantNotes: React.FC = () => {
               </h3>
 
               <ul className="space-y-1.5 text-[12px] text-gray-700">
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Only registered participants are eligible to present their papers.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Each presenter will get 10–12 minutes for presentation followed by Q&A.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Certificates will be provided to all presenting authors.
-                </li>
+                {notes.map((note, index) => (
+                  <li key={index} className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
+                    {note}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

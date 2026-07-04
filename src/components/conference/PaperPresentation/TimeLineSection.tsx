@@ -1,5 +1,9 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "@/lib/api";
+import * as Icons from "lucide-react";
 import {
   Calendar,
   ShieldCheck,
@@ -10,45 +14,26 @@ import {
   Users,
 } from "lucide-react";
 
-const timeline = [
-  {
-    title: "Abstract Submission",
-    date: "01 May - 30 June 2026",
-    icon: Calendar,
-  },
-  {
-    title: "Abstract Acceptance",
-    date: "05 July 2026",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Full Paper Submission",
-    date: "10 July - 31 July 2026",
-    icon: Upload,
-  },
-  {
-    title: "Review Process",
-    date: "01 Aug - 15 Aug 2026",
-    icon: FileText,
-  },
-  {
-    title: "Notification of Acceptance",
-    date: "20 Aug 2026",
-    icon: Bell,
-  },
-  {
-    title: "Registration Deadline",
-    date: "25 Aug 2026",
-    icon: BadgeCheck,
-  },
-  {
-    title: "Presentation Date",
-    date: "21 August 2026",
-    icon: Users,
-  },
-];
-
 export default function TimelineSection() {
+  const [timeline, setTimeline] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/paper-presentation`);
+        if (res.data.success && res.data.data && res.data.data.timeline) {
+          setTimeline(res.data.data.timeline);
+          console.log("Timeline fetched:", res.data.data.timeline);
+        } else {
+          console.error("Failed to fetch timeline:", res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching timeline data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <section className="w-full mt-2">
       <div className="  sm:px-6 lg:px-12">
@@ -61,7 +46,9 @@ export default function TimelineSection() {
           <div className="overflow-x-auto">
             <div className="flex min-w-[1100px] items-start justify-between gap-4">
               {timeline.map((item, index) => {
-                const Icon = item.icon;
+                const Icon = (item?.icon && Icons[item.icon as keyof typeof Icons] 
+                                ? Icons[item.icon as keyof typeof Icons] 
+                                : Icons.Circle) as React.ElementType;
 
                 return (
                   <div

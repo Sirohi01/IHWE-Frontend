@@ -98,7 +98,7 @@ export default function PaperPresentationHero() {
 
       {/* Cards */}
 
-      <div className="relative z-20 mx-auto -mt-14 mx-12 px-2 sm:px-6 lg:px-0">
+      <div className="relative z-20  -mt-14 mx-12 px-2 sm:px-6 lg:px-0">
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md">
           <div className="grid grid-cols-1 divide-y md:grid-cols-2 md:divide-x lg:grid-cols-5 lg:divide-y-0">
             {benefits.map((item, index) => {
