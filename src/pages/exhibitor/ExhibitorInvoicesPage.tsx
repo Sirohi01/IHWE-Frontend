@@ -180,7 +180,9 @@ export default function ExhibitorInvoicesPage() {
     ];
 
     const documents: any[] = overview?.recentDocuments || [];
-    const filteredDocuments = documents.filter((doc) => (TAB_DOC_TYPES[activeTab] || []).includes(doc.documentType));
+    const filteredDocuments = documents
+        .filter((doc) => (TAB_DOC_TYPES[activeTab] || []).includes(doc.documentType))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const remainingById = new Map<string, number>(
         (financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry.remainingAmount])
@@ -439,11 +441,11 @@ export default function ExhibitorInvoicesPage() {
                                             Type
                                         </th>
 
-                                        <th className="px-4 py-1 text-right text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
                                             Amount
                                         </th>
 
-                                        <th className="px-4 py-2 text-center text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-4 py-2 text-left text-[13px] font-semibold text-[#64748b]">
                                             Status
                                         </th>
 
@@ -486,6 +488,10 @@ export default function ExhibitorInvoicesPage() {
                                                             >
                                                                 {doc.documentNo}
                                                             </button>
+                                                        ) : doc.documentType === 'Payment' ? (
+                                                            <span className="text-[#0f172a] font-normal">
+                                                                Payment for <span className="font-semibold">{doc.documentNo}</span>
+                                                            </span>
                                                         ) : (
                                                             <span className="text-[#0f172a]">{doc.documentNo}</span>
                                                         )}
@@ -499,11 +505,11 @@ export default function ExhibitorInvoicesPage() {
                                                         {doc.documentType}
                                                     </td>
 
-                                                    <td className="px-2 text-right text-[12px] font-semibold text-[#0f172a]">
+                                                    <td className="px-2 text-left text-[12px] font-semibold text-[#0f172a]">
                                                         {formatAmount(doc.amount)}
                                                     </td>
 
-                                                    <td className="px-2 text-center">
+                                                    <td className="px-2 text-left">
                                                         {getStatusBadge(doc.status)}
                                                     </td>
 
@@ -907,7 +913,7 @@ export default function ExhibitorInvoicesPage() {
                                     href="tel:+918178612345"
                                     className="text-[11px] font-medium text-[#2563eb]"
                                 >
-                                    +91 81786 12345
+                                    +91-9654900525
                                 </a>
                             </div>
                         </div>
