@@ -16,73 +16,24 @@ import {
   Scale,
   Pill,
 } from "lucide-react";
-const guidelines = [
-  "Abstract must be original and not published or presented elsewhere.",
-  "Word limit: 250 - 300 words.",
-  "Use structured format: Background, Objectives, Methods, Results, Conclusion.",
-  "Use Times New Roman font, 12pt size, single line spacing.",
-  "Do not include author names or affiliations in the abstract.",
-  "Use standard abbreviations and avoid uncommon abbreviations.",
-  "Submit your abstract in MS Word format (.doc/.docx).",
-  "All submissions are subject to a review process.",
-];
+const iconMap: { [key: string]: any } = {
+  Lightbulb,
+  BriefcaseMedical,
+  HeartPulse,
+  FlaskConical,
+  Brain,
+  MonitorSmartphone,
+  Hospital,
+  Stethoscope,
+  Apple,
+  Leaf,
+  Scale,
+  Pill,
+};
 
-const topics = [
-  {
-    icon: Lightbulb,
-    title: "Healthcare Technology & Innovation",
-  },
-  {
-    icon: Stethoscope,
-    title: "Nursing & Patient Care",
-  },
-  {
-    icon: MonitorSmartphone,
-    title: "AI & Digital Health",
-  },
-  {
-    icon: Apple,
-    title: "Nutrition & Dietetics",
-  },
-  {
-    icon: HeartPulse,
-    title: "Public Health & Epidemiology",
-  },
-  {
-    icon: Leaf,
-    title: "Environmental Health",
-  },
-  {
-    icon: BriefcaseMedical,
-    title: "Medical Devices & Diagnostics",
-  },
-  {
-    icon: Scale,
-    title: "Policy, Ethics & Education",
-  },
-  {
-    icon: Pill,
-    title: "Pharmaceutical Sciences",
-  },
-  {
-    icon: Hospital,
-    title: "Health Economics & Outcomes",
-  },
-  {
-    icon: Brain,
-    title: "Mental Health & Wellbeing",
-  },
-  {
-    icon: FlaskConical,
-    title: "Other Allied Health Sciences",
-  },
-  {
-    icon: Hospital,
-    title: "Healthcare Management",
-  },
-];
-
-export default function AbstractSubmissionGuidelinesSection() {
+export default function AbstractSubmissionGuidelinesSection({ data }: { data: any }) {
+  const guidelines = data?.guidelines || [];
+  const topics = data?.topics || [];
   return (
     <section className="bg-white py-2">
       <div className=" px-5 sm:px-6 lg:px-12">
@@ -127,10 +78,9 @@ export default function AbstractSubmissionGuidelinesSection() {
 
               <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
             </div>
-
             <div className="grid gap-x-6 gap-y-3 mt-3 sm:grid-cols-2">
-              {topics.map((topic, index) => {
-                const Icon = topic.icon;
+              {topics.map((topic: any, index: number) => {
+                const Icon = iconMap[topic.icon] || Lightbulb;
 
                 return (
                   <div key={index} className="flex items-start gap-3">

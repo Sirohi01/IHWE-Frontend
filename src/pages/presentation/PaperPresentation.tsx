@@ -13,7 +13,7 @@ const PaperPresentation: React.FC = () => {
             <SubmissionGuidelinesSection />
             <ImportantNotes />
             <ResearchBanner />
-            {/* <HealthcareHighlights /> */}
+            <HealthcareHighlights />
         </div>
     )
 }

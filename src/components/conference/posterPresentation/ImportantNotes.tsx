@@ -3,7 +3,9 @@
 import React from "react";
 import { Megaphone, ClipboardCheck, CheckCircle2 } from "lucide-react";
 
-const ImportantNotes: React.FC = () => {
+const ImportantNotes: React.FC<{ data?: any }> = ({ data = {} }) => {
+  const importantNotes = data?.importantNotes || [];
+
   return (
     <section className="w-full">
       <div className="px-5 sm:px-6 lg:px-12">
@@ -25,25 +27,12 @@ const ImportantNotes: React.FC = () => {
               </h3>
 
               <ul className="space-y-1.5 text-[12px] text-gray-700">
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Poster presenters must register for the conference.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Presenters will get 5-7 minutes to present their poster to the evaluators.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Stand near your poster during the assigned time for discussion.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  E-certificate will be provided to all poster presenters.
-                </li>
+                {importantNotes.map((note: string, index: number) => (
+                  <li key={index} className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
+                    {note}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

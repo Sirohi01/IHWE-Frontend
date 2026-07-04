@@ -17,68 +17,12 @@ import {
   Pill,
 } from "lucide-react";
 
-const guidelines = [
-  "Poster size should be 90 cm (width) x 120 cm (height) in portrait orientation.",
-  "Poster should be clear, self-explanatory and visually attractive.",
-  "Use large fonts and high-resolution images for better visibility.",
-  "Include title, authors, affiliation, introduction, methods, results, conclusion and references.",
-  "All posters must be in English.",
-  "Presenting author must be present at the poster during the assigned time.",
-  "Posters should be mounted at the assigned board number.",
-];
+import * as LucideIcons from "lucide-react";
 
-const topics = [
-  {
-    icon: Lightbulb,
-    title: "Healthcare Technology & Innovation",
-  },
-  {
-    icon: Hospital,
-    title: "Healthcare Management",
-  },
-  {
-    icon: MonitorSmartphone,
-    title: "AI & Digital Health",
-  },
-  {
-    icon: Stethoscope,
-    title: "Nursing & Patient Care",
-  },
-  {
-    icon: HeartPulse,
-    title: "Public Health & Epidemiology",
-  },
-  {
-    icon: Apple,
-    title: "Nutrition & Dietetics",
-  },
-  {
-    icon: BriefcaseMedical,
-    title: "Medical Devices & Diagnostics",
-  },
-  {
-    icon: Leaf,
-    title: "Environmental Health",
-  },
-  {
-    icon: Pill,
-    title: "Pharmaceutical Sciences",
-  },
-  {
-    icon: Scale,
-    title: "Policy, Ethics & Education",
-  },
-  {
-    icon: Brain,
-    title: "Mental Health & Wellbeing",
-  },
-  {
-    icon: FlaskConical,
-    title: "Other Allied Health Sciences",
-  },
-];
+export default function PosterSubmissionGuidelinesSection({ data = {} }: { data?: any }) {
+  const guidelines = data?.guidelines || [];
+  const topics = data?.topics || [];
 
-export default function PosterSubmissionGuidelinesSection() {
   return (
     <section className="bg-white py-2">
       <div className=" px-5 sm:px-6 lg:px-12">
@@ -94,9 +38,9 @@ export default function PosterSubmissionGuidelinesSection() {
             </div>
 
             <div className="space-y-3 mt-3">
-              {guidelines.map((item, index) => (
+              {guidelines.map((item: string, index: number) => (
                 <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2
+                  <LucideIcons.CheckCircle2
                     size={18}
                     className="mt-0.5 shrink-0 text-[#2F8B2E]"
                   />
@@ -110,7 +54,7 @@ export default function PosterSubmissionGuidelinesSection() {
 
             <button className="mt-4 flex items-center gap-2 rounded-full border border-[#2F8B2E] px-6 py-1.5 text-[13px] font-medium uppercase text-[#2F8B2E] transition hover:bg-[#2F8B2E] hover:text-white">
               Download Detailed Guidelines
-              <Download size={16} />
+              <LucideIcons.Download size={16} />
             </button>
           </div>
 
@@ -125,8 +69,8 @@ export default function PosterSubmissionGuidelinesSection() {
             </div>
 
             <div className="grid gap-x-6 gap-y-3 mt-3 sm:grid-cols-2">
-              {topics.map((topic, index) => {
-                const Icon = topic.icon;
+              {topics.map((topic: any, index: number) => {
+                const Icon = (LucideIcons as any)[topic.icon] || LucideIcons.Lightbulb;
 
                 return (
                   <div key={index} className="flex items-start gap-3">

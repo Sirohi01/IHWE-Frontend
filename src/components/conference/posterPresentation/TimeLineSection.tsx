@@ -10,45 +10,11 @@ import {
   Users,
 } from "lucide-react";
 
-const timeline = [
-  {
-    title: "Abstract Submission",
-    date: "01 May - 30 June 2026",
-    icon: Calendar,
-  },
-  {
-    title: "Abstract Acceptance",
-    date: "05 July 2026",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Poster Submission",
-    date: "10 July - 31 July 2026",
-    icon: Upload,
-  },
-  {
-    title: "Review Process",
-    date: "01 Aug - 15 Aug 2026",
-    icon: FileText,
-  },
-  {
-    title: "Notification of Acceptance",
-    date: "20 Aug 2026",
-    icon: Bell,
-  },
-  {
-    title: "Registration Deadline",
-    date: "25 Aug 2026",
-    icon: BadgeCheck,
-  },
-  {
-    title: "Poster Display Date",
-    date: "21 August 2026",
-    icon: Users,
-  },
-];
+import * as LucideIcons from "lucide-react";
 
-export default function TimelineSection() {
+export default function TimelineSection({ data = {} }: { data?: any }) {
+  const timeline = data?.timeline || [];
+
   return (
     <section className="w-full mt-2">
       <div className="  sm:px-6 lg:px-12">
@@ -60,8 +26,8 @@ export default function TimelineSection() {
 
           <div className="overflow-x-auto">
             <div className="flex min-w-[1100px] items-start justify-between gap-4">
-              {timeline.map((item, index) => {
-                const Icon = item.icon;
+              {timeline.map((item: any, index: number) => {
+                const Icon = (LucideIcons as any)[item.icon] || LucideIcons.Calendar;
 
                 return (
                   <div

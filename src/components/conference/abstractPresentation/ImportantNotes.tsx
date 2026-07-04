@@ -3,7 +3,12 @@
 import React from "react";
 import { Megaphone, ClipboardCheck, CheckCircle2 } from "lucide-react";
 
-const ImportantNotes: React.FC = () => {
+const ImportantNotes = ({ data }: { data: any }) => {
+  const notes = data?.importantNotes || [
+    "Only registered participants are eligible to submit an abstract.",
+    "Each presenter will be notified of acceptance status via email.",
+    "E-certificate will be provided to all presenting authors."
+  ];
   return (
     <section className="w-full">
       <div className="px-5 sm:px-6 lg:px-12">
@@ -25,20 +30,12 @@ const ImportantNotes: React.FC = () => {
               </h3>
 
               <ul className="space-y-1.5 text-[12px] text-gray-700">
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Only registered participants are eligible to submit an abstract.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  Each presenter will be notified of acceptance status via email.
-                </li>
-
-                <li className="flex items-center gap-2 font-medium">
-                  <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
-                  E-certificate will be provided to all presenting authors.
-                </li>
+                {notes.map((note: string, index: number) => (
+                  <li key={index} className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 size={14} className="shrink-0 text-[#39a936]" />
+                    {note}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
