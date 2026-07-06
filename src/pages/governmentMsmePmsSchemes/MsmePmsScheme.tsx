@@ -530,9 +530,9 @@ const MsmePmsScheme = () => {
       {/* Stats Bar (Rounded Card Style) - Using WhyExhibit style */}
       <div className="relative z-40 -mt-4 md:-mt-6 mb-8">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-          <div 
+          <div
             className="rounded-2xl border border-white/10 p-1 md:py-1.5 md:px-4"
-            style={{ 
+            style={{
               backgroundColor: '#134E8E',
               boxShadow: '0 8px 20px -10px rgba(0,0,0,0.3)',
             }}
@@ -563,593 +563,592 @@ const MsmePmsScheme = () => {
         </div>
       </div>
 
-        {/* Content Sections: About & Benefits Grid */}
-        < section className="py-2 bg-white" >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {/* About Section */}
-              <div className="lg:col-span-4 bg-white rounded-[20px] border border-slate-100 p-6 flex flex-col justify-center">
-                <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">{pageData.aboutTitle}</h2>
-                <div className="flex gap-2 mb-5">
-                  <div className="w-6 h-1 bg-[#23471d]"></div>
-                  <div className="w-3 h-1 bg-slate-200"></div>
-                </div>
-
-                <div className="flex flex-row gap-5 items-center">
-                  <div className="w-24 h-24 lg:w-28 lg:h-28 shrink-0 transition-transform hover:scale-105">
-                    <img src={pageData.aboutImg} alt={pageData.aboutTitle} className="w-full h-full object-contain" />
-                  </div>
-                  <div className="space-y-3 flex-1">
-                    {pageData.aboutParagraphs.map((para: string, i: number) => (
-                      <p key={i} className="text-[12px] md:text-[13px] text-slate-600 leading-relaxed font-medium">
-                        {para}
-                      </p>
-                    ))}
-                  </div>
-                </div>
+      {/* Content Sections: About & Benefits Grid */}
+      < section className="py-2 bg-white" >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* About Section */}
+            <div className="lg:col-span-4 bg-white rounded-[20px] border border-slate-100 p-6 flex flex-col justify-center">
+              <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">{pageData.aboutTitle}</h2>
+              <div className="flex gap-2 mb-5">
+                <div className="w-6 h-1 bg-[#23471d]"></div>
+                <div className="w-3 h-1 bg-slate-200"></div>
               </div>
 
-              {/* Benefits Section */}
-              <div className="lg:col-span-8 bg-white rounded-[20px] border border-slate-100 p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-                <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">{pageData.benefitsTitle}</h2>
-                <div className="flex gap-2 mb-5">
-                  <div className="w-12 h-1 bg-[#d26019]"></div>
+              <div className="flex flex-row gap-5 items-center">
+                <div className="w-24 h-24 lg:w-28 lg:h-28 shrink-0 transition-transform hover:scale-105">
+                  <img src={pageData.aboutImg} alt={pageData.aboutTitle} className="w-full h-full object-contain" />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-slate-100 rounded-2xl overflow-hidden">
-                  {pageData.benefits.map((benefit: any, i: number) => (
-                    <div key={i} className={`p-4 hover:bg-slate-50 transition-all border-b border-r border-slate-100 last:border-r-0 group`}>
-                      <div className="flex flex-row gap-4 items-center">
-                        <div className="w-[64px] h-[64px] md:w-[80px] md:h-[80px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <img src={benefit.img} alt={benefit.title} className="w-full h-full object-contain" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-[11px] md:text-[12px] font-black text-slate-800 leading-tight mb-1 group-hover:text-[#23471d] transition-colors">{benefit.title}</h4>
-                          <p className="text-[9px] md:text-[10px] font-medium text-slate-500 leading-relaxed">
-                            {benefit.desc}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                <div className="space-y-3 flex-1">
+                  {pageData.aboutParagraphs.map((para: string, i: number) => (
+                    <p key={i} className="text-[12px] md:text-[13px] text-slate-600 leading-relaxed font-medium">
+                      {para}
+                    </p>
                   ))}
                 </div>
-                <p className="mt-4 text-[9px] text-slate-400 italic font-medium">
-                  {pageData.subsidyNotice}
-                </p>
               </div>
             </div>
-          </div>
-        </section >
 
-        {/* Detailed Guidelines Grid */}
-        < section className="py-2 bg-[#f3fbf2] border-y border-[#d3eed1]" >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* Left: Imagery Collage */}
-              <div className="lg:col-span-3">
-                <div className="rounded-[20px] overflow-hidden shadow-lg border border-slate-100 h-full">
-                  <img
-                    src={pageData.collageImg}
-                    alt="Exhibition Stalls"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+            {/* Benefits Section */}
+            <div className="lg:col-span-8 bg-white rounded-[20px] border border-slate-100 p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+              <h2 className="text-[20px] md:text-[22px] font-black text-[#1a3615] mb-2 uppercase tracking-tight">{pageData.benefitsTitle}</h2>
+              <div className="flex gap-2 mb-5">
+                <div className="w-12 h-1 bg-[#d26019]"></div>
               </div>
 
-              {/* Right: 3-Column Info Grid */}
-              <div className="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Who Can Apply */}
-                <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Users className="text-[#1a3615]" size={26} strokeWidth={2.5} />
-                    <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.whoCanApplyTitle}</h3>
-                  </div>
-                  <ul className="space-y-4 flex-1">
-                    {pageData.whoCanApplyItems.map((item: string, i: number) => (
-                      <li key={i} className="flex gap-4 items-start group/li">
-                        <div className="shrink-0 mt-1">
-                          <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
-                        </div>
-                        <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Why PMS Scheme */}
-                <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <img src={pageData.whyPmsImg} alt={pageData.whyPmsTitle} className="w-8 h-8 object-contain shrink-0" />
-                    <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.whyPmsTitle}</h3>
-                  </div>
-                  <ul className="space-y-4 flex-1">
-                    {pageData.whyPmsItems.map((item: string, i: number) => (
-                      <li key={i} className="flex gap-4 items-start group/li">
-                        <div className="shrink-0 mt-1">
-                          <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
-                        </div>
-                        <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Eligibility Criteria */}
-                <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <ShieldCheck className="text-[#1a3615]" size={26} strokeWidth={2.5} />
-                    <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.eligibilityTitle}</h3>
-                  </div>
-                  <ul className="space-y-4 flex-1">
-                    {pageData.eligibilityItems.map((item: string, i: number) => (
-                      <li key={i} className="flex gap-4 items-start group/li">
-                        <div className="shrink-0 mt-1">
-                          <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
-                        </div>
-                        <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section >
-        < section className="pb-4 bg-white border-y border-[#d3eed1]" >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            {/* Bottom Grid: Documents & How to Apply */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
-              {/* Documents Required */}
-              <div className="lg:col-span-4 bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
-                <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
-                <ul className="space-y-3">
-                  {[
-                    { label: "Udyam Registration Certificate", img: "/msmepmsscheme/udyamreg.png" },
-                    { label: "PAN Card", img: "/msmepmsscheme/pan.png" },
-                    { label: "GST Certificate", img: "/msmepmsscheme/gstcerti.png" },
-                    { label: "Company Profile", img: "/msmepmsscheme/companyprofile.png" },
-                    { label: "Product / Service Details", img: "/msmepmsscheme/productdetails.png" },
-                    { label: "Bank Account Details", img: "/msmepmsscheme/bankaccdetails.png" },
-                  ].map((doc, i) => (
-                    <li key={i} className="flex gap-5 items-center group">
-                      <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                        <img src={doc.img} alt={doc.label} className="w-full h-full object-contain" />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 border border-slate-100 rounded-2xl overflow-hidden">
+                {pageData.benefits.map((benefit: any, i: number) => (
+                  <div key={i} className={`p-4 hover:bg-slate-50 transition-all border-b border-r border-slate-100 last:border-r-0 group`}>
+                    <div className="flex flex-row gap-4 items-center">
+                      <div className="w-[64px] h-[64px] md:w-[80px] md:h-[80px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <img src={benefit.img} alt={benefit.title} className="w-full h-full object-contain" />
                       </div>
-                      <span className="text-[14px] font-bold text-slate-700 leading-tight">{doc.label}</span>
+                      <div className="flex-1">
+                        <h4 className="text-[11px] md:text-[12px] font-black text-slate-800 leading-tight mb-1 group-hover:text-[#23471d] transition-colors">{benefit.title}</h4>
+                        <p className="text-[9px] md:text-[10px] font-medium text-slate-500 leading-relaxed">
+                          {benefit.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-[9px] text-slate-400 italic font-medium">
+                {pageData.subsidyNotice}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section >
+
+      {/* Detailed Guidelines Grid */}
+      < section className="py-2 bg-[#f3fbf2] border-y border-[#d3eed1]" >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left: Imagery Collage */}
+            <div className="lg:col-span-3">
+              <div className="rounded-[20px] overflow-hidden shadow-lg border border-slate-100 h-full">
+                <img
+                  src={pageData.collageImg}
+                  alt="Exhibition Stalls"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Right: 3-Column Info Grid */}
+            <div className="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Who Can Apply */}
+              <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <Users className="text-[#1a3615]" size={26} strokeWidth={2.5} />
+                  <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.whoCanApplyTitle}</h3>
+                </div>
+                <ul className="space-y-4 flex-1">
+                  {pageData.whoCanApplyItems.map((item: string, i: number) => (
+                    <li key={i} className="flex gap-4 items-start group/li">
+                      <div className="shrink-0 mt-1">
+                        <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
+                      </div>
+                      <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* How to Apply */}
-              <div className="lg:col-span-8 bg-[#f9fafb] rounded-[20px] p-4 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-6 relative overflow-hidden">
-                <div className="flex-1 relative">
-                  <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">HOW TO APPLY?</h3>
+              {/* Why PMS Scheme */}
+              <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <img src={pageData.whyPmsImg} alt={pageData.whyPmsTitle} className="w-8 h-8 object-contain shrink-0" />
+                  <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.whyPmsTitle}</h3>
+                </div>
+                <ul className="space-y-4 flex-1">
+                  {pageData.whyPmsItems.map((item: string, i: number) => (
+                    <li key={i} className="flex gap-4 items-start group/li">
+                      <div className="shrink-0 mt-1">
+                        <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
+                      </div>
+                      <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
-                    {/* Column 1: Steps 1, 2, 3 */}
-                    <div className="space-y-3 relative">
-                      {/* Vertical Line for Column 1 */}
-                      <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
-
-                      {[
-                        { title: "Fill Online Application Form", desc: "with correct details" },
-                        { title: "Upload Required Documents", desc: "Submit all the necessary documents online" },
-                        { title: "Verification & Approval", desc: "Documents will be verified by the Ministry of MSME" },
-                      ].map((step, i) => (
-                        <div key={i} className="flex gap-6 items-start relative z-10">
-                          <div className="w-8 h-8 bg-[#1a3615] rounded-full flex items-center justify-center text-white font-black text-[12px] shrink-0 shadow-lg ring-4 ring-[#f9fafb]">
-                            {i + 1}
-                          </div>
-                          <div className="pt-0.5">
-                            <h4 className="text-[13px] font-black text-slate-800 leading-tight mb-0.5">{step.title}</h4>
-                            <p className="text-[11px] font-medium text-slate-500 leading-relaxed max-w-[220px]">{step.desc}</p>
-                          </div>
-                        </div>
-                      ))}
+              {/* Eligibility Criteria */}
+              <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <ShieldCheck className="text-[#1a3615]" size={26} strokeWidth={2.5} />
+                  <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.eligibilityTitle}</h3>
+                </div>
+                <ul className="space-y-4 flex-1">
+                  {pageData.eligibilityItems.map((item: string, i: number) => (
+                    <li key={i} className="flex gap-4 items-start group/li">
+                      <div className="shrink-0 mt-1">
+                        <CheckCircle2 size={18} className="text-[#1a3615]" strokeWidth={3} />
+                      </div>
+                      <span className="text-[13px] font-bold text-slate-700 leading-[1.6]">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section >
+      < section className="pb-4 bg-white border-y border-[#d3eed1]" >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          {/* Bottom Grid: Documents & How to Apply */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-4">
+            {/* Documents Required */}
+            <div className="lg:col-span-4 bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+              <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
+              <ul className="space-y-3">
+                {[
+                  { label: "Udyam Registration Certificate", img: "/msmepmsscheme/udyamreg.png" },
+                  { label: "PAN Card", img: "/msmepmsscheme/pan.png" },
+                  { label: "GST Certificate", img: "/msmepmsscheme/gstcerti.png" },
+                  { label: "Company Profile", img: "/msmepmsscheme/companyprofile.png" },
+                  { label: "Product / Service Details", img: "/msmepmsscheme/productdetails.png" },
+                  { label: "Bank Account Details", img: "/msmepmsscheme/bankaccdetails.png" },
+                ].map((doc, i) => (
+                  <li key={i} className="flex gap-5 items-center group">
+                    <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                      <img src={doc.img} alt={doc.label} className="w-full h-full object-contain" />
                     </div>
+                    <span className="text-[14px] font-bold text-slate-700 leading-tight">{doc.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                    {/* Column 2: Steps 4, 5 */}
-                    <div className="space-y-3 relative mt-4 md:mt-0">
-                      {/* Vertical Line for Column 2 */}
-                      <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
+            {/* How to Apply */}
+            <div className="lg:col-span-8 bg-[#f9fafb] rounded-[20px] p-4 border border-[#e5e7eb] shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col md:flex-row gap-6 relative overflow-hidden">
+              <div className="flex-1 relative">
+                <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">HOW TO APPLY?</h3>
 
-                      {[
-                        { title: "Stall Allocation", desc: "Stall will be allocated after approval" },
-                        { title: "Participation Confirmation", desc: "Confirm your participation and get ready to exhibit!" },
-                      ].map((step, i) => (
-                        <div key={i} className="flex gap-6 items-start relative z-10">
-                          <div className="w-8 h-8 bg-[#1a3615] rounded-full flex items-center justify-center text-white font-black text-[12px] shrink-0 shadow-lg ring-4 ring-[#f9fafb]">
-                            {i + 4}
-                          </div>
-                          <div className="pt-0.5">
-                            <h4 className="text-[13px] font-black text-slate-800 leading-tight mb-0.5">{step.title}</h4>
-                            <p className="text-[11px] font-medium text-slate-500 leading-relaxed max-w-[220px]">{step.desc}</p>
-                          </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
+                  {/* Column 1: Steps 1, 2, 3 */}
+                  <div className="space-y-3 relative">
+                    {/* Vertical Line for Column 1 */}
+                    <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
+
+                    {[
+                      { title: "Fill Online Application Form", desc: "with correct details" },
+                      { title: "Upload Required Documents", desc: "Submit all the necessary documents online" },
+                      { title: "Verification & Approval", desc: "Documents will be verified by the Ministry of MSME" },
+                    ].map((step, i) => (
+                      <div key={i} className="flex gap-6 items-start relative z-10">
+                        <div className="w-8 h-8 bg-[#1a3615] rounded-full flex items-center justify-center text-white font-black text-[12px] shrink-0 shadow-lg ring-4 ring-[#f9fafb]">
+                          {i + 1}
                         </div>
-                      ))}
-                    </div>
+                        <div className="pt-0.5">
+                          <h4 className="text-[13px] font-black text-slate-800 leading-tight mb-0.5">{step.title}</h4>
+                          <p className="text-[11px] font-medium text-slate-500 leading-relaxed max-w-[220px]">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Column 2: Steps 4, 5 */}
+                  <div className="space-y-3 relative mt-4 md:mt-0">
+                    {/* Vertical Line for Column 2 */}
+                    <div className="absolute left-[15px] top-[24px] bottom-[24px] w-[1px] bg-slate-200"></div>
+
+                    {[
+                      { title: "Stall Allocation", desc: "Stall will be allocated after approval" },
+                      { title: "Participation Confirmation", desc: "Confirm your participation and get ready to exhibit!" },
+                    ].map((step, i) => (
+                      <div key={i} className="flex gap-6 items-start relative z-10">
+                        <div className="w-8 h-8 bg-[#1a3615] rounded-full flex items-center justify-center text-white font-black text-[12px] shrink-0 shadow-lg ring-4 ring-[#f9fafb]">
+                          {i + 4}
+                        </div>
+                        <div className="pt-0.5">
+                          <h4 className="text-[13px] font-black text-slate-800 leading-tight mb-0.5">{step.title}</h4>
+                          <p className="text-[11px] font-medium text-slate-500 leading-relaxed max-w-[220px]">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Checklist Graphic */}
-                <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
-                  <img
-                    src="/msmepmsscheme/approved.png"
-                    alt="Application Approved"
-                    className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
-                  />
-                  {/* <div className="absolute bottom-[15%] right-[15%]">
+              {/* Checklist Graphic */}
+              <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
+                <img
+                  src="/msmepmsscheme/approved.png"
+                  alt="Application Approved"
+                  className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
+                />
+                {/* <div className="absolute bottom-[15%] right-[15%]">
                     <div className="inline-block bg-[#1a3615] text-white text-[11px] font-black px-6 py-2 rounded-full shadow-2xl uppercase tracking-widest border-4 border-white animate-bounce-slow">
                       APPROVED
                     </div>
                   </div> */}
-                </div>
               </div>
             </div>
           </div>
-        </section >
+        </div>
+      </section >
 
-        {/* Application Form Section - High Density Compact UI */}
-        < section id="apply-form" className="py-4 bg-[#f3fbf2] border-t border-[#d3eed1]" >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100 p-5 lg:p-7">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* Application Form Section - High Density Compact UI */}
+      < section id="apply-form" className="py-4 bg-[#f3fbf2] border-t border-[#d3eed1]" >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100 p-5 lg:p-7">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                {/* Left Column: Form Header & Help */}
-                <div className="lg:col-span-3">
-                  <h2 className="text-[18px] font-black text-[#1a3615] leading-[1.2] mb-2">
-                    {pageData.formTitle || "APPLY FOR PMS SCHEME – IHWE 2026"}
-                  </h2>
-                  <div className="flex gap-1.5 mb-4">
-                    <div className="w-6 h-[2px] bg-[#1a3615]"></div>
-                    <div className="w-12 h-[2px] bg-orange-200"></div>
-                  </div>
-                  <p className="text-[11px] text-slate-500 font-bold leading-relaxed mb-6">
-                    {pageData.formSubTitle || "Claim your subsidy and grow your business at IHWE 2026!"}
-                  </p>
-
-                  {/* Important Note Box */}
-                  <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
-                        <img src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
-                      </div>
-                      <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
-                    </div>
-                    <p className="text-[10px] text-slate-700 font-bold leading-relaxed">
-                      Final subsidy approval and amount is subject to MSME PMS scheme guidelines and ministry approval.
-                    </p>
-                  </div>
+              {/* Left Column: Form Header & Help */}
+              <div className="lg:col-span-3">
+                <h2 className="text-[18px] font-black text-[#1a3615] leading-[1.2] mb-2">
+                  {pageData.formTitle || "APPLY FOR PMS SCHEME – IHWE 2026"}
+                </h2>
+                <div className="flex gap-1.5 mb-4">
+                  <div className="w-6 h-[2px] bg-[#1a3615]"></div>
+                  <div className="w-12 h-[2px] bg-orange-200"></div>
                 </div>
+                <p className="text-[11px] text-slate-500 font-bold leading-relaxed mb-6">
+                  {pageData.formSubTitle || "Claim your subsidy and grow your business at IHWE 2026!"}
+                </p>
 
-                {/* Middle Column: The Form */}
-                <div className="lg:col-span-9 bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100  p-5 lg:p-7">
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Row 1: 4 Column Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Company / Organization Name <span className="text-red-500">*</span></label>
-                        <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
-                        <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
-                      </div>
-                      <div className="space-y-1 relative">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
-                        <div className="relative flex items-center">
-                          <Input
-                            name="mobileNumber"
-                            value={formData.mobileNumber}
-                            onChange={handleInputChange}
-                            required
-                            type="tel"
-                            disabled={phoneVerified || phoneOtpSent}
-                            className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${phoneVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
-                            placeholder="Enter mobile number"
-                          />
-                          {!phoneVerified && (
-                            <button
-                              type="button"
-                              onClick={sendPhoneOtp}
-                              disabled={sendingPhoneOtp || !formData.mobileNumber || phoneResendTimer > 0}
-                              className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
-                            >
-                              {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `${phoneResendTimer}s` : phoneOtpSent ? "Resend" : "Send OTP"}
-                            </button>
-                          )}
-                          {phoneVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
-                        </div>
-                      </div>
-                      <div className="space-y-1 relative">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
-                        <div className="relative flex items-center">
-                          <Input
-                            name="emailId"
-                            value={formData.emailId}
-                            onChange={handleInputChange}
-                            required
-                            type="email"
-                            disabled={emailVerified || emailOtpSent}
-                            className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${emailVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
-                            placeholder="Enter email address"
-                          />
-                          {!emailVerified && (
-                            <button
-                              type="button"
-                              onClick={sendEmailOtp}
-                              disabled={sendingEmailOtp || !formData.emailId || emailResendTimer > 0}
-                              className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
-                            >
-                              {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `${emailResendTimer}s` : emailOtpSent ? "Resend" : "Send OTP"}
-                            </button>
-                          )}
-                          {emailVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
-                        </div>
-                      </div>
+                {/* Important Note Box */}
+                <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
+                      <img src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
                     </div>
+                    <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
+                  </div>
+                  <p className="text-[10px] text-slate-700 font-bold leading-relaxed">
+                    Final subsidy approval and amount is subject to MSME PMS scheme guidelines and ministry approval.
+                  </p>
+                </div>
+              </div>
 
-                    {/* OTP Inputs Row */}
-                    {((phoneOtpSent || sendingPhoneOtp) && !phoneVerified || (emailOtpSent || sendingEmailOtp) && !emailVerified) && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-orange-50/30 border border-orange-100 rounded-md">
-                        <div>
-                          {(phoneOtpSent || sendingPhoneOtp) && !phoneVerified ? (
-                            <div className="space-y-1">
-                              <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Mobile OTP <span className="text-red-500">*</span></label>
-                              <div className="flex gap-2">
-                                <Input
-                                  type="text"
-                                  placeholder="WhatsApp OTP"
-                                  value={phoneOtp}
-                                  onChange={(e) => setPhoneOtp(e.target.value)}
-                                  className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
-                                  maxLength={6}
-                                />
-                                <Button
-                                  type="button"
-                                  onClick={confirmPhoneOtp}
-                                  disabled={verifyingPhone || !phoneOtp}
-                                  className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
-                                >
-                                  {verifyingPhone ? "Verifying..." : "Verify"}
-                                </Button>
-                              </div>
-                            </div>
-                          ) : null}
-                        </div>
-                        <div>
-                          {(emailOtpSent || sendingEmailOtp) && !emailVerified ? (
-                            <div className="space-y-1">
-                              <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Email OTP <span className="text-red-500">*</span></label>
-                              <div className="flex gap-2">
-                                <Input
-                                  type="text"
-                                  placeholder="Email OTP"
-                                  value={emailOtp}
-                                  onChange={(e) => setEmailOtp(e.target.value)}
-                                  className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
-                                  maxLength={6}
-                                />
-                                <Button
-                                  type="button"
-                                  onClick={confirmEmailOtp}
-                                  disabled={verifyingEmail || !emailOtp}
-                                  className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
-                                >
-                                  {verifyingEmail ? "Verifying..." : "Verify"}
-                                </Button>
-                              </div>
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Row 2: Udyam, GST, Category */}
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Udyam Registration Number <span className="text-red-500">*</span></label>
-                        <Input name="udyamNumber" value={formData.udyamNumber} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">GST Number</label>
-                        <Input name="gstNumber" value={formData.gstNumber} onChange={handleInputChange} className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
-                      </div>
-                      <div className="lg:col-span-2 space-y-1">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Product / Service Category <span className="text-red-500">*</span></label>
-                        <Select required value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
-                          <SelectTrigger className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3">
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="ayurveda">Ayurveda & Herbal</SelectItem>
-                            <SelectItem value="wellness">Wellness & Fitness</SelectItem>
-                            <SelectItem value="organic">Organic Food</SelectItem>
-                            <SelectItem value="pharma">Pharma & Nutraceuticals</SelectItem>
-                            <SelectItem value="personal">Personal Care</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+              {/* Middle Column: The Form */}
+              <div className="lg:col-span-9 bg-white rounded-[15px] shadow-[0_2px_20px_rgba(0,0,0,0.03)] border border-slate-100  p-5 lg:p-7">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Row 1: 4 Column Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Company / Organization Name <span className="text-red-500">*</span></label>
+                      <Input name="companyName" value={formData.companyName} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter company name" />
                     </div>
-
-                    {/* Row 3: TextArea + Upload + Help Card */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-                      {/* Company Brief */}
-                      <div className="lg:col-span-5 space-y-1 flex flex-col">
-                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Brief About Your Company / Products <span className="text-red-500">*</span></label>
-                        <Textarea name="companyBrief" value={formData.companyBrief} onChange={handleInputChange} required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
-                      </div>
-
-                      {/* Upload & Help Card Side */}
-                      <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-7 gap-5">
-                        {/* Upload Section */}
-                        <div className="md:col-span-4 space-y-1 flex flex-col">
-                          <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Upload Documents <span className="text-red-500">*</span></label>
-                          <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileSelect}
-                            className="hidden"
-                            multiple
-                            accept=".pdf,.jpg,.jpeg,.png"
-                          />
-                          <div
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                            onClick={() => fileInputRef.current?.click()}
-                            className="flex-1 border border-dashed border-slate-200 rounded-md flex flex-col items-center justify-center bg-[#f9fafb] hover:bg-slate-50 transition-colors cursor-pointer group p-3"
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Contact Person <span className="text-red-500">*</span></label>
+                      <Input name="contactPerson" value={formData.contactPerson} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter full name" />
+                    </div>
+                    <div className="space-y-1 relative">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Mobile Number <span className="text-red-500">*</span></label>
+                      <div className="relative flex items-center">
+                        <Input
+                          name="mobileNumber"
+                          value={formData.mobileNumber}
+                          onChange={handleInputChange}
+                          required
+                          type="tel"
+                          disabled={phoneVerified || phoneOtpSent}
+                          className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${phoneVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
+                          placeholder="Enter mobile number"
+                        />
+                        {!phoneVerified && (
+                          <button
+                            type="button"
+                            onClick={sendPhoneOtp}
+                            disabled={sendingPhoneOtp || !formData.mobileNumber || phoneResendTimer > 0}
+                            className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
                           >
-                            <Upload size={20} className="text-slate-400 mb-1 group-hover:text-[#1a3615] transition-colors" />
-                            <p className="text-[10px] font-black text-slate-700">
-                              {selectedFiles.length > 0 ? `${selectedFiles.length} files selected` : "Drag & drop files here"}
-                            </p>
-                            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">
-                              or <span className="text-[#1a3615] underline">Browse Files</span>
-                            </p>
-                            {selectedFiles.length > 0 && (
-                              <div className="mt-2 w-full max-h-12 overflow-y-auto">
-                                {selectedFiles.map((file, i) => (
-                                  <p key={i} className="text-[8px] text-slate-400 truncate">{file.name}</p>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                          <p className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter mt-1">Allowed: PDF, JPG, PNG (Max size: 10MB each)</p>
-                        </div>
+                            {sendingPhoneOtp ? "Sending..." : phoneResendTimer > 0 ? `${phoneResendTimer}s` : phoneOtpSent ? "Resend" : "Send OTP"}
+                          </button>
+                        )}
+                        {phoneVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
+                      </div>
+                    </div>
+                    <div className="space-y-1 relative">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Email ID <span className="text-red-500">*</span></label>
+                      <div className="relative flex items-center">
+                        <Input
+                          name="emailId"
+                          value={formData.emailId}
+                          onChange={handleInputChange}
+                          required
+                          type="email"
+                          disabled={emailVerified || emailOtpSent}
+                          className={`h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold pl-3 pr-20 ${emailVerified ? "bg-green-50/50 border-green-200 text-green-700 font-semibold" : ""}`}
+                          placeholder="Enter email address"
+                        />
+                        {!emailVerified && (
+                          <button
+                            type="button"
+                            onClick={sendEmailOtp}
+                            disabled={sendingEmailOtp || !formData.emailId || emailResendTimer > 0}
+                            className="absolute right-1 px-2.5 py-1 bg-[#1a3615] text-white text-[8px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#0a2008] disabled:bg-slate-200 transition-all active:scale-95"
+                          >
+                            {sendingEmailOtp ? "Sending..." : emailResendTimer > 0 ? `${emailResendTimer}s` : emailOtpSent ? "Resend" : "Send OTP"}
+                          </button>
+                        )}
+                        {emailVerified && <CheckCircle2 size={14} className="absolute right-3 text-green-500" />}
+                      </div>
+                    </div>
+                  </div>
 
-                        {/* Need Help Card (Ultra Compact) */}
-                        <div className="md:col-span-3">
-                          <div className="bg-[#0b1d09] rounded-xl p-4 h-full flex flex-col items-center justify-center text-center relative overflow-hidden">
-                            <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center mb-2 text-yellow-400">
-                              <Phone size={16} />
-                            </div>
-                            <h4 className="text-[14px] font-black text-white mb-0.5 leading-tight">{pageData.helpTitle || "Need Help?"}</h4>
-                            <p className="text-[9px] text-white/50 font-bold mb-3 uppercase tracking-tighter">{pageData.helpSubTitle || "Our team is here to assist you"}</p>
-
-                            <div className="space-y-0.5 mb-3">
-                              <p className="text-[14px] font-black text-white">{pageData.helpPhone || "+91 9654900525"}</p>
-                              <p className="text-[14px] font-bold text-white/60 truncate w-full">{pageData.helpEmail || "info@ihwe.in"}</p>
-                            </div>
-
-                            <Link to="/contact" className="w-full">
-                              <Button variant="outline" className="w-full border-yellow-400/50 text-yellow-400 bg-[#0b1d09] hover:bg-yellow-400 hover:text-[#1a3615] font-black text-[8px] uppercase tracking-[0.2em] h-8 rounded-md transition-all">
-                                CONTACT US
+                  {/* OTP Inputs Row */}
+                  {((phoneOtpSent || sendingPhoneOtp) && !phoneVerified || (emailOtpSent || sendingEmailOtp) && !emailVerified) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-orange-50/30 border border-orange-100 rounded-md">
+                      <div>
+                        {(phoneOtpSent || sendingPhoneOtp) && !phoneVerified ? (
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Mobile OTP <span className="text-red-500">*</span></label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="text"
+                                placeholder="WhatsApp OTP"
+                                value={phoneOtp}
+                                onChange={(e) => setPhoneOtp(e.target.value)}
+                                className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
+                                maxLength={6}
+                              />
+                              <Button
+                                type="button"
+                                onClick={confirmPhoneOtp}
+                                disabled={verifyingPhone || !phoneOtp}
+                                className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
+                              >
+                                {verifyingPhone ? "Verifying..." : "Verify"}
                               </Button>
-                            </Link>
+                            </div>
                           </div>
+                        ) : null}
+                      </div>
+                      <div>
+                        {(emailOtpSent || sendingEmailOtp) && !emailVerified ? (
+                          <div className="space-y-1">
+                            <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Enter Email OTP <span className="text-red-500">*</span></label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="text"
+                                placeholder="Email OTP"
+                                value={emailOtp}
+                                onChange={(e) => setEmailOtp(e.target.value)}
+                                className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3 text-center tracking-widest"
+                                maxLength={6}
+                              />
+                              <Button
+                                type="button"
+                                onClick={confirmEmailOtp}
+                                disabled={verifyingEmail || !emailOtp}
+                                className="h-8 bg-[#1a3615] text-white text-[10px] font-bold uppercase rounded-md px-4 shrink-0"
+                              >
+                                {verifyingEmail ? "Verifying..." : "Verify"}
+                              </Button>
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Row 2: Udyam, GST, Category */}
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Udyam Registration Number <span className="text-red-500">*</span></label>
+                      <Input name="udyamNumber" value={formData.udyamNumber} onChange={handleInputChange} required className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter Udyam number" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">GST Number</label>
+                      <Input name="gstNumber" value={formData.gstNumber} onChange={handleInputChange} className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3" placeholder="Enter GST number" />
+                    </div>
+                    <div className="lg:col-span-2 space-y-1">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Product / Service Category <span className="text-red-500">*</span></label>
+                      <Select required value={formData.category} onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}>
+                        <SelectTrigger className="h-8 bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-bold px-3">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ayurveda">Ayurveda & Herbal</SelectItem>
+                          <SelectItem value="wellness">Wellness & Fitness</SelectItem>
+                          <SelectItem value="organic">Organic Food</SelectItem>
+                          <SelectItem value="pharma">Pharma & Nutraceuticals</SelectItem>
+                          <SelectItem value="personal">Personal Care</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Row 3: TextArea + Upload + Help Card */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                    {/* Company Brief */}
+                    <div className="lg:col-span-5 space-y-1 flex flex-col">
+                      <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Brief About Your Company / Products <span className="text-red-500">*</span></label>
+                      <Textarea name="companyBrief" value={formData.companyBrief} onChange={handleInputChange} required className="flex-1 min-h-[90px] bg-white border-slate-200 focus:border-[#1a3615] rounded-md text-[11px] font-medium p-3" placeholder="Write here..." />
+                    </div>
+
+                    {/* Upload & Help Card Side */}
+                    <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-7 gap-5">
+                      {/* Upload Section */}
+                      <div className="md:col-span-4 space-y-1 flex flex-col">
+                        <label className="text-[9px] font-black text-slate-600 uppercase tracking-tight">Upload Documents <span className="text-red-500">*</span></label>
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={handleFileSelect}
+                          className="hidden"
+                          multiple
+                          accept=".pdf,.jpg,.jpeg,.png"
+                        />
+                        <div
+                          onDragOver={handleDragOver}
+                          onDrop={handleDrop}
+                          onClick={() => fileInputRef.current?.click()}
+                          className="flex-1 border border-dashed border-slate-200 rounded-md flex flex-col items-center justify-center bg-[#f9fafb] hover:bg-slate-50 transition-colors cursor-pointer group p-3"
+                        >
+                          <Upload size={20} className="text-slate-400 mb-1 group-hover:text-[#1a3615] transition-colors" />
+                          <p className="text-[10px] font-black text-slate-700">
+                            {selectedFiles.length > 0 ? `${selectedFiles.length} files selected` : "Drag & drop files here"}
+                          </p>
+                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">
+                            or <span className="text-[#1a3615] underline">Browse Files</span>
+                          </p>
+                          {selectedFiles.length > 0 && (
+                            <div className="mt-2 w-full max-h-12 overflow-y-auto">
+                              {selectedFiles.map((file, i) => (
+                                <p key={i} className="text-[8px] text-slate-400 truncate">{file.name}</p>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-tighter mt-1">Allowed: PDF, JPG, PNG (Max size: 10MB each)</p>
+                      </div>
+
+                      {/* Need Help Card (Ultra Compact) */}
+                      <div className="md:col-span-3">
+                        <div className="bg-[#0b1d09] rounded-xl p-4 h-full flex flex-col items-center justify-center text-center relative overflow-hidden">
+                          <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center mb-2 text-yellow-400">
+                            <Phone size={16} />
+                          </div>
+                          <h4 className="text-[14px] font-black text-white mb-0.5 leading-tight">{pageData.helpTitle || "Need Help?"}</h4>
+                          <p className="text-[9px] text-white/50 font-bold mb-3 uppercase tracking-tighter">{pageData.helpSubTitle || "Our team is here to assist you"}</p>
+
+                          <div className="space-y-0.5 mb-3">
+                            <p className="text-[14px] font-black text-white">{pageData.helpPhone || "+91 9654900525"}</p>
+                            <p className="text-[14px] font-bold text-white/60 truncate w-full">{pageData.helpEmail || "info@ihwe.in"}</p>
+                          </div>
+
+                          <Link to="/contact" className="w-full">
+                            <Button variant="outline" className="w-full border-yellow-400/50 text-yellow-400 bg-[#0b1d09] hover:bg-yellow-400 hover:text-[#1a3615] font-black text-[8px] uppercase tracking-[0.2em] h-8 rounded-md transition-all">
+                              CONTACT US
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    {/* Submit Row */}
-                    <div className="space-y-4 pt-1">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" required className="w-3.5 h-3.5 border border-slate-300" />
-                        <label htmlFor="terms" className="text-[10px] font-bold text-slate-500 leading-none cursor-pointer">
-                          I agree to the <Link to="/terms-of-service" className="text-[#1a3615] underline">Terms & Conditions</Link> and <Link to="/privacy-policy" className="text-[#1a3615] underline">Privacy Policy</Link>
-                        </label>
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full md:w-[380px] h-10 bg-[#1a3615] hover:bg-[#1a3615] text-white font-black text-[12px] uppercase tracking-[0.2em] rounded-md shadow-lg transition-all flex items-center justify-center gap-3"
-                      >
-                        {isSubmitting ? "PROCESSING..." : "SUBMIT APPLICATION"}
-                        {!isSubmitting && <ArrowRight size={14} />}
-                      </Button>
+                  {/* Submit Row */}
+                  <div className="space-y-4 pt-1">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="terms" required className="w-3.5 h-3.5 border border-slate-300" />
+                      <label htmlFor="terms" className="text-[10px] font-bold text-slate-500 leading-none cursor-pointer">
+                        I agree to the <Link to="/terms-of-service" className="text-[#1a3615] underline">Terms & Conditions</Link> and <Link to="/privacy-policy" className="text-[#1a3615] underline">Privacy Policy</Link>
+                      </label>
                     </div>
-                  </form>
-                </div>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full md:w-[380px] h-10 bg-[#1a3615] hover:bg-[#1a3615] text-white font-black text-[12px] uppercase tracking-[0.2em] rounded-md shadow-lg transition-all flex items-center justify-center gap-3"
+                    >
+                      {isSubmitting ? "PROCESSING..." : "SUBMIT APPLICATION"}
+                      {!isSubmitting && <ArrowRight size={14} />}
+                    </Button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-        </section >
+        </div>
+      </section >
 
-        {/* Footer CTA - Rebuilt for exact parity with brochure design */}
-        <section className="py-2 bg-white font-['Barlow',sans-serif]">
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="bg-[#123b17] rounded-lg px-4 md:px-8 py-4 shadow-lg relative flex flex-col lg:flex-row items-center justify-between gap-6">
+      {/* Footer CTA - Rebuilt for exact parity with brochure design */}
+      <section className="py-2 bg-white font-['Barlow',sans-serif]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="bg-[#123b17] rounded-lg px-4 md:px-8 py-4 shadow-lg relative flex flex-col lg:flex-row items-center justify-between gap-6">
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
-                <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 -my-8 md:-my-10 relative z-10 drop-shadow-xl transition-transform hover:scale-105">
-                  <img src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.png"} alt="Announcement" className="w-full h-full object-contain" />
-                </div>
-
-                <div className="space-y-1 mt-4 sm:mt-0">
-                  <h3 className="text-xl md:text-[22px] font-bold text-white leading-tight tracking-wide">
-                    {pageData.bottomCtaTitle ? (
-                      pageData.bottomCtaTitle.includes(pageData.bottomCtaHighlight) ? (
-                        <>
-                          {pageData.bottomCtaTitle.split(pageData.bottomCtaHighlight)[0]}
-                          <span className="text-[#f59e0b]">{pageData.bottomCtaHighlight}</span>
-                          {pageData.bottomCtaTitle.split(pageData.bottomCtaHighlight)[1]}
-                        </>
-                      ) : (
-                        pageData.bottomCtaTitle
-                      )
-                    ) : (
-                      <>Don't Miss This <span className="text-[#f59e0b]">Government-Supported Opportunity!</span></>
-                    )}
-                  </h3>
-                  <p className="text-white/90 text-sm md:text-[15px] font-normal max-w-xl leading-snug">
-                    {pageData.bottomCtaDesc || "Exhibit at IHWE 2026 and take your business to the next level with financial support under the MSME PMS Scheme."}
-                  </p>
-                </div>
+            <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
+              <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 -my-8 md:-my-10 relative z-10 drop-shadow-xl transition-transform hover:scale-105">
+                <img src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.png"} alt="Announcement" className="w-full h-full object-contain" />
               </div>
 
-              {/* Right: Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto mt-2 lg:mt-0">
-                <Button
-                  onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-2 py-2.5 h-auto bg-orange-500 hover:bg-orange-600 text-white font-bold text-[12px] md:text-[13px] tracking-wide rounded flex items-center justify-center gap-2 transition-colors border border-[#f59e0b]"
-                >
-                  APPLY FOR PMS SCHEME <ArrowRight size={14} />
-                </Button>
+              <div className="space-y-1 mt-4 sm:mt-0">
+                <h3 className="text-xl md:text-[22px] font-bold text-white leading-tight tracking-wide">
+                  {pageData.bottomCtaTitle ? (
+                    pageData.bottomCtaTitle.includes(pageData.bottomCtaHighlight) ? (
+                      <>
+                        {pageData.bottomCtaTitle.split(pageData.bottomCtaHighlight)[0]}
+                        <span className="text-[#f59e0b]">{pageData.bottomCtaHighlight}</span>
+                        {pageData.bottomCtaTitle.split(pageData.bottomCtaHighlight)[1]}
+                      </>
+                    ) : (
+                      pageData.bottomCtaTitle
+                    )
+                  ) : (
+                    <>Don't Miss This <span className="text-[#f59e0b]">Government-Supported Opportunity!</span></>
+                  )}
+                </h3>
+                <p className="text-white/90 text-sm md:text-[15px] font-normal max-w-xl leading-snug">
+                  {pageData.bottomCtaDesc || "Exhibit at IHWE 2026 and take your business to the next level with financial support under the MSME PMS Scheme."}
+                </p>
+              </div>
+            </div>
 
-                {/* <Button
+            {/* Right: Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto mt-2 lg:mt-0">
+              <Button
+                onClick={() => document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-2 py-2.5 h-auto bg-orange-500 hover:bg-orange-600 text-white font-bold text-[12px] md:text-[13px] tracking-wide rounded flex items-center justify-center gap-2 transition-colors border border-[#f59e0b]"
+              >
+                APPLY FOR PMS SCHEME <ArrowRight size={14} />
+              </Button>
+
+              {/* <Button
                   variant="outline"
                   className="px-6 py-2.5 h-auto border border-white bg-transparent text-white hover:bg-white/10 font-bold text-[12px] md:text-[13px] tracking-wide rounded flex items-center justify-center gap-2 transition-colors"
                 >
                   BOOK YOUR STALL <ArrowRight size={14} />
                 </Button> */}
-              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Final Footer Strip (Repeating stats for impact) */}
-        < div className="bg-[#123b17] py-2 border-t border-white/5" >
-          <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-            <div className="flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-4 w-full">
+      {/* Final Footer Strip (Repeating stats for impact) */}
+      < div className="bg-[#123b17] py-2 border-t border-white/5" >
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+          <div className="flex flex-col xl:flex-row items-center justify-between gap-6 xl:gap-4 w-full">
 
-              <div className="flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-y-4 lg:gap-y-0 w-full xl:w-auto">
-                {(pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).map((stat: any, i: number) => (
-                  <div key={i} className={`flex items-center gap-2.5 ${i !== (pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).length - 1 ? 'lg:border-r lg:border-white/10 lg:pr-5 lg:mr-5' : ''}`}>
-                    <div className="flex items-center justify-center shrink-0 w-12 h-12 md:w-14 md:h-14">
-                      <img src={stat.img} alt={stat.label} className={`object-contain opacity-90 w-[75%] h-[75%]`} />
-                    </div>
-                    <div className="flex flex-col justify-center">
-                      <span className="text-[13px] md:text-[15px] font-black text-white leading-tight">{stat.val}</span>
-                      <span className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase leading-tight tracking-wide">{stat.label}</span>
-                    </div>
+            <div className="flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-start gap-y-4 lg:gap-y-0 w-full xl:w-auto">
+              {(pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).map((stat: any, i: number) => (
+                <div key={i} className={`flex items-center gap-2.5 ${i !== (pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).length - 1 ? 'lg:border-r lg:border-white/10 lg:pr-5 lg:mr-5' : ''}`}>
+                  <div className="flex items-center justify-center shrink-0 w-12 h-12 md:w-14 md:h-14">
+                    <img src={stat.img} alt={stat.label} className={`object-contain opacity-90 w-[75%] h-[75%]`} />
                   </div>
-                ))}
-              </div>
-
-              {/* Social Icons */}
-              <div className="flex flex-col items-center xl:items-start gap-1.5 shrink-0">
-                <span className="text-[9px] font-black text-white uppercase tracking-wider">FOLLOW US</span>
-                <div className="flex gap-2">
-                  <a href={pageData.facebookUrl || "https://facebook.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Facebook size={16} strokeWidth={2.5} className="fill-white" /></a>
-                  <a href={pageData.instagramUrl || "https://instagram.com"} target="_blank" className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Instagram size={16} strokeWidth={2.5} /></a>
-                  <a href={pageData.linkedinUrl || "https://linkedin.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#0A66C2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Linkedin size={16} strokeWidth={0} className="fill-white" /></a>
-                  <a href={pageData.youtubeUrl || "https://youtube.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#FF0000] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Youtube size={16} strokeWidth={2.5} /></a>
+                  <div className="flex flex-col justify-center">
+                    <span className="text-[13px] md:text-[15px] font-black text-white leading-tight">{stat.val}</span>
+                    <span className="text-[8px] md:text-[9px] font-bold text-white/70 uppercase leading-tight tracking-wide">{stat.label}</span>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex flex-col items-center xl:items-start gap-1.5 shrink-0">
+              <span className="text-[9px] font-black text-white uppercase tracking-wider">FOLLOW US</span>
+              <div className="flex gap-2">
+                <a href={pageData.facebookUrl || "https://facebook.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Facebook size={16} strokeWidth={2.5} className="fill-white" /></a>
+                <a href={pageData.instagramUrl || "https://instagram.com"} target="_blank" className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Instagram size={16} strokeWidth={2.5} /></a>
+                <a href={pageData.linkedinUrl || "https://linkedin.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#0A66C2] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Linkedin size={16} strokeWidth={0} className="fill-white" /></a>
+                <a href={pageData.youtubeUrl || "https://youtube.com"} target="_blank" className="w-9 h-9 rounded-full bg-[#FF0000] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg"><Youtube size={16} strokeWidth={2.5} /></a>
               </div>
             </div>
           </div>
-        </div >
+        </div>
       </div >
     </div >
   );
