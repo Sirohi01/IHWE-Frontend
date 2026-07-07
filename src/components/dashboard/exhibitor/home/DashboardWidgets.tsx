@@ -133,7 +133,6 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
         ...(import.meta.env.DEV ? [{ id: "buyer-contacts", label: "Buyers Management", sub: `${moduleStats.leads} captured lead${moduleStats.leads === 1 ? '' : 's'}`, icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" }] : []),
         { id: "payments", label: "Make Payment", sub: balance > 0 ? `Balance ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}` : "No balance due", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
         ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", sub: `${moduleStats.marketingTemplates} template${moduleStats.marketingTemplates === 1 ? '' : 's'} available`, icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" }] : []),
-        { id: "chat", label: "Customer Care", sub: "Get instant help", icon: MessageSquare, link: "/exhibitor-dashboard/chat", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#6366f1]" },
         { id: "relationship-manager", label: "Relationship Manager", sub: data?.filledByFullName || data?.filledBy || "Your dedicated contact", icon: Headset, link: "/exhibitor-dashboard/relationship-manager", iconBg: "bg-gradient-to-br from-[#059669] to-[#047857]" },
     ];
 
