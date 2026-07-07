@@ -67,7 +67,15 @@ const TAB_DOC_TYPES: Record<string, string[]> = {
     'Invoice': ['Invoice'],
     'Delivery Challan': ['Delivery Challan'],
     'Payment': ['Payment'],
-    'Credit Notes': ['Credit Note', 'Credit Note (Legacy)', 'Debit Note'],
+    'Credit Notes': ['Debit Note'],
+    'Debit Notes': ['Credit Note', 'Credit Note (Legacy)'],
+};
+
+const getDisplayDocumentType = (type: string) => {
+    if (type === 'Debit Note') return 'Credit Note';
+    if (type === 'Credit Note') return 'Debit Note';
+    if (type === 'Credit Note (Legacy)') return 'Debit Note (Legacy)';
+    return type;
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -179,6 +187,7 @@ export default function ExhibitorInvoicesPage() {
         'Delivery Challan',
         'Payment',
         'Credit Notes',
+        'Debit Notes',
     ];
 
     const documents: any[] = overview?.recentDocuments || [];
@@ -504,7 +513,7 @@ export default function ExhibitorInvoicesPage() {
                                                     </td>
 
                                                     <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        {doc.documentType}
+                                                        {getDisplayDocumentType(doc.documentType)}
                                                     </td>
 
                                                     <td className="px-2 text-left text-[12px] font-semibold text-[#0f172a]">
