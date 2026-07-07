@@ -179,14 +179,11 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
 
             {/* Quick Access */}
             <div
-                className="w-full lg:w-[65%] bg-white rounded-2xl p-2 pb-2"
-                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+                className="w-full lg:w-[65%] bg-white rounded-xl border border-slate-100 overflow-hidden flex flex-col"
+                style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', fontFamily: 'Inter, sans-serif' }}
             >
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 px-1 gap-3">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Quick Access</span>
-                        <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
-                    </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-slate-100 border-b border-slate-200 px-3 py-2.5 gap-3 shrink-0">
+                    <h2 className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider leading-none">Quick Access</h2>
 
                     <div className="flex items-center gap-2 sm:-mt-1.5">
                         <div style={{ position: 'relative', display: 'inline-block' }}>
@@ -220,7 +217,7 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 -mt-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 p-3 flex-1">
                     {quickAccess.map(item => {
                         const Icon = item.icon;
                         return (
@@ -245,39 +242,36 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
 
             {/* Important Updates */}
             <div
-                className="w-full lg:w-[35%] shrink-0 bg-white rounded-2xl p-2 pb-2 flex flex-col justify-between"
-                style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", minHeight: "200px" }}
+                className="w-full lg:w-[35%] shrink-0 bg-white rounded-xl border border-slate-100 overflow-hidden flex flex-col"
+                style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', minHeight: "200px", fontFamily: 'Inter, sans-serif' }}
             >
-                <div>
-                    <div className="flex items-center justify-between mb-2 px-2">
+                <div className="flex items-center justify-between bg-slate-100 border-b border-slate-200 px-3 py-2.5 shrink-0">
+                    <h2 className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider leading-none">Important Updates</h2>
+                    {/* Pagination Controls in Header */}
+                    {!loadingUpdates && totalPages > 1 && (
                         <div className="flex items-center gap-2">
-                            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Important Updates</span>
-                            <span className="h-[2px] w-8 bg-gradient-to-r from-[#3b82f6] to-transparent rounded-full" />
-                        </div>
-                        {/* Pagination Controls in Header */}
-                        {!loadingUpdates && totalPages > 1 && (
-                            <div className="flex items-center gap-2">
-                                <button 
-                                    onClick={() => setPage(p => Math.max(1, p - 1))}
-                                    disabled={page === 1}
-                                    className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
-                                >
+                            <button 
+                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                                className="text-slate-700 disabled:opacity-30 hover:bg-slate-200 p-0.5 rounded-md transition-colors"
+                            >
                                     <ChevronLeft size={14} />
                                 </button>
                                 <span className="text-[9px] font-medium text-gray-500 whitespace-nowrap">
                                     {page} / {totalPages}
                                 </span>
                                 <button 
-                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                    disabled={page === totalPages}
-                                    className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
-                                >
-                                    <ChevronRight size={14} />
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                disabled={page === totalPages}
+                                className="text-slate-700 disabled:opacity-30 hover:bg-slate-200 p-0.5 rounded-md transition-colors"
+                            >
+                                <ChevronRight size={14} />
+                            </button>
+                        </div>
+                    )}
+                </div>
 
+                <div className="p-3 flex-1 flex flex-col justify-center">
                     <div className="space-y-2">
                         {loadingUpdates ? (
                             <div className="flex justify-center py-4">

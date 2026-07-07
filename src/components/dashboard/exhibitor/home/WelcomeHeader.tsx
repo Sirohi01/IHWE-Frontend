@@ -22,93 +22,56 @@ const WelcomeHeader = () => {
     const eventLocation = data?.eventId?.location || "Location TBA";
 
     return (
-
-        <div className="flex flex-col lg:flex-row justify-between lg:items-stretch gap-3 lg:gap-5">
-            {/* ── Left ── */}
-            <div className="flex flex-col justify-center text-center lg:text-left items-center lg:items-start">
-                <p className="text-xs text-black mb-1.5 tracking-wide">Welcome back,</p>
-                <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-0.5">
-                    <h2
-                        className="text-[20px] font-semibold text-gray-900 leading-tight"
-                        style={{
-                            textShadow: '0 1px 0 rgba(255,255,255,0.9), 0 2px 4px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06)'
-                        }}
-                    >
+        <div className="w-full flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-3 p-3 bg-white rounded-lg border border-slate-100" style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', fontFamily: 'Inter, sans-serif' }}>
+            {/* Left Welcome Info */}
+            <div className="flex flex-col justify-center">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Welcome back,</p>
+                <div className="flex flex-col gap-0.5 mb-1">
+                    <h2 className="text-lg font-bold text-[#124170] leading-tight">
                         {companyName}.
                     </h2>
-                    <div
-                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{
-                            background: 'linear-gradient(135deg, #02a344, #027D34)',
-                            boxShadow: '0 2px 6px rgba(2,125,52,0.4), 0 1px 0 rgba(255,255,255,0.3) inset'
-                        }}
-                    >
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </div>
-
-                </div>
-                {data?.contact1 && (data?.contact1?.firstName || data?.contact1?.lastName) && (
-                    <div className="flex items-center gap-1 mt-1 mb-1">
-                        <span className="text-[15px] text-gray-500 font-medium flex items-center gap-1">
-
+                    {data?.contact1 && (data?.contact1?.firstName || data?.contact1?.lastName) && (
+                        <div className="text-[13px] font-bold text-slate-700 leading-tight">
                             {data.contact1.title ? `${data.contact1.title} ` : ''}{data.contact1.firstName} {data.contact1.lastName}
-                        </span>
-                        {data?.contact1?.designation && (
-                            <span className="text-[10px] text-gray-400 font-medium ml-1">
-                                ({data.contact1.designation})
-                            </span>
-                        )}
-                    </div>
-                )}
-                <p className="text-xs text-gray-500 leading-relaxed mt-1">
-                    Here's what's happening with your participation in {eventName}.
-                </p>
+                            {data?.contact1?.designation && (
+                                <span className="text-slate-500 font-medium ml-1">
+                                    ({data.contact1.designation})
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div className="flex items-center gap-2.5 mt-0.5 flex-wrap">
+                    <p className="text-xs font-medium text-slate-500 leading-relaxed">
+                        Here's what's happening with your participation in {eventName}.
+                    </p>
+                </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 lg:gap-4 w-full lg:w-auto mt-2 lg:mt-0">
-                {/* ── Center Card ── */}
-                <div
-                    className="flex-1 lg:flex-none w-full lg:w-auto lg:min-w-[160px] bg-white border border-gray-200 rounded-md px-3 py-1 flex flex-col justify-center self-center z-10"
-                    style={{
-                        boxShadow: 'rgba(0, 0, 0, 0.18) 0px 2px 4px',
-                    }}
-                >
-                    {/* Date Row */}
+            <div className="flex flex-col sm:flex-row gap-3 items-center">
+                {/* Middle Event Details Card */}
+                <div className="flex-none sm:w-[220px] bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex flex-col justify-center text-left">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-[24px] h-[24px] flex items-center justify-center flex-shrink-0">
-                            <CalendarDays size={14} className="text-[#313677]" />
+                        <div className="w-7 h-7 flex items-center justify-center flex-shrink-0 bg-white rounded-md shadow-sm border border-slate-100">
+                            <CalendarDays size={14} className="text-[#0A2947]" />
                         </div>
-                        <div>
-                            <p
-                                className="text-[10px] font-medium text-[#313677] leading-snug"
-                                style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
-                            >
-                                {eventDates}
-                            </p>
-                        </div>
+                        <p className="text-xs font-bold text-[#0A2947] leading-snug">
+                            {eventDates}
+                        </p>
                     </div>
-
-                    {/* Location Row */}
-                    <div className="flex items-center gap-2.5">
-                        <div className="w-[24px] h-[24px] flex items-center justify-center flex-shrink-0">
-                            <MapPin size={14} className="text-[#313677]" />
+                    <div className="flex items-center gap-2.5 pt-2">
+                        <div className="w-7 h-7 flex items-center justify-center flex-shrink-0 bg-white rounded-md shadow-sm border border-slate-100">
+                            <MapPin size={14} className="text-[#0A2947]" />
                         </div>
-                        <div>
-                            <p
-                                className="text-[10px] font-medium text-[#313677] leading-snug"
-                                style={{ textShadow: '0 1px 2px rgba(49,54,119,0.15)' }}
-                            >
-                                {eventLocation}
-                            </p>
-                        </div>
+                        <p className="text-[10px] font-bold text-[#0A2947] uppercase leading-snug">
+                            {eventLocation}
+                        </p>
                     </div>
                 </div>
 
-                {/* ── Right Banner ── */}
+                {/* Right Banner */}
                 <div
-                    className="flex-none w-full lg:w-[420px] min-h-[60px] rounded-md overflow-hidden relative flex flex-col sm:flex-row justify-center sm:justify-start items-center px-5 py-2 lg:py-1 text-center sm:text-left"
+                    className="flex-none sm:w-[350px] rounded-lg overflow-hidden relative flex items-center px-4 py-3 text-left min-h-[70px] shadow-sm"
                     style={{
                         backgroundImage: "url('/exhibition/topright.png')",
                         backgroundSize: "cover",
@@ -116,29 +79,20 @@ const WelcomeHeader = () => {
                         backgroundRepeat: "no-repeat",
                     }}
                 >
-
-                    {/* Building */}
-                    <div className="absolute right-0 inset-y-0 w-28 opacity-35 z-[1]">
-                        {/* your building SVG */}
-                    </div>
-
-                    {/* Text */}
-                    <div className="relative z-[2] max-w-full sm:max-w-[150px]">
-                        <p className="text-[11px] text-white/75 mb-0.5 leading-relaxed">
-                            Be a part of the world's leading platform for
+                    {/* Overlay to ensure text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#111844]/90 to-transparent"></div>
+                    
+                    <div className="relative z-[2] max-w-[200px]">
+                        <p className="text-[10px] font-bold text-white/80 uppercase tracking-wider mb-0.5">
+                            Be a part of the
                         </p>
-                        <p
-                            className="text-[15px] font-medium text-white leading-snug"
-                            style={{ textShadow: '0 1px 0 rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.4)' }}
-                        >
-                            Healthcare &amp; Wellness Innovation!
+                        <p className="text-sm font-semibold text-white leading-snug">
+                            World's Leading Platform for Healthcare & Wellness Innovation!
                         </p>
                     </div>
                 </div>
             </div>
-
         </div>
-
     );
 };
 
