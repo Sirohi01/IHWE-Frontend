@@ -44,9 +44,9 @@ const NAV_ITEMS: NavItem[] = [
     { id: "exhibitor-pass", label: "Passes & Hospitality", icon: Package },
     { id: "product", label: "My Product/Services", icon: Package },
     { id: "documentation", label: "MSME Documentation", icon: FolderOpen },
-    { id: "bsm", label: "Buyers Management", icon: UsersRound },
+    ...(import.meta.env.DEV ? [{ id: "bsm", label: "Buyers Management", icon: UsersRound }] : []),
     { id: "payments", label: "Make Payment", icon: CreditCard },
-    { id: "epromotion", label: "E-Promotion", icon: Megaphone },
+    ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", icon: Megaphone }] : []),
     { id: "feedback", label: "Feedback", icon: MessageSquare },
     { id: "chat", label: "Customer Care", icon: MessageSquare },
 ];
@@ -384,31 +384,33 @@ export default function ExhibitorSidebar({
                 {sellerSection}
 
                 {/* MSME dropdown */}
-                <div>
-                    <button onClick={handleMsmeToggle}
-                        className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
-                    >
-                        <Award size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
-                        {sidebarOpen && <span className="text-sm font-medium text-white flex-1 whitespace-nowrap">MSME</span>}
-                        {sidebarOpen && <ChevronDown size={12} className={cx("ml-auto transition-transform duration-200", msmeOpen && "rotate-180")} />}
-                    </button>
+                {import.meta.env.DEV && (
+                    <div>
+                        <button onClick={handleMsmeToggle}
+                            className={cx("w-full flex items-center gap-4 px-3 py-1.5 rounded-lg text-left transition-all", isMsmeActive ? "bg-gradient-to-r from-[#095b55] to-[#08775e] text-white" : "text-white/88 hover:bg-white/8 hover:text-white")}
+                        >
+                            <Award size={sidebarOpen ? 16 : 15} className="text-white shrink-0" />
+                            {sidebarOpen && <span className="text-sm font-medium text-white flex-1 whitespace-nowrap">MSME</span>}
+                            {sidebarOpen && <ChevronDown size={12} className={cx("ml-auto transition-transform duration-200", msmeOpen && "rotate-180")} />}
+                        </button>
 
-                    <Collapse open={sidebarOpen && msmeOpen}>
-                        <div className="mt-1 mb-1 ml-[17px] border-l-2 border-white/20 pl-2 space-y-1">
-                            {MSME_ITEMS.map(item => (
-                                <MsmeNode
-                                    key={item.id}
-                                    item={item}
-                                    depth={0}
-                                    activeTab={activeTab}
-                                    setActiveTab={setActiveTab}
-                                    expandedGroups={expandedGroups}
-                                    toggleGroup={toggleGroup}
-                                />
-                            ))}
-                        </div>
-                    </Collapse>
-                </div>
+                        <Collapse open={sidebarOpen && msmeOpen}>
+                            <div className="mt-1 mb-1 ml-[17px] border-l-2 border-white/20 pl-2 space-y-1">
+                                {MSME_ITEMS.map(item => (
+                                    <MsmeNode
+                                        key={item.id}
+                                        item={item}
+                                        depth={0}
+                                        activeTab={activeTab}
+                                        setActiveTab={setActiveTab}
+                                        expandedGroups={expandedGroups}
+                                        toggleGroup={toggleGroup}
+                                    />
+                                ))}
+                            </div>
+                        </Collapse>
+                    </div>
+                )}
             </nav>
 
             {/* Social Icons at the bottom */}

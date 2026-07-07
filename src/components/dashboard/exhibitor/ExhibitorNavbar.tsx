@@ -39,6 +39,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
         if (lastSegment === 'epromotion') return 'E-Promotion';
         if (lastSegment === 'psm-claim') return 'PMS Scheme';
         if (lastSegment === 'ex-profile') return 'Exhibitor Profile';
+        if (lastSegment === 'accessories') return 'Add On Services';
         return lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     };
     
