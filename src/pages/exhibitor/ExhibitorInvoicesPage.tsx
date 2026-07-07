@@ -42,6 +42,7 @@ import {
     Eye,
     Download,
     CreditCard,
+    ChevronLeft,
     ChevronRight,
     Edit2,
     Loader2,
@@ -87,11 +88,29 @@ const STATUS_STYLES: Record<string, string> = {
     Cancelled: 'bg-[#fef2f2] text-[#dc2626]',
 };
 
-const getStatusBadge = (status: string) => (
-    <span className={`px-3 py-1 rounded-lg text-[12px] font-semibold whitespace-nowrap ${STATUS_STYLES[status] || 'bg-gray-100 text-gray-600'}`}>
-        {status || 'N/A'}
-    </span>
-);
+const getStatusBadge = (status: string) => {
+    switch (status) {
+        case 'Paid':
+        case 'Received':
+        case 'Delivered':
+        case 'Acknowledged':
+            return <span className="px-2.5 py-1 bg-green-100 text-green-700 text-[11px] font-bold rounded-md whitespace-nowrap">{status}</span>;
+        case 'Cancelled':
+            return <span className="px-2.5 py-1 bg-red-100 text-red-700 text-[11px] font-bold rounded-md whitespace-nowrap">{status}</span>;
+        case 'Sent':
+        case 'Partial':
+        case 'Issued':
+        case 'Generated':
+        case 'E-Sent':
+        case 'W-Sent':
+        case 'E/W-Sent':
+            return <span className="px-2.5 py-1 bg-blue-100 text-blue-700 text-[11px] font-bold rounded-md whitespace-nowrap">{status}</span>;
+        case 'Unpaid':
+        case 'Draft':
+        default:
+            return <span className="px-2.5 py-1 bg-orange-100 text-orange-700 text-[11px] font-bold rounded-md whitespace-nowrap">{status || 'Pending'}</span>;
+    }
+};
 
 const formatDocDate = (value: any) => {
     if (!value) return 'N/A';
@@ -334,50 +353,90 @@ export default function ExhibitorInvoicesPage() {
                     <div ref={statsRef} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
 
                         {/* CARD 1 */}
-                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                            <div className="bg-emerald-50 p-2 rounded-full shrink-0">
-                                <Wallet size={16} className="text-emerald-500" />
-                            </div>
-                            <div>
-                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Total Amount</p>
-                                <p className="text-[15px] font-extrabold text-emerald-600 leading-tight">₹ <CounterNumber end={totalPayable} started={statsVisible} delay={0} /></p>
-                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Incl. Taxes</p>
+                        <div className="group relative bg-gradient-to-br from-white from-50% to-emerald-50 p-4 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                                        <Wallet className="w-5 h-5 text-emerald-600" strokeWidth={2.5} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-xl font-bold text-slate-900 leading-none mb-1">
+                                            ₹ <CounterNumber end={totalPayable} started={statsVisible} delay={0} />
+                                        </p>
+                                        <p className="text-[9px] font-extrabold text-slate-700 leading-tight uppercase whitespace-nowrap truncate">
+                                            Total Amount
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-bold mt-2 text-emerald-600 text-center">
+                                    Incl. Taxes
+                                </div>
                             </div>
                         </div>
 
                         {/* CARD 2 */}
-                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                            <div className="bg-blue-50 p-2 rounded-full shrink-0">
-                                <CheckCircle2 size={16} className="text-blue-500" />
-                            </div>
-                            <div>
-                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Amount Paid</p>
-                                <p className="text-[15px] font-extrabold text-blue-600 leading-tight">₹ <CounterNumber end={totalPaid} started={statsVisible} delay={100} /></p>
-                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Paid till date</p>
+                        <div className="group relative bg-gradient-to-br from-white from-50% to-blue-50 p-4 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                                        <CheckCircle2 className="w-5 h-5 text-blue-600" strokeWidth={2.5} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-xl font-bold text-slate-900 leading-none mb-1">
+                                            ₹ <CounterNumber end={totalPaid} started={statsVisible} delay={100} />
+                                        </p>
+                                        <p className="text-[9px] font-extrabold text-slate-700 leading-tight uppercase whitespace-nowrap truncate">
+                                            Amount Paid
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-bold mt-2 text-blue-600 text-center">
+                                    Paid till date
+                                </div>
                             </div>
                         </div>
 
                         {/* CARD 3 */}
-                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                            <div className="bg-amber-50 p-2 rounded-full shrink-0">
-                                <Clock3 size={16} className="text-amber-500" />
-                            </div>
-                            <div>
-                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Pending Amount</p>
-                                <p className="text-[15px] font-extrabold text-amber-500 leading-tight">₹ <CounterNumber end={totalBalance} started={statsVisible} delay={200} /></p>
-                                <p className="text-[9px] text-black font-medium whitespace-nowrap">Due amount</p>
+                        <div className="group relative bg-gradient-to-br from-white from-50% to-amber-50 p-4 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+                                        <Clock3 className="w-5 h-5 text-amber-600" strokeWidth={2.5} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-xl font-bold text-slate-900 leading-none mb-1">
+                                            ₹ <CounterNumber end={totalBalance} started={statsVisible} delay={200} />
+                                        </p>
+                                        <p className="text-[9px] font-extrabold text-slate-700 leading-tight uppercase whitespace-nowrap truncate">
+                                            Pending Amount
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-bold mt-2 text-amber-600 text-center">
+                                    Due amount
+                                </div>
                             </div>
                         </div>
 
                         {/* CARD 4 */}
-                        <div className="flex items-center gap-2.5 bg-white rounded-lg px-3 py-2.5" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                            <div className="bg-red-50 p-2 rounded-full shrink-0">
-                                <AlertCircle size={16} className="text-red-500" />
-                            </div>
-                            <div>
-                                <p className="text-[9px] text-[#1A1953] font-bold uppercase tracking-wider whitespace-nowrap">Overdue Amount</p>
-                                <p className="text-[15px] font-extrabold text-red-500 leading-tight">₹ <CounterNumber end={0} started={statsVisible} delay={300} /></p>
-                                <p className="text-[9px] text-black font-medium whitespace-nowrap">No overdue</p>
+                        <div className="group relative bg-gradient-to-br from-white from-50% to-red-50 p-4 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                                        <AlertCircle className="w-5 h-5 text-red-600" strokeWidth={2.5} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p className="text-xl font-bold text-slate-900 leading-none mb-1">
+                                            ₹ <CounterNumber end={0} started={statsVisible} delay={300} />
+                                        </p>
+                                        <p className="text-[9px] font-extrabold text-slate-700 leading-tight uppercase whitespace-nowrap truncate">
+                                            Overdue Amount
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] font-bold mt-2 text-red-600 text-center">
+                                    No overdue
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -385,7 +444,7 @@ export default function ExhibitorInvoicesPage() {
 
                     {/* MAIN CARD */}
 
-                    <div className="bg-white rounded-[8px] border border-[#edf0f7] shadow-sm overflow-hidden">
+                    <div className="bg-white rounded-xl border border-[#EDF0F7] shadow-sm overflow-hidden">
 
                         {/* TABS */}
 
@@ -423,41 +482,41 @@ export default function ExhibitorInvoicesPage() {
 
                         {/* TABLE */}
 
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto custom-scrollbar">
 
-                            <table className="w-full">
+                            <table className="w-full text-left border-collapse whitespace-nowrap text-[10px]" style={{ fontFamily: 'Inter, sans-serif', color: '#15173D' }}>
 
-                                <thead className="bg-[#f8fafc]">
+                                <thead>
 
-                                    <tr>
+                                    <tr className="text-white tracking-wider" style={{ backgroundColor: '#0A2947' }}>
 
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-center">
                                             Document No.
                                         </th>
 
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-center">
                                             Date
                                         </th>
 
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-center">
                                             Type
                                         </th>
 
-                                        <th className="px-4 py-1 text-left text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-right">
                                             Amount
                                         </th>
 
-                                        <th className="px-4 py-2 text-left text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-center">
                                             Status
                                         </th>
 
-                                        <th className="px-4 py-2 text-center text-[13px] font-semibold text-[#64748b]">
+                                        <th className="px-2 py-2 font-medium text-center">
                                             Action
                                         </th>
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody className="divide-y divide-slate-100">
                                     {loadingOverview ? (
                                         <tr>
                                             <td colSpan={6} className="py-8 text-center text-[13px] text-[#64748b]">
@@ -480,9 +539,9 @@ export default function ExhibitorInvoicesPage() {
                                             return (
                                                 <tr
                                                     key={`${doc.documentType}-${doc.id}`}
-                                                    className="border-t border-[#eef2f7] hover:bg-[#fafcff]"
+                                                    className="border-b border-slate-100 bg-white hover:bg-slate-50/50 transition-colors group"
                                                 >
-                                                    <td className="px-3 py-1.5 text-[12px] font-semibold text-[#2563eb]">
+                                                    <td className="px-2 py-2 text-center font-bold" style={{ color: '#5E0006' }}>
                                                         {canView ? (
                                                             <button
                                                                 onClick={() => viewDocument(doc)}
@@ -491,49 +550,51 @@ export default function ExhibitorInvoicesPage() {
                                                                 {doc.documentNo}
                                                             </button>
                                                         ) : doc.documentType === 'Payment' ? (
-                                                            <span className="text-[#0f172a] font-normal">
+                                                            <span className="font-normal" style={{ color: '#093C5D' }}>
                                                                 Payment for <span className="font-semibold">{doc.documentNo}</span>
                                                             </span>
                                                         ) : (
-                                                            <span className="text-[#0f172a]">{doc.documentNo}</span>
+                                                            <span>{doc.documentNo}</span>
                                                         )}
                                                     </td>
 
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
+                                                    <td className="px-2 py-2 text-center font-medium">
                                                         {formatDocDate(doc.date)}
                                                     </td>
 
-                                                    <td className="px-3 text-[12px] text-[#0f172a]">
-                                                        {doc.documentType}
+                                                    <td className="px-2 py-2 text-center">
+                                                        <div className="font-bold text-[11px]" style={{ color: '#093C5D' }}>
+                                                            {doc.documentType}
+                                                        </div>
                                                     </td>
 
-                                                    <td className="px-2 text-left text-[12px] font-semibold text-[#0f172a]">
+                                                    <td className="px-2 py-2 text-right font-bold text-emerald-700">
                                                         {formatAmount(doc.amount)}
                                                     </td>
 
-                                                    <td className="px-2 text-left">
+                                                    <td className="px-2 py-2 text-center">
                                                         {getStatusBadge(doc.status)}
                                                     </td>
 
-                                                    <td className="px-2">
-                                                        <div className="flex items-center justify-center gap-2">
+                                                    <td className="px-2 py-2 text-center">
+                                                        <div className="flex items-center justify-center gap-1.5 transition-opacity">
                                                             {isPayable && (
                                                                 <button
                                                                     onClick={() => payDocument(doc)}
                                                                     disabled={isPaying}
-                                                                    className="h-6 px-2.5 rounded-xl bg-[#00a651] hover:bg-[#00914a] text-white text-[11px] font-semibold flex items-center justify-center gap-1 disabled:opacity-60"
+                                                                    className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold flex items-center justify-center gap-1 disabled:opacity-60 transition-colors"
                                                                 >
-                                                                    {isPaying ? <Loader2 size={12} className="animate-spin" /> : <CreditCard size={12} />}
-                                                                    Pay Now
+                                                                    {isPaying ? <Loader2 size={11} className="animate-spin" /> : <CreditCard size={11} />}
+                                                                    Pay
                                                                 </button>
                                                             )}
                                                             {canView && (
                                                                 <button
                                                                     onClick={() => viewDocument(doc)}
                                                                     title="View / Print"
-                                                                    className="w-8 h-6 rounded-xl border border-[#e2e8f0] flex items-center justify-center"
+                                                                    className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                                                                 >
-                                                                    <Eye size={14} />
+                                                                    <Eye size={13} />
                                                                 </button>
                                                             )}
                                                         </div>
@@ -544,41 +605,49 @@ export default function ExhibitorInvoicesPage() {
                                     )}
                                 </tbody>
                             </table>
-                            {/* TABLE FOOTER */}
-
-                            <div className="flex items-center justify-between px-4 py-2 border-t border-[#eef2f7]">
-
-                                <p className="text-[12px] text-[#64748b]">
-                                    Showing {filteredDocuments.length === 0 ? 0 : (safeCurrentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDocuments.length)} of {filteredDocuments.length} entries
-                                </p>
+                            {/* Pagination Footer */}
+                            <div className="p-2 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between text-[10px] font-medium text-slate-600 gap-4">
+                                <div className="flex items-center gap-1.5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    <span className="text-[11px] font-bold" style={{ color: '#334155' }}>Showing</span>
+                                    <span className="text-[11px] font-black px-1.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-100" style={{ color: '#016B61' }}>
+                                        {filteredDocuments.length === 0 ? 0 : (safeCurrentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safeCurrentPage * ITEMS_PER_PAGE, filteredDocuments.length)}
+                                    </span>
+                                    <span className="text-[11px] font-bold" style={{ color: '#334155' }}>of</span>
+                                    <span className="text-[11px] font-black px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-100" style={{ color: '#1E3A8A' }}>
+                                        {filteredDocuments.length}
+                                    </span>
+                                    <span className="text-[11px] font-bold" style={{ color: '#334155' }}>documents</span>
+                                </div>
 
                                 {totalPages > 1 && (
                                     <div className="flex items-center gap-1">
                                         <button
                                             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                                             disabled={safeCurrentPage === 1}
-                                            className="px-2.5 py-1 rounded-md border border-[#e2e8f0] text-[12px] font-semibold text-[#64748b] disabled:opacity-40 hover:bg-[#f8fafc]"
+                                            className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50"
                                         >
-                                            Prev
+                                            <ChevronLeft size={16} />
                                         </button>
-                                        {Array.from({ length: totalPages }).map((_, idx) => {
-                                            const pageNum = idx + 1;
-                                            return (
-                                                <button
-                                                    key={pageNum}
-                                                    onClick={() => setCurrentPage(pageNum)}
-                                                    className={`w-7 h-7 rounded-md text-[12px] font-semibold ${safeCurrentPage === pageNum ? 'bg-[#00a651] text-white' : 'text-[#64748b] hover:bg-[#f8fafc] border border-[#e2e8f0]'}`}
-                                                >
-                                                    {pageNum}
-                                                </button>
-                                            );
-                                        })}
+                                        <div className="flex items-center gap-1">
+                                            {Array.from({ length: totalPages }).map((_, idx) => {
+                                                const pageNum = idx + 1;
+                                                return (
+                                                    <button
+                                                        key={pageNum}
+                                                        onClick={() => setCurrentPage(pageNum)}
+                                                        className={`w-7 h-7 flex items-center justify-center rounded font-semibold text-sm transition-colors ${safeCurrentPage === pageNum ? 'bg-green-600 text-white' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
+                                                    >
+                                                        {pageNum}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
                                         <button
                                             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                                             disabled={safeCurrentPage === totalPages}
-                                            className="px-2.5 py-1 rounded-md border border-[#e2e8f0] text-[12px] font-semibold text-[#64748b] disabled:opacity-40 hover:bg-[#f8fafc]"
+                                            className="p-1 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50"
                                         >
-                                            Next
+                                            <ChevronRight size={16} />
                                         </button>
                                     </div>
                                 )}

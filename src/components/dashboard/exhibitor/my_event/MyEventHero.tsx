@@ -76,18 +76,25 @@ function CountBox({ value, label }: { value: number; label: string }) {
 function InfoCard({ icon: Icon, iconBg, label, value, sub }: {
     icon: any; iconBg: string; label: string; value: string; sub: string;
 }) {
+    let gradientTo = 'to-slate-50';
+    if (iconBg.includes('emerald')) gradientTo = 'to-emerald-50';
+    else if (iconBg.includes('violet')) gradientTo = 'to-violet-50';
+    else if (iconBg.includes('blue')) gradientTo = 'to-blue-50';
+    else if (iconBg.includes('orange')) gradientTo = 'to-orange-50';
+    else if (iconBg.includes('sky')) gradientTo = 'to-sky-50';
+
     return (
         <div 
-            className="flex items-center gap-4 rounded-lg bg-white px-4 py-1 flex-1 min-w-0 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer group"
-            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+            className={`flex items-center gap-3 rounded-xl bg-gradient-to-br from-white ${gradientTo} px-3 py-2 flex-1 min-w-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer border border-slate-200 shadow-sm`}
+            style={{ fontFamily: 'Inter, sans-serif' }}
         >
-            <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110`}>
-                <Icon size={22} strokeWidth={1.4} className="text-current" />
+            <div className={`w-8 h-8 rounded-full ${iconBg} flex items-center justify-center shrink-0`}>
+                <Icon size={16} strokeWidth={1.8} className="text-current" />
             </div>
-            <div className="min-w-0">
-                <p className="text-[12px] text-[#1a3a7c] font-medium mb-0.5">{label}</p>
-                <p className="text-[15px] font-semibold text-[#0f1f45] leading-tight">{value}</p>
-                <p className="text-[11px] text-gray-400">{sub}</p>
+            <div className="flex flex-col min-w-0">
+                <span className="text-[13px] font-[800] text-[#0f172a] leading-none mb-[2px] truncate block">{value}</span>
+                <span className="text-[8px] font-[800] text-[#334155] uppercase leading-tight truncate block">{label}</span>
+                <span className="text-[9px] font-[700] text-[#475569] leading-tight truncate block mt-0.5">{sub}</span>
             </div>
         </div>
     );
@@ -130,7 +137,7 @@ export default function MyEventHero({ data }: { data: any }) {
 
                 {/* COL 2 — Hero image */}
                 <div
-                    className="flex-1 relative min-h-[130px] flex items-end justify-end p-2"
+                    className="flex-1 relative min-h-[110px] flex items-end justify-end p-1.5"
                     style={{
                         backgroundImage: `url(${Hero})`,
                         backgroundSize: "cover",
@@ -142,28 +149,28 @@ export default function MyEventHero({ data }: { data: any }) {
 
                     {/* COL 3 — Dark navy: tagline top, countdown bottom */}
                     <div
-                        className="w-fit flex flex-row items-center gap-6 justify-between px-4 py-3"
+                        className="w-fit flex flex-row items-center gap-6 justify-between px-4 py-2"
                     >
                         {/* Tagline */}
                         <div className="w-[180px]">
-                            <p className="text-white/80 text-[15px] italic font-medium leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-white/80 text-[13px] italic font-medium leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
                                 Let's make your
                             </p>
-                            <p className="text-white text-[17px] font-semibold leading-tight tracking-wide">
+                            <p className="text-white text-[15px] font-semibold leading-tight tracking-wide">
                                 {eventName}
                             </p>
-                            <p className="text-[#47B338] text-[19px] font-black italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-[#47B338] text-[17px] font-black italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
                                 experience
                             </p>
-                            <p className="text-white/90 text-[15px] font-medium italic leading-snug" style={{ fontFamily: 'Georgia, serif' }}>
+                            <p className="text-white/90 text-[13px] font-medium italic leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
                                 extraordinary!
                             </p>
                         </div>
 
                         {/* Countdown + button */}
-                        <div className="flex flex-col relative gap-2">
-                            <div className="px-3 py-1.5 bg-[#021825] rounded-lg shrink-0 border border-white/10 ">
-                                <p className="text-white text-[9px] font-bold uppercase tracking-widest mb-1.5">Event Starts In</p>
+                        <div className="flex flex-col relative gap-1.5">
+                            <div className="px-3 py-1 bg-[#021825] rounded-lg shrink-0 border border-white/10 ">
+                                <p className="text-white text-[8px] font-bold uppercase tracking-widest mb-1">Event Starts In</p>
                                 <div className="flex items-center gap-2">
                                     <CountBox value={days} label="DAYS" />
                                     <CountBox value={hrs} label="HRS" />

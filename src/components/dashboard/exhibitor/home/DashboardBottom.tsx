@@ -260,13 +260,14 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
       <div className="w-full lg:w-[64.3%] flex flex-col md:flex-row gap-2">
         {/* ── Payment Overview ── */}
         <div
-          className="flex-1 bg-white rounded-lg px-4 py-3"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+          className="flex-1 bg-white rounded-lg border border-slate-100 overflow-hidden flex flex-col"
+          style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', fontFamily: 'Inter, sans-serif' }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Payment Overview</span>
-            <button onClick={onViewPayment || (() => navigate('/exhibitor-dashboard/payments'))} className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View Details</button>
+          <div className="flex items-center justify-between bg-slate-100 border-b border-slate-200 px-3 py-2.5">
+            <h2 className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider leading-none">Payment Overview</h2>
+            <button onClick={onViewPayment || (() => navigate('/exhibitor-dashboard/payments'))} className="text-[10px] text-emerald-600 font-bold hover:text-emerald-700 uppercase cursor-pointer leading-none">View Details</button>
           </div>
+          <div className="p-4 flex-1">
 
           {/* Top card - single unified */}
           <div className="bg-[#f0faf5] border border-[#d1f0e0] rounded-lg px-4 py-2 mb-4 flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -325,22 +326,24 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
               </div>
             </div>
           </div>
+          </div>
         </div>
 
         {/* ── Document Status ── */}
         <div
-          className="flex-1 bg-white rounded-lg px-4 py-3"
-          style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+          className="flex-1 bg-white rounded-lg border border-slate-100 overflow-hidden flex flex-col"
+          style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', fontFamily: 'Inter, sans-serif' }}
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between bg-slate-100 border-b border-slate-200 px-3 py-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Document Status</span>
-              <Link to="/exhibitor-dashboard/document-center" className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-2 py-0.5 rounded text-[9px] font-bold transition-colors">
+              <h2 className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider leading-none">Document Status</h2>
+              <Link to="/exhibitor-dashboard/document-center" className="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-1.5 py-0.5 rounded-sm text-[8px] font-bold transition-colors uppercase">
                 <Plus size={10} strokeWidth={3} /> ADD
               </Link>
             </div>
-            <Link to="/exhibitor-dashboard/document-center" className="text-[10px] font-semibold text-blue-500 hover:text-blue-700 transition-colors">View All</Link>
+            <Link to="/exhibitor-dashboard/document-center" className="text-[10px] text-emerald-600 font-bold hover:text-emerald-700 uppercase cursor-pointer leading-none">View All</Link>
           </div>
+          <div className="p-3 flex-1 flex flex-col justify-center">
 
           <div className="border border-gray-200 rounded-lg overflow-y-auto max-h-[220px] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-400">
             {docsList.map((doc, i) => {
@@ -372,17 +375,17 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
               </div>
             )}
           </div>
+          </div>
         </div>
       </div>
 
       {/* ── Upcoming Events ── */}
       <div
-        className="w-full lg:w-[35%] shrink-0 bg-white rounded-lg p-3 flex flex-col justify-between"
-        style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", minHeight: "220px" }}
+        className="w-full lg:w-[35%] shrink-0 bg-white rounded-lg border border-slate-100 overflow-hidden flex flex-col"
+        style={{ boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em', minHeight: "220px", fontFamily: 'Inter, sans-serif' }}
       >
-        <div>
-          <div className="flex items-center justify-between mb-2 px-2">
-            <span className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider">Upcoming Events</span>
+        <div className="flex items-center justify-between bg-slate-100 border-b border-slate-200 px-3 py-2.5 shrink-0">
+            <h2 className="text-[12px] font-bold text-[#1a3a7c] uppercase tracking-wider leading-none">Upcoming Events</h2>
             {/* Pagination Controls in Header */}
             {!isLoadingEvents && totalEventPages > 1 && (
                 <div className="flex items-center gap-2">
@@ -399,15 +402,16 @@ export default function DashboardBottom({ onViewPayment, onViewDocuments, onView
                     <button 
                         onClick={() => setEventPage(p => Math.min(totalEventPages, p + 1))}
                         disabled={eventPage === totalEventPages}
-                        className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-100 p-0.5 rounded-md transition-colors"
+                        className="text-[#1a3a7c] disabled:opacity-30 hover:bg-gray-200 p-0.5 rounded-md transition-colors"
                     >
                         <ChevronRight size={14} />
                     </button>
                 </div>
             )}
-          </div>
+        </div>
 
-          <div className="space-y-2">
+        <div className="p-3 flex-1 flex flex-col">
+          <div className="space-y-2 flex-1">
             {isLoadingEvents ? (
               <div className="flex justify-center py-4">
                   <div className="w-5 h-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
