@@ -4,11 +4,11 @@ import {
     ArrowRight, Award, Package, MessageSquare, ChevronDown,
     ChevronRight, Megaphone, CalendarCheck, FolderOpen,
     CreditCard, Store, ShoppingBag, Send, ExternalLink,
-    Star, UsersRound, Facebook, Instagram, Youtube, Linkedin, Twitter
+    Star, UsersRound, Facebook, Instagram, Youtube, Linkedin, Twitter, Phone, MessageCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { socialMediaApi, analyticsApi } from "@/lib/api";
+import { socialMediaApi, analyticsApi, API_URL } from "@/lib/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -253,6 +253,20 @@ export default function ExhibitorSidebar({
         return () => clearTimeout(timer);
     }, []);
 
+    const [rmPhone, setRmPhone] = useState<string | null>(null);
+    useEffect(() => {
+        const rmName = data?.spokenWith || data?.referredBy || null;
+        if (!rmName) return;
+        fetch(`${API_URL}/admin/by-username/${encodeURIComponent(rmName)}`)
+            .then(r => r.json())
+            .then(res => {
+                if (res.success && res.data) {
+                    setRmPhone(res.data.mobile || res.data.altMobile || null);
+                }
+            })
+            .catch(() => { });
+    }, [data]);
+
     const toggleGroup = (id: string) =>
         setExpandedGroups(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
 
@@ -290,12 +304,24 @@ export default function ExhibitorSidebar({
         );
     })();
 
+    const rawPhone = rmPhone || data?.admin?.phone || data?.vendorDetails?.phone || "1234567890";
+    const cleanPhone = rawPhone.replace(/\D/g, '');
+    const callUrl = `tel:${cleanPhone.startsWith('91') ? cleanPhone : '+91' + cleanPhone}`;
+    
+    const personName = `${data?.contact1?.firstName || ''} ${data?.contact1?.lastName || ''}`.trim() || 'Exhibitor';
+    const companyName = data?.exhibitorName || '—';
+    const regId = data?.registrationId || '—';
+    const msg = `Hi, I am ${personName} from ${companyName}. My Exhibitor ID is ${regId}. I have a query regarding IHWE 2026: `;
+    const whatsappUrl = `https://wa.me/${cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone}?text=${encodeURIComponent(msg)}`;
+
     const socialData = [
         { icon: Facebook, url: socialLinks.facebook, color: "#1877F2", label: "Facebook" },
         { icon: Instagram, url: socialLinks.instagram, color: "#E4405F", label: "Instagram" },
         { icon: Twitter, url: socialLinks.twitter, color: "#000000", label: "Twitter" },
         { icon: Youtube, url: socialLinks.youtube, color: "#FF0000", label: "YouTube" },
         { icon: Linkedin, url: socialLinks.linkedin, color: "#0A66C2", label: "LinkedIn" },
+        { icon: MessageCircle, url: whatsappUrl, color: "#25D366", label: "WhatsApp" },
+        { icon: Phone, url: callUrl, color: "#3b82f6", label: "Call Us" },
     ];
 
     return (
@@ -385,6 +411,54 @@ export default function ExhibitorSidebar({
                 </div>
             </nav>
 
+            {/* Social Icons at the bottom */}
+            {socialVisible && (
+                <>
+                    <style>{`
+                        @keyframes iconSpin { from { transform: rotate(0deg) scale(1); } to { transform: rotate(360deg) scale(1.1); } }
+                        @keyframes buttonShake {
+                            0%, 100% { transform: rotate(0deg) scale(1.1); }
+                            25% { transform: rotate(-10deg) scale(1.1); }
+                            50% { transform: rotate(10deg) scale(1.1); }
+                            75% { transform: rotate(-10deg) scale(1.1); }
+                        }
+                        .social-icon-btn { position: relative; transition: all 0.3s; }
+                        .social-icon-btn:hover { animation: buttonShake 0.5s ease-in-out; transform: scale(1.1); }
+                        .social-icon-btn:active { transform: scale(0.9); }
+                        .social-icon-wrapper { transition: all 0.2s; }
+                        .social-icon-btn:hover .social-icon-wrapper { animation: iconSpin 0.6s ease-in-out; }
+                        
+                        .social-glow {
+                            position: absolute; inset: 0; border-radius: 9999px; filter: blur(8px);
+                            opacity: 0; transition: opacity 0.3s; z-index: -1;
+                        }
+                        .social-icon-btn:hover .social-glow { opacity: 0.8; animation: pulse 2s ease-in-out infinite; }
+                    `}</style>
+                    <div className={cx("relative z-10 border-t border-white/10 mt-auto shrink-0 transition-all duration-300", sidebarOpen ? "py-4 px-2" : "py-3 px-1")}>
+                        <div className={cx("flex items-center flex-wrap", sidebarOpen ? "justify-center gap-3" : "flex-col gap-3")}>
+                            {socialData.map((item, index) => {
+                                const Icon = item.icon;
+                                return (
+                                    <a 
+                                        key={index}
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="social-icon-btn flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-md border border-white/10"
+                                        title={item.label}
+                                        onClick={() => analyticsApi.logClick(`Social Sidebar: ${item.label}`)}
+                                    >
+                                        <div className="social-glow" style={{ backgroundColor: item.color }} />
+                                        <div className="social-icon-wrapper flex items-center justify-center" style={{ color: item.color }}>
+                                            <Icon size={sidebarOpen ? 18 : 16} strokeWidth={2.5} />
+                                        </div>
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </>
+            )}
         </aside>
     );
 }
